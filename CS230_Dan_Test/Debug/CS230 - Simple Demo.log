@@ -1,0 +1,14 @@
+﻿Build started 1/7/2014 2:13:55 PM.
+     1>Project "C:\Digi Alpha Engines\CS230_Dan_Test\CS230 - Simple Demo.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\Alpha_Engine /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt Main_Test.c
+         Main_Test.c
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Digi Alpha Engines\CS230_Dan_Test\Debug\CS230 - Simple Demo.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Digi Alpha Engines\CS230_Dan_Test\Debug\\" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Digi Alpha Engines\CS230_Dan_Test\Debug\CS230 - Simple Demo.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Digi Alpha Engines\CS230_Dan_Test\Debug\CS230 - Simple Demo.lib" /MACHINE:X86 /SAFESEH Debug\Main_Test.obj
+     1>Main_Test.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+         CS230 - Simple Demo.vcxproj -> C:\Digi Alpha Engines\CS230_Dan_Test\Debug\CS230 - Simple Demo.exe
+     1>Done Building Project "C:\Digi Alpha Engines\CS230_Dan_Test\CS230 - Simple Demo.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.49
