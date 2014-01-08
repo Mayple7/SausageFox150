@@ -13,7 +13,8 @@ Copyright (C) 2014 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior 
 written consent of DigiPen Institute of Technology is prohibited. 
 */ 
-
+
+
 
 // ---------------------------------------------------------------------------
 // includes
@@ -27,7 +28,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 // globals
-int gameRunning = 1;
+int GameRunning = 1;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -38,9 +39,8 @@ int gameRunning = 1;
 
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
-	int backgroundColor = 0;
-
 	// Variable declaration	
+	int backgroundColor = 0;
 	AEGfxVertexList*	pMesh1;				// Pointer to Mesh (Model)
 
 	// Initialize the system 
@@ -76,8 +76,15 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
+	/*
+		Read Input
+		Handle Input
+		Draw Output
+		???
+		Profit!
+	*/
 	// Gameloop
-	while(gameRunning)
+	while(GameRunning)
 	{
 		// Informing the system about the loop's start
 		AESysFrameStart();
@@ -97,7 +104,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 		// check if forcing the application to quit
 		if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-			gameRunning = 0;
+			GameRunning = 0;
 		else if(AEInputCheckTriggered(VK_SPACE) && backgroundColor == 0)
 		{
 			backgroundColor = 1;
