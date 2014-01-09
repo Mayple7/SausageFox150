@@ -70,5 +70,11 @@
     <ClCompile Include="Main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StartSlides.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
