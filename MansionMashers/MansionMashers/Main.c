@@ -4,7 +4,7 @@ File:				Main.c
 Author:				Dan Muller (d.muller)
 Creation Date:		Jan 7, 2014
 
-Purpose:			Houses the main gameloop
+Purpose:			Starts the game up
 
 Functions:			WinMain - Main function
 					Foo - Another function
@@ -41,14 +41,15 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 {
 	// Variable declaration	
 	int backgroundColor = 0;
-	AEGfxVertexList*	pMesh1;				// Pointer to Mesh (Model)
+	AEGfxVertexList*	meshTitle;				// Pointer to Mesh (Model)
+	AEGfxTexture *titleTexture;					// Pointer to Texture (Image)
 
 	// Initialize the system 
 	AESysInitInfo sysInitInfo;
 	sysInitInfo.mAppInstance		= instanceH;
 	sysInitInfo.mShow				= show;
-	sysInitInfo.mWinWidth			= 800;
-	sysInitInfo.mWinHeight			= 600;
+	sysInitInfo.mWinWidth			= 1280;
+	sysInitInfo.mWinHeight			= 720;
 	sysInitInfo.mCreateConsole		= 1;
 	sysInitInfo.mMaxFrameRate		= 60;
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
@@ -65,16 +66,25 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	// 1 triangle at a time
 	// X, Y, Color, texU, texV
 	AEGfxTriAdd(
-		-25.5f, -25.5f, 0xFFFFFFFF, 0.0f, 0.0f, 
-		25.5f,  0.0f, 0xFFFFFFFF, 0.0f, 0.0f,
-		-25.5f,  25.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+		-518.0f, -84.0f, 0x00FFFFFF, 0.0f, 1.0f, 
+		518.0f,  -84.0f, 0x00FFFFFF, 1.0f, 1.0f,
+		-518.0f,  84.0f, 0x00FFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		518.0f, -84.0f, 0x00FFFFFF, 1.0f, 1.0f, 
+		518.0f,  84.0f, 0x00FFFFFF, 1.0f, 0.0f,
+		-518.0f,  84.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
 	// Saving the mesh (list of triangles) in pMesh1
 
-	pMesh1 = AEGfxMeshEnd();
-	AE_ASSERT_MESG(pMesh1, "Failed to create mesh 1!!");
+	meshTitle = AEGfxMeshEnd();
+	AE_ASSERT_MESG(meshTitle, "Failed to create mesh 1!!");
+
+	// Texture 1: From file
+	titleTexture = AEGfxTextureLoad("Textures\\MansionMashers_Title.png");
+	AE_ASSERT_MESG(titleTexture, "Failed to create texture1!!");
 
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
 	/*
 		Read Input
@@ -93,14 +103,17 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		AEInputUpdate();
 
 		// Drawing object 1
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Set poisition for object 1
 		AEGfxSetPosition(0.0f, 0.0f);
-		// No texture for object 1
-		AEGfxTextureSet(NULL, 0, 0);
-		
+		// Set texture for object 2
+		AEGfxTextureSet(titleTexture, 0.0f, 0.0f);
+		AEGfxSetTransparency(1.0f);
+		// Drawing the mesh (list of triangles)
+		AEGfxMeshDraw(meshTitle, AE_GFX_MDM_TRIANGLES);
 
-
+		// Informing the system about the loop's end
+		AESysFrameEnd();
 
 		// check if forcing the application to quit
 		if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
@@ -109,31 +122,25 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		{
 			backgroundColor = 1;
 			AEGfxSetBackgroundColor(0.0f, 0.5f, 0.0f);
-			AEGfxSetBlendColor(0.5f, 0.0f, 0.0f, 1.0f);
 		}
 		else if(AEInputCheckTriggered(VK_SPACE) && backgroundColor == 1)
 		{
 			backgroundColor = 2;
 			AEGfxSetBackgroundColor(0.0f, 0.0f, 0.5f);
-			AEGfxSetBlendColor(0.5f, 0.5f, 0.0f, 1.0f);
 		}
 		else if(AEInputCheckTriggered(VK_SPACE))
 		{
 			AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 			backgroundColor = 0;
-			AEGfxSetBlendColor(1.0f, 1.0f, 1.0f, 1.0f);
 		}
-
-		// Drawing the mesh (list of triangles)
-		AEGfxSetTransparency(1.0f);
-		AEGfxMeshDraw(pMesh1, AE_GFX_MDM_TRIANGLES);
 		
-		// Informing the system about the loop's end
-		AESysFrameEnd();
+		
 	}
 
 	// Freeing the objects and textures
-	AEGfxMeshFree(pMesh1);
+	AEGfxMeshFree(meshTitle);
+	
+	AEGfxTextureUnload(titleTexture);
 
 	// free the system
 	AESysExit();
