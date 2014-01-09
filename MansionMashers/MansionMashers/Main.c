@@ -18,7 +18,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 // includes
-
+#include "StartSlides.h"
+#include "MainMenu.h"
 #include "AEEngine.h"
 
 // ---------------------------------------------------------------------------
@@ -44,6 +45,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	float alpha = 0.0f;
 	int slideTimer = 0;
 	int fade = 1;								//0: no fade, 1: fade in, 2: fade out
+	int initializeLevel = 0;
+	int nextLevel = 0;
+	int Level = 0;
 
 	AEGfxVertexList*	meshTitle;				// Pointer to Mesh (Model)
 	AEGfxVertexList*	meshDigipen;			// Pointer to Digipen Logo Mesh
@@ -66,53 +70,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	// reset the system modules
 	AESysReset();
 
-	// Informing the library that we're about to start adding triangles
-	AEGfxMeshStart();
-
-	// 1 triangle at a time
-	// X, Y, Color, texU, texV
-	AEGfxTriAdd(
-		-518.0f, -84.0f, 0x00FFFFFF, 0.0f, 1.0f, 
-		518.0f,  -84.0f, 0x00FFFFFF, 1.0f, 1.0f,
-		-518.0f,  84.0f, 0x00FFFFFF, 0.0f, 0.0f);
-	AEGfxTriAdd(
-		518.0f, -84.0f, 0x00FFFFFF, 1.0f, 1.0f, 
-		518.0f,  84.0f, 0x00FFFFFF, 1.0f, 0.0f,
-		-518.0f,  84.0f, 0x00FFFFFF, 0.0f, 0.0f);
-
-	// Saving the mesh (list of triangles) in pMesh1
-
-	meshTitle = AEGfxMeshEnd();
-	AE_ASSERT_MESG(meshTitle, "Failed to create mesh 1!!");
-
-	// Informing the library that we're about to start adding triangles
-	AEGfxMeshStart();
-
-	// 1 triangle at a time
-	// X, Y, Color, texU, texV
-	AEGfxTriAdd(
-		-512.0f, -124.0f, 0x00FFFFFF, 0.0f, 1.0f, 
-		512.0f,  -124.0f, 0x00FFFFFF, 1.0f, 1.0f,
-		-512.0f,  124.0f, 0x00FFFFFF, 0.0f, 0.0f);
-	AEGfxTriAdd(
-		512.0f, -124.0f, 0x00FFFFFF, 1.0f, 1.0f, 
-		512.0f,  124.0f, 0x00FFFFFF, 1.0f, 0.0f,
-		-512.0f,  124.0f, 0x00FFFFFF, 0.0f, 0.0f);
-
-	// Saving the mesh (list of triangles) in pMesh1
-
-	meshDigipen = AEGfxMeshEnd();
-	AE_ASSERT_MESG(meshDigipen, "Failed to create mesh 1!!");
-
-
-	// Texture 1: From file
-	titleTexture = AEGfxTextureLoad("Textures\\MansionMashers_Title.png");
-	AE_ASSERT_MESG(titleTexture, "Failed to create Title Texture!!");
-
-	// Texture 2: From file
-	digipenLogo = AEGfxTextureLoad("Textures\\DigipenLogo.png");
-	AE_ASSERT_MESG(titleTexture, "Failed to create Digipen Logo!!");
-
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
@@ -132,55 +89,33 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		// Handling Input
 		AEInputUpdate();
 
-		// Drawing object 1
-		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		// Set poisition for object 1
-		AEGfxSetPosition(0.0f, 0.0f);
-		// Set texture for object 2
-		
-		
-		if(fade == 2)
-			alpha -= 0.005;
-		else if(fade == 1)
-			alpha += 0.005;
-		else
-			alpha = 1.0;
-
-		if(alpha > 1.0)
+		if(nextLevel)
 		{
-			alpha = 1.0f;
-			fade = 0;
-		}
-		else if(alpha < 0.0)
-		{
-			slideTextureNum = 1;
-			fade = 1;
+			nextLevel = 0;
+			Level += 1;
+			initializeLevel = 0;
 		}
 
-
-		if(fade == 0 && slideTextureNum != 1)
-			slideTimer += 1;
-
-		if(slideTimer == 180)
+		if(Level == 0)
 		{
-			fade = 2;
-			slideTimer = 0;
+			if(!initializeLevel)
+			{
+				InitializeStartScreen();
+				initializeLevel = 1;
+			}		
+			else
+				nextLevel = SplashScreenLoop();
 		}
-		
-		if(slideTextureNum == 1)
-			AEGfxSetTransparency(alpha);
-		else
-			AEGfxSetTransparency(0.0f);
-		// Drawing the mesh (list of triangles)
-		AEGfxTextureSet(titleTexture, 0.0f, 0.0f);
-		AEGfxMeshDraw(meshTitle, AE_GFX_MDM_TRIANGLES);
-
-		if(slideTextureNum == 0)
-			AEGfxSetTransparency(alpha);
-		else
-			AEGfxSetTransparency(0.0f);
-		AEGfxTextureSet(digipenLogo, 0.0f, 0.0f);
-		AEGfxMeshDraw(meshDigipen, AE_GFX_MDM_TRIANGLES);
+		else if(Level == 1)
+		{
+			if(!initializeLevel)
+			{
+				InitizalizeMainMenu();
+				initializeLevel = 1;
+			}
+			else
+				nextLevel = MenuLoop();
+		}
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();
@@ -190,14 +125,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			GameRunning = 0;
 	}
 
-	// Freeing the objects and textures
-	AEGfxMeshFree(meshTitle);
-	AEGfxMeshFree(meshDigipen);
-	
-	AEGfxTextureUnload(titleTexture);
-	AEGfxTextureUnload(digipenLogo);
-
 	// free the system
+	FreeStartScreen();
 	AESysExit();
 
 	return 1;

@@ -6,6 +6,10 @@ Creation Date:		Jan 8, 2014
 Purpose:			Drawing and logic for the start screen slides
 
 Functions:			FadeLogic - Logic for fading the slides
+					InitializeStartScreen - Creates meshes to draw on the screen
+					FreeStartScreen - Clears memory of the start screen meshes
+					DrawScreen - Draws the start screen to the screen
+					StartScreenLoop - Function that runs each iteration of the game loop
  
 Copyright (C) 2014 DigiPen Institute of Technology. 
 Reproduction or disclosure of this file or its contents without the prior 
@@ -29,17 +33,22 @@ int slideTextureNum = 0;
 int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 int slideTimer = 0;
 
+AEGfxVertexList*	meshTitle;				// Pointer to Mesh (Model)
+AEGfxVertexList*	meshDigipen;			// Pointer to Digipen Logo Mesh
+AEGfxVertexList*	meshSausage;			// Pointer to Digipen Logo Mesh
+AEGfxTexture *titleTexture;					// Pointer to Texture (Image)
+AEGfxTexture *digipenLogo;					// Pointer to Digipen logo texture
+AEGfxTexture *sausageLogo;					// Pointer to Digipen logo texture
+
 // ---------------------------------------------------------------------------
 // Static function protoypes
-
-float FadeLogic(void);
+int FadeLogic(void);
 void DrawScreen(void);
-void SplashScreenLoop(void);
 
 // ---------------------------------------------------------------------------
 // main
 
-float FadeLogic(void)
+int FadeLogic(void)
 {
 	if(fade == 2)
 		alpha -= 0.005;
@@ -53,14 +62,20 @@ float FadeLogic(void)
 		alpha = 1.0f;
 		fade = 0;
 	}
+	else if(alpha < 0.0 && slideTextureNum != 2)
+	{
+		slideTextureNum += 1;
+		fade = 1;
+		alpha = 0.0;
+	}
 	else if(alpha < 0.0)
 	{
-		slideTextureNum = 1;
-		fade = 1;
+		return 1;
 	}
 
 
-	if(fade == 0 && slideTextureNum != 1)
+
+	if(fade == 0)
 		slideTimer += 1;
 
 	if(slideTimer == 180)
@@ -68,16 +83,12 @@ float FadeLogic(void)
 		fade = 2;
 		slideTimer = 0;
 	}
+
+	return 0;
 }
-
-void DrawScreen(void)
+void InitializeStartScreen(void)
 {
-	AEGfxVertexList*	meshTitle;				// Pointer to Mesh (Model)
-	AEGfxVertexList*	meshDigipen;			// Pointer to Digipen Logo Mesh
-	AEGfxTexture *titleTexture;					// Pointer to Texture (Image)
-	AEGfxTexture *digipenLogo;					// Pointer to Digipen logo texture
-
-	// Informing the library that we're about to start adding triangles
+		// Informing the library that we're about to start adding triangles
 	AEGfxMeshStart();
 
 	// 1 triangle at a time
@@ -115,6 +126,25 @@ void DrawScreen(void)
 	meshDigipen = AEGfxMeshEnd();
 	AE_ASSERT_MESG(meshDigipen, "Failed to create mesh 1!!");
 
+	// Informing the library that we're about to start adding triangles
+	AEGfxMeshStart();
+
+	// 1 triangle at a time
+	// X, Y, Color, texU, texV
+	AEGfxTriAdd(
+		-640.0f, -360.0f, 0x00FFFFFF, 0.0f, 1.0f, 
+		640.0f,  -360.0f, 0x00FFFFFF, 1.0f, 1.0f,
+		-640.0f,  360.0f, 0x00FFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		640.0f, -360.0f, 0x00FFFFFF, 1.0f, 1.0f, 
+		640.0f,  360.0f, 0x00FFFFFF, 1.0f, 0.0f,
+		-640.0f,  360.0f, 0x00FFFFFF, 0.0f, 0.0f);
+
+	// Saving the mesh (list of triangles) in pMesh1
+
+	meshSausage = AEGfxMeshEnd();
+	AE_ASSERT_MESG(meshSausage, "Failed to create mesh 1!!");
+
 
 	// Texture 1: From file
 	titleTexture = AEGfxTextureLoad("Textures\\MansionMashers_Title.png");
@@ -124,12 +154,33 @@ void DrawScreen(void)
 	digipenLogo = AEGfxTextureLoad("Textures\\DigipenLogo.png");
 	AE_ASSERT_MESG(titleTexture, "Failed to create Digipen Logo!!");
 
+	// Texture 3: From file
+	sausageLogo = AEGfxTextureLoad("Textures\\SausageFoxLogoNoBack.png");
+	AE_ASSERT_MESG(sausageLogo, "Failed to create Digipen Logo!!");
+
+}
+
+void FreeStartScreen(void)
+{
+	// Freeing the objects and textures
+	AEGfxMeshFree(meshTitle);
+	AEGfxMeshFree(meshDigipen);
+	AEGfxMeshFree(meshSausage);
+	
+	AEGfxTextureUnload(titleTexture);
+	AEGfxTextureUnload(digipenLogo);
+	AEGfxTextureUnload(sausageLogo);
+}
+
+
+void DrawScreen(void)
+{
 	// Drawing object 1
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	// Set poisition for object 1
 	AEGfxSetPosition(0.0f, 0.0f);		
 		
-	if(slideTextureNum == 1)
+	if(slideTextureNum == 2)
 		AEGfxSetTransparency(alpha);
 	else
 		AEGfxSetTransparency(0.0f);
@@ -143,10 +194,20 @@ void DrawScreen(void)
 		AEGfxSetTransparency(0.0f);
 	AEGfxTextureSet(digipenLogo, 0.0f, 0.0f);
 	AEGfxMeshDraw(meshDigipen, AE_GFX_MDM_TRIANGLES);
+
+	if(slideTextureNum == 1)
+		AEGfxSetTransparency(alpha);
+	else
+		AEGfxSetTransparency(0.0f);
+	AEGfxTextureSet(sausageLogo, 0.0f, 0.0f);
+	AEGfxMeshDraw(meshSausage, AE_GFX_MDM_TRIANGLES);
 }
 
-void SplashScreenLoop(void)
+int SplashScreenLoop(void)
 {
-	FadeLogic();
+	int changeLevel;
+	changeLevel = FadeLogic();
 	DrawScreen();
+
+	return changeLevel;
 }
