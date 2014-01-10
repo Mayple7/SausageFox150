@@ -46,7 +46,7 @@ int foxCurrentFrame = 0;
 int foxTotalFrames = 8;
 
 int numMenuButtons = 2;
-int selectedButton = 1;								//0: start, 1: exit
+int selectedButton = 0;								//0: start, 1: exit
 
 float startButtonx = 0;
 float startButtony = 100;
