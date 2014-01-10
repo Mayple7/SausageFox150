@@ -11,6 +11,10 @@ struct Sprite
 	float Width;
 	float Height;
 
+	//Position of the sprite
+	float XPosition;
+	float YPosition;
+
 	//Animation Properties
 	int AnimationActive;
 	int CurrentFrame;
@@ -23,6 +27,9 @@ struct Sprite
 	int NumHeightFrames;
 	int NumWidthFrames;
 
+	int Visible;
+	int FlipX;
+	int FlipY;
 };
 
 struct Sprite CreateSprite(float width, float height, char* texture);

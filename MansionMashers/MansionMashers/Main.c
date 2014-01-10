@@ -66,6 +66,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;											
 	sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
 	AESysInit (&sysInitInfo);
+	AESysSetWindowTitle("Mansion Mashers!");
 
 	// reset the system modules
 	AESysReset();
