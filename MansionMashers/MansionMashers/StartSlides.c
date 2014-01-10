@@ -20,6 +20,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 // includes
 
 #include "AEEngine.h"
+#include "Sprite.h"
 
 // ---------------------------------------------------------------------------
 
@@ -88,66 +89,18 @@ int FadeLogic(void)
 }
 void InitializeStartScreen(void)
 {
-		// Informing the library that we're about to start adding triangles
-	AEGfxMeshStart();
-
-	// 1 triangle at a time
-	// X, Y, Color, texU, texV
-	AEGfxTriAdd(
-		-518.0f, -84.0f, 0x00FFFFFF, 0.0f, 1.0f, 
-		518.0f,  -84.0f, 0x00FFFFFF, 1.0f, 1.0f,
-		-518.0f,  84.0f, 0x00FFFFFF, 0.0f, 0.0f);
-	AEGfxTriAdd(
-		518.0f, -84.0f, 0x00FFFFFF, 1.0f, 1.0f, 
-		518.0f,  84.0f, 0x00FFFFFF, 1.0f, 0.0f,
-		-518.0f,  84.0f, 0x00FFFFFF, 0.0f, 0.0f);
-
-	// Saving the mesh (list of triangles) in pMesh1
-
-	meshTitle = AEGfxMeshEnd();
+	meshTitle = CreateSpriteTexture(1280.0f, 720.0f);
 	AE_ASSERT_MESG(meshTitle, "Failed to create mesh 1!!");
 
-	// Informing the library that we're about to start adding triangles
-	AEGfxMeshStart();
-
-	// 1 triangle at a time
-	// X, Y, Color, texU, texV
-	AEGfxTriAdd(
-		-512.0f, -124.0f, 0x00FFFFFF, 0.0f, 1.0f, 
-		512.0f,  -124.0f, 0x00FFFFFF, 1.0f, 1.0f,
-		-512.0f,  124.0f, 0x00FFFFFF, 0.0f, 0.0f);
-	AEGfxTriAdd(
-		512.0f, -124.0f, 0x00FFFFFF, 1.0f, 1.0f, 
-		512.0f,  124.0f, 0x00FFFFFF, 1.0f, 0.0f,
-		-512.0f,  124.0f, 0x00FFFFFF, 0.0f, 0.0f);
-
-	// Saving the mesh (list of triangles) in pMesh1
-
-	meshDigipen = AEGfxMeshEnd();
+	meshDigipen = CreateSpriteTexture(1024.0f, 248.0f);
 	AE_ASSERT_MESG(meshDigipen, "Failed to create mesh 1!!");
 
-	// Informing the library that we're about to start adding triangles
-	AEGfxMeshStart();
-
-	// 1 triangle at a time
-	// X, Y, Color, texU, texV
-	AEGfxTriAdd(
-		-640.0f, -360.0f, 0x00FFFFFF, 0.0f, 1.0f, 
-		640.0f,  -360.0f, 0x00FFFFFF, 1.0f, 1.0f,
-		-640.0f,  360.0f, 0x00FFFFFF, 0.0f, 0.0f);
-	AEGfxTriAdd(
-		640.0f, -360.0f, 0x00FFFFFF, 1.0f, 1.0f, 
-		640.0f,  360.0f, 0x00FFFFFF, 1.0f, 0.0f,
-		-640.0f,  360.0f, 0x00FFFFFF, 0.0f, 0.0f);
-
-	// Saving the mesh (list of triangles) in pMesh1
-
-	meshSausage = AEGfxMeshEnd();
+	meshSausage = CreateSpriteTexture(1280.0f, 720.0f);
 	AE_ASSERT_MESG(meshSausage, "Failed to create mesh 1!!");
 
 
 	// Texture 1: From file
-	titleTexture = AEGfxTextureLoad("Textures\\MansionMashers_Title.png");
+	titleTexture = AEGfxTextureLoad("Textures\\MansionMashersLogo.png");
 	AE_ASSERT_MESG(titleTexture, "Failed to create Title Texture!!");
 
 	// Texture 2: From file

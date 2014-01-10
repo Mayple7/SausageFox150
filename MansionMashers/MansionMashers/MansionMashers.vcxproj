@@ -80,12 +80,14 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Point4.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="StartSlides.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.c" />
     <ClCompile Include="MainMenu.c" />
+    <ClCompile Include="Sprite.c" />
     <ClCompile Include="StartSlides.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
