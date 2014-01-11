@@ -18,10 +18,10 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 // includes
-#include "StartSlides.h"
-#include "MainMenu.h"
-#include "TestLevel.h"
-#include "AEEngine.h"
+#include "../HeaderFiles/StartSlides.h"
+#include "../HeaderFiles/MainMenu.h"
+#include "../HeaderFiles/TestLevel.h"
+#include "../AEEngine.h"
 
 // ---------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 	int initializeLevel = 0;
 	int nextLevel = 0;
-	int Level = 1;
+	int Level = 0;
 
 	AEGfxVertexList*	meshTitle;				// Pointer to Mesh (Model)
 	AEGfxVertexList*	meshDigipen;			// Pointer to Digipen Logo Mesh

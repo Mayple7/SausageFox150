@@ -17,9 +17,9 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // includes
 
-#include "AEEngine.h"
-#include "TestLevel.h"
-#include "Sprite.h"
+#include "../AEEngine.h"
+#include "../HeaderFiles/TestLevel.h"
+#include "../HeaderFiles/Sprite.h"
 
 // ---------------------------------------------------------------------------
 

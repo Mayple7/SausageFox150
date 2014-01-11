@@ -65,36 +65,42 @@
     <ClInclude Include="Vector4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StartSlides.h">
+    <ClInclude Include="HeaderFiles\MainMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MainMenu.h">
+    <ClInclude Include="HeaderFiles\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="HeaderFiles\Sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestLevel.h">
+    <ClInclude Include="HeaderFiles\StartSlides.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectManager.h">
+    <ClInclude Include="HeaderFiles\TestLevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Weapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\ObjectManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.c">
+    <ClCompile Include="SourceFiles\StartSlides.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainMenu.c">
+    <ClCompile Include="SourceFiles\Main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StartSlides.c">
+    <ClCompile Include="SourceFiles\MainMenu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.c">
+    <ClCompile Include="SourceFiles\Sprite.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestLevel.c">
+    <ClCompile Include="SourceFiles\TestLevel.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
