@@ -209,10 +209,12 @@ int InputHandling(void)
 	{
 		printf("%i button: %i\n", numMenuButtons - 1, selectedButton);
 
+		// Play le gaem
 		if(selectedButton == 0)
 			return 2;
+		// Exit button
 		else if(selectedButton == 1)
-			return 1;
+			return -1;
 	}
 
 	return 0;
@@ -264,7 +266,7 @@ int MenuLoop(void)
 		AESysFrameEnd();
 
 		// check if forcing the application to quit
-		if (changeLevel > 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+		if (changeLevel != 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 			LevelRunning = 0;
 	}
 
