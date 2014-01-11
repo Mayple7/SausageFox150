@@ -77,18 +77,23 @@
     <ClInclude Include="AETypes.h" />
     <ClInclude Include="AEUtil.h" />
     <ClInclude Include="AEVec2.h" />
-    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="HeaderFiles\MainMenu.h" />
+    <ClInclude Include="HeaderFiles\ObjectManager.h" />
+    <ClInclude Include="HeaderFiles\Player.h" />
+    <ClInclude Include="HeaderFiles\Sprite.h" />
+    <ClInclude Include="HeaderFiles\StartSlides.h" />
+    <ClInclude Include="HeaderFiles\TestLevel.h" />
+    <ClInclude Include="HeaderFiles\Weapon.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Point4.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="StartSlides.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.c" />
-    <ClCompile Include="MainMenu.c" />
-    <ClCompile Include="Sprite.c" />
-    <ClCompile Include="StartSlides.c" />
+    <ClCompile Include="SourceFiles\Main.c" />
+    <ClCompile Include="SourceFiles\MainMenu.c" />
+    <ClCompile Include="SourceFiles\Sprite.c" />
+    <ClCompile Include="SourceFiles\StartSlides.c" />
+    <ClCompile Include="SourceFiles\TestLevel.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
