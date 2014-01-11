@@ -192,6 +192,7 @@ void FreeMainMenu(void)
 	AEGfxTextureUnload(exitButtonTexture);
 }
 
+//INPUT, PRESS DEM KEYS BOI
 void InputHandling(void)
 {
 	// check if forcing the application to quit

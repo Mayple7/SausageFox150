@@ -20,6 +20,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 // includes
 #include "StartSlides.h"
 #include "MainMenu.h"
+#include "TestLevel.h"
 #include "AEEngine.h"
 
 // ---------------------------------------------------------------------------
@@ -115,6 +116,16 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			}
 			else
 				nextLevel = MenuLoop();
+		}
+		else if(Level == 2)
+		{
+			if(!initializeLevel)
+			{
+				InitizalizeTestLevel();
+				initializeLevel = 1;
+			}
+			else
+				nextLevel = LevelLoop();
 		}
 
 		// Informing the system about the loop's end
