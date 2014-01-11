@@ -110,4 +110,36 @@ int UpdateFrame(int totalFrames, int currentFrame, int frameUpdate, float *offse
 	return currentFrame;
 }
 
+struct Sprite CreateSprite(float width, float height, char* texture)
+{
+	struct Sprite CurrentSprite;
+	
+	//Sprite Graphics Properties
+	AEGfxVertexList* SpriteMesh;
+	AEGfxTexture *SpriteTexture;
+
+	// Size of the sprite
+	float Width;
+	float Height;
+
+	//Position of the sprite
+	float XPosition;
+	float YPosition;
+
+	//Animation Properties
+	int AnimationActive;
+	int CurrentFrame;
+	int TotalFrames;
+	float AnimationSpeed;
+	int AnimationTimer;
+
+	//Texture Properties
+	char TextureName[256];
+	int NumHeightFrames;
+	int NumWidthFrames;
+
+	int Visible;
+	int FlipX;
+	int FlipY;
+}
 
