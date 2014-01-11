@@ -46,15 +46,6 @@ int testAnimationTimer = 0;
 // Static function protoypes
 
 // ---------------------------------------------------------------------------
-// main
-
-int LevelLoop(void)
-{
-	InputHandling();
-	DrawLevel();
-
-	return 0;
-}
 
 void InitizalizeTestLevel(void)
 {
@@ -111,6 +102,46 @@ void DrawLevel(void)
 	AEGfxMeshDraw(meshtest, AE_GFX_MDM_TRIANGLES);
 }
 
+void FreeLevel(void)
+{
+	// Freeing the objects and textures
+	AEGfxMeshFree(meshtest);
 
+	AEGfxTextureUnload(testTexture);
+}
+
+// main
+
+int LevelLoop(void)
+{
+	int changeLevel  = 0;
+	int LevelRunning = 1;
+
+	InitizalizeTestLevel();
+
+	printf("Running Level\n");
+
+	while (LevelRunning)
+	{
+		// Informing the system about the loop's start
+		AESysFrameStart();
+
+		// Handling Input
+		AEInputUpdate();
+
+		// Functions
+		DrawLevel();
+
+		// Informing the system about the loop's end
+		AESysFrameEnd();
+
+		// check if forcing the application to quit
+		if (changeLevel > 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+			LevelRunning = 0;
+	}
+
+	FreeLevel();
+	return changeLevel;
+}
 
 // ---------------------------------------------------------------------------

@@ -64,15 +64,6 @@ int animationTimer = 0;
 // Static function protoypes
 
 // ---------------------------------------------------------------------------
-// main
-
-int MenuLoop(void)
-{
-	InputHandling();
-	DrawMenu();
-
-	return 0;
-}
 
 void InitizalizeMainMenu(void)
 {
@@ -193,7 +184,7 @@ void FreeMainMenu(void)
 }
 
 //INPUT, PRESS DEM KEYS BOI
-void InputHandling(void)
+int InputHandling(void)
 {
 	// check if forcing the application to quit
 	if (AEInputCheckTriggered(VK_UP))
@@ -213,7 +204,18 @@ void InputHandling(void)
 			selectedButton++;
 
 		UpdateSelector();
-	}		
+	}
+	else if(AEInputCheckTriggered(VK_RETURN))
+	{
+		printf("%i button: %i\n", numMenuButtons - 1, selectedButton);
+
+		if(selectedButton == 0)
+			return 2;
+		else if(selectedButton == 1)
+			return 1;
+	}
+
+	return 0;
 }
 
 void UpdateSelector(void)
@@ -233,6 +235,41 @@ void UpdateSelector(void)
 			selectorY = startButtony;
 			break;
 	}
+}
+
+// main
+
+int MenuLoop(void)
+{
+	int changeLevel  = 0;
+	int LevelRunning = 1;
+
+	InitizalizeMainMenu();
+
+	printf("Running Menu\n");
+
+	while (LevelRunning)
+	{
+		// Informing the system about the loop's start
+		AESysFrameStart();
+
+		// Handling Input
+		AEInputUpdate();
+
+		// Functions
+		changeLevel = InputHandling();
+		DrawMenu();
+
+		// Informing the system about the loop's end
+		AESysFrameEnd();
+
+		// check if forcing the application to quit
+		if (changeLevel > 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+			LevelRunning = 0;
+	}
+
+	FreeMainMenu();
+	return changeLevel;
 }
 
 

@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 	int initializeLevel = 0;
 	int nextLevel = 0;
-	int Level = 0;
+	int Level = 1;
 
 	AEGfxVertexList*	meshTitle;				// Pointer to Mesh (Model)
 	AEGfxVertexList*	meshDigipen;			// Pointer to Digipen Logo Mesh
@@ -100,33 +100,15 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 		if(Level == 0)
 		{
-			if(!initializeLevel)
-			{
-				InitializeStartScreen();
-				initializeLevel = 1;
-			}		
-			else
-				nextLevel = SplashScreenLoop();
+			nextLevel = SplashScreenLoop();
 		}
 		else if(Level == 1)
 		{
-			if(!initializeLevel)
-			{
-				InitizalizeMainMenu();
-				initializeLevel = 1;
-			}
-			else
-				nextLevel = MenuLoop();
+			nextLevel = MenuLoop();
 		}
 		else if(Level == 2)
 		{
-			if(!initializeLevel)
-			{
-				InitizalizeTestLevel();
-				initializeLevel = 1;
-			}
-			else
-				nextLevel = LevelLoop();
+			nextLevel = LevelLoop();
 		}
 
 		// Informing the system about the loop's end
@@ -138,7 +120,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	}
 
 	// free the system
-	FreeStartScreen();
 	AESysExit();
 
 	return 1;
