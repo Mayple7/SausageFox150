@@ -1,0 +1,23 @@
+<<<<<<< HEAD
+#include "Sprite.h"
+
+struct Weapon
+{
+	int BonusDamage;
+	int SwingSpeed;
+
+	struct Sprite WeaponSprite;
+
+};
+=======
+#include "Sprite.h"
+
+struct Weapon
+{
+	int BonusDamage;
+	int SwingSpeed;
+
+	struct Sprite WeaponSprite;
+
+};
+>>>>>>> 50677a7153fdf19c3a04e0e5e66b69c1c0c30110
