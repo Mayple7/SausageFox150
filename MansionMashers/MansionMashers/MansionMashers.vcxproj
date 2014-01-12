@@ -77,6 +77,7 @@
     <ClInclude Include="AETypes.h" />
     <ClInclude Include="AEUtil.h" />
     <ClInclude Include="AEVec2.h" />
+    <ClInclude Include="HeaderFiles\Camera.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
     <ClInclude Include="HeaderFiles\Player.h" />
@@ -89,6 +90,7 @@
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraMovement.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />

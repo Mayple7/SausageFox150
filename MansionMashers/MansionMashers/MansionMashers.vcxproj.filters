@@ -86,6 +86,9 @@
     <ClInclude Include="HeaderFiles\ObjectManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\StartSlides.c">
@@ -101,6 +104,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\TestLevel.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraMovement.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
