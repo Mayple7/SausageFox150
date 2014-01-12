@@ -27,11 +27,12 @@ struct Sprite
 	int NumHeightFrames;
 	int NumWidthFrames;
 
+	float Alpha;
 	int Visible;
 	int FlipX;
 	int FlipY;
 };
 
-struct Sprite CreateSprite(float width, float height, char* texture);
+void CreateSprite(struct Sprite *CurrentSprite, float width, float height, char* texture);
 struct Sprite CreateAnimation(struct Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
 void DrawSprite(struct Sprite currentSprite);

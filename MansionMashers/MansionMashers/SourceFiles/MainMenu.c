@@ -39,6 +39,8 @@ AEGfxTexture *exitButtonTexture;					// Pointer to Digipen logo texture
 AEGfxTexture *selectorTexture;						// Pointer to selector texture
 AEGfxTexture *foxTexture;						// Pointer to selector texture
 
+struct Sprite Ham;
+
 float *foxOffsetX;
 float *foxOffsetY;
 
@@ -113,7 +115,11 @@ void InitizalizeMainMenu(void)
 	foxTexture = AEGfxTextureLoad("Textures\\SausageFox.png");
 	AE_ASSERT_MESG(foxTexture, "Failed to create Fox!!");
 
+	if(NULL != malloc(sizeof(struct Sprite)))
+		CreateSprite(&Ham, 344.0f, 340.0f, "TextureFiles\\Ham.png");
 
+	Ham.XPosition = 100.0f;
+	Ham.YPosition = 200.0f;
 
 	foxOffsetX = &foxFirstOffsetX;
 	foxOffsetY = &foxFirstOffsetY;
@@ -170,6 +176,8 @@ void DrawMenu(void)
 	AEGfxSetTransparency(1.0f);
 	AEGfxTextureSet(foxTexture, *foxOffsetX, *foxOffsetY);
 	AEGfxMeshDraw(meshFox, AE_GFX_MDM_TRIANGLES);
+
+	DrawSprite(Ham);
 }
 
 		

@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 	int initializeLevel = 0;
 	int nextLevel = 0;
-	int Level = 0;
+	int Level = 1;
 
 	AEGfxVertexList*	meshTitle;				// Pointer to Mesh (Model)
 	AEGfxVertexList*	meshDigipen;			// Pointer to Digipen Logo Mesh

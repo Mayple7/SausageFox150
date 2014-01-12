@@ -32,11 +32,37 @@ int AnimationActive = 0;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
+AEGfxVertexList* createMesh(float width, float height);
+
 
 // ---------------------------------------------------------------------------
 // main
 
 AEGfxVertexList* CreateSpriteTexture(float width, float height)
+{
+	float halfWidth = width / 2;
+	float halfHeight = height / 2;
+
+	// Informing the library that we're about to start adding triangles
+	AEGfxMeshStart();
+
+	// 1 triangle at a time
+	// X, Y, Color, texU, texV
+	AEGfxTriAdd(
+		-halfWidth, -halfHeight, 0x00FFFFFF, 0.0f, 1.0f, 
+		halfWidth,  -halfHeight, 0x00FFFFFF, 1.0f, 1.0f,
+		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		halfWidth, -halfHeight, 0x00FFFFFF, 1.0f, 1.0f, 
+		halfWidth,  halfHeight, 0x00FFFFFF, 1.0f, 0.0f,
+		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
+
+	// Saving the mesh (list of triangles) in pMesh1
+
+	return AEGfxMeshEnd();
+}
+
+AEGfxVertexList* createMesh(float width, float height)
 {
 	float halfWidth = width / 2;
 	float halfHeight = height / 2;
@@ -110,36 +136,50 @@ int UpdateFrame(int totalFrames, int currentFrame, int frameUpdate, float *offse
 	return currentFrame;
 }
 
-struct Sprite CreateSprite(float width, float height, char* texture)
-{
-	struct Sprite CurrentSprite;
-	
+void CreateSprite(struct Sprite *CurrentSprite, float width, float height, char* texture)
+{	
 	//Sprite Graphics Properties
-	AEGfxVertexList* SpriteMesh;
-	AEGfxTexture *SpriteTexture;
+	CurrentSprite->SpriteMesh = createMesh(width, height);
+	CurrentSprite->SpriteTexture = AEGfxTextureLoad(texture);
 
 	// Size of the sprite
-	float Width;
-	float Height;
+	CurrentSprite->Width = width;
+	CurrentSprite->Height = height;
 
 	//Position of the sprite
-	float XPosition;
-	float YPosition;
+	CurrentSprite->XPosition = 0.0f;
+	CurrentSprite->YPosition = 0.0f;
 
 	//Animation Properties
-	int AnimationActive;
-	int CurrentFrame;
-	int TotalFrames;
-	float AnimationSpeed;
-	int AnimationTimer;
+	CurrentSprite->AnimationActive = 0;
+	CurrentSprite->CurrentFrame = 0;
+	CurrentSprite->TotalFrames = 1;
+	CurrentSprite->AnimationSpeed = 1;
+	CurrentSprite->AnimationTimer = 0;
 
 	//Texture Properties
-	char TextureName[256];
-	int NumHeightFrames;
-	int NumWidthFrames;
+	strcpy(CurrentSprite->TextureName, texture);
+	CurrentSprite->NumHeightFrames = 1;
+	CurrentSprite->NumWidthFrames = 1;
 
-	int Visible;
-	int FlipX;
-	int FlipY;
+	CurrentSprite->Alpha = 1.0f;
+	CurrentSprite->Visible = 1;
+	CurrentSprite->FlipX = 0;
+	CurrentSprite->FlipY = 0;
 }
+
+void DrawSprite(struct Sprite CurrentSprite)
+{
+	
+	// Drawing Selector
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set poisition for object 2
+	AEGfxSetPosition(CurrentSprite.XPosition, CurrentSprite.YPosition);
+	// Drawing the mesh (list of triangles)
+	AEGfxSetTransparency(CurrentSprite.Alpha);
+	printf("%s\n", CurrentSprite.TextureName);
+	AEGfxTextureSet(AEGfxTextureLoad(CurrentSprite.TextureName), 0.0f, 0.0f);
+	AEGfxMeshDraw(CurrentSprite.SpriteMesh, AE_GFX_MDM_TRIANGLES);
+}
+
 
