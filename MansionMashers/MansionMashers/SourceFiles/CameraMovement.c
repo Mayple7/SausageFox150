@@ -5,7 +5,7 @@ Creation Date:		Jan 11, 2014
 
 Purpose:			Moves Camera based on given object position
 
-Functions:			SF_SetCamera
+Functions:			SF_SetCamera (SausageFox Camera)
  
 Copyright (C) 2014 DigiPen Institute of Technology. 
 Reproduction or disclosure of this file or its contents without the prior 

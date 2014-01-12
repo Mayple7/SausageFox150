@@ -1,4 +1,4 @@
-﻿Build started 1/11/2014 10:00:34 PM.
+﻿Build started 1/11/2014 10:33:45 PM.
      1>Project "C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt SourceFiles\CameraMovement.c
@@ -10,10 +10,9 @@
          Debug\Sprite.obj
          Debug\StartSlides.obj
          Debug\TestLevel.obj
-         LINK : C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\Debug\MansionMashers.exe not found or not built by the last incremental link; performing full link
          MansionMashers.vcxproj -> C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\Debug\MansionMashers.exe
      1>Done Building Project "C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.60
+Time Elapsed 00:00:00.91
