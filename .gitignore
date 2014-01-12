@@ -1,2 +1,4 @@
 *.log
+*.tlog
 *.obj
+#Ignore files build by Visual Studio
