@@ -39,6 +39,9 @@ AEGfxTexture *exitButtonTexture;					// Pointer to Digipen logo texture
 AEGfxTexture *selectorTexture;						// Pointer to selector texture
 AEGfxTexture *foxTexture;						// Pointer to selector texture
 
+struct Sprite Ham;
+struct Sprite Bektor;
+
 float *foxOffsetX;
 float *foxOffsetY;
 
@@ -70,21 +73,21 @@ void InitizalizeMainMenu(void)
 	float foxFirstOffsetX = 0.0f;
 	float foxFirstOffsetY = 0.0f;
 
-	meshStartButton = CreateSpriteTexture(480.0f, 180.0f);
+	meshStartButton = CreateSpriteTexture(480.0f, 180.0f, 1.0f, 1.0f);
 	AE_ASSERT_MESG(meshStartButton, "Failed to create start button!!");
 
 	// Texture 1: From file
 	startButtonTexture = AEGfxTextureLoad("Textures\\StartButton.png");
 	AE_ASSERT_MESG(startButtonTexture, "Failed to create Start Button Texture!!");
 
-	meshExitButton = CreateSpriteTexture(480.0f, 180.0f);
+	meshExitButton = CreateSpriteTexture(480.0f, 180.0f, 1.0f, 1.0f);
 	AE_ASSERT_MESG(meshExitButton, "Failed to create start button!!");
 
 	// Texture 1: From file
 	exitButtonTexture = AEGfxTextureLoad("Textures\\ExitButton.png");
 	AE_ASSERT_MESG(exitButtonTexture, "Failed to create Exit Button Texture!!");
 
-	meshSelector = CreateSpriteTexture(500.0f, 200.0f);
+	meshSelector = CreateSpriteTexture(500.0f, 200.0f, 1.0f, 1.0f);
 	AE_ASSERT_MESG(meshSelector, "Failed to create selector!!");
 
 	// Texture 1: From file
@@ -113,7 +116,24 @@ void InitizalizeMainMenu(void)
 	foxTexture = AEGfxTextureLoad("Textures\\SausageFox.png");
 	AE_ASSERT_MESG(foxTexture, "Failed to create Fox!!");
 
+	if(NULL != malloc(sizeof(struct Sprite)))
+		CreateSprite(&Ham, 344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
 
+	if(NULL != malloc(sizeof(struct Sprite)))
+		CreateSprite(&Bektor, 150.0f, 150.0f, 4, 1, "TextureFiles\\Bektor.png");
+
+	Ham.XPosition = 100.0f;
+	Ham.YPosition = 200.0f;
+
+	Bektor.XPosition = -300.0f;
+	Bektor.YPosition = -300.0f;
+
+	Bektor.NumHeightFrames = 1;
+	Bektor.NumWidthFrames = 4;
+	Bektor.TotalFrames = 4;
+	Bektor.AnimationSpeed = 12;
+	Bektor.AnimationActive = 1;
+	
 
 	foxOffsetX = &foxFirstOffsetX;
 	foxOffsetY = &foxFirstOffsetY;
@@ -161,7 +181,7 @@ void DrawMenu(void)
 		foxCurrentFrame = UpdateFrame(foxTotalFrames, foxCurrentFrame, 0, foxOffsetX, foxOffsetY);
 		animationTimer++;
 	}
-	printf("X: %f, Y: %f\n", *foxOffsetX, *foxOffsetY);
+
 	// Drawing Exit Button
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	// Set poisition for object 2
@@ -170,6 +190,9 @@ void DrawMenu(void)
 	AEGfxSetTransparency(1.0f);
 	AEGfxTextureSet(foxTexture, *foxOffsetX, *foxOffsetY);
 	AEGfxMeshDraw(meshFox, AE_GFX_MDM_TRIANGLES);
+
+	DrawSprite(&Ham);
+	DrawSprite(&Bektor);
 }
 
 		

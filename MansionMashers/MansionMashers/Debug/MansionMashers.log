@@ -1,24 +1,17 @@
-﻿Build started 1/11/2014 3:39:36 PM.
-     1>Project "C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" on node 2 (Build target(s)).
+﻿Build started 1/11/2014 6:09:14 PM.
+     1>Project "C:\Users\Dan\Projects\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt SourceFiles\Main.c SourceFiles\MainMenu.c SourceFiles\TestLevel.c
-         TestLevel.c
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt SourceFiles\MainMenu.c
          MainMenu.c
-         Main.c
-     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\main.c(55): warning C4101: 'digipenLogo' : unreferenced local variable
-     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\main.c(52): warning C4101: 'meshTitle' : unreferenced local variable
-     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\main.c(54): warning C4101: 'titleTexture' : unreferenced local variable
-     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\main.c(53): warning C4101: 'meshDigipen' : unreferenced local variable
-         Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\Debug\MansionMashers.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\Debug\MansionMashers.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\Debug\MansionMashers.lib" /MACHINE:X86 Debug\Main.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Dan\Projects\SausageFox150\MansionMashers\Debug\MansionMashers.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Dan\Projects\SausageFox150\MansionMashers\Debug\MansionMashers.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Dan\Projects\SausageFox150\MansionMashers\Debug\MansionMashers.lib" /MACHINE:X86 Debug\Main.obj
          Debug\MainMenu.obj
          Debug\Sprite.obj
          Debug\StartSlides.obj
          Debug\TestLevel.obj
-         MansionMashers.vcxproj -> C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\Debug\MansionMashers.exe
-     1>Done Building Project "C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" (Build target(s)).
+         MansionMashers.vcxproj -> C:\Users\Dan\Projects\SausageFox150\MansionMashers\Debug\MansionMashers.exe
+     1>Done Building Project "C:\Users\Dan\Projects\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.53
+Time Elapsed 00:00:00.67
