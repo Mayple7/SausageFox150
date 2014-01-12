@@ -23,7 +23,11 @@ Thumbs.db
 *.log
 *.tlog
 *.obj
+<<<<<<< HEAD
 obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
+=======
+#Ignore files build by Visual Studio
+>>>>>>> ff04643ac0462c872df1baee7808abc78fe3c9c9

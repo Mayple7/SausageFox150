@@ -1,18 +1,35 @@
-﻿Build started 1/11/2014 10:33:45 PM.
-     1>Project "C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" on node 2 (Build target(s)).
+﻿Build started 1/12/2014 12:40:37 PM.
+     1>Project "C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt SourceFiles\CameraMovement.c
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt SourceFiles\CameraMovement.c SourceFiles\Main.c SourceFiles\MainMenu.c SourceFiles\Sprite.c SourceFiles\StartSlides.c SourceFiles\TestLevel.c
+         TestLevel.c
+         StartSlides.c
+     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\startslides.c(55): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\startslides.c(57): warning C4305: '+=' : truncation from 'double' to 'float'
+         Sprite.c
+     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\sprite.c(42): warning C4029: declared formal parameter list different from definition
+     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\sprite.c(66): warning C4029: declared formal parameter list different from definition
+     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\sprite.c(164): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(110) : see declaration of 'strcpy'
+         MainMenu.c
+         Main.c
+     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\main.c(55): warning C4101: 'digipenLogo' : unreferenced local variable
+     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\main.c(52): warning C4101: 'meshTitle' : unreferenced local variable
+     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\main.c(54): warning C4101: 'titleTexture' : unreferenced local variable
+     1>c:\users\kaden\documents\digipengit\sausagefox150\mansionmashers\mansionmashers\sourcefiles\main.c(53): warning C4101: 'meshDigipen' : unreferenced local variable
          CameraMovement.c
+         Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\Debug\MansionMashers.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\Debug\MansionMashers.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\Debug\MansionMashers.lib" /MACHINE:X86 Debug\CameraMovement.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\Debug\MansionMashers.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\Debug\MansionMashers.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\Debug\MansionMashers.lib" /MACHINE:X86 Debug\CameraMovement.obj
          Debug\Main.obj
          Debug\MainMenu.obj
          Debug\Sprite.obj
          Debug\StartSlides.obj
          Debug\TestLevel.obj
-         MansionMashers.vcxproj -> C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\Debug\MansionMashers.exe
-     1>Done Building Project "C:\Users\Juli Gregg\Desktop\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" (Build target(s)).
+         LINK : C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\Debug\MansionMashers.exe not found or not built by the last incremental link; performing full link
+         MansionMashers.vcxproj -> C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\Debug\MansionMashers.exe
+     1>Done Building Project "C:\Users\Kaden\Documents\DigiPenGit\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.91
+Time Elapsed 00:00:02.17
