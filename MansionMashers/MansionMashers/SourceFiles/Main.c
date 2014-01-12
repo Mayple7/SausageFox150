@@ -22,6 +22,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/TestLevel.h"
 #include "../AEEngine.h"
+#include "../HeaderFiles/Movement.h"
 
 // ---------------------------------------------------------------------------
 

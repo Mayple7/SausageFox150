@@ -20,6 +20,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../AEEngine.h"
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/Sprite.h"
+#include "../HeaderFiles/Movement.h"
+#include "../HeaderFiles/Camera.h"
 
 // ---------------------------------------------------------------------------
 
@@ -191,6 +193,9 @@ void DrawMenu(void)
 	AEGfxTextureSet(foxTexture, *foxOffsetX, *foxOffsetY);
 	AEGfxMeshDraw(meshFox, AE_GFX_MDM_TRIANGLES);
 
+	//Camera follows ham
+	SF_SetCamera(Ham.XPosition, 350, 3.0f);
+
 	DrawSprite(&Ham);
 	DrawSprite(&Bektor);
 }
@@ -240,6 +245,12 @@ int InputHandling(void)
 			return -1;
 	}
 
+	//Moving the Ham waith WASD
+	JG_move('W', &Ham.XPosition, &Ham.YPosition, 3.0f,  UP);
+	JG_move('S', &Ham.XPosition, &Ham.YPosition, 3.0f, DOWN);
+	JG_move('A', &Ham.XPosition, &Ham.YPosition, 3.0f, LEFT);
+	JG_move('D', &Ham.XPosition, &Ham.YPosition, 3.0f, RIGHT);
+
 	return 0;
 }
 
@@ -280,7 +291,6 @@ int MenuLoop(void)
 
 		// Handling Input
 		AEInputUpdate();
-
 		// Functions
 		changeLevel = InputHandling();
 		DrawMenu();
