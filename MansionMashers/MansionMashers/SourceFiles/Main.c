@@ -46,7 +46,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	float alpha = 0.0f;
 	int slideTimer = 0;
 	int fade = 1;								//0: no fade, 1: fade in, 2: fade out
-	int initializeLevel = 0;
 	int nextLevel = 0;
 	int Level = 1;
 
@@ -91,25 +90,23 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		// Handling Input
 		AEInputUpdate();
 
-		if(nextLevel)
+		switch(Level)
 		{
-			nextLevel = 0;
-			Level += 1;
-			initializeLevel = 0;
+		case 0:
+			nextLevel = SplashScreenLoop();
+			break;
+		case 1:
+			nextLevel = MenuLoop();
+			break;
+		case 2:
+			nextLevel = LevelLoop();
+			break;
+		default:
+			GameRunning = 0;
 		}
 
-		if(Level == 0)
-		{
-			nextLevel = SplashScreenLoop();
-		}
-		else if(Level == 1)
-		{
-			nextLevel = MenuLoop();
-		}
-		else if(Level == 2)
-		{
-			nextLevel = LevelLoop();
-		}
+		Level = nextLevel;
+		nextLevel = 0;
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();

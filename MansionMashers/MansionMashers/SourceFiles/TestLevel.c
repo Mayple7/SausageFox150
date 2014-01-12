@@ -136,7 +136,7 @@ int LevelLoop(void)
 		AESysFrameEnd();
 
 		// check if forcing the application to quit
-		if (changeLevel > 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+		if (changeLevel != 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 			LevelRunning = 0;
 	}
 
