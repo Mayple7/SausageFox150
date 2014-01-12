@@ -90,7 +90,7 @@
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CameraMovement.c" />
+    <ClCompile Include="SourceFiles\CameraMovement.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />

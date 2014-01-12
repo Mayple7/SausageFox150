@@ -106,7 +106,7 @@
     <ClCompile Include="SourceFiles\TestLevel.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CameraMovement.c">
+    <ClCompile Include="SourceFiles\CameraMovement.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
