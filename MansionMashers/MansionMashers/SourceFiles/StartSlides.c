@@ -89,13 +89,13 @@ int FadeLogic(void)
 }
 void InitializeStartScreen(void)
 {
-	meshTitle = CreateSpriteTexture(1280.0f, 720.0f);
+	meshTitle = CreateSpriteTexture(1280.0f, 720.0f, 1.0f, 1.0f);
 	AE_ASSERT_MESG(meshTitle, "Failed to create mesh 1!!");
 
-	meshDigipen = CreateSpriteTexture(1024.0f, 248.0f);
+	meshDigipen = CreateSpriteTexture(1024.0f, 248.0f, 1.0f, 1.0f);
 	AE_ASSERT_MESG(meshDigipen, "Failed to create mesh 1!!");
 
-	meshSausage = CreateSpriteTexture(1280.0f, 720.0f);
+	meshSausage = CreateSpriteTexture(1280.0f, 720.0f, 1.0f, 1.0f);
 	AE_ASSERT_MESG(meshSausage, "Failed to create mesh 1!!");
 
 

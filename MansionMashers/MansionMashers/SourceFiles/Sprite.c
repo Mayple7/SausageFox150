@@ -62,7 +62,7 @@ AEGfxVertexList* CreateSpriteTexture(float width, float height)
 	return AEGfxMeshEnd();
 }
 
-AEGfxVertexList* createMesh(float width, float height)
+AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY)
 {
 	float halfWidth = width / 2;
 	float halfHeight = height / 2;
@@ -73,12 +73,12 @@ AEGfxVertexList* createMesh(float width, float height)
 	// 1 triangle at a time
 	// X, Y, Color, texU, texV
 	AEGfxTriAdd(
-		-halfWidth, -halfHeight, 0x00FFFFFF, 0.0f, 1.0f, 
-		halfWidth,  -halfHeight, 0x00FFFFFF, 1.0f, 1.0f,
+		-halfWidth, -halfHeight, 0x00FFFFFF, 0.0f, offsetY, 
+		halfWidth,  -halfHeight, 0x00FFFFFF, offsetX, offsetY,
 		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
 	AEGfxTriAdd(
-		halfWidth, -halfHeight, 0x00FFFFFF, 1.0f, 1.0f, 
-		halfWidth,  halfHeight, 0x00FFFFFF, 1.0f, 0.0f,
+		halfWidth, -halfHeight, 0x00FFFFFF, offsetX, offsetY, 
+		halfWidth,  halfHeight, 0x00FFFFFF, offsetX, 0.0f,
 		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
 
 	// Saving the mesh (list of triangles) in pMesh1
@@ -136,10 +136,13 @@ int UpdateFrame(int totalFrames, int currentFrame, int frameUpdate, float *offse
 	return currentFrame;
 }
 
-void CreateSprite(struct Sprite *CurrentSprite, float width, float height, char* texture)
+void CreateSprite(struct Sprite *CurrentSprite, float width, float height, int xFrames, int yFrames, char* texture)
 {	
+	CurrentSprite->OffsetX = 1.0f / xFrames;
+	CurrentSprite->OffsetY = 1.0f / yFrames;
+
 	//Sprite Graphics Properties
-	CurrentSprite->SpriteMesh = createMesh(width, height);
+	CurrentSprite->SpriteMesh = createMesh(width, height, CurrentSprite->OffsetX, CurrentSprite->OffsetY);
 	CurrentSprite->SpriteTexture = AEGfxTextureLoad(texture);
 
 	// Size of the sprite
@@ -159,8 +162,8 @@ void CreateSprite(struct Sprite *CurrentSprite, float width, float height, char*
 
 	//Texture Properties
 	strcpy(CurrentSprite->TextureName, texture);
-	CurrentSprite->NumHeightFrames = 1;
-	CurrentSprite->NumWidthFrames = 1;
+	CurrentSprite->NumHeightFrames = yFrames;
+	CurrentSprite->NumWidthFrames = xFrames;
 
 	CurrentSprite->Alpha = 1.0f;
 	CurrentSprite->Visible = 1;
@@ -168,18 +171,43 @@ void CreateSprite(struct Sprite *CurrentSprite, float width, float height, char*
 	CurrentSprite->FlipY = 0;
 }
 
-void DrawSprite(struct Sprite CurrentSprite)
+void DrawSprite(struct Sprite *CurrentSprite)
 {
-	
+	float offsetDiffX = 1.0f / CurrentSprite->NumWidthFrames;
+	float offsetDiffY = 1.0f / CurrentSprite->NumHeightFrames;
+	float offsetX = 0.0f;
+	float offsetY = 0.0f;
 	// Drawing Selector
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	// Set poisition for object 2
-	AEGfxSetPosition(CurrentSprite.XPosition, CurrentSprite.YPosition);
+	AEGfxSetPosition(CurrentSprite->XPosition, CurrentSprite->YPosition);
 	// Drawing the mesh (list of triangles)
-	AEGfxSetTransparency(CurrentSprite.Alpha);
-	printf("%s\n", CurrentSprite.TextureName);
-	AEGfxTextureSet(AEGfxTextureLoad(CurrentSprite.TextureName), 0.0f, 0.0f);
-	AEGfxMeshDraw(CurrentSprite.SpriteMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransparency(CurrentSprite->Alpha);
+	//printf("%d\n", CurrentSprite->AnimationActive);
+	if(CurrentSprite->AnimationActive)
+	{
+		CurrentSprite->AnimationTimer++;
+		if(CurrentSprite->CurrentFrame >= CurrentSprite->TotalFrames - 1 && CurrentSprite->AnimationTimer >= CurrentSprite->AnimationSpeed)
+		{
+			CurrentSprite->CurrentFrame = 0;
+			CurrentSprite->AnimationTimer = 0;
+		}
+		else if(CurrentSprite->AnimationTimer >= CurrentSprite->AnimationSpeed)
+		{
+			CurrentSprite->CurrentFrame++;
+			CurrentSprite->AnimationTimer = 0;
+		}
+		offsetX = ((CurrentSprite->CurrentFrame - 1) % CurrentSprite->NumWidthFrames) * offsetDiffX;
+		offsetY = ((CurrentSprite->CurrentFrame - 1) % CurrentSprite->NumHeightFrames) * offsetDiffY;
+	}
+	else
+	{
+		offsetX = ((CurrentSprite->CurrentFrame - 1) % CurrentSprite->NumWidthFrames) * offsetDiffX;
+		offsetY = ((CurrentSprite->CurrentFrame - 1) % CurrentSprite->NumHeightFrames) * offsetDiffY;
+	}
+
+	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
+	AEGfxMeshDraw(CurrentSprite->SpriteMesh, AE_GFX_MDM_TRIANGLES);
 }
 
 
