@@ -115,5 +115,8 @@
     <ClCompile Include="SourceFiles\Movement.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFiles\ObjectManager.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
