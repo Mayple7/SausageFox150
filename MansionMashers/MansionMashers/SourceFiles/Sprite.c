@@ -86,56 +86,6 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	return AEGfxMeshEnd();
 }
 
-int UpdateFrame(int totalFrames, int currentFrame, int frameUpdate, float *offsetX, float *offsetY)
-{
-	if(currentFrame >= totalFrames - 1 && frameUpdate)
-		currentFrame = 0;
-	else if(frameUpdate)
-		currentFrame++;
-
-	switch(currentFrame)
-	{
-	case 0:
-		*offsetX = 0.0f;
-		*offsetY = 0.0f;
-		break;
-	case 1:
-		*offsetX = 0.25f;
-		*offsetY = 0.0f;
-		break;
-	case 2:
-		*offsetX = 0.5f;
-		*offsetY = 0.0f;
-		break;
-	case 3:
-		*offsetX = 0.75f;
-		*offsetY = 0.0f;
-		break;
-	case 4:
-		*offsetX = 0.0f;
-		*offsetY = 0.5f;
-		break;
-	case 5:
-		*offsetX = 0.25f;
-		*offsetY = 0.5f;
-		break;
-	case 6:
-		*offsetX = 0.5f;
-		*offsetY = 0.5f;
-		break;
-	case 7:
-		*offsetX = 0.75f;
-		*offsetY = 0.5f;
-		break;
-	default:
-		*offsetX = *offsetX;
-		*offsetY = *offsetY;
-		break;
-	}
-
-	return currentFrame;
-}
-
 void CreateSprite(struct Sprite *CurrentSprite, float width, float height, int xFrames, int yFrames, char* texture)
 {	
 	CurrentSprite->OffsetX = 1.0f / xFrames;
