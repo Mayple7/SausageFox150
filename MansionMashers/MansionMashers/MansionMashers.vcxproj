@@ -81,10 +81,13 @@
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\Movement.h" />
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
+    <ClInclude Include="HeaderFiles\Physics.h" />
     <ClInclude Include="HeaderFiles\Player.h" />
+    <ClInclude Include="HeaderFiles\RigidBody.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
     <ClInclude Include="HeaderFiles\StartSlides.h" />
     <ClInclude Include="HeaderFiles\TestLevel.h" />
+    <ClInclude Include="HeaderFiles\Vector2.h" />
     <ClInclude Include="HeaderFiles\Weapon.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Point4.h" />
@@ -100,6 +103,7 @@
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />
     <ClCompile Include="SourceFiles\TestLevel.c" />
+    <ClCompile Include="SourceFiles\Vector2.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

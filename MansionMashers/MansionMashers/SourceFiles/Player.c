@@ -5,7 +5,8 @@ Creation Date:		Jan 8, 2014
 
 Purpose:			All the player components and code are here.
 
-Functions:			MenuLoop - Main loop for the main menu
+Functions:			InitializePlayer - Creates the player object and sprites.
+					DrawPlayer - Draws the player based on the sprite.
  
 Copyright (C) 2014 DigiPen Institute of Technology. 
 Reproduction or disclosure of this file or its contents without the prior 
@@ -18,8 +19,10 @@ written consent of DigiPen Institute of Technology is prohibited.
 // includes
 
 #include "../AEEngine.h"
+#include "../HeaderFiles/Vector2.h"
 #include "../HeaderFiles/Sprite.h"
 #include "../HeaderFiles/Player.h"
+#include "../HeaderFiles/RigidBody.h"
 
 // ---------------------------------------------------------------------------
 
