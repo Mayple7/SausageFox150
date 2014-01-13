@@ -32,6 +32,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // Includes
 #include "../HeaderFiles/Vector2.h"
+#include <math.h>
+
 // ---------------------------------------------------------------------------
 // Globals
 
@@ -40,21 +42,110 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 // Main Program
-void Vec2Zero(Vec2* Result);
-void Vec2Set(Vec2* Result, float x, float y);
 
-void Vec2Negate(Vec2* Result, Vec2* Operand);
-void Vec2Add(Vec2* Result, Vec2* Operand1, Vec2* Operand2);
-void Vec2Subtract(Vec2* Result, Vec2* Operand1, Vec2* Operand2);
-void Vec2Normalize(Vec2* Result, Vec2* Operand);
+//Zeros a vector
+void Vec2Zero(Vec2* Result)
+{
+	Result->x = 0;
+	Result->y = 0;
+}
 
-void Vec2Scale(Vec2* Result, Vec2* Operand, float Scalar);
-void Vec2Project(Vec2* Result, Vec2* Operand1, Vec2* Operand2);
+//Sets a vector to x, y
+void Vec2Set(Vec2* Result, float x, float y)
+{
+	Result->x = x;
+	Result->y = y;
+}
 
-float Vec2Length(Vec2* Operand);
-float Vec2SquareLength(Vec2* Operand);
-float Vec2Distance(Vec2* Operand1, Vec2* Operand2);
-float Vec2SquareDistance(Vec2* pVec0, Vec2* pVec1);
+//Negates a vector to -x, -y
+void Vec2Negate(Vec2* Result, Vec2* Operand)
+{
+	Result->x = -(Operand->x);
+	Result->y = -(Operand->y);
+}
 
-float Vec2DotProduct(Vec2* Operand1, Vec2* Operand2);
-float Vec2CrossProductMag(Vec2* Operand1, Vec2* Operand2);
+//Adds 2 vectors
+void Vec2Add(Vec2* Result, Vec2* Operand1, Vec2* Operand2)
+{
+	Result->x = Operand1->x + Operand2->x;
+	Result->y = Operand2->y + Operand2->y;
+}
+
+//Subtracts 2 vectors
+void Vec2Subtract(Vec2* Result, Vec2* Operand1, Vec2* Operand2)
+{
+	Result->x = Operand1->x - Operand2->x;
+	Result->y = Operand1->x - Operand2->y;
+}
+
+//Normalizes a vector
+void Vec2Normalize(Vec2* Result, Vec2* Operand)
+{
+	Result->x = Operand->x / Vec2Length(Operand);
+	Result->y = Operand->y / Vec2Length(Operand);
+}
+
+
+//Scales a vector
+void Vec2Scale(Vec2* Result, Vec2* Operand, float Scalar)
+{
+	Result->x = Scalar * Operand->x;
+	Result->y = Scalar * Operand->y;
+}
+
+//Vector projection
+void Vec2Project(Vec2* Result, Vec2* Operand1, Vec2* Operand2)
+{
+	//Vector b onto a
+	// b = Op1, a = Op2
+
+	float scalar; // (a . b) / (a . a)
+	float length; // ||a||
+
+	scalar = Vec2DotProduct(Operand2, Operand1) / Vec2DotProduct(Operand2, Operand2);
+	length = Vec2Length(Operand2);
+
+	Vec2Scale(Result, Operand2, (scalar * (1/length)));
+}
+
+//Returns length of a vector
+float Vec2Length(Vec2* Operand)
+{
+	return (sqrt(Vec2SquareLength(Operand)));
+}
+
+//Returns the square of the length of a vector
+float Vec2SquareLength(Vec2* Operand)
+{
+	return (Operand->x * Operand->x + Operand->y * Operand->y);
+}
+
+// Returns the distance between 2 vectors
+float Vec2Distance(Vec2* Operand1, Vec2* Operand2)
+{	
+	return (sqrt(Vec2SquareDistance(Operand1, Operand2)));
+}
+
+//Returns the square of the distance between 2 vectors
+float Vec2SquareDistance(Vec2* Operand1, Vec2* Operand2)
+{
+	float x_square;
+	float y_square;
+
+	x_square = (Operand1->x - Operand2->x) * (Operand1->x - Operand2->x);
+	y_square = (Operand1->y - Operand2->y) * (Operand1->y - Operand2->y);
+
+	return (x_square + y_square);
+}
+
+//Returns the dot product of 2 vectors
+float Vec2DotProduct(Vec2* Operand1, Vec2* Operand2)
+{
+	return (Operand1->x * Operand2->x + Operand1->y * Operand2->y);
+}
+
+//Returns the magnitude of the cross product of 2 vectors
+float Vec2CrossProductMag(Vec2* Operand1, Vec2* Operand2)
+{
+	return (Operand1->x * Operand2->y - Operand1->y * Operand2->x);
+}
