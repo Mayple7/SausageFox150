@@ -109,13 +109,13 @@
     <ClCompile Include="SourceFiles\TestLevel.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFiles\ObjectManager.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="SourceFiles\Camera.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Movement.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\ObjectManager.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
