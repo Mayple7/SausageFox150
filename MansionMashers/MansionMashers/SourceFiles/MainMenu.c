@@ -21,6 +21,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/Sprite.h"
 #include "../HeaderFiles/Player.h"
+#include "../HeaderFiles/Movement.h"
+#include "../HeaderFiles/Camera.h"
 
 // ---------------------------------------------------------------------------
 
@@ -40,8 +42,8 @@ AEGfxTexture *exitButtonTexture;					// Pointer to Digipen logo texture
 AEGfxTexture *selectorTexture;						// Pointer to selector texture
 AEGfxTexture *foxTexture;						// Pointer to selector texture
 
-struct Sprite Ham;
-struct Sprite Bektor;
+Sprite Ham;
+Sprite Bektor;
 
 struct Player Player;
 
@@ -145,6 +147,9 @@ void DrawMenu(void)
 	AEGfxTextureSet(exitButtonTexture, 0.0f, 0.0f);
 	AEGfxMeshDraw(meshExitButton, AE_GFX_MDM_TRIANGLES);
 
+	//Camera follows ham
+	SF_SetCamera(Ham.XPosition, 350, 3.0f);
+
 	DrawSprite(&Ham);
 	DrawSprite(&Bektor);
 	DrawPlayer(&Player);
@@ -195,6 +200,12 @@ int InputHandling(void)
 			return -1;
 	}
 
+	//Moving the Ham with WASD
+	JG_move('W', &Ham.XPosition, &Ham.YPosition, 3.0f,  UP);
+	JG_move('S', &Ham.XPosition, &Ham.YPosition, 3.0f, DOWN);
+	JG_move('A', &Ham.XPosition, &Ham.YPosition, 3.0f, LEFT);
+	JG_move('D', &Ham.XPosition, &Ham.YPosition, 3.0f, RIGHT);
+
 	return 0;
 }
 
@@ -235,7 +246,6 @@ int MenuLoop(void)
 
 		// Handling Input
 		AEInputUpdate();
-
 		// Functions
 		changeLevel = InputHandling();
 		DrawMenu();
