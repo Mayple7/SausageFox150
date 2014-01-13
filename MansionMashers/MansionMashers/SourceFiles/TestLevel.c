@@ -39,19 +39,18 @@ Sprite *objectList;
 // main
 void InitizalizeTestLevel(void)
 {
-	//addObject(&Ham);
 	objectList = (Sprite *)malloc(objectAmount * sizeof(Sprite));
 	if (objectList)
 	{
 		int i;
 		for (i = 0; i < objectAmount; i++)
 		{
-			printf("%i", sizeof(objectList[0]));
+			printf("%i\n", sizeof(objectList[i]));
 		}
 	}
 	Ham2 = objectList;
 
-	if(NULL != malloc(sizeof(struct Sprite)))
+	if(NULL != malloc(sizeof(Sprite)))
 		CreateSprite(Ham2, 344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
 
 	Ham2->XPosition = -100.0f;
@@ -60,15 +59,25 @@ void InitizalizeTestLevel(void)
 
 void DrawLevel(void)
 {
-	//int i;
-	//for (i = 0; )
-	DrawSprite(Ham2);
+	int i;
+	for (i = 0; i < objectAmount; i++)
+	{
+		Sprite* objectNext = (objectList + i);
+		if (objectNext && objectNext->Created && objectNext->Created == 1)
+			DrawSprite(objectNext);
+	}
 }
 
 void FreeLevel(void)
 {
 	// Freeing the objects and textures
-	free(objectList);
+	int i;
+	for (i = 0; i < objectAmount; i++)
+	{
+		Sprite* objectNext = (objectList + i);
+		if (objectNext && objectNext->Created && objectNext->Created == 1)
+			free(objectNext);
+	}
 }
 
 int LevelLoop(void)

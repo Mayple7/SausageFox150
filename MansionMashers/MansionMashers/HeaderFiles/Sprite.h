@@ -3,8 +3,12 @@ int UpdateFrame(int totalFrames, int currentFrame, int frameUpdate, float *offse
 
 typedef struct Sprite
 {
+	//Bools
+	int Created;
+	int CanCollide;
+
 	//Sprite Graphics Properties
-	AEGfxVertexList* SpriteMesh;
+	AEGfxVertexList *SpriteMesh;
 	AEGfxTexture *SpriteTexture;
 
 	// Size of the sprite
