@@ -118,5 +118,8 @@
     <ClCompile Include="SourceFiles\Movement.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFiles\Player.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -20,9 +20,12 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../AEEngine.h"
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/Sprite.h"
+<<<<<<< HEAD
 #include "../HeaderFiles/Player.h"
+=======
 #include "../HeaderFiles/Movement.h"
 #include "../HeaderFiles/Camera.h"
+>>>>>>> 37cf901d9a30250c9dc35ab1f967745939b1c391
 
 // ---------------------------------------------------------------------------
 
@@ -147,9 +150,32 @@ void DrawMenu(void)
 	AEGfxTextureSet(exitButtonTexture, 0.0f, 0.0f);
 	AEGfxMeshDraw(meshExitButton, AE_GFX_MDM_TRIANGLES);
 
+<<<<<<< HEAD
+=======
+	if(animationTimer >= animationSpeed)
+	{
+		foxCurrentFrame = UpdateFrame(foxTotalFrames, foxCurrentFrame, 1, foxOffsetX, foxOffsetY);
+		animationTimer = 0;
+	}
+	else
+	{
+		foxCurrentFrame = UpdateFrame(foxTotalFrames, foxCurrentFrame, 0, foxOffsetX, foxOffsetY);
+		animationTimer++;
+	}
+
+	// Drawing Exit Button
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set poisition for object 2
+	AEGfxSetPosition(0.0f, 0.0f);
+	// Drawing the mesh (list of triangles)
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(foxTexture, *foxOffsetX, *foxOffsetY);
+	AEGfxMeshDraw(meshFox, AE_GFX_MDM_TRIANGLES);
+
 	//Camera follows ham
 	SF_SetCamera(Ham.XPosition, 350, 3.0f);
 
+>>>>>>> 37cf901d9a30250c9dc35ab1f967745939b1c391
 	DrawSprite(&Ham);
 	DrawSprite(&Bektor);
 	DrawPlayer(&Player);
