@@ -39,8 +39,8 @@ AEGfxTexture *exitButtonTexture;					// Pointer to Digipen logo texture
 AEGfxTexture *selectorTexture;						// Pointer to selector texture
 AEGfxTexture *foxTexture;						// Pointer to selector texture
 
-struct Sprite Ham;
-struct Sprite Bektor;
+Sprite Ham;
+Sprite Bektor;
 
 float *foxOffsetX;
 float *foxOffsetY;

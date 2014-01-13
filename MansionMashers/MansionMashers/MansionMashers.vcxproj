@@ -93,6 +93,7 @@
     <ClCompile Include="SourceFiles\CameraMovement.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
+    <ClCompile Include="SourceFiles\ObjectManager.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />
     <ClCompile Include="SourceFiles\TestLevel.c" />
