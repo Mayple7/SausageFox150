@@ -32,38 +32,17 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // globals
 
-AEGfxVertexList*	meshStartButton;				// Pointer to Mesh (Model)
-AEGfxVertexList*	meshExitButton;					// Pointer to Digipen Logo Mesh
-AEGfxVertexList*	meshSelector;					// Selector Mesh
-AEGfxVertexList*	meshFox;					// Selector Mesh
-
-AEGfxTexture *startButtonTexture;					// Pointer to Texture (Image)
-AEGfxTexture *exitButtonTexture;					// Pointer to Digipen logo texture
-AEGfxTexture *selectorTexture;						// Pointer to selector texture
-AEGfxTexture *foxTexture;						// Pointer to selector texture
-
 Sprite Ham;
 Sprite Bektor;
+Sprite StartButton;
+Sprite ExitButton;
+Sprite Selector;
+Sprite AnimationTest;
 
 struct Player Player;
 
-float *foxOffsetX;
-float *foxOffsetY;
-
-int foxCurrentFrame = 0;
-int foxTotalFrames = 8;
-
 int numMenuButtons = 2;
 int selectedButton = 0;								//0: start, 1: exit
-
-float startButtonx = 0;
-float startButtony = 100;
-
-float exitButtonx = 0;
-float exitButtony = -100;
-
-float selectorX = 0;
-float selectorY = 0;
 
 float animationSpeed = 60.0f / 16.0f;
 int animationTimer = 0;
@@ -75,32 +54,34 @@ int animationTimer = 0;
 
 void InitizalizeMainMenu(void)
 {
-	meshStartButton = CreateSpriteTexture(480.0f, 180.0f, 1.0f, 1.0f);
-	AE_ASSERT_MESG(meshStartButton, "Failed to create start button!!");
-
-	// Texture 1: From file
-	startButtonTexture = AEGfxTextureLoad("Textures\\StartButton.png");
-	AE_ASSERT_MESG(startButtonTexture, "Failed to create Start Button Texture!!");
-
-	meshExitButton = CreateSpriteTexture(480.0f, 180.0f, 1.0f, 1.0f);
-	AE_ASSERT_MESG(meshExitButton, "Failed to create start button!!");
-
-	// Texture 1: From file
-	exitButtonTexture = AEGfxTextureLoad("Textures\\ExitButton.png");
-	AE_ASSERT_MESG(exitButtonTexture, "Failed to create Exit Button Texture!!");
-
-	meshSelector = CreateSpriteTexture(500.0f, 200.0f, 1.0f, 1.0f);
-	AE_ASSERT_MESG(meshSelector, "Failed to create selector!!");
-
-	// Texture 1: From file
-	selectorTexture = AEGfxTextureLoad("Textures\\Selector.png");
-	AE_ASSERT_MESG(selectorTexture, "Failed to create Start Button Texture!!");
+	if(NULL != malloc(sizeof(struct Sprite)))
+		CreateSprite(&StartButton, 480.0f, 180.0f, 1, 1, "TextureFiles/StartButton.png");
+	StartButton.XPosition = 0.0f;
+	StartButton.YPosition = 100.0f;
 
 	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&Ham, 344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
+		CreateSprite(&ExitButton, 480.0f, 180.0f, 1, 1, "TextureFiles/ExitButton.png");
+	ExitButton.XPosition = 0.0f;
+	ExitButton.YPosition = -100.0f;
 
 	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&Bektor, 150.0f, 150.0f, 4, 1, "TextureFiles\\Bektor.png");
+		CreateSprite(&Selector, 500.0f, 200.0f, 1, 1, "TextureFiles/Selector.png");
+	Selector.XPosition = 100.0f;
+	Selector.YPosition = 0.0f;
+	
+	if(NULL != malloc(sizeof(struct Sprite)))
+		CreateSprite(&Ham, 344.0f, 340.0f, 1, 1, "TextureFiles/Ham.png");
+
+	if(NULL != malloc(sizeof(struct Sprite)))
+		CreateSprite(&Bektor, 150.0f, 150.0f, 4, 1, "TextureFiles/Bektor.png");
+
+	if(NULL != malloc(sizeof(struct Sprite)))
+		CreateSprite(&AnimationTest, 300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
+	AnimationTest.XPosition = -400.0f;
+	AnimationTest.YPosition = 300.0f;
+
+	AnimationTest.AnimationActive = 1;
+	AnimationTest.AnimationSpeed = 60;
 
 	Ham.XPosition = 100.0f;
 	Ham.YPosition = 200.0f;
@@ -108,62 +89,34 @@ void InitizalizeMainMenu(void)
 	Bektor.XPosition = -300.0f;
 	Bektor.YPosition = -300.0f;
 
-	Bektor.TotalFrames = 4;
 	Bektor.AnimationSpeed = 12;
 	Bektor.AnimationActive = 1;
 
 	if(NULL != malloc(sizeof(struct Player)))
 		InitializePlayer(&Player);
 
-	UpdateSelector();
+	UpdateSelector(&Selector);
 }
 
 void DrawMenu(void)
 {
-	// Drawing Selector
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	// Set poisition for object 2
-	AEGfxSetPosition(selectorX, selectorY);
-	// Drawing the mesh (list of triangles)
-	AEGfxSetTransparency(1.0f);
-	AEGfxTextureSet(selectorTexture, 0.0f, 0.0f);
-	AEGfxMeshDraw(meshSelector, AE_GFX_MDM_TRIANGLES);
-
-	// Drawing Start Button
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	// Set poisition for object 1
-	AEGfxSetPosition(startButtonx, startButtony);
-	// Drawing the mesh (list of triangles)
-	AEGfxSetTransparency(1.0f);
-	AEGfxTextureSet(startButtonTexture, 0.0f, 0.0f);
-	AEGfxMeshDraw(meshStartButton, AE_GFX_MDM_TRIANGLES);
-
-	// Drawing Exit Button
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	// Set poisition for object 2
-	AEGfxSetPosition(exitButtonx, exitButtony);
-	// Drawing the mesh (list of triangles)
-	AEGfxSetTransparency(1.0f);
-	AEGfxTextureSet(exitButtonTexture, 0.0f, 0.0f);
-	AEGfxMeshDraw(meshExitButton, AE_GFX_MDM_TRIANGLES);
-
 	//Camera follows ham
 	SF_SetCamera(Ham.XPosition, 350, 3.0f);
 
+	DrawSprite(&Selector);
+	DrawSprite(&StartButton);
+	DrawSprite(&ExitButton);
 	DrawSprite(&Ham);
 	DrawSprite(&Bektor);
 	DrawPlayer(&Player);
+
+	DrawSprite(&AnimationTest);
 }
 
 		
 void FreeMainMenu(void)
 {
 	// Freeing the objects and textures
-	AEGfxMeshFree(meshStartButton);
-	AEGfxMeshFree(meshExitButton);
-	
-	AEGfxTextureUnload(startButtonTexture);
-	AEGfxTextureUnload(exitButtonTexture);
 }
 
 //INPUT, PRESS DEM KEYS BOI
@@ -177,7 +130,7 @@ int InputHandling(void)
 		else
 			selectedButton--;
 
-		UpdateSelector();
+		UpdateSelector(&Selector);
 	}
 	else if(AEInputCheckTriggered(VK_DOWN))
 	{
@@ -186,7 +139,7 @@ int InputHandling(void)
 		else
 			selectedButton++;
 
-		UpdateSelector();
+		UpdateSelector(&Selector);
 	}
 	else if(AEInputCheckTriggered(VK_RETURN))
 	{
@@ -213,21 +166,21 @@ int InputHandling(void)
 	return 0;
 }
 
-void UpdateSelector(void)
+void UpdateSelector(struct Sprite *Selector)
 {
 	switch(selectedButton)
 	{
 		case 0:
-			selectorX = startButtonx;
-			selectorY = startButtony;
+			Selector->XPosition = 0.0f;//StartButton.XPosition;
+			Selector->YPosition = 100.0f;//StartButton.YPosition;
 			break;
 		case 1:
-			selectorX = exitButtonx;
-			selectorY = exitButtony;
+			Selector->XPosition = 0.0f;//ExitButton.XPosition;
+			Selector->YPosition = -100.0f;//ExitButton.YPosition;
 			break;
 		default:
-			selectorX = startButtonx;
-			selectorY = startButtony;
+			Selector->XPosition = 0.0f;//StartButton.XPosition;
+			Selector->YPosition = 100.0f;//StartButton.YPosition;
 			break;
 	}
 }
