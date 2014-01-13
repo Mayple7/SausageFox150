@@ -39,7 +39,7 @@ struct Player Player;
 // ---------------------------------------------------------------------------
 void InitializePlayer(struct Player *Player)
 {
-	CreateSprite(&Player->PlayerSprite, 250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
+	Player->PlayerSprite = *CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
 
 	Player->PlayerSprite.XPosition = 0.0f;
 	Player->PlayerSprite.YPosition = 0.0f;

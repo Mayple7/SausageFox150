@@ -39,6 +39,6 @@ typedef struct Sprite
 	int FlipY;
 }Sprite;
 
-void CreateSprite(Sprite *CurrentSprite, float width, float height, int xFrames, int yFrames, char* texture);
+Sprite * CreateSprite(float width, float height, int xFrames, int yFrames, char* texture);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
 void DrawSprite(Sprite *currentSprite);

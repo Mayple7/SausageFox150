@@ -19,6 +19,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/Sprite.h"
+#include "../HeaderFiles/ObjectManager.h"
 
 // ---------------------------------------------------------------------------
 
@@ -136,8 +137,10 @@ int UpdateFrame(int totalFrames, int currentFrame, int frameUpdate, float *offse
 	return currentFrame;
 }
 
-void CreateSprite(Sprite *CurrentSprite, float width, float height, int xFrames, int yFrames, char* texture)
+Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* texture)
 {	
+	Sprite *CurrentSprite = addObject();
+
 	CurrentSprite->OffsetX = 1.0f / xFrames;
 	CurrentSprite->OffsetY = 1.0f / yFrames;
 
@@ -172,9 +175,11 @@ void CreateSprite(Sprite *CurrentSprite, float width, float height, int xFrames,
 
 	//The sprite has now been created
 	CurrentSprite->Created = 1;
+
+	return CurrentSprite;
 }
 
-void DrawSprite(struct Sprite *CurrentSprite)
+void DrawSprite(Sprite *CurrentSprite)
 {
 	float offsetDiffX = 1.0f / CurrentSprite->NumWidthFrames;
 	float offsetDiffY = 1.0f / CurrentSprite->NumHeightFrames;
