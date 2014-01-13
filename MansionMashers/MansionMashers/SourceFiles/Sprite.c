@@ -197,13 +197,13 @@ void DrawSprite(struct Sprite *CurrentSprite)
 			CurrentSprite->CurrentFrame++;
 			CurrentSprite->AnimationTimer = 0;
 		}
-		offsetX = ((CurrentSprite->CurrentFrame - 1) % CurrentSprite->NumWidthFrames) * offsetDiffX;
-		offsetY = ((CurrentSprite->CurrentFrame - 1) % CurrentSprite->NumHeightFrames) * offsetDiffY;
+		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
+		offsetY = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiffY;
 	}
 	else
 	{
-		offsetX = ((CurrentSprite->CurrentFrame - 1) % CurrentSprite->NumWidthFrames) * offsetDiffX;
-		offsetY = ((CurrentSprite->CurrentFrame - 1) % CurrentSprite->NumHeightFrames) * offsetDiffY;
+		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
+		offsetY = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumHeightFrames) * offsetDiffY;
 	}
 
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);

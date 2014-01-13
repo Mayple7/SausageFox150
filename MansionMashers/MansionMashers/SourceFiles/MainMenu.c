@@ -20,6 +20,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../AEEngine.h"
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/Sprite.h"
+#include "../HeaderFiles/Player.h"
 
 // ---------------------------------------------------------------------------
 
@@ -41,6 +42,8 @@ AEGfxTexture *foxTexture;						// Pointer to selector texture
 
 struct Sprite Ham;
 struct Sprite Bektor;
+
+struct Player Player;
 
 float *foxOffsetX;
 float *foxOffsetY;
@@ -70,9 +73,6 @@ int animationTimer = 0;
 
 void InitizalizeMainMenu(void)
 {
-	float foxFirstOffsetX = 0.0f;
-	float foxFirstOffsetY = 0.0f;
-
 	meshStartButton = CreateSpriteTexture(480.0f, 180.0f, 1.0f, 1.0f);
 	AE_ASSERT_MESG(meshStartButton, "Failed to create start button!!");
 
@@ -94,28 +94,6 @@ void InitizalizeMainMenu(void)
 	selectorTexture = AEGfxTextureLoad("Textures\\Selector.png");
 	AE_ASSERT_MESG(selectorTexture, "Failed to create Start Button Texture!!");
 
-	// Informing the library that we're about to start adding triangles
-	AEGfxMeshStart();
-
-	// 1 triangle at a time
-	// X, Y, Color, texU, texV
-	AEGfxTriAdd(
-		-125.0f, -75.0f, 0x00FFFFFF, 0.0f, 0.5f, 
-		125.0f,  -75.0f, 0x00FFFFFF, 0.25f, 0.5f,
-		-125.0f,  75.0f, 0x00FFFFFF, 0.0f, 0.0f);
-	AEGfxTriAdd(
-		125.0f, -75.0f, 0x00FFFFFF, 0.25f, 0.5f, 
-		125.0f,  75.0f, 0x00FFFFFF, 0.25f, 0.0f,
-		-125.0f,  75.0f, 0x00FFFFFF, 0.0f, 0.0f);
-
-	// Saving the mesh (list of triangles) in pMesh1
-
-	meshFox = AEGfxMeshEnd();
-	AE_ASSERT_MESG(meshFox, "Failed to create selector!!");
-
-	foxTexture = AEGfxTextureLoad("Textures\\SausageFox.png");
-	AE_ASSERT_MESG(foxTexture, "Failed to create Fox!!");
-
 	if(NULL != malloc(sizeof(struct Sprite)))
 		CreateSprite(&Ham, 344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
 
@@ -128,16 +106,12 @@ void InitizalizeMainMenu(void)
 	Bektor.XPosition = -300.0f;
 	Bektor.YPosition = -300.0f;
 
-	Bektor.NumHeightFrames = 1;
-	Bektor.NumWidthFrames = 4;
 	Bektor.TotalFrames = 4;
 	Bektor.AnimationSpeed = 12;
 	Bektor.AnimationActive = 1;
-	
 
-	foxOffsetX = &foxFirstOffsetX;
-	foxOffsetY = &foxFirstOffsetY;
-
+	if(NULL != malloc(sizeof(struct Player)))
+		InitializePlayer(&Player);
 
 	UpdateSelector();
 }
@@ -171,28 +145,9 @@ void DrawMenu(void)
 	AEGfxTextureSet(exitButtonTexture, 0.0f, 0.0f);
 	AEGfxMeshDraw(meshExitButton, AE_GFX_MDM_TRIANGLES);
 
-	if(animationTimer >= animationSpeed)
-	{
-		foxCurrentFrame = UpdateFrame(foxTotalFrames, foxCurrentFrame, 1, foxOffsetX, foxOffsetY);
-		animationTimer = 0;
-	}
-	else
-	{
-		foxCurrentFrame = UpdateFrame(foxTotalFrames, foxCurrentFrame, 0, foxOffsetX, foxOffsetY);
-		animationTimer++;
-	}
-
-	// Drawing Exit Button
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	// Set poisition for object 2
-	AEGfxSetPosition(0.0f, 0.0f);
-	// Drawing the mesh (list of triangles)
-	AEGfxSetTransparency(1.0f);
-	AEGfxTextureSet(foxTexture, *foxOffsetX, *foxOffsetY);
-	AEGfxMeshDraw(meshFox, AE_GFX_MDM_TRIANGLES);
-
 	DrawSprite(&Ham);
 	DrawSprite(&Bektor);
+	DrawPlayer(&Player);
 }
 
 		
