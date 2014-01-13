@@ -245,7 +245,7 @@ int InputHandling(void)
 			return -1;
 	}
 
-	//Moving the Ham waith WASD
+	//Moving the Ham with WASD
 	JG_move('W', &Ham.XPosition, &Ham.YPosition, 3.0f,  UP);
 	JG_move('S', &Ham.XPosition, &Ham.YPosition, 3.0f, DOWN);
 	JG_move('A', &Ham.XPosition, &Ham.YPosition, 3.0f, LEFT);
