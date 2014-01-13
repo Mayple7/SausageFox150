@@ -37,6 +37,7 @@ Sprite Bektor;
 Sprite StartButton;
 Sprite ExitButton;
 Sprite Selector;
+Sprite AnimationTest;
 
 struct Player Player;
 
@@ -74,13 +75,20 @@ void InitizalizeMainMenu(void)
 	if(NULL != malloc(sizeof(struct Sprite)))
 		CreateSprite(&Bektor, 150.0f, 150.0f, 4, 1, "TextureFiles/Bektor.png");
 
+	if(NULL != malloc(sizeof(struct Sprite)))
+		CreateSprite(&AnimationTest, 300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
+	AnimationTest.XPosition = -400.0f;
+	AnimationTest.YPosition = 300.0f;
+
+	AnimationTest.AnimationActive = 1;
+	AnimationTest.AnimationSpeed = 60;
+
 	Ham.XPosition = 100.0f;
 	Ham.YPosition = 200.0f;
 
 	Bektor.XPosition = -300.0f;
 	Bektor.YPosition = -300.0f;
 
-	Bektor.TotalFrames = 4;
 	Bektor.AnimationSpeed = 12;
 	Bektor.AnimationActive = 1;
 
@@ -101,6 +109,8 @@ void DrawMenu(void)
 	DrawSprite(&Ham);
 	DrawSprite(&Bektor);
 	DrawPlayer(&Player);
+
+	DrawSprite(&AnimationTest);
 }
 
 		

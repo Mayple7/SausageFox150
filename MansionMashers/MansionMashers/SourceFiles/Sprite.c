@@ -106,7 +106,7 @@ void CreateSprite(struct Sprite *CurrentSprite, float width, float height, int x
 	//Animation Properties
 	CurrentSprite->AnimationActive = 0;
 	CurrentSprite->CurrentFrame = 0;
-	CurrentSprite->TotalFrames = 1;
+	CurrentSprite->TotalFrames = xFrames * yFrames;
 	CurrentSprite->AnimationSpeed = 1;
 	CurrentSprite->AnimationTimer = 0;
 
