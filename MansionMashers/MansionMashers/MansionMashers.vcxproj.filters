@@ -113,6 +113,9 @@
     <ClInclude Include="HeaderFiles\Options.h">
       <Filter>Fox Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Matrix3.h">
+      <Filter>Fox Math Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\StartSlides.c">
@@ -143,6 +146,9 @@
       <Filter>Fox Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Vector2.c">
+      <Filter>Fox Math Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Matrix3.c">
       <Filter>Fox Math Sources</Filter>
     </ClCompile>
   </ItemGroup>
