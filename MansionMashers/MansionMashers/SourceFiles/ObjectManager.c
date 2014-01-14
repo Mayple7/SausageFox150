@@ -90,6 +90,11 @@ void freeObjectList(void)
 		Sprite* objectNext = (objectList + i);
 		//Make sure the sprite exists
 		if (objectNext && objectNext->Created == 1)
-			free(objectNext);
+		{
+			AEGfxMeshFree(objectNext->SpriteMesh);
+			AEGfxTextureUnload(objectNext->SpriteTexture);
+			printf("Slot %i is now empty\n", i);
+		}			
 	}
+	free(objectList);
 }

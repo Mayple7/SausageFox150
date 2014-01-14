@@ -104,7 +104,7 @@ void InitizalizeMainMenu(void)
 void DrawMenu(void)
 {
 	//Camera follows ham
-	//SF_SetCamera(Ham->Position, 350, 3.0f);
+	SF_SetCamera(Ham->XPosition, 350, 3.0f);
 
 	DrawSprite(Selector);
 	DrawSprite(StartButton);
