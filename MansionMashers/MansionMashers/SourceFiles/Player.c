@@ -32,32 +32,32 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // globals
 
-struct Player Player;
+Player CurrentPlayer;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
 
 // ---------------------------------------------------------------------------
-void InitializePlayer(struct Player *Player)
+void InitializePlayer(struct Player *CurrentPlayer)
 {
-	Player->PlayerSprite = *CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
+	CurrentPlayer->PlayerSprite = *CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
 
-	Player->PlayerSprite.Position.x = 0.0f;
-	Player->PlayerSprite.Position.y = 0.0f;
+	CurrentPlayer->PlayerSprite.Position.x = 0.0f;
+	CurrentPlayer->PlayerSprite.Position.y = 0.0f;
 
-	Player->PlayerSprite.TotalFrames = 8;
-	Player->PlayerSprite.AnimationActive = 1;
-	Player->PlayerSprite.AnimationSpeed = 6;
+	CurrentPlayer->PlayerSprite.TotalFrames = 8;
+	CurrentPlayer->PlayerSprite.AnimationActive = 1;
+	CurrentPlayer->PlayerSprite.AnimationSpeed = 6;
 
-	Player->Position.x = 0.0f;
-	Player->Position.y = 0.0f;
+	CurrentPlayer->Position.x = 0.0f;
+	CurrentPlayer->Position.y = 0.0f;
 }
 
-void DrawPlayer(struct Player *Player)
+void DrawPlayer(struct Player *CurrentPlayer)
 {
-	Player->PlayerSprite.Position.x = Player->Position.x;
-	Player->PlayerSprite.Position.y = Player->Position.y;
-	DrawSprite(&Player->PlayerSprite);
+	CurrentPlayer->PlayerSprite.Position.x = CurrentPlayer->Position.x;
+	CurrentPlayer->PlayerSprite.Position.y = CurrentPlayer->Position.y;
+	DrawSprite(&CurrentPlayer->PlayerSprite);
 }
 
 
