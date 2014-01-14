@@ -42,8 +42,8 @@ void InitializePlayer(struct Player *Player)
 {
 	Player->PlayerSprite = *CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
 
-	Player->PlayerSprite.XPosition = 0.0f;
-	Player->PlayerSprite.YPosition = 0.0f;
+	Player->PlayerSprite.Position.x = 0.0f;
+	Player->PlayerSprite.Position.y = 0.0f;
 
 	Player->PlayerSprite.TotalFrames = 8;
 	Player->PlayerSprite.AnimationActive = 1;
@@ -55,8 +55,8 @@ void InitializePlayer(struct Player *Player)
 
 void DrawPlayer(struct Player *Player)
 {
-	Player->PlayerSprite.XPosition = Player->Position.x;
-	Player->PlayerSprite.YPosition = Player->Position.y;
+	Player->PlayerSprite.Position.x = Player->Position.x;
+	Player->PlayerSprite.Position.y = Player->Position.y;
 	DrawSprite(&Player->PlayerSprite);
 }
 
