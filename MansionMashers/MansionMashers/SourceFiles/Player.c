@@ -49,12 +49,14 @@ void InitializePlayer(struct Player *Player)
 	Player->PlayerSprite.AnimationActive = 1;
 	Player->PlayerSprite.AnimationSpeed = 6;
 
-	Player->XPos = 0.0f;
-	Player->YPos = 0.0f;
+	Player->Position.x = 0.0f;
+	Player->Position.y = 0.0f;
 }
 
 void DrawPlayer(struct Player *Player)
 {
+	Player->PlayerSprite.XPosition = Player->Position.x;
+	Player->PlayerSprite.YPosition = Player->Position.y;
 	DrawSprite(&Player->PlayerSprite);
 }
 
@@ -62,37 +64,33 @@ void DrawPlayer(struct Player *Player)
 void MovePlayer(int key, struct Player *Obj, float move_dist, int direction)
 {
 	// Handling Input
-	AEInputUpdate();
-
+	/*
 	switch (direction)
 	{
 		case LEFT:
 			if(AEInputCheckCurr(key))
 			{
-				//Obj->XPos -= move_dist;
-				Obj->PlayerSprite.XPosition -= move_dist;
+				Obj->XPos -= move_dist;
 			}
 			break;
 		case RIGHT:
 			if(AEInputCheckCurr(key))
 			{
-				//Obj->XPos += move_dist;
-				Obj->PlayerSprite.XPosition += move_dist;
+				Obj->XPos += move_dist;
 			}
 			break;
 		case UP:
 			if(AEInputCheckCurr(key))
 			{
-				//Obj->YPos += move_dist;
-				Obj->PlayerSprite.YPosition += move_dist;
+				Obj->YPos += move_dist;				
 			}
 			break;
 		case DOWN:
 			if(AEInputCheckCurr(key))
 			{
-				//Obj->YPos -= move_dist;
-				Obj->PlayerSprite.YPosition -= move_dist;
+				Obj->YPos -= move_dist;
 			}
 			break;
 	}
+	*/
 }

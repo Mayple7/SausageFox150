@@ -1,4 +1,8 @@
+#ifndef FOX_PLAYER
+#define FOX_PLAYER
+
 #define MAX_INVENTORY 20
+#include "Vector2.h"
 
 struct Player
 {
@@ -32,6 +36,7 @@ struct Player
 	};
 
 
+	Vec2 Position;
 	float XPos;
 	float YPos;
 };
@@ -42,3 +47,5 @@ void InitializePlayer(struct Player *Player);
 void DrawPlayer(struct Player *Player); //Draw player sprite, current weapon sprite
 void ApplyPhysics(struct Player *Player);
 void MovePlayer(int key, struct Player *Obj, float move_dist, int direction);
+
+#endif

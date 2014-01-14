@@ -1,3 +1,6 @@
+#ifndef FOX_VECTOR2
+#define FOX_VECTOR2
+
 typedef struct Vector2
 {
 	float x, y;
@@ -25,3 +28,5 @@ float Vec2DotProduct(Vec2* Operand1, Vec2* Operand2);
 float Vec2CrossProductMag(Vec2* Operand1, Vec2* Operand2);
 
 void Vec2FromAngle(Vec2* Result, float Angle);
+
+#endif

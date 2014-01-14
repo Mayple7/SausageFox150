@@ -154,20 +154,14 @@ int InputHandling(void)
 	// check if forcing the application to quit
 	if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 		return -1;
-
-	//Moving the Ham with WASD 
-/*	JG_move('W', Ham, 3.0f,  UP);
-	JG_move('S', Ham, 3.0f, DOWN);
-	JG_move('A', Ham, 3.0f, LEFT);
-	JG_move('D', Ham, 3.0f, RIGHT);
-	*/
-	//Moving the player
 	
+	//Moving the player
+	/*
 	MovePlayer('A', &Player, 3.0f, LEFT);
 	MovePlayer('S', &Player, 3.0f, DOWN);
 	MovePlayer('D', &Player, 3.0f, RIGHT);
 	MovePlayer('W', &Player, 3.0f, UP);
-
+	*/
 	return 0;
 }
 
