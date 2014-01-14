@@ -27,6 +27,4 @@ float Vec2SquareDistance(Vec2* pVec0, Vec2* pVec1);
 float Vec2DotProduct(Vec2* Operand1, Vec2* Operand2);
 float Vec2CrossProductMag(Vec2* Operand1, Vec2* Operand2);
 
-void Vec2FromAngle(Vec2* Result, float Angle);
-
 #endif

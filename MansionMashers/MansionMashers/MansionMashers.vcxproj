@@ -91,6 +91,7 @@
     <ClInclude Include="HeaderFiles\StartSlides.h" />
     <ClInclude Include="HeaderFiles\TestLevel.h" />
     <ClInclude Include="HeaderFiles\Vector2.h" />
+    <ClInclude Include="HeaderFiles\Vector3.h" />
     <ClInclude Include="HeaderFiles\Weapon.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Point4.h" />
@@ -108,6 +109,7 @@
     <ClCompile Include="SourceFiles\StartSlides.c" />
     <ClCompile Include="SourceFiles\TestLevel.c" />
     <ClCompile Include="SourceFiles\Vector2.c" />
+    <ClCompile Include="SourceFiles\Vector3.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

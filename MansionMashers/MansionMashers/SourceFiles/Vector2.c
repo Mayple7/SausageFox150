@@ -1,5 +1,5 @@
 /*
-File:				Main.c
+File:				Vector2.c
 Author:				Dan Muller (d.muller)
 Creation Date:		Jan 12, 2014
 
@@ -81,8 +81,10 @@ void Vec2Subtract(Vec2* Result, Vec2* Operand1, Vec2* Operand2)
 //Normalizes a vector
 void Vec2Normalize(Vec2* Result, Vec2* Operand)
 {
-	Result->x = Operand->x / Vec2Length(Operand);
-	Result->y = Operand->y / Vec2Length(Operand);
+	float length = Vec2Length(Operand);
+
+	Result->x = Operand->x / length;
+	Result->y = Operand->y / length;
 }
 
 
@@ -100,12 +102,10 @@ void Vec2Project(Vec2* Result, Vec2* Operand1, Vec2* Operand2)
 	// b = Op1, a = Op2
 
 	float scalar; // (a . b) / (a . a)
-	float length; // ||a||
 
 	scalar = Vec2DotProduct(Operand2, Operand1) / Vec2DotProduct(Operand2, Operand2);
-	length = Vec2Length(Operand2);
 
-	Vec2Scale(Result, Operand2, (scalar * (1/length)));
+	Vec2Scale(Result, Operand2, scalar);
 }
 
 //Returns length of a vector

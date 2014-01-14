@@ -1,9 +1,25 @@
-﻿Build started 1/13/2014 11:44:37 PM.
+﻿Build started 1/14/2014 2:29:52 PM.
      1>Project "C:\Users\Dan\Projects\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt SourceFiles\Main.c SourceFiles\MainMenu.c SourceFiles\Movement.c SourceFiles\Player.c
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt SourceFiles\Main.c SourceFiles\MainMenu.c SourceFiles\Matrix3.c SourceFiles\Movement.c SourceFiles\ObjectManager.c SourceFiles\Player.c SourceFiles\Sprite.c SourceFiles\StartSlides.c SourceFiles\TestLevel.c SourceFiles\Vector2.c SourceFiles\Vector3.c
+         Vector3.c
+     1>c:\users\dan\projects\sausagefox150\mansionmashers\mansionmashers\sourcefiles\vector3.c(99): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dan\projects\sausagefox150\mansionmashers\mansionmashers\sourcefiles\vector3.c(123): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+         Vector2.c
+     1>c:\users\dan\projects\sausagefox150\mansionmashers\mansionmashers\sourcefiles\vector2.c(114): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dan\projects\sausagefox150\mansionmashers\mansionmashers\sourcefiles\vector2.c(126): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+         TestLevel.c
+         StartSlides.c
+     1>c:\users\dan\projects\sausagefox150\mansionmashers\mansionmashers\sourcefiles\startslides.c(52): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>c:\users\dan\projects\sausagefox150\mansionmashers\mansionmashers\sourcefiles\startslides.c(54): warning C4305: '+=' : truncation from 'double' to 'float'
+         Sprite.c
+     1>c:\users\dan\projects\sausagefox150\mansionmashers\mansionmashers\sourcefiles\sprite.c(67): warning C4029: declared formal parameter list different from definition
+     1>c:\users\dan\projects\sausagefox150\mansionmashers\mansionmashers\sourcefiles\sprite.c(117): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(110) : see declaration of 'strcpy'
          Player.c
+         ObjectManager.c
          Movement.c
+         Matrix3.c
          MainMenu.c
          Main.c
          Generating Code...
@@ -11,6 +27,7 @@
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Dan\Projects\SausageFox150\MansionMashers\Debug\MansionMashers.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Dan\Projects\SausageFox150\MansionMashers\Debug\MansionMashers.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Dan\Projects\SausageFox150\MansionMashers\Debug\MansionMashers.lib" /MACHINE:X86 Debug\Camera.obj
          Debug\Main.obj
          Debug\MainMenu.obj
+         Debug\Matrix3.obj
          Debug\Movement.obj
          Debug\ObjectManager.obj
          Debug\Player.obj
@@ -18,9 +35,10 @@
          Debug\StartSlides.obj
          Debug\TestLevel.obj
          Debug\Vector2.obj
+         Debug\Vector3.obj
          MansionMashers.vcxproj -> C:\Users\Dan\Projects\SausageFox150\MansionMashers\Debug\MansionMashers.exe
      1>Done Building Project "C:\Users\Dan\Projects\SausageFox150\MansionMashers\MansionMashers\MansionMashers.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.85
+Time Elapsed 00:00:05.87
