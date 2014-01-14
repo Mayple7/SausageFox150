@@ -1,6 +1,8 @@
 #ifndef FOX_SPRITE
 #define FOX_SPRITE
 
+#include "Vector2.h"
+
 typedef struct Sprite
 {
 	//Bools
@@ -16,8 +18,7 @@ typedef struct Sprite
 	float Height;
 
 	//Position of the sprite
-	float XPosition;
-	float YPosition;
+	Vec2 Position;
 
 	//Animation Properties
 	int AnimationActive;

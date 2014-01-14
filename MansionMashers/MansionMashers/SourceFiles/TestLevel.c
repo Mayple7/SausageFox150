@@ -56,8 +56,8 @@ void InitizalizeTestLevel(void)
 
 	Ham2 = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
 
-	Ham2->XPosition = -200.0f;
-	Ham2->YPosition = -150.0f;
+	Ham2->Position.x = -200.0f;
+	Ham2->Position.y = -150.0f;
 }
 
 int LevelLoop(void)

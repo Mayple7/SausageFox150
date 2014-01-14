@@ -58,33 +58,33 @@ void InitizalizeMainMenu(void)
 	resetObjectList();
 
 	StartButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/StartButton.png");
-	StartButton->XPosition = 0.0f;
-	StartButton->YPosition = 100.0f;
+	StartButton->Position.x = 0.0f;
+	StartButton->Position.y = 100.0f;
 
 	ExitButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/ExitButton.png");
-	ExitButton->XPosition = 0.0f;
-	ExitButton->YPosition = -100.0f;
+	ExitButton->Position.x = 0.0f;
+	ExitButton->Position.y = -100.0f;
 
 	Selector = CreateSprite(500.0f, 200.0f, 1, 1, "TextureFiles/Selector.png");
-	Selector->XPosition = 100.0f;
-	Selector->YPosition = 0.0f;
+	Selector->Position.x = 100.0f;
+	Selector->Position.y = 0.0f;
 	
 	Ham = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles/Ham.png");
 
 	Bektor = CreateSprite(150.0f, 150.0f, 4, 1, "TextureFiles/Bektor.png");
 
 	AnimationTest = CreateSprite(300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
-	AnimationTest->XPosition = -400.0f;
-	AnimationTest->YPosition = 300.0f;
+	AnimationTest->Position.x = -400.0f;
+	AnimationTest->Position.y = 300.0f;
 
 	AnimationTest->AnimationActive = 1;
 	AnimationTest->AnimationSpeed = 60;
 
-	Ham->XPosition = 100.0f;
-	Ham->YPosition = 200.0f;
+	Ham->Position.x = 100.0f;
+	Ham->Position.y = 200.0f;
 
-	Bektor->XPosition = -300.0f;
-	Bektor->YPosition = -300.0f;
+	Bektor->Position.x = -300.0f;
+	Bektor->Position.y = -300.0f;
 
 	Bektor->AnimationSpeed = 12;
 	Bektor->AnimationActive = 1;
@@ -98,7 +98,7 @@ void InitizalizeMainMenu(void)
 void DrawMenu(void)
 {
 	//Camera follows ham
-	SF_SetCamera((&Player)->PlayerSprite.XPosition, 350, 3.0f);
+	SF_SetCamera((&Player)->PlayerSprite.Position.x, 350, 3.0f);
 
 	DrawSprite(Selector);
 	DrawSprite(StartButton);
@@ -170,16 +170,16 @@ void UpdateSelector(struct Sprite *Selector)
 	switch(selectedButton)
 	{
 		case 0:
-			Selector->XPosition = 0.0f;//StartButton.XPosition;
-			Selector->YPosition = 100.0f;//StartButton.YPosition;
+			Selector->Position.x = 0.0f;//StartButton.Position.x;
+			Selector->Position.y = 100.0f;//StartButton.Position.y;
 			break;
 		case 1:
-			Selector->XPosition = 0.0f;//ExitButton.XPosition;
-			Selector->YPosition = -100.0f;//ExitButton.YPosition;
+			Selector->Position.x = 0.0f;//ExitButton.Position.x;
+			Selector->Position.y = -100.0f;//ExitButton.Position.y;
 			break;
 		default:
-			Selector->XPosition = 0.0f;//StartButton.XPosition;
-			Selector->YPosition = 100.0f;//StartButton.YPosition;
+			Selector->Position.x = 0.0f;//StartButton.Position.x;
+			Selector->Position.y = 100.0f;//StartButton.Position.y;
 			break;
 	}
 }

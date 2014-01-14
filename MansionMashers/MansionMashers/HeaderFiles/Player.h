@@ -4,7 +4,7 @@
 #define MAX_INVENTORY 20
 #include "Vector2.h"
 
-struct Player
+typedef struct Player
 {
 	struct Sprite PlayerSprite;
 	//struct RigidBody PlayerRigidBody;
@@ -39,7 +39,7 @@ struct Player
 	Vec2 Position;
 	float XPos;
 	float YPos;
-};
+}Player;
 
 
 

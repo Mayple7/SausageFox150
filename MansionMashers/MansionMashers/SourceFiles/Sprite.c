@@ -103,8 +103,8 @@ Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* 
 	CurrentSprite->Height = height;
 
 	//Position of the sprite
-	CurrentSprite->XPosition = 0.0f;
-	CurrentSprite->YPosition = 0.0f;
+	CurrentSprite->Position.x = 0.0f;
+	CurrentSprite->Position.y = 0.0f;
 
 	//Animation Properties
 	CurrentSprite->AnimationActive = 0;
@@ -138,7 +138,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	// Drawing Selector
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	// Set poisition for object 2
-	AEGfxSetPosition(CurrentSprite->XPosition, CurrentSprite->YPosition);
+	AEGfxSetPosition(CurrentSprite->Position.x, CurrentSprite->Position.y);
 	// Drawing the mesh (list of triangles)
 	AEGfxSetTransparency(CurrentSprite->Alpha);
 	//printf("%d\n", CurrentSprite->AnimationActive);
