@@ -53,14 +53,19 @@ Sprite* addObject(void)
 
 void resetObjectList(void)
 {
+	//Set up the memory to fit the desired amount of objects
 	objectList = (Sprite *)malloc(objectAmount * sizeof(Sprite));
+	//Make sure the malloc is not NULL
 	if (objectList)
 	{
-		/*int i;
+		/*
+		//Print the size allocated
+		int i;
 		for (i = 0; i < objectAmount; i++)
 		{
 			printf("%i\n", sizeof(objectList[i]));
-		}*/
+		}
+		*/
 		printf("\nOBJECT LIST SET UP COMPLETE\n\n");
 	}
 	else
@@ -91,10 +96,12 @@ void freeObjectList(void)
 		//Make sure the sprite exists
 		if (objectNext && objectNext->Created == 1)
 		{
+			//Free the mesh and texture data
 			AEGfxMeshFree(objectNext->SpriteMesh);
 			AEGfxTextureUnload(objectNext->SpriteTexture);
 			printf("Slot %i is now empty\n", i);
-		}			
+		}
 	}
+	//Free the object list data allocation
 	free(objectList);
 }

@@ -35,14 +35,9 @@ Sprite *Ham2;
 
 // ---------------------------------------------------------------------------
 // main
-void InitizalizeTestLevel(void)
+void MakeLevel(void)
 {
 	resetObjectList();
-
-	Ham2 = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
-
-	Ham2->XPosition = -100.0f;
-	Ham2->YPosition = -150.0f;
 }
 
 void DrawLevel(void)
@@ -55,11 +50,22 @@ void FreeLevel(void)
 	freeObjectList();
 }
 
+void InitizalizeTestLevel(void)
+{
+	Sprite *Hammy = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
+
+	Ham2 = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
+
+	Ham2->XPosition = -200.0f;
+	Ham2->YPosition = -150.0f;
+}
+
 int LevelLoop(void)
 {
 	int changeLevel  = 0;
 	int LevelRunning = 1;
 
+	MakeLevel();
 	InitizalizeTestLevel();
 
 	printf("Running Level\n");
