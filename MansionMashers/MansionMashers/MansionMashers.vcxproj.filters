@@ -5,18 +5,30 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Fox Math Headers">
-      <UniqueIdentifier>{de4a7a39-09d6-425c-ac77-608c5ea3f918}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fox Headers">
-      <UniqueIdentifier>{40d97c4c-fafb-4599-99bb-8fe21e69b826}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fox Math Sources">
-      <UniqueIdentifier>{a5e986d6-de3a-475b-a852-e15811ad4a17}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fox Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fox Source Files\Fox Level Sources">
+      <UniqueIdentifier>{61d5b9b7-dcbc-4f25-9bb7-8c67f14acba5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Source Files\Fox Math Sources">
+      <UniqueIdentifier>{a5e986d6-de3a-475b-a852-e15811ad4a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Source Files\Fox Engine Sources">
+      <UniqueIdentifier>{93333951-5d5b-4419-9d45-8c033d179f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files">
+      <UniqueIdentifier>{19d2fe8c-ac40-4ff9-bd2c-f9b741e98e83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files\Fox Engine Headers">
+      <UniqueIdentifier>{4a2b1a30-0542-4ab2-9b25-e73e033c5c22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files\Fox Math Headers">
+      <UniqueIdentifier>{de4a7a39-09d6-425c-ac77-608c5ea3f918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files\Fox Level Headers">
+      <UniqueIdentifier>{40d97c4c-fafb-4599-99bb-8fe21e69b826}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,87 +87,90 @@
       <Filter>AE Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\TestLevel.h">
-      <Filter>Fox Headers</Filter>
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\Weapon.h">
-      <Filter>Fox Headers</Filter>
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\StartSlides.h">
-      <Filter>Fox Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Sprite.h">
-      <Filter>Fox Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Player.h">
-      <Filter>Fox Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\ObjectManager.h">
-      <Filter>Fox Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Movement.h">
-      <Filter>Fox Headers</Filter>
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\MainMenu.h">
-      <Filter>Fox Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Camera.h">
-      <Filter>Fox Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Physics.h">
-      <Filter>Fox Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\RigidBody.h">
-      <Filter>Fox Headers</Filter>
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\Vector2.h">
-      <Filter>Fox Math Headers</Filter>
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\Options.h">
-      <Filter>Fox Headers</Filter>
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\Matrix3.h">
-      <Filter>Fox Math Headers</Filter>
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\Vector3.h">
-      <Filter>Fox Math Headers</Filter>
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\ObjectManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\FoxEngine.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Physics.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Sprite.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\RigidBody.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Player.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Movement.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Camera.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SourceFiles\StartSlides.c">
-      <Filter>Fox Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\Main.c">
-      <Filter>Fox Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\MainMenu.c">
-      <Filter>Fox Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\Sprite.c">
-      <Filter>Fox Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\TestLevel.c">
-      <Filter>Fox Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\ObjectManager.c">
-      <Filter>Fox Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\Camera.c">
-      <Filter>Fox Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\Movement.c">
-      <Filter>Fox Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\Player.c">
-      <Filter>Fox Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\Vector2.c">
-      <Filter>Fox Math Sources</Filter>
+      <Filter>Fox Source Files\Fox Math Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Matrix3.c">
-      <Filter>Fox Math Sources</Filter>
+      <Filter>Fox Source Files\Fox Math Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Vector3.c">
-      <Filter>Fox Math Sources</Filter>
+      <Filter>Fox Source Files\Fox Math Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\MainMenu.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\TestLevel.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\StartSlides.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Main.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Camera.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\ObjectManager.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Movement.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Player.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Sprite.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

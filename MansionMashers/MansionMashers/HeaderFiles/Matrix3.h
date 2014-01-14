@@ -1,6 +1,7 @@
 #ifndef Matrix3_H
 #define Matrix3_H
 
+#include "Vector3.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // DO NOT MODIFY THIS FILE FOR ASSIGNMENT 1
