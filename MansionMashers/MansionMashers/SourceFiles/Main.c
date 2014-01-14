@@ -50,11 +50,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int nextLevel = 0;
 	int Level = 1;
 
-	AEGfxVertexList*	meshTitle;				// Pointer to Mesh (Model)
-	AEGfxVertexList*	meshDigipen;			// Pointer to Digipen Logo Mesh
-	AEGfxTexture *titleTexture;					// Pointer to Texture (Image)
-	AEGfxTexture *digipenLogo;					// Pointer to Digipen logo texture
-
 	// Initialize the system 
 	AESysInitInfo sysInitInfo;
 	sysInitInfo.mAppInstance		= instanceH;

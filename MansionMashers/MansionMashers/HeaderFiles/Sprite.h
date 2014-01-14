@@ -1,6 +1,3 @@
-AEGfxVertexList* CreateSpriteTexture(float width, float height, float offsetX, float offsetY);
-int UpdateFrame(int totalFrames, int currentFrame, int frameUpdate, float *offsetX, float *offsetY);
-
 typedef struct Sprite
 {
 	//Bools
