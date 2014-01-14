@@ -1,5 +1,8 @@
 #include "../AEEngine.h"
+//#include "../HeaderFiles/Sprite.h"
 
-// Create object list
-const int objectAmount    = 20;
-//int objectCurrent         = 0;
+//Functionz
+Sprite* addObject(void);
+void resetObjectList(void);
+void drawObjectList(void);
+void freeObjectList(void);

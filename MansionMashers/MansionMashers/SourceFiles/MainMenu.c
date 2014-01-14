@@ -23,6 +23,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/Player.h"
 #include "../HeaderFiles/Movement.h"
 #include "../HeaderFiles/Camera.h"
+#include "../HeaderFiles/ObjectManager.h"
 
 // ---------------------------------------------------------------------------
 
@@ -32,12 +33,12 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // globals
 
-Sprite Ham;
-Sprite Bektor;
-Sprite StartButton;
-Sprite ExitButton;
-Sprite Selector;
-Sprite AnimationTest;
+Sprite* Ham;
+Sprite* Bektor;
+Sprite* StartButton;
+Sprite* ExitButton;
+Sprite* Selector;
+Sprite* AnimationTest;
 
 struct Player Player;
 
@@ -54,69 +55,72 @@ int animationTimer = 0;
 
 void InitizalizeMainMenu(void)
 {
-	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&StartButton, 480.0f, 180.0f, 1, 1, "TextureFiles/StartButton.png");
-	StartButton.XPosition = 0.0f;
-	StartButton.YPosition = 100.0f;
+	resetObjectList();
 
-	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&ExitButton, 480.0f, 180.0f, 1, 1, "TextureFiles/ExitButton.png");
-	ExitButton.XPosition = 0.0f;
-	ExitButton.YPosition = -100.0f;
+	if(NULL != malloc(sizeof(Sprite)))
+		StartButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/StartButton.png");
+	StartButton->XPosition = 0.0f;
+	StartButton->YPosition = 100.0f;
 
-	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&Selector, 500.0f, 200.0f, 1, 1, "TextureFiles/Selector.png");
-	Selector.XPosition = 100.0f;
-	Selector.YPosition = 0.0f;
+	if(NULL != malloc(sizeof(Sprite)))
+		ExitButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/ExitButton.png");
+	ExitButton->XPosition = 0.0f;
+	ExitButton->YPosition = -100.0f;
+
+	if(NULL != malloc(sizeof(Sprite)))
+		Selector = CreateSprite(500.0f, 200.0f, 1, 1, "TextureFiles/Selector.png");
+	Selector->XPosition = 100.0f;
+	Selector->YPosition = 0.0f;
 	
-	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&Ham, 344.0f, 340.0f, 1, 1, "TextureFiles/Ham.png");
+	if(NULL != malloc(sizeof(Sprite)))
+		Ham = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles/Ham.png");
 
-	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&Bektor, 150.0f, 150.0f, 4, 1, "TextureFiles/Bektor.png");
+	if(NULL != malloc(sizeof(Sprite)))
+		Bektor = CreateSprite(150.0f, 150.0f, 4, 1, "TextureFiles/Bektor.png");
 
-	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&AnimationTest, 300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
-	AnimationTest.XPosition = -400.0f;
-	AnimationTest.YPosition = 300.0f;
+	if(NULL != malloc(sizeof(Sprite)))
+		AnimationTest = CreateSprite(300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
+	AnimationTest->XPosition = -400.0f;
+	AnimationTest->YPosition = 300.0f;
 
-	AnimationTest.AnimationActive = 1;
-	AnimationTest.AnimationSpeed = 60;
+	AnimationTest->AnimationActive = 1;
+	AnimationTest->AnimationSpeed = 60;
 
-	Ham.XPosition = 100.0f;
-	Ham.YPosition = 200.0f;
+	Ham->XPosition = 100.0f;
+	Ham->YPosition = 200.0f;
 
-	Bektor.XPosition = -300.0f;
-	Bektor.YPosition = -300.0f;
+	Bektor->XPosition = -300.0f;
+	Bektor->YPosition = -300.0f;
 
-	Bektor.AnimationSpeed = 12;
-	Bektor.AnimationActive = 1;
+	Bektor->AnimationSpeed = 12;
+	Bektor->AnimationActive = 1;
 
-	if(NULL != malloc(sizeof(struct Player)))
+	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&Player);
 
-	UpdateSelector(&Selector);
+	UpdateSelector(Selector);
 }
 
 void DrawMenu(void)
 {
 	//Camera follows ham
-	SF_SetCamera(Ham.XPosition, 350, 3.0f);
+	//SF_SetCamera(Ham->Position, 350, 3.0f);
 
-	DrawSprite(&Selector);
-	DrawSprite(&StartButton);
-	DrawSprite(&ExitButton);
-	DrawSprite(&Ham);
-	DrawSprite(&Bektor);
+	DrawSprite(Selector);
+	DrawSprite(StartButton);
+	DrawSprite(ExitButton);
+	DrawSprite(Ham);
+	DrawSprite(Bektor);
 	DrawPlayer(&Player);
 
-	DrawSprite(&AnimationTest);
+	DrawSprite(AnimationTest);
 }
 
 		
 void FreeMainMenu(void)
 {
 	// Freeing the objects and textures
+	freeObjectList();
 }
 
 //INPUT, PRESS DEM KEYS BOI
@@ -130,7 +134,7 @@ int InputHandling(void)
 		else
 			selectedButton--;
 
-		UpdateSelector(&Selector);
+		UpdateSelector(Selector);
 	}
 	else if(AEInputCheckTriggered(VK_DOWN))
 	{
@@ -139,7 +143,7 @@ int InputHandling(void)
 		else
 			selectedButton++;
 
-		UpdateSelector(&Selector);
+		UpdateSelector(Selector);
 	}
 	else if(AEInputCheckTriggered(VK_RETURN))
 	{
@@ -158,10 +162,10 @@ int InputHandling(void)
 		return -1;
 
 	//Moving the Ham with WASD
-	JG_move('W', &Ham.XPosition, &Ham.YPosition, 3.0f,  UP);
-	JG_move('S', &Ham.XPosition, &Ham.YPosition, 3.0f, DOWN);
-	JG_move('A', &Ham.XPosition, &Ham.YPosition, 3.0f, LEFT);
-	JG_move('D', &Ham.XPosition, &Ham.YPosition, 3.0f, RIGHT);
+	JG_move('W', &Ham->XPosition, &Ham->YPosition, 3.0f,  UP);
+	JG_move('S', &Ham->XPosition, &Ham->YPosition, 3.0f, DOWN);
+	JG_move('A', &Ham->XPosition, &Ham->YPosition, 3.0f, LEFT);
+	JG_move('D', &Ham->XPosition, &Ham->YPosition, 3.0f, RIGHT);
 
 	return 0;
 }

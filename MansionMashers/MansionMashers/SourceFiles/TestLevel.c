@@ -28,30 +28,18 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 // globals
-Sprite *Ham2;
-Sprite *objectList;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
-
+Sprite *Ham2;
 
 // ---------------------------------------------------------------------------
 // main
 void InitizalizeTestLevel(void)
 {
-	objectList = (Sprite *)malloc(objectAmount * sizeof(Sprite));
-	if (objectList)
-	{
-		int i;
-		for (i = 0; i < objectAmount; i++)
-		{
-			printf("%i\n", sizeof(objectList[i]));
-		}
-	}
-	Ham2 = objectList;
+	resetObjectList();
 
-	if(NULL != malloc(sizeof(Sprite)))
-		CreateSprite(Ham2, 344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
+	Ham2 = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
 
 	Ham2->XPosition = -100.0f;
 	Ham2->YPosition = -150.0f;
@@ -59,25 +47,12 @@ void InitizalizeTestLevel(void)
 
 void DrawLevel(void)
 {
-	int i;
-	for (i = 0; i < objectAmount; i++)
-	{
-		Sprite* objectNext = (objectList + i);
-		if (objectNext && objectNext->Created && objectNext->Created == 1)
-			DrawSprite(objectNext);
-	}
+	drawObjectList();
 }
 
 void FreeLevel(void)
 {
-	// Freeing the objects and textures
-	int i;
-	for (i = 0; i < objectAmount; i++)
-	{
-		Sprite* objectNext = (objectList + i);
-		if (objectNext && objectNext->Created && objectNext->Created == 1)
-			free(objectNext);
-	}
+	freeObjectList();
 }
 
 int LevelLoop(void)
