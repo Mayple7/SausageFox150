@@ -34,9 +34,9 @@ int slideTextureNum = 0;
 int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 int slideTimer = 0;
 
-Sprite Sausage;
-Sprite Title;
-Sprite Digipen;
+Sprite *Sausage;
+Sprite *Title;
+Sprite *Digipen;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -87,13 +87,13 @@ int FadeLogic(void)
 void InitializeStartScreen(void)
 {
 	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&Title, 1280.0f, 720.0f, 1, 1, "TextureFiles/MansionMashersLogo.png");
+		Title = CreateSprite(1280.0f, 720.0f, 1, 1, "TextureFiles/MansionMashersLogo.png");
 
 	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&Digipen, 1024.0f, 248.0f, 1, 1, "TextureFiles/DigipenLogo.png");
+		Digipen = CreateSprite(1024.0f, 248.0f, 1, 1, "TextureFiles/DigipenLogo.png");
 
 	if(NULL != malloc(sizeof(struct Sprite)))
-		CreateSprite(&Sausage, 1280.0f, 720.0f, 1, 1, "TextureFiles/SausageFoxLogoNoBack.png");
+		Sausage = CreateSprite(1280.0f, 720.0f, 1, 1, "TextureFiles/SausageFoxLogoNoBack.png");
 }
 
 void FreeStartScreen(void)
@@ -107,29 +107,29 @@ void DrawScreen(void)
 	//Digipen Logo
 	if(slideTextureNum == 0)
 	{
-		Digipen.Alpha = alpha;
-		DrawSprite(&Digipen);
+		Digipen->Alpha = alpha;
+		DrawSprite(Digipen);
 	}
 	else
-		Digipen.Alpha = 0.0f;
+		Digipen->Alpha = 0.0f;
 
 	//Sausage Fox Logo
 	if(slideTextureNum == 1)
 	{
-		Sausage.Alpha = alpha;
-		DrawSprite(&Sausage);
+		Sausage->Alpha = alpha;
+		DrawSprite(Sausage);
 	}
 	else
-		Sausage.Alpha = 0.0f;
+		Sausage->Alpha = 0.0f;
 
 	//Mansion Mashers Logo
 	if(slideTextureNum == 2)
 	{
-		Title.Alpha = alpha;
-		DrawSprite(&Title);
+		Title->Alpha = alpha;
+		DrawSprite(Title);
 	}
 	else
-		Title.Alpha = 0.0f;
+		Title->Alpha = 0.0f;
 
 }
 
