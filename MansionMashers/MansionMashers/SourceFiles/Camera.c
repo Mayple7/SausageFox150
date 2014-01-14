@@ -16,11 +16,12 @@ written consent of DigiPen Institute of Technology is prohibited.
 // includes
 
 #include "../AEEngine.h"
+#include "../HeaderFiles/Vector2.h"
 
 
 // ---------------------------------------------------------------------------
 
-void SF_SetCamera(float playerX, int offset, int move_dist)
+void SetCamera(Vec2 *playerX, int offset, int move_dist)
 {
 
 	float camX, camY;	
@@ -29,10 +30,10 @@ void SF_SetCamera(float playerX, int offset, int move_dist)
 	AEGfxGetCamPosition(&camX, &camY);
 
 	//Moves camera Right
-	if(playerX > (camX + offset))
+	if(playerX->x > (camX + offset))
 		AEGfxSetCamPosition(camX + move_dist, camY);
 	
 	//Moves camera Left
-	else if(playerX < (camX - offset))
+	else if(playerX->x < (camX - offset))
 		AEGfxSetCamPosition(camX - move_dist, camY);
 }

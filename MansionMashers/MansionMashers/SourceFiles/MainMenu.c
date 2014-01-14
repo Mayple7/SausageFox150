@@ -98,7 +98,7 @@ void InitizalizeMainMenu(void)
 void DrawMenu(void)
 {
 	//Camera follows ham
-	SF_SetCamera((&CurrentPlayer)->PlayerSprite.Position.x, 350, 3.0f);
+	SetCamera(&CurrentPlayer.Position, 350, 3.0f);
 
 	DrawSprite(Selector);
 	DrawSprite(StartButton);

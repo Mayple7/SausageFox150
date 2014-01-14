@@ -68,16 +68,20 @@ void Input_Player(struct Player *CurrentPlayer, int key)
 	switch (key)
 	{
 		case 'A':
-			MoveObject(&CurrentPlayer->Position, LEFT, 3.0f);
+			if(AEInputCheckCurr('A'))
+				MoveObject(&CurrentPlayer->Position, LEFT, 3.0f);
 			break;
 		case 'S':
-			MoveObject(&CurrentPlayer->Position, DOWN, 3.0f);
+			if(AEInputCheckCurr('S'))
+				MoveObject(&CurrentPlayer->Position, DOWN, 3.0f);
 			break;
 		case 'D':
-			MoveObject(&CurrentPlayer->Position, RIGHT, 3.0f);
+			if(AEInputCheckCurr('D'))
+				MoveObject(&CurrentPlayer->Position, RIGHT, 3.0f);
 			break;
 		case 'W':
-			MoveObject(&CurrentPlayer->Position, UP, 3.0f);
+			if(AEInputCheckCurr('W'))
+				MoveObject(&CurrentPlayer->Position, UP, 3.0f);
 			break;
 	}
 }
