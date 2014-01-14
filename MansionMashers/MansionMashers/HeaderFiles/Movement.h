@@ -1,6 +1,5 @@
 
 
-typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
+//typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
 
-
-void JG_move(int key, struct Sprite *obj, float move_dist, int direction);
+void Obj_move(int key, struct Sprite *obj, float move_dist, int direction);

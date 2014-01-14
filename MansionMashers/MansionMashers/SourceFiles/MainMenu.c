@@ -104,7 +104,7 @@ void InitizalizeMainMenu(void)
 void DrawMenu(void)
 {
 	//Camera follows ham
-	SF_SetCamera(Ham->XPosition, 350, 3.0f);
+	SF_SetCamera((&Player)->PlayerSprite.XPosition, 350, 3.0f);
 
 	DrawSprite(Selector);
 	DrawSprite(StartButton);
@@ -161,11 +161,18 @@ int InputHandling(void)
 	if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 		return -1;
 
-	//Moving the Ham with WASD
-	JG_move('W', &Ham->XPosition, &Ham->YPosition, 3.0f,  UP);
-	JG_move('S', &Ham->XPosition, &Ham->YPosition, 3.0f, DOWN);
-	JG_move('A', &Ham->XPosition, &Ham->YPosition, 3.0f, LEFT);
-	JG_move('D', &Ham->XPosition, &Ham->YPosition, 3.0f, RIGHT);
+	//Moving the Ham with WASD 
+/*	JG_move('W', Ham, 3.0f,  UP);
+	JG_move('S', Ham, 3.0f, DOWN);
+	JG_move('A', Ham, 3.0f, LEFT);
+	JG_move('D', Ham, 3.0f, RIGHT);
+	*/
+	//Moving the player
+	
+	MovePlayer('A', &Player, 3.0f, LEFT);
+	MovePlayer('S', &Player, 3.0f, DOWN);
+	MovePlayer('D', &Player, 3.0f, RIGHT);
+	MovePlayer('W', &Player, 3.0f, UP);
 
 	return 0;
 }

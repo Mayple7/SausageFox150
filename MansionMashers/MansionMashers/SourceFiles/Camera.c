@@ -17,6 +17,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 #include "../AEEngine.h"
 
+
 // ---------------------------------------------------------------------------
 
 void SF_SetCamera(float playerX, int offset, int move_dist)

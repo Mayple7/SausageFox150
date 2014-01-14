@@ -24,6 +24,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/Player.h"
 #include "../HeaderFiles/RigidBody.h"
 
+
 // ---------------------------------------------------------------------------
 
 // Libraries
@@ -47,6 +48,9 @@ void InitializePlayer(struct Player *Player)
 	Player->PlayerSprite.TotalFrames = 8;
 	Player->PlayerSprite.AnimationActive = 1;
 	Player->PlayerSprite.AnimationSpeed = 6;
+
+	Player->XPos = 0.0f;
+	Player->YPos = 0.0f;
 }
 
 void DrawPlayer(struct Player *Player)
@@ -54,3 +58,41 @@ void DrawPlayer(struct Player *Player)
 	DrawSprite(&Player->PlayerSprite);
 }
 
+
+void MovePlayer(int key, struct Player *Obj, float move_dist, int direction)
+{
+	// Handling Input
+	AEInputUpdate();
+
+	switch (direction)
+	{
+		case LEFT:
+			if(AEInputCheckCurr(key))
+			{
+				//Obj->XPos -= move_dist;
+				Obj->PlayerSprite.XPosition -= move_dist;
+			}
+			break;
+		case RIGHT:
+			if(AEInputCheckCurr(key))
+			{
+				//Obj->XPos += move_dist;
+				Obj->PlayerSprite.XPosition += move_dist;
+			}
+			break;
+		case UP:
+			if(AEInputCheckCurr(key))
+			{
+				//Obj->YPos += move_dist;
+				Obj->PlayerSprite.YPosition += move_dist;
+			}
+			break;
+		case DOWN:
+			if(AEInputCheckCurr(key))
+			{
+				//Obj->YPos -= move_dist;
+				Obj->PlayerSprite.YPosition -= move_dist;
+			}
+			break;
+	}
+}
