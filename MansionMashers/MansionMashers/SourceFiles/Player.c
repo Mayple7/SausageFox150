@@ -61,36 +61,12 @@ void DrawPlayer(struct Player *Player)
 }
 
 
-void MovePlayer(int key, struct Player *Obj, float move_dist, int direction)
+void Input_Player(int key)
 {
-	// Handling Input
 	/*
-	switch (direction)
+	switch (key)
 	{
-		case LEFT:
-			if(AEInputCheckCurr(key))
-			{
-				Obj->XPos -= move_dist;
-			}
-			break;
-		case RIGHT:
-			if(AEInputCheckCurr(key))
-			{
-				Obj->XPos += move_dist;
-			}
-			break;
-		case UP:
-			if(AEInputCheckCurr(key))
-			{
-				Obj->YPos += move_dist;				
-			}
-			break;
-		case DOWN:
-			if(AEInputCheckCurr(key))
-			{
-				Obj->YPos -= move_dist;
-			}
-			break;
-	}
-	*/
+		case 'A':
+			obj_move
+	}*/
 }
