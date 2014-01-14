@@ -1,8 +1,10 @@
 #ifndef FOX_MOVEMENT
 #define FOX_MOVEMENT
 
-typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
+#include "Vector2.h"
 
-void obj_move(Vec2 *Pos, int direction, float move_dist);
+enum Direction{ UP, LEFT, DOWN, RIGHT };
+
+void MoveObject(Vec2 *Pos, enum Direction dirMove, float move_dist);
 
 #endif

@@ -2,9 +2,9 @@
 #include "../AEEngine.h"
 #include "../HeaderFiles/Vector2.h"
 
-void obj_move(Vec2 *Pos, int direction, float move_dist)
+void MoveObject(Vec2 *Pos, enum Direction dirMove, float move_dist)
 {
-	switch (direction)
+	switch (dirMove)
 	{
 		case LEFT:
 			Pos->x -= move_dist;

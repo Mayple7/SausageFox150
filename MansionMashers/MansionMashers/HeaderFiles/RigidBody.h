@@ -11,6 +11,6 @@ struct RigidBody
 	float Friction;
 };
 
-void UpdateVelocity(struct RigidBody *RigidBody);
+//void UpdateVelocity(struct RigidBody *CurrentRigidBody);
 
 #endif

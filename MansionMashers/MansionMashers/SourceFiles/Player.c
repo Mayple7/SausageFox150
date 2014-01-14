@@ -68,16 +68,16 @@ void Input_Player(struct Player *CurrentPlayer, int key)
 	switch (key)
 	{
 		case 'A':
-			obj_move(&CurrentPlayer->Position, LEFT, 3.0f);
+			MoveObject(&CurrentPlayer->Position, LEFT, 3.0f);
 			break;
 		case 'S':
-			obj_move(&CurrentPlayer->Position, DOWN, 3.0f);
+			MoveObject(&CurrentPlayer->Position, DOWN, 3.0f);
 			break;
 		case 'D':
-			obj_move(&CurrentPlayer->Position, RIGHT, 3.0f);
+			MoveObject(&CurrentPlayer->Position, RIGHT, 3.0f);
 			break;
 		case 'W':
-			obj_move(&CurrentPlayer->Position, UP, 3.0f);
+			MoveObject(&CurrentPlayer->Position, UP, 3.0f);
 			break;
 	}
 }
