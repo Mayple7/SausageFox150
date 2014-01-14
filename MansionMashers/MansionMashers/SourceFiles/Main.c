@@ -1,4 +1,3 @@
-
 /*
 File:				Main.c
 Author:				Dan Muller (d.muller)
@@ -86,6 +85,20 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		// Handling Input
 		AEInputUpdate();
 
+		//Level List
+		/*
+			//Interface Levels
+		   -1:	Exit Game
+			0:	Splash Screen
+			1:	Main Menu
+			2:	Options Screen
+			3:	Credits
+			4:	Level Select
+			5:	Level 1
+			6:	First Shop
+			7:	Level 2
+			8:	etc. etc.
+		*/
 		switch(Level)
 		{
 		case 0:

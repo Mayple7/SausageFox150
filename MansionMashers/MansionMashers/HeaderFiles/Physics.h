@@ -1,3 +1,6 @@
+#ifndef FOX_PHYSICS
+#define FOX_PHYSICS
+
 struct Physics
 {
 	int Gravity;
@@ -6,3 +9,4 @@ struct Physics
 
 };
 
+#endif

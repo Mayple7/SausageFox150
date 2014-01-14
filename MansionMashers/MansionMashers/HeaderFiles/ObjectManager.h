@@ -1,3 +1,6 @@
+#ifndef FOX_OBJ_MANAGER
+#define FOX_OBJ_MANAGER
+
 #include "../AEEngine.h"
 //#include "../HeaderFiles/Sprite.h"
 
@@ -6,3 +9,5 @@ Sprite* addObject(void);
 void resetObjectList(void);
 void drawObjectList(void);
 void freeObjectList(void);
+
+#endif

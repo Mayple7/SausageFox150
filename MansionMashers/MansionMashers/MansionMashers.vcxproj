@@ -43,6 +43,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -81,6 +82,7 @@
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\Movement.h" />
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
+    <ClInclude Include="HeaderFiles\Options.h" />
     <ClInclude Include="HeaderFiles\Physics.h" />
     <ClInclude Include="HeaderFiles\Player.h" />
     <ClInclude Include="HeaderFiles\RigidBody.h" />

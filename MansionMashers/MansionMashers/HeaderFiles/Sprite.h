@@ -1,3 +1,6 @@
+#ifndef FOX_SPRITE
+#define FOX_SPRITE
+
 typedef struct Sprite
 {
 	//Bools
@@ -39,3 +42,5 @@ typedef struct Sprite
 Sprite * CreateSprite(float width, float height, int xFrames, int yFrames, char* texture);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
 void DrawSprite(Sprite *currentSprite);
+
+#endif
