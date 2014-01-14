@@ -1,4 +1,9 @@
+#ifndef FOX_PLAYER
+#define FOX_PLAYER
+
+#ifndef MAX_INVENTORY
 #define MAX_INVENTORY 20
+#endif
 
 struct Player
 {
@@ -40,3 +45,4 @@ void InitializePlayer(struct Player *Player);
 void DrawPlayer(struct Player *Player); //Draw player sprite, current weapon sprite
 void ApplyPhysics(struct Player *Player);
 
+#endif

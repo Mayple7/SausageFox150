@@ -1,3 +1,6 @@
+#ifndef FOX_WEAPON
+#define FOX_WEAPON
+
 #include "Sprite.h"
 
 struct Weapon
@@ -8,3 +11,5 @@ struct Weapon
 	struct Sprite WeaponSprite;
 
 };
+
+#endif

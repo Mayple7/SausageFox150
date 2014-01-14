@@ -57,29 +57,23 @@ void InitizalizeMainMenu(void)
 {
 	resetObjectList();
 
-	if(NULL != malloc(sizeof(Sprite)))
-		StartButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/StartButton.png");
+	StartButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/StartButton.png");
 	StartButton->XPosition = 0.0f;
 	StartButton->YPosition = 100.0f;
 
-	if(NULL != malloc(sizeof(Sprite)))
-		ExitButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/ExitButton.png");
+	ExitButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/ExitButton.png");
 	ExitButton->XPosition = 0.0f;
 	ExitButton->YPosition = -100.0f;
 
-	if(NULL != malloc(sizeof(Sprite)))
-		Selector = CreateSprite(500.0f, 200.0f, 1, 1, "TextureFiles/Selector.png");
+	Selector = CreateSprite(500.0f, 200.0f, 1, 1, "TextureFiles/Selector.png");
 	Selector->XPosition = 100.0f;
 	Selector->YPosition = 0.0f;
 	
-	if(NULL != malloc(sizeof(Sprite)))
-		Ham = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles/Ham.png");
+	Ham = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles/Ham.png");
 
-	if(NULL != malloc(sizeof(Sprite)))
-		Bektor = CreateSprite(150.0f, 150.0f, 4, 1, "TextureFiles/Bektor.png");
+	Bektor = CreateSprite(150.0f, 150.0f, 4, 1, "TextureFiles/Bektor.png");
 
-	if(NULL != malloc(sizeof(Sprite)))
-		AnimationTest = CreateSprite(300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
+	AnimationTest = CreateSprite(300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
 	AnimationTest->XPosition = -400.0f;
 	AnimationTest->YPosition = 300.0f;
 
