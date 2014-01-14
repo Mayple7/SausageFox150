@@ -23,6 +23,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/Sprite.h"
 #include "../HeaderFiles/Player.h"
 #include "../HeaderFiles/RigidBody.h"
+#include "../HeaderFiles/Movement.h"
 
 
 // ---------------------------------------------------------------------------
@@ -61,12 +62,22 @@ void DrawPlayer(struct Player *Player)
 }
 
 
-void Input_Player(int key)
+void Input_Player(struct Player *CurrentPlayer, int key)
 {
-	/*
+	
 	switch (key)
 	{
 		case 'A':
-			obj_move
-	}*/
+			obj_move(&CurrentPlayer->Position, LEFT, 3.0f);
+			break;
+		case 'S':
+			obj_move(&CurrentPlayer->Position, DOWN, 3.0f);
+			break;
+		case 'D':
+			obj_move(&CurrentPlayer->Position, RIGHT, 3.0f);
+			break;
+		case 'W':
+			obj_move(&CurrentPlayer->Position, UP, 3.0f);
+			break;
+	}
 }

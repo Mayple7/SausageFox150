@@ -3,6 +3,6 @@
 
 typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
 
-void Obj_move(int key, struct Sprite *obj, float move_dist, int direction);
+void obj_move(Vec2 *Pos, int direction, float move_dist);
 
 #endif

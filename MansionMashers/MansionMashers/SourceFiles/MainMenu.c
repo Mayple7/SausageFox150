@@ -156,12 +156,11 @@ int InputHandling(void)
 		return -1;
 	
 	//Moving the player
-	/*
-	MovePlayer('A', &Player, 3.0f, LEFT);
-	MovePlayer('S', &Player, 3.0f, DOWN);
-	MovePlayer('D', &Player, 3.0f, RIGHT);
-	MovePlayer('W', &Player, 3.0f, UP);
-	*/
+	Input_Player(&Player, 'W');
+	Input_Player(&Player, 'A');
+	Input_Player(&Player, 'S');
+	Input_Player(&Player, 'D');
+
 	return 0;
 }
 
