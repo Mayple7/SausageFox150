@@ -1,8 +1,8 @@
 #include "../HeaderFiles/Movement.h"
 #include "../AEEngine.h"
+#include "../HeaderFiles/Sprite.h"
 
-
-void JG_move(int key, float *objX, float *objY, float move_dist, int direction)
+void JG_move(int key, Sprite *obj, float move_dist, int direction)
 {
 
 	// Handling Input
@@ -12,19 +12,19 @@ void JG_move(int key, float *objX, float *objY, float move_dist, int direction)
 	{
 		case LEFT:
 			if(AEInputCheckCurr(key))
-				*objX -= move_dist;
+				obj->XPosition -= move_dist;
 			break;
 		case RIGHT:
 			if(AEInputCheckCurr(key))
-				*objX += move_dist;
+				obj->XPosition += move_dist;
 			break;
 		case UP:
 			if(AEInputCheckCurr(key))
-				*objY += move_dist;
+				obj->YPosition += move_dist;
 			break;
 		case DOWN:
 			if(AEInputCheckCurr(key))
-				*objY -= move_dist;
+				obj->YPosition -= move_dist;
 			break;
 	}
 
