@@ -37,3 +37,8 @@ void SetCamera(Vec2 *playerX, int offset, int move_dist)
 	else if(playerX->x < (camX - offset))
 		AEGfxSetCamPosition(camX - move_dist, camY);
 }
+
+void ResetCamera(void)
+{
+	AEGfxSetCamPosition(0.0, 0.0);
+}

@@ -21,6 +21,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/TestLevel.h"
 #include "../HeaderFiles/Sprite.h"
 #include "../HeaderFiles/ObjectManager.h"
+#include "../HeaderFiles/Camera.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -58,6 +59,8 @@ void InitizalizeTestLevel(void)
 
 	Ham2->Position.x = -200.0f;
 	Ham2->Position.y = -150.0f;
+
+	ResetCamera();
 }
 
 int LevelLoop(void)
