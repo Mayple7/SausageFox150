@@ -40,7 +40,7 @@ Sprite* ExitButton;
 Sprite* Selector;
 Sprite* AnimationTest;
 
-struct Player Player;
+Player CurrentPlayer;
 
 int numMenuButtons = 2;
 int selectedButton = 0;								//0: start, 1: exit
@@ -90,7 +90,7 @@ void InitizalizeMainMenu(void)
 	Bektor->AnimationActive = 1;
 
 	if(NULL != malloc(sizeof(Player)))
-		InitializePlayer(&Player);
+		InitializePlayer(&CurrentPlayer);
 
 	UpdateSelector(Selector);
 }
@@ -98,14 +98,14 @@ void InitizalizeMainMenu(void)
 void DrawMenu(void)
 {
 	//Camera follows ham
-	SF_SetCamera((&Player)->PlayerSprite.Position.x, 350, 3.0f);
+	SF_SetCamera((&CurrentPlayer)->PlayerSprite.Position.x, 350, 3.0f);
 
 	DrawSprite(Selector);
 	DrawSprite(StartButton);
 	DrawSprite(ExitButton);
 	DrawSprite(Ham);
 	DrawSprite(Bektor);
-	DrawPlayer(&Player);
+	DrawPlayer(&CurrentPlayer);
 
 	DrawSprite(AnimationTest);
 }
