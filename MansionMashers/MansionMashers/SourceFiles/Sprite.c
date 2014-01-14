@@ -19,7 +19,6 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/Sprite.h"
-#include "../HeaderFiles/ObjectManager.h"
 
 // ---------------------------------------------------------------------------
 
@@ -87,60 +86,8 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	return AEGfxMeshEnd();
 }
 
-int UpdateFrame(int totalFrames, int currentFrame, int frameUpdate, float *offsetX, float *offsetY)
-{
-	if(currentFrame >= totalFrames - 1 && frameUpdate)
-		currentFrame = 0;
-	else if(frameUpdate)
-		currentFrame++;
-
-	switch(currentFrame)
-	{
-	case 0:
-		*offsetX = 0.0f;
-		*offsetY = 0.0f;
-		break;
-	case 1:
-		*offsetX = 0.25f;
-		*offsetY = 0.0f;
-		break;
-	case 2:
-		*offsetX = 0.5f;
-		*offsetY = 0.0f;
-		break;
-	case 3:
-		*offsetX = 0.75f;
-		*offsetY = 0.0f;
-		break;
-	case 4:
-		*offsetX = 0.0f;
-		*offsetY = 0.5f;
-		break;
-	case 5:
-		*offsetX = 0.25f;
-		*offsetY = 0.5f;
-		break;
-	case 6:
-		*offsetX = 0.5f;
-		*offsetY = 0.5f;
-		break;
-	case 7:
-		*offsetX = 0.75f;
-		*offsetY = 0.5f;
-		break;
-	default:
-		*offsetX = *offsetX;
-		*offsetY = *offsetY;
-		break;
-	}
-
-	return currentFrame;
-}
-
-Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* texture)
+void CreateSprite(Sprite *CurrentSprite, float width, float height, int xFrames, int yFrames, char* texture)
 {	
-	Sprite *CurrentSprite = addObject();
-
 	CurrentSprite->OffsetX = 1.0f / xFrames;
 	CurrentSprite->OffsetY = 1.0f / yFrames;
 
@@ -175,11 +122,9 @@ Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* 
 
 	//The sprite has now been created
 	CurrentSprite->Created = 1;
-
-	return CurrentSprite;
 }
 
-void DrawSprite(Sprite *CurrentSprite)
+void DrawSprite(struct Sprite *CurrentSprite)
 {
 	float offsetDiffX = 1.0f / CurrentSprite->NumWidthFrames;
 	float offsetDiffY = 1.0f / CurrentSprite->NumHeightFrames;
