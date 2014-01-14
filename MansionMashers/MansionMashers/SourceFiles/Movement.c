@@ -1,14 +1,22 @@
 #include "../HeaderFiles/Movement.h"
 #include "../AEEngine.h"
-#include "../HeaderFiles/Sprite.h"
+#include "../HeaderFiles/Vector2.h"
 
-void Obj_move(int key, struct Sprite *obj, float move_dist, int direction)
+void obj_move(Vec2 *Pos, int direction, float move_dist)
 {
-	// Handling Input
-	/* AEInputUpdate();
-
-	if(AEInputCheckCurr(key))
-
-	*/
-	// AEGfxSetPosition(*objX, *objY); 
+	switch (direction)
+	{
+		case LEFT:
+			Pos->x -= move_dist;
+			break;
+		case RIGHT:
+			Pos->x += move_dist;
+			break;
+		case UP:
+			Pos->y += move_dist;				
+			break;
+		case DOWN:
+			Pos->y -= move_dist;
+			break;
+	}
 }

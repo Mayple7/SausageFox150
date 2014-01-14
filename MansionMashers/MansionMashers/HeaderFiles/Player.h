@@ -41,7 +41,7 @@ typedef struct Player
 	float YPos;
 }Player;
 
-typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
+
 
 void InitializePlayer(struct Player *Player);
 void DrawPlayer(struct Player *Player); //Draw player sprite, current weapon sprite
