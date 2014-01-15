@@ -134,6 +134,9 @@
     <ClInclude Include="HeaderFiles\Camera.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\CollisionManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -170,6 +173,9 @@
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Sprite.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\CollisionManager.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>

@@ -20,6 +20,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../AEEngine.h"
 #include "../HeaderFiles/TestLevel.h"
 #include "../HeaderFiles/Sprite.h"
+#include "../HeaderFiles/CollisionManager.h"
 #include "../HeaderFiles/ObjectManager.h"
 #include "../HeaderFiles/Camera.h"
 
@@ -49,6 +50,11 @@ void DrawLevel(void)
 void FreeLevel(void)
 {
 	freeObjectList();
+}
+
+void EventLevel(void)
+{
+
 }
 
 void InitizalizeTestLevel(void)
@@ -83,6 +89,7 @@ int LevelLoop(void)
 
 		// Functions
 		DrawLevel();
+		EventLevel();
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();

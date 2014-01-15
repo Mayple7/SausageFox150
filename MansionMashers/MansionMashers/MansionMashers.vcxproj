@@ -79,6 +79,7 @@
     <ClInclude Include="AEUtil.h" />
     <ClInclude Include="AEVec2.h" />
     <ClInclude Include="HeaderFiles\Camera.h" />
+    <ClInclude Include="HeaderFiles\CollisionManager.h" />
     <ClInclude Include="HeaderFiles\FoxEngine.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\Matrix3.h" />
@@ -100,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Camera.c" />
+    <ClCompile Include="SourceFiles\CollisionManager.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\Matrix3.c" />
