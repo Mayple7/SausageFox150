@@ -73,7 +73,10 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 	{
 		case 'A':
 			if(AEInputCheckCurr('A'))
+			{
 				MoveObject(&CurrentPlayer->Position, LEFT, 3.0f);
+				CurrentPlayer->PlayerSprite.FlipX = 0;
+			}
 			break;
 		case 'S':
 			if(AEInputCheckCurr('S'))
@@ -81,11 +84,17 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 			break;
 		case 'D':
 			if(AEInputCheckCurr('D'))
+			{
 				MoveObject(&CurrentPlayer->Position, RIGHT, 3.0f);
+				CurrentPlayer->PlayerSprite.FlipX = 1;
+			}
 			break;
 		case 'W':
 			if(AEInputCheckCurr('W'))
-				MoveObject(&CurrentPlayer->Position, UP, 3.0f);
+			{
+				//MoveObject(&CurrentPlayer->Position, UP, 3.0f);
+				CurrentPlayer->PlayerSprite.Rotation += 0.03;
+			}	
 			break;
 	}
 }
