@@ -1,6 +1,10 @@
 #ifndef FOX_VECTOR2
 #define FOX_VECTOR2
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 typedef struct Vector2
 {
 	float x, y;
@@ -26,5 +30,7 @@ float Vec2SquareDistance(Vec2* pVec0, Vec2* pVec1);
 
 float Vec2DotProduct(Vec2* Operand1, Vec2* Operand2);
 float Vec2CrossProductMag(Vec2* Operand1, Vec2* Operand2);
+
+void Vec2RotateDegrees(Vec2* Result, float Degrees);
 
 #endif

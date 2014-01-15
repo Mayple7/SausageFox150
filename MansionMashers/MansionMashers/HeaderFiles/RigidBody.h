@@ -19,7 +19,7 @@ void ZeroVelocity(RigidBody* Result);
 void ApplyForce(RigidBody* Result, Vec2* Force);
 void ApplyVelocity(RigidBody* Result, Vec2* VelocityChange);
 
-void SetVelocity(RigidBody* Result, Vec2* NewVelocity);
+void SetVelocity(RigidBody* Result, float x, float y);
 void SetAcceleration(RigidBody* Result, Vec2* NewAcceleration);
 
 void UpdateVelocity(RigidBody* CurrentRigidBody);

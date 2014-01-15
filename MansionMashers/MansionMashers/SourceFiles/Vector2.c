@@ -149,3 +149,11 @@ float Vec2CrossProductMag(Vec2* Operand1, Vec2* Operand2)
 {
 	return (Operand1->x * Operand2->y - Operand1->y * Operand2->x);
 }
+
+void Vec2RotateDegrees(Vec2* Result, float Degrees)
+{
+	//float length = Vec2Length(Result);
+	float radians = 2 * M_PI * Degrees / 360.0f;
+	Result->x = Result->x * cos(radians) - Result->y * sin(radians);
+	Result->y = Result->x * sin(radians) + Result->y * cos(radians);
+}

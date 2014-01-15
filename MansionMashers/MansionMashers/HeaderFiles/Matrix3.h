@@ -1,13 +1,9 @@
 #ifndef Matrix3_H
 #define Matrix3_H
 
-#include "Vector3.h"
-
-////////////////////////////////////////////////////////////////////////////////
-// DO NOT MODIFY THIS FILE FOR ASSIGNMENT 1
-////////////////////////////////////////////////////////////////////////////////
-
-struct Matrix3
+#include "FoxMath.h"
+/*
+typedef struct Matrix3
 {
   union
   {
@@ -34,13 +30,13 @@ struct Matrix3
   */
   
     // Default constructor should initialize to zeroes
-  Matrix3(void);
+  void Matrix3Zero(void);
   
     // Copy constructor, copies every entry from the other matrix.
-  Matrix3(const Matrix3& rhs);
+  //void Matrix3(Matrix3* Result, Matrix3* Operator);
   
     // Non-default constructor, self-explanatory
-  Matrix3(float mm00, float mm01, float mm02, float mm03,
+  /*Matrix3(float mm00, float mm01, float mm02, float mm03,
           float mm10, float mm11, float mm12, float mm13,
           float mm20, float mm21, float mm22, float mm23,
           float mm30, float mm31, float mm32, float mm33);
@@ -76,16 +72,8 @@ struct Matrix3
   bool operator==(const Matrix3& rhs) const;
   bool operator!=(const Matrix3& rhs) const;
   
-    // Zeroes out the entire matrix
-  void Zero(void);
-  
     // Builds the identity matrix
   void Identity(void);
-  
-    // Already implemented, simple print function
-  void Print(void) const;
 };
-
-
-
+*/
 #endif

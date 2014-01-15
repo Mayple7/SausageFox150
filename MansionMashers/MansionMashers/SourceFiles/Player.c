@@ -53,8 +53,8 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
 
-	Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
-	Vec2Set(&CurrentPlayer->PlayerRigidBody.Velocity, 1.0f, 1.0f);
+	ZeroAcceleration(&CurrentPlayer->PlayerRigidBody);
+	SetVelocity(&CurrentPlayer->PlayerRigidBody, 1.0f, 1.0f);
 }
 
 void DrawPlayer(struct Player *CurrentPlayer)
@@ -66,7 +66,7 @@ void DrawPlayer(struct Player *CurrentPlayer)
 }
 
 
-void Input_Player(struct Player *CurrentPlayer, int key)
+void InputPlayer(struct Player *CurrentPlayer, int key)
 {
 	
 	switch (key)

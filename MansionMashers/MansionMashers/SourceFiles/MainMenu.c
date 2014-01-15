@@ -19,11 +19,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/MainMenu.h"
-#include "../HeaderFiles/Sprite.h"
-#include "../HeaderFiles/Player.h"
-#include "../HeaderFiles/Movement.h"
-#include "../HeaderFiles/Camera.h"
-#include "../HeaderFiles/ObjectManager.h"
+#include "../HeaderFiles/FoxEngine.h"
+#include "../HeaderFiles/FoxMath.h"
 
 // ---------------------------------------------------------------------------
 
@@ -150,16 +147,21 @@ int InputHandling(void)
 		else if(selectedButton == 1)
 			return -1;
 	}
+	else if(AEInputCheckTriggered(VK_SPACE))
+	{
+		Vec2RotateDegrees(&CurrentPlayer.PlayerRigidBody.Velocity, 180.0f);
+	}
+
 
 	// check if forcing the application to quit
 	if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 		return -1;
 	
 	//Moving the player
-	Input_Player(&CurrentPlayer, 'W');
-	Input_Player(&CurrentPlayer, 'A');
-	Input_Player(&CurrentPlayer, 'S');
-	Input_Player(&CurrentPlayer, 'D');
+	InputPlayer(&CurrentPlayer, 'W');
+	InputPlayer(&CurrentPlayer, 'A');
+	InputPlayer(&CurrentPlayer, 'S');
+	InputPlayer(&CurrentPlayer, 'D');
 
 	return 0;
 }
