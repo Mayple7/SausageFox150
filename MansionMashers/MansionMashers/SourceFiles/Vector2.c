@@ -68,7 +68,7 @@ void Vec2Negate(Vec2* Result, Vec2* Operand)
 void Vec2Add(Vec2* Result, Vec2* Operand1, Vec2* Operand2)
 {
 	Result->x = Operand1->x + Operand2->x;
-	Result->y = Operand2->y + Operand2->y;
+	Result->y = Operand1->y + Operand2->y;
 }
 
 //Subtracts 2 vectors

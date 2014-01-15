@@ -3,11 +3,12 @@
 
 #define MAX_INVENTORY 20
 #include "Vector2.h"
+#include "RigidBody.h"
 
 typedef struct Player
 {
-	struct Sprite PlayerSprite;
-	//struct RigidBody PlayerRigidBody;
+	Sprite PlayerSprite;
+	RigidBody PlayerRigidBody;
 	//struct CollisionInfo PlayerCollision;
 	//struct Transform PlayerTransform;
 
@@ -35,17 +36,15 @@ typedef struct Player
 		//struct Weapon CurrentWeapon;
 	};
 
-
 	Vec2 Position;
-	float XPos;
-	float YPos;
+
 }Player;
 
 
 
 void InitializePlayer(struct Player *Player);
 void DrawPlayer(struct Player *Player); //Draw player sprite, current weapon sprite
-void ApplyPhysics(struct Player *Player);
+void UpdatePosition(struct Player *Player);
 void Input_Player(struct Player *Player, int key);
 
 #endif
