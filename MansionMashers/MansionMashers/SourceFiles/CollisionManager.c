@@ -69,9 +69,13 @@ void circleCircleCollision(Sprite* objA, Sprite* objB)
 {
 	Vec2 posA = objA->Position;
 	Vec2 posB = objB->Position;
+	float radiusA = ((objA->Width + objA->Height) / 2) / 2;
+	float radiusB = ((objB->Width + objB->Height) / 2) / 2;
 
-	if (posA.x + objA->Width > posB.x && posA.x < posB.x + objB->Width
-		&& posA.y + objA->Height > posB.y && posA.y < posB.y + objB->Height)
+	printf("%f\n", sqrt((posA.x - posB.x) * (posA.x - posB.x) + (posA.y - posB.y) * (posA.y - posB.y)));
+	printf("%f\n", (radiusA + radiusB));
+
+	if (sqrt((posA.x - posB.x) * (posA.x - posB.x) + (posA.y - posB.y) * (posA.y - posB.y)) < (radiusA + radiusB))
 		printf("Detected interaction\n");
 	else
 		printf("No interaction\n");

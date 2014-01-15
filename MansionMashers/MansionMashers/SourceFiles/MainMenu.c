@@ -147,11 +147,7 @@ int InputHandling(void)
 		else if(selectedButton == 1)
 			return -1;
 	}
-	else if(AEInputCheckTriggered(VK_SPACE))
-	{
-		Vec2RotateDegrees(&CurrentPlayer.PlayerRigidBody.Velocity, 90.0f);
-	}
-	else if(AEInputCheckTriggered(VK_BACK))
+	else if(AEInputCheckCurr(VK_BACK))
 	{
 		Vec2 force;
 		Vec2Set(&force, -8.0f, 0.0f);
@@ -162,6 +158,11 @@ int InputHandling(void)
 		Vec2 force;
 		Vec2Set(&force, 8.0f, 0.0f);
 		ApplyForce(&CurrentPlayer.PlayerRigidBody, &force);
+	}
+	else
+	{
+		CurrentPlayer.PlayerRigidBody.Acceleration.x = 0;
+		CurrentPlayer.PlayerRigidBody.Acceleration.y = 0;
 	}
 
 	// check if forcing the application to quit
