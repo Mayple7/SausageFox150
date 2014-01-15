@@ -172,5 +172,8 @@
     <ClCompile Include="SourceFiles\Sprite.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFiles\RigidBody.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

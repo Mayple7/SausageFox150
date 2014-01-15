@@ -106,6 +106,7 @@
     <ClCompile Include="SourceFiles\Movement.c" />
     <ClCompile Include="SourceFiles\ObjectManager.c" />
     <ClCompile Include="SourceFiles\Player.c" />
+    <ClCompile Include="SourceFiles\RigidBody.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />
     <ClCompile Include="SourceFiles\TestLevel.c" />

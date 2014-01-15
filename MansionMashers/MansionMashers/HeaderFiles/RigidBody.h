@@ -1,7 +1,9 @@
 #ifndef FOX_RIGIDBODY
 #define FOX_RIGIDBODY
 
-struct RigidBody
+#include "Vector2.h"
+
+typedef struct RigidBody
 {
 	Vec2 Velocity;
 	Vec2 Acceleration;
@@ -9,8 +11,17 @@ struct RigidBody
 	float Mass;
 	float Drag;
 	float Friction;
-};
+}RigidBody;
 
-//void UpdateVelocity(struct RigidBody *CurrentRigidBody);
+void ZeroAcceleration(RigidBody* Result);
+void ZeroVelocity(RigidBody* Result);
+
+void ApplyForce(RigidBody* Result, Vec2* Force);
+void ApplyVelocity(RigidBody* Result, Vec2* VelocityChange);
+
+void SetVelocity(RigidBody* Result, Vec2* NewVelocity);
+void SetAcceleration(RigidBody* Result, Vec2* NewAcceleration);
+
+void UpdateVelocity(RigidBody* CurrentRigidBody);
 
 #endif

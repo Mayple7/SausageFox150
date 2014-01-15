@@ -52,10 +52,14 @@ void InitializePlayer(struct Player *CurrentPlayer)
 
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
+
+	Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
+	Vec2Set(&CurrentPlayer->PlayerRigidBody.Velocity, 1.0f, 1.0f);
 }
 
 void DrawPlayer(struct Player *CurrentPlayer)
 {
+	UpdatePosition(CurrentPlayer);
 	CurrentPlayer->PlayerSprite.Position.x = CurrentPlayer->Position.x;
 	CurrentPlayer->PlayerSprite.Position.y = CurrentPlayer->Position.y;
 	DrawSprite(&CurrentPlayer->PlayerSprite);
@@ -84,4 +88,9 @@ void Input_Player(struct Player *CurrentPlayer, int key)
 				MoveObject(&CurrentPlayer->Position, UP, 3.0f);
 			break;
 	}
+}
+
+void UpdatePosition(Player *CurrentPlayer)
+{
+	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &CurrentPlayer->PlayerRigidBody.Velocity);
 }
