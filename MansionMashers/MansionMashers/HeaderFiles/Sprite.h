@@ -11,6 +11,8 @@ typedef struct Sprite
 
 	//Collision
 	int CanCollide;
+	int Ghost;
+	int IsHit;
 	int SensorType;
 
 	//Sprite Graphics Properties

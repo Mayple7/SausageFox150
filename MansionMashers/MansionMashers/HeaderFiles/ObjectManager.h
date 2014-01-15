@@ -4,6 +4,10 @@
 #include "../AEEngine.h"
 #include "..\HeaderFiles\Sprite.h"
 
+//Create object list
+#define OBJECTAMOUNT 20
+Sprite *objectList;
+
 //Functionz
 Sprite* addObject(void);
 void resetObjectList(void);
