@@ -2,7 +2,7 @@
 #define FOX_OBJ_MANAGER
 
 #include "../AEEngine.h"
-//#include "../HeaderFiles/Sprite.h"
+#include "..\HeaderFiles\Sprite.h"
 
 //Functionz
 Sprite* addObject(void);
