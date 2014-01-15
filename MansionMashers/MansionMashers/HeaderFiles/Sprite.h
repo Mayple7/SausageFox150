@@ -2,12 +2,16 @@
 #define FOX_SPRITE
 
 #include "Vector2.h"
+#include "../HeaderFiles/CollisionManager.h"
 
 typedef struct Sprite
 {
-	//Bools
+	//Created (BOOL 1 or 0 only)
 	int Created;
+
+	//Collision
 	int CanCollide;
+	int SensorType;
 
 	//Sprite Graphics Properties
 	AEGfxVertexList *SpriteMesh;

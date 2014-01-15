@@ -54,7 +54,7 @@ void FreeLevel(void)
 
 void EventLevel(void)
 {
-
+	detectCollision();
 }
 
 void InitizalizeTestLevel(void)

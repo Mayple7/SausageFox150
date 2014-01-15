@@ -123,9 +123,12 @@ Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* 
 	CurrentSprite->FlipX = 0;
 	CurrentSprite->FlipY = 0;
 
+	//Collision
+	CurrentSprite->CanCollide = 1;
+	CurrentSprite->SensorType = RectangleCollider;
+
 	//The sprite has now been created
 	CurrentSprite->Created = 1;
-	CurrentSprite->CanCollide = 1;
 
 	return CurrentSprite;
 }

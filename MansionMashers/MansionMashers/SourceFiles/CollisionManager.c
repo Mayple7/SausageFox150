@@ -16,6 +16,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 // includes
+
+#include "../HeaderFiles/ObjectManager.h"
 #include "../HeaderFiles/CollisionManager.h"
 
 // ---------------------------------------------------------------------------
@@ -29,3 +31,21 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 // Main
+
+void detectCollision(void)
+{
+	//Sort through the objects to find which to detect collision
+	/*int i;
+	for (i = 0; i < objectAmount; i++)
+	{
+		Sprite* objectNext = (objectList + i);
+		//Make sure the sprite exists
+		if (objectNext && objectNext->Created == 1)
+		{
+			//Free the mesh and texture data
+			AEGfxMeshFree(objectNext->SpriteMesh);
+			AEGfxTextureUnload(objectNext->SpriteTexture);
+			printf("Slot %i is now empty\n", i);
+		}
+	}*/
+}
