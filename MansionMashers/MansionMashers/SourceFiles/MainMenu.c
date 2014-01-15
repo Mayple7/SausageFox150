@@ -31,7 +31,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 // globals
 
 Sprite* Ham;
-Sprite* Bektor;
+Sprite* Fox;
 Sprite* StartButton;
 Sprite* ExitButton;
 Sprite* Selector;
@@ -68,7 +68,7 @@ void InitizalizeMainMenu(void)
 	
 	Ham = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles/Ham.png");
 
-	Bektor = CreateSprite(150.0f, 150.0f, 4, 1, "TextureFiles/Bektor.png");
+	Fox = CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
 
 	AnimationTest = CreateSprite(300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
 	AnimationTest->Position.x = -400.0f;
@@ -80,11 +80,11 @@ void InitizalizeMainMenu(void)
 	Ham->Position.x = 100.0f;
 	Ham->Position.y = 200.0f;
 
-	Bektor->Position.x = -300.0f;
-	Bektor->Position.y = -300.0f;
+	Fox->Position.x = -300.0f;
+	Fox->Position.y = -150.0f;
 
-	Bektor->AnimationSpeed = 12;
-	Bektor->AnimationActive = 1;
+	Fox->AnimationSpeed = 6;
+	Fox->AnimationActive = 1;
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
@@ -101,7 +101,7 @@ void DrawMenu(void)
 	DrawSprite(StartButton);
 	DrawSprite(ExitButton);
 	DrawSprite(Ham);
-	DrawSprite(Bektor);
+	DrawSprite(Fox);
 	DrawPlayer(&CurrentPlayer);
 
 	DrawSprite(AnimationTest);
