@@ -38,10 +38,14 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 	Vec2 posA = objA->Position;
 	Vec2 posB = objB->Position;
 
-	printf("%i    ::    %i\n", objA->Width, objB->Width);
+	/*printf("NEW SET:\n");
+	printf("%6.2f    >    %6.2f\n", posA.x + objA->Width, posB.x);
+	printf("%6.2f    <    %6.2f\n", posA.x, posB.x + objB->Width);
+	printf("%6.2f    >    %6.2f\n", posA.y + objA->Height, posB.y);
+	printf("%6.2f    <    %6.2f\n", posA.y, posB.y + objB->Height);*/
 
-	if (posA.x + objA->Width < posB.x && posA.x > posB.x + objB->Width
-		&& posA.y + objA->Height < posB.y && posA.y > posB.y + objB->Height)
+	if (posA.x + objA->Width > posB.x && posA.x < posB.x + objB->Width
+		&& posA.y + objA->Height > posB.y && posA.y < posB.y + objB->Height)
 		printf("Detected interaction\n");
 	else
 		printf("No interaction\n");
@@ -50,13 +54,27 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 ////////  Collision Detection        [C&R]   ///////
 void circleRectangleCollision(Sprite* objA, Sprite* objB)
 {
+	Vec2 posA = objA->Position;
+	Vec2 posB = objB->Position;
 
+	if (posA.x + objA->Width > posB.x && posA.x < posB.x + objB->Width
+		&& posA.y + objA->Height > posB.y && posA.y < posB.y + objB->Height)
+		printf("Detected interaction\n");
+	else
+		printf("No interaction\n");
 }
 
 ////////  Collision Detection        [C&C]   ///////
 void circleCircleCollision(Sprite* objA, Sprite* objB)
 {
+	Vec2 posA = objA->Position;
+	Vec2 posB = objB->Position;
 
+	if (posA.x + objA->Width > posB.x && posA.x < posB.x + objB->Width
+		&& posA.y + objA->Height > posB.y && posA.y < posB.y + objB->Height)
+		printf("Detected interaction\n");
+	else
+		printf("No interaction\n");
 }
 
 ////////    SEARCH FOR THE COLLIDEE    [B]   ///////
@@ -95,6 +113,7 @@ void detectCollision(void)
 		if (objA && objA->Created == 1 && objA->CanCollide == 1)
 		{
 			//Search the workspace for any colliding objects
+			//printf("%i    ::    %i\n", objA->Width, objA->Width);
 			searchForIntersection(objA);
 		}
 	}
