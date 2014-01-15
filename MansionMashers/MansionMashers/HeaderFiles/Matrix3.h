@@ -9,14 +9,14 @@ typedef struct Matrix3
   {
     struct  
     {
-      float m00, m01, m02, m03,
-          m10, m11, m12, m13,
-          m20, m21, m22, m23,
-          m30, m31, m32, m33;
+      float m00, m01, m02,
+          m10, m11, m12,
+          m20, m21, m22,
+
     };
   
-    float m[4][4];
-    float v[16];
+    float m[3][3];
+    float v[9];
   };
   
   /* 
@@ -30,7 +30,7 @@ typedef struct Matrix3
   */
   
     // Default constructor should initialize to zeroes
-  void Matrix3Zero(void);
+	//void Matrix3Zero(void);
   
     // Copy constructor, copies every entry from the other matrix.
   //void Matrix3(Matrix3* Result, Matrix3* Operator);
