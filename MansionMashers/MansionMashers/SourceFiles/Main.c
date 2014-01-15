@@ -98,6 +98,12 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			6:	First Shop
 			7:	Level 2
 			8:	etc. etc.
+
+			enum:
+			L1
+			L2
+			L3
+			L_NUM -> Will equal number of levels
 		*/
 		switch(Level)
 		{
