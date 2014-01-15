@@ -37,10 +37,10 @@ void ApplyVelocity(RigidBody* Result, Vec2* VelocityChange)
 	Result->Velocity.y += VelocityChange->y;
 }
 
-void SetVelocity(RigidBody* Result, Vec2* NewVelocity)
+void SetVelocity(RigidBody* Result, float x, float y)
 {
-	Result->Velocity.x = NewVelocity->x;
-	Result->Velocity.y = NewVelocity->y;
+	Result->Velocity.x = x;
+	Result->Velocity.y = y;
 }
 void UpdateVelocity(RigidBody* CurrentRigidBody)
 {
