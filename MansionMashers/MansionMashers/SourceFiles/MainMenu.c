@@ -149,9 +149,20 @@ int InputHandling(void)
 	}
 	else if(AEInputCheckTriggered(VK_SPACE))
 	{
-		Vec2RotateDegrees(&CurrentPlayer.PlayerRigidBody.Velocity, 180.0f);
+		Vec2RotateDegrees(&CurrentPlayer.PlayerRigidBody.Velocity, 90.0f);
 	}
-
+	else if(AEInputCheckTriggered(VK_BACK))
+	{
+		Vec2 force;
+		Vec2Set(&force, -8.0f, 0.0f);
+		ApplyForce(&CurrentPlayer.PlayerRigidBody, &force);
+	}
+	else if(AEInputCheckCurr(VK_HOME))
+	{
+		Vec2 force;
+		Vec2Set(&force, 8.0f, 0.0f);
+		ApplyForce(&CurrentPlayer.PlayerRigidBody, &force);
+	}
 
 	// check if forcing the application to quit
 	if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())

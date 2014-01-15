@@ -154,6 +154,8 @@ void Vec2RotateDegrees(Vec2* Result, float Degrees)
 {
 	//float length = Vec2Length(Result);
 	float radians = 2 * M_PI * Degrees / 360.0f;
-	Result->x = Result->x * cos(radians) - Result->y * sin(radians);
-	Result->y = Result->x * sin(radians) + Result->y * cos(radians);
+	float resultX = Result->x * cos(radians) - Result->y * sin(radians);
+	float resultY = Result->x * sin(radians) + Result->y * cos(radians);
+
+	Vec2Set(Result, resultX, resultY);
 }

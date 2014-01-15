@@ -9,7 +9,9 @@ typedef struct RigidBody
 	Vec2 Acceleration;
 
 	float Mass;
-	float Drag;
+	float Density;			// Mass / (Volume(3D) || Area(2D))
+	float Area;
+	float Drag;				// Between 0 and 1
 	float Friction;
 }RigidBody;
 
@@ -23,5 +25,6 @@ void SetVelocity(RigidBody* Result, float x, float y);
 void SetAcceleration(RigidBody* Result, Vec2* NewAcceleration);
 
 void UpdateVelocity(RigidBody* CurrentRigidBody);
+void ApplyDrag(RigidBody* CurrentRigidBody);
 
 #endif

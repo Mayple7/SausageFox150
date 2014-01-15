@@ -53,8 +53,13 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
 
+	CurrentPlayer->PlayerRigidBody.Mass = 10;
+	CurrentPlayer->PlayerRigidBody.Drag = 0.5;
+	CurrentPlayer->PlayerRigidBody.Area = CurrentPlayer->PlayerSprite.Width * CurrentPlayer->PlayerSprite.Height;
+	CurrentPlayer->PlayerRigidBody.Density = CurrentPlayer->PlayerRigidBody.Mass / CurrentPlayer->PlayerRigidBody.Area;
+
 	ZeroAcceleration(&CurrentPlayer->PlayerRigidBody);
-	SetVelocity(&CurrentPlayer->PlayerRigidBody, 1.0f, 1.0f);
+	SetVelocity(&CurrentPlayer->PlayerRigidBody, 0.0f, 0.0f);
 }
 
 void DrawPlayer(struct Player *CurrentPlayer)
@@ -92,5 +97,6 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 
 void UpdatePosition(Player *CurrentPlayer)
 {
+	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
 	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &CurrentPlayer->PlayerRigidBody.Velocity);
 }

@@ -13,6 +13,7 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited. 
 */ 
 
+#include "..\AEEngine.h"
 #include "..\HeaderFiles\RigidBody.h"
 
 void ZeroAcceleration(RigidBody* Result)
@@ -27,8 +28,10 @@ void ZeroVelocity(RigidBody* Result)
 
 void ApplyForce(RigidBody* Result, Vec2* Force)
 {
-	Result->Acceleration.x += Force->x;
-	Result->Acceleration.y += Force->y;
+	if(Result->Acceleration.x * Result->Acceleration.x < Force->x * Force->x)
+		Result->Acceleration.x += Force->x;
+	if(Result->Acceleration.y * Result->Acceleration.y < Force->y * Force->y)
+		Result->Acceleration.y += Force->y;
 }
 
 void ApplyVelocity(RigidBody* Result, Vec2* VelocityChange)
@@ -42,7 +45,30 @@ void SetVelocity(RigidBody* Result, float x, float y)
 	Result->Velocity.x = x;
 	Result->Velocity.y = y;
 }
-void UpdateVelocity(RigidBody* CurrentRigidBody)
+
+void UpdateVelocity(RigidBody* CurrentRigidBody) // V = Vi + at
 {
-	Vec2Add(&CurrentRigidBody->Velocity, &CurrentRigidBody->Velocity, &CurrentRigidBody->Acceleration);
+	Vec2 accelerationTime;
+	ApplyDrag(CurrentRigidBody);
+	Vec2Scale(&accelerationTime, &CurrentRigidBody->Acceleration, 1 / 60.0f);
+	Vec2Add(&CurrentRigidBody->Velocity, &CurrentRigidBody->Velocity, &accelerationTime);
+	printf("%f\n", CurrentRigidBody->Acceleration.x);
 }
+
+void ApplyDrag(RigidBody* CurrentRigidBody)
+{
+	Vec2 dragForce;
+	Vec2Scale(&dragForce, &CurrentRigidBody->Velocity, 0.5 * CurrentRigidBody->Density * CurrentRigidBody->Area);
+	
+	Vec2Negate(&dragForce, &dragForce);
+	Vec2Scale(&dragForce, &dragForce, 1 / CurrentRigidBody->Mass);
+	if(CurrentRigidBody->Acceleration.x * CurrentRigidBody->Acceleration.x > dragForce.x * dragForce.x)
+		CurrentRigidBody->Acceleration.x += dragForce.x;
+	else
+		CurrentRigidBody->Acceleration.x = 0;
+	if(CurrentRigidBody->Acceleration.y * CurrentRigidBody->Acceleration.y > dragForce.y * dragForce.y)
+		CurrentRigidBody->Acceleration.y += dragForce.y;
+	else
+		CurrentRigidBody->Acceleration.y = 0;
+}
+
