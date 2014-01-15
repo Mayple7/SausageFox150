@@ -63,10 +63,12 @@ AEGfxVertexList* CreateSpriteTexture(float width, float height)
 	return AEGfxMeshEnd();
 }
 
-AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY)
+AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation)
 {
 	float halfWidth = width / 2;
 	float halfHeight = height / 2;
+
+	float len = sqrt(halfWidth*halfWidth + halfHeight*halfHeight);
 
 	// Informing the library that we're about to start adding triangles
 	AEGfxMeshStart();
@@ -74,13 +76,13 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	// 1 triangle at a time
 	// X, Y, Color, texU, texV
 	AEGfxTriAdd(
-		-halfWidth, -halfHeight, 0x00FFFFFF, 0.0f, offsetY, 
-		halfWidth,  -halfHeight, 0x00FFFFFF, offsetX, offsetY,
-		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
+		len * cos(atan2(halfHeight,halfWidth) + PI + Rotation), len * sin(atan2(halfHeight,halfWidth) + PI + Rotation),		0x00FFFFFF, 0.0f, offsetY, 
+		len * cos(atan2(-halfHeight,halfWidth) + Rotation),		len * sin(atan2(-halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, offsetY,
+		len * cos(atan2(halfHeight,-halfWidth) + Rotation),		len * sin(atan2(halfHeight,-halfWidth) + Rotation),			0x00FFFFFF, 0.0f, 0.0f);
 	AEGfxTriAdd(
-		halfWidth, -halfHeight, 0x00FFFFFF, offsetX, offsetY, 
-		halfWidth,  halfHeight, 0x00FFFFFF, offsetX, 0.0f,
-		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
+		len * cos(atan2(-halfHeight,halfWidth) + Rotation),		len * sin(atan2(-halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, offsetY, 
+		len * cos(atan2(halfHeight,halfWidth) + Rotation),		len * sin(atan2(halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, 0.0f,
+		len * cos(atan2(halfHeight,-halfWidth) + Rotation),		len * sin(atan2(halfHeight,-halfWidth) + Rotation),			0x00FFFFFF, 0.0f, 0.0f);
 
 	// Saving the mesh (list of triangles) in pMesh1
 
@@ -94,8 +96,11 @@ Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* 
 	CurrentSprite->OffsetX = 1.0f / xFrames;
 	CurrentSprite->OffsetY = 1.0f / yFrames;
 
+	CurrentSprite->Rotation = 0.0f;
+	CurrentSprite->RotationPrev = 0.0f;
+
 	//Sprite Graphics Properties
-	CurrentSprite->SpriteMesh = createMesh(width, height, CurrentSprite->OffsetX, CurrentSprite->OffsetY);
+	CurrentSprite->SpriteMesh = createMesh(width, height, CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
 	CurrentSprite->SpriteTexture = AEGfxTextureLoad(texture);
 
 	// Size of the sprite
@@ -122,9 +127,13 @@ Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* 
 	CurrentSprite->Visible = 1;
 	CurrentSprite->FlipX = 0;
 	CurrentSprite->FlipY = 0;
+	CurrentSprite->FlipXPrev = 0;
+	CurrentSprite->FlipYPrev = 0;
 
 	//Collision
 	CurrentSprite->CanCollide = 1;
+	CurrentSprite->Ghost      = 1;
+	CurrentSprite->IsHit      = 0;
 	CurrentSprite->SensorType = RectangleCollider;
 
 	//The sprite has now been created
@@ -143,6 +152,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	// Set poisition for object 2
 	AEGfxSetPosition(CurrentSprite->Position.x, CurrentSprite->Position.y);
+
 	// Drawing the mesh (list of triangles)
 	AEGfxSetTransparency(CurrentSprite->Alpha);
 	//printf("%d\n", CurrentSprite->AnimationActive);
@@ -167,7 +177,13 @@ void DrawSprite(struct Sprite *CurrentSprite)
 		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
 		offsetY = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumHeightFrames) * offsetDiffY;
 	}
-
+	if (CurrentSprite->Rotation != CurrentSprite->RotationPrev || CurrentSprite->FlipX != CurrentSprite->FlipXPrev || CurrentSprite->FlipY != CurrentSprite->FlipYPrev)
+	{
+		CurrentSprite->SpriteMesh = createMesh(CurrentSprite->Width * (((2*CurrentSprite->FlipX)-1)*-1), CurrentSprite->Height * (((2*CurrentSprite->FlipY)-1)*-1), CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
+		CurrentSprite->RotationPrev = CurrentSprite->Rotation;
+		CurrentSprite->FlipXPrev = CurrentSprite->FlipX;
+		CurrentSprite->FlipYPrev = CurrentSprite->FlipY;
+	}
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
 	AEGfxMeshDraw(CurrentSprite->SpriteMesh, AE_GFX_MDM_TRIANGLES);
 }

@@ -22,6 +22,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/Sprite.h"
 #include "../HeaderFiles/CollisionManager.h"
 #include "../HeaderFiles/ObjectManager.h"
+#include "../HeaderFiles/Player.h"
+#include "../HeaderFiles/Movement.h"
 #include "../HeaderFiles/Camera.h"
 
 // ---------------------------------------------------------------------------
@@ -59,7 +61,7 @@ void EventLevel(void)
 
 void InitizalizeTestLevel(void)
 {
-	Sprite *Hammy = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
+	Sprite *Hammy = CreateSprite(150.0f, 140.0f, 1, 1, "TextureFiles\\Ham.png");
 
 	Ham2 = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
 

@@ -11,6 +11,8 @@ typedef struct Sprite
 
 	//Collision
 	int CanCollide;
+	int Ghost;
+	int IsHit;
 	int SensorType;
 
 	//Sprite Graphics Properties
@@ -42,6 +44,10 @@ typedef struct Sprite
 	int Visible;
 	int FlipX;
 	int FlipY;
+	int FlipXPrev;
+	int FlipYPrev;
+	float Rotation;
+	float RotationPrev;
 }Sprite;
 
 Sprite * CreateSprite(float width, float height, int xFrames, int yFrames, char* texture);

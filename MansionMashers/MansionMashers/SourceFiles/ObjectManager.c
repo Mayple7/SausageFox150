@@ -24,10 +24,6 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // globals
 
-//Create object list
-const int objectAmount = 20;
-Sprite *objectList;
-
 // ---------------------------------------------------------------------------
 // Static function protoypes
 
@@ -37,7 +33,7 @@ Sprite *objectList;
 Sprite* addObject(void)
 {
 	int i;
-	for (i = 0; i < objectAmount; i++)
+	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
 		Sprite* objectNext = (objectList + i);
 		//Find a sprite that is empty
@@ -53,14 +49,14 @@ Sprite* addObject(void)
 void resetObjectList(void)
 {
 	//Set up the memory to fit the desired amount of objects
-	objectList = (Sprite *)malloc(objectAmount * sizeof(Sprite));
+	objectList = (Sprite *)malloc(OBJECTAMOUNT * sizeof(Sprite));
 	//Make sure the malloc is not NULL
 	if (objectList)
 	{
 		/*
 		//Print the size allocated
 		int i;
-		for (i = 0; i < objectAmount; i++)
+		for (i = 0; i < OBJECTAMOUNT; i++)
 		{
 			printf("%i\n", sizeof(objectList[i]));
 		}
@@ -76,7 +72,7 @@ void resetObjectList(void)
 void drawObjectList(void)
 {
 	int i;
-	for (i = 0; i < objectAmount; i++)
+	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
 		Sprite* objectNext = (objectList + i);
 		//Make sure the sprite exists
@@ -89,7 +85,7 @@ void freeObjectList(void)
 {
 	// Freeing the objects and textures
 	int i;
-	for (i = 0; i < objectAmount; i++)
+	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
 		Sprite* objectNext = (objectList + i);
 		//Make sure the sprite exists
