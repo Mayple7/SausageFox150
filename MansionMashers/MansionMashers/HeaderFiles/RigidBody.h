@@ -11,7 +11,7 @@ typedef struct RigidBody
 	float Mass;
 	float Density;			// Mass / (Volume(3D) || Area(2D))
 	float Area;
-	float Drag;				// Between 0 and 1
+	float Drag;				
 	float Friction;
 }RigidBody;
 
