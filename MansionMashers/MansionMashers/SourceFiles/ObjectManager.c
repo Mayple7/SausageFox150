@@ -17,6 +17,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // includes
 #include "../HeaderFiles/ObjectManager.h"
+#include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -49,7 +50,7 @@ Sprite* addObject(void)
 void resetObjectList(void)
 {
 	//Set up the memory to fit the desired amount of objects
-	objectList = (Sprite *)malloc(OBJECTAMOUNT * sizeof(Sprite));
+	objectList = (Sprite *)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite));
 	//Make sure the malloc is not NULL
 	if (objectList)
 	{

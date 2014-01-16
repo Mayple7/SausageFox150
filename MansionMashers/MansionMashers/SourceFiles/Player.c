@@ -5,9 +5,11 @@ Creation Date:		Jan 8, 2014
 
 Purpose:			All the player components and code are here.
 
-Functions:			InitializePlayer - Creates the player object and sprites.
+Functions:			InitializePlayer - Creates the player object
 					DrawPlayer - Draws the player based on the sprite.
- 
+					UpdatePosition - Updates the position of the player based on velocity and acceleration
+
+
 Copyright (C) 2014 DigiPen Institute of Technology. 
 Reproduction or disclosure of this file or its contents without the prior 
 written consent of DigiPen Institute of Technology is prohibited. 
@@ -19,11 +21,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/Vector2.h"
-#include "../HeaderFiles/Sprite.h"
-#include "../HeaderFiles/Player.h"
-#include "../HeaderFiles/RigidBody.h"
-#include "../HeaderFiles/Movement.h"
+#include "../HeaderFiles/FoxMath.h"
+#include "../HeaderFiles/FoxEngine.h"
 
 
 // ---------------------------------------------------------------------------
