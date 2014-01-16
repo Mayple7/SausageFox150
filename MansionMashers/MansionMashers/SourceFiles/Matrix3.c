@@ -20,8 +20,10 @@
  
   
 */
-/*
+
 #include "../HeaderFiles/FoxMath.h"
+
+
 
 //Set matrix to zero
 void Matrix3Zero(Matrix3* Result)
@@ -51,10 +53,9 @@ void Matrix3Copy(Matrix3* Result, Matrix3* Operand)
 
 }
 
-void Matrix3Set(Matrix3* Result, float mm00, float mm01, float mm02, float mm03,
-          float mm10, float mm11, float mm12, float mm13,
-          float mm20, float mm21, float mm22, float mm23,
-          float mm30, float mm31, float mm32, float mm33)
+void Matrix3Set(Matrix3* Result, float mm00, float mm01, float mm02,
+          float mm10, float mm11, float mm12,
+          float mm20, float mm21, float mm22)
 {	
 	Result->m00 = mm00;
 	Result->m01 = mm01;
@@ -77,4 +78,4 @@ void Matrix3MultVec3(Vec3* Result, Matrix3* Operand1, Vec3* Operand2)
 
 }
 
-*/
+

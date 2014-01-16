@@ -2,7 +2,7 @@
 #define Matrix3_H
 
 #include "FoxMath.h"
-/*
+
 typedef struct Matrix3
 {
   union
@@ -11,13 +11,14 @@ typedef struct Matrix3
     {
       float m00, m01, m02,
           m10, m11, m12,
-          m20, m21, m22,
+          m20, m21, m22;
 
     };
   
     float m[3][3];
     float v[9];
   };
+} Matrix3;
   
   /* 
     This union lets us access the data in multiple ways
@@ -76,4 +77,14 @@ typedef struct Matrix3
   void Identity(void);
 };
 */
+
+  void Matrix3Zero(Matrix3* Result);
+  void Matrix3Copy(Matrix3* Result, Matrix3* Operand);
+  void Matrix3Set(Matrix3* Result, float mm00, float mm01, float mm02, float mm10, float mm11, float mm12, float mm20, float mm21, float mm22);
+  void Matrix3MultVec3(Vec3* Result, Matrix3* Operand1, Vec3* Operand2);
+
+
+
+
+
 #endif
