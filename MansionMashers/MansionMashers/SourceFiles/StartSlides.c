@@ -20,7 +20,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/Sprite.h"
+#include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
 
@@ -86,14 +86,11 @@ int FadeLogic(void)
 }
 void InitializeStartScreen(void)
 {
-	if(NULL != malloc(sizeof(struct Sprite)))
-		Title = CreateSprite(1280.0f, 720.0f, 1, 1, "TextureFiles/MansionMashersLogo.png");
+	resetObjectList();
 
-	if(NULL != malloc(sizeof(struct Sprite)))
-		Digipen = CreateSprite(1024.0f, 248.0f, 1, 1, "TextureFiles/DigipenLogo.png");
-
-	if(NULL != malloc(sizeof(struct Sprite)))
-		Sausage = CreateSprite(1280.0f, 720.0f, 1, 1, "TextureFiles/SausageFoxLogoNoBack.png");
+	Title = CreateSprite(1280.0f, 720.0f, 1, 1, "TextureFiles/MansionMashersLogo.png");
+	Digipen = CreateSprite(1024.0f, 248.0f, 1, 1, "TextureFiles/DigipenLogo.png");
+	Sausage = CreateSprite(1280.0f, 720.0f, 1, 1, "TextureFiles/SausageFoxLogoNoBack.png");
 }
 
 void FreeStartScreen(void)

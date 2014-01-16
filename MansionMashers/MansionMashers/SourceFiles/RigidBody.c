@@ -5,8 +5,13 @@ Creation Date:		Jan 14, 2014
 
 Purpose:			The rigidbody and functions are here
 
-Functions:			InitializePlayer - Creates the player object and sprites.
-					DrawPlayer - Draws the player based on the sprite.
+Functions:			ZeroAcceleration - Zeros the acceleration vector
+					ZeroVelocity - Zeros the velocity vector
+					ApplyForce - Applies a force to the object
+					ApplyVelocity - Applies a velocity to the object
+					SetVelocity - Sets the velocity of an object
+					UpdateVelocity - Updates the velocity based on acceleration and drag
+					ApplyDrag - Calculates and includes drag force to the object
  
 Copyright (C) 2014 DigiPen Institute of Technology. 
 Reproduction or disclosure of this file or its contents without the prior 
@@ -69,19 +74,5 @@ void ApplyDrag(RigidBody* CurrentRigidBody)
 	{
 		CurrentRigidBody->Acceleration.x += dragForce.x;
 	}
-
-	/*
-	if((CurrentRigidBody->Acceleration.x > 0 && (dragForce.x < 0 || dragForce.x < CurrentRigidBody->Acceleration.x)) || (CurrentRigidBody->Acceleration.x < 0 && (dragForce.x > 0 || dragForce.x > CurrentRigidBody->Acceleration.x)))
-		//if(CurrentRigidBody->Velocity.x > 0 && dragForce.x + CurrentRigidBody->Velocity.x < 0)
-			//CurrentRigidBody->Velocity.x = 0;
-		//else if(CurrentRigidBody->Velocity.x < 0 && dragForce.x + CurrentRigidBody->Velocity.x > 0)
-			//CurrentRigidBody->Velocity.x = 0;
-		if(CurrentRigidBody->Acceleration.x + dragForce.x > 0 && CurrentRigidBody->Velocity.x < 0)
-			CurrentRigidBody->Acceleration.x += dragForce.x;
-		else if(CurrentRigidBody->Acceleration.x + dragForce.x < 0 && CurrentRigidBody->Velocity.x > 0)
-			CurrentRigidBody->Acceleration.x += dragForce.x;
-	if((CurrentRigidBody->Acceleration.y > 0 && dragForce.y < 0) || (CurrentRigidBody->Acceleration.y < 0 && dragForce.y > 0))
-		CurrentRigidBody->Acceleration.y += dragForce.y;
-	*/
 }
 
