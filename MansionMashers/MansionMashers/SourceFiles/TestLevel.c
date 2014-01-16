@@ -36,7 +36,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // Static function protoypes
 Sprite *Ham2;
-
+Sprite *Background;
+Sprite *Hammy;
 // ---------------------------------------------------------------------------
 // main
 void MakeLevel(void)
@@ -61,14 +62,17 @@ void EventLevel(void)
 
 void InitizalizeTestLevel(void)
 {
-	Sprite *Hammy = CreateSprite(150.0f, 140.0f, 1, 1, "TextureFiles\\Ham.png");
+	Background = CreateSprite(3840.0f, 720.0f, 1, 1, "TextureFiles\\LevelBackground.png");
+	Background->SensorType = RectangleCollider;
+
+	Hammy = CreateSprite(150.0f, 140.0f, 1, 1, "TextureFiles\\Ham.png");
 	Hammy->SensorType = RectangleCollider;
 
-	Ham2 = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles\\Ham.png");
+	Ham2 = CreateSprite(224.0f, 96.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	Ham2->SensorType = RectangleCollider;
 
-	Ham2->Position.x = -200.0f;
-	Ham2->Position.y = -150.0f;
+	Ham2->Position.x = -400.0f;
+	Ham2->Position.y = 300.0f;
 
 	ResetCamera();
 }
