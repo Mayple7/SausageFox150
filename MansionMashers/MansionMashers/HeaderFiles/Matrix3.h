@@ -80,9 +80,16 @@ typedef struct Matrix3
 
   void Matrix3Zero(Matrix3* Result);
   void Matrix3Copy(Matrix3* Result, Matrix3* Operand);
-  void Matrix3Set(Matrix3* Result, float mm00, float mm01, float mm02, float mm10, float mm11, float mm12, float mm20, float mm21, float mm22);
+  void Matrix3Set(Matrix3* Result, float mm00, float mm01, float mm02, 
+		float mm10, float mm11, float mm12, 
+		float mm20, float mm21, float mm22);
+  
   void Matrix3MultVec3(Vec3* Result, Matrix3* Operand1, Vec3* Operand2);
+  void Matrix3Add(Matrix3* Result, Matrix3* Operand1, Matrix3* Operand2);
+  void Matrix3Sub(Matrix3* Result, Matrix3* Operand1, Matrix3* Operand2);
 
+  void Matrix3Scale(Matrix3* Result, Matrix3* Operand, float Scalar);
+  void Matrix3Div(Matrix3* Result, Matrix3* Operand, float Divisor);
 
 
 
