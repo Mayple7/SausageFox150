@@ -39,7 +39,7 @@ AEGfxVertexList* createMesh(float width, float height);
 // ---------------------------------------------------------------------------
 // main
 
-AEGfxVertexList* CreateSpriteTexture(float width, float height)
+/*AEGfxVertexList* CreateSpriteTexture(float width, float height)
 {
 	float halfWidth = width / 2;
 	float halfHeight = height / 2;
@@ -62,7 +62,7 @@ AEGfxVertexList* CreateSpriteTexture(float width, float height)
 
 	return AEGfxMeshEnd();
 }
-
+*/
 AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation)
 {
 	float halfWidth = width / 2;
