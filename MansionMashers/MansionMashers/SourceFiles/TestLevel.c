@@ -92,7 +92,7 @@ void InitizalizeTestLevel(void)
 	Hammy->ZIndex = 20;
 	Hammy->Position.x = 400.0f;
 
-	HUD = CreateSprite(224.0f, 96.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD = CreateSprite(448.0f, 192.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD->SensorType = RectangleCollider;
 	HUD->ZIndex = 200;
 	HUD->CanCollide = 0;
@@ -101,7 +101,7 @@ void InitizalizeTestLevel(void)
 	Background->CanCollide = 0;
 
 	HUD->Position.x = -400.0f;
-	HUD->Position.y = 300.0f;
+	HUD->Position.y = 250.0f;
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
