@@ -101,19 +101,11 @@ void InitizalizeMainMenu(void)
 
 void DrawMenu(void)
 {
-	//Camera follows ham
+	//Camera follows player
 	SetCamera(&CurrentPlayer.Position, 350, 3.0f);
 
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
-
-	/*DrawSprite(Selector);
-	DrawSprite(StartButton);
-	DrawSprite(ExitButton);
-	DrawSprite(Ham);
-	DrawSprite(Fox);
-
-	DrawSprite(AnimationTest);*/
 }
 
 		
