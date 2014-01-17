@@ -38,6 +38,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 Sprite *Ham2;
 Sprite *Background;
 Sprite *Hammy;
+Player CurrentPlayer;
 
 // ---------------------------------------------------------------------------
 // main

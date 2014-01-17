@@ -82,7 +82,7 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 			if(AEInputCheckCurr('A'))
 			{
 				MoveObject(&CurrentPlayer->Position, LEFT, 3.0f);
-				CurrentPlayer->PlayerSprite.FlipX = 0;
+				CurrentPlayer->PlayerSprite->FlipX = 0;
 				//CurrentPlayer->PlayerSprite.Rotation += 0.03;
 
 				CurrentPlayer->Position.x -= 3.0f;
@@ -100,7 +100,7 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 			if(AEInputCheckCurr('D'))
 			{
 				MoveObject(&CurrentPlayer->Position, RIGHT, 5.0f);
-				CurrentPlayer->PlayerSprite.FlipX = 1;
+				CurrentPlayer->PlayerSprite->FlipX = 1;
 				//CurrentPlayer->PlayerSprite.Rotation -= 0.03;
 
 				CurrentPlayer->Position.x += 3.0f;
