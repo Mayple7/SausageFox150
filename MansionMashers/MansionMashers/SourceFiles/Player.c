@@ -52,11 +52,14 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
 
+	CurrentPlayer->PlayerRigidBody.Static = FALSE;
 	CurrentPlayer->PlayerRigidBody.Mass = 10;
 	CurrentPlayer->PlayerRigidBody.Drag = 0.5;
 	CurrentPlayer->PlayerRigidBody.Area = CurrentPlayer->PlayerSprite.Width * CurrentPlayer->PlayerSprite.Height;
 	CurrentPlayer->PlayerRigidBody.Density = CurrentPlayer->PlayerRigidBody.Mass / CurrentPlayer->PlayerRigidBody.Area;
 
+	//ZeroGravity(&CurrentPlayer->PlayerRigidBody);
+	SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -10.0f);
 	ZeroAcceleration(&CurrentPlayer->PlayerRigidBody);
 	SetVelocity(&CurrentPlayer->PlayerRigidBody, 0.0f, 0.0f);
 }
@@ -64,6 +67,7 @@ void InitializePlayer(struct Player *CurrentPlayer)
 void DrawPlayer(struct Player *CurrentPlayer)
 {
 	UpdatePosition(CurrentPlayer);
+	printf("V: %f, A: %f\n", CurrentPlayer->PlayerRigidBody.Velocity.y, CurrentPlayer->PlayerRigidBody.Acceleration.y);
 	CurrentPlayer->PlayerSprite.Position.x = CurrentPlayer->Position.x;
 	CurrentPlayer->PlayerSprite.Position.y = CurrentPlayer->Position.y;
 	DrawSprite(&CurrentPlayer->PlayerSprite);
@@ -112,6 +116,18 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 
 void UpdatePosition(Player *CurrentPlayer)
 {
+	if(CurrentPlayer->Position.y <= 0)
+	{
+		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
+		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Velocity);
+		ZeroGravity(&CurrentPlayer->PlayerRigidBody);
+	}
+	else
+	{
+		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -10.0f);
+	}
+
+
 	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
 	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &CurrentPlayer->PlayerRigidBody.Velocity);
 }
