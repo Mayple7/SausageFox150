@@ -46,7 +46,7 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerSprite->Position.y = 0.0f;
 
 	CurrentPlayer->PlayerSprite->AnimationActive = 1;
-	CurrentPlayer->PlayerSprite->AnimationSpeed = 2;
+	CurrentPlayer->PlayerSprite->AnimationSpeed = 4; // STOP CHANGING HIS LEG SPEED -The Supreme Sausage
 
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
