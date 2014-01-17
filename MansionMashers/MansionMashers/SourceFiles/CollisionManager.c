@@ -35,7 +35,19 @@ written consent of DigiPen Institute of Technology is prohibited.
 ////////         Collision Detected          ///////
 void collisionDetected(Sprite* objA, Sprite* objB)
 {
-
+	if (objB->SpriteType == PlayerType)
+	{
+		collisionDetected(objB, objA);
+		return;
+	}
+	else if (objA->SpriteType == PlayerType)
+	{
+		if (objB->SpriteType == FoodType)
+		{
+			printf("YUM YUM YUM YUM  DELICIOUSO\n");
+			freeObject(objB);
+		}
+	}
 }
 
 ////////  Collision Detection        [R&R]   ///////
@@ -53,8 +65,8 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 	if (posA.x + objA->Width > posB.x && posA.x < posB.x + objB->Width
 		&& posA.y + objA->Height > posB.y && posA.y < posB.y + objB->Height)
 		collisionDetected(objA, objB);
-	else
-		printf("No interaction\n");
+	//else
+		//printf("No interaction\n");
 }
 
 ////////  Collision Detection        [C&R]   ///////

@@ -139,6 +139,7 @@ Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* 
 
 	//The sprite has now been created
 	CurrentSprite->Created = 1;
+	CurrentSprite->SpriteType = PartType;
 
 	return CurrentSprite;
 }
