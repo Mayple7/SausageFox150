@@ -152,15 +152,15 @@ int InputHandling(void)
 		Vec2 force;
 		Vec2Set(&force, 0.0f, 15.0f);
 		if(CurrentPlayer.Position.y < 1)
-			Vec2Set(&CurrentPlayer.Position, 0.0f, 0.1f);
+			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, 0.1f);
 		ApplyForce(&CurrentPlayer.PlayerRigidBody, &force);
 	}
-	else if(AEInputCheckTriggered(VK_HOME))
+	else if(AEInputCheckTriggered(VK_SPACE))
 	{
 		Vec2 force;
 		Vec2Set(&force, 0.0f, 8.0f);
 		if(CurrentPlayer.Position.y < 1)
-			Vec2Set(&CurrentPlayer.Position, 0.0f, 0.1f);
+			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, 0.1f);
 		ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &force);
 	}
 	else
