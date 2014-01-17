@@ -46,7 +46,7 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerSprite->Position.y = 0.0f;
 
 	CurrentPlayer->PlayerSprite->AnimationActive = 1;
-	CurrentPlayer->PlayerSprite->AnimationSpeed = 1;
+	CurrentPlayer->PlayerSprite->AnimationSpeed = 4;
 
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
@@ -126,7 +126,7 @@ void UpdatePosition(Player *CurrentPlayer)
 	}
 	else
 	{
-		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -10.0f);
+		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -15.0f);
 	}
 
 
