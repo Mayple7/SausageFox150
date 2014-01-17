@@ -19,16 +19,10 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/TestLevel.h"
-#include "../HeaderFiles/Sprite.h"
-#include "../HeaderFiles/CollisionManager.h"
-#include "../HeaderFiles/ObjectManager.h"
-#include "../HeaderFiles/Player.h"
-#include "../HeaderFiles/Movement.h"
-#include "../HeaderFiles/Camera.h"
+#include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
-#pragma comment (lib, "Alpha_Engine.lib")
 
 // ---------------------------------------------------------------------------
 // globals
@@ -49,10 +43,12 @@ void MakeLevel(void)
 void DrawLevel(void)
 {
 	//Camera follows player
-	SetCamera(&CurrentPlayer.Position, 350, 3);
-
+	
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
+
+	SetCamera(&CurrentPlayer.Position, 350, 3, HUD);
+
 }
 
 void FreeLevel(void)
@@ -91,6 +87,7 @@ void InitizalizeTestLevel(void)
 	Hammy->SensorType = RectangleCollider;
 	Hammy->ZIndex = 20;
 	Hammy->Position.x = 400.0f;
+	Hammy->SpriteType = FoodType;
 
 	HUD = CreateSprite(448.0f, 192.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD->SensorType = RectangleCollider;
@@ -105,6 +102,8 @@ void InitizalizeTestLevel(void)
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
+
+	CurrentPlayer.PlayerSprite->SpriteType = PlayerType;
 
 	ResetCamera();
 }
