@@ -2,7 +2,7 @@
 #define FOX_OBJ_MANAGER
 
 #include "../AEEngine.h"
-#include "..\HeaderFiles\Sprite.h"
+#include "Sprite.h"
 
 //Create object list
 #define OBJECTAMOUNT 20
@@ -13,5 +13,6 @@ Sprite* addObject(void);
 void resetObjectList(void);
 void drawObjectList(void);
 void freeObjectList(void);
+void freeObject(Sprite* objectNext);
 
 #endif

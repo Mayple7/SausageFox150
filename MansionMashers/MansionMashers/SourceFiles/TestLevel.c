@@ -84,15 +84,24 @@ void EventLevel(void)
 void InitizalizeTestLevel(void)
 {	
 	Sprite *Hammy = CreateSprite(150.0f, 140.0f, 1, 1, "TextureFiles\\Ham.png");
+	Sprite *Hammy2 = CreateSprite(150.0f, 140.0f, 1, 1, "TextureFiles\\Ham.png");
+
 	Hammy->SensorType = RectangleCollider;
 	Hammy->ZIndex = 20;
 	Hammy->Position.x = 400.0f;
 	Hammy->SpriteType = FoodType;
 
+	Hammy2->SensorType = RectangleCollider;
+	Hammy2->ZIndex = 22;
+	Hammy2->Position.y = -100.0f;
+	Hammy2->Position.x = -500.0f;
+	Hammy2->SpriteType = FoodType;
+
 	HUD = CreateSprite(448.0f, 192.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD->SensorType = RectangleCollider;
 	HUD->ZIndex = 200;
 	HUD->CanCollide = 0;
+	HUD->SpriteType = HudType;
 
 	Background = CreateSprite(3840.0f, 720.0f, 1, 1, "TextureFiles\\LevelBackground.png");
 	Background->CanCollide = 0;
