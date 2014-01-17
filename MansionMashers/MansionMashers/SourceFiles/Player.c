@@ -57,7 +57,6 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerRigidBody.Area = CurrentPlayer->PlayerSprite->Width * CurrentPlayer->PlayerSprite->Height;
 	CurrentPlayer->PlayerRigidBody.Density = CurrentPlayer->PlayerRigidBody.Mass / CurrentPlayer->PlayerRigidBody.Area;
 
-	//ZeroGravity(&CurrentPlayer->PlayerRigidBody);
 	SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -10.0f);
 	ZeroAcceleration(&CurrentPlayer->PlayerRigidBody);
 	SetVelocity(&CurrentPlayer->PlayerRigidBody, 0.0f, 0.0f);
@@ -80,7 +79,7 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 		case 'A':
 			if(AEInputCheckCurr('A'))
 			{
-				MoveObject(&CurrentPlayer->Position, LEFT, 3.0f);
+				MoveObject(&CurrentPlayer->Position, LEFT, 5.0f);
 				CurrentPlayer->PlayerSprite->FlipX = 0;
 				//CurrentPlayer->PlayerSprite.Rotation += 0.03;
 
