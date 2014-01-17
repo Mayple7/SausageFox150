@@ -49,10 +49,12 @@ void MakeLevel(void)
 void DrawLevel(void)
 {
 	//Camera follows player
-	SetCamera(&CurrentPlayer.Position, 350, 3);
-
+	
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
+
+	SetCamera(&CurrentPlayer.Position, 350, 3, HUD);
+
 }
 
 void FreeLevel(void)

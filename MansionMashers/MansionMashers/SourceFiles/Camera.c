@@ -16,18 +16,23 @@ written consent of DigiPen Institute of Technology is prohibited.
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/Vector2.h"
+#include "../HeaderFiles/Camera.h"
+#include "../HeaderFiles/Sprite.h"
 
 
 // ---------------------------------------------------------------------------
 
-void SetCamera(Vec2 *playerX, int offset, int move_dist)
+void SetCamera(Vec2 *playerX, int offset, int move_dist, struct Sprite* hudmain)
 {
-
 	float camX, camY;	
 
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
+
+	hudmain->Position.x = camX - 400;
+	hudmain->Position.y = camY + 250;
+
+	DrawSprite(hudmain);
 
 	//Moves camera Right
 	if(playerX->x > (camX + offset))
@@ -36,6 +41,8 @@ void SetCamera(Vec2 *playerX, int offset, int move_dist)
 	//Moves camera Left
 	else if(playerX->x < (camX - offset))
 		AEGfxSetCamPosition(camX - move_dist, camY);
+
+
 }
 
 void ResetCamera(void)
