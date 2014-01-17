@@ -44,7 +44,8 @@ void collisionDetected(Sprite* objA, Sprite* objB)
 	{
 		if (objB->SpriteType == FoodType)
 		{
-			printf("YUM YUM YUM YUM  DELICIOUSO");
+			printf("YUM YUM YUM YUM  DELICIOUSO\n");
+			freeObject(objB);
 		}
 	}
 }
