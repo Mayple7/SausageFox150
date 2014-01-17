@@ -4,10 +4,13 @@
 #include "Vector2.h"
 #include "../HeaderFiles/CollisionManager.h"
 
+enum spriteType{ Player, Enemy, Part };
+
 typedef struct Sprite
 {
 	//Created (BOOL 1 or 0 only)
 	int Created;
+	int SpriteType;
 
 	//Collision
 	int CanCollide;

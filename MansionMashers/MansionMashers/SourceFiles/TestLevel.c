@@ -19,16 +19,10 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/TestLevel.h"
-#include "../HeaderFiles/Sprite.h"
-#include "../HeaderFiles/CollisionManager.h"
-#include "../HeaderFiles/ObjectManager.h"
-#include "../HeaderFiles/Player.h"
-#include "../HeaderFiles/Movement.h"
-#include "../HeaderFiles/Camera.h"
+#include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
-#pragma comment (lib, "Alpha_Engine.lib")
 
 // ---------------------------------------------------------------------------
 // globals
@@ -105,6 +99,8 @@ void InitizalizeTestLevel(void)
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
+
+	CurrentPlayer.CurrentSprite->SpriteType = Player;
 
 	ResetCamera();
 }
