@@ -68,7 +68,7 @@ void EventLevel(void)
 	if(AEInputCheckTriggered(VK_SPACE))
 	{
 		Vec2 force;
-		Vec2Set(&force, 0.0f, 8.0f);
+		Vec2Set(&force, 0.0f, 12.0f);
 		if(CurrentPlayer.Position.y < -225)
 			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, -224.9f);
 		ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &force);
