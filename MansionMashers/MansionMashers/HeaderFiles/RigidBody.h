@@ -27,7 +27,7 @@ void SetVelocity(RigidBody* Result, float x, float y);
 void SetAcceleration(RigidBody* Result, Vec2* NewAcceleration);
 
 void UpdateVelocity(RigidBody* CurrentRigidBody);
-void ApplyDrag(RigidBody* CurrentRigidBody);
+void applyDrag(RigidBody* CurrentRigidBody);
 
 void ZeroGravity(RigidBody* CurrentRigidBody);
 void SetGravity(RigidBody* CurrentRigidBody, float GravityForceX, float GravityForceY);
