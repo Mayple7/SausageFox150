@@ -1,6 +1,9 @@
 #ifndef FOX_ENGINE
 #define FOX_ENGINE
 
+#define FALSE 0
+#define TRUE 1
+
 //-------------------------------------------------------------------------
 // Fox engine includes
 

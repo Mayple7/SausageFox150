@@ -38,6 +38,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 Sprite *Ham2;
 Sprite *Background;
 Sprite *Hammy;
+Player CurrentPlayer;
+
 // ---------------------------------------------------------------------------
 // main
 void MakeLevel(void)
@@ -48,6 +50,7 @@ void MakeLevel(void)
 void DrawLevel(void)
 {
 	drawObjectList();
+	DrawPlayer(&CurrentPlayer);
 }
 
 void FreeLevel(void)
@@ -58,6 +61,12 @@ void FreeLevel(void)
 void EventLevel(void)
 {
 	detectCollision();
+
+	//Moving the player
+	InputPlayer(&CurrentPlayer, 'W');
+	InputPlayer(&CurrentPlayer, 'A');
+	InputPlayer(&CurrentPlayer, 'S');
+	InputPlayer(&CurrentPlayer, 'D');
 }
 
 void InitizalizeTestLevel(void)
@@ -67,12 +76,16 @@ void InitizalizeTestLevel(void)
 
 	Hammy = CreateSprite(150.0f, 140.0f, 1, 1, "TextureFiles\\Ham.png");
 	Hammy->SensorType = RectangleCollider;
+	Hammy->ZIndex = 5;
 
 	Ham2 = CreateSprite(224.0f, 96.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	Ham2->SensorType = RectangleCollider;
 
 	Ham2->Position.x = -400.0f;
 	Ham2->Position.y = 300.0f;
+
+	if(NULL != malloc(sizeof(Player)))
+		InitializePlayer(&CurrentPlayer);
 
 	ResetCamera();
 }
