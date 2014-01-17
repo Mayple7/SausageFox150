@@ -118,7 +118,7 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 
 void UpdatePosition(Player *CurrentPlayer)
 {
-	if(CurrentPlayer->Position.y <= 0)
+	if(CurrentPlayer->Position.y <= -225)
 	{
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Velocity);
