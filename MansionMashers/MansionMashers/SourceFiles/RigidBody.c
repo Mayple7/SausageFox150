@@ -53,10 +53,14 @@ void SetVelocity(RigidBody* Result, float x, float y)
 
 void UpdateVelocity(RigidBody* CurrentRigidBody) // V = Vi + at
 {
-	Vec2 accelerationTime;
-	ApplyDrag(CurrentRigidBody);
-	Vec2Scale(&accelerationTime, &CurrentRigidBody->Acceleration, 1 / 60.0f);
-	Vec2Add(&CurrentRigidBody->Velocity, &CurrentRigidBody->Velocity, &accelerationTime);
+	if(!CurrentRigidBody->Static)
+	{
+		Vec2 accelerationTime;
+		ApplyDrag(CurrentRigidBody);
+		ApplyGravity(CurrentRigidBody);
+		Vec2Scale(&accelerationTime, &CurrentRigidBody->Acceleration, 1 / 60.0f);
+		Vec2Add(&CurrentRigidBody->Velocity, &CurrentRigidBody->Velocity, &accelerationTime);
+	}
 }
 
 void ApplyDrag(RigidBody* CurrentRigidBody)
@@ -74,5 +78,29 @@ void ApplyDrag(RigidBody* CurrentRigidBody)
 	{
 		CurrentRigidBody->Acceleration.x += dragForce.x;
 	}
+
+	if(CurrentRigidBody->Velocity.y > 0 && dragForce.y < 0)
+	{
+		CurrentRigidBody->Acceleration.y += dragForce.y;
+	}
+	else if(CurrentRigidBody->Velocity.y < 0 && dragForce.y > 0)
+	{
+		CurrentRigidBody->Acceleration.y += dragForce.y;
+	}
+}
+
+void ZeroGravity(RigidBody* CurrentRigidBody)
+{
+	Vec2Set(&CurrentRigidBody->Gravity, 0.0f, 0.0f);
+}
+
+void SetGravity(RigidBody* CurrentRigidBody, float GravityForceX, float GravityForceY)
+{
+	Vec2Set(&CurrentRigidBody->Gravity, GravityForceX, GravityForceY);
+}
+
+void ApplyGravity(RigidBody* CurrentRigidBody)
+{
+	Vec2Add(&CurrentRigidBody->Acceleration, &CurrentRigidBody->Acceleration, &CurrentRigidBody->Gravity);
 }
 

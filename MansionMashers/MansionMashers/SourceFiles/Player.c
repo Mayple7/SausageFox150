@@ -52,11 +52,14 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
 
+	CurrentPlayer->PlayerRigidBody.Static = FALSE;
 	CurrentPlayer->PlayerRigidBody.Mass = 10;
 	CurrentPlayer->PlayerRigidBody.Drag = 0.5;
 	CurrentPlayer->PlayerRigidBody.Area = CurrentPlayer->PlayerSprite->Width * CurrentPlayer->PlayerSprite->Height;
 	CurrentPlayer->PlayerRigidBody.Density = CurrentPlayer->PlayerRigidBody.Mass / CurrentPlayer->PlayerRigidBody.Area;
 
+	//ZeroGravity(&CurrentPlayer->PlayerRigidBody);
+	SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -10.0f);
 	ZeroAcceleration(&CurrentPlayer->PlayerRigidBody);
 	SetVelocity(&CurrentPlayer->PlayerRigidBody, 0.0f, 0.0f);
 }
@@ -78,8 +81,8 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 		case 'A':
 			if(AEInputCheckCurr('A'))
 			{
-				//MoveObject(&CurrentPlayer->Position, LEFT, 3.0f);
-				//CurrentPlayer->PlayerSprite.FlipX = 0;
+				MoveObject(&CurrentPlayer->Position, LEFT, 3.0f);
+				CurrentPlayer->PlayerSprite.FlipX = 0;
 				//CurrentPlayer->PlayerSprite.Rotation += 0.03;
 
 				CurrentPlayer->Position.x -= 3.0f;
@@ -88,7 +91,7 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 		case 'S':
 			if(AEInputCheckCurr('S'))
 			{
-				//MoveObject(&CurrentPlayer->Position, DOWN, 3.0f);
+				MoveObject(&CurrentPlayer->Position, DOWN, 5.0f);
 				//CurrentPlayer->Position.x -= cos(CurrentPlayer->PlayerSprite.Rotation+(PI/2)) * 1.5f;
 				//CurrentPlayer->Position.y -= sin(CurrentPlayer->PlayerSprite.Rotation+(PI/2)) * 1.5f;
 			}
@@ -96,8 +99,8 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 		case 'D':
 			if(AEInputCheckCurr('D'))
 			{
-				//MoveObject(&CurrentPlayer->Position, RIGHT, 3.0f);
-				//CurrentPlayer->PlayerSprite.FlipX = 1;
+				MoveObject(&CurrentPlayer->Position, RIGHT, 5.0f);
+				CurrentPlayer->PlayerSprite.FlipX = 1;
 				//CurrentPlayer->PlayerSprite.Rotation -= 0.03;
 
 				CurrentPlayer->Position.x += 3.0f;
@@ -106,7 +109,7 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 		case 'W':
 			if(AEInputCheckCurr('W'))
 			{
-				//MoveObject(&CurrentPlayer->Position, UP, 3.0f);
+				MoveObject(&CurrentPlayer->Position, UP, 3.0f);
 				//CurrentPlayer->Position.x += cos(CurrentPlayer->PlayerSprite.Rotation+(PI/2)) * 3;
 				//CurrentPlayer->Position.y += sin(CurrentPlayer->PlayerSprite.Rotation+(PI/2)) * 3;
 			}	
@@ -116,6 +119,18 @@ void InputPlayer(struct Player *CurrentPlayer, int key)
 
 void UpdatePosition(Player *CurrentPlayer)
 {
+	if(CurrentPlayer->Position.y <= 0)
+	{
+		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
+		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Velocity);
+		ZeroGravity(&CurrentPlayer->PlayerRigidBody);
+	}
+	else
+	{
+		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -10.0f);
+	}
+
+
 	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
 	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &CurrentPlayer->PlayerRigidBody.Velocity);
 }
