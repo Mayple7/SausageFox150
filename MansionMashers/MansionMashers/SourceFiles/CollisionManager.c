@@ -32,6 +32,12 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // Main
 
+////////         Collision Detected          ///////
+void collisionDetected(Sprite* objA, Sprite* objB)
+{
+
+}
+
 ////////  Collision Detection        [R&R]   ///////
 void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 {
@@ -46,7 +52,7 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 
 	if (posA.x + objA->Width > posB.x && posA.x < posB.x + objB->Width
 		&& posA.y + objA->Height > posB.y && posA.y < posB.y + objB->Height)
-		printf("Detected interaction\n");
+		collisionDetected(objA, objB);
 	else
 		printf("No interaction\n");
 }

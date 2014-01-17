@@ -7,7 +7,7 @@
 
 typedef struct Player
 {
-	Sprite PlayerSprite;
+	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;
 	//struct CollisionInfo PlayerCollision;
 	//struct Transform PlayerTransform;

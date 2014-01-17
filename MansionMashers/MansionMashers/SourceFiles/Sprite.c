@@ -110,6 +110,7 @@ Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* 
 	//Position of the sprite
 	CurrentSprite->Position.x = 0.0f;
 	CurrentSprite->Position.y = 0.0f;
+	CurrentSprite->ZIndex     = 0;
 
 	//Animation Properties
 	CurrentSprite->AnimationActive = 0;

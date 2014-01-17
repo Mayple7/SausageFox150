@@ -57,22 +57,27 @@ void InitizalizeMainMenu(void)
 	StartButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/StartButton.png");
 	StartButton->Position.x = 0.0f;
 	StartButton->Position.y = 100.0f;
+	StartButton->ZIndex     = 1;
 
 	ExitButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/ExitButton.png");
 	ExitButton->Position.x = 0.0f;
 	ExitButton->Position.y = -100.0f;
+	ExitButton->ZIndex     = 1;
 
 	Selector = CreateSprite(500.0f, 200.0f, 1, 1, "TextureFiles/Selector.png");
 	Selector->Position.x = 100.0f;
 	Selector->Position.y = 0.0f;
 	
 	Ham = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles/Ham.png");
+	Ham->ZIndex =  65454;
 
 	Fox = CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
+	Fox->ZIndex = 5;
 
 	AnimationTest = CreateSprite(300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
 	AnimationTest->Position.x = -400.0f;
 	AnimationTest->Position.y = 300.0f;
+	AnimationTest->ZIndex     = 3;
 
 	AnimationTest->AnimationActive = 1;
 	AnimationTest->AnimationSpeed = 60;
@@ -89,6 +94,8 @@ void InitizalizeMainMenu(void)
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
 
+	CurrentPlayer.PlayerSprite->ZIndex = 5;
+
 	UpdateSelector(Selector);
 }
 
@@ -97,14 +104,16 @@ void DrawMenu(void)
 	//Camera follows ham
 	SetCamera(&CurrentPlayer.Position, 350, 3.0f);
 
-	DrawSprite(Selector);
+	drawObjectList();
+	DrawPlayer(&CurrentPlayer);
+
+	/*DrawSprite(Selector);
 	DrawSprite(StartButton);
 	DrawSprite(ExitButton);
 	DrawSprite(Ham);
 	DrawSprite(Fox);
-	DrawPlayer(&CurrentPlayer);
 
-	DrawSprite(AnimationTest);
+	DrawSprite(AnimationTest);*/
 }
 
 		

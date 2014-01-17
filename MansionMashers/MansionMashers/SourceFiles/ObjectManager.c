@@ -72,13 +72,31 @@ void resetObjectList(void)
 
 void drawObjectList(void)
 {
-	int i;
-	for (i = 0; i < OBJECTAMOUNT; i++)
+	int currentZ = 0;
+	int nextZ    = 0;
+	//Draw the sprites so the highest Z is in front
+	while (nextZ != -1)
 	{
-		Sprite* objectNext = (objectList + i);
-		//Make sure the sprite exists
-		if (objectNext && objectNext->Created == 1)
-			DrawSprite(objectNext);
+		int i;
+		nextZ = -1;
+		for (i = 0; i < OBJECTAMOUNT; i++)
+		{
+			Sprite* objectNext = (objectList + i);
+			//Make sure the sprite exists
+			if (objectNext && objectNext->Created == 1 && objectNext->ZIndex >= currentZ)
+			{
+				if (objectNext->ZIndex == currentZ)
+				{
+					DrawSprite(objectNext);
+				}
+				else
+				{
+					if (nextZ == -1 || nextZ > objectNext->ZIndex)
+						nextZ = objectNext->ZIndex;
+				}
+			}
+		}
+		currentZ = nextZ;
 	}
 }
 

@@ -25,6 +25,7 @@ typedef struct Sprite
 
 	//Position of the sprite
 	Vec2 Position;
+	unsigned short ZIndex;
 
 	//Animation Properties
 	int AnimationActive;
