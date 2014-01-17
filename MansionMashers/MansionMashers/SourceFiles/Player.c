@@ -45,9 +45,8 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerSprite->Position.x = 0.0f;
 	CurrentPlayer->PlayerSprite->Position.y = 0.0f;
 
-	CurrentPlayer->PlayerSprite->TotalFrames = 4;
 	CurrentPlayer->PlayerSprite->AnimationActive = 1;
-	CurrentPlayer->PlayerSprite->AnimationSpeed = 12;
+	CurrentPlayer->PlayerSprite->AnimationSpeed = 1;
 
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
