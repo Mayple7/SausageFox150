@@ -133,3 +133,28 @@ void UpdatePosition(Player *CurrentPlayer)
 	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
 	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &CurrentPlayer->PlayerRigidBody.Velocity);
 }
+
+void updateMaxHealth(PlayerStats *CurrentPlayerStats)
+{
+	//Placeholder max health formula
+	CurrentPlayerStats->MaxHealth = 5 + CurrentPlayerStats->Strength * 2;
+}
+
+void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
+{
+	//Placeholder move speed formula
+	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility + 3.0f;
+}
+
+void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
+{
+	//Placeholder attack speed formula
+	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 5.0f + 10.0f;
+}
+
+void updateDamageReduction(PlayerStats *CurrentPlayerStats)
+{
+	//Placeholder damage reduction formula
+	CurrentPlayerStats->DamageReduction = CurrentPlayerStats->Defense * 2.0f / 100.0f;
+}
+

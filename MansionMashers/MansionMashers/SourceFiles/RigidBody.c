@@ -56,14 +56,14 @@ void UpdateVelocity(RigidBody* CurrentRigidBody) // V = Vi + at
 	if(!CurrentRigidBody->Static)
 	{
 		Vec2 accelerationTime;
-		ApplyDrag(CurrentRigidBody);
+		applyDrag(CurrentRigidBody);
 		ApplyGravity(CurrentRigidBody);
 		Vec2Scale(&accelerationTime, &CurrentRigidBody->Acceleration, 1 / 60.0f);
 		Vec2Add(&CurrentRigidBody->Velocity, &CurrentRigidBody->Velocity, &accelerationTime);
 	}
 }
 
-void ApplyDrag(RigidBody* CurrentRigidBody)
+void applyDrag(RigidBody* CurrentRigidBody)
 {
 	Vec2 dragForce;
 	Vec2Scale(&dragForce, &CurrentRigidBody->Velocity, 0.5 * CurrentRigidBody->Drag * CurrentRigidBody->Density * CurrentRigidBody->Area);
