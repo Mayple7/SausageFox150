@@ -4,7 +4,7 @@
 #include "Vector2.h"
 #include "../HeaderFiles/CollisionManager.h"
 
-enum spriteType{ Player, Enemy, Part };
+enum spriteType{ PlayerType, EnemyType, PartType, BackgroundType, FoodType };
 
 typedef struct Sprite
 {

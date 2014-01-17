@@ -85,6 +85,7 @@ void InitizalizeTestLevel(void)
 	Hammy->SensorType = RectangleCollider;
 	Hammy->ZIndex = 20;
 	Hammy->Position.x = 400.0f;
+	Hammy->SpriteType = FoodType;
 
 	HUD = CreateSprite(448.0f, 192.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD->SensorType = RectangleCollider;
@@ -100,7 +101,7 @@ void InitizalizeTestLevel(void)
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
 
-	CurrentPlayer.CurrentSprite->SpriteType = Player;
+	CurrentPlayer.PlayerSprite->SpriteType = PlayerType;
 
 	ResetCamera();
 }
