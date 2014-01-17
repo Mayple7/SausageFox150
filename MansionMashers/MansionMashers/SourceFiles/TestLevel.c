@@ -35,9 +35,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
-Sprite *Ham2;
+Sprite *HUD;
 Sprite *Background;
-Sprite *Hammy;
 Player CurrentPlayer;
 
 // ---------------------------------------------------------------------------
@@ -49,6 +48,9 @@ void MakeLevel(void)
 
 void DrawLevel(void)
 {
+	//Camera follows player
+	SetCamera(&CurrentPlayer.Position, 350, 3);
+
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
 }
@@ -63,6 +65,20 @@ void EventLevel(void)
 	detectCollision();
 
 	//Moving the player
+	if(AEInputCheckTriggered(VK_SPACE))
+	{
+		Vec2 force;
+		Vec2Set(&force, 0.0f, 8.0f);
+		if(CurrentPlayer.Position.y < 1)
+			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, 0.1f);
+		ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &force);
+	}
+	else
+	{
+		CurrentPlayer.PlayerRigidBody.Acceleration.x = 0;
+		CurrentPlayer.PlayerRigidBody.Acceleration.y = 0;
+	}
+
 	InputPlayer(&CurrentPlayer, 'W');
 	InputPlayer(&CurrentPlayer, 'A');
 	InputPlayer(&CurrentPlayer, 'S');
@@ -70,19 +86,22 @@ void EventLevel(void)
 }
 
 void InitizalizeTestLevel(void)
-{
-	Background = CreateSprite(3840.0f, 720.0f, 1, 1, "TextureFiles\\LevelBackground.png");
-	Background->SensorType = RectangleCollider;
-
-	Hammy = CreateSprite(150.0f, 140.0f, 1, 1, "TextureFiles\\Ham.png");
+{	
+	Sprite *Hammy = CreateSprite(150.0f, 140.0f, 1, 1, "TextureFiles\\Ham.png");
 	Hammy->SensorType = RectangleCollider;
-	Hammy->ZIndex = 5;
+	Hammy->ZIndex = 20;
+	Hammy->Position.x = 400.0f;
 
-	Ham2 = CreateSprite(224.0f, 96.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
-	Ham2->SensorType = RectangleCollider;
+	HUD = CreateSprite(224.0f, 96.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD->SensorType = RectangleCollider;
+	HUD->ZIndex = 200;
+	HUD->CanCollide = 0;
 
-	Ham2->Position.x = -400.0f;
-	Ham2->Position.y = 300.0f;
+	Background = CreateSprite(3840.0f, 720.0f, 1, 1, "TextureFiles\\LevelBackground.png");
+	Background->CanCollide = 0;
+
+	HUD->Position.x = -400.0f;
+	HUD->Position.y = 300.0f;
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
