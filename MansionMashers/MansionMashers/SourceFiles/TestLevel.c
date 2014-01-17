@@ -19,16 +19,10 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/TestLevel.h"
-#include "../HeaderFiles/Sprite.h"
-#include "../HeaderFiles/CollisionManager.h"
-#include "../HeaderFiles/ObjectManager.h"
-#include "../HeaderFiles/Player.h"
-#include "../HeaderFiles/Movement.h"
-#include "../HeaderFiles/Camera.h"
+#include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
-#pragma comment (lib, "Alpha_Engine.lib")
 
 // ---------------------------------------------------------------------------
 // globals
@@ -70,7 +64,7 @@ void EventLevel(void)
 	if(AEInputCheckTriggered(VK_SPACE))
 	{
 		Vec2 force;
-		Vec2Set(&force, 0.0f, 8.0f);
+		Vec2Set(&force, 0.0f, 12.0f);
 		if(CurrentPlayer.Position.y < -225)
 			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, -224.9f);
 		ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &force);
@@ -93,6 +87,7 @@ void InitizalizeTestLevel(void)
 	Hammy->SensorType = RectangleCollider;
 	Hammy->ZIndex = 20;
 	Hammy->Position.x = 400.0f;
+	Hammy->SpriteType = FoodType;
 
 	HUD = CreateSprite(448.0f, 192.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD->SensorType = RectangleCollider;
@@ -107,6 +102,8 @@ void InitizalizeTestLevel(void)
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
+
+	CurrentPlayer.PlayerSprite->SpriteType = PlayerType;
 
 	ResetCamera();
 }
