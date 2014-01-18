@@ -83,7 +83,7 @@ void drawObjectList(void)
 		{
 			Sprite* objectNext = (objectList + i);
 			//Make sure the sprite exists
-			if (objectNext && objectNext->Created == 1 && objectNext->ZIndex >= currentZ)
+			if (objectNext && objectNext->Created == 1 && objectNext->ZIndex >= currentZ && objectNext->SpriteType != HudType)
 			{
 				if (objectNext->ZIndex == currentZ)
 				{
@@ -97,6 +97,18 @@ void drawObjectList(void)
 			}
 		}
 		currentZ = nextZ;
+	}
+}
+
+void freeObject(Sprite* objectNext)
+{
+	//Make sure the sprite exists
+	if (objectNext && objectNext->Created == 1)
+	{
+		//Free the mesh and texture data
+		objectNext->Created = 0;
+		AEGfxMeshFree(objectNext->SpriteMesh);
+		AEGfxTextureUnload(objectNext->SpriteTexture);
 	}
 }
 

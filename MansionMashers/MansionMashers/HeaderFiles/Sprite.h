@@ -2,9 +2,9 @@
 #define FOX_SPRITE
 
 #include "Vector2.h"
-#include "../HeaderFiles/CollisionManager.h"
+#include "CollisionManager.h"
 
-enum spriteType{ PlayerType, EnemyType, PartType, BackgroundType, FoodType };
+enum spriteType{ PlayerType, EnemyType, PartType, BackgroundType, FoodType, HudType };
 
 typedef struct Sprite
 {
