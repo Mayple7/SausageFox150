@@ -5,7 +5,12 @@
 #include "FoxEngine.h"
 #include "../HeaderFiles/Sprite.h"
 
-void SetCamera(Vec2 *playerX, int offset, int move_dist, struct Sprite *hudmain); 
+typedef struct HUDLayer
+{
+	struct Sprite* HudItem[20];
+}HUDLayer;
+
+void SetCamera(Vec2 *playerX, int offset, int move_dist, struct HUDLayer *hudmain); 
 void ResetCamera(void);
 
 #endif

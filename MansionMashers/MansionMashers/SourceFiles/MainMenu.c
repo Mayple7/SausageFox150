@@ -39,7 +39,10 @@ Sprite* AnimationTest;
 
 Player CurrentPlayer;
 
+Sprite* HUD2;
 Sprite* HUD;
+
+HUDLayer HUDList;
 
 int numMenuButtons = 2;
 int selectedButton = 0;								//0: start, 1: exit
@@ -76,11 +79,6 @@ void InitizalizeMainMenu(void)
 	Fox = CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
 	Fox->ZIndex = 5;
 
-	HUD = CreateSprite(448.0f, 192.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
-	HUD->SensorType = RectangleCollider;
-	HUD->ZIndex = 200;
-	HUD->CanCollide = 0;
-
 	AnimationTest = CreateSprite(300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
 	AnimationTest->Position.x = -400.0f;
 	AnimationTest->Position.y = 300.0f;
@@ -109,7 +107,7 @@ void InitizalizeMainMenu(void)
 void DrawMenu(void)
 {
 	//Camera follows player
-	SetCamera(&CurrentPlayer.Position, 350, 3.0f, HUD);
+	SetCamera(&CurrentPlayer.Position, 350, 3.0f, &HUDList);
 
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);

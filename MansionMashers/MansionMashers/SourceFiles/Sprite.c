@@ -68,7 +68,7 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	float halfWidth = width / 2;
 	float halfHeight = height / 2;
 
-	float len = sqrt(halfWidth*halfWidth + halfHeight*halfHeight);
+	double len = sqrt(halfWidth*halfWidth + halfHeight*halfHeight);
 
 	// Informing the library that we're about to start adding triangles
 	AEGfxMeshStart();

@@ -30,8 +30,13 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // Static function protoypes
 Sprite *HUD;
+Sprite *HUDitem;
+Sprite *HUD2;
+Sprite *HUD3;
+Sprite *HUD4;
 Sprite *Background;
 Player CurrentPlayer;
+HUDLayer HUDList;
 
 // ---------------------------------------------------------------------------
 // main
@@ -47,7 +52,7 @@ void DrawLevel(void)
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
 
-	SetCamera(&CurrentPlayer.Position, 350, 3, HUD);
+	SetCamera(&CurrentPlayer.Position, 350, 3, &HUDList);
 
 }
 
@@ -79,6 +84,21 @@ void EventLevel(void)
 	InputPlayer(&CurrentPlayer, 'A');
 	InputPlayer(&CurrentPlayer, 'S');
 	InputPlayer(&CurrentPlayer, 'D');
+
+
+	if(AEInputCheckTriggered('Q'))
+	{
+		if (HUDitem->ItemType == 0)
+		{
+			HUDitem->SpriteTexture = AEGfxTextureLoad("TextureFiles\\ThrowableHUD.png");
+			HUDitem->ItemType = 1;
+		}
+		else
+		{
+			HUDitem->SpriteTexture = AEGfxTextureLoad("TextureFiles\\HealthPotionHUD.png");
+			HUDitem->ItemType = 0;
+		}
+	}
 }
 
 void InitizalizeTestLevel(void)
@@ -97,17 +117,51 @@ void InitizalizeTestLevel(void)
 	Hammy2->Position.x = -500.0f;
 	Hammy2->SpriteType = FoodType;
 
-	HUD = CreateSprite(448.0f, 192.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD = CreateSprite(330.0f, 140.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD->SensorType = RectangleCollider;
 	HUD->ZIndex = 200;
 	HUD->CanCollide = 0;
 	HUD->SpriteType = HudType;
 
+	HUDitem = CreateSprite(44.0f, 44.0f, 1, 1, "TextureFiles\\HealthPotionHUD.png");
+	HUDitem->SensorType = RectangleCollider;
+	HUDitem->ZIndex = 200;
+	HUDitem->CanCollide = 0;
+	HUDitem->SpriteType = HudType;
+	HUDitem->ItemType = 0;
+
+	HUD2 = CreateSprite(330.0f, 140.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD2->SensorType = RectangleCollider;
+	HUD2->ZIndex = 200;
+	HUD2->CanCollide = 0;
+	HUD2->SpriteType = HudType;
+	
+	HUD3 = CreateSprite(330.0f, 140.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD3->SensorType = RectangleCollider;
+	HUD3->ZIndex = 200;
+	HUD3->CanCollide = 0;
+	HUD3->SpriteType = HudType;
+
+	HUD4 = CreateSprite(330.0f, 140.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD4->SensorType = RectangleCollider;
+	HUD4->ZIndex = 200;
+	HUD4->CanCollide = 0;
+	HUD4->SpriteType = HudType;
+
+	HUDList.HudItem[0] = HUD;
+	HUDList.HudItem[1] = HUD2;
+	HUDList.HudItem[2] = HUD3;
+	HUDList.HudItem[3] = HUD4;
+	HUDList.HudItem[4] = HUDitem;
+
 	Background = CreateSprite(3840.0f, 720.0f, 1, 1, "TextureFiles\\LevelBackground.png");
 	Background->CanCollide = 0;
 
-	HUD->Position.x = -400.0f;
+	HUD->Position.x = -504.0f;
 	HUD->Position.y = 250.0f;
+
+	HUD2->Position.x = 504.0f;
+	HUD2->Position.y = 250.0f;
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);

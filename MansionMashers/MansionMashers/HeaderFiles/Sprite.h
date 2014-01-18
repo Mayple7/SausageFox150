@@ -39,6 +39,7 @@ typedef struct Sprite
 	float OffsetX;
 	float OffsetY;
 
+	int ItemType;
 	//Texture Properties
 	char TextureName[256];
 	int NumHeightFrames;
