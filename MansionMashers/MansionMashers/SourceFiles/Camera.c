@@ -29,7 +29,7 @@ void SetCamera(Vec2 *playerX, int offset, int move_dist, struct Sprite* hudmain)
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
 
-	hudmain->Position.x = camX - 400;
+	hudmain->Position.x = camX - 504;
 	hudmain->Position.y = camY + 250;
 
 	DrawSprite(hudmain);
