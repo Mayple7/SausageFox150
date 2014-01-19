@@ -156,7 +156,7 @@ int InputHandling(void)
 	else if(AEInputCheckCurr(VK_BACK))
 	{
 		Vec2 force;
-		Vec2Set(&force, 0.0f, 15.0f);
+		Vec2Set(&force, 0.0f, 30.0f);
 		if(CurrentPlayer.Position.y < -225.0)
 			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, -224.9f);
 		ApplyForce(&CurrentPlayer.PlayerRigidBody, &force);

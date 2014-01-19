@@ -39,30 +39,6 @@ AEGfxVertexList* createMesh(float width, float height);
 // ---------------------------------------------------------------------------
 // main
 
-/*AEGfxVertexList* CreateSpriteTexture(float width, float height)
-{
-	float halfWidth = width / 2;
-	float halfHeight = height / 2;
-
-	// Informing the library that we're about to start adding triangles
-	AEGfxMeshStart();
-
-	// 1 triangle at a time
-	// X, Y, Color, texU, texV
-	AEGfxTriAdd(
-		-halfWidth, -halfHeight, 0x00FFFFFF, 0.0f, 1.0f, 
-		halfWidth,  -halfHeight, 0x00FFFFFF, 1.0f, 1.0f,
-		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
-	AEGfxTriAdd(
-		halfWidth, -halfHeight, 0x00FFFFFF, 1.0f, 1.0f, 
-		halfWidth,  halfHeight, 0x00FFFFFF, 1.0f, 0.0f,
-		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
-
-	// Saving the mesh (list of triangles) in pMesh1
-
-	return AEGfxMeshEnd();
-}
-*/
 AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation)
 {
 	float halfWidth = width / 2;
