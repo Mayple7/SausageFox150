@@ -59,30 +59,25 @@ void InitizalizeMainMenu(void)
 {
 	resetObjectList();
 
-	StartButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/StartButton.png");
+	StartButton = CreateSprite("Start Button", "TextureFiles/StartButton.png", 480.0f, 180.0f, 1, 1, 1);
 	StartButton->Position.x = 0.0f;
 	StartButton->Position.y = 100.0f;
-	StartButton->ZIndex     = 1;
 
-	ExitButton = CreateSprite(480.0f, 180.0f, 1, 1, "TextureFiles/ExitButton.png");
+	ExitButton = CreateSprite("Exit Button", "TextureFiles/ExitButton.png", 480.0f, 180.0f, 1, 1, 1);
 	ExitButton->Position.x = 0.0f;
 	ExitButton->Position.y = -100.0f;
-	ExitButton->ZIndex     = 1;
 
-	Selector = CreateSprite(500.0f, 200.0f, 1, 1, "TextureFiles/Selector.png");
+	Selector = CreateSprite("Selector", "TextureFiles/Selector.png", 500.0f, 200.0f, 0, 1, 1);
 	Selector->Position.x = 100.0f;
 	Selector->Position.y = 0.0f;
 	
-	Ham = CreateSprite(344.0f, 340.0f, 1, 1, "TextureFiles/Ham.png");
-	Ham->ZIndex =  65454;
+	Ham = CreateSprite("Ham", "TextureFiles/Ham.png", 344.0f, 340.0f, 65454, 1, 1);
 
-	Fox = CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
-	Fox->ZIndex = 5;
+	Fox = CreateSprite("Fox", "TextureFiles/SausageFox.png", 250.0f, 150.0f, 5, 4, 2);
 
-	AnimationTest = CreateSprite(300.0f, 300.0f, 3, 3, "TextureFiles/AnimationTest.png");
+	AnimationTest = CreateSprite("Animation Test", "TextureFiles/AnimationTest.png", 300.0f, 300.0f, 3, 3, 3);
 	AnimationTest->Position.x = -400.0f;
 	AnimationTest->Position.y = 300.0f;
-	AnimationTest->ZIndex     = 3;
 
 	AnimationTest->AnimationActive = 1;
 	AnimationTest->AnimationSpeed = 60;

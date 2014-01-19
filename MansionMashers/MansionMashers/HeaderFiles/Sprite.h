@@ -11,6 +11,7 @@ typedef struct Sprite
 	//Created (BOOL 1 or 0 only)
 	int Created;
 	int SpriteType;
+	char SpriteName[24];
 
 	//Collision
 	int CanCollide;
@@ -55,7 +56,7 @@ typedef struct Sprite
 	float RotationPrev;
 }Sprite;
 
-Sprite * CreateSprite(float width, float height, int xFrames, int yFrames, char* texture);
+Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
 void DrawSprite(Sprite *currentSprite);
 

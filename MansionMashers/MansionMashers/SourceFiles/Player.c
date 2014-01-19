@@ -40,7 +40,7 @@ Player CurrentPlayer;
 // ---------------------------------------------------------------------------
 void InitializePlayer(struct Player *CurrentPlayer)
 {
-	CurrentPlayer->PlayerSprite = CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
+	CurrentPlayer->PlayerSprite = CreateSprite("Player", "TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2);
 
 	CurrentPlayer->PlayerSprite->Position.x = 0.0f;
 	CurrentPlayer->PlayerSprite->Position.y = 0.0f;
