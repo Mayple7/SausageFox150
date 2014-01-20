@@ -82,6 +82,9 @@
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
     <ClInclude Include="HeaderFiles\FoxEngine.h" />
     <ClInclude Include="HeaderFiles\FoxMath.h" />
+    <ClInclude Include="HeaderFiles\GameStateList.h" />
+    <ClInclude Include="HeaderFiles\GameStateManager.h" />
+    <ClInclude Include="HeaderFiles\GSTestLevel.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\Matrix3.h" />
     <ClInclude Include="HeaderFiles\Movement.h" />
@@ -103,6 +106,8 @@
   <ItemGroup>
     <ClCompile Include="SourceFiles\Camera.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
+    <ClCompile Include="SourceFiles\GameStateManager.c" />
+    <ClCompile Include="SourceFiles\GSTestLevel.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\Matrix3.c" />
