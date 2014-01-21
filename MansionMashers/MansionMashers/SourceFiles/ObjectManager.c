@@ -50,7 +50,8 @@ Sprite* addObject(void)
 void resetObjectList(void)
 {
 	//Set up the memory to fit the desired amount of objects
-	objectList = (Sprite *)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite));
+	objectList  = (Sprite *)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite));
+	collideList = (Sprite **)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite**));
 	//Make sure the malloc is not NULL
 	if (objectList)
 	{

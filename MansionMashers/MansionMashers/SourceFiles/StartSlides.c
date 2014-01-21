@@ -88,9 +88,9 @@ void InitializeStartScreen(void)
 {
 	resetObjectList();
 
-	Title = CreateSprite(1280.0f, 720.0f, 1, 1, "TextureFiles/MansionMashersLogo.png");
-	Digipen = CreateSprite(1024.0f, 248.0f, 1, 1, "TextureFiles/DigipenLogo.png");
-	Sausage = CreateSprite(1280.0f, 720.0f, 1, 1, "TextureFiles/SausageFoxLogoNoBack.png");
+	Title = CreateSprite("Title", "TextureFiles/MansionMashersLogo.png", 1280.0f, 720.0f, 0, 1, 1);
+	Digipen = CreateSprite("Digipen", "TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1);
+	Sausage = CreateSprite("Sausage", "TextureFiles/SausageFoxLogoNoBack.png", 1280.0f, 720.0f, 0, 1, 1);
 }
 
 void FreeStartScreen(void)

@@ -40,7 +40,7 @@ Player CurrentPlayer;
 // ---------------------------------------------------------------------------
 void InitializePlayer(struct Player *CurrentPlayer)
 {
-	CurrentPlayer->PlayerSprite = CreateSprite(250.0f, 150.0f, 4, 2, "TextureFiles/SausageFox.png");
+	CurrentPlayer->PlayerSprite = CreateSprite("Player", "TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2);
 
 	CurrentPlayer->PlayerSprite->Position.x = 0.0f;
 	CurrentPlayer->PlayerSprite->Position.y = 0.0f;
@@ -71,47 +71,41 @@ void DrawPlayer(struct Player *CurrentPlayer)
 }
 
 
-void InputPlayer(struct Player *CurrentPlayer, int key)
+void InputPlayer(struct Player *CurrentPlayer)
 {
-	
-	switch (key)
+	if(AEInputCheckCurr('A'))
 	{
-		case 'A':
-			if(AEInputCheckCurr('A'))
-			{
-				MoveObject(&CurrentPlayer->Position, LEFT, 5.0f);
-				CurrentPlayer->PlayerSprite->FlipX = 0;
-				//CurrentPlayer->PlayerSprite.Rotation += 0.03;
-
-				CurrentPlayer->Position.x -= 3.0f;
-			}
-			break;
-		case 'S':
-			if(AEInputCheckCurr('S'))
-			{
-				MoveObject(&CurrentPlayer->Position, DOWN, 5.0f);
-				//CurrentPlayer->Position.x -= cos(CurrentPlayer->PlayerSprite.Rotation+(PI/2)) * 1.5f;
-				//CurrentPlayer->Position.y -= sin(CurrentPlayer->PlayerSprite.Rotation+(PI/2)) * 1.5f;
-			}
-			break;
-		case 'D':
-			if(AEInputCheckCurr('D'))
-			{
-				MoveObject(&CurrentPlayer->Position, RIGHT, 5.0f);
-				CurrentPlayer->PlayerSprite->FlipX = 1;
-				//CurrentPlayer->PlayerSprite.Rotation -= 0.03;
-
-				CurrentPlayer->Position.x += 3.0f;
-			}
-			break;
-		case 'W':
-			if(AEInputCheckCurr('W'))
-			{
-				MoveObject(&CurrentPlayer->Position, UP, 3.0f);
-				//CurrentPlayer->Position.x += cos(CurrentPlayer->PlayerSprite.Rotation+(PI/2)) * 3;
-				//CurrentPlayer->Position.y += sin(CurrentPlayer->PlayerSprite.Rotation+(PI/2)) * 3;
-			}	
-			break;
+		CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		MoveObject(&CurrentPlayer->Position, LEFT, 8.0f);
+		CurrentPlayer->PlayerSprite->FlipX = 0;
+	}
+	else if(AEInputCheckCurr('D'))
+	{
+		CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		MoveObject(&CurrentPlayer->Position, RIGHT, 8.0f);
+		CurrentPlayer->PlayerSprite->FlipX = 1;
+	}
+	else
+	{
+		if(CurrentPlayer->PlayerSprite->CurrentFrame == 0 || CurrentPlayer->PlayerSprite->CurrentFrame == 4)
+			CurrentPlayer->PlayerSprite->AnimationActive = 0;
+		else
+			CurrentPlayer->PlayerSprite->AnimationActive = 1;
+	}
+	if(AEInputCheckTriggered(VK_SPACE))
+	{
+		Vec2 velocity;
+		Vec2Set(&velocity, 0.0f, 12.0f);
+		if(CurrentPlayer->Position.y < -225)
+		{
+			Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, -224.9f);
+			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
+		}
+	}
+	else
+	{
+		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
+		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 	}
 }
 

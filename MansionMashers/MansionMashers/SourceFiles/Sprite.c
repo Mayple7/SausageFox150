@@ -39,30 +39,6 @@ AEGfxVertexList* createMesh(float width, float height);
 // ---------------------------------------------------------------------------
 // main
 
-/*AEGfxVertexList* CreateSpriteTexture(float width, float height)
-{
-	float halfWidth = width / 2;
-	float halfHeight = height / 2;
-
-	// Informing the library that we're about to start adding triangles
-	AEGfxMeshStart();
-
-	// 1 triangle at a time
-	// X, Y, Color, texU, texV
-	AEGfxTriAdd(
-		-halfWidth, -halfHeight, 0x00FFFFFF, 0.0f, 1.0f, 
-		halfWidth,  -halfHeight, 0x00FFFFFF, 1.0f, 1.0f,
-		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
-	AEGfxTriAdd(
-		halfWidth, -halfHeight, 0x00FFFFFF, 1.0f, 1.0f, 
-		halfWidth,  halfHeight, 0x00FFFFFF, 1.0f, 0.0f,
-		-halfWidth,  halfHeight, 0x00FFFFFF, 0.0f, 0.0f);
-
-	// Saving the mesh (list of triangles) in pMesh1
-
-	return AEGfxMeshEnd();
-}
-*/
 AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation)
 {
 	float halfWidth = width / 2;
@@ -89,7 +65,8 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	return AEGfxMeshEnd();
 }
 
-Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* texture)
+//////  SPRITE NAME STRING    TEXTURE STRING    WIDTH    HEIGHT    AMNT FRAMES X    DRAW Z INDEX     AMNT FRAMES Y
+Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames)
 {	
 	Sprite *CurrentSprite = addObject();
 
@@ -110,13 +87,13 @@ Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* 
 	//Position of the sprite
 	CurrentSprite->Position.x = 0.0f;
 	CurrentSprite->Position.y = 0.0f;
-	CurrentSprite->ZIndex     = 0;
+	CurrentSprite->ZIndex     = ZIndex;
 
 	//Animation Properties
 	CurrentSprite->AnimationActive = 0;
 	CurrentSprite->CurrentFrame = 0;
 	CurrentSprite->TotalFrames = xFrames * yFrames;
-	CurrentSprite->AnimationSpeed = 1;
+	CurrentSprite->AnimationSpeed = 12;
 	CurrentSprite->AnimationTimer = 0;
 
 	//Texture Properties
@@ -134,12 +111,12 @@ Sprite* CreateSprite(float width, float height, int xFrames, int yFrames, char* 
 	//Collision
 	CurrentSprite->CanCollide = 1;
 	CurrentSprite->Ghost      = 1;
-	CurrentSprite->IsHit      = 0;
 	CurrentSprite->SensorType = RectangleCollider;
 
 	//The sprite has now been created
-	CurrentSprite->Created = 1;
 	CurrentSprite->SpriteType = PartType;
+	strcpy(CurrentSprite->SpriteName, SpriteName);
+	CurrentSprite->Created = 1;
 
 	return CurrentSprite;
 }

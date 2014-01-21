@@ -14,5 +14,6 @@
 #include "Player.h"
 #include "RigidBody.h"
 #include "Sprite.h"
+#include "Enemy.h"
 
 #endif

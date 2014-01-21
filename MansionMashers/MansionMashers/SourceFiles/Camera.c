@@ -22,7 +22,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 
-void SetCamera(Vec2 *playerX, int offset, int move_dist, struct HUDLayer* hudmain)
+void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 {
 	float camX, camY;	
 	int i;
@@ -47,11 +47,11 @@ void SetCamera(Vec2 *playerX, int offset, int move_dist, struct HUDLayer* hudmai
 
 	//Moves camera Right
 	if(playerX->x > (camX + offset))
-		AEGfxSetCamPosition(camX + move_dist, camY);
+		AEGfxSetCamPosition(playerX->x - offset, camY);
 	
 	//Moves camera Left
 	else if(playerX->x < (camX - offset))
-		AEGfxSetCamPosition(camX - move_dist, camY);
+		AEGfxSetCamPosition(playerX->x + offset, camY);
 
 
 }
