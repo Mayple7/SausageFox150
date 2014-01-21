@@ -33,14 +33,14 @@ void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 	{
 		if (i < 4)
 		{
-			hudmain->HudItem[i]->Position.x = camX - 504 + (i*330);
-			hudmain->HudItem[i]->Position.y = camY + 250;
+			hudmain->HudItem[i]->Position.x = camX - 480 + (i*320);
+			hudmain->HudItem[i]->Position.y = camY + 275;
 			DrawSprite(hudmain->HudItem[i]);
 		}
 		else
 		{
-			hudmain->HudItem[i]->Position.x = camX - 504 - 112 + ((i-4)*330);
-			hudmain->HudItem[i]->Position.y = camY + 250 - 37;
+			hudmain->HudItem[i]->Position.x = camX - 480 - 70 + ((i-4)*320);
+			hudmain->HudItem[i]->Position.y = camY + 275 - 23;
 			DrawSprite(hudmain->HudItem[i]);
 		}
 	}
