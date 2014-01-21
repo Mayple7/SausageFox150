@@ -117,7 +117,7 @@ void InitizalizeTestLevel(void)
 	Hammy2->Position.x = -500.0f;
 	Hammy2->SpriteType = FoodType;
 
-	HUD = CreateSprite(330.0f, 140.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD = CreateSprite(320.0f, 137.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD->SensorType = RectangleCollider;
 	HUD->ZIndex = 200;
 	HUD->CanCollide = 0;
@@ -130,19 +130,19 @@ void InitizalizeTestLevel(void)
 	HUDitem->SpriteType = HudType;
 	HUDitem->ItemType = 0;
 
-	HUD2 = CreateSprite(330.0f, 140.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD2 = CreateSprite(320.0f, 137.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD2->SensorType = RectangleCollider;
 	HUD2->ZIndex = 200;
 	HUD2->CanCollide = 0;
 	HUD2->SpriteType = HudType;
 	
-	HUD3 = CreateSprite(330.0f, 140.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD3 = CreateSprite(320.0f, 137.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD3->SensorType = RectangleCollider;
 	HUD3->ZIndex = 200;
 	HUD3->CanCollide = 0;
 	HUD3->SpriteType = HudType;
 
-	HUD4 = CreateSprite(330.0f, 140.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
+	HUD4 = CreateSprite(320.0f, 137.0f, 1, 1, "TextureFiles\\PlayerHUD.png");
 	HUD4->SensorType = RectangleCollider;
 	HUD4->ZIndex = 200;
 	HUD4->CanCollide = 0;
