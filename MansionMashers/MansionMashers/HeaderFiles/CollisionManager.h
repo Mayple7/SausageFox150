@@ -3,6 +3,6 @@
 
 enum SensorType{ RectangleCollider, CircleCollider };
 
-void detectCollision(void);
+void DetectCollision(void);
 
 #endif
