@@ -77,8 +77,8 @@ void UpdateEnemyPosition(Enemy *CurrentEnemy)
 {
 	if(CurrentEnemy->Position.y <= -225)
 	{
-		Vec2Zero(&CurrentEnemy->EnemyRigidBody.Acceleration);
-		Vec2Zero(&CurrentEnemy->EnemyRigidBody.Velocity);
+		ZeroAcceleration(&CurrentEnemy->EnemyRigidBody);
+		ZeroVelocity(&CurrentEnemy->EnemyRigidBody);
 		ZeroGravity(&CurrentEnemy->EnemyRigidBody);
 	}
 	else
@@ -106,4 +106,18 @@ void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer)
 		else
 			CurrentEnemy->Position.x -= 2;
 	}
+	if(LogicTimer == (int)(rand() / 180) && CurrentEnemy->Position.y <= -225.0f)
+	{
+		Vec2 velocity;
+		Vec2Set(&velocity, 0.0f, 10.0f);
+		if(CurrentEnemy->Position.y < -225)
+			Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, -224.9f);
+		ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
+	}
+	else
+	{
+		ZeroAcceleration(&CurrentEnemy->EnemyRigidBody);
+	}
+
+
 }
