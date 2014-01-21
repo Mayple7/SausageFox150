@@ -45,7 +45,7 @@ void InitializeEnemy(struct Enemy *CurrentEnemy)
 
 	CurrentEnemy->EnemySprite->AnimationActive = 1;
 	CurrentEnemy->EnemySprite->AnimationSpeed = 6;
-	CurrentEnemy->EnemySprite->ItemType = EnemyType;
+	CurrentEnemy->EnemySprite->SpriteType = EnemyType;
 	CurrentEnemy->EnemySprite->CanCollide = 1;
 
 	CurrentEnemy->Position.x = 300.0f;

@@ -152,6 +152,16 @@ void HandleCollision(Sprite *objHit)
 		printf("YUM YUM YUM YUM  DELICIOUSO\n");
 		freeObject(objHit);
 	}
+	else if (objHit->SpriteType == EnemyType)
+	{
+		if((objHit->Position.y + (objHit->Height / 3.0f) < CurrentPlayer.Position.y - (CurrentPlayer.PlayerSprite->Height / 2.0f)) && CurrentPlayer.PlayerRigidBody.Velocity.y < 0)
+		{
+			printf("BOOP!");
+			freeObject(objHit);
+			SetVelocity(&CurrentPlayer.PlayerRigidBody, 0.0f, 10.0f);
+		}
+	}
+
 }
 
 void UpdatePosition(Player *CurrentPlayer)
