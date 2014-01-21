@@ -54,7 +54,7 @@ void DrawLevel(void)
 	DrawPlayer(&CurrentPlayer);
 	DrawEnemy(&CurrentEnemy);
 
-	SetCamera(&CurrentPlayer.Position, 350, 8, &HUDList);
+	SetCamera(&CurrentPlayer.Position, 350, &HUDList);
 
 }
 
