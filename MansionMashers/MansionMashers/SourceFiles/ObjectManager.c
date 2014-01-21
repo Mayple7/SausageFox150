@@ -73,8 +73,8 @@ void resetObjectList(void)
 		printf("\nOBJECT LIST SET UP COMPLETE\n\n");
 
 		//Set up collisions
-		collideList = (Sprite *)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite*));
-		collidables = (Sprite *)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite*));
+		collideList = (Sprite *)calloc((OBJECTAMOUNT / 4), (OBJECTAMOUNT / 4) * sizeof(Sprite));
+		collidables = (Sprite *)calloc((OBJECTAMOUNT / 4), (OBJECTAMOUNT / 4) * sizeof(Sprite));
 
 		//Make sure the malloc is not NULL
 		if (collideList && collidables)
