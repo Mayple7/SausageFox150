@@ -75,12 +75,12 @@ void EventLevel(void)
 	{
 		if (HUD1item->ItemType == 0)
 		{
-			HUD1item->SpriteTexture = AEGfxTextureLoad("TextureFiles\\ThrowableHUD.png");
+			HUD1item->SpriteTexture = AEGfxTextureLoad("TextureFiles/ThrowableHUD.png");
 			HUD1item->ItemType = 1;
 		}
 		else
 		{
-			HUD1item->SpriteTexture = AEGfxTextureLoad("TextureFiles\\HealthPotionHUD.png");
+			HUD1item->SpriteTexture = AEGfxTextureLoad("TextureFiles/HealthPotionHUD.png");
 			HUD1item->ItemType = 0;
 		}
 	}
@@ -88,8 +88,8 @@ void EventLevel(void)
 
 void InitizalizeTestLevel(void)
 {	
-	Sprite *Hammy = CreateSprite("Hammy", "TextureFiles\\Ham.png", 150.0f, 140.0f, 20, 1, 1);
-	Sprite *Hammy2 = CreateSprite("Hammy2", "TextureFiles\\Ham.png", 150.0f, 140.0f, 22, 1, 1);
+	Sprite *Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
+	Sprite *Hammy2 = CreateSprite("Hammy2", "TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1);
 
 	Hammy->SensorType = RectangleCollider;
 	Hammy->Position.x = 400.0f;
@@ -100,45 +100,45 @@ void InitizalizeTestLevel(void)
 	Hammy2->Position.x = -500.0f;
 	Hammy2->SpriteType = FoodType;
 
-	HUD1 = CreateSprite("HUD1", "TextureFiles\\GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD1 = CreateSprite("HUD1", "TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD1->SensorType = RectangleCollider;
 	HUD1->CanCollide = 0;
 	HUD1->SpriteType = HudType;
 
-	HUD2 = CreateSprite("HUD2", "TextureFiles\\HollyHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD2 = CreateSprite("HUD2", "TextureFiles/HollyHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD2->SensorType = RectangleCollider;
 	HUD2->CanCollide = 0;
 	HUD2->SpriteType = HudType;
 	
-	HUD3 = CreateSprite("HUD3", "TextureFiles\\MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD3 = CreateSprite("HUD3", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD3->SensorType = RectangleCollider;
 	HUD3->CanCollide = 0;
 	HUD3->SpriteType = HudType;
 
-	HUD4 = CreateSprite("HUD4", "TextureFiles\\KayaHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD4 = CreateSprite("HUD4", "TextureFiles/KayaHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD4->SensorType = RectangleCollider;
 	HUD4->CanCollide = 0;
 	HUD4->SpriteType = HudType;
 
-	HUD1item = CreateSprite("HUDitem", "TextureFiles\\HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD1item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
 	HUD1item->SensorType = RectangleCollider;
 	HUD1item->CanCollide = 0;
 	HUD1item->SpriteType = HudType;
 	HUD1item->ItemType = 0;
 
-	HUD2item = CreateSprite("HUDitem", "TextureFiles\\HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD2item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
 	HUD2item->SensorType = RectangleCollider;
 	HUD2item->CanCollide = 0;
 	HUD2item->SpriteType = HudType;
 	HUD2item->ItemType = 0;
 
-	HUD3item = CreateSprite("HUDitem", "TextureFiles\\HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD3item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
 	HUD3item->SensorType = RectangleCollider;
 	HUD3item->CanCollide = 0;
 	HUD3item->SpriteType = HudType;
 	HUD3item->ItemType = 0;
 
-	HUD4item = CreateSprite("HUDitem", "TextureFiles\\HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD4item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
 	HUD4item->SensorType = RectangleCollider;
 	HUD4item->CanCollide = 0;
 	HUD4item->SpriteType = HudType;
@@ -153,7 +153,7 @@ void InitizalizeTestLevel(void)
 	HUDList.HudItem[6] = HUD3item;
 	HUDList.HudItem[7] = HUD4item;
 
-	Background = CreateSprite("Background", "TextureFiles\\LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
+	Background = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
 	Background->CanCollide = 0;
 
 	if(NULL != malloc(sizeof(Player)))
