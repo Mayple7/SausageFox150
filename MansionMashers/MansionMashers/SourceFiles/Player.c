@@ -110,8 +110,10 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 		else
 		{
-			if(CurrentPlayer->PlayerSprite->CurrentFrame == 0 || CurrentPlayer->PlayerSprite->CurrentFrame == 4)
+			if(CurrentPlayer->PlayerSprite->CurrentFrame == 0)
 				CurrentPlayer->PlayerSprite->AnimationActive = 0;
+			else if(CurrentPlayer->PlayerSprite->CurrentFrame == 4)
+				CurrentPlayer->PlayerSprite->CurrentFrame = 0;
 			else
 				CurrentPlayer->PlayerSprite->AnimationActive = 1;
 		}
