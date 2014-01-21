@@ -68,7 +68,7 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 //////  SPRITE NAME STRING    TEXTURE STRING    WIDTH    HEIGHT    AMNT FRAMES X    DRAW Z INDEX     AMNT FRAMES Y
 Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames)
 {	
-	Sprite *CurrentSprite = addObject();
+	Sprite *CurrentSprite = AddObject();
 
 	CurrentSprite->OffsetX = 1.0f / xFrames;
 	CurrentSprite->OffsetY = 1.0f / yFrames;

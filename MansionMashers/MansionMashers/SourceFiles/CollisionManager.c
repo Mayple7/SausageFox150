@@ -19,6 +19,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 #include "../HeaderFiles/ObjectManager.h"
 #include "../HeaderFiles/CollisionManager.h"
+#include "../HeaderFiles/Player.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -35,18 +36,16 @@ written consent of DigiPen Institute of Technology is prohibited.
 ////////         Collision Detected          ///////
 void collisionDetected(Sprite* objA, Sprite* objB)
 {
-	if (objB->SpriteType == PlayerType)
+	/*if (objB->SpriteType == PlayerType)
 	{
 		collisionDetected(objB, objA);
 		return;
 	}
-	else if (objA->SpriteType == PlayerType)
+	else */
+	
+	if (objA->SpriteType == PlayerType)
 	{
-		if (objB->SpriteType == FoodType)
-		{
-			printf("YUM YUM YUM YUM  DELICIOUSO\n");
-			freeObject(objB);
-		}
+		HandleCollision(objB);
 	}
 }
 
@@ -124,7 +123,23 @@ void searchForIntersection(Sprite* objA)
 }
 
 ////////    SEARCH FOR THE COLLIDER    [A]    ///////
-void detectCollision(void)
+void DetectCollision(void)
+{
+	int i;
+	for (i = 0; i < OBJECTAMOUNT; i++)
+	{
+		Sprite* collidableNext = (collidables + i);
+		//Make sure the sprite exists
+		if (collidableNext && collidableNext->Created == 1)
+		{
+			//Check for collision (We will assume everything in the collidables list CanCollide)
+			searchForIntersection(collidableNext);
+		}
+	}
+}
+
+/*
+void DetectCollision(void)
 {
 	//Sort through the objects to find which to detect collision
 	int i;
@@ -139,4 +154,4 @@ void detectCollision(void)
 			searchForIntersection(objA);
 		}
 	}
-}
+}*/

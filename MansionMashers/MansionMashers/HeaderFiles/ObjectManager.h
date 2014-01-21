@@ -6,11 +6,17 @@
 
 //Create object list
 #define OBJECTAMOUNT 20
+//Objects that are in the workspace
 Sprite *objectList;
-Sprite **collideList;
+
+//Objects that have been collided with
+Sprite *collideList;
+//Objects that search for collision
+Sprite *collidables;
 
 //Functionz
-Sprite* addObject(void);
+Sprite* AddObject(void);
+void AddCollidable(Sprite *newCollidable);
 void resetObjectList(void);
 void drawObjectList(void);
 void freeObjectList(void);

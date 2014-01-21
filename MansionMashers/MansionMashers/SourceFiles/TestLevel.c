@@ -63,7 +63,7 @@ void FreeLevel(void)
 
 void EventLevel(void)
 {
-	detectCollision();
+	DetectCollision();
 
 	InputPlayer(&CurrentPlayer);
 
@@ -144,7 +144,10 @@ void InitizalizeTestLevel(void)
 	if(NULL != malloc(sizeof(Enemy)))
 		InitializeEnemy(&CurrentEnemy);
 
+	AddCollidable(CurrentEnemy.EnemySprite);
+
 	CurrentPlayer.PlayerSprite->SpriteType = PlayerType;
+	AddCollidable(CurrentPlayer.PlayerSprite);
 
 	ResetCamera();
 }

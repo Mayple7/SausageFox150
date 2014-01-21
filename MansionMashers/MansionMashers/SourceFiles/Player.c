@@ -24,9 +24,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
 
-
 // ---------------------------------------------------------------------------
-
 // Libraries
 
 // ---------------------------------------------------------------------------
@@ -109,6 +107,15 @@ void InputPlayer(struct Player *CurrentPlayer)
 	}
 }
 
+void HandleCollision(Sprite *objHit)
+{
+	if (objHit->SpriteType == FoodType)
+	{
+		printf("YUM YUM YUM YUM  DELICIOUSO\n");
+		freeObject(objHit);
+	}
+}
+
 void UpdatePosition(Player *CurrentPlayer)
 {
 	if(CurrentPlayer->Position.y <= -225)
@@ -150,4 +157,3 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 	//Placeholder damage reduction formula
 	CurrentPlayerStats->DamageReduction = CurrentPlayerStats->Defense * 2.0f / 100.0f;
 }
-
