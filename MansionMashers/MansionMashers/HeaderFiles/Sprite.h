@@ -10,8 +10,11 @@ typedef struct Sprite
 {
 	//Created (BOOL 1 or 0 only)
 	int Created;
-	int SpriteType;
+
+	//Name
 	char SpriteName[24];
+	//Type
+	int SpriteType;
 
 	//Collision
 	int CanCollide;

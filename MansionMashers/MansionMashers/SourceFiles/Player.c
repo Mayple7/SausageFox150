@@ -24,9 +24,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
 
-
 // ---------------------------------------------------------------------------
-
 // Libraries
 
 // ---------------------------------------------------------------------------
@@ -75,22 +73,48 @@ void InputPlayer(struct Player *CurrentPlayer)
 {
 	if(AEInputCheckCurr('A'))
 	{
-		CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		if(CurrentPlayer->Position.y > -225)
+		{
+			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
+				CurrentPlayer->PlayerSprite->AnimationActive = 0;
+			else
+				CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		}
+		else
+			CurrentPlayer->PlayerSprite->AnimationActive = 1;
 		MoveObject(&CurrentPlayer->Position, LEFT, 8.0f);
 		CurrentPlayer->PlayerSprite->FlipX = 0;
 	}
 	else if(AEInputCheckCurr('D'))
 	{
-		CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		if(CurrentPlayer->Position.y > -225)
+		{
+			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
+				CurrentPlayer->PlayerSprite->AnimationActive = 0;
+			else
+				CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		}
+		else
+			CurrentPlayer->PlayerSprite->AnimationActive = 1;
 		MoveObject(&CurrentPlayer->Position, RIGHT, 8.0f);
 		CurrentPlayer->PlayerSprite->FlipX = 1;
 	}
 	else
 	{
-		if(CurrentPlayer->PlayerSprite->CurrentFrame == 0 || CurrentPlayer->PlayerSprite->CurrentFrame == 4)
-			CurrentPlayer->PlayerSprite->AnimationActive = 0;
+		if(CurrentPlayer->Position.y > -225)
+		{
+			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
+				CurrentPlayer->PlayerSprite->AnimationActive = 0;
+			else
+				CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		}
 		else
-			CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		{
+			if(CurrentPlayer->PlayerSprite->CurrentFrame == 0 || CurrentPlayer->PlayerSprite->CurrentFrame == 4)
+				CurrentPlayer->PlayerSprite->AnimationActive = 0;
+			else
+				CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		}
 	}
 	if(AEInputCheckTriggered(VK_SPACE))
 	{
@@ -102,11 +126,42 @@ void InputPlayer(struct Player *CurrentPlayer)
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
 		}
 	}
+	if(AEInputCheckCurr(VK_BACK))
+	{
+		Vec2 force;
+		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
+		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
+		Vec2Set(&force, 0.0f, 15.0f);
+		if(CurrentPlayer->Position.y < -225)
+		{
+			Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, -224.9f);
+		}
+		ApplyForce(&CurrentPlayer->PlayerRigidBody, &force);
+	}
 	else
 	{
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 	}
+}
+
+void HandleCollision(Sprite *objHit)
+{
+	if (objHit->SpriteType == FoodType)
+	{
+		printf("YUM YUM YUM YUM  DELICIOUSO\n");
+		freeObject(objHit);
+	}
+	else if (objHit->SpriteType == EnemyType)
+	{
+		if((objHit->Position.y + (objHit->Height / 3.0f) < CurrentPlayer.Position.y - (CurrentPlayer.PlayerSprite->Height / 2.0f)) && CurrentPlayer.PlayerRigidBody.Velocity.y < 0)
+		{
+			printf("BOOP!");
+			freeObject(objHit);
+			SetVelocity(&CurrentPlayer.PlayerRigidBody, 0.0f, 10.0f);
+		}
+	}
+
 }
 
 void UpdatePosition(Player *CurrentPlayer)
@@ -150,4 +205,3 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 	//Placeholder damage reduction formula
 	CurrentPlayerStats->DamageReduction = CurrentPlayerStats->Defense * 2.0f / 100.0f;
 }
-

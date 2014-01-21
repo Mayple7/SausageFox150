@@ -31,7 +31,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // Main
 
-Sprite* addObject(void)
+Sprite* AddObject(void)
 {
 	int i;
 	for (i = 0; i < OBJECTAMOUNT; i++)
@@ -47,23 +47,51 @@ Sprite* addObject(void)
 	return NULL;
 }
 
+void AddCollidable(Sprite *newCollidable)
+{
+	int i;
+	for (i = 0; i < OBJECTAMOUNT; i++)
+	{
+		//Sprite* collidableNext = (collidables + i);
+		//Find a sprite that is empty
+		if ((collidables + i) && (collidables + i)->Created != 1)
+		{
+			printf("Slot %i is now collidable\n", i);
+			collidables = newCollidable;
+			return;
+		}
+	}
+}
+
 void resetObjectList(void)
 {
 	//Set up the memory to fit the desired amount of objects
 	objectList  = (Sprite *)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite));
-	collideList = (Sprite **)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite**));
-	//Make sure the malloc is not NULL
+	//Make sure the calloc is not NULL
 	if (objectList)
 	{
-		/*
-		//Print the size allocated
-		int i;
-		for (i = 0; i < OBJECTAMOUNT; i++)
-		{
-			printf("%i\n", sizeof(objectList[i]));
-		}
-		*/
 		printf("\nOBJECT LIST SET UP COMPLETE\n\n");
+
+		//Set up collisions
+		collideList = (Sprite *)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite*));
+		collidables = (Sprite *)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite*));
+
+		//Make sure the malloc is not NULL
+		if (collideList && collidables)
+		{
+			/*int i;
+			for (i = 0; i < OBJECTAMOUNT; i++)
+			{
+				collideList = NULL;
+				collidables = NULL;
+			}*/
+
+			printf("COLLIDE LIST SET UP COMPLETE\n\n");
+		}
+		else
+		{
+			printf("COLLIDE LIST SET UP FAILED\n\n");
+		}
 	}
 	else
 	{
