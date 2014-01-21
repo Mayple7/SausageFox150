@@ -63,6 +63,7 @@ void InitizalizeMainMenu(void)
 	Selector->Position.x = 100.0f;
 	Selector->Position.y = 0.0f;
 	
+	ResetCamera();
 	UpdateSelector(Selector);
 }
 

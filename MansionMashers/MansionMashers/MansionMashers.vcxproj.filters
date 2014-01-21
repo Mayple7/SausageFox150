@@ -143,6 +143,9 @@
     <ClInclude Include="HeaderFiles\Enemy.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -190,5 +193,8 @@
     <ClCompile Include="SourceFiles\Enemy.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Pictures\fox_head.ico" />
   </ItemGroup>
 </Project>
