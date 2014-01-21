@@ -33,10 +33,23 @@ void ZeroVelocity(RigidBody* Result)
 
 void ApplyForce(RigidBody* Result, Vec2* Force)
 {
-	if(Result->Acceleration.x * Result->Acceleration.x < Force->x * Force->x)
+	if((Result->Acceleration.x <= 0 && Force->x > 0) || (Result->Acceleration.x >= 0 && Force->x < 0))
+	{
 		Result->Acceleration.x += Force->x;
-	if(Result->Acceleration.y * Result->Acceleration.y < Force->y * Force->y)
+	}
+	else if(Result->Acceleration.x * Result->Acceleration.x < Force->x * Force->x)
+	{
+		Result->Acceleration.x += Force->x;
+	}
+	
+	if((Result->Acceleration.y <= 0 && Force->y > 0) || (Result->Acceleration.y >= 0 && Force->y < 0))
+	{
 		Result->Acceleration.y += Force->y;
+	}
+	else if(Result->Acceleration.y * Result->Acceleration.y < Force->y * Force->y)
+	{
+		Result->Acceleration.y += Force->y;
+	}
 }
 
 void ApplyVelocity(RigidBody* Result, Vec2* VelocityChange)

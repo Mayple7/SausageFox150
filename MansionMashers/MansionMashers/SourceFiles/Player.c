@@ -73,22 +73,48 @@ void InputPlayer(struct Player *CurrentPlayer)
 {
 	if(AEInputCheckCurr('A'))
 	{
-		CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		if(CurrentPlayer->Position.y > -225)
+		{
+			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
+				CurrentPlayer->PlayerSprite->AnimationActive = 0;
+			else
+				CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		}
+		else
+			CurrentPlayer->PlayerSprite->AnimationActive = 1;
 		MoveObject(&CurrentPlayer->Position, LEFT, 8.0f);
 		CurrentPlayer->PlayerSprite->FlipX = 0;
 	}
 	else if(AEInputCheckCurr('D'))
 	{
-		CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		if(CurrentPlayer->Position.y > -225)
+		{
+			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
+				CurrentPlayer->PlayerSprite->AnimationActive = 0;
+			else
+				CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		}
+		else
+			CurrentPlayer->PlayerSprite->AnimationActive = 1;
 		MoveObject(&CurrentPlayer->Position, RIGHT, 8.0f);
 		CurrentPlayer->PlayerSprite->FlipX = 1;
 	}
 	else
 	{
-		if(CurrentPlayer->PlayerSprite->CurrentFrame == 0 || CurrentPlayer->PlayerSprite->CurrentFrame == 4)
-			CurrentPlayer->PlayerSprite->AnimationActive = 0;
+		if(CurrentPlayer->Position.y > -225)
+		{
+			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
+				CurrentPlayer->PlayerSprite->AnimationActive = 0;
+			else
+				CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		}
 		else
-			CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		{
+			if(CurrentPlayer->PlayerSprite->CurrentFrame == 0 || CurrentPlayer->PlayerSprite->CurrentFrame == 4)
+				CurrentPlayer->PlayerSprite->AnimationActive = 0;
+			else
+				CurrentPlayer->PlayerSprite->AnimationActive = 1;
+		}
 	}
 	if(AEInputCheckTriggered(VK_SPACE))
 	{
@@ -99,6 +125,18 @@ void InputPlayer(struct Player *CurrentPlayer)
 			Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, -224.9f);
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
 		}
+	}
+	if(AEInputCheckCurr(VK_BACK))
+	{
+		Vec2 force;
+		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
+		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
+		Vec2Set(&force, 0.0f, 15.0f);
+		if(CurrentPlayer->Position.y < -225)
+		{
+			Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, -224.9f);
+		}
+		ApplyForce(&CurrentPlayer->PlayerRigidBody, &force);
 	}
 	else
 	{
