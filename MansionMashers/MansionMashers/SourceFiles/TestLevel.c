@@ -52,8 +52,13 @@ void DrawLevel(void)
 	DrawPlayer(&CurrentPlayer);
 	DrawEnemy(&CurrentEnemy);
 
+<<<<<<< HEAD
 	//Camera follows player
 	SetCamera(&CurrentPlayer.Position, 350, 8, &HUDList);
+=======
+	SetCamera(&CurrentPlayer.Position, 350, &HUDList);
+
+>>>>>>> 420e88ee640078c188fe60681bdfcdd099a8ca65
 }
 
 void FreeLevel(void)

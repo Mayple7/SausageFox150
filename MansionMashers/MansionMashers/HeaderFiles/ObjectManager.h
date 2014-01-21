@@ -7,6 +7,7 @@
 //Create object list
 #define OBJECTAMOUNT 20
 Sprite *objectList;
+Sprite **collideList;
 
 //Functionz
 Sprite* addObject(void);
