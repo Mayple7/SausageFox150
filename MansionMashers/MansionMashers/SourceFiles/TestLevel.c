@@ -48,14 +48,12 @@ void MakeLevel(void)
 
 void DrawLevel(void)
 {
-	//Camera follows player
-	
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
 	DrawEnemy(&CurrentEnemy);
 
+	//Camera follows player
 	SetCamera(&CurrentPlayer.Position, 350, &HUDList);
-
 }
 
 void FreeLevel(void)
@@ -67,25 +65,7 @@ void EventLevel(void)
 {
 	detectCollision();
 
-	//Moving the player
-	if(AEInputCheckTriggered(VK_SPACE))
-	{
-		Vec2 velocity;
-		Vec2Set(&velocity, 0.0f, 12.0f);
-		if(CurrentPlayer.Position.y < -225)
-			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, -224.9f);
-		ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &velocity);
-	}
-	else
-	{
-		CurrentPlayer.PlayerRigidBody.Acceleration.x = 0;
-		CurrentPlayer.PlayerRigidBody.Acceleration.y = 0;
-	}
-
-	InputPlayer(&CurrentPlayer, 'W');
-	InputPlayer(&CurrentPlayer, 'A');
-	InputPlayer(&CurrentPlayer, 'S');
-	InputPlayer(&CurrentPlayer, 'D');
+	InputPlayer(&CurrentPlayer);
 
 
 	if(AEInputCheckTriggered('Q'))
@@ -117,7 +97,7 @@ void InitizalizeTestLevel(void)
 	Hammy2->Position.x = -500.0f;
 	Hammy2->SpriteType = FoodType;
 
-	HUD = CreateSprite("HUD", "TextureFiles\\PlayerHUD.png", 330.0f, 140.0f, 200, 1, 1);
+	HUD = CreateSprite("HUD", "TextureFiles\\GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD->SensorType = RectangleCollider;
 	HUD->CanCollide = 0;
 	HUD->SpriteType = HudType;
@@ -128,17 +108,17 @@ void InitizalizeTestLevel(void)
 	HUDitem->SpriteType = HudType;
 	HUDitem->ItemType = 0;
 
-	HUD2 = CreateSprite("HUD2", "TextureFiles\\PlayerHUD.png", 330.0f, 140.0f, 200, 1, 1);
+	HUD2 = CreateSprite("HUD2", "TextureFiles\\HollyHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD2->SensorType = RectangleCollider;
 	HUD2->CanCollide = 0;
 	HUD2->SpriteType = HudType;
 	
-	HUD3 = CreateSprite("HUD3", "TextureFiles\\PlayerHUD.png", 330.0f, 140.0f, 200, 1, 1);
+	HUD3 = CreateSprite("HUD3", "TextureFiles\\MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD3->SensorType = RectangleCollider;
 	HUD3->CanCollide = 0;
 	HUD3->SpriteType = HudType;
 
-	HUD4 = CreateSprite("HUD4", "TextureFiles\\PlayerHUD.png", 330.0f, 140.0f, 200, 1, 1);
+	HUD4 = CreateSprite("HUD4", "TextureFiles\\KayaHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD4->SensorType = RectangleCollider;
 	HUD4->CanCollide = 0;
 	HUD4->SpriteType = HudType;
