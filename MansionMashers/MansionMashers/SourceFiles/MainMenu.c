@@ -30,14 +30,9 @@ written consent of DigiPen Institute of Technology is prohibited.
 // ---------------------------------------------------------------------------
 // globals
 
-Sprite* Ham;
-Sprite* Fox;
 Sprite* StartButton;
 Sprite* ExitButton;
 Sprite* Selector;
-Sprite* AnimationTest;
-
-Player CurrentPlayer;
 
 Sprite* HUD2;
 Sprite* HUD;
@@ -46,9 +41,6 @@ HUDLayer HUDList;
 
 int numMenuButtons = 2;
 int selectedButton = 0;								//0: start, 1: exit
-
-float animationSpeed = 60.0f / 16.0f;
-int animationTimer = 0;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -71,41 +63,12 @@ void InitizalizeMainMenu(void)
 	Selector->Position.x = 100.0f;
 	Selector->Position.y = 0.0f;
 	
-	Ham = CreateSprite("Ham", "TextureFiles/Ham.png", 344.0f, 340.0f, 65454, 1, 1);
-
-	Fox = CreateSprite("Fox", "TextureFiles/SausageFox.png", 250.0f, 150.0f, 5, 4, 2);
-
-	AnimationTest = CreateSprite("Animation Test", "TextureFiles/AnimationTest.png", 300.0f, 300.0f, 3, 3, 3);
-	AnimationTest->Position.x = -400.0f;
-	AnimationTest->Position.y = 300.0f;
-
-	AnimationTest->AnimationActive = 1;
-	AnimationTest->AnimationSpeed = 60;
-
-	Ham->Position.x = 100.0f;
-	Ham->Position.y = 200.0f;
-
-	Fox->Position.x = -300.0f;
-	Fox->Position.y = -150.0f;
-
-	Fox->AnimationSpeed = 6;
-	Fox->AnimationActive = 1;
-
-	if(NULL != malloc(sizeof(Player)))
-		InitializePlayer(&CurrentPlayer);
-
-	CurrentPlayer.PlayerSprite->ZIndex = 5;
-
 	UpdateSelector(Selector);
 }
 
 void DrawMenu(void)
 {
-	//Camera follows player
-	SetCamera(&CurrentPlayer.Position, 350, 3.0f, &HUDList);
-
 	drawObjectList();
-	DrawPlayer(&CurrentPlayer);
 }
 
 		
@@ -119,7 +82,7 @@ void FreeMainMenu(void)
 int InputHandling(void)
 {
 	// check if forcing the application to quit
-	if (AEInputCheckTriggered(VK_UP))
+	if (AEInputCheckTriggered(VK_UP) || AEInputCheckTriggered('W'))
 	{
 		if(selectedButton == 0)
 			selectedButton = numMenuButtons - 1;
@@ -128,7 +91,7 @@ int InputHandling(void)
 
 		UpdateSelector(Selector);
 	}
-	else if(AEInputCheckTriggered(VK_DOWN))
+	else if(AEInputCheckTriggered(VK_DOWN) || AEInputCheckTriggered('S'))
 	{
 		if(selectedButton == numMenuButtons - 1)
 			selectedButton = 0;
@@ -137,7 +100,7 @@ int InputHandling(void)
 
 		UpdateSelector(Selector);
 	}
-	else if(AEInputCheckTriggered(VK_RETURN))
+	else if(AEInputCheckTriggered(VK_RETURN) || AEInputCheckTriggered(VK_SPACE))
 	{
 		printf("%i button: %i\n", numMenuButtons - 1, selectedButton);
 
@@ -148,37 +111,10 @@ int InputHandling(void)
 		else if(selectedButton == 1)
 			return -1;
 	}
-	else if(AEInputCheckCurr(VK_BACK))
-	{
-		Vec2 force;
-		Vec2Set(&force, 0.0f, 30.0f);
-		if(CurrentPlayer.Position.y < -225.0)
-			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, -224.9f);
-		ApplyForce(&CurrentPlayer.PlayerRigidBody, &force);
-	}
-	else if(AEInputCheckTriggered(VK_SPACE))
-	{
-		Vec2 force;
-		Vec2Set(&force, 0.0f, 12.0f);
-		if(CurrentPlayer.Position.y < -225.0)
-			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, -224.9f);
-		ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &force);
-	}
-	else
-	{
-		CurrentPlayer.PlayerRigidBody.Acceleration.x = 0;
-		CurrentPlayer.PlayerRigidBody.Acceleration.y = 0;
-	}
 
 	// check if forcing the application to quit
 	if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 		return -1;
-	
-	//Moving the player
-	InputPlayer(&CurrentPlayer, 'W');
-	InputPlayer(&CurrentPlayer, 'A');
-	InputPlayer(&CurrentPlayer, 'S');
-	InputPlayer(&CurrentPlayer, 'D');
 
 	return 0;
 }
