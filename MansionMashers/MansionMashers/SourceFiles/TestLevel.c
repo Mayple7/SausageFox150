@@ -97,7 +97,7 @@ void InitizalizeTestLevel(void)
 	Hammy2->Position.x = -500.0f;
 	Hammy2->SpriteType = FoodType;
 
-	HUD = CreateSprite("HUD", "TextureFiles\\PlayerHUD.png", 330.0f, 140.0f, 200, 1, 1);
+	HUD = CreateSprite("HUD", "TextureFiles\\GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD->SensorType = RectangleCollider;
 	HUD->CanCollide = 0;
 	HUD->SpriteType = HudType;
@@ -108,17 +108,17 @@ void InitizalizeTestLevel(void)
 	HUDitem->SpriteType = HudType;
 	HUDitem->ItemType = 0;
 
-	HUD2 = CreateSprite("HUD2", "TextureFiles\\PlayerHUD.png", 330.0f, 140.0f, 200, 1, 1);
+	HUD2 = CreateSprite("HUD2", "TextureFiles\\HollyHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD2->SensorType = RectangleCollider;
 	HUD2->CanCollide = 0;
 	HUD2->SpriteType = HudType;
 	
-	HUD3 = CreateSprite("HUD3", "TextureFiles\\PlayerHUD.png", 330.0f, 140.0f, 200, 1, 1);
+	HUD3 = CreateSprite("HUD3", "TextureFiles\\MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD3->SensorType = RectangleCollider;
 	HUD3->CanCollide = 0;
 	HUD3->SpriteType = HudType;
 
-	HUD4 = CreateSprite("HUD4", "TextureFiles\\PlayerHUD.png", 330.0f, 140.0f, 200, 1, 1);
+	HUD4 = CreateSprite("HUD4", "TextureFiles\\KayaHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD4->SensorType = RectangleCollider;
 	HUD4->CanCollide = 0;
 	HUD4->SpriteType = HudType;
