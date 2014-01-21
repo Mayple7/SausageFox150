@@ -36,6 +36,7 @@ Sprite *HUD3;
 Sprite *HUD4;
 Sprite *Background;
 Player CurrentPlayer;
+Enemy CurrentEnemy;
 HUDLayer HUDList;
 
 // ---------------------------------------------------------------------------
@@ -51,6 +52,7 @@ void DrawLevel(void)
 	
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
+	DrawEnemy(&CurrentEnemy);
 
 	SetCamera(&CurrentPlayer.Position, 350, 3, &HUDList);
 
@@ -159,6 +161,9 @@ void InitizalizeTestLevel(void)
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
 
+	if(NULL != malloc(sizeof(Enemy)))
+		InitializeEnemy(&CurrentEnemy);
+
 	CurrentPlayer.PlayerSprite->SpriteType = PlayerType;
 
 	ResetCamera();
@@ -183,6 +188,7 @@ int LevelLoop(void)
 		AEInputUpdate();
 
 		// Functions
+		EnemyLogic(&CurrentEnemy, &CurrentPlayer);
 		DrawLevel();
 		EventLevel();
 

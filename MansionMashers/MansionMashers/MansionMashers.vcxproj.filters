@@ -140,6 +140,9 @@
     <ClInclude Include="HeaderFiles\FoxMath.h">
       <Filter>Fox Header Files\Fox Math Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Enemy.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -182,6 +185,9 @@
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\RigidBody.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Enemy.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>
