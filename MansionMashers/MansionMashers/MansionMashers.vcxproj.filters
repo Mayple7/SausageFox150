@@ -140,14 +140,8 @@
     <ClInclude Include="HeaderFiles\FoxMath.h">
       <Filter>Fox Header Files\Fox Math Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\GameStateManager.h">
-      <Filter>Fox Header Files\Fox Level Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\GameStateList.h">
-      <Filter>Fox Header Files\Fox Level Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\GSTestLevel.h">
-      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    <ClInclude Include="HeaderFiles\Enemy.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -193,11 +187,8 @@
     <ClCompile Include="SourceFiles\RigidBody.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\GameStateManager.c">
-      <Filter>Fox Source Files\Fox Level Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\GSTestLevel.c">
-      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    <ClCompile Include="SourceFiles\Enemy.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
