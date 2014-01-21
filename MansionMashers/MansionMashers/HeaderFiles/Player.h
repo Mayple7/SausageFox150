@@ -43,10 +43,10 @@ typedef struct Player
 
 }Player;
 
-void InitializePlayer(struct Player *Player);
-void DrawPlayer(struct Player *Player); //Draw player sprite, current weapon sprite
-void UpdatePosition(struct Player *Player);
-void InputPlayer(struct Player *Player, int key);
+void InitializePlayer(struct Player *CurrentPlayer);
+void DrawPlayer(struct Player *CurrentPlayer); //Draw player sprite, current weapon sprite
+void UpdatePosition(struct Player *CurrentPlayer);
+void InputPlayer(struct Player *CurrentPlayer);
 
 //Updating non-modifiable player stats
 void updateMaxHealth(PlayerStats *CurrentPlayerStats);

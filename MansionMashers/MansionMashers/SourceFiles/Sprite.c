@@ -93,7 +93,7 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 	CurrentSprite->AnimationActive = 0;
 	CurrentSprite->CurrentFrame = 0;
 	CurrentSprite->TotalFrames = xFrames * yFrames;
-	CurrentSprite->AnimationSpeed = 1;
+	CurrentSprite->AnimationSpeed = 12;
 	CurrentSprite->AnimationTimer = 0;
 
 	//Texture Properties

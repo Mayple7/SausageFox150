@@ -48,14 +48,12 @@ void MakeLevel(void)
 
 void DrawLevel(void)
 {
-	//Camera follows player
-	
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
 	DrawEnemy(&CurrentEnemy);
 
+	//Camera follows player
 	SetCamera(&CurrentPlayer.Position, 350, 8, &HUDList);
-
 }
 
 void FreeLevel(void)
@@ -67,25 +65,7 @@ void EventLevel(void)
 {
 	detectCollision();
 
-	//Moving the player
-	if(AEInputCheckTriggered(VK_SPACE))
-	{
-		Vec2 velocity;
-		Vec2Set(&velocity, 0.0f, 12.0f);
-		if(CurrentPlayer.Position.y < -225)
-			Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, -224.9f);
-		ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &velocity);
-	}
-	else
-	{
-		CurrentPlayer.PlayerRigidBody.Acceleration.x = 0;
-		CurrentPlayer.PlayerRigidBody.Acceleration.y = 0;
-	}
-
-	InputPlayer(&CurrentPlayer, 'W');
-	InputPlayer(&CurrentPlayer, 'A');
-	InputPlayer(&CurrentPlayer, 'S');
-	InputPlayer(&CurrentPlayer, 'D');
+	InputPlayer(&CurrentPlayer);
 
 
 	if(AEInputCheckTriggered('Q'))
