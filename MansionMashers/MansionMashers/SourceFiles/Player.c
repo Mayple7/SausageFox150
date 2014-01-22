@@ -65,7 +65,6 @@ void DrawPlayer(struct Player *CurrentPlayer)
 	UpdatePosition(CurrentPlayer);
 	CurrentPlayer->PlayerSprite->Position.x = CurrentPlayer->Position.x;
 	CurrentPlayer->PlayerSprite->Position.y = CurrentPlayer->Position.y;
-	//DrawSprite(CurrentPlayer->PlayerSprite);
 }
 
 
@@ -158,7 +157,7 @@ void HandleCollision(Sprite *objHit)
 	{
 		if((objHit->Position.y + (objHit->Height / 3.0f) < CurrentPlayer.Position.y - (CurrentPlayer.PlayerSprite->Height / 2.0f)) && CurrentPlayer.PlayerRigidBody.Velocity.y < 0)
 		{
-			printf("BOOP!");
+			printf("BOOP!\n");
 			freeObject(objHit);
 			SetVelocity(&CurrentPlayer.PlayerRigidBody, 0.0f, 10.0f);
 		}

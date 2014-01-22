@@ -59,10 +59,13 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 	printf("%6.2f    >    %6.2f\n", posA.x + objA->Width, posB.x);
 	printf("%6.2f    <    %6.2f\n", posA.x, posB.x + objB->Width);
 	printf("%6.2f    >    %6.2f\n", posA.y + objA->Height, posB.y);
-	printf("%6.2f    <    %6.2f\n", posA.y, posB.y + objB->Height);*/
+	printf("%6.2f    <    %6.2f\n", posA.y, posB.y + objB->Height);
 
-	if (posA.x + objA->Width > posB.x && posA.x < posB.x + objB->Width
-		&& posA.y + objA->Height > posB.y && posA.y < posB.y + objB->Height)
+	printf("\n%6.2f\n", posA.x + objA->CollideSize.x);
+	printf("%6.2f\n", posA.y + objA->CollideSize.y);*/
+
+	if (posA.x + objA->CollideSize.x > posB.x && posA.x < posB.x + objB->CollideSize.x
+		&& posA.y + objA->CollideSize.y > posB.y && posA.y < posB.y + objB->CollideSize.y)
 		collisionDetected(objA, objB);
 	//else
 		//printf("No interaction\n");
@@ -71,20 +74,12 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 ////////  Collision Detection        [C&R]   ///////
 void circleRectangleCollision(Sprite* objA, Sprite* objB)
 {
-	Vec2 posA = objA->Position;
-	Vec2 posB = objB->Position;
-
-	if (posA.x + objA->Width > posB.x && posA.x < posB.x + objB->Width
-		&& posA.y + objA->Height > posB.y && posA.y < posB.y + objB->Height)
-		printf("Detected interaction\n");
-	else
-		printf("No interaction\n");
 }
 
 ////////  Collision Detection        [C&C]   ///////
 void circleCircleCollision(Sprite* objA, Sprite* objB)
 {
-	Vec2 posA = objA->Position;
+	/*Vec2 posA = objA->Position;
 	Vec2 posB = objB->Position;
 	float radiusA = ((objA->Width + objA->Height) / 2) / 2;
 	float radiusB = ((objB->Width + objB->Height) / 2) / 2;
@@ -95,7 +90,7 @@ void circleCircleCollision(Sprite* objA, Sprite* objB)
 	if (sqrt((posA.x - posB.x) * (posA.x - posB.x) + (posA.y - posB.y) * (posA.y - posB.y)) < (radiusA + radiusB))
 		printf("Detected interaction\n");
 	else
-		printf("No interaction\n");
+		printf("No interaction\n");*/
 }
 
 ////////    SEARCH FOR THE COLLIDEE    [B]   ///////
@@ -126,14 +121,13 @@ void searchForIntersection(Sprite* objA)
 void DetectCollision(void)
 {
 	int i;
-	for (i = 0; i < OBJECTAMOUNT; i++)
+	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
-		Sprite* collidableNext = (collidables + i);
 		//Make sure the sprite exists
-		if (collidableNext && collidableNext->Created == 1)
+		if (collidables[i].Created == 1)
 		{
 			//Check for collision (We will assume everything in the collidables list CanCollide)
-			searchForIntersection(collidableNext);
+			searchForIntersection(&collidables[i]);
 		}
 	}
 }

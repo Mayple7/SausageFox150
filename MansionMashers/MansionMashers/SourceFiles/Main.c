@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 	int nextLevel = 0;
 	int Level = 1;
-
+	
 	// Initialize the system 
 	AESysInitInfo sysInitInfo;
 	sysInitInfo.mAppInstance		= instanceH;
@@ -127,8 +127,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		AESysFrameEnd();
 
 		// check if forcing the application to quit
-		if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-			GameRunning = 0;
+		//if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+			//GameRunning = 0;
 	}
 
 	// free the system

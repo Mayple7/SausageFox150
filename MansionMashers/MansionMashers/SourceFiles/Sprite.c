@@ -109,9 +109,11 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 	CurrentSprite->FlipYPrev = 0;
 
 	//Collision
-	CurrentSprite->CanCollide = 1;
-	CurrentSprite->Ghost      = 1;
-	CurrentSprite->SensorType = RectangleCollider;
+	CurrentSprite->CanCollide     = 1;
+	CurrentSprite->Ghost          = 1;
+	CurrentSprite->SensorType     = RectangleCollider;
+	CurrentSprite->CollideSize.x  = CurrentSprite->Width;
+	CurrentSprite->CollideSize.y  = CurrentSprite->Height;
 
 	//The sprite has now been created
 	CurrentSprite->SpriteType = PartType;

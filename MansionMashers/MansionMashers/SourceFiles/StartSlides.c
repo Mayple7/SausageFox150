@@ -40,18 +40,18 @@ Sprite *Digipen;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
-int FadeLogic(void);
+int fadeLogic(void);
 void DrawScreen(void);
 
 // ---------------------------------------------------------------------------
 // main
 
-int FadeLogic(void)
+int fadeLogic(void)
 {
 	if(fade == 2)
-		alpha -= 0.005;
+		alpha -= 0.01;
 	else if(fade == 1)
-		alpha += 0.005;
+		alpha += 0.01;
 	else
 		alpha = 1.0;
 
@@ -96,6 +96,7 @@ void InitializeStartScreen(void)
 void FreeStartScreen(void)
 {
 	// Freeing the objects and textures
+	freeObjectList();
 }
 
 
@@ -146,7 +147,7 @@ int SplashScreenLoop(void)
 		AEInputUpdate();
 
 		// Functions
-		changeLevel = FadeLogic();
+		changeLevel = fadeLogic();
 		DrawScreen();
 
 		// Informing the system about the loop's end

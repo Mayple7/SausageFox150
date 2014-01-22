@@ -36,12 +36,11 @@ Sprite* AddObject(void)
 	int i;
 	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
-		Sprite* objectNext = (objectList + i);
 		//Find a sprite that is empty
-		if (objectNext && objectNext->Created != 1)
+		if (objectList[i].Created != 1)
 		{
 			printf("Slot %i is now filled\n", i);
-			return objectNext;
+			return &objectList[i];
 		}
 	}
 	return NULL;
@@ -50,11 +49,10 @@ Sprite* AddObject(void)
 void AddCollidable(Sprite *newCollidable)
 {
 	int i;
-	for (i = 0; i < OBJECTAMOUNT; i++)
+	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
-		//Sprite* collidableNext = (collidables + i);
 		//Find a sprite that is empty
-		if ((collidables + i) && (collidables + i)->Created != 1)
+		if (collidables[i].Created != 1)
 		{
 			printf("Slot %i is now collidable\n", i);
 			collidables = newCollidable;
@@ -66,26 +64,19 @@ void AddCollidable(Sprite *newCollidable)
 void resetObjectList(void)
 {
 	//Set up the memory to fit the desired amount of objects
-	objectList  = (Sprite *)calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite));
+	objectList  = (Sprite *) calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite));
 	//Make sure the calloc is not NULL
 	if (objectList)
 	{
 		printf("\nOBJECT LIST SET UP COMPLETE\n\n");
 
 		//Set up collisions
-		collideList = (Sprite *)calloc((OBJECTAMOUNT / 4), (OBJECTAMOUNT / 4) * sizeof(Sprite));
-		collidables = (Sprite *)calloc((OBJECTAMOUNT / 4), (OBJECTAMOUNT / 4) * sizeof(Sprite));
+		collideList = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
+		collidables = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 
 		//Make sure the malloc is not NULL
 		if (collideList && collidables)
 		{
-			/*int i;
-			for (i = 0; i < OBJECTAMOUNT; i++)
-			{
-				collideList = NULL;
-				collidables = NULL;
-			}*/
-
 			printf("COLLIDE LIST SET UP COMPLETE\n\n");
 		}
 		else
@@ -147,16 +138,17 @@ void freeObjectList(void)
 	int i;
 	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
-		Sprite* objectNext = (objectList + i);
 		//Make sure the sprite exists
-		if (objectNext && objectNext->Created == 1)
+		if (objectList[i].Created == 1)
 		{
 			//Free the mesh and texture data
-			AEGfxMeshFree(objectNext->SpriteMesh);
-			AEGfxTextureUnload(objectNext->SpriteTexture);
+			AEGfxMeshFree(objectList[i].SpriteMesh);
+			AEGfxTextureUnload(objectList[i].SpriteTexture);
 			printf("Slot %i is now empty\n", i);
 		}
 	}
 	//Free the object list data allocation
 	free(objectList);
+	//free(collideList);
+	//free(collidables);
 }
