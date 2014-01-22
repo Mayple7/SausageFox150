@@ -135,7 +135,14 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	AEGfxSetPosition(CurrentSprite->Position.x, CurrentSprite->Position.y);
 
 	// Drawing the mesh (list of triangles)
-	AEGfxSetTransparency(CurrentSprite->Alpha);
+	if(CurrentSprite->Visible == FALSE)
+	{
+		AEGfxSetTransparency(0.0f);
+	}
+	else
+	{
+		AEGfxSetTransparency(CurrentSprite->Alpha);
+	}
 	//printf("%d\n", CurrentSprite->AnimationActive);
 	if(CurrentSprite->AnimationActive)
 	{
