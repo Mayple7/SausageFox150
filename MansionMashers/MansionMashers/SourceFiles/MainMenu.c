@@ -21,6 +21,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
+#include "../HeaderFiles/GameStateManager.h"
+#include "../HeaderFiles/GameStateList.h"
 
 // ---------------------------------------------------------------------------
 
@@ -140,7 +142,7 @@ void UpdateSelector(struct Sprite *Selector)
 }
 
 // main
-
+/***
 int MenuLoop(void)
 {
 	int changeLevel  = 0;
@@ -172,6 +174,7 @@ int MenuLoop(void)
 	FreeMainMenu();
 	return changeLevel;
 }
+**/
 
 void LoadMainMenu(void)
 {
@@ -185,7 +188,13 @@ void UnloadMainMenu(void)
 
 void UpdateMainMenu(void)
 {
-	//Placeholder
+	int changeLevel  = 0;
+	changeLevel = InputHandling();
+
+	if(changeLevel == 2)
+		SetNextState(GS_TestLevel);
+	else if(changeLevel == -1)
+		SetNextState(GS_Quit);
 }
 
 

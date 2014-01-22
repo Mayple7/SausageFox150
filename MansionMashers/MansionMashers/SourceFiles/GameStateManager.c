@@ -18,6 +18,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/GSTestLevel.h"
 #include "../HeaderFiles/MainMenu.h"
+#include "../HeaderFiles/TestLevel.h"
 
 // ---------------------------------------------------------------------------
 // Globals
@@ -92,6 +93,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pFree = FreeMainMenu;
 			GSMPointers.pDraw = DrawMainMenu;
 			GSMPointers.pUnload = UnloadMainMenu;
+			break;
+		case GS_TestLevel:
+			GSMPointers.pLoad = LoadTestLevel;
+			GSMPointers.pInit = InitizalizeTestLevel;
+			GSMPointers.pUpdate = UpdateTestLevel;
+			GSMPointers.pFree = FreeTestLevel;
+			GSMPointers.pDraw = DrawTestLevel;
+			GSMPointers.pUnload = UnloadTestLevel;
 			break;
 		case GS_Level1:
 			break;
