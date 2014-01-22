@@ -44,12 +44,12 @@ HUDLayer HUDList;
 
 // ---------------------------------------------------------------------------
 // main
-void MakeLevel(void)
+void MakeTestLevel(void)
 {
 	resetObjectList();
 }
 
-void DrawLevel(void)
+void DrawTestLevel(void)
 {
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
@@ -59,12 +59,12 @@ void DrawLevel(void)
 	SetCamera(&CurrentPlayer.Position, 350, &HUDList);
 }
 
-void FreeLevel(void)
+void FreeTestLevel(void)
 {
 	freeObjectList();
 }
 
-void EventLevel(void)
+void EventTestLevel(void)
 {
 	DetectCollision();
 
@@ -95,6 +95,8 @@ void InitizalizeTestLevel(void)
 	Hammy->Position.x   = 400.0f;
 	Hammy->SpriteType   = FoodType;
 	Hammy->CollideDebug = 1;
+	Hammy->CollideOffset.x =  200.0f;
+	Hammy->CollideOffset.y =  0.0f;
 
 	Hammy2->SensorType = RectangleCollider;
 	Hammy2->Position.y = -100.0f;
@@ -156,8 +158,10 @@ void InitizalizeTestLevel(void)
 		InitializeEnemy(&CurrentEnemy);
 
 	AddCollidable(CurrentEnemy.EnemySprite);
+	CurrentEnemy.EnemySprite->CollideDebug = 1;
+	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1;
+	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1;
 
-	CurrentPlayer.PlayerSprite->SpriteType = PlayerType;
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
 	//Player collision box changes (Feel free to mess with all this collision stuff)
@@ -176,7 +180,7 @@ int LevelLoop(void)
 	int changeLevel  = 0;
 	int LevelRunning = 1;
 
-	MakeLevel();
+	MakeTestLevel();
 	InitizalizeTestLevel();
 
 	printf("Running Level\n");
@@ -191,8 +195,8 @@ int LevelLoop(void)
 
 		// Functions
 		EnemyLogic(&CurrentEnemy, &CurrentPlayer);
-		DrawLevel();
-		EventLevel();
+		DrawTestLevel();
+		EventTestLevel();
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();
@@ -208,7 +212,7 @@ int LevelLoop(void)
 
 	}
 
-	FreeLevel();
+	FreeTestLevel();
 	return changeLevel;
 }
 
