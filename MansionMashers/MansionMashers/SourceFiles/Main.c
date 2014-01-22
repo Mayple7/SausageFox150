@@ -82,13 +82,15 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	while(GameRunning)
 	{
+		AESysFrameStart();
+
 		Previous = GetCurrentState();
 		Current = GetCurrentState();
 		Next = GetNextState();
 
 		if(Current == GS_Quit)
 		{
-			//System_Exit();
+			AESysExit();
 			return 0;
 		}
 		else if(Current == GS_Restart)
@@ -108,7 +110,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		
 		while(Current == Next)
 		{
-			//Input_Handle();
+			AEInputUpdate();
 			GSMPointers.pUpdate();
 			GSMPointers.pDraw();
 			Next = GetNextState();
@@ -123,8 +125,10 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		SetCurrentState(Next);
 		Previous = Current;
 		Current = Next;
+
+		AESysFrameEnd();
 	}
-		
+
 	return 0;
 
 	//End of GSM

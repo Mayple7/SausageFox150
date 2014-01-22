@@ -21,6 +21,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
+#include "../HeaderFiles/GameStateManager.h"
+#include "../HeaderFiles/GameStateList.h"
 
 // ---------------------------------------------------------------------------
 
@@ -185,7 +187,13 @@ void UnloadMainMenu(void)
 
 void UpdateMainMenu(void)
 {
-	//Placeholder
+	int changeLevel  = 0;
+	changeLevel = InputHandling();
+
+	if(changeLevel == 2)
+		SetNextState(GS_TestLevel);
+	else if(changeLevel == -1)
+		SetNextState(GS_Quit);
 }
 
 

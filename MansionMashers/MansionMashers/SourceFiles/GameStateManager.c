@@ -93,6 +93,9 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawMainMenu;
 			GSMPointers.pUnload = UnloadMainMenu;
 			break;
+		case GS_TestLevel:
+			
+			break;
 		case GS_Level1:
 			break;
 		case GS_Level2:
