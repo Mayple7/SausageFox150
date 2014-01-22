@@ -20,4 +20,13 @@ typedef struct GameState
 
 struct GSM_Pointers GSMPointers;
 
+void GSMInitialize(int InitState);
+int GetPreviousState(void);
+int GetCurrentState(void);
+int GetNextState(void);
+void SetPreviousState(int PreviousState);
+void SetCurrentState(int CurrentState);
+void SetNextState(int NextState);
+void GSMUpdate(int CurState);
+
 #endif

@@ -17,6 +17,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/GSTestLevel.h"
+#include "../HeaderFiles/MainMenu.h"
 
 // ---------------------------------------------------------------------------
 // Globals
@@ -30,6 +31,8 @@ void GSMInitialize(int InitState);
 int GetPreviousState(void);
 int GetCurrentState(void);
 int GetNextState(void);
+void SetPreviousState(int PreviousState);
+void SetCurrentState(int CurrentState);
 void SetNextState(int NextState);
 void GSMUpdate(int CurState);
 
@@ -62,6 +65,16 @@ int GetNextState(void)
 	return State.Next;
 }
 
+void SetPreviousState(int PreviousState)
+{
+	State.Previous = PreviousState;
+}
+
+void SetCurrentState(int CurrentState)
+{
+	State.Current = CurrentState;
+}
+
 //Set state for changing level
 void SetNextState(int NextState)
 {
@@ -73,6 +86,12 @@ void GSMUpdate(int CurState)
 	switch (CurState)
 	{
 		case GS_MainMenu:
+			GSMPointers.pLoad = LoadMainMenu;
+			GSMPointers.pInit = InitizalizeMainMenu;
+			GSMPointers.pUpdate = UpdateMainMenu;
+			GSMPointers.pFree = FreeMainMenu;
+			GSMPointers.pDraw = DrawMainMenu;
+			GSMPointers.pUnload = UnloadMainMenu;
 			break;
 		case GS_Level1:
 			break;

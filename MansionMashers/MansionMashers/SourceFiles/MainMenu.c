@@ -173,6 +173,20 @@ int MenuLoop(void)
 	return changeLevel;
 }
 
+void LoadMainMenu(void)
+{
+	//Placeholder
+}
+
+void UnloadMainMenu(void)
+{
+	//Placeholder
+}
+
+void UpdateMainMenu(void)
+{
+	//Placeholder
+}
 
 
 // ---------------------------------------------------------------------------

@@ -22,6 +22,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/TestLevel.h"
 #include "../AEEngine.h"
 #include "../HeaderFiles/Movement.h"
+#include "../HeaderFiles/GameStateManager.h"
+#include "../HeaderFiles/GameStateList.h"
 
 // ---------------------------------------------------------------------------
 
@@ -48,6 +50,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 	int nextLevel = 0;
 	int Level = 1;
+	int Previous;								//Local State Variables
+	int Current;								//Local State Variables
+	int Next;									//Local State Variables
 	
 	// Initialize the system 
 	AESysInitInfo sysInitInfo;
@@ -72,43 +77,52 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	/********************************************************
 	//Slowing working GSM into files don't uncomment for now
 
-	System_Initialize();
-	GSM_Initialize(Level_1);
+	//System_Initialize();
+	GSMInitialize(GS_MainMenu);
 
 	while(GameRunning)
 	{
-		if(Status.Current == Quit)
+		Previous = GetCurrentState();
+		Current = GetCurrentState();
+		Next = GetNextState();
+
+		if(Current == GS_Quit)
 		{
-			System_Exit();
+			//System_Exit();
 			return 0;
 		}
-		else if(Status.Current == Restart)
+		else if(Current == GS_Restart)
 		{
-			Status.Current = Status.Previous;
-			Status.Next = Status.Previous;
+			SetCurrentState(Previous);
+			SetNextState(Previous);
+			Current = Previous;
+			Next = Previous;
 		}
 		else
 		{
-			GSM_Update(Status.Current);
-			Pointers.pLoad();
+			GSMUpdate(Current);
+			GSMPointers.pLoad();
 		}
 
-		Pointers.pInit();
+		GSMPointers.pInit();
 		
-		while(Status.Current == Status.Next)
+		while(Current == Next)
 		{
-			Input_Handle();
-			Pointers.pUpdate();
-			Pointers.pDraw();
+			//Input_Handle();
+			GSMPointers.pUpdate();
+			GSMPointers.pDraw();
+			Next = GetNextState();
 		}
 
-		Pointers.pFree();
+		GSMPointers.pFree();
 
-		if(Status.Next != Restart)
-			Pointers.pUnload();
+		if(Next != GS_Restart)
+			GSMPointers.pUnload();
 		
-		Status.Previous = Status.Current;
-		Status.Current = Status.Next;
+		SetPreviousState(Current);
+		SetCurrentState(Next);
+		Previous = Current;
+		Current = Next;
 	}
 		
 	return 0;

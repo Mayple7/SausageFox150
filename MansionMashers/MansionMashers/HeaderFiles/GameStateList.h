@@ -4,6 +4,7 @@
 enum GSL
 {
 	GS_MainMenu,
+	GS_TestLevel,
 	GS_Level1,
 	GS_Level2,
 	GS_LevelNUM,
