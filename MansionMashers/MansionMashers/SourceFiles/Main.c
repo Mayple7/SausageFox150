@@ -69,6 +69,53 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
+	/********************************************************
+	//Slowing working GSM into files don't uncomment for now
+
+	System_Initialize();
+	GSM_Initialize(Level_1);
+
+	while(GameRunning)
+	{
+		if(Status.Current == Quit)
+		{
+			System_Exit();
+			return 0;
+		}
+		else if(Status.Current == Restart)
+		{
+			Status.Current = Status.Previous;
+			Status.Next = Status.Previous;
+		}
+		else
+		{
+			GSM_Update(Status.Current);
+			Pointers.pLoad();
+		}
+
+		Pointers.pInit();
+		
+		while(Status.Current == Status.Next)
+		{
+			Input_Handle();
+			Pointers.pUpdate();
+			Pointers.pDraw();
+		}
+
+		Pointers.pFree();
+
+		if(Status.Next != Restart)
+			Pointers.pUnload();
+		
+		Status.Previous = Status.Current;
+		Status.Current = Status.Next;
+	}
+		
+	return 0;
+
+	//End of GSM
+	******************************************************/
+	
 	/*
 		Read Input
 		Handle Input

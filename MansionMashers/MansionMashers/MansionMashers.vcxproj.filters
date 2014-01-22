@@ -146,6 +146,15 @@
     <ClInclude Include="resource.h">
       <Filter>AE Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\GameStateList.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\GameStateManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\GSTestLevel.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -192,6 +201,12 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\Enemy.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\GameStateManager.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\GSTestLevel.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
