@@ -52,21 +52,23 @@ void collisionDetected(Sprite* objA, Sprite* objB)
 ////////  Collision Detection        [R&R]   ///////
 void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 {
-	//Get the positions for quick access
+	//Get the positions and offset for quick access
 	Vec2 posA = objA->Position;
 	Vec2 posB = objB->Position;
+	Vec2 offA = objA->CollideOffset;
+	Vec2 offB = objB->CollideOffset;
 
 	//Collidable 1
-	float leftAx   = posA.x;
-	float rightAx  = posA.x + (objA->CollideSize.x);
-	float topAy    = posA.y;
-	float bottomAy = posA.y + (objA->CollideSize.y);
+	float leftAx   = posA.x + offA.x;
+	float rightAx  = posA.x + offA.x + objA->CollideSize.x;
+	float topAy    = posA.y + offA.y;
+	float bottomAy = posA.y + offA.y + objA->CollideSize.y;
 
 	//Collidable 2
-	float leftBx   = posB.x;
-	float rightBx  = posB.x + (objB->CollideSize.x);
-	float topBy    = posB.y;
-	float bottomBy = posB.y + (objB->CollideSize.y);
+	float leftBx   = posB.x + offB.x;
+	float rightBx  = posB.x + offB.x + objB->CollideSize.x;
+	float topBy    = posB.y + offB.y;
+	float bottomBy = posB.y + offB.y + objB->CollideSize.y;
 
 	//Check if all requires for collision are true
 	if (leftAx < rightBx && rightAx > leftBx && topAy < bottomBy && bottomAy > topBy)
