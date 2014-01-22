@@ -20,6 +20,7 @@ typedef struct Sprite
 	int CanCollide;
 	int Ghost;
 	int SensorType;
+	int CollideDebug;
 	Vec2 CollideSize;
 	Vec2 CollideOffset;
 

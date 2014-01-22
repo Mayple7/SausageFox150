@@ -167,6 +167,21 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	}
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
 	AEGfxMeshDraw(CurrentSprite->SpriteMesh, AE_GFX_MDM_TRIANGLES);
+
+	if (CurrentSprite->CollideDebug)
+	{
+		//Sprite Graphics Properties
+		AEGfxVertexList *DebugMesh = createMesh(CurrentSprite->CollideSize.x, CurrentSprite->CollideSize.y, 1.0f, 1.0f, 0.0f);
+		AEGfxTexture *DebugTexture = AEGfxTextureLoad("TextureFiles/DebugBox.png");
+
+		AEGfxSetPosition(CurrentSprite->Position.x + CurrentSprite->CollideOffset.x, CurrentSprite->Position.y + CurrentSprite->CollideOffset.y);
+
+		AEGfxTextureSet(DebugTexture, 1.0f, 1.0f);
+		AEGfxMeshDraw(DebugMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxMeshFree(DebugMesh);
+		AEGfxTextureUnload(DebugTexture);
+	}
 }
 
 
