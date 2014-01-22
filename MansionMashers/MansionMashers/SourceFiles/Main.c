@@ -74,7 +74,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
-	/********************************************************
+	//********************************************************
 	//Slowing working GSM into files don't uncomment for now
 
 	//System_Initialize();
@@ -82,7 +82,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	while(GameRunning)
 	{
-		AESysFrameStart();
+		//AESysFrameStart();
 
 		Previous = GetCurrentState();
 		Current = GetCurrentState();
@@ -110,10 +110,12 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		
 		while(Current == Next)
 		{
+			AESysFrameStart();
 			AEInputUpdate();
 			GSMPointers.pUpdate();
 			GSMPointers.pDraw();
 			Next = GetNextState();
+			AESysFrameEnd();
 		}
 
 		GSMPointers.pFree();
@@ -126,13 +128,13 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		Previous = Current;
 		Current = Next;
 
-		AESysFrameEnd();
+		//AESysFrameEnd();
 	}
 
-	return 0;
+	return 1;
 
 	//End of GSM
-	******************************************************/
+	//******************************************************/
 	
 	/*
 		Read Input
@@ -142,6 +144,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		Profit!
 	*/
 	// Gameloop
+	/****************************************************
 	while(GameRunning)
 	{
 		// Informing the system about the loop's start
@@ -170,6 +173,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			L3
 			L_NUM -> Will equal number of levels
 		*/
+
+		/******************
 		switch(Level)
 		{
 		case 0:
@@ -198,8 +203,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	// free the system
 	AESysExit();
-
+	
 	return 1;
+	***************************************/
 }
 
 // ---------------------------------------------------------------------------

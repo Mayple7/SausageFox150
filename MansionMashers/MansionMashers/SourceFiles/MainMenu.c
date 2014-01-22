@@ -142,7 +142,7 @@ void UpdateSelector(struct Sprite *Selector)
 }
 
 // main
-
+/***
 int MenuLoop(void)
 {
 	int changeLevel  = 0;
@@ -174,6 +174,7 @@ int MenuLoop(void)
 	FreeMainMenu();
 	return changeLevel;
 }
+**/
 
 void LoadMainMenu(void)
 {

@@ -20,6 +20,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../AEEngine.h"
 #include "../HeaderFiles/TestLevel.h"
 #include "../HeaderFiles/FoxEngine.h"
+#include "../HeaderFiles/GameStateManager.h"
+#include "../HeaderFiles/GameStateList.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -41,6 +43,9 @@ Sprite *Background;
 Player CurrentPlayer;
 Enemy CurrentEnemy;
 HUDLayer HUDList;
+
+Sprite *Hammy;
+Sprite *Hammy2;
 
 // ---------------------------------------------------------------------------
 // main
@@ -88,8 +93,15 @@ void EventTestLevel(void)
 
 void InitizalizeTestLevel(void)
 {	
-	Sprite *Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
-	Sprite *Hammy2 = CreateSprite("Hammy2", "TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1);
+	MakeTestLevel();
+
+	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
+	Hammy2 = CreateSprite("Hammy2", "TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1);
+
+	//Sprite *Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
+	//Sprite *Hammy2 = CreateSprite("Hammy2", "TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1);
+
+	//MakeTestLevel();	//Moved here for testing
 
 	Hammy->SensorType   = RectangleCollider;
 	Hammy->Position.x   = 400.0f;
@@ -175,6 +187,7 @@ void InitizalizeTestLevel(void)
 	ResetCamera();
 }
 
+/***
 int LevelLoop(void)
 {
 	int changeLevel  = 0;
@@ -214,6 +227,28 @@ int LevelLoop(void)
 
 	FreeTestLevel();
 	return changeLevel;
+}
+**/
+
+void UnloadTestLevel(void)
+{
+	//Placeholder
+}
+
+void LoadTestLevel(void)
+{
+	//Placeholder
+}
+
+void UpdateTestLevel(void)
+{
+	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
+	EventTestLevel();
+
+	if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+		{
+			SetNextState(GS_MainMenu);
+		}
 }
 
 // ---------------------------------------------------------------------------
