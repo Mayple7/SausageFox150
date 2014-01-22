@@ -21,6 +21,9 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/LevelShowcase.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
+#include "../HeaderFiles/GameStateManager.h"
+#include "../HeaderFiles/GameStateList.h"
+
 
 // ---------------------------------------------------------------------------
 
@@ -37,49 +40,10 @@ Sprite *Background;
 
 Player CurrentPlayer;
 
-
-
-int ShowcaseLoop(void)
-{
-	int changeLevel  = 0;
-	int LevelRunning = 1;
-
-	MakeShowcase();
-	InitizalizeShowcase();
-
-	printf("Running Showcase\n");
-
-	while (LevelRunning)
-	{
-		// Informing the system about the loop's start
-		AESysFrameStart();
-
-		// Handling Input
-		AEInputUpdate();
-
-		// Functions
-		DrawShowcase();
-
-		// Informing the system about the loop's end
-		AESysFrameEnd();
-
-		// check if forcing the application to quit
-		//if (changeLevel != 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-			//LevelRunning = 0;
-		if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-		{
-			LevelRunning = 0;
-			changeLevel = 1;
-		}
-
-	}
-
-	FreeShowcase();
-	return changeLevel;
-}
-
 void InitizalizeShowcase(void)
 {
+	MakeShowcase();
+
 	HUD = CreateSprite("HUD", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD->CanCollide = 0;
 	HUD->SpriteType = HudType;
@@ -153,6 +117,22 @@ void EventShowcase(void)
 
 int InputHandling(void);
 
-void UnloadShowcase(void);
-void LoadShowcase(void);
-void UpdateShowcase(void);
+void UnloadShowcase(void)
+{
+	//Placeholder
+}
+
+void LoadShowcase(void)
+{
+	//Placeholder
+}
+
+void UpdateShowcase(void)
+{
+	EventShowcase();
+
+	if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+	{
+		SetNextState(GS_MainMenu);
+	}
+}
