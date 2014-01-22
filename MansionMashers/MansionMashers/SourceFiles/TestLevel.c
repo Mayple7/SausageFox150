@@ -165,7 +165,7 @@ void InitizalizeTestLevel(void)
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
 	//Player collision box changes (Feel free to mess with all this collision stuff)
-	CurrentPlayer.PlayerSprite->CollideSize.x   = CurrentPlayer.PlayerSprite->Width  / 2;
+	CurrentPlayer.PlayerSprite->CollideSize.x   = 2 * CurrentPlayer.PlayerSprite->Width  / 3;
 	CurrentPlayer.PlayerSprite->CollideSize.y   = CurrentPlayer.PlayerSprite->Height / 2;
 	CurrentPlayer.PlayerSprite->CollideOffset.x =  0.0f;
 	CurrentPlayer.PlayerSprite->CollideOffset.y =  0.0f;
