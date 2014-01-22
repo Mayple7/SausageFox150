@@ -67,7 +67,7 @@ void InitizalizeMainMenu(void)
 	UpdateSelector(Selector);
 }
 
-void DrawMenu(void)
+void DrawMainMenu(void)
 {
 	drawObjectList();
 }
@@ -159,7 +159,7 @@ int MenuLoop(void)
 		AEInputUpdate();
 		// Functions
 		changeLevel = InputHandling();
-		DrawMenu();
+		DrawMainMenu();
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();
