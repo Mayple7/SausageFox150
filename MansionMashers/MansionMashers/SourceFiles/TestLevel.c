@@ -166,6 +166,8 @@ void InitizalizeTestLevel(void)
 
 	CurrentPlayer.PlayerSprite->SpriteType = PlayerType;
 	AddCollidable(CurrentPlayer.PlayerSprite);
+	//CurrentPlayer.PlayerSprite->CollideSize.x = CurrentPlayer.PlayerSprite->Width / 100;
+	//CurrentPlayer.PlayerSprite->CollideSize.y = CurrentPlayer.PlayerSprite->Height / 100;
 
 	ResetCamera();
 }
@@ -199,7 +201,7 @@ int LevelLoop(void)
 		// check if forcing the application to quit
 		//if (changeLevel != 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 			//LevelRunning = 0;
-		if(AEInputCheckTriggered(VK_ESCAPE))
+		if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 		{
 			LevelRunning = 0;
 			changeLevel = 1;
