@@ -19,6 +19,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/GSTestLevel.h"
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/TestLevel.h"
+#include "../HeaderFiles/LevelShowcase.h"
 
 // ---------------------------------------------------------------------------
 // Globals
@@ -102,6 +103,13 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawTestLevel;
 			GSMPointers.pUnload = UnloadTestLevel;
 			break;
+		case GS_ShowcaseLevel:
+			GSMPointers.pLoad = LoadShowcase;
+			GSMPointers.pInit = InitizalizeShowcase;
+			GSMPointers.pUpdate = UpdateShowcase;
+			GSMPointers.pFree = FreeShowcase;
+			GSMPointers.pDraw = DrawShowcase;
+			GSMPointers.pUnload = UnloadShowcase;
 		case GS_Level1:
 			break;
 		case GS_Level2:
