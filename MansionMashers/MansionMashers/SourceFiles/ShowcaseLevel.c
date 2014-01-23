@@ -153,8 +153,6 @@ void EventShowcase(void)
 	}
 }
 
-int InputHandling(void);
-
 void UnloadShowcase(void)
 {
 	//Placeholder

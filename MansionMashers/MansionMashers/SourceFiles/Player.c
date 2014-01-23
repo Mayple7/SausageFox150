@@ -52,6 +52,7 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->Position.y = 0.0f;
 
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
+	CurrentPlayer->dropDown = FALSE;
 	CurrentPlayer->PlayerRigidBody.Static = FALSE;
 	CurrentPlayer->PlayerRigidBody.Mass = 10;
 	CurrentPlayer->PlayerRigidBody.Drag = 0.5;
@@ -127,8 +128,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		if(AEInputCheckCurr('S') && CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
-			CurrentPlayer->Position.y -= 40;
-			SetVelocity(&CurrentPlayer->PlayerRigidBody, 0.0f, -5.0f);
+			CurrentPlayer->dropDown = TRUE;
 		}
 
 		
@@ -201,6 +201,15 @@ void UpdatePosition(Player *CurrentPlayer)
 	else
 	{
 		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -15.0f);
+	}
+	if(CurrentPlayer->dropDown)
+	{
+		CurrentPlayer->Position.y -= 5.0f;
+		if(CurrentPlayer->PlayerRigidBody.Velocity.y < 0)
+		{
+			CurrentPlayer->PlayerRigidBody.Velocity.y = -5.0f;
+			CurrentPlayer->dropDown = FALSE;
+		}
 	}
 
 

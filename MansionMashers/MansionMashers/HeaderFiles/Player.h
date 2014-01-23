@@ -40,6 +40,7 @@ typedef struct Player
 	PlayerStats CurrentPlayerStats;
 
 	Vec2 Position;
+	int dropDown;  //Fake Boolean
 
 }Player;
 
