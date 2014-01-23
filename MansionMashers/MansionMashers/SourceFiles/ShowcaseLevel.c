@@ -110,7 +110,7 @@ void InitializeShowcase(void)
 	if(NULL != malloc(sizeof(Enemy)))
 		InitializeEnemy(&CurrentEnemy);
 
-	CurrentEnemy.EnemySprite->CollideDebug = TRUE;
+	CurrentEnemy.EnemySprite->CollideDebug = FALSE;
 	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1;
 	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1;
 
@@ -185,11 +185,6 @@ void UpdateShowcase(void)
 {
 	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
 	EventShowcase();
-
-	if(CurrentPlayer.Position.x > 550)
-		CurrentPlayer.PlayerSprite->CollideDebug = FALSE;
-	else
-		CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
 	if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 	{
