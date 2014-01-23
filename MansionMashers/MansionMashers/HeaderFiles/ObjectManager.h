@@ -9,6 +9,8 @@
 //Objects that are in the workspace
 Sprite *objectList;
 
+//Create collide list
+#define COLLIDEAMOUNT (OBJECTAMOUNT / 4)
 //Objects that have been collided with
 Sprite *collideList;
 //Objects that search for collision

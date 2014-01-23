@@ -21,7 +21,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/TestLevel.h"
 #include "../AEEngine.h"
-#include "../HeaderFiles/Movement.h"
+#include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
 
@@ -48,7 +48,10 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 	int nextLevel = 0;
 	int Level = 1;
-
+	int Previous;								//Local State Variables
+	int Current;								//Local State Variables
+	int Next;									//Local State Variables
+	
 	// Initialize the system 
 	AESysInitInfo sysInitInfo;
 	sysInitInfo.mAppInstance		= instanceH;
@@ -69,6 +72,68 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
+	//********************************************************
+	//Slowing working GSM into files don't uncomment for now
+
+	//System_Initialize();
+	GSMInitialize(GS_ShowcaseLevel);
+
+	while(GameRunning)
+	{
+		//AESysFrameStart();
+
+		Previous = GetCurrentState();
+		Current = GetCurrentState();
+		Next = GetNextState();
+
+		if(Current == GS_Quit)
+		{
+			AESysExit();
+			return 0;
+		}
+		else if(Current == GS_Restart)
+		{
+			SetCurrentState(Previous);
+			SetNextState(Previous);
+			Current = Previous;
+			Next = Previous;
+		}
+		else
+		{
+			GSMUpdate(Current);
+			GSMPointers.pLoad();
+		}
+
+		GSMPointers.pInit();
+		
+		while(Current == Next)
+		{
+			AESysFrameStart();
+			AEInputUpdate();
+			GSMPointers.pUpdate();
+			GSMPointers.pDraw();
+			Next = GetNextState();
+			AESysFrameEnd();
+		}
+
+		GSMPointers.pFree();
+
+		if(Next != GS_Restart)
+			GSMPointers.pUnload();
+		
+		SetPreviousState(Current);
+		SetCurrentState(Next);
+		Previous = Current;
+		Current = Next;
+
+		//AESysFrameEnd();
+	}
+
+	return 1;
+
+	//End of GSM
+	//******************************************************/
+	
 	/*
 		Read Input
 		Handle Input
@@ -77,6 +142,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		Profit!
 	*/
 	// Gameloop
+	/****************************************************
 	while(GameRunning)
 	{
 		// Informing the system about the loop's start
@@ -105,6 +171,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			L3
 			L_NUM -> Will equal number of levels
 		*/
+
+		/******************
 		switch(Level)
 		{
 		case 0:
@@ -127,14 +195,15 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		AESysFrameEnd();
 
 		// check if forcing the application to quit
-		if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-			GameRunning = 0;
+		//if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+			//GameRunning = 0;
 	}
 
 	// free the system
 	AESysExit();
-
+	
 	return 1;
+	***************************************/
 }
 
 // ---------------------------------------------------------------------------

@@ -16,8 +16,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 #ifndef FOX_OPTIONS
 #define FOX_OPTIONS
 
-void DrawLevel(void);
-void FreeLevel(void);
+void DrawTestLevel(void);
+void FreeTestLevel(void);
 void InitizalizeOptions(void);
 
 int OptionsLoop(void);

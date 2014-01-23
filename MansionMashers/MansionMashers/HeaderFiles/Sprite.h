@@ -19,8 +19,10 @@ typedef struct Sprite
 	//Collision
 	int CanCollide;
 	int Ghost;
-	int IsHit;
 	int SensorType;
+	int CollideDebug;
+	Vec2 CollideSize;
+	Vec2 CollideOffset;
 
 	//Sprite Graphics Properties
 	AEGfxVertexList *SpriteMesh;

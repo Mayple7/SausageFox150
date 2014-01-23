@@ -17,6 +17,9 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/GSTestLevel.h"
+#include "../HeaderFiles/MainMenu.h"
+#include "../HeaderFiles/TestLevel.h"
+#include "../HeaderFiles/LevelShowcase.h"
 
 // ---------------------------------------------------------------------------
 // Globals
@@ -30,6 +33,8 @@ void GSMInitialize(int InitState);
 int GetPreviousState(void);
 int GetCurrentState(void);
 int GetNextState(void);
+void SetPreviousState(int PreviousState);
+void SetCurrentState(int CurrentState);
 void SetNextState(int NextState);
 void GSMUpdate(int CurState);
 
@@ -62,6 +67,16 @@ int GetNextState(void)
 	return State.Next;
 }
 
+void SetPreviousState(int PreviousState)
+{
+	State.Previous = PreviousState;
+}
+
+void SetCurrentState(int CurrentState)
+{
+	State.Current = CurrentState;
+}
+
 //Set state for changing level
 void SetNextState(int NextState)
 {
@@ -73,7 +88,28 @@ void GSMUpdate(int CurState)
 	switch (CurState)
 	{
 		case GS_MainMenu:
+			GSMPointers.pLoad = LoadMainMenu;
+			GSMPointers.pInit = InitizalizeMainMenu;
+			GSMPointers.pUpdate = UpdateMainMenu;
+			GSMPointers.pFree = FreeMainMenu;
+			GSMPointers.pDraw = DrawMainMenu;
+			GSMPointers.pUnload = UnloadMainMenu;
 			break;
+		case GS_TestLevel:
+			GSMPointers.pLoad = LoadTestLevel;
+			GSMPointers.pInit = InitizalizeTestLevel;
+			GSMPointers.pUpdate = UpdateTestLevel;
+			GSMPointers.pFree = FreeTestLevel;
+			GSMPointers.pDraw = DrawTestLevel;
+			GSMPointers.pUnload = UnloadTestLevel;
+			break;
+		case GS_ShowcaseLevel:
+			GSMPointers.pLoad = LoadShowcase;
+			GSMPointers.pInit = InitizalizeShowcase;
+			GSMPointers.pUpdate = UpdateShowcase;
+			GSMPointers.pFree = FreeShowcase;
+			GSMPointers.pDraw = DrawShowcase;
+			GSMPointers.pUnload = UnloadShowcase;
 		case GS_Level1:
 			break;
 		case GS_Level2:

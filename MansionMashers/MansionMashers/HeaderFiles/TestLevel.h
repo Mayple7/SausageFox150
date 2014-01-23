@@ -3,6 +3,10 @@
 
 int LevelLoop(void);
 void InitizalizeTestLevel(void);
-void DrawLevel(void);
+void DrawTestLevel(void);
+void LoadTestLevel(void);
+void UnloadTestLevel(void);
+void FreeTestLevel(void);
+void UpdateTestLevel(void);
 
 #endif

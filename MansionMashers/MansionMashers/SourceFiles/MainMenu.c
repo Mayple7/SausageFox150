@@ -63,10 +63,11 @@ void InitizalizeMainMenu(void)
 	Selector->Position.x = 100.0f;
 	Selector->Position.y = 0.0f;
 	
+	ResetCamera();
 	UpdateSelector(Selector);
 }
 
-void DrawMenu(void)
+void DrawMainMenu(void)
 {
 	drawObjectList();
 }
@@ -139,7 +140,7 @@ void UpdateSelector(struct Sprite *Selector)
 }
 
 // main
-
+/***
 int MenuLoop(void)
 {
 	int changeLevel  = 0;
@@ -158,7 +159,7 @@ int MenuLoop(void)
 		AEInputUpdate();
 		// Functions
 		changeLevel = InputHandling();
-		DrawMenu();
+		DrawMainMenu();
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();
@@ -171,7 +172,28 @@ int MenuLoop(void)
 	FreeMainMenu();
 	return changeLevel;
 }
+**/
 
+void LoadMainMenu(void)
+{
+	//Placeholder
+}
+
+void UnloadMainMenu(void)
+{
+	//Placeholder
+}
+
+void UpdateMainMenu(void)
+{
+	int changeLevel  = 0;
+	changeLevel = InputHandling();
+
+	if(changeLevel == 2)
+		SetNextState(GS_TestLevel);
+	else if(changeLevel == -1)
+		SetNextState(GS_Quit);
+}
 
 
 // ---------------------------------------------------------------------------

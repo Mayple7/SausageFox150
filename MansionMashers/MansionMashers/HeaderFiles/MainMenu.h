@@ -4,8 +4,11 @@
 int MenuLoop(void);
 void InitizalizeMainMenu(void);
 void FreeMainMenu(void);
-void DrawMenu(void);
+void DrawMainMenu(void);
 int InputHandling(void);
 void UpdateSelector(struct Sprite* Selector);
+void UnloadMainMenu(void);
+void LoadMainMenu(void);
+void UpdateMainMenu(void);
 
 #endif

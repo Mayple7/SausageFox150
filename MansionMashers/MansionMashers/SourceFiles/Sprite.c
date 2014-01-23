@@ -109,9 +109,11 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 	CurrentSprite->FlipYPrev = 0;
 
 	//Collision
-	CurrentSprite->CanCollide = 1;
-	CurrentSprite->Ghost      = 1;
-	CurrentSprite->SensorType = RectangleCollider;
+	CurrentSprite->CanCollide     = 1;
+	CurrentSprite->Ghost          = 1;
+	CurrentSprite->SensorType     = RectangleCollider;
+	CurrentSprite->CollideSize.x  = CurrentSprite->Width;
+	CurrentSprite->CollideSize.y  = CurrentSprite->Height;
 
 	//The sprite has now been created
 	CurrentSprite->SpriteType = PartType;
@@ -133,7 +135,14 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	AEGfxSetPosition(CurrentSprite->Position.x, CurrentSprite->Position.y);
 
 	// Drawing the mesh (list of triangles)
-	AEGfxSetTransparency(CurrentSprite->Alpha);
+	if(CurrentSprite->Visible == FALSE)
+	{
+		AEGfxSetTransparency(0.0f);
+	}
+	else
+	{
+		AEGfxSetTransparency(CurrentSprite->Alpha);
+	}
 	//printf("%d\n", CurrentSprite->AnimationActive);
 	if(CurrentSprite->AnimationActive)
 	{
@@ -165,6 +174,21 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	}
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
 	AEGfxMeshDraw(CurrentSprite->SpriteMesh, AE_GFX_MDM_TRIANGLES);
+
+	if (CurrentSprite->CollideDebug)
+	{
+		//Sprite Graphics Properties
+		AEGfxVertexList *DebugMesh = createMesh(CurrentSprite->CollideSize.x, CurrentSprite->CollideSize.y, 1.0f, 1.0f, 0.0f);
+		AEGfxTexture *DebugTexture = AEGfxTextureLoad("TextureFiles/DebugBox.png");
+
+		AEGfxSetPosition(CurrentSprite->Position.x + CurrentSprite->CollideOffset.x, CurrentSprite->Position.y + CurrentSprite->CollideOffset.y);
+
+		AEGfxTextureSet(DebugTexture, 1.0f, 1.0f);
+		AEGfxMeshDraw(DebugMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxMeshFree(DebugMesh);
+		AEGfxTextureUnload(DebugTexture);
+	}
 }
 
 
