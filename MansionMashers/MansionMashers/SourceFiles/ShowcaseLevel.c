@@ -121,9 +121,9 @@ void InitializeShowcase(void)
 	CurrentPlayer.PlayerSprite->CollideSize.x   = 2 * CurrentPlayer.PlayerSprite->Width  / 3;
 	CurrentPlayer.PlayerSprite->CollideSize.y   = CurrentPlayer.PlayerSprite->Height / 2;
 	CurrentPlayer.PlayerSprite->CollideOffset.x =  0.0f;
-	CurrentPlayer.PlayerSprite->CollideOffset.y =  0.0f;
+	CurrentPlayer.PlayerSprite->CollideOffset.y =  -20.0f;
 	//Show debug box
-	//CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
+	CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
 	
 	Vec2Set(&startingCamera, -1280, 0.0f);
@@ -183,6 +183,10 @@ void LoadShowcase(void)
 
 void UpdateShowcase(void)
 {
+	if(CurrentPlayer.Position.x > 700)
+		CurrentPlayer.PlayerSprite->CollideDebug = FALSE;
+	else
+		CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
 	EventShowcase();
 
