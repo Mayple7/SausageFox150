@@ -21,8 +21,6 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
-#include "../HeaderFiles/GameStateManager.h"
-#include "../HeaderFiles/GameStateList.h"
 
 // ---------------------------------------------------------------------------
 
