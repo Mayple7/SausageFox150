@@ -155,12 +155,12 @@ void InitializeTestLevel(void)
 	HUD4item->ItemType = 0;
 
 	HUDList.HudItem[0] = HUD1;
-	HUDList.HudItem[1] = HUD2;
-	HUDList.HudItem[2] = HUD3;
-	HUDList.HudItem[3] = HUD4;
-	HUDList.HudItem[4] = HUD1item;
-	HUDList.HudItem[5] = HUD2item;
-	HUDList.HudItem[6] = HUD3item;
+	HUDList.HudItem[2] = HUD2;
+	HUDList.HudItem[4] = HUD3;
+	HUDList.HudItem[6] = HUD4;
+	HUDList.HudItem[1] = HUD1item;
+	HUDList.HudItem[3] = HUD2item;
+	HUDList.HudItem[5] = HUD3item;
 	HUDList.HudItem[7] = HUD4item;
 
 	Background = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);

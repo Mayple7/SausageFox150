@@ -99,7 +99,7 @@ void InitializeShowcase(void)
 	Hammy->CollideDebug = TRUE;
 
 	HUDList.HudItem[0] = HUD;
-	HUDList.HudItem[4] = HUDitem;
+	HUDList.HudItem[1] = HUDitem;
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
