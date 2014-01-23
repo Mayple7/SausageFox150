@@ -1,8 +1,7 @@
 #ifndef FOX_MAINMENU
 #define FOX_MAINMENU
 
-int MenuLoop(void);
-void InitizalizeMainMenu(void);
+void InitializeMainMenu(void);
 void FreeMainMenu(void);
 void DrawMainMenu(void);
 int InputHandling(void);

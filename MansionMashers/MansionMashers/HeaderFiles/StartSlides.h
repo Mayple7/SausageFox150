@@ -1,8 +1,11 @@
 #ifndef FOX_SPLASH
 #define FOX_SPLASH
 
-int SplashScreenLoop(void);
 void InitializeStartScreen(void);
 void FreeStartScreen(void);
+void DrawStartScreen(void);
+void UnloadStartScreen(void);
+void LoadStartScreen(void);
+void UpdateStartScreen(void);
 
 #endif

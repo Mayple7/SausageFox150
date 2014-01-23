@@ -89,7 +89,7 @@ void EventTestLevel(void)
 	}
 }
 
-void InitizalizeTestLevel(void)
+void InitializeTestLevel(void)
 {	
 	MakeTestLevel();
 

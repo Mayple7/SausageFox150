@@ -46,7 +46,7 @@ Enemy CurrentEnemy;
 
 Sprite *Hammy;
 
-void InitizalizeShowcase(void)
+void InitializeShowcase(void)
 {
 	MakeShowcase();
 

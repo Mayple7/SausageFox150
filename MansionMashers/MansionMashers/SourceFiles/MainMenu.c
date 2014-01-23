@@ -48,7 +48,7 @@ int selectedButton = 0;								//0: start, 1: showcase 2: exit
 
 // ---------------------------------------------------------------------------
 
-void InitizalizeMainMenu(void)
+void InitializeMainMenu(void)
 {
 	resetObjectList();
 

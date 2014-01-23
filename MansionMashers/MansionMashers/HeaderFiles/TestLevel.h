@@ -2,7 +2,7 @@
 #define FOX_TESTLEVEL
 
 int LevelLoop(void);
-void InitizalizeTestLevel(void);
+void InitializeTestLevel(void);
 void DrawTestLevel(void);
 void LoadTestLevel(void);
 void UnloadTestLevel(void);

@@ -2,7 +2,7 @@
 #define FOX_SHOWCASE
 
 int ShowcaseLoop(void);
-void InitizalizeShowcase(void);
+void InitializeShowcase(void);
 void FreeShowcase(void);
 void DrawShowcase(void);
 int InputHandling(void);

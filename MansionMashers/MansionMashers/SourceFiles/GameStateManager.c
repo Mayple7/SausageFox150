@@ -17,6 +17,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/GSTestLevel.h"
+#include "../HeaderFiles/StartSlides.h"
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/TestLevel.h"
 #include "../HeaderFiles/LevelShowcase.h"
@@ -87,9 +88,17 @@ void GSMUpdate(int CurState)
 {
 	switch (CurState)
 	{
+		case GS_SplashScreen:
+			GSMPointers.pLoad = LoadStartScreen;
+			GSMPointers.pInit = InitializeStartScreen;
+			GSMPointers.pUpdate = UpdateStartScreen;
+			GSMPointers.pFree = FreeStartScreen;
+			GSMPointers.pDraw = DrawStartScreen;
+			GSMPointers.pUnload = UnloadStartScreen;
+			break;
 		case GS_MainMenu:
 			GSMPointers.pLoad = LoadMainMenu;
-			GSMPointers.pInit = InitizalizeMainMenu;
+			GSMPointers.pInit = InitializeMainMenu;
 			GSMPointers.pUpdate = UpdateMainMenu;
 			GSMPointers.pFree = FreeMainMenu;
 			GSMPointers.pDraw = DrawMainMenu;
@@ -97,7 +106,7 @@ void GSMUpdate(int CurState)
 			break;
 		case GS_TestLevel:
 			GSMPointers.pLoad = LoadTestLevel;
-			GSMPointers.pInit = InitizalizeTestLevel;
+			GSMPointers.pInit = InitializeTestLevel;
 			GSMPointers.pUpdate = UpdateTestLevel;
 			GSMPointers.pFree = FreeTestLevel;
 			GSMPointers.pDraw = DrawTestLevel;
@@ -105,7 +114,7 @@ void GSMUpdate(int CurState)
 			break;
 		case GS_ShowcaseLevel:
 			GSMPointers.pLoad = LoadShowcase;
-			GSMPointers.pInit = InitizalizeShowcase;
+			GSMPointers.pInit = InitializeShowcase;
 			GSMPointers.pUpdate = UpdateShowcase;
 			GSMPointers.pFree = FreeShowcase;
 			GSMPointers.pDraw = DrawShowcase;
