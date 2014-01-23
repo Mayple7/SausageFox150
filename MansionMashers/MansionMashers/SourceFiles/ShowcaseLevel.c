@@ -35,10 +35,9 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 Sprite *HUD;
 Sprite *HUDitem;
-HUDLayer HUDList;
 Sprite *Background;
 Sprite *Background2;
-
+HUDLayer HUDList;
 Sprite *Shelf;
 Sprite *Crate;
 
@@ -50,8 +49,11 @@ Sprite *Hammy;
 void InitializeShowcase(void)
 {
 	Vec2 startingCamera;
-
+	int hudLoop;
 	MakeShowcase();
+
+	for (hudLoop = 0; hudLoop < 20; hudLoop++)
+		HUDList.HudItem[hudLoop] = 0;
 
 	HUD = CreateSprite("HUD", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
 	HUD->CanCollide = FALSE;

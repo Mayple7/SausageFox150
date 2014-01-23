@@ -91,7 +91,12 @@ void EventTestLevel(void)
 
 void InitializeTestLevel(void)
 {	
+	int hudLoop;
+
 	MakeTestLevel();
+
+	for (hudLoop = 0; hudLoop < 20; hudLoop++)
+		HUDList.HudItem[hudLoop] = 0;
 
 	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
 	Hammy2 = CreateSprite("Hammy2", "TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1);
