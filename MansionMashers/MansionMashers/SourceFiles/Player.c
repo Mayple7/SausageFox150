@@ -123,6 +123,15 @@ void InputPlayer(struct Player *CurrentPlayer)
 	if(AEInputCheckTriggered(VK_SPACE))
 	{
 		Vec2 velocity;
+
+		if(AEInputCheckCurr('S') && CurrentPlayer->PlayerRigidBody.onGround)
+		{
+			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
+			CurrentPlayer->Position.y -= 40;
+			SetVelocity(&CurrentPlayer->PlayerRigidBody, 0.0f, -5.0f);
+		}
+
+		
 		Vec2Set(&velocity, 0.0f, 12.0f);
 		if(CurrentPlayer->Position.y < -225 || CurrentPlayer->PlayerRigidBody.onGround)
 		{
