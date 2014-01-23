@@ -71,23 +71,23 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 	float bottomBy = topBy - objB->CollideSize.y;
 
 	//Check if all requires for collision are true
-	//if (leftAx < rightBx && rightAx > leftBx && topAy < bottomBy && bottomAy > topBy)
-		//collisionDetected(objA, objB);
+	if (leftAx < rightBx && rightAx > leftBx && topAy > bottomBy && bottomAy < topBy)
+		collisionDetected(objA, objB);
 
-	// Within X boundaries
-	if((leftAx < rightBx && leftAx > leftBx) || (rightAx < rightBx && rightAx > leftBx))
+	// Within B's x boundaries
+	/*if(leftAx < rightBx && rightAx > leftBx)
 	{
 		if(objA->SpriteType == PlayerType)
 			printf("--%s--\n", objB->SpriteName);
-		//Within Y boundaries
-		if((topAy > bottomBy && topAy < topBy) || (bottomAy > bottomBy && bottomAy < topBy))
+		//Within B's y boundaries
+		if(bottomAy < topBy && topAy > bottomBy)
+//		if((topAy > bottomBy && topAy < topBy) || (bottomAy > bottomBy && bottomAy < topBy))
 		{
 			if(objA->SpriteType == PlayerType)
 				printf("%s\n", objB->SpriteName);
 			collisionDetected(objA, objB);
 		}
-
-	}
+	}*/
 }
 
 ////////  Collision Detection        [C&R]   ///////
