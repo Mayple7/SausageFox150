@@ -49,6 +49,8 @@ Sprite *Hammy;
 
 void InitializeShowcase(void)
 {
+	Vec2 startingCamera;
+
 	MakeShowcase();
 
 	HUD = CreateSprite("HUD", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
@@ -71,21 +73,21 @@ void InitializeShowcase(void)
 	Shelf = CreateSprite("Shelf", "TextureFiles/Shelf.png", 123.0f, 245.5f, 8, 1, 1);
 	Shelf->CanCollide = TRUE;
 	Shelf->Position.x = 475;
-	Shelf->Position.y = -110;
+	Shelf->Position.y = -115;
 	Shelf->SpriteType = PlatformType;
 	Shelf->CollideDebug = TRUE;
-	Shelf->CollideSize.y = 80;
-	Shelf->CollideOffset.y = Shelf->Height / 2 - 40;
+	Shelf->CollideSize.y = 60;
+	Shelf->CollideOffset.y = Shelf->Height / 2 - 30;
 
 	Crate = CreateSprite("Crate", "TextureFiles/Crate.png", 859.0f, 260.5f, 9, 1, 1);
 	Crate->CanCollide = TRUE;
-	Crate->Position.x = 1000;
+	Crate->Position.x = 1400;
 	Crate->Position.y = -180;
 	Crate->SpriteType = PlatformType;
-	Crate->CollideDebug = TRUE;
-	Crate->CollideSize.y = 80;
+	Crate->CollideDebug = FALSE;
+	Crate->CollideSize.y = 60;
 	Crate->CollideOffset.x = 0.0f;
-	Crate->CollideOffset.y = Crate->Height / 2 - 40;
+	Crate->CollideOffset.y = Crate->Height / 2 - 60;
 
 	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
 	Hammy->Position.x   = -400.0f;
@@ -119,8 +121,11 @@ void InitializeShowcase(void)
 	CurrentPlayer.PlayerSprite->CollideOffset.x =  0.0f;
 	CurrentPlayer.PlayerSprite->CollideOffset.y =  0.0f;
 	//Show debug box
-	CurrentPlayer.PlayerSprite->CollideDebug = 1;
+	//CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
+	
+	Vec2Set(&startingCamera, -1280, 0.0f);
+	SetCamera(&startingCamera, 350, &HUDList);
 }
 
 void FreeShowcase(void)
@@ -178,6 +183,11 @@ void UpdateShowcase(void)
 {
 	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
 	EventShowcase();
+
+	if(CurrentPlayer.Position.x > 550)
+		CurrentPlayer.PlayerSprite->CollideDebug = FALSE;
+	else
+		CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
 	if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
 	{
