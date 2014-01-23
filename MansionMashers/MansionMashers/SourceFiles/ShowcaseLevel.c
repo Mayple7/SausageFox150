@@ -40,6 +40,7 @@ Sprite *Background;
 Sprite *Background2;
 
 Sprite *Shelf;
+Sprite *Crate;
 
 Player CurrentPlayer;
 Enemy CurrentEnemy;
@@ -75,6 +76,16 @@ void InitializeShowcase(void)
 	Shelf->CollideDebug = TRUE;
 	Shelf->CollideSize.y = 80;
 	Shelf->CollideOffset.y = Shelf->Height / 2 - 40;
+
+	Crate = CreateSprite("Crate", "TextureFiles/Crate.png", 859.0f, 260.5f, 9, 1, 1);
+	Crate->CanCollide = TRUE;
+	Crate->Position.x = 1000;
+	Crate->Position.y = -180;
+	Crate->SpriteType = PlatformType;
+	Crate->CollideDebug = TRUE;
+	Crate->CollideSize.y = 80;
+	Crate->CollideOffset.x = 0.0f;
+	Crate->CollideOffset.y = Crate->Height / 2 - 40;
 
 	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
 	Hammy->Position.x   = -400.0f;
