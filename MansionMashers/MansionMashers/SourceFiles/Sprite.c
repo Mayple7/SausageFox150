@@ -143,7 +143,6 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	{
 		AEGfxSetTransparency(CurrentSprite->Alpha);
 	}
-	//printf("%d\n", CurrentSprite->AnimationActive);
 	if(CurrentSprite->AnimationActive)
 	{
 		CurrentSprite->AnimationTimer++;
@@ -191,4 +190,8 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	}
 }
 
+void UpdateMesh(Sprite *currentSprite)
+{
+	currentSprite->SpriteMesh = createMesh(currentSprite->Width, currentSprite->Height, currentSprite->OffsetX, currentSprite->OffsetY, currentSprite->Rotation);
+}
 

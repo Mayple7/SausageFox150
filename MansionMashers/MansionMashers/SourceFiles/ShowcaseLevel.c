@@ -37,33 +37,69 @@ Sprite *HUD;
 Sprite *HUDitem;
 HUDLayer HUDList;
 Sprite *Background;
+Sprite *Background2;
+
+Sprite *Shelf;
 
 Player CurrentPlayer;
+Enemy CurrentEnemy;
+
+Sprite *Hammy;
 
 void InitizalizeShowcase(void)
 {
 	MakeShowcase();
 
 	HUD = CreateSprite("HUD", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
-	HUD->CanCollide = 0;
+	HUD->CanCollide = FALSE;
 	HUD->SpriteType = HudType;
 
 	HUDitem = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
-	HUDitem->CanCollide = 0;
+	HUDitem->CanCollide = FALSE;
 	HUDitem->SpriteType = HudType;
 	HUDitem->ItemType = 0;
 
 	Background = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
-	Background->CanCollide = 0;
+	Background->CanCollide = FALSE;
+	
+	Background2 = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
+	Background2->CanCollide = FALSE;
+	Background2->Position.x = 3840;
+	Background2->FlipX = TRUE;
+
+	Shelf = CreateSprite("Shelf", "TextureFiles/Shelf.png", 123.0f, 245.5f, 8, 1, 1);
+	Shelf->CanCollide = TRUE;
+	Shelf->Position.x = 475;
+	Shelf->Position.y = -110;
+	Shelf->SpriteType = PlatformType;
+	Shelf->CollideDebug = TRUE;
+	Shelf->CollideSize.y = 80;
+	Shelf->CollideOffset.y = Shelf->Height / 2 - 40;
+
+	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
+	Hammy->Position.x   = -400.0f;
+	Hammy->CanCollide = TRUE;
+	Hammy->SensorType = RectangleCollider;
+	Hammy->SpriteType = FoodType;
+	Hammy->CollideDebug = TRUE;
 
 	HUDList.HudItem[0] = HUD;
 	HUDList.HudItem[4] = HUDitem;
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
-	//CurrentPlayer.Position.x = -1280;
-	//CurrentPlayer.Position.y = -225;
 
+	CurrentPlayer.Position.x = -1280;
+	CurrentPlayer.Position.y = -220;
+
+	if(NULL != malloc(sizeof(Enemy)))
+		InitializeEnemy(&CurrentEnemy);
+
+	CurrentEnemy.EnemySprite->CollideDebug = TRUE;
+	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1;
+	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1;
+
+	AddCollidable(CurrentEnemy.EnemySprite);
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
 	//Player collision box changes (Feel free to mess with all this collision stuff)
@@ -85,6 +121,7 @@ void DrawShowcase(void)
 {
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
+	DrawEnemy(&CurrentEnemy);
 	SetCamera(&CurrentPlayer.Position, 350, &HUDList);
 }
 
@@ -95,6 +132,7 @@ void MakeShowcase(void)
 
 void EventShowcase(void)
 {
+	CurrentPlayer.PlayerRigidBody.onGround = FALSE;
 	DetectCollision();
 
 	InputPlayer(&CurrentPlayer);
@@ -129,6 +167,7 @@ void LoadShowcase(void)
 
 void UpdateShowcase(void)
 {
+	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
 	EventShowcase();
 
 	if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())

@@ -4,7 +4,7 @@
 #include "Vector2.h"
 #include "CollisionManager.h"
 
-enum spriteType{ PlayerType, EnemyType, PartType, BackgroundType, FoodType, HudType };
+enum spriteType{ PlayerType, EnemyType, PartType, BackgroundType, FoodType, HudType, PlatformType };
 
 typedef struct Sprite
 {
@@ -63,6 +63,7 @@ typedef struct Sprite
 
 Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
+void UpdateMesh(Sprite *currentSprite);
 void DrawSprite(Sprite *currentSprite);
 
 #endif

@@ -51,6 +51,7 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
 
+	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->PlayerRigidBody.Static = FALSE;
 	CurrentPlayer->PlayerRigidBody.Mass = 10;
 	CurrentPlayer->PlayerRigidBody.Drag = 0.5;
@@ -74,7 +75,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 {
 	if(AEInputCheckCurr('A'))
 	{
-		if(CurrentPlayer->Position.y > -225)
+		if(CurrentPlayer->Position.y > -225 && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
 				CurrentPlayer->PlayerSprite->AnimationActive = 0;
@@ -88,7 +89,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	}
 	else if(AEInputCheckCurr('D'))
 	{
-		if(CurrentPlayer->Position.y > -225)
+		if(CurrentPlayer->Position.y > -225 && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
 				CurrentPlayer->PlayerSprite->AnimationActive = 0;
@@ -102,7 +103,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	}
 	else
 	{
-		if(CurrentPlayer->Position.y > -225)
+		if(CurrentPlayer->Position.y > -225 && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
 				CurrentPlayer->PlayerSprite->AnimationActive = 0;
@@ -123,9 +124,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		Vec2 velocity;
 		Vec2Set(&velocity, 0.0f, 12.0f);
-		if(CurrentPlayer->Position.y < -225)
+		if(CurrentPlayer->Position.y < -225 || CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, -224.9f);
+			if(CurrentPlayer->Position.y < -225)
+				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, -224.9f);
+			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
 		}
 	}
@@ -157,19 +160,30 @@ void HandleCollision(Sprite *objHit)
 	}
 	else if (objHit->SpriteType == EnemyType)
 	{
-		if((objHit->Position.y + (objHit->Height / 3.0f) < CurrentPlayer.Position.y - (CurrentPlayer.PlayerSprite->Height / 2.0f)) && CurrentPlayer.PlayerRigidBody.Velocity.y < 0)
+		if((objHit->Position.y + (objHit->Height / 3.0f) < CurrentPlayer.Position.y - (CurrentPlayer.PlayerSprite->CollideSize.y / 2.0f)) && CurrentPlayer.PlayerRigidBody.Velocity.y < 0)
 		{
 			printf("BOOP!\n");
 			freeObject(objHit);
 			SetVelocity(&CurrentPlayer.PlayerRigidBody, 0.0f, 10.0f);
 		}
 	}
+	else if(objHit->SpriteType == PlatformType && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
+	{
+		if(CurrentPlayer.Position.y + CurrentPlayer.PlayerSprite->CollideOffset.y - CurrentPlayer.PlayerSprite->CollideSize.y / 2.0f > objHit->Position.y + objHit->CollideOffset.y)
+		{
+			CurrentPlayer.PlayerRigidBody.onGround = TRUE;
+		}
+	}
+	else if(objHit->SpriteType == PlatformType)
+	{
+		CurrentPlayer.PlayerRigidBody.onGround = FALSE;
+	}
 
 }
 
 void UpdatePosition(Player *CurrentPlayer)
 {
-	if(CurrentPlayer->Position.y <= -225)
+	if(CurrentPlayer->Position.y <= -225 || CurrentPlayer->PlayerRigidBody.onGround)
 	{
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Velocity);

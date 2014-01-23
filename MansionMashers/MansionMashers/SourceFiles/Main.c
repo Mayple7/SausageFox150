@@ -78,7 +78,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	//Slowing working GSM into files don't uncomment for now
 
 	//System_Initialize();
-	GSMInitialize(GS_ShowcaseLevel);
+	GSMInitialize(GS_MainMenu);
 
 	while(GameRunning)
 	{
