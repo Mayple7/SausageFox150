@@ -75,7 +75,7 @@ int fadeLogic(void)
 	if(fade == 0)
 		slideTimer += 1;
 
-	if(slideTimer == 180)
+	if(slideTimer == 120)
 	{
 		fade = 2;
 		slideTimer = 0;

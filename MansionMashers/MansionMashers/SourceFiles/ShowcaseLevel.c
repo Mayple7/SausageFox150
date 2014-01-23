@@ -92,7 +92,7 @@ void InitializeShowcase(void)
 	Crate->CollideOffset.y = Crate->Height / 2 - 60;
 
 	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
-	Hammy->Position.x   = -400.0f;
+	Hammy->Position.x   = -800.0f;
 	Hammy->CanCollide = TRUE;
 	Hammy->SensorType = RectangleCollider;
 	Hammy->SpriteType = FoodType;
