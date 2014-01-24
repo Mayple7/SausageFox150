@@ -38,6 +38,7 @@ Sprite *HUD2item;
 Sprite *HUD3item;
 Sprite *HUD4item;
 Sprite *Background;
+Sprite *ColliderInvisible;
 Player CurrentPlayer;
 Enemy CurrentEnemy;
 HUDLayer HUDList;
@@ -163,8 +164,16 @@ void InitializeTestLevel(void)
 	HUDList.HudItem[5] = HUD3item;
 	HUDList.HudItem[7] = HUD4item;
 
-	Background = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
+	Background = CreateSprite("Background", "TextureFiles/LevelGrassground.png", 3840.0f, 720.0f, 0, 1, 1);
 	Background->CanCollide = 0;
+
+	ColliderInvisible = CreateSprite("ColliderInvisible", "TextureFiles/LevelGrassground.png", 300.0f, 80.0f, 0, 1, 1);
+	ColliderInvisible->SpriteType = PlatformType;
+	ColliderInvisible->Visible = FALSE;
+	ColliderInvisible->CollideDebug = TRUE;
+	ColliderInvisible->Position.x = -1020.0f;
+	ColliderInvisible->Position.y = -40.0f;
+
 
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
@@ -173,7 +182,7 @@ void InitializeTestLevel(void)
 		InitializeEnemy(&CurrentEnemy);
 
 	AddCollidable(CurrentEnemy.EnemySprite);
-	CurrentEnemy.EnemySprite->CollideDebug = 1;
+	CurrentEnemy.EnemySprite->CollideDebug = TRUE;
 	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1;
 	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1;
 
@@ -185,7 +194,7 @@ void InitializeTestLevel(void)
 	CurrentPlayer.PlayerSprite->CollideOffset.x =  0.0f;
 	CurrentPlayer.PlayerSprite->CollideOffset.y =  0.0f;
 	//Show debug box
-	CurrentPlayer.PlayerSprite->CollideDebug = 1;
+	CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
 	ResetCamera();
 }
