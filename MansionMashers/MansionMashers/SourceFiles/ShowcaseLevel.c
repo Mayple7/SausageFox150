@@ -93,7 +93,7 @@ void InitializeShowcase(void)
 	Crate->CollideOffset.y = Crate->Height / 2 - 60;
 
 	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
-	Hammy->Position.x   = -800.0f;
+	Hammy->Position.x   = -1000.0f;
 	Hammy->CanCollide = TRUE;
 	Hammy->SensorType = RectangleCollider;
 	Hammy->SpriteType = FoodType;
@@ -105,13 +105,14 @@ void InitializeShowcase(void)
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
 
-	CurrentPlayer.Position.x = -1280;
+	CurrentPlayer.Position.x = -1380;
 	CurrentPlayer.Position.y = -220;
 
 	if(NULL != malloc(sizeof(Enemy)))
 		InitializeEnemy(&CurrentEnemy);
 
 	CurrentEnemy.EnemySprite->CollideDebug = FALSE;
+	CurrentEnemy.Position.x = 600;
 	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1;
 	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1;
 

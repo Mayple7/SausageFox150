@@ -42,12 +42,6 @@ int GameRunning = 1;
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
 	// Variable declaration	
-	int slideTextureNum = 0;					// Number for the slide texture being shown
-	float alpha = 0.0f;
-	int slideTimer = 0;
-	int fade = 1;								//0: no fade, 1: fade in, 2: fade out
-	int nextLevel = 0;
-	int Level = 1;
 	int Previous;								//Local State Variables
 	int Current;								//Local State Variables
 	int Next;									//Local State Variables
@@ -58,7 +52,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mShow				= show;
 	sysInitInfo.mWinWidth			= 1280;
 	sysInitInfo.mWinHeight			= 720;
-	sysInitInfo.mCreateConsole		= 1;
+	sysInitInfo.mCreateConsole		= 0;
 	sysInitInfo.mMaxFrameRate		= 60;
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
 	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;											
@@ -76,7 +70,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	//Slowing working GSM into files don't uncomment for now
 
 	//System_Initialize();
-	GSMInitialize(GS_MainMenu);
+	GSMInitialize(GS_SplashScreen);
 
 	while(GameRunning)
 	{
