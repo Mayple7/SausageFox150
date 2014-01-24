@@ -3,6 +3,7 @@
 
 enum GSL
 {
+	GS_SplashScreen,
 	GS_MainMenu,
 	GS_TestLevel,
 	GS_ShowcaseLevel,

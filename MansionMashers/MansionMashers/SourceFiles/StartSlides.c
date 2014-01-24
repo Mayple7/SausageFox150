@@ -41,7 +41,6 @@ Sprite *Digipen;
 // ---------------------------------------------------------------------------
 // Static function protoypes
 int fadeLogic(void);
-void DrawScreen(void);
 
 // ---------------------------------------------------------------------------
 // main
@@ -76,7 +75,7 @@ int fadeLogic(void)
 	if(fade == 0)
 		slideTimer += 1;
 
-	if(slideTimer == 180)
+	if(slideTimer == 120)
 	{
 		fade = 2;
 		slideTimer = 0;
@@ -100,7 +99,7 @@ void FreeStartScreen(void)
 }
 
 
-void DrawScreen(void)
+void DrawStartScreen(void)
 {
 	//Digipen Logo
 	if(slideTextureNum == 0)
@@ -131,6 +130,30 @@ void DrawScreen(void)
 
 }
 
+void UnloadStartScreen(void)
+{
+	//Placeholder?
+}
+
+void LoadStartScreen(void)
+{
+	//Placeholder?
+}
+
+void UpdateStartScreen(void)
+{
+	int changeLevel;
+
+	changeLevel = fadeLogic();
+
+	if(changeLevel == 1)
+		SetNextState(GS_MainMenu);
+	else if(changeLevel == -1)
+		SetNextState(GS_Quit);
+}
+
+
+/*
 int SplashScreenLoop(void)
 {
 	int changeLevel  = 0;
@@ -161,3 +184,5 @@ int SplashScreenLoop(void)
 	FreeStartScreen();
 	return changeLevel;
 }
+*/
+

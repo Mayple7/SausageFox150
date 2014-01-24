@@ -33,31 +33,36 @@ written consent of DigiPen Institute of Technology is prohibited.
 Sprite* StartButton;
 Sprite* ExitButton;
 Sprite* Selector;
+Sprite* ShowcaseButton;
 
 Sprite* HUD2;
 Sprite* HUD;
 
 HUDLayer HUDList;
 
-int numMenuButtons = 2;
-int selectedButton = 0;								//0: start, 1: exit
+int numMenuButtons = 3;
+int selectedButton = 0;								//0: start, 1: showcase 2: exit
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
 
 // ---------------------------------------------------------------------------
 
-void InitizalizeMainMenu(void)
+void InitializeMainMenu(void)
 {
 	resetObjectList();
 
 	StartButton = CreateSprite("Start Button", "TextureFiles/StartButton.png", 480.0f, 180.0f, 1, 1, 1);
 	StartButton->Position.x = 0.0f;
-	StartButton->Position.y = 100.0f;
+	StartButton->Position.y = 200.0f;
+
+	ShowcaseButton = CreateSprite("Showcase Button", "TextureFiles/ShowcaseButton.png", 640.0f, 180.0f, 1, 1, 1);
+	ShowcaseButton->Position.x = 0.0f;
+	ShowcaseButton->Position.y = 0.0f;
 
 	ExitButton = CreateSprite("Exit Button", "TextureFiles/ExitButton.png", 480.0f, 180.0f, 1, 1, 1);
 	ExitButton->Position.x = 0.0f;
-	ExitButton->Position.y = -100.0f;
+	ExitButton->Position.y = -200.0f;
 
 	Selector = CreateSprite("Selector", "TextureFiles/Selector.png", 500.0f, 200.0f, 0, 1, 1);
 	Selector->Position.x = 100.0f;
@@ -107,9 +112,12 @@ int InputHandling(void)
 
 		// Play le gaem
 		if(selectedButton == 0)
+			return 1;
+		// Showcase button
+		else if(selectedButton == 1)
 			return 2;
 		// Exit button
-		else if(selectedButton == 1)
+		else if(selectedButton == 2)
 			return -1;
 	}
 
@@ -125,16 +133,28 @@ void UpdateSelector(struct Sprite *Selector)
 	switch(selectedButton)
 	{
 		case 0:
-			Selector->Position.x = 0.0f;//StartButton.Position.x;
-			Selector->Position.y = 100.0f;//StartButton.Position.y;
+			Selector->Position.x = StartButton->Position.x;
+			Selector->Position.y = StartButton->Position.y;
+			Selector->Width = 500;
+			UpdateMesh(Selector);
 			break;
 		case 1:
-			Selector->Position.x = 0.0f;//ExitButton.Position.x;
-			Selector->Position.y = -100.0f;//ExitButton.Position.y;
+			Selector->Position.x = ShowcaseButton->Position.x;
+			Selector->Position.y = ShowcaseButton->Position.y;
+			Selector->Width = 660;
+			UpdateMesh(Selector);
+			break;
+		case 2:
+			Selector->Position.x = ExitButton->Position.x;
+			Selector->Position.y = ExitButton->Position.y;
+			Selector->Width = 500;
+			UpdateMesh(Selector);
 			break;
 		default:
-			Selector->Position.x = 0.0f;//StartButton.Position.x;
-			Selector->Position.y = 100.0f;//StartButton.Position.y;
+			Selector->Position.x = StartButton->Position.x;
+			Selector->Position.y = StartButton->Position.y;
+			Selector->Width = 500;
+			UpdateMesh(Selector);
 			break;
 	}
 }
@@ -189,8 +209,10 @@ void UpdateMainMenu(void)
 	int changeLevel  = 0;
 	changeLevel = InputHandling();
 
-	if(changeLevel == 2)
+	if(changeLevel == 1)
 		SetNextState(GS_TestLevel);
+	else if(changeLevel == 2)
+		SetNextState(GS_ShowcaseLevel);
 	else if(changeLevel == -1)
 		SetNextState(GS_Quit);
 }

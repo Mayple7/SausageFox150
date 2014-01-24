@@ -9,6 +9,7 @@ typedef struct RigidBody
 	Vec2 Acceleration;
 	Vec2 Gravity;
 
+	int onGround;
 	int Static;
 	float Mass;
 	float Density;			// Mass / (Volume(3D) || Area(2D))

@@ -89,9 +89,6 @@
     <ClInclude Include="HeaderFiles\TestLevel.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\Weapon.h">
-      <Filter>Fox Header Files\Fox Level Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\StartSlides.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
@@ -157,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="HeaderFiles\LevelShowcase.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Weapon.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -59,20 +59,35 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 	Vec2 offB = objB->CollideOffset;
 
 	//Collidable 1
-	float leftAx   = posA.x + offA.x;
-	float rightAx  = posA.x + offA.x + objA->CollideSize.x;
-	float topAy    = posA.y + offA.y;
-	float bottomAy = posA.y + offA.y + objA->CollideSize.y;
+	float leftAx   = posA.x + offA.x - (objA->CollideSize.x / 2);
+	float rightAx  = leftAx + objA->CollideSize.x;
+	float topAy    = posA.y + offA.y + (objA->CollideSize.y / 2);
+	float bottomAy = topAy - objA->CollideSize.y;
 
 	//Collidable 2
-	float leftBx   = posB.x + offB.x;
-	float rightBx  = posB.x + offB.x + objB->CollideSize.x;
-	float topBy    = posB.y + offB.y;
-	float bottomBy = posB.y + offB.y + objB->CollideSize.y;
+	float leftBx   = posB.x + offB.x - (objB->CollideSize.x / 2);
+	float rightBx  = leftBx + objB->CollideSize.x;
+	float topBy    = posB.y + offB.y + (objB->CollideSize.y / 2);
+	float bottomBy = topBy - objB->CollideSize.y;
 
 	//Check if all requires for collision are true
-	if (leftAx < rightBx && rightAx > leftBx && topAy < bottomBy && bottomAy > topBy)
+	if (leftAx < rightBx && rightAx > leftBx && topAy > bottomBy && bottomAy < topBy)
 		collisionDetected(objA, objB);
+
+	// Within B's x boundaries
+	/*if(leftAx < rightBx && rightAx > leftBx)
+	{
+		if(objA->SpriteType == PlayerType)
+			printf("--%s--\n", objB->SpriteName);
+		//Within B's y boundaries
+		if(bottomAy < topBy && topAy > bottomBy)
+//		if((topAy > bottomBy && topAy < topBy) || (bottomAy > bottomBy && bottomAy < topBy))
+		{
+			if(objA->SpriteType == PlayerType)
+				printf("%s\n", objB->SpriteName);
+			collisionDetected(objA, objB);
+		}
+	}*/
 }
 
 ////////  Collision Detection        [C&R]   ///////
