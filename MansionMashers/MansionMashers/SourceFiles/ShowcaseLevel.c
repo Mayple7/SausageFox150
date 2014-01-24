@@ -87,6 +87,7 @@ void InitializeShowcase(void)
 	Crate->Position.y = -180;
 	Crate->SpriteType = PlatformType;
 	Crate->CollideDebug = FALSE;
+	Crate->CollideSize.x = Crate->Width - 100;
 	Crate->CollideSize.y = 60;
 	Crate->CollideOffset.x = 0.0f;
 	Crate->CollideOffset.y = Crate->Height / 2 - 60;
@@ -127,7 +128,7 @@ void InitializeShowcase(void)
 
 	
 	Vec2Set(&startingCamera, -1280, 0.0f);
-	SetCamera(&startingCamera, 350, &HUDList);
+	SetCamera(&startingCamera, 250, &HUDList);
 }
 
 void FreeShowcase(void)
@@ -140,7 +141,7 @@ void DrawShowcase(void)
 	drawObjectList();
 	DrawPlayer(&CurrentPlayer);
 	DrawEnemy(&CurrentEnemy);
-	SetCamera(&CurrentPlayer.Position, 350, &HUDList);
+	SetCamera(&CurrentPlayer.Position, 250, &HUDList);
 }
 
 void MakeShowcase(void)

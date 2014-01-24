@@ -58,14 +58,14 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mShow				= show;
 	sysInitInfo.mWinWidth			= 1280;
 	sysInitInfo.mWinHeight			= 720;
-	sysInitInfo.mCreateConsole		= 0;
+	sysInitInfo.mCreateConsole		= 1;
 	sysInitInfo.mMaxFrameRate		= 60;
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
 	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;											
 	sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
 	AESysInit (&sysInitInfo);
 	AESysSetWindowTitle("Mansion Mashers!");
-
+	
 	// reset the system modules
 	AESysReset();
 
