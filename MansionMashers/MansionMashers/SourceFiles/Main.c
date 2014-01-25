@@ -52,7 +52,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mShow				= show;
 	sysInitInfo.mWinWidth			= 1280;
 	sysInitInfo.mWinHeight			= 720;
-	sysInitInfo.mCreateConsole		= 1;
+	sysInitInfo.mCreateConsole		= 0;
 	sysInitInfo.mMaxFrameRate		= 60;
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
 	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;											
@@ -60,15 +60,28 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AESysInit (&sysInitInfo);
 	AESysSetWindowTitle("Mansion Mashers!");
 	
+	if(AllocConsole())
+	{
+		FILE* file;
+ 
+		freopen_s(&file, "CONOUT$", "wt", stdout);
+		freopen_s(&file, "CONOUT$", "wt", stderr);
+		freopen_s(&file, "CONOUT$", "wt", stdin);
+
+		SetConsoleTitle("Alpha Engine - Console");
+	}
+
 	// reset the system modules
 	AESysReset();
 
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
+
+	//frepoen("CON", "W", stdout); 
+
 	//********************************************************
 	//Slowing working GSM into files don't uncomment for now
-
 	//System_Initialize();
 	GSMInitialize(GS_MainMenu);
 
