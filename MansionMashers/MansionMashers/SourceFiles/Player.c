@@ -147,12 +147,12 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		Vec2 force;
 		RECT rect;
-		if(GetWindowRect(AESysGetWindowHandle(), &rect))
+		if(GetClientRect(AESysGetWindowHandle(), &rect))
 		{
 		  int width = rect.right - rect.left;
 		  int height = rect.bottom - rect.top;
 		  printf("%d, %d\n", width, height);
-		}
+		} // 1382x744
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 		Vec2Set(&force, 0.0f, 15.0f);
