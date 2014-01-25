@@ -52,7 +52,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mShow				= show;
 	sysInitInfo.mWinWidth			= 1280;
 	sysInitInfo.mWinHeight			= 720;
-	sysInitInfo.mCreateConsole		= 0;
+	sysInitInfo.mCreateConsole		= 1;
 	sysInitInfo.mMaxFrameRate		= 60;
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
 	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;											
@@ -70,7 +70,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	//Slowing working GSM into files don't uncomment for now
 
 	//System_Initialize();
-	GSMInitialize(GS_SplashScreen);
+	GSMInitialize(GS_MainMenu);
 
 	while(GameRunning)
 	{

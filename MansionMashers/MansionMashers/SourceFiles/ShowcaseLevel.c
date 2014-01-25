@@ -152,7 +152,7 @@ void MakeShowcase(void)
 
 void EventShowcase(void)
 {
-	CurrentPlayer.PlayerRigidBody.onGround = FALSE;
+	
 	DetectCollision();
 
 	InputPlayer(&CurrentPlayer);

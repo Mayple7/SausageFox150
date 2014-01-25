@@ -69,11 +69,13 @@ void DrawPlayer(struct Player *CurrentPlayer)
 	UpdatePosition(CurrentPlayer);
 	CurrentPlayer->PlayerSprite->Position.x = CurrentPlayer->Position.x;
 	CurrentPlayer->PlayerSprite->Position.y = CurrentPlayer->Position.y;
+	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 }
 
 
 void InputPlayer(struct Player *CurrentPlayer)
 {
+
 	if(AEInputCheckCurr('A'))
 	{
 		if(CurrentPlayer->Position.y > -225 && !CurrentPlayer->PlayerRigidBody.onGround)
