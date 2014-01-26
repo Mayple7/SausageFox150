@@ -119,6 +119,7 @@ void GSMUpdate(int CurState)
 			GSMPointers.pFree = FreeShowcase;
 			GSMPointers.pDraw = DrawShowcase;
 			GSMPointers.pUnload = UnloadShowcase;
+			break;
 		case GS_Level1:
 			break;
 		case GS_Level2:

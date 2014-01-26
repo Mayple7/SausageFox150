@@ -48,53 +48,16 @@ Sprite *Hammy2;
 
 // ---------------------------------------------------------------------------
 // main
-void MakeTestLevel(void)
+void LoadTestLevel(void)
 {
-	resetObjectList();
-}
-
-void DrawTestLevel(void)
-{
-	drawObjectList();
-	DrawPlayer(&CurrentPlayer);
-	DrawEnemy(&CurrentEnemy);
-
-	//Camera follows player
-	SetCamera(&CurrentPlayer.Position, 350, &HUDList);
-}
-
-void FreeTestLevel(void)
-{
-	freeObjectList();
-}
-
-void EventTestLevel(void)
-{
-	DetectCollision();
-
-	InputPlayer(&CurrentPlayer);
-
-
-	if(AEInputCheckTriggered('Q'))
-	{
-		if (HUD1item->ItemType == 0)
-		{
-			HUD1item->SpriteTexture = AEGfxTextureLoad("TextureFiles/ThrowableHUD.png");
-			HUD1item->ItemType = 1;
-		}
-		else
-		{
-			HUD1item->SpriteTexture = AEGfxTextureLoad("TextureFiles/HealthPotionHUD.png");
-			HUD1item->ItemType = 0;
-		}
-	}
+	//Placeholder
 }
 
 void InitializeTestLevel(void)
 {	
 	int hudLoop;
 
-	MakeTestLevel();
+	resetObjectList();
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
@@ -199,59 +162,6 @@ void InitializeTestLevel(void)
 	ResetCamera();
 }
 
-/***
-int LevelLoop(void)
-{
-	int changeLevel  = 0;
-	int LevelRunning = 1;
-
-	MakeTestLevel();
-	InitizalizeTestLevel();
-
-	printf("Running Level\n");
-
-	while (LevelRunning)
-	{
-		// Informing the system about the loop's start
-		AESysFrameStart();
-
-		// Handling Input
-		AEInputUpdate();
-
-		// Functions
-		EnemyLogic(&CurrentEnemy, &CurrentPlayer);
-		DrawTestLevel();
-		EventTestLevel();
-
-		// Informing the system about the loop's end
-		AESysFrameEnd();
-
-		// check if forcing the application to quit
-		//if (changeLevel != 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-			//LevelRunning = 0;
-		if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-		{
-			LevelRunning = 0;
-			changeLevel = 1;
-		}
-
-	}
-
-	FreeTestLevel();
-	return changeLevel;
-}
-**/
-
-void UnloadTestLevel(void)
-{
-	//Placeholder
-}
-
-void LoadTestLevel(void)
-{
-	//Placeholder
-}
-
 void UpdateTestLevel(void)
 {
 	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
@@ -263,4 +173,44 @@ void UpdateTestLevel(void)
 		}
 }
 
-// ---------------------------------------------------------------------------
+void DrawTestLevel(void)
+{
+	drawObjectList();
+	DrawPlayer(&CurrentPlayer);
+	DrawEnemy(&CurrentEnemy);
+
+	//Camera follows player
+	SetCamera(&CurrentPlayer.Position, 350, &HUDList);
+}
+
+void FreeTestLevel(void)
+{
+	freeObjectList();
+}
+
+void UnloadTestLevel(void)
+{
+	//Placeholder
+}
+
+void EventTestLevel(void)
+{
+	DetectCollision();
+
+	InputPlayer(&CurrentPlayer);
+
+
+	if(AEInputCheckTriggered('Q'))
+	{
+		if (HUD1item->ItemType == 0)
+		{
+			HUD1item->SpriteTexture = AEGfxTextureLoad("TextureFiles/ThrowableHUD.png");
+			HUD1item->ItemType = 1;
+		}
+		else
+		{
+			HUD1item->SpriteTexture = AEGfxTextureLoad("TextureFiles/HealthPotionHUD.png");
+			HUD1item->ItemType = 0;
+		}
+	}
+}

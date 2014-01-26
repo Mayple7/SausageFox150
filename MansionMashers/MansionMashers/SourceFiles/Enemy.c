@@ -67,7 +67,6 @@ void DrawEnemy(struct Enemy *CurrentEnemy)
 	UpdateEnemyPosition(CurrentEnemy);
 	CurrentEnemy->EnemySprite->Position.x = CurrentEnemy->Position.x;
 	CurrentEnemy->EnemySprite->Position.y = CurrentEnemy->Position.y;
-	//DrawSprite(CurrentEnemy->EnemySprite);
 }
 
 

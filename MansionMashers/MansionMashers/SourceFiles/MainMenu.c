@@ -47,6 +47,10 @@ int selectedButton = 0;								//0: start, 1: showcase 2: exit
 // Static function protoypes
 
 // ---------------------------------------------------------------------------
+void LoadMainMenu(void)
+{
+	//Placeholder
+}
 
 void InitializeMainMenu(void)
 {
@@ -72,6 +76,19 @@ void InitializeMainMenu(void)
 	UpdateSelector(Selector);
 }
 
+void UpdateMainMenu(void)
+{
+	int changeLevel  = 0;
+	changeLevel = InputHandling();
+
+	if(changeLevel == 1)
+		SetNextState(GS_TestLevel);
+	else if(changeLevel == 2)
+		SetNextState(GS_ShowcaseLevel);
+	else if(changeLevel == -1)
+		SetNextState(GS_Quit);
+}
+
 void DrawMainMenu(void)
 {
 	drawObjectList();
@@ -82,6 +99,11 @@ void FreeMainMenu(void)
 {
 	// Freeing the objects and textures
 	freeObjectList();
+}
+
+void UnloadMainMenu(void)
+{
+	//Placeholder
 }
 
 //INPUT, PRESS DEM KEYS BOI
@@ -158,64 +180,3 @@ void UpdateSelector(struct Sprite *Selector)
 			break;
 	}
 }
-
-// main
-/***
-int MenuLoop(void)
-{
-	int changeLevel  = 0;
-	int LevelRunning = 1;
-
-	InitizalizeMainMenu();
-
-	printf("Running Menu\n");
-
-	while (LevelRunning)
-	{
-		// Informing the system about the loop's start
-		AESysFrameStart();
-
-		// Handling Input
-		AEInputUpdate();
-		// Functions
-		changeLevel = InputHandling();
-		DrawMainMenu();
-
-		// Informing the system about the loop's end
-		AESysFrameEnd();
-
-		// check if forcing the application to quit
-		if (changeLevel != 0 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-			LevelRunning = 0;
-	}
-
-	FreeMainMenu();
-	return changeLevel;
-}
-**/
-
-void LoadMainMenu(void)
-{
-	//Placeholder
-}
-
-void UnloadMainMenu(void)
-{
-	//Placeholder
-}
-
-void UpdateMainMenu(void)
-{
-	int changeLevel  = 0;
-	changeLevel = InputHandling();
-
-	if(changeLevel == 1)
-		SetNextState(GS_TestLevel);
-	else if(changeLevel == 2)
-		SetNextState(GS_ShowcaseLevel);
-	else if(changeLevel == -1)
-		SetNextState(GS_Quit);
-}
-
-
-// ---------------------------------------------------------------------------

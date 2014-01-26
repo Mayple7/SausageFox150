@@ -77,9 +77,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
-
-	//frepoen("CON", "W", stdout); 
-
 	//********************************************************
 	//Slowing working GSM into files don't uncomment for now
 	//System_Initialize();
@@ -140,77 +137,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	//End of GSM
 	//******************************************************/
-	
-	/*
-		Read Input
-		Handle Input
-		Draw Output
-		???
-		Profit!
-	*/
-	// Gameloop
-	/****************************************************
-	while(GameRunning)
-	{
-		// Informing the system about the loop's start
-		AESysFrameStart();
-
-		// Handling Input
-		AEInputUpdate();
-
-		//Level List
-		/*
-			//Interface Levels
-		   -1:	Exit Game
-			0:	Splash Screen
-			1:	Main Menu
-			2:	Options Screen
-			3:	Credits
-			4:	Level Select
-			5:	Level 1
-			6:	First Shop
-			7:	Level 2
-			8:	etc. etc.
-
-			enum:
-			L1
-			L2
-			L3
-			L_NUM -> Will equal number of levels
-		*/
-
-		/******************
-		switch(Level)
-		{
-		case 0:
-			nextLevel = SplashScreenLoop();
-			break;
-		case 1:
-			nextLevel = MenuLoop();
-			break;
-		case 2:
-			nextLevel = LevelLoop();
-			break;
-		default:
-			GameRunning = 0;
-		}
-
-		Level = nextLevel;
-		nextLevel = 0;
-
-		// Informing the system about the loop's end
-		AESysFrameEnd();
-
-		// check if forcing the application to quit
-		//if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-			//GameRunning = 0;
-	}
-
-	// free the system
-	AESysExit();
-	
-	return 1;
-	***************************************/
 }
 
 // ---------------------------------------------------------------------------

@@ -73,21 +73,6 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 	//Check if all requires for collision are true
 	if (leftAx < rightBx && rightAx > leftBx && topAy > bottomBy && bottomAy < topBy)
 		collisionDetected(objA, objB);
-
-	// Within B's x boundaries
-	/*if(leftAx < rightBx && rightAx > leftBx)
-	{
-		if(objA->SpriteType == PlayerType)
-			printf("--%s--\n", objB->SpriteName);
-		//Within B's y boundaries
-		if(bottomAy < topBy && topAy > bottomBy)
-//		if((topAy > bottomBy && topAy < topBy) || (bottomAy > bottomBy && bottomAy < topBy))
-		{
-			if(objA->SpriteType == PlayerType)
-				printf("%s\n", objB->SpriteName);
-			collisionDetected(objA, objB);
-		}
-	}*/
 }
 
 ////////  Collision Detection        [C&R]   ///////
@@ -150,21 +135,3 @@ void DetectCollision(void)
 		}
 	}
 }
-
-/*
-void DetectCollision(void)
-{
-	//Sort through the objects to find which to detect collision
-	int i;
-	for (i = 0; i < OBJECTAMOUNT; i++)
-	{
-		Sprite* objA = (objectList + i);
-		//Make sure the sprite exists
-		if (objA && objA->Created == 1 && objA->CanCollide == 1)
-		{
-			//Search the workspace for any colliding objects
-			//printf("%i    ::    %i\n", objA->Width, objA->Width);
-			searchForIntersection(objA);
-		}
-	}
-}*/

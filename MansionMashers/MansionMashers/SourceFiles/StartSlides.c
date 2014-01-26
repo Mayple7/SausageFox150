@@ -83,6 +83,12 @@ int fadeLogic(void)
 
 	return 0;
 }
+
+void LoadStartScreen(void)
+{
+	//Placeholder?
+}
+
 void InitializeStartScreen(void)
 {
 	resetObjectList();
@@ -92,12 +98,17 @@ void InitializeStartScreen(void)
 	Sausage = CreateSprite("Sausage", "TextureFiles/SausageFoxLogoNoBack.png", 1280.0f, 720.0f, 0, 1, 1);
 }
 
-void FreeStartScreen(void)
+void UpdateStartScreen(void)
 {
-	// Freeing the objects and textures
-	freeObjectList();
-}
+	int changeLevel;
 
+	changeLevel = fadeLogic();
+
+	if(changeLevel == 1)
+		SetNextState(GS_MainMenu);
+	else if(changeLevel == -1)
+		SetNextState(GS_Quit);
+}
 
 void DrawStartScreen(void)
 {
@@ -130,59 +141,13 @@ void DrawStartScreen(void)
 
 }
 
+void FreeStartScreen(void)
+{
+	// Freeing the objects and textures
+	freeObjectList();
+}
+
 void UnloadStartScreen(void)
 {
 	//Placeholder?
 }
-
-void LoadStartScreen(void)
-{
-	//Placeholder?
-}
-
-void UpdateStartScreen(void)
-{
-	int changeLevel;
-
-	changeLevel = fadeLogic();
-
-	if(changeLevel == 1)
-		SetNextState(GS_MainMenu);
-	else if(changeLevel == -1)
-		SetNextState(GS_Quit);
-}
-
-
-/*
-int SplashScreenLoop(void)
-{
-	int changeLevel  = 0;
-	int LevelRunning = 1;
-
-	InitializeStartScreen();
-
-	while (LevelRunning)
-	{
-		// Informing the system about the loop's start
-		AESysFrameStart();
-
-		// Handling Input
-		AEInputUpdate();
-
-		// Functions
-		changeLevel = fadeLogic();
-		DrawScreen();
-
-		// Informing the system about the loop's end
-		AESysFrameEnd();
-
-		// check if forcing the application to quit
-		if (changeLevel == 1 || AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-			LevelRunning = 0;
-	}
-
-	FreeStartScreen();
-	return changeLevel;
-}
-*/
-

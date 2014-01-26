@@ -46,11 +46,16 @@ Enemy CurrentEnemy;
 
 Sprite *Hammy;
 
+void LoadShowcase(void)
+{
+	//Placeholder
+}
+
 void InitializeShowcase(void)
 {
 	Vec2 startingCamera;
 	int hudLoop;
-	MakeShowcase();
+	resetObjectList();
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
@@ -132,9 +137,19 @@ void InitializeShowcase(void)
 	SetCamera(&startingCamera, 250, &HUDList);
 }
 
-void FreeShowcase(void)
+void UpdateShowcase(void)
 {
-	freeObjectList();
+	if(CurrentPlayer.Position.x > 700)
+		CurrentPlayer.PlayerSprite->CollideDebug = FALSE;
+	else
+		CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
+	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
+	EventShowcase();
+
+	if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+	{
+		SetNextState(GS_MainMenu);
+	}
 }
 
 void DrawShowcase(void)
@@ -145,9 +160,14 @@ void DrawShowcase(void)
 	SetCamera(&CurrentPlayer.Position, 250, &HUDList);
 }
 
-void MakeShowcase(void)
+void FreeShowcase(void)
 {
-	resetObjectList();
+	freeObjectList();
+}
+
+void UnloadShowcase(void)
+{
+	//Placeholder
 }
 
 void EventShowcase(void)
@@ -173,27 +193,6 @@ void EventShowcase(void)
 	}
 }
 
-void UnloadShowcase(void)
-{
-	//Placeholder
-}
 
-void LoadShowcase(void)
-{
-	//Placeholder
-}
 
-void UpdateShowcase(void)
-{
-	if(CurrentPlayer.Position.x > 700)
-		CurrentPlayer.PlayerSprite->CollideDebug = FALSE;
-	else
-		CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
-	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
-	EventShowcase();
 
-	if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-	{
-		SetNextState(GS_MainMenu);
-	}
-}
