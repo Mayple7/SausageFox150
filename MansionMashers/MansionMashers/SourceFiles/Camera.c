@@ -82,7 +82,6 @@ void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 /*!
 	\brief
 	Resets the camera position to (0,0)
-
 */
 /*************************************************************************/
 void ResetCamera(void)
