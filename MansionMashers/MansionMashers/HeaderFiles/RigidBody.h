@@ -32,6 +32,6 @@ void applyDrag(RigidBody* CurrentRigidBody);
 
 void ZeroGravity(RigidBody* CurrentRigidBody);
 void SetGravity(RigidBody* CurrentRigidBody, float GravityForceX, float GravityForceY);
-void ApplyGravity(RigidBody* CurrentRigidBody);
+void applyGravity(RigidBody* CurrentRigidBody);
 
 #endif

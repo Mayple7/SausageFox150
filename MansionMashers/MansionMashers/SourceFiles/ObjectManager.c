@@ -1,18 +1,25 @@
-/*
-File:				ObjectManager.c
-Author:				Kaden Nugent (kaden.n)
-Creation Date:		Jan 8, 2014
+/*****************************************************************************/
+/*!
+\file				ObjectManager.c
+\author				Kaden Nugent (kaden.n)
+\date				Jan 8, 2014
 
-Purpose:			Manages Objects
+\brief				Manages the objects and allocating and freeing the memory
 
-Functions:			
- 
-Copyright (C) 2014 DigiPen Institute of Technology. 
-Reproduction or disclosure of this file or its contents without the prior 
-written consent of DigiPen Institute of Technology is prohibited. 
+\par				Functions:
+\li					AddObject
+\li					AddCollidable
+\li					resetObjectList
+\li					drawObjectList
+\li					freeObject
+\li					freeObjectList
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
-
-
+/*****************************************************************************/
 
 // ---------------------------------------------------------------------------
 // includes
@@ -20,17 +27,17 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
-// Libraries
-
-// ---------------------------------------------------------------------------
-// globals
-
-// ---------------------------------------------------------------------------
-// Static function protoypes
-
-// ---------------------------------------------------------------------------
 // Main
 
+/*************************************************************************/
+/*!
+	\brief
+	Adds an object to the list
+	
+	\return
+	Returns a sprite pointer of the object added
+*/
+/*************************************************************************/
 Sprite* AddObject(void)
 {
 	int i;
@@ -46,6 +53,15 @@ Sprite* AddObject(void)
 	return NULL;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Adds a collidable sprite to the collidable list
+	
+	\param newCollidable
+	The sprite of a collidable to add to the list
+*/
+/*************************************************************************/
 void AddCollidable(Sprite *newCollidable)
 {
 	int i;
@@ -61,6 +77,12 @@ void AddCollidable(Sprite *newCollidable)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Resets all the objects in the list and callocs a new array of sprites
+*/
+/*************************************************************************/
 void resetObjectList(void)
 {
 	//Set up the memory to fit the desired amount of objects
@@ -90,6 +112,12 @@ void resetObjectList(void)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Draws all the objects in the object list
+*/
+/*************************************************************************/
 void drawObjectList(void)
 {
 	int currentZ = 0;
@@ -120,6 +148,15 @@ void drawObjectList(void)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Frees the sprite being passed
+	
+	\param objectNext
+	The pointer to a sprite whose memory is to be deallocated
+*/
+/*************************************************************************/
 void freeObject(Sprite* objectNext)
 {
 	//Make sure the sprite exists
@@ -132,6 +169,12 @@ void freeObject(Sprite* objectNext)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Cycles through the object list freeing all objects in the list
+*/
+/*************************************************************************/
 void freeObjectList(void)
 {
 	// Freeing the objects and textures

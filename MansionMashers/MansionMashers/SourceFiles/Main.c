@@ -1,19 +1,21 @@
-/*
-File:				Main.c
-Author:				Dan Muller (d.muller)
-Creation Date:		Jan 7, 2014
+/*****************************************************************************/
+/*!
+\file				Main.c
+\author				Dan Muller (d.muller)
+\date				Jan 7, 2014
 
-Purpose:			Starts the game up
+\brief				The main function for the game and holds the game loop
 
-Functions:			WinMain - Main function
-					Foo - Another function
- 
-Copyright (C) 2014 DigiPen Institute of Technology. 
-Reproduction or disclosure of this file or its contents without the prior 
-written consent of DigiPen Institute of Technology is prohibited. 
+\par				Functions:
+\li					SetCamera
+\li					ResetCamera
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
-
-
+/*****************************************************************************/
 
 // ---------------------------------------------------------------------------
 // includes
@@ -24,7 +26,6 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
-
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
 
@@ -38,16 +39,27 @@ int GameRunning = 1;
 // ---------------------------------------------------------------------------
 // main
 
-
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
 	// Variable declaration	
 	int Previous;								//Local State Variables
 	int Current;								//Local State Variables
 	int Next;									//Local State Variables
-	
-	// Initialize the system 
 	AESysInitInfo sysInitInfo;
+
+	//Creates the console window
+	if(AllocConsole())
+	{
+		FILE* file;
+ 
+		freopen_s(&file, "CONOUT$", "wt", stdout);
+		freopen_s(&file, "CONOUT$", "wt", stderr);
+		freopen_s(&file, "CONOUT$", "wt", stdin);
+
+		SetConsoleTitle("Alpha Engine - Console");
+	}
+
+	// Initialize the system 
 	sysInitInfo.mAppInstance		= instanceH;
 	sysInitInfo.mShow				= show;
 	sysInitInfo.mWinWidth			= 1280;
@@ -60,16 +72,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AESysInit (&sysInitInfo);
 	AESysSetWindowTitle("Mansion Mashers!");
 	
-	if(AllocConsole())
-	{
-		FILE* file;
- 
-		freopen_s(&file, "CONOUT$", "wt", stdout);
-		freopen_s(&file, "CONOUT$", "wt", stderr);
-		freopen_s(&file, "CONOUT$", "wt", stdin);
-
-		SetConsoleTitle("Alpha Engine - Console");
-	}
+	
 
 	// reset the system modules
 	AESysReset();
@@ -136,7 +139,4 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	return 1;
 
 	//End of GSM
-	//******************************************************/
 }
-
-// ---------------------------------------------------------------------------

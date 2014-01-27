@@ -5,7 +5,7 @@ int ShowcaseLoop(void);
 void InitializeShowcase(void);
 void FreeShowcase(void);
 void DrawShowcase(void);
-int InputHandling(void);
+void InputHandling(void);
 void EventShowcase(void);
 
 void UnloadShowcase(void);
