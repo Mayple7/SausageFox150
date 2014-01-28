@@ -1,37 +1,47 @@
-/*
-File:				Vector3.c
-Author:				Dan Muller (d.muller)
-Creation Date:		Jan 13, 2014
+/*****************************************************************************/
+/*!
+\file				Vector3.c
+\author				Dan Muller (d.muller)
+\date				Jan 13, 2014
 
-Purpose:			Has all of the vector 2D functions.
+\brief				All Vector3 functions
 
-Functions:			Vec3Zero - Zeros a vector
-					Vec3Set - Sets a vector to x, y, z
-
-					Vec3Negate - Negates a vector to -x, -y, -z
-					Vec3Add - Adds 3 vectors
-					Vec3Subtract - Subtracts 3 vectors
-					Vec3Normalize - Normalizes a vector
-
-					Vec3Scale - Scales a vector
-					Vec3Project - Vector projection
-
-					Vec3Length - Returns length of a vector
-					Vec3SquareLength - Returns the square of the length of a vector
-					Vec3Distance - Returns the distance between 2 vectors
-					Vec3SquareDistance - Returns the square of the distance between 2 vectors
-
-					Vec3DotProduct - Returns the dot product of 2 vectors
-					Vec3CrossProductMag - Returns the magnitude of the cross product of 2 vectors
- 
-Copyright (C) 2014 DigiPen Institute of Technology. 
-Reproduction or disclosure of this file or its contents without the prior 
-written consent of DigiPen Institute of Technology is prohibited. 
+\par				Functions:
+\li					Vec3Zero
+\li					Vec3Set
+\li					Vec3Negate
+\li					Vec3Add
+\li					Vec3Subtract
+\li					Vec3Normalize
+\li					Vec3Scale
+\li					Vec3Project
+\li					Vec3Length
+\li					Vec3SquareLength
+\li					Vec3Distance
+\li					Vec3SquareDistance
+\li					Vec3DotProduct
+\li					Vec3CrossProductMag
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
 
+// ---------------------------------------------------------------------------
+// Includes
 #include "../HeaderFiles/Vector3.h"
 #include <math.h>
 
+/*************************************************************************/
+/*!
+	\brief
+	Zeroes a vector
+
+	\param Result
+	Vector to be zeroed
+*/
+/*************************************************************************/
 void Vec3Zero(Vec3* Result)
 {
 	Result->x = 0.0f;
@@ -39,6 +49,24 @@ void Vec3Zero(Vec3* Result)
 	Result->z = 0.0f;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Sets a vector to specific x, y and z values
+
+	\param Result
+	Vector to be set
+
+	\param x
+	X value for the vector
+
+	\param y
+	Y value for the vector
+
+	\param z
+	Z value for the vector
+*/
+/*************************************************************************/
 void Vec3Set(Vec3* Result, float x, float y, float z)
 {
 	Result->x = x;
@@ -46,6 +74,18 @@ void Vec3Set(Vec3* Result, float x, float y, float z)
 	Result->z = z;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Negates a vector
+
+	\param Result
+	Pointer to the negated vector
+
+	\param Operand
+	Vector to be negated
+*/
+/*************************************************************************/
 void Vec3Negate(Vec3* Result, Vec3* Operand)
 {
 	Result->x = -Operand->x;
@@ -53,6 +93,21 @@ void Vec3Negate(Vec3* Result, Vec3* Operand)
 	Result->z = -Operand->z;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Adds 2 Vectors
+
+	\param Result
+	Vector 2 result of the addition
+
+	\param Operand1
+	First operand for the addition
+
+	\param Operand2
+	Second operand for the addition
+*/
+/*************************************************************************/
 void Vec3Add(Vec3* Result, Vec3* Operand1, Vec3* Operand2)
 {
 	Result->x = Operand1->x + Operand2->x;
@@ -60,6 +115,21 @@ void Vec3Add(Vec3* Result, Vec3* Operand1, Vec3* Operand2)
 	Result->z = Operand1->z + Operand2->z;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Subtracts 2 vectors
+
+	\param Result
+	Result of the subtraction
+
+	\param Operand1
+	Vector to subtract from
+
+	\param Operand2
+	Vector to subtract
+*/
+/*************************************************************************/
 void Vec3Subtract(Vec3* Result, Vec3* Operand1, Vec3* Operand2)
 {
 	Result->x = Operand1->x - Operand2->x;
@@ -67,6 +137,18 @@ void Vec3Subtract(Vec3* Result, Vec3* Operand1, Vec3* Operand2)
 	Result->z = Operand1->z - Operand2->z;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Normalizes a vector
+
+	\param Result
+	Pointer to the resulting normalized vector
+
+	\param Operand
+	Vector to be normalized
+*/
+/*************************************************************************/
 void Vec3Normalize(Vec3* Result, Vec3* Operand)
 {
 	float length = Vec3Length(Operand);
@@ -76,6 +158,21 @@ void Vec3Normalize(Vec3* Result, Vec3* Operand)
 	Result->z = Operand->z / length;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Scale a vector by a scalar
+
+	\param Result
+	Vector of the result of the scaling
+
+	\param Operand
+	Vector to be scaled
+
+	\param Scalar
+	Value to scale the vector with
+*/
+/*************************************************************************/
 void Vec3Scale(Vec3* Result, Vec3* Operand, float Scalar)
 {
 	Result->x = Operand->x * Scalar;
@@ -83,6 +180,21 @@ void Vec3Scale(Vec3* Result, Vec3* Operand, float Scalar)
 	Result->z = Operand->z * Scalar;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Projects one vector onto another
+
+	\param Result
+	Vector of the result of the projection
+
+	\param Operand1
+	Vector to project
+
+	\param Operand2
+	Vector to project onto
+*/
+/*************************************************************************/
 void Vec3Project(Vec3* Result, Vec3* Operand1, Vec3* Operand2)
 {
 	float scalar;
@@ -92,13 +204,35 @@ void Vec3Project(Vec3* Result, Vec3* Operand1, Vec3* Operand2)
 	Vec3Scale(Result, Operand2, scalar);
 }
 
-//void Vec3ProjectPerp(Vec3* Result, Vec3* Operand1, Vec3* Operand2);
+/*************************************************************************/
+/*!
+	\brief
+	Calculates the length of a vector
 
+	\param Operand
+	Vector whose length will be calculated
+
+	\return
+	The value of the length of the Operand vector
+*/
+/*************************************************************************/
 float Vec3Length(Vec3* Operand)
 {
 	return sqrt(Vec3SquareLength(Operand));
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Calculates the square of the vector length
+
+	\param Operand
+	Vector to calculate the square length of
+
+	\return
+	Value of the square length of the Operand vector
+*/
+/*************************************************************************/
 float Vec3SquareLength(Vec3* Operand)
 {
 	return (Operand->x * Operand->x) + (Operand->y * Operand->y) + (Operand->z * Operand->z);
@@ -107,11 +241,38 @@ float Vec3SquareLength(Vec3* Operand)
 //float Vec3Distance(Vec3* Operand1, Vec3* Operand2);
 //float Vec3SquareDistance(Vec3* Operand1, Vec3* Operand2);
 
+/*************************************************************************/
+/*!
+	\brief
+	Calculates the dot product of 2 vectors
+
+	\param Operand1
+	Vector to calculate the dot product with
+
+	\param Operand2
+	Vector to calculate the dot product with
+
+	\return
+	Value of the dot product calculated
+*/
+/*************************************************************************/
 float Vec3DotProduct(Vec3* Operand1, Vec3* Operand2)
 {
 	return (Operand1->x * Operand2->x) + (Operand1->y * Operand2->y) + (Operand1->z * Operand2->z);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Calculates the magnitude of the cross product
+
+	\param Operand1
+	Vector to calculate the cross product magnitude with
+
+	\param Operand2
+	Vector to calculate the cross product magnitude with
+*/
+/*************************************************************************/
 float Vec3CrossProductMag(Vec3* Operand1, Vec3* Operand2)
 {
 	float i, j, k;

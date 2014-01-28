@@ -1,18 +1,23 @@
-/*
-File:				ObjectManager.c
-Author:				Kaden Nugent (kaden.n)
-Creation Date:		Jan 8, 2014
+/*****************************************************************************/
+/*!
+\file				CollisionManager.c
+\author				Kaden Nugent (kaden.n)
+\date				Jan 8, 2014
 
-Purpose:			Manages Collision
+\brief				Manages collision detection and resolution
 
-Functions:			
- 
-Copyright (C) 2014 DigiPen Institute of Technology. 
-Reproduction or disclosure of this file or its contents without the prior 
-written consent of DigiPen Institute of Technology is prohibited. 
+\par				Functions:
+\li					collisionDetected
+\li					rectangleRectangleCollision
+\li					searchForIntersection
+\li					DetectCollision
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
-
-
+/*****************************************************************************/
 
 // ---------------------------------------------------------------------------
 // includes
@@ -22,34 +27,41 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/Player.h"
 
 // ---------------------------------------------------------------------------
-// Libraries
-
-// ---------------------------------------------------------------------------
-// globals
-
-// ---------------------------------------------------------------------------
-// Static function protoypes
-
-// ---------------------------------------------------------------------------
 // Main
 
-////////         Collision Detected          ///////
+/*************************************************************************/
+/*!
+	\brief
+	Sends a collision event to the correct collision handler
+	  
+	\param objA
+	The object being collided
+	  
+	\param objB
+	The colliding object
+*/
+/*************************************************************************/
 void collisionDetected(Sprite* objA, Sprite* objB)
-{
-	/*if (objB->SpriteType == PlayerType)
-	{
-		collisionDetected(objB, objA);
-		return;
-	}
-	else */
-	
-	if (objA->SpriteType == PlayerType)
+{	
+	//Send event to the player's collision handler
+	if (objA->CollisionGroup == PlayerType)
 	{
 		HandleCollision(objB);
 	}
 }
 
-////////  Collision Detection        [R&R]   ///////
+/*************************************************************************/
+/*!
+	\brief
+	Determines if there is a collision between 2 rectangle colliders
+	  
+	\param objA
+	The object being collided
+	  
+	\param objB
+	The colliding object
+*/
+/*************************************************************************/
 void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 {
 	//Get the positions and offset for quick access
@@ -73,21 +85,6 @@ void rectangleRectangleCollision(Sprite* objA, Sprite* objB)
 	//Check if all requires for collision are true
 	if (leftAx < rightBx && rightAx > leftBx && topAy > bottomBy && bottomAy < topBy)
 		collisionDetected(objA, objB);
-
-	// Within B's x boundaries
-	/*if(leftAx < rightBx && rightAx > leftBx)
-	{
-		if(objA->SpriteType == PlayerType)
-			printf("--%s--\n", objB->SpriteName);
-		//Within B's y boundaries
-		if(bottomAy < topBy && topAy > bottomBy)
-//		if((topAy > bottomBy && topAy < topBy) || (bottomAy > bottomBy && bottomAy < topBy))
-		{
-			if(objA->SpriteType == PlayerType)
-				printf("%s\n", objB->SpriteName);
-			collisionDetected(objA, objB);
-		}
-	}*/
 }
 
 ////////  Collision Detection        [C&R]   ///////
@@ -112,7 +109,15 @@ void circleCircleCollision(Sprite* objA, Sprite* objB)
 		printf("No interaction\n");*/
 }
 
-////////    SEARCH FOR THE COLLIDEE    [B]   ///////
+/*************************************************************************/
+/*!
+	\brief
+	Sorts through all collidable to search for a collision
+	  
+	\param objA
+	The object being collided
+*/
+/*************************************************************************/
 void searchForIntersection(Sprite* objA)
 {
 	//Sort through the objects to find which to detect collision
@@ -136,7 +141,12 @@ void searchForIntersection(Sprite* objA)
 	}
 }
 
-////////    SEARCH FOR THE COLLIDER    [A]    ///////
+/*************************************************************************/
+/*!
+	\brief
+	Searches through all objects for a collidable object to detect collision
+*/
+/*************************************************************************/
 void DetectCollision(void)
 {
 	int i;
@@ -150,21 +160,3 @@ void DetectCollision(void)
 		}
 	}
 }
-
-/*
-void DetectCollision(void)
-{
-	//Sort through the objects to find which to detect collision
-	int i;
-	for (i = 0; i < OBJECTAMOUNT; i++)
-	{
-		Sprite* objA = (objectList + i);
-		//Make sure the sprite exists
-		if (objA && objA->Created == 1 && objA->CanCollide == 1)
-		{
-			//Search the workspace for any colliding objects
-			//printf("%i    ::    %i\n", objA->Width, objA->Width);
-			searchForIntersection(objA);
-		}
-	}
-}*/

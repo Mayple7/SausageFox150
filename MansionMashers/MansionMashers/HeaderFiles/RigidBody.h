@@ -16,7 +16,10 @@ typedef struct RigidBody
 	float Area;
 	float Drag;				
 	float Friction;
+	float Restitution;
 }RigidBody;
+
+void InitializeRigidBody(RigidBody* Result, int isStatic, float width, float height);
 
 void ZeroAcceleration(RigidBody* Result);
 void ZeroVelocity(RigidBody* Result);
@@ -32,6 +35,6 @@ void applyDrag(RigidBody* CurrentRigidBody);
 
 void ZeroGravity(RigidBody* CurrentRigidBody);
 void SetGravity(RigidBody* CurrentRigidBody, float GravityForceX, float GravityForceY);
-void ApplyGravity(RigidBody* CurrentRigidBody);
+void applyGravity(RigidBody* CurrentRigidBody);
 
 #endif

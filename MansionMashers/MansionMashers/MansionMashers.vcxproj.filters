@@ -149,13 +149,16 @@
     <ClInclude Include="HeaderFiles\GameStateManager.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\GSTestLevel.h">
-      <Filter>Fox Header Files\Fox Level Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\LevelShowcase.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\Weapon.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\PhysicsConstants.h">
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Platform.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -208,11 +211,11 @@
     <ClCompile Include="SourceFiles\GameStateManager.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\GSTestLevel.c">
-      <Filter>Fox Source Files\Fox Level Sources</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\ShowcaseLevel.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Platform.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

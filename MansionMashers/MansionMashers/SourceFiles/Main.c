@@ -1,19 +1,21 @@
-/*
-File:				Main.c
-Author:				Dan Muller (d.muller)
-Creation Date:		Jan 7, 2014
+/*****************************************************************************/
+/*!
+\file				Main.c
+\author				Dan Muller (d.muller)
+\date				Jan 7, 2014
 
-Purpose:			Starts the game up
+\brief				The main function for the game and holds the game loop
 
-Functions:			WinMain - Main function
-					Foo - Another function
- 
-Copyright (C) 2014 DigiPen Institute of Technology. 
-Reproduction or disclosure of this file or its contents without the prior 
-written consent of DigiPen Institute of Technology is prohibited. 
+\par				Functions:
+\li					SetCamera
+\li					ResetCamera
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
-
-
+/*****************************************************************************/
 
 // ---------------------------------------------------------------------------
 // includes
@@ -24,7 +26,6 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
-
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
 
@@ -38,16 +39,27 @@ int GameRunning = 1;
 // ---------------------------------------------------------------------------
 // main
 
-
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
 	// Variable declaration	
 	int Previous;								//Local State Variables
 	int Current;								//Local State Variables
 	int Next;									//Local State Variables
-	
-	// Initialize the system 
 	AESysInitInfo sysInitInfo;
+
+	//Creates the console window
+	if(AllocConsole())
+	{
+		FILE* file;
+ 
+		freopen_s(&file, "CONOUT$", "wt", stdout);
+		freopen_s(&file, "CONOUT$", "wt", stderr);
+		freopen_s(&file, "CONOUT$", "wt", stdin);
+
+		SetConsoleTitle("Alpha Engine - Console");
+	}
+
+	// Initialize the system 
 	sysInitInfo.mAppInstance		= instanceH;
 	sysInitInfo.mShow				= show;
 	sysInitInfo.mWinWidth			= 1280;
@@ -60,25 +72,13 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AESysInit (&sysInitInfo);
 	AESysSetWindowTitle("Mansion Mashers!");
 	
-	if(AllocConsole())
-	{
-		FILE* file;
- 
-		freopen_s(&file, "CONOUT$", "wt", stdout);
-		freopen_s(&file, "CONOUT$", "wt", stderr);
-		freopen_s(&file, "CONOUT$", "wt", stdin);
-
-		SetConsoleTitle("Alpha Engine - Console");
-	}
+	
 
 	// reset the system modules
 	AESysReset();
 
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-
-
-	//frepoen("CON", "W", stdout); 
 
 	//********************************************************
 	//Slowing working GSM into files don't uncomment for now
@@ -139,78 +139,4 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	return 1;
 
 	//End of GSM
-	//******************************************************/
-	
-	/*
-		Read Input
-		Handle Input
-		Draw Output
-		???
-		Profit!
-	*/
-	// Gameloop
-	/****************************************************
-	while(GameRunning)
-	{
-		// Informing the system about the loop's start
-		AESysFrameStart();
-
-		// Handling Input
-		AEInputUpdate();
-
-		//Level List
-		/*
-			//Interface Levels
-		   -1:	Exit Game
-			0:	Splash Screen
-			1:	Main Menu
-			2:	Options Screen
-			3:	Credits
-			4:	Level Select
-			5:	Level 1
-			6:	First Shop
-			7:	Level 2
-			8:	etc. etc.
-
-			enum:
-			L1
-			L2
-			L3
-			L_NUM -> Will equal number of levels
-		*/
-
-		/******************
-		switch(Level)
-		{
-		case 0:
-			nextLevel = SplashScreenLoop();
-			break;
-		case 1:
-			nextLevel = MenuLoop();
-			break;
-		case 2:
-			nextLevel = LevelLoop();
-			break;
-		default:
-			GameRunning = 0;
-		}
-
-		Level = nextLevel;
-		nextLevel = 0;
-
-		// Informing the system about the loop's end
-		AESysFrameEnd();
-
-		// check if forcing the application to quit
-		//if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-			//GameRunning = 0;
-	}
-
-	// free the system
-	AESysExit();
-	
-	return 1;
-	***************************************/
 }
-
-// ---------------------------------------------------------------------------

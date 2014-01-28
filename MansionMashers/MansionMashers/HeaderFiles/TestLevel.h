@@ -8,5 +8,6 @@ void LoadTestLevel(void);
 void UnloadTestLevel(void);
 void FreeTestLevel(void);
 void UpdateTestLevel(void);
+void EventTestLevel(void);
 
 #endif

@@ -36,8 +36,7 @@ typedef struct Enemy
 }Enemy;
 
 void InitializeEnemy(Enemy *CurrentEnemy);
-void DrawEnemy(Enemy *CurrentEnemy); //Draw player sprite, current weapon sprite
-void UpdateEnemyPosition(Enemy *CurrentEnemy);
+void UpdateEnemy(Enemy *CurrentEnemy);
 void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer);
 
 #endif

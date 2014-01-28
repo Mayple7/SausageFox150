@@ -1,16 +1,21 @@
-/*
-File:				Camera.c
-Author:				Juli Gregg (j.gregg)
-Creation Date:		Jan 11, 2014
+/*****************************************************************************/
+/*!
+\file				Camera.c
+\author				Juli Gregg (j.gregg)
+\date				Jan 11, 2014
 
-Purpose:			Moves Camera based on given object position
+\brief				Camera movement functions
 
-Functions:			SF_SetCamera (SausageFox Camera)
- 
-Copyright (C) 2014 DigiPen Institute of Technology. 
-Reproduction or disclosure of this file or its contents without the prior 
-written consent of DigiPen Institute of Technology is prohibited. 
+\par				Functions:
+\li					SetCamera
+\li					ResetCamera
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
+/*****************************************************************************/
 
 // ---------------------------------------------------------------------------
 // includes
@@ -20,15 +25,32 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/Sprite.h"
 
 
-// ---------------------------------------------------------------------------
-
+/*************************************************************************/
+/*!
+	\brief
+	Sets the camera position
+	
+	\param playerX
+	Where the player is located
+	
+	\param offset
+	The distance from the edge of the camera the player needs to be
+	before changing the camera position
+	
+	\param hudmain
+	HUD objects to draw
+*/
+/*************************************************************************/
 void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 {
+	//Variables for camera position
 	float camX, camY;	
 	int i;
+
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
 
+	//Draws the hud items in the correct position
 	for (i = 0; hudmain->HudItem[i]; i++)
 	{
 		if (i % 2 == 0)
@@ -44,7 +66,6 @@ void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 			DrawSprite(hudmain->HudItem[i]);
 		}
 	}
-
 	//Moves camera Right
 	if(playerX->x > (camX + offset))
 		AEGfxSetCamPosition(playerX->x - offset, camY);
@@ -52,11 +73,16 @@ void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 	//Moves camera Left
 	else if(playerX->x < (camX - offset))
 		AEGfxSetCamPosition(playerX->x + offset, camY);
-
-
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Resets the camera position to (0,0)
+*/
+/*************************************************************************/
 void ResetCamera(void)
 {
+	//Sets camera position to (0,0)
 	AEGfxSetCamPosition(0.0, 0.0);
 }

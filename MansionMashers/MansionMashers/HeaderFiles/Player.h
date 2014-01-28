@@ -45,8 +45,7 @@ typedef struct Player
 }Player;
 
 void InitializePlayer(struct Player *CurrentPlayer);
-void DrawPlayer(struct Player *CurrentPlayer); //Draw player sprite, current weapon sprite
-void UpdatePosition(struct Player *CurrentPlayer);
+void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
 void HandleCollision(Sprite *objHit);
 

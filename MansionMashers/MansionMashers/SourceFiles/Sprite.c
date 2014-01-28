@@ -1,28 +1,31 @@
-/*
-File:				Sprite.c
-Author:				Dan Muller (d.muller)
-Creation Date:		Jan 8, 2014
+/*****************************************************************************/
+/*!
+\file				Sprite.c
+\author				Dan Muller (d.muller
+\date				Jan 8, 2014
 
-Purpose:			Sprite functions are here
+\brief				Has functions to create sprites and edit sprites
 
-Functions:			CreateSprite - Creates a sprite
- 
-Copyright (C) 2014 DigiPen Institute of Technology. 
-Reproduction or disclosure of this file or its contents without the prior 
-written consent of DigiPen Institute of Technology is prohibited. 
+\par				Functions:
+\li					createMesh
+\li					CreateSprite
+\li					DrawSprite
+\li					UpdateMesh
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
-
-
+/*****************************************************************************/
 
 // ---------------------------------------------------------------------------
 // includes
-
 #include "../AEEngine.h"
 #include "../HeaderFiles/Sprite.h"
 #include "../HeaderFiles/ObjectManager.h"
 
 // ---------------------------------------------------------------------------
-
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
 
@@ -39,6 +42,30 @@ AEGfxVertexList* createMesh(float width, float height);
 // ---------------------------------------------------------------------------
 // main
 
+/*************************************************************************/
+/*!
+	\brief
+	Creates the mesh for the sprite
+	
+	\param width
+	The width of the sprite
+
+	\param height
+	The height of the sprite
+	
+	\param offsetX
+	The offset of the texture to place over the mesh in the X direction (1.0 is default)
+	
+	\param offsetY
+	The offset of the texture to place over the mesh in the Y direction (1.0 is default)
+
+	\param Rotation
+	HUD objects to draw
+
+	\return
+	The lest of vertecies for the mesh creation
+*/
+/*************************************************************************/
 AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation)
 {
 	float halfWidth = width / 2;
@@ -60,19 +87,53 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 		len * cos(atan2(halfHeight,halfWidth) + Rotation),		len * sin(atan2(halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, 0.0f,
 		len * cos(atan2(halfHeight,-halfWidth) + Rotation),		len * sin(atan2(halfHeight,-halfWidth) + Rotation),			0x00FFFFFF, 0.0f, 0.0f);
 
-	// Saving the mesh (list of triangles) in pMesh1
-
+	//Returns the mesh
 	return AEGfxMeshEnd();
 }
 
-//////  SPRITE NAME STRING    TEXTURE STRING    WIDTH    HEIGHT    AMNT FRAMES X    DRAW Z INDEX     AMNT FRAMES Y
-Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames)
+/*************************************************************************/
+/*!
+	\brief
+	Creates and returns the sprite and adds it to the object manager list
+	
+	\param SpriteName
+	Name of the sprite
+
+	\param texture
+	Location of the texture for the sprite
+	
+	\param width
+	The width of the sprite
+	
+	\param height
+	The height of the sprite
+
+	\param ZIndex
+	The index for drawing the object (Highest number = drawn on top)
+
+	\param xFrames
+	The number of frames in the x direction
+
+	\param yFrames
+	The number of frames in the y direction
+
+	\param newGroup
+	The collision group to add the sprite to
+
+	\return
+	A pointer to the sprite object
+*/
+/*************************************************************************/
+Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup)
 {	
+	//Adds the sprite to the object manager list
 	Sprite *CurrentSprite = AddObject();
 
+	//Animation offset if needed
 	CurrentSprite->OffsetX = 1.0f / xFrames;
 	CurrentSprite->OffsetY = 1.0f / yFrames;
 
+	//Rotation default to 0
 	CurrentSprite->Rotation = 0.0f;
 	CurrentSprite->RotationPrev = 0.0f;
 
@@ -90,9 +151,12 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 	CurrentSprite->ZIndex     = ZIndex;
 
 	//Animation Properties
-	CurrentSprite->AnimationActive = 0;
 	CurrentSprite->CurrentFrame = 0;
 	CurrentSprite->TotalFrames = xFrames * yFrames;
+	if(CurrentSprite->TotalFrames > 1)
+		CurrentSprite->AnimationActive = 1;
+	else
+		CurrentSprite->AnimationActive = 0;
 	CurrentSprite->AnimationSpeed = 12;
 	CurrentSprite->AnimationTimer = 0;
 
@@ -108,7 +172,7 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 	CurrentSprite->FlipXPrev = 0;
 	CurrentSprite->FlipYPrev = 0;
 
-	//Collision
+	//Collision properties
 	CurrentSprite->CanCollide     = 1;
 	CurrentSprite->Ghost          = 1;
 	CurrentSprite->SensorType     = RectangleCollider;
@@ -116,25 +180,35 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 	CurrentSprite->CollideSize.y  = CurrentSprite->Height;
 
 	//The sprite has now been created
-	CurrentSprite->SpriteType = PartType;
+	CurrentSprite->CollisionGroup = newGroup;
 	strcpy(CurrentSprite->SpriteName, SpriteName);
 	CurrentSprite->Created = 1;
 
 	return CurrentSprite;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Draws the sprite and updates the animation properties if needed
+
+	\param CurrentSprite
+	The sprite object to draw
+*/
+/*************************************************************************/
 void DrawSprite(struct Sprite *CurrentSprite)
 {
+	//Calculate the offset difference between frames
 	float offsetDiffX = 1.0f / CurrentSprite->NumWidthFrames;
 	float offsetDiffY = 1.0f / CurrentSprite->NumHeightFrames;
 	float offsetX = 0.0f;
 	float offsetY = 0.0f;
-	// Drawing Selector
+	//Set draw mode to texture
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	// Set poisition for object 2
+	// Set position for the sprite drawing
 	AEGfxSetPosition(CurrentSprite->Position.x, CurrentSprite->Position.y);
 
-	// Drawing the mesh (list of triangles)
+	// Update the transparency of the sprite if visible or not
 	if(CurrentSprite->Visible == FALSE)
 	{
 		AEGfxSetTransparency(0.0f);
@@ -143,8 +217,10 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	{
 		AEGfxSetTransparency(CurrentSprite->Alpha);
 	}
+	// Update the current frame on the animation
 	if(CurrentSprite->AnimationActive)
 	{
+		// Updates to the next frame of animation if needed
 		CurrentSprite->AnimationTimer++;
 		if(CurrentSprite->CurrentFrame >= CurrentSprite->TotalFrames - 1 && CurrentSprite->AnimationTimer >= CurrentSprite->AnimationSpeed)
 		{
@@ -156,14 +232,17 @@ void DrawSprite(struct Sprite *CurrentSprite)
 			CurrentSprite->CurrentFrame++;
 			CurrentSprite->AnimationTimer = 0;
 		}
+		// Sets the correct offset after updating the animation frame
 		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
 		offsetY = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiffY;
 	}
 	else
 	{
+		// Sets the correct offset for the current frame
 		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
 		offsetY = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumHeightFrames) * offsetDiffY;
 	}
+	// Updates the rotation and mesh of the object to draw
 	if (CurrentSprite->Rotation != CurrentSprite->RotationPrev || CurrentSprite->FlipX != CurrentSprite->FlipXPrev || CurrentSprite->FlipY != CurrentSprite->FlipYPrev)
 	{
 		CurrentSprite->SpriteMesh = createMesh(CurrentSprite->Width * (((2*CurrentSprite->FlipX)-1)*-1), CurrentSprite->Height * (((2*CurrentSprite->FlipY)-1)*-1), CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
@@ -171,9 +250,13 @@ void DrawSprite(struct Sprite *CurrentSprite)
 		CurrentSprite->FlipXPrev = CurrentSprite->FlipX;
 		CurrentSprite->FlipYPrev = CurrentSprite->FlipY;
 	}
+	// Draws the texture on the mesh
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
+	// Draws the mesh
 	AEGfxMeshDraw(CurrentSprite->SpriteMesh, AE_GFX_MDM_TRIANGLES);
 
+
+	// Debug box, will be replaced
 	if (CurrentSprite->CollideDebug)
 	{
 		//Sprite Graphics Properties
@@ -190,6 +273,15 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates the mesh for a sprite
+	
+	\param currentSprite
+	The sprite whose mesh will be updated
+*/
+/*************************************************************************/
 void UpdateMesh(Sprite *currentSprite)
 {
 	currentSprite->SpriteMesh = createMesh(currentSprite->Width, currentSprite->Height, currentSprite->OffsetX, currentSprite->OffsetY, currentSprite->Rotation);

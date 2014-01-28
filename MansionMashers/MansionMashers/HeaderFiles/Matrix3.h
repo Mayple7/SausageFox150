@@ -89,7 +89,7 @@ typedef struct Matrix3
   void Matrix3Sub(Matrix3* Result, Matrix3* Operand1, Matrix3* Operand2);
 
   void Matrix3Scale(Matrix3* Result, Matrix3* Operand, float Scalar);
-  void Matrix3Div(Matrix3* Result, Matrix3* Operand, float Divisor);
+  void Matrix3Identity(Matrix3* Result);
 
 
 

@@ -85,7 +85,6 @@
     <ClInclude Include="HeaderFiles\FoxMath.h" />
     <ClInclude Include="HeaderFiles\GameStateList.h" />
     <ClInclude Include="HeaderFiles\GameStateManager.h" />
-    <ClInclude Include="HeaderFiles\GSTestLevel.h" />
     <ClInclude Include="HeaderFiles\LevelShowcase.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\Matrix3.h" />
@@ -93,6 +92,8 @@
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
     <ClInclude Include="HeaderFiles\Options.h" />
     <ClInclude Include="HeaderFiles\Physics.h" />
+    <ClInclude Include="HeaderFiles\PhysicsConstants.h" />
+    <ClInclude Include="HeaderFiles\Platform.h" />
     <ClInclude Include="HeaderFiles\Player.h" />
     <ClInclude Include="HeaderFiles\RigidBody.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
@@ -111,12 +112,12 @@
     <ClCompile Include="SourceFiles\CollisionManager.c" />
     <ClCompile Include="SourceFiles\Enemy.c" />
     <ClCompile Include="SourceFiles\GameStateManager.c" />
-    <ClCompile Include="SourceFiles\GSTestLevel.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\Matrix3.c" />
     <ClCompile Include="SourceFiles\Movement.c" />
     <ClCompile Include="SourceFiles\ObjectManager.c" />
+    <ClCompile Include="SourceFiles\Platform.c" />
     <ClCompile Include="SourceFiles\Player.c" />
     <ClCompile Include="SourceFiles\RigidBody.c" />
     <ClCompile Include="SourceFiles\ShowcaseLevel.c" />
