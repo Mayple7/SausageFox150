@@ -37,4 +37,6 @@ void ZeroGravity(RigidBody* CurrentRigidBody);
 void SetGravity(RigidBody* CurrentRigidBody, float GravityForceX, float GravityForceY);
 void applyGravity(RigidBody* CurrentRigidBody);
 
+void BounceObject(RigidBody* RB1, RigidBody* RB2);
+
 #endif

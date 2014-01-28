@@ -222,12 +222,6 @@ void HandleCollision(Sprite *objHit)
 	{
 		CurrentPlayer.PlayerRigidBody.onGround = FALSE;
 	}
-	//If land on bounce pad
-	/*else if(objHit->SpriteType == BounceType)
-	{
-		BounceObject(
-	}*/
-
 }
 
 /*************************************************************************/

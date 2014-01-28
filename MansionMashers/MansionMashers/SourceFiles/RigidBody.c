@@ -268,13 +268,17 @@ void applyGravity(RigidBody* CurrentRigidBody)
 	Vec2Add(&CurrentRigidBody->Acceleration, &CurrentRigidBody->Acceleration, &CurrentRigidBody->Gravity);
 }
 
-/*
+
 void BounceObject(RigidBody* RB1, RigidBody* RB2)
 {
 	float totalRestitution;
 
-	if(RB2->Static)
-		Vec2Scale(&RB1->Velocity, &RB1->Velocity, totalRestitution);
+	// Total restitution is A * B
+	totalRestitution = RB1->Restitution * RB2->Restitution;
 
+	if(RB2->Static)
+	{
+		Vec2Scale(&RB1->Velocity, &RB1->Velocity, totalRestitution);
+		SetVelocity(RB1, RB1->Velocity.x, -RB1->Velocity.y);
+	}
 }
-*/

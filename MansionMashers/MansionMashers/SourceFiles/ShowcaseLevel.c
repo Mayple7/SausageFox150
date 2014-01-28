@@ -45,7 +45,7 @@ Sprite *HUDitem;
 Sprite *Background;
 Sprite *Background2;
 HUDLayer HUDList;
-Sprite *BouncePad;
+Platform *BouncePad;
 Sprite *Shelf;
 Sprite *Crate;
 
@@ -106,11 +106,6 @@ void InitializeShowcase(void)
 	Shelf->CollideDebug = TRUE;
 	Shelf->CollideSize.y = 60;
 	Shelf->CollideOffset.y = Shelf->Height / 2 - 30;
-
-	//Creating a bouncepad
-	BouncePad = CreateSprite("BouncePad", "TextureFiles/BouncePad.png", 400, 100, 8, 1, 1, BounceType);
-	BouncePad->Position.x = -1000;
-	BouncePad->Position.y = -200;
 	
 	// Create and initialize the crate sprite
 	Crate = CreateSprite("Crate", "TextureFiles/Crate.png", 859.0f, 260.5f, 9, 1, 1, PlatformType);
