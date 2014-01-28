@@ -43,14 +43,13 @@ int LogicTimer;
 void InitializeEnemy(struct Enemy *CurrentEnemy)
 {
 	//Creates the enemy sprite
-	CurrentEnemy->EnemySprite = CreateSprite("Enemy", "TextureFiles/EasyEnemy.png", 150.0f, 150.0f, 8, 8, 1);
+	CurrentEnemy->EnemySprite = CreateSprite("Enemy", "TextureFiles/EasyEnemy.png", 150.0f, 150.0f, 8, 8, 1, EnemyType);
 
 	//Animation properties
 	CurrentEnemy->EnemySprite->AnimationActive = 1;
 	CurrentEnemy->EnemySprite->AnimationSpeed = 6;
 
 	//Collision properties
-	CurrentEnemy->EnemySprite->SpriteType = EnemyType;
 	CurrentEnemy->EnemySprite->CanCollide = 1;
 
 	//Starting position

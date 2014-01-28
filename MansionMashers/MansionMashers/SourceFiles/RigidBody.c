@@ -7,6 +7,7 @@
 \brief				Physics based functions which act on an object
 
 \par				Functions:
+\li					InitializeRigidBody
 \li					ZeroAcceleration
 \li					ZeroVelocity
 \li					ZeroGravity
@@ -28,6 +29,31 @@
 // includes
 #include "..\AEEngine.h"
 #include "..\HeaderFiles\RigidBody.h"
+#include "..\HeaderFiles\PhysicsConstants.h"
+
+/*************************************************************************/
+/*!
+	\brief
+	Sets the rigidbody to default global values
+	
+	\param Result
+	The rigidbody to initialize
+*/
+/*************************************************************************/
+void InitializeRigidBody(RigidBody* Result, int isStatic, float width, float height)
+{
+	Vec2Set(&Result->Velocity, 0.0f, 0.0f);
+	Vec2Set(&Result->Acceleration, 0.0f, 0.0f);
+	Vec2Set(&Result->Gravity, FOX_GRAVITY_X, FOX_GRAVITY_Y);
+
+	Result->Static = isStatic;
+	Result->Mass = FOX_DEFAULT_MASS;
+	Result->Area = width * height;
+	Result->Density = Result->Mass / Result->Area;
+	Result->Drag = FOX_AIRDRAG;
+	Result->Friction = FOX_DEFAULT_FRICTION;
+	Result->Restitution = FOX_DEFAULT_RESTITUTION;
+}
 
 /*************************************************************************/
 /*!
@@ -242,3 +268,13 @@ void applyGravity(RigidBody* CurrentRigidBody)
 	Vec2Add(&CurrentRigidBody->Acceleration, &CurrentRigidBody->Acceleration, &CurrentRigidBody->Gravity);
 }
 
+/*
+void BounceObject(RigidBody* RB1, RigidBody* RB2)
+{
+	float totalRestitution;
+
+	if(RB2->Static)
+		Vec2Scale(&RB1->Velocity, &RB1->Velocity, totalRestitution);
+
+}
+*/

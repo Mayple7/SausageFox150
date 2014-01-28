@@ -92,6 +92,8 @@
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
     <ClInclude Include="HeaderFiles\Options.h" />
     <ClInclude Include="HeaderFiles\Physics.h" />
+    <ClInclude Include="HeaderFiles\PhysicsConstants.h" />
+    <ClInclude Include="HeaderFiles\Platform.h" />
     <ClInclude Include="HeaderFiles\Player.h" />
     <ClInclude Include="HeaderFiles\RigidBody.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
@@ -115,6 +117,7 @@
     <ClCompile Include="SourceFiles\Matrix3.c" />
     <ClCompile Include="SourceFiles\Movement.c" />
     <ClCompile Include="SourceFiles\ObjectManager.c" />
+    <ClCompile Include="SourceFiles\Platform.c" />
     <ClCompile Include="SourceFiles\Player.c" />
     <ClCompile Include="SourceFiles\RigidBody.c" />
     <ClCompile Include="SourceFiles\ShowcaseLevel.c" />

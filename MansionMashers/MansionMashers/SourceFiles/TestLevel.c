@@ -78,13 +78,12 @@ void InitializeTestLevel(void)
 		HUDList.HudItem[hudLoop] = 0;
 
 	// Create the HAMs
-	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
-	Hammy2 = CreateSprite("Hammy2", "TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1);
+	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1, FoodType);
+	Hammy2 = CreateSprite("Hammy2", "TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1, FoodType);
 
 	// Collision for the first HAM
 	Hammy->SensorType   = RectangleCollider;
 	Hammy->Position.x   = 400.0f;
-	Hammy->SpriteType   = FoodType;
 	Hammy->CollideDebug = 1;
 	Hammy->CollideOffset.x =  200.0f;
 	Hammy->CollideOffset.y =  0.0f;
@@ -93,43 +92,34 @@ void InitializeTestLevel(void)
 	Hammy2->SensorType = RectangleCollider;
 	Hammy2->Position.y = -100.0f;
 	Hammy2->Position.x = -500.0f;
-	Hammy2->SpriteType = FoodType;
 
 	// Creating the HUD items
-	HUD1 = CreateSprite("HUD1", "TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD1 = CreateSprite("HUD1", "TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
 	HUD1->CanCollide = 0;
-	HUD1->SpriteType = HudType;
 
-	HUD2 = CreateSprite("HUD2", "TextureFiles/HollyHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD2 = CreateSprite("HUD2", "TextureFiles/HollyHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
 	HUD2->CanCollide = 0;
-	HUD2->SpriteType = HudType;
 	
-	HUD3 = CreateSprite("HUD3", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD3 = CreateSprite("HUD3", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
 	HUD3->CanCollide = 0;
-	HUD3->SpriteType = HudType;
 
-	HUD4 = CreateSprite("HUD4", "TextureFiles/KayaHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD4 = CreateSprite("HUD4", "TextureFiles/KayaHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
 	HUD4->CanCollide = 0;
-	HUD4->SpriteType = HudType;
 
-	HUD1item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD1item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
 	HUD1item->CanCollide = 0;
-	HUD1item->SpriteType = HudType;
 	HUD1item->ItemType = 0;
 
-	HUD2item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD2item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
 	HUD2item->CanCollide = 0;
-	HUD2item->SpriteType = HudType;
 	HUD2item->ItemType = 0;
 
-	HUD3item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD3item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
 	HUD3item->CanCollide = 0;
-	HUD3item->SpriteType = HudType;
 	HUD3item->ItemType = 0;
 
-	HUD4item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD4item = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
 	HUD4item->CanCollide = 0;
-	HUD4item->SpriteType = HudType;
 	HUD4item->ItemType = 0;
 
 	// Add HUD items to the list
@@ -143,12 +133,11 @@ void InitializeTestLevel(void)
 	HUDList.HudItem[7] = HUD4item;
 
 	// Create the background
-	Background = CreateSprite("Background", "TextureFiles/LevelGrassground.png", 3840.0f, 720.0f, 0, 1, 1);
+	Background = CreateSprite("Background", "TextureFiles/LevelGrassground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
 	Background->CanCollide = 0;
 
 	// Secret invisible collider GO!
-	ColliderInvisible = CreateSprite("ColliderInvisible", "TextureFiles/LevelGrassground.png", 300.0f, 80.0f, 0, 1, 1);
-	ColliderInvisible->SpriteType = PlatformType;
+	ColliderInvisible = CreateSprite("ColliderInvisible", "TextureFiles/LevelGrassground.png", 300.0f, 80.0f, 0, 1, 1, PlatformType);
 	ColliderInvisible->Visible = FALSE;
 	ColliderInvisible->CollideDebug = TRUE;
 	ColliderInvisible->Position.x = -1020.0f;

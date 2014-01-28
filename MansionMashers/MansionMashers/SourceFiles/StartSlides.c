@@ -73,9 +73,9 @@ void InitializeStartScreen(void)
 	resetObjectList();
 
 	// Create the slide sprites
-	Title = CreateSprite("Title", "TextureFiles/MansionMashersLogo.png", 1280.0f, 720.0f, 0, 1, 1);
-	Digipen = CreateSprite("Digipen", "TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1);
-	Sausage = CreateSprite("Sausage", "TextureFiles/SausageFoxLogoNoBack.png", 1280.0f, 720.0f, 0, 1, 1);
+	Title = CreateSprite("Title", "TextureFiles/MansionMashersLogo.png", 1280.0f, 720.0f, 0, 1, 1, BackgroundType);
+	Digipen = CreateSprite("Digipen", "TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1, BackgroundType);
+	Sausage = CreateSprite("Sausage", "TextureFiles/SausageFoxLogoNoBack.png", 1280.0f, 720.0f, 0, 1, 1, BackgroundType);
 }
 
 /*************************************************************************/

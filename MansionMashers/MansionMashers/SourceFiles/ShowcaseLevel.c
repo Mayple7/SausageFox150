@@ -45,6 +45,7 @@ Sprite *HUDitem;
 Sprite *Background;
 Sprite *Background2;
 HUDLayer HUDList;
+Sprite *BouncePad;
 Sprite *Shelf;
 Sprite *Crate;
 
@@ -80,42 +81,41 @@ void InitializeShowcase(void)
 		HUDList.HudItem[hudLoop] = 0;
 
 	// Create single player HUD sprite
-	HUD = CreateSprite("HUD", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD = CreateSprite("HUD", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
 	HUD->CanCollide = FALSE;
-	HUD->SpriteType = HudType;
 
 	// Create single player HUD item sprite
-	HUDitem = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUDitem = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
 	HUDitem->CanCollide = FALSE;
-	HUDitem->SpriteType = HudType;
 	HUDitem->ItemType = 0;
 
 	// Create the background sprite
-	Background = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
+	Background = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
 	Background->CanCollide = FALSE;
 	
 	// Create the offset background sprite
-	Background2 = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
+	Background2 = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
 	Background2->CanCollide = FALSE;
 	Background2->Position.x = 3840;
 	Background2->FlipX = TRUE;
 
 	// Create the shelf sprite and initialize to be collidable
-	Shelf = CreateSprite("Shelf", "TextureFiles/Shelf.png", 123.0f, 245.5f, 8, 1, 1);
-	Shelf->CanCollide = TRUE;
+	Shelf = CreateSprite("Shelf", "TextureFiles/Shelf.png", 123.0f, 245.5f, 8, 1, 1, PlatformType);
 	Shelf->Position.x = 475;
 	Shelf->Position.y = -115;
-	Shelf->SpriteType = PlatformType;
 	Shelf->CollideDebug = TRUE;
 	Shelf->CollideSize.y = 60;
 	Shelf->CollideOffset.y = Shelf->Height / 2 - 30;
 
+	//Creating a bouncepad
+	BouncePad = CreateSprite("BouncePad", "TextureFiles/BouncePad.png", 400, 100, 8, 1, 1, BounceType);
+	BouncePad->Position.x = -1000;
+	BouncePad->Position.y = -200;
+	
 	// Create and initialize the crate sprite
-	Crate = CreateSprite("Crate", "TextureFiles/Crate.png", 859.0f, 260.5f, 9, 1, 1);
-	Crate->CanCollide = TRUE;
+	Crate = CreateSprite("Crate", "TextureFiles/Crate.png", 859.0f, 260.5f, 9, 1, 1, PlatformType);
 	Crate->Position.x = 1400;
 	Crate->Position.y = -180;
-	Crate->SpriteType = PlatformType;
 	Crate->CollideDebug = FALSE;
 	Crate->CollideSize.x = Crate->Width - 100;
 	Crate->CollideSize.y = 60;
@@ -123,11 +123,9 @@ void InitializeShowcase(void)
 	Crate->CollideOffset.y = Crate->Height / 2 - 60;
 
 	// Create and initialize the HAM sprite
-	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
+	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1, FoodType);
 	Hammy->Position.x   = -1000.0f;
-	Hammy->CanCollide = TRUE;
 	Hammy->SensorType = RectangleCollider;
-	Hammy->SpriteType = FoodType;
 	Hammy->CollideDebug = TRUE;
 
 	// Add the HUD sprites to the HUDlist

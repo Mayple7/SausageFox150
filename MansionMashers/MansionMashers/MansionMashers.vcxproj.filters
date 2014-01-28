@@ -155,6 +155,12 @@
     <ClInclude Include="HeaderFiles\Weapon.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\PhysicsConstants.h">
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Platform.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -207,6 +213,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\ShowcaseLevel.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Platform.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

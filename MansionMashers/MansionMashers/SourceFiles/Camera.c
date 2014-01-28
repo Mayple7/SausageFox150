@@ -66,7 +66,6 @@ void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 			DrawSprite(hudmain->HudItem[i]);
 		}
 	}
-
 	//Moves camera Right
 	if(playerX->x > (camX + offset))
 		AEGfxSetCamPosition(playerX->x - offset, camY);
@@ -74,8 +73,6 @@ void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 	//Moves camera Left
 	else if(playerX->x < (camX - offset))
 		AEGfxSetCamPosition(playerX->x + offset, camY);
-
-
 }
 
 /*************************************************************************/

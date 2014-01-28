@@ -46,7 +46,7 @@ Player CurrentPlayer;
 void InitializePlayer(struct Player *CurrentPlayer)
 {
 	//Creates the sprite for the player
-	CurrentPlayer->PlayerSprite = CreateSprite("Player", "TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2);
+	CurrentPlayer->PlayerSprite = CreateSprite("Player", "TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2, PlayerType);
 
 	//Default position of the player
 	CurrentPlayer->Position.x = 0.0f;
@@ -56,24 +56,16 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerSprite->AnimationSpeed = 4; // STOP CHANGING HIS LEG SPEED -The Supreme Sausage
 
 	//Collision properties
-	CurrentPlayer->PlayerSprite->SpriteType = PlayerType;
 	CurrentPlayer->PlayerSprite->CollideSize.x   = 2 * CurrentPlayer->PlayerSprite->Width  / 3;
 	CurrentPlayer->PlayerSprite->CollideSize.y   = CurrentPlayer->PlayerSprite->Height / 2;
 	CurrentPlayer->PlayerSprite->CollideOffset.x =  0.0f;
 	CurrentPlayer->PlayerSprite->CollideOffset.y =  -20.0f;
 
-	//Physics properties
+	//Initialize rigidbody
+	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, CurrentPlayer->PlayerSprite->Width, CurrentPlayer->PlayerSprite->Height);
+
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
-	CurrentPlayer->PlayerRigidBody.Static = FALSE;
-	CurrentPlayer->PlayerRigidBody.Mass = 10;
-	CurrentPlayer->PlayerRigidBody.Drag = 0.5;
-	CurrentPlayer->PlayerRigidBody.Area = CurrentPlayer->PlayerSprite->Width * CurrentPlayer->PlayerSprite->Height;
-	CurrentPlayer->PlayerRigidBody.Density = CurrentPlayer->PlayerRigidBody.Mass / CurrentPlayer->PlayerRigidBody.Area;
-
-	SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -10.0f);
-	ZeroAcceleration(&CurrentPlayer->PlayerRigidBody);
-	SetVelocity(&CurrentPlayer->PlayerRigidBody, 0.0f, 0.0f);
 }
 
 /*************************************************************************/
@@ -198,13 +190,13 @@ void InputPlayer(struct Player *CurrentPlayer)
 void HandleCollision(Sprite *objHit)
 {
 	//If the object is Ham
-	if (objHit->SpriteType == FoodType)
+	if (objHit->CollisionGroup == FoodType)
 	{
 		printf("YUM YUM YUM YUM  DELICIOUSO\n");
 		freeObject(objHit);
 	}
 	//If the object is an enemy
-	else if (objHit->SpriteType == EnemyType)
+	else if (objHit->CollisionGroup == EnemyType)
 	{
 		if((objHit->Position.y + (objHit->Height / 3.0f) < CurrentPlayer.Position.y - (CurrentPlayer.PlayerSprite->CollideSize.y / 2.0f)) && CurrentPlayer.PlayerRigidBody.Velocity.y < 0)
 		{
@@ -214,18 +206,27 @@ void HandleCollision(Sprite *objHit)
 		}
 	}
 	//If the object is a platform and you're landing on it
-	else if(objHit->SpriteType == PlatformType && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
+	else if(objHit->CollisionGroup == PlatformType && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
 	{
 		if(CurrentPlayer.Position.y + CurrentPlayer.PlayerSprite->CollideOffset.y - CurrentPlayer.PlayerSprite->CollideSize.y / 2.0f > objHit->Position.y + objHit->CollideOffset.y)
 		{
+			if(CurrentPlayer.PlayerRigidBody.Velocity.y != 0)
+			{
+				CurrentPlayer.Position.y = objHit->Position.y + objHit->CollideOffset.y + objHit->CollideSize.y / 2 - CurrentPlayer.PlayerSprite->CollideOffset.y + (CurrentPlayer.PlayerSprite->CollideSize.y / 2 - 0.01);
+			}
 			CurrentPlayer.PlayerRigidBody.onGround = TRUE;
 		}
 	}
 	//If you are not landing on the platform
-	else if(objHit->SpriteType == PlatformType)
+	else if(objHit->CollisionGroup == PlatformType)
 	{
 		CurrentPlayer.PlayerRigidBody.onGround = FALSE;
 	}
+	//If land on bounce pad
+	/*else if(objHit->SpriteType == BounceType)
+	{
+		BounceObject(
+	}*/
 
 }
 

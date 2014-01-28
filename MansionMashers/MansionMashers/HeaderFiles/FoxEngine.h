@@ -15,6 +15,7 @@
 #include "RigidBody.h"
 #include "Sprite.h"
 #include "Enemy.h"
+#include "Platform.h"
 #include "GameStateManager.h"
 #include "GameStateList.h"
 

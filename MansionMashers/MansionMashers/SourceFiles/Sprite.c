@@ -117,11 +117,14 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	\param yFrames
 	The number of frames in the y direction
 
+	\param newGroup
+	The collision group to add the sprite to
+
 	\return
 	A pointer to the sprite object
 */
 /*************************************************************************/
-Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames)
+Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup)
 {	
 	//Adds the sprite to the object manager list
 	Sprite *CurrentSprite = AddObject();
@@ -177,7 +180,7 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 	CurrentSprite->CollideSize.y  = CurrentSprite->Height;
 
 	//The sprite has now been created
-	CurrentSprite->SpriteType = PartType;
+	CurrentSprite->CollisionGroup = newGroup;
 	strcpy(CurrentSprite->SpriteName, SpriteName);
 	CurrentSprite->Created = 1;
 

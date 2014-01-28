@@ -131,7 +131,7 @@ void drawObjectList(void)
 		{
 			Sprite* objectNext = (objectList + i);
 			//Make sure the sprite exists
-			if (objectNext && objectNext->Created == 1 && objectNext->ZIndex >= currentZ && objectNext->SpriteType != HudType)
+			if (objectNext && objectNext->Created == 1 && objectNext->ZIndex >= currentZ && objectNext->CollisionGroup != HudType)
 			{
 				if (objectNext->ZIndex == currentZ)
 				{

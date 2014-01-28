@@ -44,7 +44,7 @@
 void collisionDetected(Sprite* objA, Sprite* objB)
 {	
 	//Send event to the player's collision handler
-	if (objA->SpriteType == PlayerType)
+	if (objA->CollisionGroup == PlayerType)
 	{
 		HandleCollision(objB);
 	}
