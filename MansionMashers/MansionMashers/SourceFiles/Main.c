@@ -45,6 +45,10 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int Previous;								//Local State Variables
 	int Current;								//Local State Variables
 	int Next;									//Local State Variables
+	long Time1 = 0;								//For framerate controller
+	long Time2 = 0;								//for framerate controller
+	long DeltaTime = 0;
+	int FrameRate = 60;							//Make a define in the future
 	AESysInitInfo sysInitInfo;
 
 	//Creates the console window
@@ -65,7 +69,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mWinWidth			= 1280;
 	sysInitInfo.mWinHeight			= 720;
 	sysInitInfo.mCreateConsole		= 0;
-	sysInitInfo.mMaxFrameRate		= 60;
+	sysInitInfo.mMaxFrameRate		= 0;
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
 	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;											
 	sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
@@ -73,31 +77,30 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AESysSetWindowTitle("Mansion Mashers!");
 	
 	
-
 	// reset the system modules
 	AESysReset();
 
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
-	//********************************************************
-	//Slowing working GSM into files don't uncomment for now
-	//System_Initialize();
+	//GSM Start
+
 	GSMInitialize(GS_MainMenu);
 
 	while(GameRunning)
 	{
-		//AESysFrameStart();
-
+		//Setting local states
 		Previous = GetCurrentState();
 		Current = GetCurrentState();
 		Next = GetNextState();
 
+		//Checking if wanting to quit
 		if(Current == GS_Quit)
 		{
 			AESysExit();
 			return 0;
 		}
+		//Checking if wanting to restart
 		else if(Current == GS_Restart)
 		{
 			SetCurrentState(Previous);
@@ -116,10 +119,24 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		while(Current == Next)
 		{
 			AESysFrameStart();
+			Time1 = timeGetTime();							//in Milliseconds
+
 			AEInputUpdate();
 			GSMPointers.pUpdate();
 			GSMPointers.pDraw();
 			Next = GetNextState();
+
+			Time2 = timeGetTime();							//in Milliseconds
+			DeltaTime = Time2 - Time1;						//in Milliseconds
+			
+			//Framerate controller
+			while(DeltaTime < (1000.0 / FrameRate))
+			{
+				Time2 = timeGetTime();
+				DeltaTime = Time2 - Time1;
+			}
+			//printf("%lu\n", DeltaTime);
+
 			AESysFrameEnd();
 		}
 
@@ -130,10 +147,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		
 		SetPreviousState(Current);
 		SetCurrentState(Next);
-		Previous = Current;
-		Current = Next;
 
-		//AESysFrameEnd();
 	}
 
 	return 1;
