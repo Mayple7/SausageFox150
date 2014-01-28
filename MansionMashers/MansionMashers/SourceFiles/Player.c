@@ -27,6 +27,7 @@
 // includes
 
 #include "../AEEngine.h"
+#include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
 

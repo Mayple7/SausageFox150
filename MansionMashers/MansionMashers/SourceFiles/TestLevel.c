@@ -29,6 +29,7 @@
 #include "../AEEngine.h"
 #include "../HeaderFiles/TestLevel.h"
 #include "../HeaderFiles/FoxEngine.h"
+#include "../HeaderFiles/FoxObjects.h"
 
 // ---------------------------------------------------------------------------
 // Globals

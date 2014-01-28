@@ -4,6 +4,7 @@
 #define MAX_INVENTORY 20
 #include "Vector2.h"
 #include "RigidBody.h"
+#include "Sprite.h"
 
 typedef struct PlayerStats
 {

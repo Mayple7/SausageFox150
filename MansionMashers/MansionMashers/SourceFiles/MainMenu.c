@@ -30,6 +30,7 @@
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
+#include "../HeaderFiles/FoxObjects.h"
 
 // ---------------------------------------------------------------------------
 // Libraries

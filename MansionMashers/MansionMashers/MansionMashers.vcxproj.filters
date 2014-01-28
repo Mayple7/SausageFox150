@@ -30,6 +30,12 @@
     <Filter Include="Fox Header Files\Fox Level Headers">
       <UniqueIdentifier>{40d97c4c-fafb-4599-99bb-8fe21e69b826}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fox Source Files\Fox Object Sources">
+      <UniqueIdentifier>{5a01428f-408b-445b-b12e-348418e1c603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files\Fox Object Headers">
+      <UniqueIdentifier>{a6968583-69c8-49ee-ada5-bea8e76d0b11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DPipelineTools.h">
@@ -122,9 +128,6 @@
     <ClInclude Include="HeaderFiles\RigidBody.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\Player.h">
-      <Filter>Fox Header Files\Fox Engine Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\Movement.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
@@ -136,9 +139,6 @@
     </ClInclude>
     <ClInclude Include="HeaderFiles\FoxMath.h">
       <Filter>Fox Header Files\Fox Math Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Enemy.h">
-      <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>AE Header Files</Filter>
@@ -158,8 +158,17 @@
     <ClInclude Include="HeaderFiles\PhysicsConstants.h">
       <Filter>Fox Header Files\Fox Math Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Enemy.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Player.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
     <ClInclude Include="HeaderFiles\Platform.h">
-      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\FoxObjects.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -193,9 +202,6 @@
     <ClCompile Include="SourceFiles\Movement.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\Player.c">
-      <Filter>Fox Source Files\Fox Engine Sources</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\Sprite.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
@@ -205,17 +211,20 @@
     <ClCompile Include="SourceFiles\RigidBody.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\Enemy.c">
-      <Filter>Fox Source Files\Fox Engine Sources</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\GameStateManager.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\ShowcaseLevel.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFiles\Player.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
     <ClCompile Include="SourceFiles\Platform.c">
-      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Enemy.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
