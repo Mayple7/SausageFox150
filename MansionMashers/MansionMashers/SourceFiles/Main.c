@@ -42,13 +42,12 @@ int GameRunning = 1;
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
 	// Variable declaration	
-	int Previous;								//Local State Variables
-	int Current;								//Local State Variables
-	int Next;									//Local State Variables
-	long Time1 = 0;								//For framerate controller
-	long Time2 = 0;								//for framerate controller
-	long DeltaTime = 0;
-	int FrameRate = 60;							//Make a define in the future
+	int Previous;										//Local State Variables
+	int Current;										//Local State Variables
+	int Next;											//Local State Variables
+	LARGE_INTEGER CycleStart, CycleEnd, Frequency; 		//for framerate controller
+	double DeltaTime = 0;
+	int FrameRate = 60;									//Make a define in the future
 	AESysInitInfo sysInitInfo;
 
 	//Creates the console window
@@ -84,7 +83,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
 	//GSM Start
-
 	GSMInitialize(GS_MainMenu);
 
 	while(GameRunning)
@@ -119,23 +117,27 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		while(Current == Next)
 		{
 			AESysFrameStart();
-			Time1 = timeGetTime();							//in Milliseconds
+			
+			//FrameRate Controller
+			QueryPerformanceCounter(&CycleStart);			
 
 			AEInputUpdate();
 			GSMPointers.pUpdate();
 			GSMPointers.pDraw();
 			Next = GetNextState();
 
-			Time2 = timeGetTime();							//in Milliseconds
-			DeltaTime = Time2 - Time1;						//in Milliseconds
+			//FrameRate Controller
+			QueryPerformanceCounter(&CycleEnd);				
+			QueryPerformanceFrequency(&Frequency);			
+			DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Frequency.QuadPart);
 			
 			//Framerate controller
-			while(DeltaTime < (1000.0 / FrameRate))
+			while(DeltaTime < (1.0/FrameRate))
 			{
-				Time2 = timeGetTime();
-				DeltaTime = Time2 - Time1;
+				QueryPerformanceCounter(&CycleEnd);
+				DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Frequency.QuadPart);
 			}
-			//printf("%lu\n", DeltaTime);
+			//printf("%f\n", DeltaTime);
 
 			AESysFrameEnd();
 		}
@@ -149,8 +151,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		SetCurrentState(Next);
 
 	}
+	//End of GSM
 
 	return 1;
-
-	//End of GSM
 }
