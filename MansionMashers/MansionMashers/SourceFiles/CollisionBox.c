@@ -38,10 +38,11 @@
 	The height of the collision box
 */
 /*************************************************************************/
-void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, float width, float height)
+void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGroup, float width, float height)
 {
 	newBox->canCollide = TRUE;
 	newBox->Position = *newPosition;
+	newBox->collisionGroup = collisionGroup;
 	newBox->width = width;
 	newBox->height = height;
 	newBox->Offset.x = 0;

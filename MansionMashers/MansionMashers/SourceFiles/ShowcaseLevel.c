@@ -152,11 +152,12 @@ void InitializeShowcase(void)
 	//Show debug box
 	CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
-	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", PlatformType, 10, 400, 100);
+	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 10, 400, 100);
 	BouncePad->Position.x = -1000;
 	BouncePad->Position.y = -200;
 	BouncePad->PlatformCollider.Position = BouncePad->Position;
 	BouncePad->PlatformSprite->Position = BouncePad->Position;
+	BouncePad->PlatformRigidBody.Restitution = 1.9;
 
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
