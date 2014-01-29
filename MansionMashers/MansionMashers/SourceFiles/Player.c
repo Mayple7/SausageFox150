@@ -15,6 +15,7 @@
 \li					updateMoveSpeed
 \li					updateAttackSpeed
 \li					updateDamageReduction
+\li					DetectPlayerCollision
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -168,11 +169,10 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 		Vec2Set(&force, 0.0f, 15.0f);
-		if(CurrentPlayer->Position.y < -225)
+		if(CurrentPlayer->Position.y > -225)
 		{
-			Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, -224.9f);
+			ApplyForce(&CurrentPlayer->PlayerRigidBody, &force);
 		}
-		ApplyForce(&CurrentPlayer->PlayerRigidBody, &force);
 	}
 	//No acceleration when backspace is not being pushed
 	else
@@ -209,23 +209,6 @@ void HandleCollision(Sprite *objHit)
 			SetVelocity(&CurrentPlayer.PlayerRigidBody, 0.0f, 10.0f);
 		}
 	}
-	//If the object is a platform and you're landing on it
-	/*else if(objHit->CollisionGroup == PlatformType && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
-	{
-		if(CurrentPlayer.Position.y + CurrentPlayer.PlayerSprite->CollideOffset.y - CurrentPlayer.PlayerSprite->CollideSize.y / 2.0f > objHit->Position.y + objHit->CollideOffset.y)
-		{
-			if(CurrentPlayer.PlayerRigidBody.Velocity.y != 0)
-			{
-				CurrentPlayer.Position.y = objHit->Position.y + objHit->CollideOffset.y + objHit->CollideSize.y / 2 - CurrentPlayer.PlayerSprite->CollideOffset.y + (CurrentPlayer.PlayerSprite->CollideSize.y / 2 - 0.01);
-			}
-			CurrentPlayer.PlayerRigidBody.onGround = TRUE;
-		}
-	}
-	//If you are not landing on the platform
-	else if(objHit->CollisionGroup == PlatformType)
-	{
-		CurrentPlayer.PlayerRigidBody.onGround = FALSE;
-	}*/
 }
 
 /*************************************************************************/
@@ -333,12 +316,18 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 	CurrentPlayerStats->DamageReduction = CurrentPlayerStats->Defense * 2.0f / 100.0f;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Detects collisions with the player and calls the correct resolution functions
+*/
+/*************************************************************************/
 void DetectPlayerCollision(void)
 {
 	Platform* pList = platformList;
 	int hit = 0;
 
-	while(pList->objID != NULL)
+	while(pList->objID != 0)
 	{
 		hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
 		if(hit && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
@@ -347,7 +336,7 @@ void DetectPlayerCollision(void)
 			{
 				if(CurrentPlayer.PlayerRigidBody.Velocity.y != 0)
 				{
-					CurrentPlayer.Position.y = pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y + pList->PlatformCollider.height / 2 + CurrentPlayer.PlayerCollider.Offset.y + CurrentPlayer.PlayerCollider.height - 0.01;
+					CurrentPlayer.Position.y = pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y + pList->PlatformCollider.height / 2 + CurrentPlayer.PlayerCollider.Offset.y + CurrentPlayer.PlayerCollider.height - 0.01f;
 				}
 				CurrentPlayer.PlayerRigidBody.onGround = TRUE;
 			}

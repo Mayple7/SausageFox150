@@ -142,8 +142,8 @@ void InitializeShowcase(void)
 
 	CurrentEnemy.EnemySprite->CollideDebug = FALSE;
 	CurrentEnemy.Position.x = 600;
-	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1;
-	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1;
+	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1f;
+	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1f;
 
 	// Add the enemy and player to the collidable list
 	AddCollidable(CurrentEnemy.EnemySprite);
