@@ -257,4 +257,8 @@ void EventTestLevel(void)
 			HUD1item->ItemType = 0;
 		}
 	}
+
+	// check if forcing the application to quit
+	if (0 == AESysDoesWindowExist())
+		SetNextState(GS_Quit);
 }
