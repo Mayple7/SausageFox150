@@ -9,9 +9,11 @@ typedef struct Platform
 {
 	Sprite *PlatformSprite;
 	RigidBody PlatformRigidBody;
+	CollisionBox PlatformCollider;
 	Vec2 Position;
+	int objID;
 }Platform;
 
-void InitializePlatform(Platform* CurrentPlatform, int SpriteType);
+Platform* CreatePlatform(int SpriteType, int objID);
 
 #endif

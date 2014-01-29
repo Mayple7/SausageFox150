@@ -170,6 +170,9 @@
     <ClInclude Include="HeaderFiles\FoxObjects.h">
       <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\CollisionBox.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -225,6 +228,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\Enemy.c">
       <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\CollisionBox.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

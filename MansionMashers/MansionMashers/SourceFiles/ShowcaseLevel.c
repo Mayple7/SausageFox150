@@ -151,6 +151,8 @@ void InitializeShowcase(void)
 	//Show debug box
 	CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
+	BouncePad = CreatePlatform(PlatformType, 10);
+
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
 	SetCamera(&startingCamera, 250, &HUDList);
@@ -231,7 +233,7 @@ void EventShowcase(void)
 {
 	// Check for any collision and handle the results
 	DetectCollision();
-
+	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 

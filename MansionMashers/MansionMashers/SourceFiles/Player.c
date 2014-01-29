@@ -266,6 +266,7 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Updates the sprite
 	CurrentPlayer->PlayerSprite->Position.x = CurrentPlayer->Position.x;
 	CurrentPlayer->PlayerSprite->Position.y = CurrentPlayer->Position.y;
+	CurrentPlayer->PlayerCollider.Position = CurrentPlayer->Position;
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 }
 
@@ -327,4 +328,23 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 {
 	//Placeholder damage reduction formula
 	CurrentPlayerStats->DamageReduction = CurrentPlayerStats->Defense * 2.0f / 100.0f;
+}
+
+void DetectPlayerCollision(void)
+{
+	Platform* pList = platformList;
+	int i = 0;
+
+	while(pList->objID != NULL)
+	{
+		i = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
+		if(i)
+			printf("WE CAN COLLIDE!!!!\n");
+		pList++;
+	}
+	// Check Platform collisions
+	//	-> Handle collision if true
+	// Check projectile collisions
+	//	-> Handle collision if true
+	// other collisions!
 }
