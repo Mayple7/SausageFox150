@@ -58,7 +58,7 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerSprite->AnimationSpeed = 4; // STOP CHANGING HIS LEG SPEED -The Supreme Sausage
 
 	//Collision properties
-	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, 2 * CurrentPlayer->PlayerSprite->Width  / 3, PlayerType, CurrentPlayer->PlayerSprite->Height / 2);
+	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, 2 * CurrentPlayer->PlayerSprite->Width / 3, CurrentPlayer->PlayerSprite->Height / 2);
 	CurrentPlayer->PlayerCollider.Offset.y = -20.0f;
 	
 	CurrentPlayer->PlayerSprite->CollideSize.x   = 2 * CurrentPlayer->PlayerSprite->Width  / 3;
