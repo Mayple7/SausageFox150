@@ -233,7 +233,7 @@ void EventShowcase(void)
 {
 	// Check for any collision and handle the results
 	DetectCollision();
-
+	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 

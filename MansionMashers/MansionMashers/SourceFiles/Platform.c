@@ -39,6 +39,10 @@ Platform* CreatePlatform(int collisionGroup, int newID)
 	CurrentPlatform->PlatformSprite = CreateSprite("BouncePad", "TextureFiles/BouncePad.png", 400, 100, 8, 1, 1, PlatformType);
 	CurrentPlatform->PlatformSprite->Position.x = -1000;
 	CurrentPlatform->PlatformSprite->Position.y = -200;
+	CurrentPlatform->Position.x = -1000;
+	CurrentPlatform->Position.y = -200;
+
+	CreateCollisionBox(&CurrentPlatform->PlatformCollider, &CurrentPlatform->Position, 400, 100);
 	CurrentPlatform->objID = newID;
 	InitializeRigidBody(&CurrentPlatform->PlatformRigidBody, TRUE, 400, 100);
 }

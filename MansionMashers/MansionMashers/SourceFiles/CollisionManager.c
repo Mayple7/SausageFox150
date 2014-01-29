@@ -25,6 +25,7 @@
 #include "../HeaderFiles/ObjectManager.h"
 #include "../HeaderFiles/CollisionManager.h"
 #include "../HeaderFiles/Player.h"
+#include "../HeaderFiles/CollisionBox.h"
 
 // ---------------------------------------------------------------------------
 // Main
@@ -159,4 +160,43 @@ void DetectCollision(void)
 			searchForIntersection(&collidables[i]);
 		}
 	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Determines if there is a collision between 2 rectangle colliders
+	  
+	\param objA
+	The object being collided
+	  
+	\param objB
+	The colliding object
+*/
+/*************************************************************************/
+int CollisionRectangles(CollisionBox* objA, CollisionBox* objB)
+{
+	//Get the positions and offset for quick access
+	Vec2 posA = objA->Position;
+	Vec2 posB = objB->Position;
+	Vec2 offA = objA->Offset;
+	Vec2 offB = objB->Offset;
+
+	//Collidable 1
+	float leftAx   = posA.x + offA.x - (objA->width / 2);
+	float rightAx  = leftAx + objA->width;
+	float topAy    = posA.y + offA.y + (objA->height / 2);
+	float bottomAy = topAy - objA->height;
+
+	//Collidable 2
+	float leftBx   = posB.x + offB.x - (objB->width / 2);
+	float rightBx  = leftBx + objB->width;
+	float topBy    = posB.y + offB.y + (objB->height / 2);
+	float bottomBy = topBy - objB->height;
+
+	//Check if all requires for collision are true
+	if (leftAx < rightBx && rightAx > leftBx && topAy > bottomBy && bottomAy < topBy)
+		return TRUE;
+	else
+		return FALSE;
 }

@@ -5,6 +5,7 @@
 #include "Vector2.h"
 #include "RigidBody.h"
 #include "Sprite.h"
+#include "CollisionBox.h"
 
 typedef struct PlayerStats
 {
@@ -35,6 +36,7 @@ typedef struct Player
 {
 	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;
+	CollisionBox PlayerCollider;
 	//struct CollisionInfo PlayerCollision;
 	//struct Transform PlayerTransform;
 

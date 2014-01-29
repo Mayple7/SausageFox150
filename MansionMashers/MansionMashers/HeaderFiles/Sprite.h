@@ -1,6 +1,7 @@
 #ifndef FOX_SPRITE
 #define FOX_SPRITE
 
+#include "../AEEngine.h"
 #include "Vector2.h"
 #include "CollisionManager.h"
 
