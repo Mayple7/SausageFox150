@@ -98,6 +98,7 @@
     <ClInclude Include="HeaderFiles\PhysicsConstants.h" />
     <ClInclude Include="HeaderFiles\Platform.h" />
     <ClInclude Include="HeaderFiles\Player.h" />
+    <ClInclude Include="HeaderFiles\PlayerCollision.h" />
     <ClInclude Include="HeaderFiles\RigidBody.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
     <ClInclude Include="HeaderFiles\StartSlides.h" />
@@ -123,6 +124,7 @@
     <ClCompile Include="SourceFiles\ObjectManager.c" />
     <ClCompile Include="SourceFiles\Platform.c" />
     <ClCompile Include="SourceFiles\Player.c" />
+    <ClCompile Include="SourceFiles\PlayerCollision.c" />
     <ClCompile Include="SourceFiles\RigidBody.c" />
     <ClCompile Include="SourceFiles\ShowcaseLevel.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />

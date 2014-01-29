@@ -7,5 +7,6 @@
 #include "Player.h"
 #include "Platform.h"
 #include "Enemy.h"
+#include "PlayerCollision.h"
 
 #endif

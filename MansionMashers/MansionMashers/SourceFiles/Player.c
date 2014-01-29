@@ -330,38 +330,13 @@ void DetectPlayerCollision(void)
 	while(pList->objID != 0)
 	{
 		hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
-		if(hit && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
+		if(hit)
 		{
-			if(CurrentPlayer.PlayerCollider.Position.y + CurrentPlayer.PlayerCollider.Offset.y - CurrentPlayer.PlayerCollider.height / 2.0f > pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y)
-			{
-				if(CurrentPlayer.PlayerRigidBody.Velocity.y != 0 && pList->PlatformCollider.collisionGroup == PlatformType)
-				{
-					CurrentPlayer.Position.y = pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y + pList->PlatformCollider.height / 2 + CurrentPlayer.PlayerCollider.Offset.y + CurrentPlayer.PlayerCollider.height - 0.01f;
-					CurrentPlayer.PlayerRigidBody.onGround = TRUE;
-				}
-				else if(CurrentPlayer.PlayerRigidBody.Velocity.y != 0 && pList->PlatformCollider.collisionGroup == BounceType)
-				{
-					if(CurrentPlayer.PlayerRigidBody.Velocity.y > -0.5)
-					{
-						CurrentPlayer.Position.y = pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y + pList->PlatformCollider.height / 2 + CurrentPlayer.PlayerCollider.Offset.y + CurrentPlayer.PlayerCollider.height - 0.01f;
-						CurrentPlayer.PlayerRigidBody.onGround = TRUE;
-					}
-					else
-					{
-						CurrentPlayer.Position.y = pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y + pList->PlatformCollider.height / 2 + CurrentPlayer.PlayerCollider.Offset.y + CurrentPlayer.PlayerCollider.height + 0.5f;
-						BounceObject(&CurrentPlayer.PlayerRigidBody, &pList->PlatformRigidBody);
-					}
-				}
-				else
-					CurrentPlayer.PlayerRigidBody.onGround = TRUE;
-			}
+			PlayerCollidePlatform(&CurrentPlayer, pList);
 		}
 		pList++;
 	}
 
-
-	// Check Platform collisions
-	//	-> Handle collision if true
 	// Check projectile collisions
 	//	-> Handle collision if true
 	// other collisions!
