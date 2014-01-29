@@ -58,7 +58,7 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerSprite->AnimationSpeed = 4; // STOP CHANGING HIS LEG SPEED -The Supreme Sausage
 
 	//Collision properties
-	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, 2 * CurrentPlayer->PlayerSprite->Width  / 3, PlayerType, CurrentPlayer->PlayerSprite->Height / 2);
+	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, 2 * CurrentPlayer->PlayerSprite->Width / 3, CurrentPlayer->PlayerSprite->Height / 2);
 	CurrentPlayer->PlayerCollider.Offset.y = -20.0f;
 	
 	CurrentPlayer->PlayerSprite->CollideSize.x   = 2 * CurrentPlayer->PlayerSprite->Width  / 3;
@@ -68,7 +68,7 @@ void InitializePlayer(struct Player *CurrentPlayer)
 
 	//Initialize rigidbody
 	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, CurrentPlayer->PlayerSprite->Width, CurrentPlayer->PlayerSprite->Height);
-
+	CurrentPlayer->PlayerRigidBody.Mass = 15;
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
 }
@@ -252,7 +252,9 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Updates the sprite
 	CurrentPlayer->PlayerSprite->Position.x = CurrentPlayer->Position.x;
 	CurrentPlayer->PlayerSprite->Position.y = CurrentPlayer->Position.y;
-	CurrentPlayer->PlayerCollider.Position = CurrentPlayer->Position;
+
+	//Updates the collision box
+	UpdateCollisionPosition(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 }
 
@@ -330,38 +332,13 @@ void DetectPlayerCollision(void)
 	while(pList->objID != 0)
 	{
 		hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
-		if(hit && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
+		if(hit)
 		{
-			if(CurrentPlayer.PlayerCollider.Position.y + CurrentPlayer.PlayerCollider.Offset.y - CurrentPlayer.PlayerCollider.height / 2.0f > pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y)
-			{
-				if(CurrentPlayer.PlayerRigidBody.Velocity.y != 0 && pList->PlatformCollider.collisionGroup == PlatformType)
-				{
-					CurrentPlayer.Position.y = pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y + pList->PlatformCollider.height / 2 + CurrentPlayer.PlayerCollider.Offset.y + CurrentPlayer.PlayerCollider.height - 0.01f;
-					CurrentPlayer.PlayerRigidBody.onGround = TRUE;
-				}
-				else if(CurrentPlayer.PlayerRigidBody.Velocity.y != 0 && pList->PlatformCollider.collisionGroup == BounceType)
-				{
-					if(CurrentPlayer.PlayerRigidBody.Velocity.y > -0.5)
-					{
-						CurrentPlayer.Position.y = pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y + pList->PlatformCollider.height / 2 + CurrentPlayer.PlayerCollider.Offset.y + CurrentPlayer.PlayerCollider.height - 0.01f;
-						CurrentPlayer.PlayerRigidBody.onGround = TRUE;
-					}
-					else
-					{
-						CurrentPlayer.Position.y = pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y + pList->PlatformCollider.height / 2 + CurrentPlayer.PlayerCollider.Offset.y + CurrentPlayer.PlayerCollider.height + 0.5f;
-						BounceObject(&CurrentPlayer.PlayerRigidBody, &pList->PlatformRigidBody);
-					}
-				}
-				else
-					CurrentPlayer.PlayerRigidBody.onGround = TRUE;
-			}
+			PlayerCollidePlatform(&CurrentPlayer, pList);
 		}
 		pList++;
 	}
 
-
-	// Check Platform collisions
-	//	-> Handle collision if true
 	// Check projectile collisions
 	//	-> Handle collision if true
 	// other collisions!

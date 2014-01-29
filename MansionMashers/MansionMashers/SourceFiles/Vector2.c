@@ -216,7 +216,7 @@ void Vec2Project(Vec2* Result, Vec2* Operand1, Vec2* Operand2)
 /*************************************************************************/
 float Vec2Length(Vec2* Operand)
 {
-	return (sqrt(Vec2SquareLength(Operand)));
+	return (float)sqrt(Vec2SquareLength(Operand));
 }
 
 /*************************************************************************/
@@ -253,7 +253,7 @@ float Vec2SquareLength(Vec2* Operand)
 /*************************************************************************/
 float Vec2Distance(Vec2* Operand1, Vec2* Operand2)
 {	
-	return (sqrt(Vec2SquareDistance(Operand1, Operand2)));
+	return (float)sqrt(Vec2SquareDistance(Operand1, Operand2));
 }
 
 /*************************************************************************/
@@ -334,9 +334,9 @@ float Vec2CrossProductMag(Vec2* Operand1, Vec2* Operand2)
 void Vec2RotateDegrees(Vec2* Result, float Degrees)
 {
 	//float length = Vec2Length(Result);
-	float radians = 2 * M_PI * Degrees / 360.0f;
-	float resultX = Result->x * cos(radians) - Result->y * sin(radians);
-	float resultY = Result->x * sin(radians) + Result->y * cos(radians);
+	float radians = 2 * (float)M_PI * Degrees / 360.0f;
+	float resultX = Result->x * (float)cos(radians) - Result->y * (float)sin(radians);
+	float resultY = Result->x * (float)sin(radians) + Result->y * (float)cos(radians);
 
 	Vec2Set(Result, resultX, resultY);
 }

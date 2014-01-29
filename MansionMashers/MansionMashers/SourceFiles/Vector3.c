@@ -218,7 +218,7 @@ void Vec3Project(Vec3* Result, Vec3* Operand1, Vec3* Operand2)
 /*************************************************************************/
 float Vec3Length(Vec3* Operand)
 {
-	return sqrt(Vec3SquareLength(Operand));
+	return (float)sqrt(Vec3SquareLength(Operand));
 }
 
 /*************************************************************************/
@@ -281,6 +281,6 @@ float Vec3CrossProductMag(Vec3* Operand1, Vec3* Operand2)
 	j = -(Operand1->x * Operand2->z - Operand1->z * Operand2->x);
 	k = (Operand1->x * Operand2->y - Operand1->y * Operand2->x);
 
-	return sqrt(i * i + j * j + k * k);
+	return (float)sqrt(i * i + j * j + k * k);
 }
 

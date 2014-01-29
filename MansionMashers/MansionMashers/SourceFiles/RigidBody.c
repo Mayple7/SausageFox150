@@ -193,7 +193,7 @@ void applyDrag(RigidBody* CurrentRigidBody)
 {
 	Vec2 dragForce;
 	//CurrentVelocity * 0.5 * DragConstant * ObjectDensity * ObjectArea
-	Vec2Scale(&dragForce, &CurrentRigidBody->Velocity, 0.5 * CurrentRigidBody->Drag * CurrentRigidBody->Density * CurrentRigidBody->Area);
+	Vec2Scale(&dragForce, &CurrentRigidBody->Velocity, 0.5f * CurrentRigidBody->Drag * CurrentRigidBody->Density * CurrentRigidBody->Area);
 	
 	//Drag force is opposite the velocity direction
 	Vec2Negate(&dragForce, &dragForce);
@@ -279,8 +279,12 @@ void BounceObject(RigidBody* RB1, RigidBody* RB2)
 
 	if(RB2->Static)
 	{
-		printf("%f\n", RB1->Velocity.y);
 		Vec2Scale(&RB1->Velocity, &RB1->Velocity, totalRestitution);
 		SetVelocity(RB1, RB1->Velocity.x, -RB1->Velocity.y);
+	}
+	else if(RB1->Static)
+	{
+		Vec2Scale(&RB2->Velocity, &RB2->Velocity, totalRestitution);
+		SetVelocity(RB2, RB2->Velocity.x, -RB2->Velocity.y);
 	}
 }

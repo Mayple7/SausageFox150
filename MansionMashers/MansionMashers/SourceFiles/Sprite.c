@@ -36,7 +36,7 @@ int AnimationActive = 0;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
-AEGfxVertexList* createMesh(float width, float height);
+AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation);
 
 
 // ---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	float halfWidth = width / 2;
 	float halfHeight = height / 2;
 
-	double len = sqrt(halfWidth*halfWidth + halfHeight*halfHeight);
+	float len = (float)sqrt(halfWidth*halfWidth + halfHeight*halfHeight);
 
 	// Informing the library that we're about to start adding triangles
 	AEGfxMeshStart();
@@ -79,13 +79,13 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	// 1 triangle at a time
 	// X, Y, Color, texU, texV
 	AEGfxTriAdd(
-		len * cos(atan2(halfHeight,halfWidth) + PI + Rotation), len * sin(atan2(halfHeight,halfWidth) + PI + Rotation),		0x00FFFFFF, 0.0f, offsetY, 
-		len * cos(atan2(-halfHeight,halfWidth) + Rotation),		len * sin(atan2(-halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, offsetY,
-		len * cos(atan2(halfHeight,-halfWidth) + Rotation),		len * sin(atan2(halfHeight,-halfWidth) + Rotation),			0x00FFFFFF, 0.0f, 0.0f);
+		len * (float)cos(atan2(halfHeight,halfWidth) + PI + Rotation), len * (float)sin(atan2(halfHeight,halfWidth) + PI + Rotation),		0x00FFFFFF, 0.0f, offsetY, 
+		len * (float)cos(atan2(-halfHeight,halfWidth) + Rotation),		len * (float)sin(atan2(-halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, offsetY,
+		len * (float)cos(atan2(halfHeight,-halfWidth) + Rotation),		len * (float)sin(atan2(halfHeight,-halfWidth) + Rotation),			0x00FFFFFF, 0.0f, 0.0f);
 	AEGfxTriAdd(
-		len * cos(atan2(-halfHeight,halfWidth) + Rotation),		len * sin(atan2(-halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, offsetY, 
-		len * cos(atan2(halfHeight,halfWidth) + Rotation),		len * sin(atan2(halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, 0.0f,
-		len * cos(atan2(halfHeight,-halfWidth) + Rotation),		len * sin(atan2(halfHeight,-halfWidth) + Rotation),			0x00FFFFFF, 0.0f, 0.0f);
+		len * (float)cos(atan2(-halfHeight,halfWidth) + Rotation),		len * (float)sin(atan2(-halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, offsetY, 
+		len * (float)cos(atan2(halfHeight,halfWidth) + Rotation),		len * (float)sin(atan2(halfHeight,halfWidth) + Rotation),			0x00FFFFFF, offsetX, 0.0f,
+		len * (float)cos(atan2(halfHeight,-halfWidth) + Rotation),		len * (float)sin(atan2(halfHeight,-halfWidth) + Rotation),			0x00FFFFFF, 0.0f, 0.0f);
 
 	//Returns the mesh
 	return AEGfxMeshEnd();
