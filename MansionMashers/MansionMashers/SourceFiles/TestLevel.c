@@ -152,8 +152,8 @@ void InitializeTestLevel(void)
 	if(NULL != malloc(sizeof(Enemy)))
 		InitializeEnemy(&CurrentEnemy);
 	CurrentEnemy.EnemySprite->CollideDebug = TRUE;
-	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1;
-	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1;
+	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1f;
+	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1f;
 
 
 	// Adds the player and enemy to the collilde list

@@ -170,12 +170,12 @@ int fadeLogic(void)
 {
 	// Fade out the slide
 	if(fade == 2)
-		alpha -= 0.01;
+		alpha -= 0.01f;
 	// Fade in the slide
 	else if(fade == 1)
-		alpha += 0.01;
+		alpha += 0.01f;
 	else
-		alpha = 1.0;
+		alpha = 1.0f;
 
 	// The fade in is done
 	if(alpha > 1.0)
@@ -188,7 +188,7 @@ int fadeLogic(void)
 	{
 		slideTextureNum += 1;
 		fade = 1;
-		alpha = 0.0;
+		alpha = 0.0f;
 	}
 	// The fade out is done, go to main menu
 	else if(alpha < 0.0)
