@@ -157,7 +157,7 @@ void InitializeShowcase(void)
 	BouncePad->Position.y = -200;
 	BouncePad->PlatformCollider.Position = BouncePad->Position;
 	BouncePad->PlatformSprite->Position = BouncePad->Position;
-	BouncePad->PlatformRigidBody.Restitution = 1.9;
+	BouncePad->PlatformRigidBody.Restitution = 1.9f;
 
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);

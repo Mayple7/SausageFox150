@@ -92,14 +92,14 @@ Platform* AddPlatform(void)
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
-		if(platformList[i].objID == NULL)
+		if(platformList[i].objID == 0)
 		{
 			printf("Platform at %i Created\n", i);
 			return &platformList[i];
 		}
 
 	}
-
+	return NULL;
 }
 
 /*************************************************************************/
@@ -117,7 +117,7 @@ void resetObjectList(void)
 	{
 		printf("\nOBJECT LIST SET UP COMPLETE\n\n");
 
-		//Set up collisions
+		//Set up object lists
 		platformList = (Platform *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Platform));
 		collideList = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 		collidables = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));

@@ -8,6 +8,7 @@
 
 \par				Functions:
 \li					CreateCollisionBox
+\li					UpdateCollisionPosition
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -31,6 +32,9 @@
 	\param newPosition
 	The position of the collision box
 
+	\param collisionGroup
+	The collision group of the collision group
+
 	\param width
 	The width of the collision box
 
@@ -49,8 +53,20 @@ void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGr
 	newBox->Offset.y = 0;
 }
 
-void UpdateCollisionPosition(CollisionBox *Collider, Vec2 newPosition)
+/*************************************************************************/
+/*!
+	\brief
+	Updates the position of the collision box
+	
+	\param Collider
+	The collision box object
+
+	\param newPosition
+	The position of the collision box
+*/
+/*************************************************************************/
+void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition)
 {
-	Collider->Position = newPosition;
+	Collider->Position = *newPosition;
 }
 

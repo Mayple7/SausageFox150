@@ -68,7 +68,7 @@ void InitializePlayer(struct Player *CurrentPlayer)
 
 	//Initialize rigidbody
 	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, CurrentPlayer->PlayerSprite->Width, CurrentPlayer->PlayerSprite->Height);
-
+	CurrentPlayer->PlayerRigidBody.Mass = 15;
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
 }
@@ -252,7 +252,9 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Updates the sprite
 	CurrentPlayer->PlayerSprite->Position.x = CurrentPlayer->Position.x;
 	CurrentPlayer->PlayerSprite->Position.y = CurrentPlayer->Position.y;
-	CurrentPlayer->PlayerCollider.Position = CurrentPlayer->Position;
+
+	//Updates the collision box
+	UpdateCollisionPosition(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 }
 

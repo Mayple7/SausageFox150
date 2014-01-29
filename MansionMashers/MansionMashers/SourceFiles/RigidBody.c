@@ -193,7 +193,7 @@ void applyDrag(RigidBody* CurrentRigidBody)
 {
 	Vec2 dragForce;
 	//CurrentVelocity * 0.5 * DragConstant * ObjectDensity * ObjectArea
-	Vec2Scale(&dragForce, &CurrentRigidBody->Velocity, 0.5 * CurrentRigidBody->Drag * CurrentRigidBody->Density * CurrentRigidBody->Area);
+	Vec2Scale(&dragForce, &CurrentRigidBody->Velocity, 0.5f * CurrentRigidBody->Drag * CurrentRigidBody->Density * CurrentRigidBody->Area);
 	
 	//Drag force is opposite the velocity direction
 	Vec2Negate(&dragForce, &dragForce);
