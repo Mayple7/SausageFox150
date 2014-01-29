@@ -47,8 +47,8 @@ Sprite *Background;
 Sprite *Background2;
 HUDLayer HUDList;
 Platform *BouncePad;
-Sprite *Shelf;
-Sprite *Crate;
+Platform *Shelf;
+Platform *Crate;
 
 Player CurrentPlayer;
 Enemy CurrentEnemy;
@@ -101,22 +101,23 @@ void InitializeShowcase(void)
 	Background2->FlipX = TRUE;
 
 	// Create the shelf sprite and initialize to be collidable
-	Shelf = CreateSprite("Shelf", "TextureFiles/Shelf.png", 123.0f, 245.5f, 8, 1, 1, PlatformType);
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 11, 123, 245);
 	Shelf->Position.x = 475;
 	Shelf->Position.y = -115;
-	Shelf->CollideDebug = TRUE;
-	Shelf->CollideSize.y = 60;
-	Shelf->CollideOffset.y = Shelf->Height / 2 - 30;
+	Shelf->PlatformCollider.Position = Shelf->Position;
+	Shelf->PlatformSprite->Position = Shelf->Position;
+	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
+	Shelf->PlatformCollider.height = 60;
 	
 	// Create and initialize the crate sprite
-	Crate = CreateSprite("Crate", "TextureFiles/Crate.png", 859.0f, 260.5f, 9, 1, 1, PlatformType);
+	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 12, 859, 260.5f);
 	Crate->Position.x = 1400;
 	Crate->Position.y = -180;
-	Crate->CollideDebug = FALSE;
-	Crate->CollideSize.x = Crate->Width - 100;
-	Crate->CollideSize.y = 60;
-	Crate->CollideOffset.x = 0.0f;
-	Crate->CollideOffset.y = Crate->Height / 2 - 60;
+	Crate->PlatformCollider.Position = Crate->Position;
+	Crate->PlatformSprite->Position = Crate->Position;
+	Crate->PlatformCollider.Offset.y = Crate->PlatformSprite->Height / 2 - 60;
+	Crate->PlatformCollider.width = Crate->PlatformCollider.width - 100;
+	Crate->PlatformCollider.height = 60;
 
 	// Create and initialize the HAM sprite
 	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1, FoodType);
@@ -151,7 +152,11 @@ void InitializeShowcase(void)
 	//Show debug box
 	CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
-	BouncePad = CreatePlatform(PlatformType, 10);
+	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", PlatformType, 10, 400, 100);
+	BouncePad->Position.x = -1000;
+	BouncePad->Position.y = -200;
+	BouncePad->PlatformCollider.Position = BouncePad->Position;
+	BouncePad->PlatformSprite->Position = BouncePad->Position;
 
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);

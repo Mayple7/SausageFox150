@@ -134,7 +134,7 @@ void InitializeTestLevel(void)
 	HUDList.HudItem[7] = HUD4item;
 
 	// Create the background
-	Background = CreateSprite("Background", "TextureFiles/LevelGrassground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
+	Background = CreateSprite("Background", "TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, BackgroundType);
 	Background->CanCollide = 0;
 
 	// Secret invisible collider GO!

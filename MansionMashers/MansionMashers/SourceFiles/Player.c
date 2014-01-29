@@ -57,6 +57,9 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerSprite->AnimationSpeed = 4; // STOP CHANGING HIS LEG SPEED -The Supreme Sausage
 
 	//Collision properties
+	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, 2 * CurrentPlayer->PlayerSprite->Width  / 3, CurrentPlayer->PlayerSprite->Height / 2);
+	CurrentPlayer->PlayerCollider.Offset.y = -20.0f;
+	
 	CurrentPlayer->PlayerSprite->CollideSize.x   = 2 * CurrentPlayer->PlayerSprite->Width  / 3;
 	CurrentPlayer->PlayerSprite->CollideSize.y   = CurrentPlayer->PlayerSprite->Height / 2;
 	CurrentPlayer->PlayerSprite->CollideOffset.x =  0.0f;
@@ -207,7 +210,7 @@ void HandleCollision(Sprite *objHit)
 		}
 	}
 	//If the object is a platform and you're landing on it
-	else if(objHit->CollisionGroup == PlatformType && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
+	/*else if(objHit->CollisionGroup == PlatformType && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
 	{
 		if(CurrentPlayer.Position.y + CurrentPlayer.PlayerSprite->CollideOffset.y - CurrentPlayer.PlayerSprite->CollideSize.y / 2.0f > objHit->Position.y + objHit->CollideOffset.y)
 		{
@@ -222,7 +225,7 @@ void HandleCollision(Sprite *objHit)
 	else if(objHit->CollisionGroup == PlatformType)
 	{
 		CurrentPlayer.PlayerRigidBody.onGround = FALSE;
-	}
+	}*/
 }
 
 /*************************************************************************/
@@ -333,15 +336,26 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 void DetectPlayerCollision(void)
 {
 	Platform* pList = platformList;
-	int i = 0;
+	int hit = 0;
 
 	while(pList->objID != NULL)
 	{
-		i = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
-		if(i)
-			printf("WE CAN COLLIDE!!!!\n");
+		hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
+		if(hit && CurrentPlayer.PlayerRigidBody.Velocity.y <= 0)
+		{
+			if(CurrentPlayer.PlayerCollider.Position.y + CurrentPlayer.PlayerCollider.Offset.y - CurrentPlayer.PlayerCollider.height / 2.0f > pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y)
+			{
+				if(CurrentPlayer.PlayerRigidBody.Velocity.y != 0)
+				{
+					CurrentPlayer.Position.y = pList->PlatformCollider.Position.y + pList->PlatformCollider.Offset.y + pList->PlatformCollider.height / 2 + CurrentPlayer.PlayerCollider.Offset.y + CurrentPlayer.PlayerCollider.height - 0.01;
+				}
+				CurrentPlayer.PlayerRigidBody.onGround = TRUE;
+			}
+		}
 		pList++;
 	}
+
+
 	// Check Platform collisions
 	//	-> Handle collision if true
 	// Check projectile collisions
