@@ -124,7 +124,7 @@ void searchForIntersection(Sprite* objA)
 	int j;
 	for (j = 0; j < OBJECTAMOUNT; j++)
 	{
-		Sprite* objB = (objectList + j);
+		Sprite* objB = (drawList + j);
 		//Make sure the sprite exists
 		if (objB && objB->Created == 1 && objB != objA && objB->CanCollide == 1)
 		{

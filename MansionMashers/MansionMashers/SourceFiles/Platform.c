@@ -32,11 +32,14 @@
 	A pointer to the platform to be initialized
 */
 /*************************************************************************/
-void InitializePlatform(Platform* CurrentPlatform, int collisionGroup)
+Platform* CreatePlatform(int collisionGroup, int newID)
 {
+	Platform *CurrentPlatform = AddPlatform();
+
 	CurrentPlatform->PlatformSprite = CreateSprite("BouncePad", "TextureFiles/BouncePad.png", 400, 100, 8, 1, 1, PlatformType);
 	CurrentPlatform->PlatformSprite->Position.x = -1000;
 	CurrentPlatform->PlatformSprite->Position.y = -200;
+	CurrentPlatform->objID = newID;
 	InitializeRigidBody(&CurrentPlatform->PlatformRigidBody, TRUE, 400, 100);
 }
 

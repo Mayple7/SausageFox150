@@ -328,3 +328,12 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 	//Placeholder damage reduction formula
 	CurrentPlayerStats->DamageReduction = CurrentPlayerStats->Defense * 2.0f / 100.0f;
 }
+
+void DetectPlayerCollision(void)
+{
+	// Check Platform collisions
+	//	-> Handle collision if true
+	// Check projectile collisions
+	//	-> Handle collision if true
+	// other collisions!
+}

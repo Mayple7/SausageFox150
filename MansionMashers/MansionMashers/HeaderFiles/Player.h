@@ -49,6 +49,8 @@ void InitializePlayer(struct Player *CurrentPlayer);
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
 void HandleCollision(Sprite *objHit);
+void DetectPlayerCollision(void);
+
 
 //Updating non-modifiable player stats
 void updateMaxHealth(PlayerStats *CurrentPlayerStats);
