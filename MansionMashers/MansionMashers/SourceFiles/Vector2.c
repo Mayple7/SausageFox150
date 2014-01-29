@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*!
 \file				Vector2.c
-\author				Dan Muller (d.muller)
+\author				Juli Gregg (j.gregg)
 \date				Jan 12, 2014
 
 \brief				All Vector2 functions
