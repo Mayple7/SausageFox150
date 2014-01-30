@@ -3,6 +3,7 @@
 
 #include "../AEEngine.h"
 #include "Vector2.h"
+#include "TextureManager.h"
 #include "CollisionManager.h"
 
 enum collisionGroup{ PlayerType, EnemyType, PartType, BackgroundType, FoodType, HudType, PlatformType, BounceType, ButtonType};
@@ -62,7 +63,7 @@ typedef struct Sprite
 	float RotationPrev;
 }Sprite;
 
-Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup);
+Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
 void UpdateMesh(Sprite *currentSprite);
 void DrawSprite(Sprite *currentSprite);

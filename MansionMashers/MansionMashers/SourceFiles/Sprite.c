@@ -95,9 +95,6 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 /*!
 	\brief
 	Creates and returns the sprite and adds it to the object manager list
-	
-	\param SpriteName
-	Name of the sprite
 
 	\param texture
 	Location of the texture for the sprite
@@ -124,7 +121,7 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	A pointer to the sprite object
 */
 /*************************************************************************/
-Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup)
+Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup)
 {	
 	//Adds the sprite to the object manager list
 	Sprite *CurrentSprite = AddObject();
@@ -139,7 +136,7 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 
 	//Sprite Graphics Properties
 	CurrentSprite->SpriteMesh = createMesh(width, height, CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
-	CurrentSprite->SpriteTexture = AEGfxTextureLoad(texture);
+	CurrentSprite->SpriteTexture = LoadTexture(texture);
 
 	// Size of the sprite
 	CurrentSprite->Width = width;
@@ -181,7 +178,7 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 
 	//The sprite has now been created
 	CurrentSprite->CollisionGroup = newGroup;
-	strcpy(CurrentSprite->SpriteName, SpriteName);
+	//strcpy(CurrentSprite->SpriteName, SpriteName);
 	CurrentSprite->Created = 1;
 
 	return CurrentSprite;

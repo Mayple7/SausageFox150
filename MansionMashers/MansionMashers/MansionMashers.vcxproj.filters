@@ -176,8 +176,11 @@
     <ClInclude Include="HeaderFiles\PlayerCollision.h">
       <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\TextureManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
     <ClInclude Include="HeaderFiles\SearchIntArray.h">
-      <Filter>Fox Header Files\Fox Math Headers</Filter>
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\Food.h">
       <Filter>Fox Header Files\Fox Object Headers</Filter>
@@ -244,11 +247,14 @@
     <ClCompile Include="SourceFiles\PlayerCollision.c">
       <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\SearchIntArray.c">
-      <Filter>Fox Source Files\Fox Math Sources</Filter>
+    <ClCompile Include="SourceFiles\TextureManager.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Food.c">
       <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\SearchIntArray.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
