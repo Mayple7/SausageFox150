@@ -7,6 +7,7 @@ typedef struct CollisionBox
 {
 	int canCollide;
 	int collisionGroup;
+	int collisionID;
 
 	Vec2 Position;
 	Vec2 Offset;
@@ -16,7 +17,7 @@ typedef struct CollisionBox
 
 }CollisionBox;
 
-void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGroup, float width, float height);
+void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGroup, float width, float height, int newID);
 void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition);
 
 #endif

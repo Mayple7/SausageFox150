@@ -101,6 +101,7 @@
     <ClInclude Include="HeaderFiles\Player.h" />
     <ClInclude Include="HeaderFiles\PlayerCollision.h" />
     <ClInclude Include="HeaderFiles\RigidBody.h" />
+    <ClInclude Include="HeaderFiles\SearchIntArray.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
     <ClInclude Include="HeaderFiles\StartSlides.h" />
     <ClInclude Include="HeaderFiles\TestLevel.h" />
@@ -127,6 +128,7 @@
     <ClCompile Include="SourceFiles\Player.c" />
     <ClCompile Include="SourceFiles\PlayerCollision.c" />
     <ClCompile Include="SourceFiles\RigidBody.c" />
+    <ClCompile Include="SourceFiles\SearchIntArray.c" />
     <ClCompile Include="SourceFiles\ShowcaseLevel.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />

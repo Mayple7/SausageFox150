@@ -33,6 +33,8 @@
 
 // ---------------------------------------------------------------------------
 // Globals
+int newID;					// ID number
+
 Sprite *HUD1;
 Sprite *HUD2;
 Sprite *HUD3;
@@ -46,6 +48,12 @@ Sprite *ColliderInvisible;
 Player CurrentPlayer;
 Enemy CurrentEnemy;
 HUDLayer HUDList;
+
+Sprite *LegUpper;
+Sprite *LegLower;
+Sprite *LegUpper2;
+Sprite *LegLower2;
+Sprite *Body;
 
 Sprite *Hammy;
 Sprite *Hammy2;
@@ -93,6 +101,32 @@ void InitializeTestLevel(void)
 	Hammy2->SensorType = RectangleCollider;
 	Hammy2->Position.y = -100.0f;
 	Hammy2->Position.x = -500.0f;
+
+	// Create the legs of the player
+	Body = CreateSprite("Body", "TextureFiles/Body.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	Body->SensorType = RectangleCollider;
+	Body->Position.y = -100.0f;
+	Body->Position.x = 0.0f;
+
+	LegUpper = CreateSprite("LegUpper", "TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	LegUpper->SensorType = RectangleCollider;
+	LegUpper->Position.y = -100.0f;
+	LegUpper->Position.x = 0.0f;
+
+	LegLower = CreateSprite("LegLower", "TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	LegLower->SensorType = RectangleCollider;
+	LegLower->Position.y = -100.0f;
+	LegLower->Position.x = 0.0f;
+
+	LegUpper2 = CreateSprite("LegUpper2", "TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	LegUpper2->SensorType = RectangleCollider;
+	LegUpper2->Position.y = -100.0f;
+	LegUpper2->Position.x = 0.0f;
+
+	LegLower2 = CreateSprite("LegLowe2r", "TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	LegLower2->SensorType = RectangleCollider;
+	LegLower2->Position.y = -100.0f;
+	LegLower2->Position.x = 0.0f;
 
 	// Creating the HUD items
 	HUD1 = CreateSprite("HUD1", "TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
@@ -146,7 +180,7 @@ void InitializeTestLevel(void)
 
 	// Creates the player
 	if(NULL != malloc(sizeof(Player)))
-		InitializePlayer(&CurrentPlayer);
+		InitializePlayer(&CurrentPlayer, newID++);
 
 	// Creates the enemy
 	if(NULL != malloc(sizeof(Enemy)))
@@ -184,6 +218,9 @@ void UpdateTestLevel(void)
 
 	// Update the player's position
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	// Update/Draw them legs
+	LegAnimation(&CurrentPlayer, LegUpper, LegUpper2, LegLower, LegLower2, Body);
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))
