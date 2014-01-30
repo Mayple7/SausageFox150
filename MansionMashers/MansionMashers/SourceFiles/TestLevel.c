@@ -104,27 +104,27 @@ void InitializeTestLevel(void)
 	Hammy2->Position.x = -500.0f;
 
 	// Create the legs of the player
-	Body = CreateSprite("Body", "TextureFiles/Body.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	Body = CreateSprite("TextureFiles/Body.png", 128.0f, 128.0f, 22, 1, 1, PartType);
 	Body->SensorType = RectangleCollider;
 	Body->Position.y = -100.0f;
 	Body->Position.x = 0.0f;
 
-	LegUpper = CreateSprite("LegUpper", "TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, PartType);
 	LegUpper->SensorType = RectangleCollider;
 	LegUpper->Position.y = -100.0f;
 	LegUpper->Position.x = 0.0f;
 
-	LegLower = CreateSprite("LegLower", "TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, PartType);
 	LegLower->SensorType = RectangleCollider;
 	LegLower->Position.y = -100.0f;
 	LegLower->Position.x = 0.0f;
 
-	LegUpper2 = CreateSprite("LegUpper2", "TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, PartType);
 	LegUpper2->SensorType = RectangleCollider;
 	LegUpper2->Position.y = -100.0f;
 	LegUpper2->Position.x = 0.0f;
 
-	LegLower2 = CreateSprite("LegLowe2r", "TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, PartType);
+	LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, PartType);
 	LegLower2->SensorType = RectangleCollider;
 	LegLower2->Position.y = -100.0f;
 	LegLower2->Position.x = 0.0f;

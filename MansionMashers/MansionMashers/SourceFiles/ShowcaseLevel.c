@@ -86,7 +86,7 @@ void InitializeShowcase(void)
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
 
-	OverlayGrid = CreateSprite("Grid", "TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, BackgroundType);
+	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, BackgroundType);
 	OverlayGrid->CanCollide = FALSE;
 
 	// Create single player HUD sprite
