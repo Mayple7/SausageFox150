@@ -238,15 +238,15 @@ void Matrix3Mult(Matrix3* Result, Matrix3* Operand1, Matrix3* Operand2)
 
 		tempResult.m00 = Operand1->m00 * Operand2->m00 + Operand1->m01 * Operand2->m10 + Operand1->m02 * Operand2->m20;
 		tempResult.m01 = Operand1->m00 * Operand2->m01 + Operand1->m01 * Operand2->m11 + Operand1->m02 * Operand2->m21;
-		tempResult.m02 = Operand1->m00 * Operand2->m02 + Operand1->m01 * Operand2->m22 + Operand1->m02 * Operand2->m22;
+		tempResult.m02 = Operand1->m00 * Operand2->m02 + Operand1->m01 * Operand2->m12 + Operand1->m02 * Operand2->m22;
 
 		tempResult.m10 = Operand1->m10 * Operand2->m00 + Operand1->m11 * Operand2->m10 + Operand1->m12 * Operand2->m20;
 		tempResult.m11 = Operand1->m10 * Operand2->m01 + Operand1->m11 * Operand2->m11 + Operand1->m12 * Operand2->m21;
-		tempResult.m12 = Operand1->m10 * Operand2->m02 + Operand1->m11 * Operand2->m22 + Operand1->m12 * Operand2->m22;
+		tempResult.m12 = Operand1->m10 * Operand2->m02 + Operand1->m11 * Operand2->m12 + Operand1->m12 * Operand2->m22;
 
 		tempResult.m20 = Operand1->m20 * Operand2->m00 + Operand1->m21 * Operand2->m10 + Operand1->m22 * Operand2->m20;
 		tempResult.m21 = Operand1->m20 * Operand2->m01 + Operand1->m21 * Operand2->m11 + Operand1->m22 * Operand2->m21;
-		tempResult.m22 = Operand1->m20 * Operand2->m02 + Operand1->m21 * Operand2->m22 + Operand1->m22 * Operand2->m22;
+		tempResult.m22 = Operand1->m20 * Operand2->m02 + Operand1->m21 * Operand2->m12 + Operand1->m22 * Operand2->m22;
 		
 		for(i = 0; i < 3; i++)
 		{
@@ -261,15 +261,15 @@ void Matrix3Mult(Matrix3* Result, Matrix3* Operand1, Matrix3* Operand2)
 	{
 		Result->m00 = Operand1->m00 * Operand2->m00 + Operand1->m01 * Operand2->m10 + Operand1->m02 * Operand2->m20;
 		Result->m01 = Operand1->m00 * Operand2->m01 + Operand1->m01 * Operand2->m11 + Operand1->m02 * Operand2->m21;
-		Result->m02 = Operand1->m00 * Operand2->m02 + Operand1->m01 * Operand2->m22 + Operand1->m02 * Operand2->m22;
+		Result->m02 = Operand1->m00 * Operand2->m02 + Operand1->m01 * Operand2->m12 + Operand1->m02 * Operand2->m22;
 
 		Result->m10 = Operand1->m10 * Operand2->m00 + Operand1->m11 * Operand2->m10 + Operand1->m12 * Operand2->m20;
 		Result->m11 = Operand1->m10 * Operand2->m01 + Operand1->m11 * Operand2->m11 + Operand1->m12 * Operand2->m21;
-		Result->m12 = Operand1->m10 * Operand2->m02 + Operand1->m11 * Operand2->m22 + Operand1->m12 * Operand2->m22;
+		Result->m12 = Operand1->m10 * Operand2->m02 + Operand1->m11 * Operand2->m12 + Operand1->m12 * Operand2->m22;
 
 		Result->m20 = Operand1->m20 * Operand2->m00 + Operand1->m21 * Operand2->m10 + Operand1->m22 * Operand2->m20;
 		Result->m21 = Operand1->m20 * Operand2->m01 + Operand1->m21 * Operand2->m11 + Operand1->m22 * Operand2->m21;
-		Result->m22 = Operand1->m20 * Operand2->m02 + Operand1->m21 * Operand2->m22 + Operand1->m22 * Operand2->m22;
+		Result->m22 = Operand1->m20 * Operand2->m02 + Operand1->m21 * Operand2->m12 + Operand1->m22 * Operand2->m22;
 	}
 }
 
