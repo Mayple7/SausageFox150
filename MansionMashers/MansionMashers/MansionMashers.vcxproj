@@ -84,6 +84,7 @@
     <ClInclude Include="HeaderFiles\CollisionBox.h" />
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
     <ClInclude Include="HeaderFiles\Enemy.h" />
+    <ClInclude Include="HeaderFiles\Food.h" />
     <ClInclude Include="HeaderFiles\FoxEngine.h" />
     <ClInclude Include="HeaderFiles\FoxMath.h" />
     <ClInclude Include="HeaderFiles\FoxObjects.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="SourceFiles\CollisionBox.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
     <ClCompile Include="SourceFiles\Enemy.c" />
+    <ClCompile Include="SourceFiles\Food.c" />
     <ClCompile Include="SourceFiles\GameStateManager.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />

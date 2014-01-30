@@ -1,10 +1,10 @@
 /*****************************************************************************/
 /*!
-\file				Platform.c
+\file				Food.c
 \author				Dan Muller (d.muller)
-\date				Jan 27, 2014
+\date				Jan 29, 2014
 
-\brief				Functions to do with a platform are here
+\brief				Functions to do with food are here
 
 \par				Functions:
 \li					CreatePlatform
@@ -18,7 +18,7 @@
 
 // ---------------------------------------------------------------------------
 // includes
-#include "../AEEngine.h"
+/*#include "../AEEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
@@ -26,23 +26,22 @@
 /*************************************************************************/
 /*!
 	\brief
-	Create the platform
+	Creates the food object
 	
 	\param CurrentPlatform
 	A pointer to the platform to be initialized
 */
 /*************************************************************************/
-Platform* CreatePlatform(char* textureName, int collisionGroup, float width, float height, int newID)
+/*Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int newID)
 {
-	Platform *CurrentPlatform = AddPlatform();
+	Food *CurrentFood = AddFood();
 
-	CurrentPlatform->PlatformSprite = CreateSprite("BouncePad", textureName, width, height, 8, 1, 1, PlatformType);
+	CurrentFood->FoodSprite = CreateSprite("FoodPad", textureName, width, height, 10, 1, 1, FoodType);
 
 
-	CreateCollisionBox(&CurrentPlatform->PlatformCollider, &CurrentPlatform->Position, collisionGroup, width, height, newID);
-	CurrentPlatform->objID = newID;
-	InitializeRigidBody(&CurrentPlatform->PlatformRigidBody, TRUE, 400, 100);
+	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, collisionGroup, width, height, newID);
+	CurrentFood->objID = newID;
 
-	return CurrentPlatform;
-}
+	return CurrentFood;
+}*/
 
