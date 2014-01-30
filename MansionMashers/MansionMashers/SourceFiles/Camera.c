@@ -25,25 +25,12 @@ written consent of DigiPen Institute of Technology is prohibited.
 void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 {
 	float camX, camY;	
-	int i;
+
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
 
-	for (i = 0; hudmain->HudItem[i]; i++)
-	{
-		if (i % 2 == 0)
-		{
-			hudmain->HudItem[i]->Position.x = camX - 480 + ((i/2)*320);
-			hudmain->HudItem[i]->Position.y = camY + 275;
-			DrawSprite(hudmain->HudItem[i]);
-		}
-		else
-		{
-			hudmain->HudItem[i]->Position.x = camX - 480 - 70 + (((i-1)/2)*320);
-			hudmain->HudItem[i]->Position.y = camY + 275 - 23;
-			DrawSprite(hudmain->HudItem[i]);
-		}
-	}
+	//Update/Draw the HUD
+	DrawHUD(hudmain, camX, camY);
 
 	//Moves camera Right
 	if(playerX->x > (camX + offset))
@@ -59,4 +46,24 @@ void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 void ResetCamera(void)
 {
 	AEGfxSetCamPosition(0.0, 0.0);
+}
+
+void DrawHUD(struct HUDLayer *hud, float camx, float camy)
+{
+	int i;
+	for (i = 0; hud->HudItem[i]; i++)
+	{
+		if (i % 2 == 0)
+		{
+			hud->HudItem[i]->Position.x = camx - 480 + ((i/2)*320);
+			hud->HudItem[i]->Position.y = camy + 275;
+			DrawSprite(hud->HudItem[i]);
+		}
+		else
+		{
+			hud->HudItem[i]->Position.x = camx - 480 - 70 + (((i-1)/2)*320);
+			hud->HudItem[i]->Position.y = camy + 275 - 23;
+			DrawSprite(hud->HudItem[i]);
+		}
+	}
 }
