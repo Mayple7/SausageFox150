@@ -179,6 +179,9 @@
     <ClInclude Include="HeaderFiles\SearchIntArray.h">
       <Filter>Fox Header Files\Fox Math Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Food.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -243,6 +246,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\SearchIntArray.c">
       <Filter>Fox Source Files\Fox Math Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Food.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
