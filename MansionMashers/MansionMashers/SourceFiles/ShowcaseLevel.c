@@ -95,38 +95,34 @@ void InitializeShowcase(void)
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
 
-	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, BackgroundType);
+	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1);
 
 	// Create single player HUD sprite
-	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
+	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD->isHUD = TRUE;
 
 	// Create single player HUD item sprite
-	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
+	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
 	HUDitem->ItemType = 0;
+	HUDitem->isHUD = TRUE;
 
 	// Create the background sprite
-	Background = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
+	Background = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
 	
 	// Create the offset background sprite
-	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
+	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
 	Background2->Position.x = 3840;
 	Background2->FlipX = TRUE;
 
 	// Create the shelf sprite and initialize to be collidable
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 123, 245, newID++);
-	Shelf->Position.x = 475;
-	Shelf->Position.y = -115;
-	Shelf->PlatformCollider.Position = Shelf->Position;
-	Shelf->PlatformSprite->Position = Shelf->Position;
+	UpdatePlatformPosition(Shelf, 475, -115);
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
 	Shelf->PlatformCollider.height = 60;
 	
 	// Create and initialize the crate sprite
 	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 859, 260.5f, newID++);
-	Crate->Position.x = 1400;
-	Crate->Position.y = -180;
-	Crate->PlatformCollider.Position = Crate->Position;
-	Crate->PlatformSprite->Position = Crate->Position;
+	UpdatePlatformPosition(Crate, 1400, -180);
 	Crate->PlatformCollider.Offset.y = Crate->PlatformSprite->Height / 2 - 60;
 	Crate->PlatformCollider.width = Crate->PlatformCollider.width - 100;
 	Crate->PlatformCollider.height = 60;
@@ -223,7 +219,6 @@ void UnloadShowcase(void)
 void EventShowcase(void)
 {
 	// Check for any collision and handle the results
-	//DetectCollision();
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);

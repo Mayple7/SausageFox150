@@ -56,7 +56,6 @@ typedef struct Player
 void InitializePlayer(struct Player *CurrentPlayer, int newID);
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
-void HandleCollision(Sprite *objHit);
 void DetectPlayerCollision(void);
 void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy);
 

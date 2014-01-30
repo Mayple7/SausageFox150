@@ -55,7 +55,7 @@ Sprite *LegUpper2;
 Sprite *LegLower2;
 Sprite *Body;
 
-Sprite *Hammy;
+Food *Hammy;
 Sprite *Hammy2;
 
 /*************************************************************************/
@@ -80,6 +80,7 @@ void InitializeTestLevel(void)
 {	
 	int hudLoop;
 
+	newID = 1;
 	// Reset the object list
 	resetObjectList();
 
@@ -88,63 +89,53 @@ void InitializeTestLevel(void)
 		HUDList.HudItem[hudLoop] = 0;
 
 	// Create the HAMs
-	Hammy = CreateSprite("TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1, FoodType);
-	Hammy2 = CreateSprite("TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1, FoodType);
+	Hammy = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++);
+	Hammy2 = CreateSprite("TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1);
 
 	// Collision for the first HAM
-	Hammy->SensorType   = RectangleCollider;
-	Hammy->Position.x   = 400.0f;
-	Hammy->CollideDebug = 1;
-	Hammy->CollideOffset.x =  200.0f;
-	Hammy->CollideOffset.y =  0.0f;
+	UpdateFoodPosition(Hammy, 400, 0);
 
 	// Collision for the second HAM
-	Hammy2->SensorType = RectangleCollider;
 	Hammy2->Position.y = -100.0f;
 	Hammy2->Position.x = -500.0f;
 
 	// Create the legs of the player
-	Body = CreateSprite("TextureFiles/Body.png", 128.0f, 128.0f, 22, 1, 1, PartType);
-	Body->SensorType = RectangleCollider;
+	Body = CreateSprite("TextureFiles/Body.png", 128.0f, 128.0f, 22, 1, 1);
 	Body->Position.y = -100.0f;
 	Body->Position.x = 0.0f;
 
-	LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, PartType);
-	LegUpper->SensorType = RectangleCollider;
+	LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
 	LegUpper->Position.y = -100.0f;
 	LegUpper->Position.x = 0.0f;
 
-	LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, PartType);
-	LegLower->SensorType = RectangleCollider;
+	LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
 	LegLower->Position.y = -100.0f;
 	LegLower->Position.x = 0.0f;
 
-	LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, PartType);
-	LegUpper2->SensorType = RectangleCollider;
+	LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
 	LegUpper2->Position.y = -100.0f;
 	LegUpper2->Position.x = 0.0f;
 
-	LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, PartType);
-	LegLower2->SensorType = RectangleCollider;
+	LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
 	LegLower2->Position.y = -100.0f;
 	LegLower2->Position.x = 0.0f;
 
 	// Creating the HUD items
-	HUD1 = CreateSprite("TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
-	HUD2 = CreateSprite("TextureFiles/HollyHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
-	HUD3 = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
-	HUD4 = CreateSprite("TextureFiles/KayaHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
+	HUD1 = CreateSprite("TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD2 = CreateSprite("TextureFiles/HollyHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD3 = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD4 = CreateSprite("TextureFiles/KayaHUD.png", 320.0f, 137.0f, 200, 1, 1);
 
-	HUD1item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
+	HUD1item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
 	HUD1item->ItemType = 0;
 
-	HUD2item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
+	HUD2item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
 	HUD2item->ItemType = 0;
 
-	HUD3item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
+	HUD3item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
 	HUD3item->ItemType = 0;
 
-	HUD4item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
+	HUD4item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
 	HUD4item->ItemType = 0;
 
 	// Add HUD items to the list
@@ -158,13 +149,11 @@ void InitializeTestLevel(void)
 	HUDList.HudItem[7] = HUD4item;
 
 	// Create the background
-	Background = CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, BackgroundType);
-	Background->CanCollide = 0;
+	Background = CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1);
 
 	// Secret invisible collider GO!
-	ColliderInvisible = CreateSprite("TextureFiles/LevelGrassground.png", 300.0f, 80.0f, 0, 1, 1, PlatformType);
+	ColliderInvisible = CreateSprite("TextureFiles/LevelGrassground.png", 300.0f, 80.0f, 0, 1, 1);
 	ColliderInvisible->Visible = FALSE;
-	ColliderInvisible->CollideDebug = TRUE;
 	ColliderInvisible->Position.x = -1020.0f;
 	ColliderInvisible->Position.y = -40.0f;
 
@@ -177,9 +166,6 @@ void InitializeTestLevel(void)
 
 	// Adds the player and enemy to the collilde list
 	AddCollidable(CurrentPlayer.PlayerSprite);
-
-	// Show debug box
-	CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
 	// Reset camera to (0,0)
 	ResetCamera();
@@ -194,6 +180,7 @@ void InitializeTestLevel(void)
 void UpdateTestLevel(void)
 {
 	// Run the enemy logic and update the enemy
+	DetectPlayerCollision();
 	EnemyLogic(CurrentEnemy, &CurrentPlayer);
 	UpdateEnemy(CurrentEnemy);
 
@@ -259,9 +246,6 @@ void UnloadTestLevel(void)
 /*************************************************************************/
 void EventTestLevel(void)
 {
-	// Detect and handle collisions
-	DetectCollision();
-
 	// Handle any input for the player
 	InputPlayer(&CurrentPlayer);
 

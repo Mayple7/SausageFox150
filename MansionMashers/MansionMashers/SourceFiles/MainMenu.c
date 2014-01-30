@@ -83,22 +83,22 @@ void InitializeMainMenu(void)
 	resetObjectList();
 
 	// Create the start button
-	StartButton = CreateSprite("TextureFiles/StartButton.png", 480.0f, 180.0f, 1, 1, 1, ButtonType);
+	StartButton = CreateSprite("TextureFiles/StartButton.png", 480.0f, 180.0f, 1, 1, 1);
 	StartButton->Position.x = 0.0f;
 	StartButton->Position.y = 200.0f;
 
 	// Creates the showcase button
-	ShowcaseButton = CreateSprite("TextureFiles/ShowcaseButton.png", 640.0f, 180.0f, 1, 1, 1, ButtonType);
+	ShowcaseButton = CreateSprite("TextureFiles/ShowcaseButton.png", 640.0f, 180.0f, 1, 1, 1);
 	ShowcaseButton->Position.x = 0.0f;
 	ShowcaseButton->Position.y = 0.0f;
 
 	// Creates the exit button
-	ExitButton = CreateSprite("TextureFiles/ExitButton.png", 480.0f, 180.0f, 1, 1, 1, ButtonType);
+	ExitButton = CreateSprite("TextureFiles/ExitButton.png", 480.0f, 180.0f, 1, 1, 1);
 	ExitButton->Position.x = 0.0f;
 	ExitButton->Position.y = -200.0f;
 
 	// Creates the selector button - set to default position of the start button
-	Selector = CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 0, 1, 1, PartType);
+	Selector = CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 0, 1, 1);
 	Selector->Position.x = 100.0f;
 	Selector->Position.y = 0.0f;
 	

@@ -36,12 +36,19 @@ Platform* CreatePlatform(char* textureName, int collisionGroup, float width, flo
 {
 	Platform *CurrentPlatform = AddPlatform();
 
-	CurrentPlatform->PlatformSprite = CreateSprite(textureName, width, height, 4, 1, 1, PlatformType);
+	CurrentPlatform->PlatformSprite = CreateSprite(textureName, width, height, 4, 1, 1);
 
 	CreateCollisionBox(&CurrentPlatform->PlatformCollider, &CurrentPlatform->Position, collisionGroup, width, height, newID);
 	CurrentPlatform->objID = newID;
 	InitializeRigidBody(&CurrentPlatform->PlatformRigidBody, TRUE, 400, 100);
 
 	return CurrentPlatform;
+}
+
+void UpdatePlatformPosition(Platform* CurrentPlatform, float x, float y)
+{
+	Vec2Set(&CurrentPlatform->Position, x, y);
+	CurrentPlatform->PlatformCollider.Position = CurrentPlatform->Position;
+	CurrentPlatform->PlatformSprite->Position = CurrentPlatform->Position;
 }
 

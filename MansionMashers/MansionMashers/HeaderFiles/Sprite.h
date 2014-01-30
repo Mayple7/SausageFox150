@@ -6,8 +6,6 @@
 #include "TextureManager.h"
 #include "CollisionManager.h"
 
-enum collisionGroup{ PlayerType, EnemyType, PartType, BackgroundType, FoodType, HudType, PlatformType, BounceType, ButtonType};
-
 typedef struct Sprite
 {
 	//Created (BOOL 1 or 0 only)
@@ -15,16 +13,9 @@ typedef struct Sprite
 
 	//Name
 	char SpriteName[24];
+	
 	//Collision Group
-	int CollisionGroup;
-
-	//Collision
-	int CanCollide;
-	int Ghost;
-	int SensorType;
-	int CollideDebug;
-	Vec2 CollideSize;
-	Vec2 CollideOffset;
+	int isHUD;
 
 	//Sprite Graphics Properties
 	AEGfxVertexList *SpriteMesh;
@@ -63,7 +54,7 @@ typedef struct Sprite
 	float RotationPrev;
 }Sprite;
 
-Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup);
+Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
 void UpdateMesh(Sprite *currentSprite);
 void DrawSprite(Sprite *currentSprite);
