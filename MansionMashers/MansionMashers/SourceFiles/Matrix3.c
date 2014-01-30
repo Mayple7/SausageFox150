@@ -440,7 +440,7 @@ void Matrix3ScaleMatrix(Matrix3 *Result, float x, float y)
 /*************************************************************************/
 void Matrix3RotDeg(Matrix3 *Result, float Angle)
 {
-	float radians = FOX_PI * (Angle / 180.0f);
+	float radians = (float)FOX_PI * (Angle / 180.0f);
 	
 	Result->m[0][0] = (float)cos(radians); 
 	Result->m[0][1] = (float)-sin(radians);
