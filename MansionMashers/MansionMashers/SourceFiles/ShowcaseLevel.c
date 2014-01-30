@@ -1,18 +1,26 @@
-/*
-File:				ShowcaseLevel.c
-Author:				Dan Muller (d.muller)
-Creation Date:		Jan 22, 2014
+/*****************************************************************************/
+/*!
+\file				ShowcaseLevel.c
+\author				Dan Muller (d.muller)
+\date				Jan 22, 2014
 
-Purpose:			Showcase demo
+\brief				Functions for the showcase level
 
-Functions:			MenuLoop - Main loop for the main menu
- 
-Copyright (C) 2014 DigiPen Institute of Technology. 
-Reproduction or disclosure of this file or its contents without the prior 
-written consent of DigiPen Institute of Technology is prohibited. 
+\par				Functions:
+\li					LoadShowcase
+\li					InitializeShowcase
+\li					UpdateShowcase
+\li					DrawShowcase
+\li					FreeShowcase
+\li					UnloadShowcase
+\li					EventShowcase
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
-
-
+/*****************************************************************************/
 
 // ---------------------------------------------------------------------------
 // includes
@@ -21,12 +29,12 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/LevelShowcase.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
+#include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 
 
 // ---------------------------------------------------------------------------
-
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
 
@@ -38,124 +46,204 @@ Sprite *HUDitem;
 Sprite *Background;
 Sprite *Background2;
 HUDLayer HUDList;
-Sprite *Shelf;
-Sprite *Crate;
+Platform *BouncePad;
+Platform *Shelf;
+Platform *Crate;
 
 Player CurrentPlayer;
 Enemy CurrentEnemy;
 
 Sprite *Hammy;
 
+/*************************************************************************/
+/*!
+	\brief
+	Loads assets for the showcase level
+*/
+/*************************************************************************/
+void LoadShowcase(void)
+{
+	//Placeholder
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Initializes the objects for the showcase level
+*/
+/*************************************************************************/
 void InitializeShowcase(void)
 {
 	Vec2 startingCamera;
 	int hudLoop;
-	MakeShowcase();
+	resetObjectList();
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
 
-	HUD = CreateSprite("HUD", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	// Create single player HUD sprite
+	HUD = CreateSprite("HUD", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
 	HUD->CanCollide = FALSE;
-	HUD->SpriteType = HudType;
 
-	HUDitem = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	// Create single player HUD item sprite
+	HUDitem = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
 	HUDitem->CanCollide = FALSE;
-	HUDitem->SpriteType = HudType;
 	HUDitem->ItemType = 0;
 
-	Background = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
+	// Create the background sprite
+	Background = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
 	Background->CanCollide = FALSE;
 	
-	Background2 = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
+	// Create the offset background sprite
+	Background2 = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
 	Background2->CanCollide = FALSE;
 	Background2->Position.x = 3840;
 	Background2->FlipX = TRUE;
 
-	Shelf = CreateSprite("Shelf", "TextureFiles/Shelf.png", 123.0f, 245.5f, 8, 1, 1);
-	Shelf->CanCollide = TRUE;
+	// Create the shelf sprite and initialize to be collidable
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 11, 123, 245);
 	Shelf->Position.x = 475;
 	Shelf->Position.y = -115;
-	Shelf->SpriteType = PlatformType;
-	Shelf->CollideDebug = TRUE;
-	Shelf->CollideSize.y = 60;
-	Shelf->CollideOffset.y = Shelf->Height / 2 - 30;
-
-	Crate = CreateSprite("Crate", "TextureFiles/Crate.png", 859.0f, 260.5f, 9, 1, 1);
-	Crate->CanCollide = TRUE;
+	Shelf->PlatformCollider.Position = Shelf->Position;
+	Shelf->PlatformSprite->Position = Shelf->Position;
+	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
+	Shelf->PlatformCollider.height = 60;
+	
+	// Create and initialize the crate sprite
+	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 12, 859, 260.5f);
 	Crate->Position.x = 1400;
 	Crate->Position.y = -180;
-	Crate->SpriteType = PlatformType;
-	Crate->CollideDebug = FALSE;
-	Crate->CollideSize.y = 60;
-	Crate->CollideOffset.x = 0.0f;
-	Crate->CollideOffset.y = Crate->Height / 2 - 60;
+	Crate->PlatformCollider.Position = Crate->Position;
+	Crate->PlatformSprite->Position = Crate->Position;
+	Crate->PlatformCollider.Offset.y = Crate->PlatformSprite->Height / 2 - 60;
+	Crate->PlatformCollider.width = Crate->PlatformCollider.width - 100;
+	Crate->PlatformCollider.height = 60;
 
-	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1);
-	Hammy->Position.x   = -400.0f;
-	Hammy->CanCollide = TRUE;
+	// Create and initialize the HAM sprite
+	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1, FoodType);
+	Hammy->Position.x   = -1000.0f;
 	Hammy->SensorType = RectangleCollider;
-	Hammy->SpriteType = FoodType;
 	Hammy->CollideDebug = TRUE;
 
+	// Add the HUD sprites to the HUDlist
 	HUDList.HudItem[0] = HUD;
 	HUDList.HudItem[1] = HUDitem;
 
+	// Create the player
 	if(NULL != malloc(sizeof(Player)))
 		InitializePlayer(&CurrentPlayer);
 
-	CurrentPlayer.Position.x = -1280;
+	CurrentPlayer.Position.x = -1380;
 	CurrentPlayer.Position.y = -220;
 
+	// Create the enemy
 	if(NULL != malloc(sizeof(Enemy)))
 		InitializeEnemy(&CurrentEnemy);
 
 	CurrentEnemy.EnemySprite->CollideDebug = FALSE;
-	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1;
-	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1;
+	CurrentEnemy.Position.x = 600;
+	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1f;
+	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1f;
 
+	// Add the enemy and player to the collidable list
 	AddCollidable(CurrentEnemy.EnemySprite);
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
-	//Player collision box changes (Feel free to mess with all this collision stuff)
-	CurrentPlayer.PlayerSprite->CollideSize.x   = 2 * CurrentPlayer.PlayerSprite->Width  / 3;
-	CurrentPlayer.PlayerSprite->CollideSize.y   = CurrentPlayer.PlayerSprite->Height / 2;
-	CurrentPlayer.PlayerSprite->CollideOffset.x =  0.0f;
-	CurrentPlayer.PlayerSprite->CollideOffset.y =  0.0f;
 	//Show debug box
-	//CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
+	CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 
-	
+	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 10, 400, 100);
+	BouncePad->Position.x = -1000;
+	BouncePad->Position.y = -200;
+	BouncePad->PlatformCollider.Position = BouncePad->Position;
+	BouncePad->PlatformSprite->Position = BouncePad->Position;
+	BouncePad->PlatformRigidBody.Restitution = 1.9f;
+
+	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
-	SetCamera(&startingCamera, 350, &HUDList);
+	SetCamera(&startingCamera, 250, &HUDList);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates the showcase level
+*/
+/*************************************************************************/
+void UpdateShowcase(void)
+{
+	// Hide the debug box past X=700
+	if(CurrentPlayer.Position.x > 700)
+		CurrentPlayer.PlayerSprite->CollideDebug = FALSE;
+	else
+		CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
+	// Run the enemy logic
+	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
+	UpdateEnemy(&CurrentEnemy);
+
+	// Handle any events such as collision
+	EventShowcase();
+
+	// Update the player position
+	UpdatePlayerPosition(&CurrentPlayer);
+
+	// Return to main menu with ESC
+	if(AEInputCheckTriggered(VK_ESCAPE))
+	{
+		SetNextState(GS_MainMenu);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Draws the showcase level
+*/
+/*************************************************************************/
+void DrawShowcase(void)
+{
+	// Draws the object list and sets the camera to the correct location
+	drawObjectList();
+	SetCamera(&CurrentPlayer.Position, 250, &HUDList);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees all the objects in the showcase level
+*/
+/*************************************************************************/
 void FreeShowcase(void)
 {
 	freeObjectList();
 }
 
-void DrawShowcase(void)
+/*************************************************************************/
+/*!
+	\brief
+	Unloads all the assets in the showcase level
+*/
+/*************************************************************************/
+void UnloadShowcase(void)
 {
-	drawObjectList();
-	DrawPlayer(&CurrentPlayer);
-	DrawEnemy(&CurrentEnemy);
-	SetCamera(&CurrentPlayer.Position, 350, &HUDList);
+	//Placeholder
 }
 
-void MakeShowcase(void)
-{
-	resetObjectList();
-}
-
+/*************************************************************************/
+/*!
+	\brief
+	Handles all events in the showcase level
+*/
+/*************************************************************************/
 void EventShowcase(void)
 {
-	CurrentPlayer.PlayerRigidBody.onGround = FALSE;
+	// Check for any collision and handle the results
 	DetectCollision();
-
+	DetectPlayerCollision();
+	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
-
+	// Handle input for swapping items
 	if(AEInputCheckTriggered('Q'))
 	{
 		if (HUDitem->ItemType == 0)
@@ -169,25 +257,12 @@ void EventShowcase(void)
 			HUDitem->ItemType = 0;
 		}
 	}
+
+	// check if forcing the application to quit
+	if (0 == AESysDoesWindowExist())
+		SetNextState(GS_Quit);
 }
 
-void UnloadShowcase(void)
-{
-	//Placeholder
-}
 
-void LoadShowcase(void)
-{
-	//Placeholder
-}
 
-void UpdateShowcase(void)
-{
-	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
-	EventShowcase();
 
-	if(AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
-	{
-		SetNextState(GS_MainMenu);
-	}
-}

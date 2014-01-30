@@ -44,9 +44,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <CompileAs>CompileAsC</CompileAs>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Winmm.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,13 +81,14 @@
     <ClInclude Include="AEUtil.h" />
     <ClInclude Include="AEVec2.h" />
     <ClInclude Include="HeaderFiles\Camera.h" />
+    <ClInclude Include="HeaderFiles\CollisionBox.h" />
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
     <ClInclude Include="HeaderFiles\Enemy.h" />
     <ClInclude Include="HeaderFiles\FoxEngine.h" />
     <ClInclude Include="HeaderFiles\FoxMath.h" />
+    <ClInclude Include="HeaderFiles\FoxObjects.h" />
     <ClInclude Include="HeaderFiles\GameStateList.h" />
     <ClInclude Include="HeaderFiles\GameStateManager.h" />
-    <ClInclude Include="HeaderFiles\GSTestLevel.h" />
     <ClInclude Include="HeaderFiles\LevelShowcase.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\Matrix3.h" />
@@ -93,7 +96,10 @@
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
     <ClInclude Include="HeaderFiles\Options.h" />
     <ClInclude Include="HeaderFiles\Physics.h" />
+    <ClInclude Include="HeaderFiles\PhysicsConstants.h" />
+    <ClInclude Include="HeaderFiles\Platform.h" />
     <ClInclude Include="HeaderFiles\Player.h" />
+    <ClInclude Include="HeaderFiles\PlayerCollision.h" />
     <ClInclude Include="HeaderFiles\RigidBody.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
     <ClInclude Include="HeaderFiles\StartSlides.h" />
@@ -108,16 +114,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Camera.c" />
+    <ClCompile Include="SourceFiles\CollisionBox.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
     <ClCompile Include="SourceFiles\Enemy.c" />
     <ClCompile Include="SourceFiles\GameStateManager.c" />
-    <ClCompile Include="SourceFiles\GSTestLevel.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\Matrix3.c" />
     <ClCompile Include="SourceFiles\Movement.c" />
     <ClCompile Include="SourceFiles\ObjectManager.c" />
+    <ClCompile Include="SourceFiles\Platform.c" />
     <ClCompile Include="SourceFiles\Player.c" />
+    <ClCompile Include="SourceFiles\PlayerCollision.c" />
     <ClCompile Include="SourceFiles\RigidBody.c" />
     <ClCompile Include="SourceFiles\ShowcaseLevel.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />

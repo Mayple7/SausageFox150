@@ -4,6 +4,8 @@
 #define MAX_INVENTORY 20
 #include "Vector2.h"
 #include "RigidBody.h"
+#include "Sprite.h"
+#include "CollisionBox.h"
 
 typedef struct PlayerStats
 {
@@ -34,6 +36,7 @@ typedef struct Player
 {
 	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;
+	CollisionBox PlayerCollider;
 	//struct CollisionInfo PlayerCollision;
 	//struct Transform PlayerTransform;
 
@@ -45,10 +48,11 @@ typedef struct Player
 }Player;
 
 void InitializePlayer(struct Player *CurrentPlayer);
-void DrawPlayer(struct Player *CurrentPlayer); //Draw player sprite, current weapon sprite
-void UpdatePosition(struct Player *CurrentPlayer);
+void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
 void HandleCollision(Sprite *objHit);
+void DetectPlayerCollision(void);
+
 
 //Updating non-modifiable player stats
 void updateMaxHealth(PlayerStats *CurrentPlayerStats);

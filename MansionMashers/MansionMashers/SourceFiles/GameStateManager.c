@@ -1,22 +1,32 @@
-/*
-File:				GameStateManager.c
-Author:				Juli Gregg (j.gregg)
-Creation Date:		Jan 20, 2014
+/*****************************************************************************/
+/*!
+\file				GameStateManager.c
+\author				Juli Gregg (j.gregg)
+\date				Jan 20, 2014
 
-Purpose:			Managers running levels and switching levels
+\brief				Manages the levels and updates function pointers for switching levels
 
-Functions:			
- 
-Copyright (C) 2014 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents without the prior
-written consent of DigiPen Institute of Technology is prohibited.
-*/
+\par				Functions:
+\li					GSMInitialize
+\li					GetPreviousState
+\li					GetCurrentState
+\li					GetNextState
+\li					SetPreviousState
+\li					SetCurrentState
+\li					SetNextState
+\li					GSMUpdate
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
+*/ 
+/*****************************************************************************/
 
 // ---------------------------------------------------------------------------
 // Includes
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/GSTestLevel.h"
 #include "../HeaderFiles/StartSlides.h"
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/TestLevel.h"
@@ -42,7 +52,15 @@ void GSMUpdate(int CurState);
 // ---------------------------------------------------------------------------
 // Main Program
 
-//Initializes states to same level to start
+/*************************************************************************/
+/*!
+	\brief
+	Initializes states to the same level to start
+	  
+	\param InitState
+	The initial state to start the game
+*/
+/*************************************************************************/
 void GSMInitialize(int InitState)
 {
 	State.Previous = InitState;
@@ -50,40 +68,99 @@ void GSMInitialize(int InitState)
 	State.Next = InitState;
 }
 
-//Previous
+/*************************************************************************/
+/*!
+	\brief
+	Returns the previous state
+
+	\return
+	The enum of the previous state
+*/
+/*************************************************************************/
 int GetPreviousState(void)
 {
 	return State.Previous;
 }
 
-//Current
+/*************************************************************************/
+/*!
+	\brief
+	Returns the current state
+	
+	\return
+	The enum of the current state
+*/
+/*************************************************************************/
 int GetCurrentState(void)
 {
 	return State.Current;
 }
 
-//Next
+/*************************************************************************/
+/*!
+	\brief
+	Returns the next state
+	
+	\return
+	The enum of the next state
+*/
+/*************************************************************************/
 int GetNextState(void)
 {
 	return State.Next;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Sets the previous state
+	
+	\param PreviousState
+	The enum of the state to set
+*/
+/*************************************************************************/
 void SetPreviousState(int PreviousState)
 {
 	State.Previous = PreviousState;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Sets the current state
+	
+	\param CurrentState
+	The enum of the state to set
+*/
+/*************************************************************************/
 void SetCurrentState(int CurrentState)
 {
 	State.Current = CurrentState;
 }
 
-//Set state for changing level
+/*************************************************************************/
+/*!
+	\brief
+	Sets the next state
+	
+	\param NextState
+	The enum of the state to set
+*/
+/*************************************************************************/
 void SetNextState(int NextState)
 {
 	State.Next = NextState;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates all the function pointers for the current level
+	
+	\param CurState
+	The enum of the state to use the function pointers
+*/
+/*************************************************************************/
 void GSMUpdate(int CurState)
 {
 	switch (CurState)
@@ -119,15 +196,10 @@ void GSMUpdate(int CurState)
 			GSMPointers.pFree = FreeShowcase;
 			GSMPointers.pDraw = DrawShowcase;
 			GSMPointers.pUnload = UnloadShowcase;
+			break;
 		case GS_Level1:
 			break;
 		case GS_Level2:
-			GSMPointers.pLoad = Load2;
-			GSMPointers.pInit = Init2;
-			GSMPointers.pUpdate = Update2;
-			GSMPointers.pFree = Free2;
-			GSMPointers.pDraw = Draw2;
-			GSMPointers.pUnload = Unload2;
 			break;
 	}
 }

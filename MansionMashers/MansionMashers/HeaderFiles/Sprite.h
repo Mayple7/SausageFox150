@@ -1,10 +1,11 @@
 #ifndef FOX_SPRITE
 #define FOX_SPRITE
 
+#include "../AEEngine.h"
 #include "Vector2.h"
 #include "CollisionManager.h"
 
-enum spriteType{ PlayerType, EnemyType, PartType, BackgroundType, FoodType, HudType, PlatformType };
+enum collisionGroup{ PlayerType, EnemyType, PartType, BackgroundType, FoodType, HudType, PlatformType, BounceType, ButtonType};
 
 typedef struct Sprite
 {
@@ -13,8 +14,8 @@ typedef struct Sprite
 
 	//Name
 	char SpriteName[24];
-	//Type
-	int SpriteType;
+	//Collision Group
+	int CollisionGroup;
 
 	//Collision
 	int CanCollide;
@@ -61,7 +62,7 @@ typedef struct Sprite
 	float RotationPrev;
 }Sprite;
 
-Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames);
+Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
 void UpdateMesh(Sprite *currentSprite);
 void DrawSprite(Sprite *currentSprite);

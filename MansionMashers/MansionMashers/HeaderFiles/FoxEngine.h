@@ -11,10 +11,8 @@
 #include "Movement.h"
 #include "ObjectManager.h"
 #include "Physics.h"
-#include "Player.h"
 #include "RigidBody.h"
 #include "Sprite.h"
-#include "Enemy.h"
 #include "GameStateManager.h"
 #include "GameStateList.h"
 
