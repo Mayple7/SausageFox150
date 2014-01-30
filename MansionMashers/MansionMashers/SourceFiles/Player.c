@@ -94,7 +94,38 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
-	//Move left when A is pushed
+	// Move the direction based on the speed
+	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);
+
+	// not key press for direction then slow down!
+	if(!AEInputCheckCurr('D') && !AEInputCheckCurr('A'))
+	{
+		if (!(CurrentPlayer->Position.y > -225) && !CurrentPlayer->PlayerRigidBody.onGround)
+		{
+			if (CurrentPlayer->Speed - 0.35f >= 0.0f)
+			{
+				CurrentPlayer->Speed -= 0.35f;
+			}
+			else
+			{
+				CurrentPlayer->Speed = 0.0f;
+				CurrentPlayer->LegSinValue = 0;
+			}
+		}
+		else
+		{
+			if (CurrentPlayer->Speed - 0.1f >= 0.0f)
+			{
+				CurrentPlayer->Speed -= 0.1f;
+			}
+			else
+			{
+				CurrentPlayer->Speed = 0.0f;
+				CurrentPlayer->LegSinValue = 0;
+			}
+		}
+	}
+	// Move left if A is pressed
 	if(AEInputCheckCurr('A'))
 	{
 		if(CurrentPlayer->Position.y > -225 && !CurrentPlayer->PlayerRigidBody.onGround)
@@ -106,10 +137,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 		else
 			CurrentPlayer->PlayerSprite->AnimationActive = 1;
-		MoveObject(&CurrentPlayer->Position, LEFT, 8.0f);
 		CurrentPlayer->PlayerSprite->FlipX = 0;
+		CurrentPlayer->PlayerDirection = LEFT;
+		CurrentPlayer->Speed = 8.0f;
 	}
-	//Move right when D is pushed
+	// Move right if D is pressed
 	else if(AEInputCheckCurr('D'))
 	{
 		if(CurrentPlayer->Position.y > -225 && !CurrentPlayer->PlayerRigidBody.onGround)
@@ -121,8 +153,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 		else
 			CurrentPlayer->PlayerSprite->AnimationActive = 1;
-		MoveObject(&CurrentPlayer->Position, RIGHT, 8.0f);
 		CurrentPlayer->PlayerSprite->FlipX = 1;
+		CurrentPlayer->PlayerDirection = RIGHT;
+		CurrentPlayer->Speed = 8.0f;
 	}
 	//Stop moving when A and D are not pushed, stop animation correctly as well
 	else
@@ -386,4 +419,74 @@ void DetectPlayerCollision(void)
 	// Check projectile collisions
 	//	-> Handle collision if true
 	// other collisions!
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Animates the players legs.
+*/
+/*************************************************************************/
+void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy)
+{
+	float LegDistance = 9-Object->Speed;
+	float LegUpperDirection = sin(Object->LegSinValue)/(LegDistance);
+	float LegLowerDirection;
+	float LegUpperDirection2 = sin(Object->LegSinValue)/(LegDistance);
+	float LegLowerDirection2;
+
+	Object->LegSinValue += .1; 
+
+    if (LegUpperDirection < 0)
+        LegLowerDirection = (sin(Object->LegSinValue)/2 + sin(Object->LegSinValue) * -0.8)/(LegDistance);
+    else
+        LegLowerDirection = (LegUpperDirection + sin(Object->LegSinValue) + sin(Object->LegSinValue) * 0.4)/(LegDistance);
+
+    if (LegUpperDirection2 > 0)
+        LegLowerDirection2 = (sin(Object->LegSinValue)/2 + sin(Object->LegSinValue) * -0.8)/(LegDistance);
+    else
+        LegLowerDirection2 = (LegUpperDirection2 + sin(Object->LegSinValue) + sin(Object->LegSinValue) * 0.4)/(LegDistance);
+	
+	LegUpr->FlipX = Object->PlayerSprite->FlipX;
+	LegLwr->FlipX = Object->PlayerSprite->FlipX;
+	LegUpr2->FlipX = Object->PlayerSprite->FlipX;
+	LegLwr2->FlipX = Object->PlayerSprite->FlipX;
+
+
+	if (Object->PlayerSprite->FlipX == FALSE)
+	{
+		LegUpr->Rotation = LegUpperDirection;
+		LegUpr->Position.x = Object->Position.x + sin(Object->LegSinValue)*8/(LegDistance);
+		LegUpr->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegLwr->Position.x = cos(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.x;
+		LegLwr->Position.y = sin(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.y;
+		LegLwr->Rotation = LegLowerDirection;
+
+		LegUpr2->Rotation = -LegUpperDirection2;
+		LegUpr2->Position.x = Object->Position.x + sin(Object->LegSinValue)*-8/(LegDistance);
+		LegUpr2->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegLwr2->Position.x = cos(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.x;
+		LegLwr2->Position.y = sin(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.y;
+		LegLwr2->Rotation = -LegLowerDirection2;
+	}
+	else
+	{
+		LegUpr->Rotation = -LegUpperDirection;
+		LegUpr->Position.x = Object->Position.x + sin(Object->LegSinValue)*-8/(LegDistance);
+		LegUpr->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegLwr->Position.x = cos(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.x;
+		LegLwr->Position.y = sin(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.y;
+		LegLwr->Rotation = -LegLowerDirection;
+
+		LegUpr2->Rotation = LegUpperDirection2;
+		LegUpr2->Position.x = Object->Position.x + sin(Object->LegSinValue)*8/(LegDistance);
+		LegUpr2->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegLwr2->Position.x = cos(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.x;
+		LegLwr2->Position.y = sin(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.y;
+		LegLwr2->Rotation = LegLowerDirection2;
+	}
+
+	Bdy->Position.x = Object->Position.x;
+	Bdy->Position.y = Object->Position.y + sin(-Object->LegSinValue*2)*5/(LegDistance);
+	//*************************************************************************************************
 }

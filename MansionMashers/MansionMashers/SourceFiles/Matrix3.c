@@ -16,6 +16,8 @@
 \li					Matrix3Mult
 \li					Matrix3Scale
 \li					Matrix3Identity
+\li					Matrix3Transpose
+\li					Matrix3Translate
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -225,17 +227,46 @@ void Matrix3Sub(Matrix3* Result, Matrix3* Operand1, Matrix3* Operand2)
 /*************************************************************************/
 void Matrix3Mult(Matrix3* Result, Matrix3* Operand1, Matrix3* Operand2)
 {
-	Result->m00 = Operand1->m00 * Operand2->m00 + Operand1->m01 * Operand2->m10 + Operand1->m02 * Operand2->m20;
-	Result->m01 = Operand1->m00 * Operand2->m01 + Operand1->m01 * Operand2->m11 + Operand1->m02 * Operand2->m21;
-	Result->m02 = Operand1->m00 * Operand2->m02 + Operand1->m01 * Operand2->m22 + Operand1->m02 * Operand2->m22;
+	if(Result == Operand1 || Result == Operand1)
+	{
+		Matrix3 tempResult;
+		int i, j;
 
-	Result->m10 = Operand1->m10 * Operand2->m00 + Operand1->m11 * Operand2->m10 + Operand1->m12 * Operand2->m20;
-	Result->m11 = Operand1->m10 * Operand2->m01 + Operand1->m11 * Operand2->m11 + Operand1->m12 * Operand2->m21;
-	Result->m12 = Operand1->m10 * Operand2->m02 + Operand1->m11 * Operand2->m22 + Operand1->m12 * Operand2->m22;
+		tempResult.m00 = Operand1->m00 * Operand2->m00 + Operand1->m01 * Operand2->m10 + Operand1->m02 * Operand2->m20;
+		tempResult.m01 = Operand1->m00 * Operand2->m01 + Operand1->m01 * Operand2->m11 + Operand1->m02 * Operand2->m21;
+		tempResult.m02 = Operand1->m00 * Operand2->m02 + Operand1->m01 * Operand2->m22 + Operand1->m02 * Operand2->m22;
 
-	Result->m20 = Operand1->m20 * Operand2->m00 + Operand1->m21 * Operand2->m10 + Operand1->m22 * Operand2->m20;
-	Result->m21 = Operand1->m20 * Operand2->m01 + Operand1->m21 * Operand2->m11 + Operand1->m22 * Operand2->m21;
-	Result->m22 = Operand1->m20 * Operand2->m02 + Operand1->m21 * Operand2->m22 + Operand1->m22 * Operand2->m22;
+		tempResult.m10 = Operand1->m10 * Operand2->m00 + Operand1->m11 * Operand2->m10 + Operand1->m12 * Operand2->m20;
+		tempResult.m11 = Operand1->m10 * Operand2->m01 + Operand1->m11 * Operand2->m11 + Operand1->m12 * Operand2->m21;
+		tempResult.m12 = Operand1->m10 * Operand2->m02 + Operand1->m11 * Operand2->m22 + Operand1->m12 * Operand2->m22;
+
+		tempResult.m20 = Operand1->m20 * Operand2->m00 + Operand1->m21 * Operand2->m10 + Operand1->m22 * Operand2->m20;
+		tempResult.m21 = Operand1->m20 * Operand2->m01 + Operand1->m21 * Operand2->m11 + Operand1->m22 * Operand2->m21;
+		tempResult.m22 = Operand1->m20 * Operand2->m02 + Operand1->m21 * Operand2->m22 + Operand1->m22 * Operand2->m22;
+		
+		for(i = 0; i < 3; i++)
+		{
+			for(j = 0; j < 3; j++)
+			{
+				Result->m[i][j] = tempResult.m[i][j];
+			}
+		}
+
+	}
+	else
+	{
+		Result->m00 = Operand1->m00 * Operand2->m00 + Operand1->m01 * Operand2->m10 + Operand1->m02 * Operand2->m20;
+		Result->m01 = Operand1->m00 * Operand2->m01 + Operand1->m01 * Operand2->m11 + Operand1->m02 * Operand2->m21;
+		Result->m02 = Operand1->m00 * Operand2->m02 + Operand1->m01 * Operand2->m22 + Operand1->m02 * Operand2->m22;
+
+		Result->m10 = Operand1->m10 * Operand2->m00 + Operand1->m11 * Operand2->m10 + Operand1->m12 * Operand2->m20;
+		Result->m11 = Operand1->m10 * Operand2->m01 + Operand1->m11 * Operand2->m11 + Operand1->m12 * Operand2->m21;
+		Result->m12 = Operand1->m10 * Operand2->m02 + Operand1->m11 * Operand2->m22 + Operand1->m12 * Operand2->m22;
+
+		Result->m20 = Operand1->m20 * Operand2->m00 + Operand1->m21 * Operand2->m10 + Operand1->m22 * Operand2->m20;
+		Result->m21 = Operand1->m20 * Operand2->m01 + Operand1->m21 * Operand2->m11 + Operand1->m22 * Operand2->m21;
+		Result->m22 = Operand1->m20 * Operand2->m02 + Operand1->m21 * Operand2->m22 + Operand1->m22 * Operand2->m22;
+	}
 }
 
 /*************************************************************************/
@@ -288,4 +319,63 @@ void Matrix3Identity(Matrix3* Result)
 	Result->m20 = 0.0f; 
 	Result->m21 = 0.0f;
 	Result->m22 = 1.0f; 
+}
+//******************************************************************************************************************
+/*************************************************************************/
+/*!
+	\brief
+	Calculates the transpose matrix of Operand and saves it in Result.
+
+	\param Operand
+	A matrix to transpose
+*/
+/*************************************************************************/
+void Matrix3Transpose(Matrix3 *Result, Matrix3 *Operand)
+{
+	float temp;
+
+	//Diagonal
+	Result->m[0][0] = Operand->m[0][0]; 
+	Result->m[1][1] = Operand->m[1][1]; 
+	Result->m[2][2] = Operand->m[2][2];
+	
+	//top swap
+	temp = Operand->m[0][1];
+	Result->m[0][1] = Operand->m[1][0];
+	Result->m[1][0] = temp;
+	
+	//middle swap
+	temp = Operand->m[0][2];
+	Result->m[0][2] = Operand->m[2][0];
+	Result->m[2][0] = temp; 
+
+	//bottom swap
+	temp = Operand->m[1][2];
+	Result->m[1][2] = Operand->m[2][1];
+	Result->m[2][1] = temp;
+	 
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Creates a translation matrix from x & y and saves it in Result
+
+	\param Operand
+	A matrix to transpose
+*/
+/*************************************************************************/
+void Matrix3Translate(Matrix3 *Result, float x, float y)
+{
+	Result->m[0][0] = 1.0f; 
+	Result->m[0][1] = 0.0f;
+	Result->m[0][2] = x; 
+
+	Result->m[1][0] = 0.0f;
+	Result->m[1][1] = 1.0f; 
+	Result->m[1][2] = y;
+
+	Result->m[2][0] = 0.0f; 
+	Result->m[2][1] = 0.0f;
+	Result->m[2][2] = 1.0f; 
 }
