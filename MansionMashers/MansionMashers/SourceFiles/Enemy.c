@@ -28,46 +28,28 @@
 
 // ---------------------------------------------------------------------------
 // globals
-
-Enemy CurrentEnemy;
 int LogicTimer;
 
 /*************************************************************************/
 /*!
 	\brief
-	Initializes and creates the sprite for the enemy
+	Initializes and creates the enemy
 	  
 	\param CurrentEnemy
 	A pointer to the enemy object to be initialized
 */
 /*************************************************************************/
-void InitializeEnemy(struct Enemy *CurrentEnemy)
+Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float height, int objID)
 {
+	Enemy *CurrentEnemy = AddEnemy();
+
 	//Creates the enemy sprite
-	CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/EasyEnemy.png", 150.0f, 150.0f, 8, 8, 1, EnemyType);
-
-	//Animation properties
-	CurrentEnemy->EnemySprite->AnimationActive = 1;
-	CurrentEnemy->EnemySprite->AnimationSpeed = 6;
-
-	//Collision properties
-	CurrentEnemy->EnemySprite->CanCollide = 1;
-
-	//Starting position
-	CurrentEnemy->Position.x = 300.0f;
-	CurrentEnemy->Position.y = 0.0f;
+	CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/EasyEnemy.png", width, height, 8, 8, 1, collisionGroup);
 
 	//Physics variables initialized
-	CurrentEnemy->EnemyRigidBody.Static = FALSE;
-	CurrentEnemy->EnemyRigidBody.Mass = 10;
-	CurrentEnemy->EnemyRigidBody.Drag = 0.5;
-	CurrentEnemy->EnemyRigidBody.Area = CurrentEnemy->EnemySprite->Width * CurrentEnemy->EnemySprite->Height;
-	CurrentEnemy->EnemyRigidBody.Density = CurrentEnemy->EnemyRigidBody.Mass / CurrentEnemy->EnemyRigidBody.Area;
+	InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, width, height);
 
-	//Initialize physics systems
-	SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, -15.0f);
-	ZeroAcceleration(&CurrentEnemy->EnemyRigidBody);
-	SetVelocity(&CurrentEnemy->EnemyRigidBody, 0.0f, 0.0f);
+	return CurrentEnemy;
 }
 
 /*************************************************************************/
@@ -97,6 +79,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	UpdateVelocity(&CurrentEnemy->EnemyRigidBody);
 	Vec2Add(&CurrentEnemy->Position, &CurrentEnemy->Position, &CurrentEnemy->EnemyRigidBody.Velocity);
 	CurrentEnemy->EnemySprite->Position = CurrentEnemy->Position;
+	CurrentEnemy->EnemyCollider.Position = CurrentEnemy->Position;
 }
 
 /*************************************************************************/

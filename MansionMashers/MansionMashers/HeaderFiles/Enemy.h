@@ -4,6 +4,7 @@
 #include "Vector2.h"
 #include "RigidBody.h"
 #include "Sprite.h"
+#include "CollisionBox.h"
 
 typedef struct EnemyStats
 {
@@ -24,18 +25,18 @@ typedef struct EnemyStats
 typedef struct Enemy
 {
 	int EnemyType;
+	int objID;
 
 	Sprite *EnemySprite;
 	RigidBody EnemyRigidBody;
 	EnemyStats CurrentEnemyStats;
-	//struct CollisionInfo EnemyCollision;
-	//struct Transform EnemyTransform;
+	CollisionBox EnemyCollider;
 
 	Vec2 Position;
 
 }Enemy;
 
-void InitializeEnemy(Enemy *CurrentEnemy);
+Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float height, int objID);
 void UpdateEnemy(Enemy *CurrentEnemy);
 void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer);
 
