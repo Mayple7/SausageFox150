@@ -13,10 +13,14 @@ Sprite *collideList;
 //Objects that search for collision
 Sprite *collidables;
 Platform *platformList;
+Food *foodList;
+Enemy *enemyList;
 
 //Functionz
 Sprite* AddObject(void);
 Platform* AddPlatform(void);
+Food* AddFood(void);
+Enemy* AddEnemy(void);
 void AddCollidable(Sprite *newCollidable);
 void resetObjectList(void);
 void drawObjectList(void);

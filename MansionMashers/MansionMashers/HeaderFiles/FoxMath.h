@@ -1,8 +1,8 @@
 #ifndef FOX_MATH
 #define FOX_MATH
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
+#ifndef FOX_PI
+#define FOX_PI 3.14159265358979323846
 #endif
 
 //-------------------------------------------------------------------------

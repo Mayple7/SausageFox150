@@ -55,7 +55,7 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	}
 
 	//Creates the sprite for the player
-	CurrentPlayer->PlayerSprite = CreateSprite("Player", "TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2, PlayerType);
+	CurrentPlayer->PlayerSprite = CreateSprite("TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2, PlayerType);
 
 	//Default position of the player
 	CurrentPlayer->Position.x = 0.0f;
@@ -67,8 +67,6 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	//Collision properties
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, 2 * CurrentPlayer->PlayerSprite->Width / 3, CurrentPlayer->PlayerSprite->Height / 2, newID);
 	CurrentPlayer->PlayerCollider.Offset.y = -20.0f;
-
-	
 
 	//Old collision data
 	CurrentPlayer->PlayerSprite->CollideSize.x   = 2 * CurrentPlayer->PlayerSprite->Width  / 3;
@@ -102,9 +100,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		if (!(CurrentPlayer->Position.y > -225) && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			if (CurrentPlayer->Speed - 0.35f >= 0.0f)
+			if (CurrentPlayer->Speed - 0.8f >= 0.0f)
 			{
-				CurrentPlayer->Speed -= 0.35f;
+				CurrentPlayer->Speed -= 0.8f;
 			}
 			else
 			{
@@ -114,9 +112,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 		else
 		{
-			if (CurrentPlayer->Speed - 0.1f >= 0.0f)
+			if (CurrentPlayer->Speed - 0.8f >= 0.0f)
 			{
-				CurrentPlayer->Speed -= 0.1f;
+				CurrentPlayer->Speed -= 0.8f;
 			}
 			else
 			{
@@ -236,14 +234,8 @@ void InputPlayer(struct Player *CurrentPlayer)
 /*************************************************************************/
 void HandleCollision(Sprite *objHit)
 {
-	//If the object is Ham
-	if (objHit->CollisionGroup == FoodType)
-	{
-		printf("YUM YUM YUM YUM  DELICIOUSO\n");
-		freeObject(objHit);
-	}
 	//If the object is an enemy
-	else if (objHit->CollisionGroup == EnemyType)
+	if (objHit->CollisionGroup == EnemyType)
 	{
 		if((objHit->Position.y + (objHit->Height / 3.0f) < CurrentPlayer.Position.y - (CurrentPlayer.PlayerSprite->CollideSize.y / 2.0f)) && CurrentPlayer.PlayerRigidBody.Velocity.y < 0)
 		{
@@ -370,50 +362,103 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 void DetectPlayerCollision(void)
 {
 	Platform* pList = platformList;
+	Food* fList = foodList;
 	int hit = 0;
 	int hitPrev = 0;
 
 	while(pList->objID != 0)
 	{
-		hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
-		hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
-		if(hit)
+		if(pList->objID > 0)
 		{
-			// New target, on start collision
-			if(hitPrev < 0)
+			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
+			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
+			if(hit)
 			{
-				CurrentPlayer.CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
-				//printf("NOT FOUND: %i\n", -hitPrev);
-				PlayerCollidePlatform(&CurrentPlayer, pList);
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentPlayer.CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					PlayerCollidePlatform(&CurrentPlayer, pList);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					PlayerCollidePlatform(&CurrentPlayer, pList);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+					PlayerCollidePlatform(&CurrentPlayer, pList);
+				}
 			}
-			// Found target, hit previous frame, on persistant
-			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+			else
 			{
-				//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				PlayerCollidePlatform(&CurrentPlayer, pList);
-			}
-			// Found target, did not hit previous frame, on start collision
-			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
-			{
-				//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				CurrentPlayer.CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
-				PlayerCollidePlatform(&CurrentPlayer, pList);
-			}
-		}
-		else
-		{
-			if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
-			{
-				// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-			}
-			// Found target, collision ended
-			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
-			{
-				//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				CurrentPlayer.CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10;
+				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+				}
+				// Found target, collision ended
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = 0;
+				}
 			}
 		}
 		pList++;
+	}
+	while(fList->objID != 0)
+	{
+		if(fList->objID > 0)
+		{
+			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &fList->FoodCollider);
+			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, fList->FoodCollider.collisionID);
+
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentPlayer.CollisionData[-hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					PlayerCollideFood(&CurrentPlayer, fList);
+					fList->objID = -1;
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					PlayerCollideFood(&CurrentPlayer, fList);
+					fList->objID = -1;
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
+					PlayerCollideFood(&CurrentPlayer, fList);
+					fList->objID = -1;
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+				}
+				// Found target, collision ended
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = 0;
+				}
+			}
+		}
+		fList++;
 	}
 
 	// Check projectile collisions
@@ -430,22 +475,22 @@ void DetectPlayerCollision(void)
 void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy)
 {
 	float LegDistance = 9-Object->Speed;
-	float LegUpperDirection = sin(Object->LegSinValue)/(LegDistance);
+	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
-	float LegUpperDirection2 = sin(Object->LegSinValue)/(LegDistance);
+	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection2;
 
-	Object->LegSinValue += .1; 
+	Object->LegSinValue += 0.1f; 
 
     if (LegUpperDirection < 0)
-        LegLowerDirection = (sin(Object->LegSinValue)/2 + sin(Object->LegSinValue) * -0.8)/(LegDistance);
+        LegLowerDirection = ((float)sin(Object->LegSinValue)/2 + (float)sin(Object->LegSinValue) * -0.8f)/(LegDistance);
     else
-        LegLowerDirection = (LegUpperDirection + sin(Object->LegSinValue) + sin(Object->LegSinValue) * 0.4)/(LegDistance);
+        LegLowerDirection = (LegUpperDirection + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 
     if (LegUpperDirection2 > 0)
-        LegLowerDirection2 = (sin(Object->LegSinValue)/2 + sin(Object->LegSinValue) * -0.8)/(LegDistance);
+        LegLowerDirection2 = ((float)sin(Object->LegSinValue)/2 + (float)sin(Object->LegSinValue) * -0.8f)/(LegDistance);
     else
-        LegLowerDirection2 = (LegUpperDirection2 + sin(Object->LegSinValue) + sin(Object->LegSinValue) * 0.4)/(LegDistance);
+        LegLowerDirection2 = (LegUpperDirection2 + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 	
 	LegUpr->FlipX = Object->PlayerSprite->FlipX;
 	LegLwr->FlipX = Object->PlayerSprite->FlipX;
@@ -456,37 +501,37 @@ void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLw
 	if (Object->PlayerSprite->FlipX == FALSE)
 	{
 		LegUpr->Rotation = LegUpperDirection;
-		LegUpr->Position.x = Object->Position.x + sin(Object->LegSinValue)*8/(LegDistance);
-		LegUpr->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr->Position.x = cos(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.x;
-		LegLwr->Position.y = sin(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.y;
+		LegUpr->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*8/(LegDistance);
+		LegUpr->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.x;
+		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
 
 		LegUpr2->Rotation = -LegUpperDirection2;
-		LegUpr2->Position.x = Object->Position.x + sin(Object->LegSinValue)*-8/(LegDistance);
-		LegUpr2->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr2->Position.x = cos(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.x;
-		LegLwr2->Position.y = sin(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.y;
+		LegUpr2->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*-8/(LegDistance);
+		LegUpr2->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.x;
+		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
 	}
 	else
 	{
 		LegUpr->Rotation = -LegUpperDirection;
-		LegUpr->Position.x = Object->Position.x + sin(Object->LegSinValue)*-8/(LegDistance);
-		LegUpr->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr->Position.x = cos(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.x;
-		LegLwr->Position.y = sin(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.y;
+		LegUpr->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*-8/(LegDistance);
+		LegUpr->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.x;
+		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
 
 		LegUpr2->Rotation = LegUpperDirection2;
-		LegUpr2->Position.x = Object->Position.x + sin(Object->LegSinValue)*8/(LegDistance);
-		LegUpr2->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr2->Position.x = cos(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.x;
-		LegLwr2->Position.y = sin(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.y;
+		LegUpr2->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*8/(LegDistance);
+		LegUpr2->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.x;
+		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
 	}
 
 	Bdy->Position.x = Object->Position.x;
-	Bdy->Position.y = Object->Position.y + sin(-Object->LegSinValue*2)*5/(LegDistance);
+	Bdy->Position.y = Object->Position.y + (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
 	//*************************************************************************************************
 }

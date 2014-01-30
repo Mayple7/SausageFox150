@@ -24,8 +24,8 @@
 
 // ---------------------------------------------------------------------------
 // includes
-#include "../HeaderFiles/ObjectManager.h"
 #include "../HeaderFiles/FoxEngine.h"
+#include "../HeaderFiles/FoxObjects.h"
 
 // ---------------------------------------------------------------------------
 // Main
@@ -83,8 +83,8 @@ void AddCollidable(Sprite *newCollidable)
 	\brief
 	Adds a platform to the platform list
 	
-	\param newPlatform
-	The platform to add to the list
+	\return
+	The platform added to the list
 */
 /*************************************************************************/
 Platform* AddPlatform(void)
@@ -96,6 +96,54 @@ Platform* AddPlatform(void)
 		{
 			printf("Platform at %i Created\n", i);
 			return &platformList[i];
+		}
+
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Adds a food to the food list
+	
+	\return
+	The food added to the list
+*/
+/*************************************************************************/
+Food* AddFood(void)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if(foodList[i].objID == 0)
+		{
+			printf("Food at %i Created\n", i);
+			return &foodList[i];
+		}
+
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Adds an enemy to the enemy list
+	
+	\return
+	The enemy added to the list
+*/
+/*************************************************************************/
+Enemy* AddEnemy(void)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if(enemyList[i].objID == 0)
+		{
+			printf("Enemy at %i Created\n", i);
+			return &enemyList[i];
 		}
 
 	}
@@ -119,11 +167,13 @@ void resetObjectList(void)
 
 		//Set up object lists
 		platformList = (Platform *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Platform));
+		foodList = (Food *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Food));
+		enemyList = (Enemy *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Enemy));
 		collideList = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 		collidables = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 
 		//Make sure the malloc is not NULL
-		if (collideList && collidables && platformList)
+		if (collideList && collidables && platformList && foodList)
 		{
 			printf("COLLIDE LIST SET UP COMPLETE\n\n");
 		}
@@ -191,7 +241,7 @@ void freeObject(Sprite* objectNext)
 		//Free the mesh and texture data
 		objectNext->Created = 0;
 		AEGfxMeshFree(objectNext->SpriteMesh);
-		AEGfxTextureUnload(objectNext->SpriteTexture);
+		//AEGfxTextureUnload(objectNext->SpriteTexture);
 	}
 }
 
@@ -212,15 +262,14 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			AEGfxMeshFree(drawList[i].SpriteMesh);
-			AEGfxTextureUnload(drawList[i].SpriteTexture);
+			//AEGfxTextureUnload(drawList[i].SpriteTexture);
 			printf("Slot %i is now empty\n", i);
 		}
 	}
 	//Free the object list data allocation
 	free(drawList);
 	free(platformList);
-	//free(collideList);
-	//free(collidables);
+	free(foodList);
 }
 
 

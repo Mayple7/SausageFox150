@@ -24,6 +24,7 @@
 #include "../AEEngine.h"
 #include "../HeaderFiles/Sprite.h"
 #include "../HeaderFiles/ObjectManager.h"
+#include "../HeaderFiles/TextureManager.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -95,9 +96,6 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 /*!
 	\brief
 	Creates and returns the sprite and adds it to the object manager list
-	
-	\param SpriteName
-	Name of the sprite
 
 	\param texture
 	Location of the texture for the sprite
@@ -124,7 +122,7 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	A pointer to the sprite object
 */
 /*************************************************************************/
-Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup)
+Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup)
 {	
 	//Adds the sprite to the object manager list
 	Sprite *CurrentSprite = AddObject();
@@ -139,7 +137,7 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 
 	//Sprite Graphics Properties
 	CurrentSprite->SpriteMesh = createMesh(width, height, CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
-	CurrentSprite->SpriteTexture = AEGfxTextureLoad(texture);
+	CurrentSprite->SpriteTexture = LoadTexture(texture);
 
 	// Size of the sprite
 	CurrentSprite->Width = width;
@@ -161,7 +159,7 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 	CurrentSprite->AnimationTimer = 0;
 
 	//Texture Properties
-	strcpy(CurrentSprite->TextureName, texture);
+	//strcpy(CurrentSprite->TextureName, texture);
 	CurrentSprite->NumHeightFrames = yFrames;
 	CurrentSprite->NumWidthFrames = xFrames;
 
@@ -173,15 +171,18 @@ Sprite* CreateSprite(char SpriteName[], char* texture, float width, float height
 	CurrentSprite->FlipYPrev = 0;
 
 	//Collision properties
-	CurrentSprite->CanCollide     = 1;
-	CurrentSprite->Ghost          = 1;
+	if (newGroup == BackgroundType || newGroup == HudType)
+		CurrentSprite->CanCollide = FALSE;
+	else
+		CurrentSprite->CanCollide = TRUE;
+	CurrentSprite->Ghost          = TRUE;
 	CurrentSprite->SensorType     = RectangleCollider;
 	CurrentSprite->CollideSize.x  = CurrentSprite->Width;
 	CurrentSprite->CollideSize.y  = CurrentSprite->Height;
 
 	//The sprite has now been created
 	CurrentSprite->CollisionGroup = newGroup;
-	strcpy(CurrentSprite->SpriteName, SpriteName);
+	//strcpy(CurrentSprite->SpriteName, SpriteName);
 	CurrentSprite->Created = 1;
 
 	return CurrentSprite;
@@ -261,7 +262,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	{
 		//Sprite Graphics Properties
 		AEGfxVertexList *DebugMesh = createMesh(CurrentSprite->CollideSize.x, CurrentSprite->CollideSize.y, 1.0f, 1.0f, 0.0f);
-		AEGfxTexture *DebugTexture = AEGfxTextureLoad("TextureFiles/DebugBox.png");
+		AEGfxTexture *DebugTexture = LoadTexture("TextureFiles/DebugBox.png");
 
 		AEGfxSetPosition(CurrentSprite->Position.x + CurrentSprite->CollideOffset.x, CurrentSprite->Position.y + CurrentSprite->CollideOffset.y);
 
@@ -269,7 +270,6 @@ void DrawSprite(struct Sprite *CurrentSprite)
 		AEGfxMeshDraw(DebugMesh, AE_GFX_MDM_TRIANGLES);
 
 		AEGfxMeshFree(DebugMesh);
-		AEGfxTextureUnload(DebugTexture);
 	}
 }
 

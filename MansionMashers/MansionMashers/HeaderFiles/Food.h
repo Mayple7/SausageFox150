@@ -14,5 +14,6 @@ typedef struct Food
 }Food;
 
 Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int objID);
+void UpdateFoodPosition(Food *CurrentFood, float x, float y);
 
 #endif
