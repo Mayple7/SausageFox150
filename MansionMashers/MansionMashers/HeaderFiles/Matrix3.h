@@ -96,7 +96,7 @@ typedef struct Matrix3
   void Matrix3Translate(Matrix3 *Result, float x, float y);
   void Matrix3ScaleMatrix(Matrix3 *Result, float x, float y);
   void Matrix3RotDeg(Matrix3 *Result, float Angle);
-  void Matrix3RotRad(Matrix3 *Result, float Angle)
+  void Matrix3RotRad(Matrix3 *Result, float Angle);
 
 
 
