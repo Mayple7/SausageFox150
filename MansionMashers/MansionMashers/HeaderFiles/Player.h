@@ -42,6 +42,12 @@ typedef struct Player
 
 	PlayerStats CurrentPlayerStats;
 
+	float Speed;
+
+	float LegSinValue;
+  
+	enum Direction PlayerDirection;
+
 	Vec2 Position;
 	int dropDown;  //Fake Boolean
 
@@ -52,7 +58,7 @@ void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
 void HandleCollision(Sprite *objHit);
 void DetectPlayerCollision(void);
-
+void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy);
 
 //Updating non-modifiable player stats
 void updateMaxHealth(PlayerStats *CurrentPlayerStats);
