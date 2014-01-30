@@ -55,7 +55,7 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	}
 
 	//Creates the sprite for the player
-	CurrentPlayer->PlayerSprite = CreateSprite("TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2, PlayerType);
+	CurrentPlayer->PlayerSprite = CreateSprite("TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2);
 
 	//Default position of the player
 	CurrentPlayer->Position.x = 0.0f;
@@ -68,15 +68,8 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, 2 * CurrentPlayer->PlayerSprite->Width / 3, CurrentPlayer->PlayerSprite->Height / 2, newID);
 	CurrentPlayer->PlayerCollider.Offset.y = -20.0f;
 
-	//Old collision data
-	CurrentPlayer->PlayerSprite->CollideSize.x   = 2 * CurrentPlayer->PlayerSprite->Width  / 3;
-	CurrentPlayer->PlayerSprite->CollideSize.y   = CurrentPlayer->PlayerSprite->Height / 2;
-	CurrentPlayer->PlayerSprite->CollideOffset.x =  0.0f;
-	CurrentPlayer->PlayerSprite->CollideOffset.y =  -20.0f;
-
 	//Initialize rigidbody
 	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, CurrentPlayer->PlayerSprite->Width, CurrentPlayer->PlayerSprite->Height);
-	CurrentPlayer->PlayerRigidBody.Mass = 15;
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
 }
@@ -220,29 +213,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
-	}
-}
-
-/*************************************************************************/
-/*!
-	\brief
-	Handles a collision with the player
-	
-	\param objHit
-	Object that hit the player
-*/
-/*************************************************************************/
-void HandleCollision(Sprite *objHit)
-{
-	//If the object is an enemy
-	if (objHit->CollisionGroup == EnemyType)
-	{
-		if((objHit->Position.y + (objHit->Height / 3.0f) < CurrentPlayer.Position.y - (CurrentPlayer.PlayerSprite->CollideSize.y / 2.0f)) && CurrentPlayer.PlayerRigidBody.Velocity.y < 0)
-		{
-			printf("BOOP!\n");
-			freeObject(objHit);
-			SetVelocity(&CurrentPlayer.PlayerRigidBody, 0.0f, 10.0f);
-		}
 	}
 }
 

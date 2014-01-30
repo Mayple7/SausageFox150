@@ -115,17 +115,16 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	\param yFrames
 	The number of frames in the y direction
 
-	\param newGroup
-	The collision group to add the sprite to
-
 	\return
 	A pointer to the sprite object
 */
 /*************************************************************************/
-Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, int newGroup)
+Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames)
 {	
 	//Adds the sprite to the object manager list
 	Sprite *CurrentSprite = AddObject();
+
+	CurrentSprite->isHUD = FALSE;
 
 	//Animation offset if needed
 	CurrentSprite->OffsetX = 1.0f / xFrames;
@@ -170,19 +169,6 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->FlipXPrev = 0;
 	CurrentSprite->FlipYPrev = 0;
 
-	//Collision properties
-	if (newGroup == BackgroundType || newGroup == HudType)
-		CurrentSprite->CanCollide = FALSE;
-	else
-		CurrentSprite->CanCollide = TRUE;
-	CurrentSprite->Ghost          = TRUE;
-	CurrentSprite->SensorType     = RectangleCollider;
-	CurrentSprite->CollideSize.x  = CurrentSprite->Width;
-	CurrentSprite->CollideSize.y  = CurrentSprite->Height;
-
-	//The sprite has now been created
-	CurrentSprite->CollisionGroup = newGroup;
-	//strcpy(CurrentSprite->SpriteName, SpriteName);
 	CurrentSprite->Created = 1;
 
 	return CurrentSprite;
@@ -258,7 +244,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 
 
 	// Debug box, will be replaced
-	if (CurrentSprite->CollideDebug)
+	/*if (CurrentSprite->CollideDebug)
 	{
 		//Sprite Graphics Properties
 		AEGfxVertexList *DebugMesh = createMesh(CurrentSprite->CollideSize.x, CurrentSprite->CollideSize.y, 1.0f, 1.0f, 0.0f);
@@ -270,7 +256,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 		AEGfxMeshDraw(DebugMesh, AE_GFX_MDM_TRIANGLES);
 
 		AEGfxMeshFree(DebugMesh);
-	}
+	}*/
 }
 
 /*************************************************************************/

@@ -44,7 +44,7 @@ Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float hei
 	Enemy *CurrentEnemy = AddEnemy();
 
 	//Creates the enemy sprite
-	CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/EasyEnemy.png", width, height, 8, 8, 1, collisionGroup);
+	CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/EasyEnemy.png", width, height, 8, 8, 1);
 
 	//Physics variables initialized
 	InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, width, height);

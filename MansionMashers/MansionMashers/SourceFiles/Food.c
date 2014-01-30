@@ -36,7 +36,7 @@ Food* CreateFood(char* textureName, int collisionGroup, float width, float heigh
 {
 	Food *CurrentFood = AddFood();
 
-	CurrentFood->FoodSprite = CreateSprite(textureName, width, height, 10, 1, 1, FoodType);
+	CurrentFood->FoodSprite = CreateSprite(textureName, width, height, 10, 1, 1);
 
 	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, collisionGroup, width, height, newID);
 	CurrentFood->objID = newID;
