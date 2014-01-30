@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*!
 \file				Matrix3.c
-\author				Dan Muller (d.muller)
+\author				Juli Gregg (j.gregg)
 \date				Jan 13, 2014
 
 \brief				Math functions for a 3x3 matrix
