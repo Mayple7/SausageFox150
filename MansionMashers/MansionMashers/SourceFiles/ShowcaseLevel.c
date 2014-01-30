@@ -40,6 +40,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
+int newID;					// ID number
 
 Sprite *HUD;
 Sprite *HUDitem;
@@ -49,6 +50,7 @@ HUDLayer HUDList;
 Platform *BouncePad;
 Platform *Shelf;
 Platform *Crate;
+Sprite *OverlayGrid;
 
 Player CurrentPlayer;
 Enemy CurrentEnemy;
@@ -77,10 +79,15 @@ void InitializeShowcase(void)
 {
 	Vec2 startingCamera;
 	int hudLoop;
+
+	newID = 1;
 	resetObjectList();
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
+
+	OverlayGrid = CreateSprite("Grid", "TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, BackgroundType);
+	OverlayGrid->CanCollide = FALSE;
 
 	// Create single player HUD sprite
 	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
@@ -102,7 +109,7 @@ void InitializeShowcase(void)
 	Background2->FlipX = TRUE;
 
 	// Create the shelf sprite and initialize to be collidable
-	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 11, 123, 245);
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 123, 245, newID++);
 	Shelf->Position.x = 475;
 	Shelf->Position.y = -115;
 	Shelf->PlatformCollider.Position = Shelf->Position;
@@ -111,7 +118,7 @@ void InitializeShowcase(void)
 	Shelf->PlatformCollider.height = 60;
 	
 	// Create and initialize the crate sprite
-	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 12, 859, 260.5f);
+	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 859, 260.5f, newID++);
 	Crate->Position.x = 1400;
 	Crate->Position.y = -180;
 	Crate->PlatformCollider.Position = Crate->Position;
@@ -132,7 +139,7 @@ void InitializeShowcase(void)
 
 	// Create the player
 	if(NULL != malloc(sizeof(Player)))
-		InitializePlayer(&CurrentPlayer);
+		InitializePlayer(&CurrentPlayer, newID++);
 
 	CurrentPlayer.Position.x = -1380;
 	CurrentPlayer.Position.y = -220;
@@ -150,10 +157,7 @@ void InitializeShowcase(void)
 	AddCollidable(CurrentEnemy.EnemySprite);
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
-	//Show debug box
-	CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
-
-	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 10, 400, 100);
+	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 400, 100, newID++);
 	BouncePad->Position.x = -1000;
 	BouncePad->Position.y = -200;
 	BouncePad->PlatformCollider.Position = BouncePad->Position;
@@ -173,11 +177,6 @@ void InitializeShowcase(void)
 /*************************************************************************/
 void UpdateShowcase(void)
 {
-	// Hide the debug box past X=700
-	if(CurrentPlayer.Position.x > 700)
-		CurrentPlayer.PlayerSprite->CollideDebug = FALSE;
-	else
-		CurrentPlayer.PlayerSprite->CollideDebug = TRUE;
 	// Run the enemy logic
 	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
 	UpdateEnemy(&CurrentEnemy);

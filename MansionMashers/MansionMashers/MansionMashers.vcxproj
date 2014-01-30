@@ -84,6 +84,7 @@
     <ClInclude Include="HeaderFiles\CollisionBox.h" />
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
     <ClInclude Include="HeaderFiles\Enemy.h" />
+    <ClInclude Include="HeaderFiles\Food.h" />
     <ClInclude Include="HeaderFiles\FoxEngine.h" />
     <ClInclude Include="HeaderFiles\FoxMath.h" />
     <ClInclude Include="HeaderFiles\FoxObjects.h" />
@@ -101,6 +102,7 @@
     <ClInclude Include="HeaderFiles\Player.h" />
     <ClInclude Include="HeaderFiles\PlayerCollision.h" />
     <ClInclude Include="HeaderFiles\RigidBody.h" />
+    <ClInclude Include="HeaderFiles\SearchIntArray.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
     <ClInclude Include="HeaderFiles\StartSlides.h" />
     <ClInclude Include="HeaderFiles\TestLevel.h" />
@@ -118,6 +120,7 @@
     <ClCompile Include="SourceFiles\CollisionBox.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
     <ClCompile Include="SourceFiles\Enemy.c" />
+    <ClCompile Include="SourceFiles\Food.c" />
     <ClCompile Include="SourceFiles\GameStateManager.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
@@ -128,6 +131,7 @@
     <ClCompile Include="SourceFiles\Player.c" />
     <ClCompile Include="SourceFiles\PlayerCollision.c" />
     <ClCompile Include="SourceFiles\RigidBody.c" />
+    <ClCompile Include="SourceFiles\SearchIntArray.c" />
     <ClCompile Include="SourceFiles\ShowcaseLevel.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />

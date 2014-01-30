@@ -16,5 +16,6 @@
 #include "Sprite.h"
 #include "GameStateManager.h"
 #include "GameStateList.h"
+#include "SearchIntArray.h"
 
 #endif
