@@ -9,8 +9,6 @@ typedef struct Texture
 {
 	//Created (BOOL 1 or 0 only)
 	int Created;
-	//Name
-	char TextureName[24];
 	//Texture
 	AEGfxTexture *TextureObject;
 }Texture;
