@@ -55,7 +55,8 @@ Sprite *OverlayGrid;
 Player CurrentPlayer;
 Enemy CurrentEnemy;
 
-Sprite *Hammy;
+Food *Ham;
+Food *Hammy;
 
 /*************************************************************************/
 /*!
@@ -82,6 +83,15 @@ void InitializeShowcase(void)
 
 	newID = 1;
 	resetObjectList();
+
+	// Create the player
+	if(NULL != malloc(sizeof(Player)))
+		InitializePlayer(&CurrentPlayer, newID++);
+
+	CurrentPlayer.Position.x = -1380;
+	CurrentPlayer.Position.y = -220;
+	CurrentPlayer.PlayerSprite->Position = CurrentPlayer.Position;
+	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
@@ -127,22 +137,16 @@ void InitializeShowcase(void)
 	Crate->PlatformCollider.width = Crate->PlatformCollider.width - 100;
 	Crate->PlatformCollider.height = 60;
 
+	Ham = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++);
+	Ham->Position.x = 0.0f;
+
 	// Create and initialize the HAM sprite
-	Hammy = CreateSprite("TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1, FoodType);
-	Hammy->Position.x   = -1000.0f;
-	Hammy->SensorType = RectangleCollider;
-	Hammy->CollideDebug = TRUE;
+	Hammy = CreateFood("TextureFiles/Ham.png", FoodType, 150.0f, 140.0f, newID++);
+	UpdateFoodPosition(Hammy, -1000.0f, 0.0f);
 
 	// Add the HUD sprites to the HUDlist
 	HUDList.HudItem[0] = HUD;
 	HUDList.HudItem[1] = HUDitem;
-
-	// Create the player
-	if(NULL != malloc(sizeof(Player)))
-		InitializePlayer(&CurrentPlayer, newID++);
-
-	CurrentPlayer.Position.x = -1380;
-	CurrentPlayer.Position.y = -220;
 
 	// Create the enemy
 	if(NULL != malloc(sizeof(Enemy)))

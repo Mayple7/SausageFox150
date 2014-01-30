@@ -143,11 +143,12 @@ void resetObjectList(void)
 
 		//Set up object lists
 		platformList = (Platform *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Platform));
+		foodList = (Food *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Food));
 		collideList = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 		collidables = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 
 		//Make sure the malloc is not NULL
-		if (collideList && collidables && platformList)
+		if (collideList && collidables && platformList && foodList)
 		{
 			printf("COLLIDE LIST SET UP COMPLETE\n\n");
 		}
@@ -243,6 +244,7 @@ void freeObjectList(void)
 	//Free the object list data allocation
 	free(drawList);
 	free(platformList);
+	free(foodList);
 }
 
 
