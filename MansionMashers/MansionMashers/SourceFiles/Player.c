@@ -458,15 +458,15 @@ void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLw
 		LegUpr->Rotation = LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x + sin(Object->LegSinValue)*8/(LegDistance);
 		LegUpr->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr->Position.x = cos(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.x;
-		LegLwr->Position.y = sin(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.y;
+		LegLwr->Position.x = cos(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.x;
+		LegLwr->Position.y = sin(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
 
 		LegUpr2->Rotation = -LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x + sin(Object->LegSinValue)*-8/(LegDistance);
 		LegUpr2->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr2->Position.x = cos(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.x;
-		LegLwr2->Position.y = sin(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.y;
+		LegLwr2->Position.x = cos(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.x;
+		LegLwr2->Position.y = sin(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
 	}
 	else
@@ -474,15 +474,15 @@ void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLw
 		LegUpr->Rotation = -LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x + sin(Object->LegSinValue)*-8/(LegDistance);
 		LegUpr->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr->Position.x = cos(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.x;
-		LegLwr->Position.y = sin(LegUpr->Rotation-(M_PI/2)) * 20 + LegUpr->Position.y;
+		LegLwr->Position.x = cos(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.x;
+		LegLwr->Position.y = sin(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
 
 		LegUpr2->Rotation = LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x + sin(Object->LegSinValue)*8/(LegDistance);
 		LegUpr2->Position.y = Object->Position.y - sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr2->Position.x = cos(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.x;
-		LegLwr2->Position.y = sin(LegUpr2->Rotation-(M_PI/2)) * 20 + LegUpr2->Position.y;
+		LegLwr2->Position.x = cos(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.x;
+		LegLwr2->Position.y = sin(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
 	}
 
