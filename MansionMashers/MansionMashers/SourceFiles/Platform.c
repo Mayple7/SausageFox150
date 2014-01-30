@@ -38,7 +38,6 @@ Platform* CreatePlatform(char* textureName, int collisionGroup, float width, flo
 
 	CurrentPlatform->PlatformSprite = CreateSprite(textureName, width, height, 4, 1, 1, PlatformType);
 
-
 	CreateCollisionBox(&CurrentPlatform->PlatformCollider, &CurrentPlatform->Position, collisionGroup, width, height, newID);
 	CurrentPlatform->objID = newID;
 	InitializeRigidBody(&CurrentPlatform->PlatformRigidBody, TRUE, 400, 100);
