@@ -104,6 +104,7 @@
     <ClInclude Include="HeaderFiles\Sprite.h" />
     <ClInclude Include="HeaderFiles\StartSlides.h" />
     <ClInclude Include="HeaderFiles\TestLevel.h" />
+    <ClInclude Include="HeaderFiles\TextureManager.h" />
     <ClInclude Include="HeaderFiles\Vector2.h" />
     <ClInclude Include="HeaderFiles\Vector3.h" />
     <ClInclude Include="HeaderFiles\Weapon.h" />
@@ -131,6 +132,7 @@
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />
     <ClCompile Include="SourceFiles\TestLevel.c" />
+    <ClCompile Include="SourceFiles\TextureManager.c" />
     <ClCompile Include="SourceFiles\Vector2.c" />
     <ClCompile Include="SourceFiles\Vector3.c" />
   </ItemGroup>

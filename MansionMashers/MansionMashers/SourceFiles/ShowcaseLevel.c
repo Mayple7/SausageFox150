@@ -63,7 +63,8 @@ Sprite *Hammy;
 /*************************************************************************/
 void LoadShowcase(void)
 {
-	//Placeholder
+	//Allocate space for a large texture
+	CreateTextureList();
 }
 
 /*************************************************************************/
@@ -82,20 +83,20 @@ void InitializeShowcase(void)
 		HUDList.HudItem[hudLoop] = 0;
 
 	// Create single player HUD sprite
-	HUD = CreateSprite("HUD", "TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
+	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
 	HUD->CanCollide = FALSE;
 
 	// Create single player HUD item sprite
-	HUDitem = CreateSprite("HUDitem", "TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
+	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
 	HUDitem->CanCollide = FALSE;
 	HUDitem->ItemType = 0;
 
 	// Create the background sprite
-	Background = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
+	Background = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
 	Background->CanCollide = FALSE;
 	
 	// Create the offset background sprite
-	Background2 = CreateSprite("Background", "TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
+	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
 	Background2->CanCollide = FALSE;
 	Background2->Position.x = 3840;
 	Background2->FlipX = TRUE;
@@ -120,7 +121,7 @@ void InitializeShowcase(void)
 	Crate->PlatformCollider.height = 60;
 
 	// Create and initialize the HAM sprite
-	Hammy = CreateSprite("Hammy", "TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1, FoodType);
+	Hammy = CreateSprite("TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1, FoodType);
 	Hammy->Position.x   = -1000.0f;
 	Hammy->SensorType = RectangleCollider;
 	Hammy->CollideDebug = TRUE;
@@ -226,7 +227,8 @@ void FreeShowcase(void)
 /*************************************************************************/
 void UnloadShowcase(void)
 {
-	//Placeholder
+	//Destroy the textures
+	DestroyTextureList();
 }
 
 /*************************************************************************/

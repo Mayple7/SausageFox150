@@ -44,7 +44,7 @@ int LogicTimer;
 void InitializeEnemy(struct Enemy *CurrentEnemy)
 {
 	//Creates the enemy sprite
-	CurrentEnemy->EnemySprite = CreateSprite("Enemy", "TextureFiles/EasyEnemy.png", 150.0f, 150.0f, 8, 8, 1, EnemyType);
+	CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/EasyEnemy.png", 150.0f, 150.0f, 8, 8, 1, EnemyType);
 
 	//Animation properties
 	CurrentEnemy->EnemySprite->AnimationActive = 1;
