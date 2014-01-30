@@ -32,14 +32,14 @@
 	A pointer to the platform to be initialized
 */
 /*************************************************************************/
-Platform* CreatePlatform(char* textureName, int collisionGroup, int newID, float width, float height)
+Platform* CreatePlatform(char* textureName, int collisionGroup, float width, float height, int newID)
 {
 	Platform *CurrentPlatform = AddPlatform();
 
 	CurrentPlatform->PlatformSprite = CreateSprite("BouncePad", textureName, width, height, 8, 1, 1, PlatformType);
 
 
-	CreateCollisionBox(&CurrentPlatform->PlatformCollider, &CurrentPlatform->Position, collisionGroup, width, height);
+	CreateCollisionBox(&CurrentPlatform->PlatformCollider, &CurrentPlatform->Position, collisionGroup, width, height, newID);
 	CurrentPlatform->objID = newID;
 	InitializeRigidBody(&CurrentPlatform->PlatformRigidBody, TRUE, 400, 100);
 

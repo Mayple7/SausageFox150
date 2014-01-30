@@ -3,14 +3,14 @@
 
 #include "FoxMath.h"
 #include "FoxEngine.h"
-#include "../HeaderFiles/Sprite.h"
+#include "Sprite.h"
 
 typedef struct HUDLayer
 {
-	struct Sprite* HudItem[20];
+	Sprite* HudItem[20];
 }HUDLayer;
 
-void SetCamera(Vec2 *playerX, int offset, struct HUDLayer *hudmain); 
+void SetCamera(Vec2 *playerX, int offset, HUDLayer *hudmain); 
 void ResetCamera(void);
 
 #endif

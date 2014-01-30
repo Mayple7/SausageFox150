@@ -21,6 +21,8 @@
 // includes
 
 #include "../AEEngine.h"
+#include "../HeaderFiles/FoxEngine.h"
+#include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/Camera.h"
 #include "../HeaderFiles/Sprite.h"
 

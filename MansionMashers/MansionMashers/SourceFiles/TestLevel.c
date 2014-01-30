@@ -33,6 +33,8 @@
 
 // ---------------------------------------------------------------------------
 // Globals
+int newID;					// ID number
+
 Sprite *HUD1;
 Sprite *HUD2;
 Sprite *HUD3;
@@ -146,7 +148,7 @@ void InitializeTestLevel(void)
 
 	// Creates the player
 	if(NULL != malloc(sizeof(Player)))
-		InitializePlayer(&CurrentPlayer);
+		InitializePlayer(&CurrentPlayer, newID++);
 
 	// Creates the enemy
 	if(NULL != malloc(sizeof(Enemy)))

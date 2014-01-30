@@ -269,7 +269,18 @@ void applyGravity(RigidBody* CurrentRigidBody)
 	Vec2Add(&CurrentRigidBody->Acceleration, &CurrentRigidBody->Acceleration, &CurrentRigidBody->Gravity);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Calculates the result of a bounce effect on two objects
+	
+	\param RB1
+	One of the objects
 
+	\param RB2
+	The second object
+*/
+/*************************************************************************/
 void BounceObject(RigidBody* RB1, RigidBody* RB2)
 {
 	float totalRestitution;

@@ -45,8 +45,15 @@ Player CurrentPlayer;
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-void InitializePlayer(struct Player *CurrentPlayer)
+void InitializePlayer(struct Player *CurrentPlayer, int newID)
 {
+	int i;
+
+	for(i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		CurrentPlayer->CollisionData[i] = -1;
+	}
+
 	//Creates the sprite for the player
 	CurrentPlayer->PlayerSprite = CreateSprite("Player", "TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2, PlayerType);
 
@@ -58,9 +65,12 @@ void InitializePlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerSprite->AnimationSpeed = 4; // STOP CHANGING HIS LEG SPEED -The Supreme Sausage
 
 	//Collision properties
-	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, 2 * CurrentPlayer->PlayerSprite->Width / 3, CurrentPlayer->PlayerSprite->Height / 2);
+	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, 2 * CurrentPlayer->PlayerSprite->Width / 3, CurrentPlayer->PlayerSprite->Height / 2, newID);
 	CurrentPlayer->PlayerCollider.Offset.y = -20.0f;
+
 	
+
+	//Old collision data
 	CurrentPlayer->PlayerSprite->CollideSize.x   = 2 * CurrentPlayer->PlayerSprite->Width  / 3;
 	CurrentPlayer->PlayerSprite->CollideSize.y   = CurrentPlayer->PlayerSprite->Height / 2;
 	CurrentPlayer->PlayerSprite->CollideOffset.x =  0.0f;
@@ -328,13 +338,47 @@ void DetectPlayerCollision(void)
 {
 	Platform* pList = platformList;
 	int hit = 0;
+	int hitPrev = 0;
 
 	while(pList->objID != 0)
 	{
 		hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
+		hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
 		if(hit)
 		{
-			PlayerCollidePlatform(&CurrentPlayer, pList);
+			// New target, on start collision
+			if(hitPrev < 0)
+			{
+				CurrentPlayer.CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+				//printf("NOT FOUND: %i\n", -hitPrev);
+				PlayerCollidePlatform(&CurrentPlayer, pList);
+			}
+			// Found target, hit previous frame, on persistant
+			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+			{
+				//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+				PlayerCollidePlatform(&CurrentPlayer, pList);
+			}
+			// Found target, did not hit previous frame, on start collision
+			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+			{
+				//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+				CurrentPlayer.CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+				PlayerCollidePlatform(&CurrentPlayer, pList);
+			}
+		}
+		else
+		{
+			if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+			{
+				// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+			}
+			// Found target, collision ended
+			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+			{
+				//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+				CurrentPlayer.CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10;
+			}
 		}
 		pList++;
 	}

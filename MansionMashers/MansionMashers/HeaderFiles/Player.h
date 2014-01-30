@@ -6,6 +6,7 @@
 #include "RigidBody.h"
 #include "Sprite.h"
 #include "CollisionBox.h"
+#include "FoxObjects.h"
 
 typedef struct PlayerStats
 {
@@ -26,7 +27,7 @@ typedef struct PlayerStats
 	int Money;
 	/*struct Inventory
 	{
-		struct Weapon InvWeapons[MAX_INVENTORY];
+		Weapon InvWeapons[MAX_INVENTORY];
 	};*/
 
 	//struct Weapon CurrentWeapon;
@@ -37,8 +38,7 @@ typedef struct Player
 	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;
 	CollisionBox PlayerCollider;
-	//struct CollisionInfo PlayerCollision;
-	//struct Transform PlayerTransform;
+	int CollisionData[COLLIDEAMOUNT];
 
 	PlayerStats CurrentPlayerStats;
 
@@ -47,7 +47,7 @@ typedef struct Player
 
 }Player;
 
-void InitializePlayer(struct Player *CurrentPlayer);
+void InitializePlayer(struct Player *CurrentPlayer, int newID);
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
 void HandleCollision(Sprite *objHit);
