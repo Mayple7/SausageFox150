@@ -53,7 +53,7 @@ Platform *Crate;
 Sprite *OverlayGrid;
 
 Player CurrentPlayer;
-Enemy CurrentEnemy;
+Enemy *CurrentEnemy;
 
 Food *Ham;
 Food *Hammy;
@@ -144,16 +144,9 @@ void InitializeShowcase(void)
 	HUDList.HudItem[1] = HUDitem;
 
 	// Create the enemy
-	if(NULL != malloc(sizeof(Enemy)))
-		InitializeEnemy(&CurrentEnemy);
-
-	CurrentEnemy.EnemySprite->CollideDebug = FALSE;
-	CurrentEnemy.Position.x = 600;
-	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1f;
-	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1f;
+	CurrentEnemy = CreateEnemy("TextureFiles/EasyEnemy.png", EnemyType, 150, 150, newID++);
 
 	// Add the enemy and player to the collidable list
-	AddCollidable(CurrentEnemy.EnemySprite);
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
 	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 400, 100, newID++);
@@ -177,8 +170,8 @@ void InitializeShowcase(void)
 void UpdateShowcase(void)
 {
 	// Run the enemy logic
-	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
-	UpdateEnemy(&CurrentEnemy);
+	EnemyLogic(CurrentEnemy, &CurrentPlayer);
+	UpdateEnemy(CurrentEnemy);
 
 	// Handle any events such as collision
 	EventShowcase();

@@ -234,12 +234,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 /*************************************************************************/
 void HandleCollision(Sprite *objHit)
 {
-	//If the object is Ham
-	/*if (objHit->CollisionGroup == FoodType)
-	{
-		printf("YUM YUM YUM YUM  DELICIOUSO\n");
-		freeObject(objHit);
-	}*/
 	//If the object is an enemy
 	if (objHit->CollisionGroup == EnemyType)
 	{

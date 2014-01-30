@@ -46,7 +46,7 @@ Sprite *HUD4item;
 Sprite *Background;
 Sprite *ColliderInvisible;
 Player CurrentPlayer;
-Enemy CurrentEnemy;
+Enemy *CurrentEnemy;
 HUDLayer HUDList;
 
 Sprite *LegUpper;
@@ -173,15 +173,9 @@ void InitializeTestLevel(void)
 		InitializePlayer(&CurrentPlayer, newID++);
 
 	// Creates the enemy
-	if(NULL != malloc(sizeof(Enemy)))
-		InitializeEnemy(&CurrentEnemy);
-	CurrentEnemy.EnemySprite->CollideDebug = TRUE;
-	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1f;
-	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1f;
-
+	CurrentEnemy = CreateEnemy("TextureFiles/EasyEnemy.png", EnemyType, 150, 150, newID++);
 
 	// Adds the player and enemy to the collilde list
-	AddCollidable(CurrentEnemy.EnemySprite);
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
 	// Show debug box
@@ -200,8 +194,8 @@ void InitializeTestLevel(void)
 void UpdateTestLevel(void)
 {
 	// Run the enemy logic and update the enemy
-	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
-	UpdateEnemy(&CurrentEnemy);
+	EnemyLogic(CurrentEnemy, &CurrentPlayer);
+	UpdateEnemy(CurrentEnemy);
 
 	// Handle test level events
 	EventTestLevel();
