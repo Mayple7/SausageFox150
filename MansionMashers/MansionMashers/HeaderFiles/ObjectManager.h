@@ -13,6 +13,7 @@ Sprite *collideList;
 //Objects that search for collision
 Sprite *collidables;
 Platform *platformList;
+Food *foodList;
 
 //Functionz
 Sprite* AddObject(void);

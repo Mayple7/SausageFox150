@@ -13,5 +13,6 @@
 #include "Platform.h"
 #include "Enemy.h"
 #include "PlayerCollision.h"
+#include "Food.h"
 
 #endif

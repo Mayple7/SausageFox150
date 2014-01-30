@@ -25,6 +25,7 @@
 // ---------------------------------------------------------------------------
 // includes
 #include "../HeaderFiles/FoxEngine.h"
+#include "../HeaderFiles/FoxObjects.h"
 
 // ---------------------------------------------------------------------------
 // Main
@@ -95,6 +96,30 @@ Platform* AddPlatform(void)
 		{
 			printf("Platform at %i Created\n", i);
 			return &platformList[i];
+		}
+
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Adds a platform to the platform list
+	
+	\param newPlatform
+	The platform to add to the list
+*/
+/*************************************************************************/
+Food* AddFood(void)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if(foodList[i].objID == 0)
+		{
+			printf("Food at %i Created\n", i);
+			return &foodList[i];
 		}
 
 	}
