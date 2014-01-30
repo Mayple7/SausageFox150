@@ -55,7 +55,7 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	}
 
 	//Creates the sprite for the player
-	CurrentPlayer->PlayerSprite = CreateSprite("Player", "TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2, PlayerType);
+	CurrentPlayer->PlayerSprite = CreateSprite("TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2, PlayerType);
 
 	//Default position of the player
 	CurrentPlayer->Position.x = 0.0f;

@@ -24,7 +24,6 @@
 
 // ---------------------------------------------------------------------------
 // includes
-#include "../HeaderFiles/ObjectManager.h"
 #include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
@@ -191,7 +190,7 @@ void freeObject(Sprite* objectNext)
 		//Free the mesh and texture data
 		objectNext->Created = 0;
 		AEGfxMeshFree(objectNext->SpriteMesh);
-		AEGfxTextureUnload(objectNext->SpriteTexture);
+		//AEGfxTextureUnload(objectNext->SpriteTexture);
 	}
 }
 
@@ -212,15 +211,13 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			AEGfxMeshFree(drawList[i].SpriteMesh);
-			AEGfxTextureUnload(drawList[i].SpriteTexture);
+			//AEGfxTextureUnload(drawList[i].SpriteTexture);
 			printf("Slot %i is now empty\n", i);
 		}
 	}
 	//Free the object list data allocation
 	free(drawList);
 	free(platformList);
-	//free(collideList);
-	//free(collidables);
 }
 
 

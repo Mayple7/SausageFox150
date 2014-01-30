@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Movement.h"
 #include "ObjectManager.h"
+#include "TextureManager.h"
 #include "Physics.h"
 #include "RigidBody.h"
 #include "Sprite.h"

@@ -58,7 +58,8 @@ int fadeLogic(void);
 /*************************************************************************/
 void LoadStartScreen(void)
 {
-	//Placeholder?
+	//Allocate space for a large texture
+	CreateTextureList();
 }
 
 /*************************************************************************/
@@ -73,9 +74,9 @@ void InitializeStartScreen(void)
 	resetObjectList();
 
 	// Create the slide sprites
-	Title = CreateSprite("Title", "TextureFiles/MansionMashersLogo.png", 1280.0f, 720.0f, 0, 1, 1, BackgroundType);
-	Digipen = CreateSprite("Digipen", "TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1, BackgroundType);
-	Sausage = CreateSprite("Sausage", "TextureFiles/SausageFoxLogoNoBack.png", 1280.0f, 720.0f, 0, 1, 1, BackgroundType);
+	Title = CreateSprite("TextureFiles/MansionMashersLogo.png", 1280.0f, 720.0f, 0, 1, 1, BackgroundType);
+	Digipen = CreateSprite("TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1, BackgroundType);
+	Sausage = CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 1280.0f, 720.0f, 0, 1, 1, BackgroundType);
 }
 
 /*************************************************************************/
@@ -154,7 +155,8 @@ void FreeStartScreen(void)
 /*************************************************************************/
 void UnloadStartScreen(void)
 {
-	//Placeholder?
+	//Destroy the textures
+	DestroyTextureList();
 }
 
 /*************************************************************************/
