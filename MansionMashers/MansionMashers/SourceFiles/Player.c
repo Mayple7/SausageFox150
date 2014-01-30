@@ -68,8 +68,6 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, 2 * CurrentPlayer->PlayerSprite->Width / 3, CurrentPlayer->PlayerSprite->Height / 2, newID);
 	CurrentPlayer->PlayerCollider.Offset.y = -20.0f;
 
-	
-
 	//Old collision data
 	CurrentPlayer->PlayerSprite->CollideSize.x   = 2 * CurrentPlayer->PlayerSprite->Width  / 3;
 	CurrentPlayer->PlayerSprite->CollideSize.y   = CurrentPlayer->PlayerSprite->Height / 2;
@@ -102,9 +100,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		if (!(CurrentPlayer->Position.y > -225) && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			if (CurrentPlayer->Speed - 0.35f >= 0.0f)
+			if (CurrentPlayer->Speed - 0.5f >= 0.0f)
 			{
-				CurrentPlayer->Speed -= 0.35f;
+				CurrentPlayer->Speed -= 0.5f;
 			}
 			else
 			{
@@ -114,9 +112,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 		else
 		{
-			if (CurrentPlayer->Speed - 0.1f >= 0.0f)
+			if (CurrentPlayer->Speed - 0.5f >= 0.0f)
 			{
-				CurrentPlayer->Speed -= 0.1f;
+				CurrentPlayer->Speed -= 0.5f;
 			}
 			else
 			{
