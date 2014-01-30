@@ -96,24 +96,19 @@ void InitializeShowcase(void)
 		HUDList.HudItem[hudLoop] = 0;
 
 	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, BackgroundType);
-	OverlayGrid->CanCollide = FALSE;
 
 	// Create single player HUD sprite
 	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
-	HUD->CanCollide = FALSE;
 
 	// Create single player HUD item sprite
 	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
-	HUDitem->CanCollide = FALSE;
 	HUDitem->ItemType = 0;
 
 	// Create the background sprite
 	Background = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
-	Background->CanCollide = FALSE;
 	
 	// Create the offset background sprite
 	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
-	Background2->CanCollide = FALSE;
 	Background2->Position.x = 3840;
 	Background2->FlipX = TRUE;
 
