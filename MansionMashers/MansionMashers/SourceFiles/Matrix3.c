@@ -18,7 +18,10 @@
 \li					Matrix3Identity
 \li					Matrix3Transpose
 \li					Matrix3Translate
-  
+\li					Matrix3ScaleMatrix
+\li					Matrix3RotDeg
+\li					Matrix3RotRad
+
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
  Reproduction or disclosure of this file or its contents without the prior 
@@ -29,6 +32,7 @@
 // ---------------------------------------------------------------------------
 // Includes
 #include "../HeaderFiles/FoxMath.h"
+#include <math.h>
 
 /*************************************************************************/
 /*!
@@ -326,6 +330,9 @@ void Matrix3Identity(Matrix3* Result)
 	\brief
 	Calculates the transpose matrix of Operand and saves it in Result.
 
+	\param Result
+	A matrix to store transposed.
+
 	\param Operand
 	A matrix to transpose
 */
@@ -361,8 +368,14 @@ void Matrix3Transpose(Matrix3 *Result, Matrix3 *Operand)
 	\brief
 	Creates a translation matrix from x & y and saves it in Result
 
-	\param Operand
-	A matrix to transpose
+	\param Result
+	A matrix to store translation matrix.
+
+	\param x
+	X translation value
+
+	\param y
+	Y translation value
 */
 /*************************************************************************/
 void Matrix3Translate(Matrix3 *Result, float x, float y)
@@ -374,6 +387,96 @@ void Matrix3Translate(Matrix3 *Result, float x, float y)
 	Result->m[1][0] = 0.0f;
 	Result->m[1][1] = 1.0f; 
 	Result->m[1][2] = y;
+
+	Result->m[2][0] = 0.0f; 
+	Result->m[2][1] = 0.0f;
+	Result->m[2][2] = 1.0f; 
+}
+
+
+/*************************************************************************/
+/*!
+	\brief
+	Creates a scaling matrix from x & y and saves it in Result.
+
+	\param Result
+	A matrix to store scale matrix
+
+	\param x
+	X Scalar to put in matrix
+
+	\param y
+	Y Scalar to put in matrix
+	
+*/
+/*************************************************************************/
+void Matrix3ScaleMatrix(Matrix3 *Result, float x, float y)
+{
+	Result->m[0][0] = x; 
+	Result->m[0][1] = 0.0f;
+	Result->m[0][2] = 0.0f; 
+
+	Result->m[1][0] = 0.0f;
+	Result->m[1][1] = y; 
+	Result->m[1][2] = 0.0f;
+
+	Result->m[2][0] = 0.0f; 
+	Result->m[2][1] = 0.0f;
+	Result->m[2][2] = 1.0f; 
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	This matrix creates a rotation matrix from "Angle" whose value is in degree.
+
+	\param Result
+	A rotation matrix
+
+	\param Angle
+	Angle for matrix
+	
+*/
+/*************************************************************************/
+void Matrix3RotDeg(Matrix3 *Result, float Angle)
+{
+	float radians = FOX_PI * (Angle / 180.0f);
+	
+	Result->m[0][0] = (float)cos(radians); 
+	Result->m[0][1] = (float)-sin(radians);
+	Result->m[0][2] = 0.0f; 
+
+	Result->m[1][0] = (float)sin(radians);
+	Result->m[1][1] = (float)cos(radians); 
+	Result->m[1][2] = 0.0f;
+
+	Result->m[2][0] = 0.0f; 
+	Result->m[2][1] = 0.0f;
+	Result->m[2][2] = 1.0f; 
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	This matrix creates a rotation matrix from "Angle" whose value is in radians.
+
+	\param Result
+	A rotatation matrix
+
+	\param Angle
+	Angle for matrix
+	
+*/
+/*************************************************************************/
+void Matrix3RotRad(Matrix3 *Result, float Angle)
+{
+	Result->m[0][0] = (float)cos(Angle); 
+	Result->m[0][1] = (float)-sin(Angle);
+	Result->m[0][2] = 0.0f; 
+
+	Result->m[1][0] = (float)sin(Angle);
+	Result->m[1][1] = (float)cos(Angle); 
+	Result->m[1][2] = 0.0f;
 
 	Result->m[2][0] = 0.0f; 
 	Result->m[2][1] = 0.0f;
