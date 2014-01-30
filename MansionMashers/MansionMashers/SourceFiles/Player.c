@@ -235,13 +235,13 @@ void InputPlayer(struct Player *CurrentPlayer)
 void HandleCollision(Sprite *objHit)
 {
 	//If the object is Ham
-	if (objHit->CollisionGroup == FoodType)
+	/*if (objHit->CollisionGroup == FoodType)
 	{
 		printf("YUM YUM YUM YUM  DELICIOUSO\n");
 		freeObject(objHit);
-	}
+	}*/
 	//If the object is an enemy
-	else if (objHit->CollisionGroup == EnemyType)
+	if (objHit->CollisionGroup == EnemyType)
 	{
 		if((objHit->Position.y + (objHit->Height / 3.0f) < CurrentPlayer.Position.y - (CurrentPlayer.PlayerSprite->CollideSize.y / 2.0f)) && CurrentPlayer.PlayerRigidBody.Velocity.y < 0)
 		{
@@ -368,6 +368,7 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 void DetectPlayerCollision(void)
 {
 	Platform* pList = platformList;
+	Food* fList = foodList;
 	int hit = 0;
 	int hitPrev = 0;
 
@@ -408,10 +409,56 @@ void DetectPlayerCollision(void)
 			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
 			{
 				//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				CurrentPlayer.CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10;
+				CurrentPlayer.CollisionData[hitPrev] = 0;
 			}
 		}
 		pList++;
+	}
+	while(fList->objID != 0)
+	{
+		hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &fList->FoodCollider);
+		hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, fList->FoodCollider.collisionID);
+
+		if(hit)
+		{
+			// New target, on start collision
+			if(hitPrev < 0)
+			{
+				CurrentPlayer.CollisionData[-hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
+				//printf("NOT FOUND: %i\n", -hitPrev);
+				PlayerCollideFood(&CurrentPlayer, fList);
+				fList->objID = 0;
+			}
+			// Found target, hit previous frame, on persistant
+			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+			{
+				//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+				PlayerCollideFood(&CurrentPlayer, fList);
+				fList->objID = 0;
+			}
+			// Found target, did not hit previous frame, on start collision
+			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+			{
+				//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+				CurrentPlayer.CollisionData[hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
+				PlayerCollideFood(&CurrentPlayer, fList);
+				fList->objID = 0;
+			}
+		}
+		else
+		{
+			if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+			{
+				// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+			}
+			// Found target, collision ended
+			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+			{
+				//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+				CurrentPlayer.CollisionData[hitPrev] = 0;
+			}
+		}
+		fList++;
 	}
 
 	// Check projectile collisions

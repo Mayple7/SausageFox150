@@ -2,7 +2,9 @@
 #define FOX_PLAYER_COLLISION
 
 #include "FoxObjects.h"
+#include "Food.h"
 
 void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform);
+void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood);
 
 #endif

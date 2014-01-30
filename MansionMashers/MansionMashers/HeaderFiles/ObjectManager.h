@@ -18,6 +18,7 @@ Food *foodList;
 //Functionz
 Sprite* AddObject(void);
 Platform* AddPlatform(void);
+Food* AddFood(void);
 void AddCollidable(Sprite *newCollidable);
 void resetObjectList(void);
 void drawObjectList(void);
