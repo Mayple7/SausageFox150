@@ -374,88 +374,94 @@ void DetectPlayerCollision(void)
 
 	while(pList->objID != 0)
 	{
-		hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
-		hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
-		if(hit)
+		if(pList->objID > 0)
 		{
-			// New target, on start collision
-			if(hitPrev < 0)
+			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
+			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
+			if(hit)
 			{
-				CurrentPlayer.CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
-				//printf("NOT FOUND: %i\n", -hitPrev);
-				PlayerCollidePlatform(&CurrentPlayer, pList);
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentPlayer.CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					PlayerCollidePlatform(&CurrentPlayer, pList);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					PlayerCollidePlatform(&CurrentPlayer, pList);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+					PlayerCollidePlatform(&CurrentPlayer, pList);
+				}
 			}
-			// Found target, hit previous frame, on persistant
-			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+			else
 			{
-				//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				PlayerCollidePlatform(&CurrentPlayer, pList);
-			}
-			// Found target, did not hit previous frame, on start collision
-			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
-			{
-				//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				CurrentPlayer.CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
-				PlayerCollidePlatform(&CurrentPlayer, pList);
-			}
-		}
-		else
-		{
-			if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
-			{
-				// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-			}
-			// Found target, collision ended
-			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
-			{
-				//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				CurrentPlayer.CollisionData[hitPrev] = 0;
+				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+				}
+				// Found target, collision ended
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = 0;
+				}
 			}
 		}
 		pList++;
 	}
 	while(fList->objID != 0)
 	{
-		hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &fList->FoodCollider);
-		hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, fList->FoodCollider.collisionID);
+		if(fList->objID > 0)
+		{
+			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &fList->FoodCollider);
+			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, fList->FoodCollider.collisionID);
 
-		if(hit)
-		{
-			// New target, on start collision
-			if(hitPrev < 0)
+			if(hit)
 			{
-				CurrentPlayer.CollisionData[-hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
-				//printf("NOT FOUND: %i\n", -hitPrev);
-				PlayerCollideFood(&CurrentPlayer, fList);
-				fList->objID = 0;
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentPlayer.CollisionData[-hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					PlayerCollideFood(&CurrentPlayer, fList);
+					fList->objID = -1;
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					PlayerCollideFood(&CurrentPlayer, fList);
+					fList->objID = -1;
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
+					PlayerCollideFood(&CurrentPlayer, fList);
+					fList->objID = -1;
+				}
 			}
-			// Found target, hit previous frame, on persistant
-			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+			else
 			{
-				//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				PlayerCollideFood(&CurrentPlayer, fList);
-				fList->objID = 0;
-			}
-			// Found target, did not hit previous frame, on start collision
-			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
-			{
-				//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				CurrentPlayer.CollisionData[hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
-				PlayerCollideFood(&CurrentPlayer, fList);
-				fList->objID = 0;
-			}
-		}
-		else
-		{
-			if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
-			{
-				// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-			}
-			// Found target, collision ended
-			else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
-			{
-				//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-				CurrentPlayer.CollisionData[hitPrev] = 0;
+				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+				}
+				// Found target, collision ended
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = 0;
+				}
 			}
 		}
 		fList++;
