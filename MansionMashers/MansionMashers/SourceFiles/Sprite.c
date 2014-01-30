@@ -171,8 +171,11 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->FlipYPrev = 0;
 
 	//Collision properties
-	CurrentSprite->CanCollide     = 1;
-	CurrentSprite->Ghost          = 1;
+	if (newGroup == BackgroundType || newGroup == HudType)
+		CurrentSprite->CanCollide = FALSE;
+	else
+		CurrentSprite->CanCollide = TRUE;
+	CurrentSprite->Ghost          = TRUE;
 	CurrentSprite->SensorType     = RectangleCollider;
 	CurrentSprite->CollideSize.x  = CurrentSprite->Width;
 	CurrentSprite->CollideSize.y  = CurrentSprite->Height;
