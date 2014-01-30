@@ -24,6 +24,7 @@
 #include "../AEEngine.h"
 #include "../HeaderFiles/Sprite.h"
 #include "../HeaderFiles/ObjectManager.h"
+#include "../HeaderFiles/TextureManager.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -158,7 +159,7 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->AnimationTimer = 0;
 
 	//Texture Properties
-	strcpy(CurrentSprite->TextureName, texture);
+	//strcpy(CurrentSprite->TextureName, texture);
 	CurrentSprite->NumHeightFrames = yFrames;
 	CurrentSprite->NumWidthFrames = xFrames;
 
@@ -170,8 +171,11 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->FlipYPrev = 0;
 
 	//Collision properties
-	CurrentSprite->CanCollide     = 1;
-	CurrentSprite->Ghost          = 1;
+	if (newGroup == BackgroundType || newGroup == HudType)
+		CurrentSprite->CanCollide = FALSE;
+	else
+		CurrentSprite->CanCollide = TRUE;
+	CurrentSprite->Ghost          = TRUE;
 	CurrentSprite->SensorType     = RectangleCollider;
 	CurrentSprite->CollideSize.x  = CurrentSprite->Width;
 	CurrentSprite->CollideSize.y  = CurrentSprite->Height;
@@ -258,7 +262,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	{
 		//Sprite Graphics Properties
 		AEGfxVertexList *DebugMesh = createMesh(CurrentSprite->CollideSize.x, CurrentSprite->CollideSize.y, 1.0f, 1.0f, 0.0f);
-		AEGfxTexture *DebugTexture = AEGfxTextureLoad("TextureFiles/DebugBox.png");
+		AEGfxTexture *DebugTexture = LoadTexture("TextureFiles/DebugBox.png");
 
 		AEGfxSetPosition(CurrentSprite->Position.x + CurrentSprite->CollideOffset.x, CurrentSprite->Position.y + CurrentSprite->CollideOffset.y);
 
@@ -266,7 +270,6 @@ void DrawSprite(struct Sprite *CurrentSprite)
 		AEGfxMeshDraw(DebugMesh, AE_GFX_MDM_TRIANGLES);
 
 		AEGfxMeshFree(DebugMesh);
-		AEGfxTextureUnload(DebugTexture);
 	}
 }
 

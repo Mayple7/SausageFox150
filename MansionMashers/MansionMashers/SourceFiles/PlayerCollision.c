@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------
 // includes
 #include "../HeaderFiles/FoxObjects.h"
+#include "../HeaderFiles/ObjectManager.h"
 
 /*************************************************************************/
 /*!
@@ -60,4 +61,11 @@ void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform)
 				CurrentPlayer->PlayerRigidBody.onGround = TRUE;
 		}
 	}
+}
+
+
+void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
+{
+	printf("YUM YUM YUM YUM  DELICIOUSO\n");
+	freeObject(CurrentFood->FoodSprite);
 }

@@ -53,9 +53,9 @@ Platform *Crate;
 Sprite *OverlayGrid;
 
 Player CurrentPlayer;
-Enemy CurrentEnemy;
 
-Sprite *Hammy;
+Food *Ham;
+Food *Hammy;
 
 /*************************************************************************/
 /*!
@@ -83,28 +83,32 @@ void InitializeShowcase(void)
 	newID = 1;
 	resetObjectList();
 
+	// Create the player
+	if(NULL != malloc(sizeof(Player)))
+		InitializePlayer(&CurrentPlayer, newID++);
+
+	CurrentPlayer.Position.x = -1380;
+	CurrentPlayer.Position.y = -220;
+	CurrentPlayer.PlayerSprite->Position = CurrentPlayer.Position;
+	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
 
 	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, BackgroundType);
-	OverlayGrid->CanCollide = FALSE;
 
 	// Create single player HUD sprite
 	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, HudType);
-	HUD->CanCollide = FALSE;
 
 	// Create single player HUD item sprite
 	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, HudType);
-	HUDitem->CanCollide = FALSE;
 	HUDitem->ItemType = 0;
 
 	// Create the background sprite
 	Background = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
-	Background->CanCollide = FALSE;
 	
 	// Create the offset background sprite
 	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1, BackgroundType);
-	Background2->CanCollide = FALSE;
 	Background2->Position.x = 3840;
 	Background2->FlipX = TRUE;
 
@@ -127,34 +131,18 @@ void InitializeShowcase(void)
 	Crate->PlatformCollider.width = Crate->PlatformCollider.width - 100;
 	Crate->PlatformCollider.height = 60;
 
+	Ham = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++);
+	Ham->Position.x = 0.0f;
+
 	// Create and initialize the HAM sprite
-	Hammy = CreateSprite("TextureFiles/Ham.png", 150.0f, 140.0f, 20, 1, 1, FoodType);
-	Hammy->Position.x   = -1000.0f;
-	Hammy->SensorType = RectangleCollider;
-	Hammy->CollideDebug = TRUE;
+	Hammy = CreateFood("TextureFiles/Ham.png", FoodType, 150.0f, 140.0f, newID++);
+	UpdateFoodPosition(Hammy, -1000.0f, 0.0f);
 
 	// Add the HUD sprites to the HUDlist
 	HUDList.HudItem[0] = HUD;
 	HUDList.HudItem[1] = HUDitem;
 
-	// Create the player
-	if(NULL != malloc(sizeof(Player)))
-		InitializePlayer(&CurrentPlayer, newID++);
-
-	CurrentPlayer.Position.x = -1380;
-	CurrentPlayer.Position.y = -220;
-
-	// Create the enemy
-	if(NULL != malloc(sizeof(Enemy)))
-		InitializeEnemy(&CurrentEnemy);
-
-	CurrentEnemy.EnemySprite->CollideDebug = FALSE;
-	CurrentEnemy.Position.x = 600;
-	CurrentEnemy.EnemySprite->CollideSize.x = CurrentEnemy.EnemySprite->Width  / 1.1f;
-	CurrentEnemy.EnemySprite->CollideSize.y = CurrentEnemy.EnemySprite->Height / 1.1f;
-
 	// Add the enemy and player to the collidable list
-	AddCollidable(CurrentEnemy.EnemySprite);
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
 	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 400, 100, newID++);
@@ -177,10 +165,6 @@ void InitializeShowcase(void)
 /*************************************************************************/
 void UpdateShowcase(void)
 {
-	// Run the enemy logic
-	EnemyLogic(&CurrentEnemy, &CurrentPlayer);
-	UpdateEnemy(&CurrentEnemy);
-
 	// Handle any events such as collision
 	EventShowcase();
 
@@ -239,7 +223,7 @@ void UnloadShowcase(void)
 void EventShowcase(void)
 {
 	// Check for any collision and handle the results
-	DetectCollision();
+	//DetectCollision();
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);

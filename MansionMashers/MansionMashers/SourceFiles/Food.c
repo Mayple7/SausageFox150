@@ -18,7 +18,7 @@
 
 // ---------------------------------------------------------------------------
 // includes
-/*#include "../AEEngine.h"
+#include "../AEEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
@@ -32,16 +32,22 @@
 	A pointer to the platform to be initialized
 */
 /*************************************************************************/
-/*Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int newID)
+Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int newID)
 {
 	Food *CurrentFood = AddFood();
 
-	CurrentFood->FoodSprite = CreateSprite("FoodPad", textureName, width, height, 10, 1, 1, FoodType);
-
+	CurrentFood->FoodSprite = CreateSprite(textureName, width, height, 10, 1, 1, FoodType);
 
 	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, collisionGroup, width, height, newID);
 	CurrentFood->objID = newID;
 
 	return CurrentFood;
-}*/
+}
+
+void UpdateFoodPosition(Food *CurrentFood, float x, float y)
+{
+	Vec2Set(&CurrentFood->Position, x, y);
+	CurrentFood->FoodCollider.Position = CurrentFood->Position;
+	CurrentFood->FoodSprite->Position = CurrentFood->Position;
+}
 

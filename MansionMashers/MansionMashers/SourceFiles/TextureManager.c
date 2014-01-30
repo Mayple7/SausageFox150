@@ -85,8 +85,9 @@ AEGfxTexture *LoadTexture(char *texture)
 	for (i = 0; i < TEXTUREAMOUNT; i++)
 	{
 		//Find a sprite that is empty
-		if (textureList[i].Created && !strcmp(textureList[i].TextureName, texture))
+		if (textureList[i].Created && !strcmp(textureList[i].TextureObject->mpName, texture))
 		{
+			//printf("Reusing an old texture for slot: %i\n", i);
 			return textureList[i].TextureObject;
 		}
 	}
@@ -96,6 +97,7 @@ AEGfxTexture *LoadTexture(char *texture)
 		//Find a sprite that is empty
 		if (!textureList[i].Created)
 		{
+			//printf("Creating a texture for slot: %i\n", i);
 			textureList[i].Created = 1;
 			textureList[i].TextureObject = AEGfxTextureLoad(texture);
 			return textureList[i].TextureObject;
