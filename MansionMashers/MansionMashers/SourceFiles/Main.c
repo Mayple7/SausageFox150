@@ -31,7 +31,8 @@
 
 // ---------------------------------------------------------------------------
 // globals
-int GameRunning = 1;
+int GameRunning  = 1;
+int debugConsole = 1;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -51,7 +52,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AESysInitInfo sysInitInfo;
 
 	//Creates the console window
-	if(AllocConsole())
+	if(debugConsole && AllocConsole())
 	{
 		FILE* file;
  
