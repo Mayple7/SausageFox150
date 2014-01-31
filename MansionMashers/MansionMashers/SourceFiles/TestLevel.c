@@ -49,18 +49,6 @@ Player CurrentPlayer;
 Enemy *CurrentEnemy;
 HUDLayer HUDList;
 
-Sprite *LegUpper;
-Sprite *LegLower;
-Sprite *LegUpper2;
-Sprite *LegLower2;
-Sprite *Body;
-Sprite *Tail;
-Sprite *ArmUpper;
-Sprite *ArmLower;
-Sprite *ArmUpper2;
-Sprite *ArmLower2;
-Sprite *Weapon;
-
 Food *Hammy;
 Sprite *Hammy2;
 
@@ -99,31 +87,6 @@ void InitializeTestLevel(void)
 
 	// Collision for the first HAM
 	UpdateFoodPosition(Hammy, 400, 0);
-	 
-	// Create the legs of the player
-
-	ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
-
-	ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
-
-	LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
-
-	LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
-
-	LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
-
-	LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
-
-	Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 1, 1);
-
-	Tail = CreateSprite("TextureFiles/Tail.png", 300.0f, 300.0f, 22, 1, 1);
-
-	Weapon = CreateSprite("TextureFiles/Flamethrower.png", 256.0f, 256.0f, 22, 1, 1);
-
-	ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
-
-	ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
-
 
 
 	// Creating the HUD items
@@ -195,9 +158,6 @@ void UpdateTestLevel(void)
 
 	// Update the player's position
 	UpdatePlayerPosition(&CurrentPlayer);
-
-	// Update/Draw them legs
-	Animation(&CurrentPlayer, LegUpper, LegUpper2, LegLower, LegLower2, Body, ArmUpper, ArmLower, ArmUpper2, ArmLower2, Weapon, Tail);
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))

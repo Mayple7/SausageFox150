@@ -8,6 +8,21 @@
 #include "CollisionBox.h"
 #include "FoxObjects.h"
 
+typedef struct PlayerParts
+{
+	Sprite *LegUpper;
+	Sprite *LegLower;
+	Sprite *LegUpper2;
+	Sprite *LegLower2;
+	Sprite *Body;
+	Sprite *Tail;
+	Sprite *ArmUpper;
+	Sprite *ArmLower;
+	Sprite *ArmUpper2;
+	Sprite *ArmLower2;
+	Sprite *Weapon;
+}PlayerParts;
+
 typedef struct PlayerStats
 {
 	//Modifiable Stats
@@ -40,6 +55,7 @@ typedef struct Player
 	CollisionBox PlayerCollider;
 	int CollisionData[COLLIDEAMOUNT];
 
+	PlayerParts PlayerSpriteParts;
 	PlayerStats CurrentPlayerStats;
 
 	float Speed;
@@ -57,7 +73,8 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID);
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
 void DetectPlayerCollision(void);
-void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy, Sprite *ArmUpr, Sprite *ArmLwr, Sprite *ArmUpr2, Sprite *ArmLwr2, Sprite *Weap, Sprite *Tail);
+void Animation(Player *Object);
+void CreatePlayerSprites(Player *Player);
 
 //Updating non-modifiable player stats
 void updateMaxHealth(PlayerStats *CurrentPlayerStats);

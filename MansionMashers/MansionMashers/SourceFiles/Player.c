@@ -77,6 +77,8 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, CurrentPlayer->PlayerSprite->Width, CurrentPlayer->PlayerSprite->Height);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
+
+	CreatePlayerSprites(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -90,6 +92,15 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
+	Animation(CurrentPlayer);
+
+	if (AEInputCheckTriggered('1'))
+		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/Sword.png");
+	if (AEInputCheckTriggered('2'))
+		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/Axe.png");
+	if (AEInputCheckTriggered('3'))
+		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/Hammer.png");
+
 	// Move the direction based on the speed
 	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);
 
@@ -447,13 +458,24 @@ void DetectPlayerCollision(void)
 	Animates the players legs.
 */
 /*************************************************************************/
-void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy, Sprite *ArmUpr, Sprite *ArmLwr, Sprite *ArmUpr2, Sprite *ArmLwr2, Sprite *Weap, Sprite *Tail)
+void Animation(Player *Object)
 {
 	float LegDistance = 9.5f-Object->Speed;
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection2;
+	Sprite *LegUpr = Object->PlayerSpriteParts.LegUpper;
+	Sprite *LegUpr2 = Object->PlayerSpriteParts.LegUpper2;
+	Sprite *LegLwr = Object->PlayerSpriteParts.LegLower;
+	Sprite *LegLwr2 = Object->PlayerSpriteParts.LegLower2;
+	Sprite *ArmUpr = Object->PlayerSpriteParts.ArmUpper;
+	Sprite *ArmUpr2 = Object->PlayerSpriteParts.ArmUpper2;
+	Sprite *ArmLwr = Object->PlayerSpriteParts.ArmLower;
+	Sprite *ArmLwr2 = Object->PlayerSpriteParts.ArmLower2;
+	Sprite *Bdy = Object->PlayerSpriteParts.Body;
+	Sprite *Weap = Object->PlayerSpriteParts.Weapon;
+	Sprite *Tail = Object->PlayerSpriteParts.Tail;
 
 	Object->LegSinValue += 0.1f; 
 
@@ -461,7 +483,8 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 	Bdy->Position.y = Object->Position.y - (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
 	Tail->Position = Bdy->Position;
 
-
+	if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+	{
     if (LegUpperDirection < 0)
         LegLowerDirection = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
     else
@@ -471,7 +494,14 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
         LegLowerDirection2 = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
     else
         LegLowerDirection2 = (LegUpperDirection2 + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
-	
+	}
+	else
+	{
+		LegUpperDirection = (float)sin(LegDistance/10)-1.0f;
+		LegUpperDirection2 = (float)sin(LegDistance/10)-1.0f;
+		LegLowerDirection = LegUpperDirection + 0.5f;
+		LegLowerDirection2 = LegUpperDirection2 - 0.5f;
+	}
 	LegUpr->FlipX = Object->PlayerSprite->FlipX;
 	LegLwr->FlipX = Object->PlayerSprite->FlipX;
 	LegUpr2->FlipX = Object->PlayerSprite->FlipX;
@@ -488,18 +518,26 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 	if (Object->PlayerSprite->FlipX == FALSE)
 	{
 		LegUpr->Rotation = LegUpperDirection;
-		LegUpr->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*8/(LegDistance);
+		LegUpr->Position.x = Object->Position.x;
 		LegUpr->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
-
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+		{
+			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
+		}
+		
 		LegUpr2->Rotation = -LegUpperDirection2;
-		LegUpr2->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*-8/(LegDistance);
+		LegUpr2->Position.x = Object->Position.x;
 		LegUpr2->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+		{
+			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
+		}
 
 		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
 		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
@@ -529,18 +567,26 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 	else
 	{
 		LegUpr->Rotation = -LegUpperDirection;
-		LegUpr->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*-8/(LegDistance);
+		LegUpr->Position.x = Object->Position.x;
 		LegUpr->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+		{
+			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
+		}
 
 		LegUpr2->Rotation = LegUpperDirection2;
-		LegUpr2->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*8/(LegDistance);
+		LegUpr2->Position.x = Object->Position.x;
 		LegUpr2->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+		{
+			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
+		}
 
 		ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
 		ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
@@ -570,4 +616,29 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 	}
 
 	//*************************************************************************************************
+}
+
+void CreatePlayerSprites(Player *Player)
+{
+	Player->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.Tail = CreateSprite("TextureFiles/Tail.png", 300.0f, 300.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.Weapon = CreateSprite("TextureFiles/Axe.png", 256.0f, 256.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
 }
