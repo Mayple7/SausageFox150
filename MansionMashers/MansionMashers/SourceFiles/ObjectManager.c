@@ -167,10 +167,10 @@ void resetObjectList(void)
 
 		//Set up object lists
 		platformList = (Platform *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Platform));
-		foodList = (Food *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Food));
-		enemyList = (Enemy *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Enemy));
-		collideList = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
-		collidables = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
+		foodList     = (Food *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Food));
+		enemyList    = (Enemy *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Enemy));
+		collideList  = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
+		collidables  = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 
 		//Make sure the malloc is not NULL
 		if (collideList && collidables && platformList && foodList)
@@ -241,7 +241,6 @@ void freeObject(Sprite* objectNext)
 		//Free the mesh and texture data
 		objectNext->Created = 0;
 		AEGfxMeshFree(objectNext->SpriteMesh);
-		//AEGfxTextureUnload(objectNext->SpriteTexture);
 	}
 }
 
@@ -253,7 +252,7 @@ void freeObject(Sprite* objectNext)
 /*************************************************************************/
 void freeObjectList(void)
 {
-	// Freeing the objects and textures
+	////////--Freeing the drawn objects and textures
 	int i;
 	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
@@ -262,12 +261,34 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			AEGfxMeshFree(drawList[i].SpriteMesh);
-			//AEGfxTextureUnload(drawList[i].SpriteTexture);
 			printf("Slot %i is now empty\n", i);
 		}
 	}
 	//Free the object list data allocation
 	free(drawList);
+
+	////////--Freeing the collision objects and textures
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (platformList[i].objID)
+		{
+			//Free the mesh and texture data
+			AEGfxMeshFree(platformList[i].PlatformCollider.DebugMesh);
+			printf("Platform %i is now freed\n", i);
+		}
+	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (foodList[i].objID)
+		{
+			//Free the mesh and texture data
+			AEGfxMeshFree(foodList[i].FoodCollider.DebugMesh);
+			printf("Food %i is now freed\n", i);
+		}
+	}
+	//Free collision lists data allocation
 	free(platformList);
 	free(foodList);
 }
