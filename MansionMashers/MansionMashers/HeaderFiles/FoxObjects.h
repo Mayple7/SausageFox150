@@ -2,9 +2,9 @@
 #define FOX_OBJECTS
 
 //Create object list
-#define OBJECTAMOUNT 20
+#define OBJECTAMOUNT 50
 //Create collide list
-#define COLLIDEAMOUNT (OBJECTAMOUNT / 2)
+#define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
 
 //-------------------------------------------------------------------------
 // Fox object includes
