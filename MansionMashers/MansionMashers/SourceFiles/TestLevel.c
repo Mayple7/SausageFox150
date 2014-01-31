@@ -115,7 +115,7 @@ void InitializeTestLevel(void)
 
 	Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 1, 1);
 
-	Weapon = CreateSprite("TextureFiles/Sword.png", 256.0f, 256.0f, 22, 1, 1);
+	Weapon = CreateSprite("TextureFiles/Flamethrower.png", 256.0f, 256.0f, 22, 1, 1);
 
 	ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
 
