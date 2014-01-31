@@ -61,6 +61,8 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
 
+	CurrentPlayer->PlayerSprite->Visible = FALSE;
+
 	//Animation properties
 	CurrentPlayer->PlayerSprite->AnimationSpeed = 4; // STOP CHANGING HIS LEG SPEED -The Supreme Sausage
 
@@ -442,15 +444,18 @@ void DetectPlayerCollision(void)
 	Animates the players legs.
 */
 /*************************************************************************/
-void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy)
+void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy, Sprite *ArmUpr, Sprite *ArmLwr)
 {
-	float LegDistance = 9-Object->Speed;
+	float LegDistance = 9.25f-Object->Speed;
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection2;
 
 	Object->LegSinValue += 0.1f; 
+
+	Bdy->Position.x = Object->Position.x;
+	Bdy->Position.y = Object->Position.y + (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
 
     if (LegUpperDirection < 0)
         LegLowerDirection = ((float)sin(Object->LegSinValue)/2 + (float)sin(Object->LegSinValue) * -0.8f)/(LegDistance);
@@ -466,6 +471,9 @@ void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLw
 	LegLwr->FlipX = Object->PlayerSprite->FlipX;
 	LegUpr2->FlipX = Object->PlayerSprite->FlipX;
 	LegLwr2->FlipX = Object->PlayerSprite->FlipX;
+	Bdy->FlipX = Object->PlayerSprite->FlipX;
+	ArmUpr->FlipX = Object->PlayerSprite->FlipX;
+	ArmLwr->FlipX = Object->PlayerSprite->FlipX;
 
 
 	if (Object->PlayerSprite->FlipX == FALSE)
@@ -473,35 +481,54 @@ void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLw
 		LegUpr->Rotation = LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*8/(LegDistance);
 		LegUpr->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.x;
-		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.y;
+		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.x;
+		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
 
 		LegUpr2->Rotation = -LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*-8/(LegDistance);
 		LegUpr2->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.x;
-		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.y;
+		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.x;
+		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
+
+		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
+		ArmLwr->Rotation = ArmUpr->Rotation - 1.0f + LegUpperDirection/2.0f;
+
+		ArmUpr->Position.x = Bdy->Position.x;
+		ArmUpr->Position.y = Bdy->Position.y + 50;
+
+		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * 40;
+		ArmLwr->Position.y = ArmUpr->Position.y - (float)sin(ArmUpr->Rotation) * 40;
 	}
 	else
 	{
 		LegUpr->Rotation = -LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*-8/(LegDistance);
 		LegUpr->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.x;
-		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 20 + LegUpr->Position.y;
+		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.x;
+		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
 
 		LegUpr2->Rotation = LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*8/(LegDistance);
 		LegUpr2->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.x;
-		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 20 + LegUpr2->Position.y;
+		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.x;
+		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
+
+		ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
+		ArmLwr->Rotation = ArmUpr->Rotation + 1.0f - LegUpperDirection/2.0f;
+
+		ArmUpr->Position.x = Bdy->Position.x;
+		ArmUpr->Position.y = Bdy->Position.y + 50;
+
+		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * 40;
+		ArmLwr->Position.y = ArmUpr->Position.y + (float)sin(ArmUpr->Rotation) * 40;
 	}
 
-	Bdy->Position.x = Object->Position.x;
-	Bdy->Position.y = Object->Position.y + (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
+	
+	
+	
 	//*************************************************************************************************
 }
