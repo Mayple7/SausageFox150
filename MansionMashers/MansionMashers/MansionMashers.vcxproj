@@ -48,7 +48,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Winmm.lib;fmodex_vc.lib;fmodexL_vc.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Winmm.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -92,6 +92,7 @@
     <ClInclude Include="HeaderFiles\GameStateManager.h" />
     <ClInclude Include="HeaderFiles\LevelShowcase.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
+    <ClInclude Include="HeaderFiles\MapLevel.h" />
     <ClInclude Include="HeaderFiles\Matrix3.h" />
     <ClInclude Include="HeaderFiles\Movement.h" />
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
@@ -107,6 +108,7 @@
     <ClInclude Include="HeaderFiles\StartSlides.h" />
     <ClInclude Include="HeaderFiles\TestLevel.h" />
     <ClInclude Include="HeaderFiles\TextureManager.h" />
+    <ClInclude Include="HeaderFiles\TutorialLevel.h" />
     <ClInclude Include="HeaderFiles\Vector2.h" />
     <ClInclude Include="HeaderFiles\Vector3.h" />
     <ClInclude Include="HeaderFiles\Weapon.h" />
@@ -124,6 +126,7 @@
     <ClCompile Include="SourceFiles\GameStateManager.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
+    <ClCompile Include="SourceFiles\MapLevel.c" />
     <ClCompile Include="SourceFiles\Matrix3.c" />
     <ClCompile Include="SourceFiles\Movement.c" />
     <ClCompile Include="SourceFiles\ObjectManager.c" />
@@ -137,6 +140,7 @@
     <ClCompile Include="SourceFiles\StartSlides.c" />
     <ClCompile Include="SourceFiles\TestLevel.c" />
     <ClCompile Include="SourceFiles\TextureManager.c" />
+    <ClCompile Include="SourceFiles\TutorialLevel.c" />
     <ClCompile Include="SourceFiles\Vector2.c" />
     <ClCompile Include="SourceFiles\Vector3.c" />
   </ItemGroup>

@@ -31,6 +31,8 @@
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/TestLevel.h"
 #include "../HeaderFiles/LevelShowcase.h"
+#include "../HeaderFiles/TutorialLevel.h"
+#include "../HeaderFiles/MapLevel.h"
 
 // ---------------------------------------------------------------------------
 // Globals
@@ -197,7 +199,21 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawShowcase;
 			GSMPointers.pUnload = UnloadShowcase;
 			break;
-		case GS_Level1:
+		case GS_Tutorial:
+			GSMPointers.pLoad = LoadTutorial;
+			GSMPointers.pInit = InitializeTutorial;
+			GSMPointers.pUpdate = UpdateTutorial;
+			GSMPointers.pFree = FreeTutorial;
+			GSMPointers.pDraw = DrawTutorial;
+			GSMPointers.pUnload = UnloadTutorial;
+			break;
+		case GS_MapLevel:
+			GSMPointers.pLoad = LoadMapLevel;
+			GSMPointers.pInit = InitializeMapLevel;
+			GSMPointers.pUpdate = UpdateMapLevel;
+			GSMPointers.pFree = FreeMapLevel;
+			GSMPointers.pDraw = DrawMapLevel;
+			GSMPointers.pUnload = UnloadMapLevel;
 			break;
 		case GS_Level2:
 			break;
