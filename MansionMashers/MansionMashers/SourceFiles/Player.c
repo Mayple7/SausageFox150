@@ -461,12 +461,12 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 	Bdy->Position.y = Object->Position.y + (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
 
     if (LegUpperDirection < 0)
-        LegLowerDirection = ((float)sin(Object->LegSinValue)/2 + (float)sin(Object->LegSinValue) * -0.4f)/(LegDistance);
+        LegLowerDirection = ((float)sin(Object->LegSinValue)/1.5f + (float)sin(Object->LegSinValue) * -0.2f)/(LegDistance);
     else
         LegLowerDirection = (LegUpperDirection + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 
     if (LegUpperDirection2 > 0)
-        LegLowerDirection2 = ((float)sin(Object->LegSinValue)/2 + (float)sin(Object->LegSinValue) * -0.4f)/(LegDistance);
+        LegLowerDirection2 = ((float)sin(Object->LegSinValue)/1.5f + (float)sin(Object->LegSinValue) * -0.2f)/(LegDistance);
     else
         LegLowerDirection2 = (LegUpperDirection2 + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 	
