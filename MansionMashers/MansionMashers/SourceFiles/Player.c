@@ -458,17 +458,17 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 	Object->LegSinValue += 0.1f; 
 
 	Bdy->Position.x = Object->Position.x;
-	Bdy->Position.y = Object->Position.y + (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
+	Bdy->Position.y = Object->Position.y - (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
 	Tail->Position = Bdy->Position;
 
 
     if (LegUpperDirection < 0)
-        LegLowerDirection = ((float)sin(Object->LegSinValue)/1.5f + (float)sin(Object->LegSinValue) * -0.2f)/(LegDistance);
+        LegLowerDirection = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
     else
         LegLowerDirection = (LegUpperDirection + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 
     if (LegUpperDirection2 > 0)
-        LegLowerDirection2 = ((float)sin(Object->LegSinValue)/1.5f + (float)sin(Object->LegSinValue) * -0.2f)/(LegDistance);
+        LegLowerDirection2 = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
     else
         LegLowerDirection2 = (LegUpperDirection2 + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 	
@@ -489,14 +489,14 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 	{
 		LegUpr->Rotation = LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*8/(LegDistance);
-		LegUpr->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegUpr->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
 
 		LegUpr2->Rotation = -LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*-8/(LegDistance);
-		LegUpr2->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegUpr2->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
@@ -530,14 +530,14 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 	{
 		LegUpr->Rotation = -LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*-8/(LegDistance);
-		LegUpr->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegUpr->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
 
 		LegUpr2->Rotation = LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x + (float)sin(Object->LegSinValue)*8/(LegDistance);
-		LegUpr2->Position.y = Object->Position.y - (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegUpr2->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
