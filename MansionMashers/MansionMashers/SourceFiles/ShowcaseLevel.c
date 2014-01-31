@@ -51,6 +51,8 @@ Platform *BouncePad;
 Platform *Shelf;
 Platform *Crate;
 Sprite *OverlayGrid;
+Sprite *FoxBig;
+Sprite *FoxSmall;
 
 Player CurrentPlayer;
 
@@ -140,6 +142,7 @@ void InitializeShowcase(void)
 
 	// Add the enemy and player to the collidable list
 	AddCollidable(CurrentPlayer.PlayerSprite);
+	CurrentPlayer.PlayerSprite->Visible = TRUE;
 
 	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 400, 100, newID++);
 	BouncePad->Position.x = -1000;
@@ -147,6 +150,11 @@ void InitializeShowcase(void)
 	BouncePad->PlatformCollider.Position = BouncePad->Position;
 	BouncePad->PlatformSprite->Position = BouncePad->Position;
 	BouncePad->PlatformRigidBody.Restitution = 1.9f;
+
+	FoxBig = CreateSprite("Textures/GinkoArt.png", 148.5, 270, 20, 1, 1);
+	FoxBig->Position.x = -300;
+	FoxSmall = CreateSprite("Textures/GinkoSmall.png", 148.5, 270, 20, 1, 1);
+	FoxSmall->Position.x = -800;
 
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
