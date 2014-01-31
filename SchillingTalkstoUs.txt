@@ -1,0 +1,49 @@
+Engine | Game
+
+Engine:
+	Input Manager
+	Graphics/Sprites/Animation/Particles
+				   -system, emitter, effector
+	Game State Manager
+	FrameRate Controller
+	Audio/Sound
+	Serialization- saving/loading/file I/O
+	File Manager
+	Memory Manager
+	Asset Manager
+	Action List
+	States/Finite State Manager
+	Lighting
+	Physics
+	Collision/Resolution
+	Tile Maps
+	Object Manager
+	Small Memory Block 
+
+
+Game:
+	AI/Behaviors	
+
+____
+
+Trace 
+Asserts
+Individual Sandbox levels
+____
+
+Inheritance
+
+Object can only exist in one link of one lists
+
+Cast...
+LL* GObj = (LinkList)
+
+GameObject:
+-Link List
+-Unique Idetifier
+-Type
+
+LinkList:
+-Next
+-Prev
+	
