@@ -262,7 +262,6 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			AEGfxMeshFree(drawList[i].SpriteMesh);
-			//AEGfxTextureUnload(drawList[i].SpriteTexture);
 			printf("Slot %i is now empty\n", i);
 		}
 	}
@@ -273,12 +272,21 @@ void freeObjectList(void)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (platformList[i].PlatformCollider.DebugMesh)
+		if (platformList[i].objID)
 		{
 			//Free the mesh and texture data
 			AEGfxMeshFree(platformList[i].PlatformCollider.DebugMesh);
-			AEGfxTextureUnload(platformList[i].PlatformCollider.DebugTexture);
 			printf("Platform %i is now freed\n", i);
+		}
+	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (foodList[i].objID)
+		{
+			//Free the mesh and texture data
+			AEGfxMeshFree(foodList[i].FoodCollider.DebugMesh);
+			printf("Food %i is now freed\n", i);
 		}
 	}
 	//Free collision lists data allocation
