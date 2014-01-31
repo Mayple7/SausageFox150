@@ -56,6 +56,8 @@ Sprite *LegLower2;
 Sprite *Body;
 Sprite *ArmUpper;
 Sprite *ArmLower;
+Sprite *ArmUpper2;
+Sprite *ArmLower2;
 
 Food *Hammy;
 Sprite *Hammy2;
@@ -95,8 +97,12 @@ void InitializeTestLevel(void)
 
 	// Collision for the first HAM
 	UpdateFoodPosition(Hammy, 400, 0);
-
+	 
 	// Create the legs of the player
+
+	ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
+
+	ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
 
 	LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
 
@@ -111,6 +117,8 @@ void InitializeTestLevel(void)
 	ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
 
 	ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
+
+
 
 	// Creating the HUD items
 	HUD1 = CreateSprite("TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1);
@@ -183,7 +191,7 @@ void UpdateTestLevel(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	// Update/Draw them legs
-	LegAnimation(&CurrentPlayer, LegUpper, LegUpper2, LegLower, LegLower2, Body, ArmUpper, ArmLower);
+	LegAnimation(&CurrentPlayer, LegUpper, LegUpper2, LegLower, LegLower2, Body, ArmUpper, ArmLower, ArmUpper2, ArmLower2);
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))
