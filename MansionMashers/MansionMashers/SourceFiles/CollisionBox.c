@@ -78,6 +78,15 @@ void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition)
 		displayCollisionDebug(Collider);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Draws the collision debug box
+	
+	\param Collider
+	The collision box object
+*/
+/*************************************************************************/
 void displayCollisionDebug(CollisionBox *Collider)
 {
 	//Sprite Graphics Properties
