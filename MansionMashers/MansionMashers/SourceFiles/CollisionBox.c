@@ -20,6 +20,7 @@
 // ---------------------------------------------------------------------------
 // includes
 #include "../HeaderFiles/FoxEngine.h"
+#include "../AEEngine.h"
 
 /*************************************************************************/
 /*!
@@ -52,6 +53,8 @@ void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGr
 	newBox->height = height;
 	newBox->Offset.x = 0;
 	newBox->Offset.y = 0;
+	newBox->DebugMesh = createMesh(width, height, 1.0f, 1.0f, 0.0f);
+	newBox->DebugTexture = LoadTexture("TextureFiles/DebugBox.png");
 }
 
 /*************************************************************************/
@@ -69,5 +72,20 @@ void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGr
 void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition)
 {
 	Collider->Position = *newPosition;
+
+	//Check if debug should be displayed
+	if (Collider->collisionDebug)
+		displayCollisionDebug(Collider);
 }
 
+void displayCollisionDebug(CollisionBox *Collider)
+{
+	//Sprite Graphics Properties
+	AEGfxSetPosition(Collider->Position.x + Collider->Offset.x, Collider->Position.y + Collider->Offset.y);
+
+	AEGfxTextureSet(Collider->DebugTexture, 1.0f, 1.0f);
+	AEGfxMeshDraw(Collider->DebugMesh, AE_GFX_MDM_TRIANGLES);
+
+	//NEED TO FREE THIS
+	//AEGfxMeshFree(DebugMesh);
+}

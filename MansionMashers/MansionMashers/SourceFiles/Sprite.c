@@ -37,7 +37,6 @@ int AnimationActive = 0;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
-AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation);
 
 
 // ---------------------------------------------------------------------------
@@ -241,22 +240,6 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
 	// Draws the mesh
 	AEGfxMeshDraw(CurrentSprite->SpriteMesh, AE_GFX_MDM_TRIANGLES);
-
-
-	// Debug box, will be replaced
-	/*if (CurrentSprite->CollideDebug)
-	{
-		//Sprite Graphics Properties
-		AEGfxVertexList *DebugMesh = createMesh(CurrentSprite->CollideSize.x, CurrentSprite->CollideSize.y, 1.0f, 1.0f, 0.0f);
-		AEGfxTexture *DebugTexture = LoadTexture("TextureFiles/DebugBox.png");
-
-		AEGfxSetPosition(CurrentSprite->Position.x + CurrentSprite->CollideOffset.x, CurrentSprite->Position.y + CurrentSprite->CollideOffset.y);
-
-		AEGfxTextureSet(DebugTexture, 1.0f, 1.0f);
-		AEGfxMeshDraw(DebugMesh, AE_GFX_MDM_TRIANGLES);
-
-		AEGfxMeshFree(DebugMesh);
-	}*/
 }
 
 /*************************************************************************/
