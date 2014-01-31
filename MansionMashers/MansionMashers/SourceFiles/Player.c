@@ -447,7 +447,7 @@ void DetectPlayerCollision(void)
 	Animates the players legs.
 */
 /*************************************************************************/
-void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy, Sprite *ArmUpr, Sprite *ArmLwr, Sprite *ArmUpr2, Sprite *ArmLwr2, Sprite *Weap)
+void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy, Sprite *ArmUpr, Sprite *ArmLwr, Sprite *ArmUpr2, Sprite *ArmLwr2, Sprite *Weap, Sprite *Tail)
 {
 	float LegDistance = 9.5f-Object->Speed;
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
@@ -459,6 +459,8 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 
 	Bdy->Position.x = Object->Position.x;
 	Bdy->Position.y = Object->Position.y + (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
+	Tail->Position = Bdy->Position;
+
 
     if (LegUpperDirection < 0)
         LegLowerDirection = ((float)sin(Object->LegSinValue)/1.5f + (float)sin(Object->LegSinValue) * -0.2f)/(LegDistance);
@@ -475,6 +477,7 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 	LegUpr2->FlipX = Object->PlayerSprite->FlipX;
 	LegLwr2->FlipX = Object->PlayerSprite->FlipX;
 	Bdy->FlipX = Object->PlayerSprite->FlipX;
+	Tail->FlipX = Object->PlayerSprite->FlipX;
 	ArmUpr->FlipX = Object->PlayerSprite->FlipX;
 	ArmLwr->FlipX = Object->PlayerSprite->FlipX;
 	ArmUpr2->FlipX = Object->PlayerSprite->FlipX;
@@ -563,10 +566,8 @@ void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, 
 		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * 37;
 		Weap->Rotation = ArmLwr->Rotation;
 
+
 	}
 
-	
-	
-	
 	//*************************************************************************************************
 }
