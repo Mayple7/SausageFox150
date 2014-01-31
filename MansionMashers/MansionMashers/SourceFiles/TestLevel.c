@@ -58,6 +58,7 @@ Sprite *ArmUpper;
 Sprite *ArmLower;
 Sprite *ArmUpper2;
 Sprite *ArmLower2;
+Sprite *Weapon;
 
 Food *Hammy;
 Sprite *Hammy2;
@@ -113,6 +114,8 @@ void InitializeTestLevel(void)
 	LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
 
 	Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 1, 1);
+
+	Weapon = CreateSprite("TextureFiles/Hammer.png", 128.0f, 128.0f, 22, 1, 1);
 
 	ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
 
@@ -191,7 +194,7 @@ void UpdateTestLevel(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	// Update/Draw them legs
-	LegAnimation(&CurrentPlayer, LegUpper, LegUpper2, LegLower, LegLower2, Body, ArmUpper, ArmLower, ArmUpper2, ArmLower2);
+	Animation(&CurrentPlayer, LegUpper, LegUpper2, LegLower, LegLower2, Body, ArmUpper, ArmLower, ArmUpper2, ArmLower2, Weapon);
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))

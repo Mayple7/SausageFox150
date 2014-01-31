@@ -447,7 +447,7 @@ void DetectPlayerCollision(void)
 	Animates the players legs.
 */
 /*************************************************************************/
-void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy, Sprite *ArmUpr, Sprite *ArmLwr, Sprite *ArmUpr2, Sprite *ArmLwr2)
+void Animation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy, Sprite *ArmUpr, Sprite *ArmLwr, Sprite *ArmUpr2, Sprite *ArmLwr2, Sprite *Weap)
 {
 	float LegDistance = 9.5f-Object->Speed;
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
@@ -461,12 +461,12 @@ void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLw
 	Bdy->Position.y = Object->Position.y + (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
 
     if (LegUpperDirection < 0)
-        LegLowerDirection = ((float)sin(Object->LegSinValue)/2 + (float)sin(Object->LegSinValue) * -0.8f)/(LegDistance);
+        LegLowerDirection = ((float)sin(Object->LegSinValue)/2 + (float)sin(Object->LegSinValue) * -0.4f)/(LegDistance);
     else
         LegLowerDirection = (LegUpperDirection + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 
     if (LegUpperDirection2 > 0)
-        LegLowerDirection2 = ((float)sin(Object->LegSinValue)/2 + (float)sin(Object->LegSinValue) * -0.8f)/(LegDistance);
+        LegLowerDirection2 = ((float)sin(Object->LegSinValue)/2 + (float)sin(Object->LegSinValue) * -0.4f)/(LegDistance);
     else
         LegLowerDirection2 = (LegUpperDirection2 + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 	
@@ -479,6 +479,7 @@ void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLw
 	ArmLwr->FlipX = Object->PlayerSprite->FlipX;
 	ArmUpr2->FlipX = Object->PlayerSprite->FlipX;
 	ArmLwr2->FlipX = Object->PlayerSprite->FlipX;
+	Weap->FlipX = Object->PlayerSprite->FlipX;
 
 
 	if (Object->PlayerSprite->FlipX == FALSE)
@@ -517,6 +518,10 @@ void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLw
 			ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f;
 		}
 
+		Weap->Position.x = ArmLwr->Position.x - (float)cos(ArmLwr->Rotation) * 37;
+		Weap->Position.y = ArmLwr->Position.y - (float)sin(ArmLwr->Rotation) * 37;
+		Weap->Rotation = ArmLwr->Rotation;
+
 	}
 	else
 	{
@@ -553,6 +558,10 @@ void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLw
 			ArmLwr->Rotation = ArmUpr->Rotation + 0.5f;
 			ArmLwr2->Rotation = ArmUpr2->Rotation + 0.5f;
 		}
+
+		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * 37;
+		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * 37;
+		Weap->Rotation = ArmLwr->Rotation;
 
 	}
 
