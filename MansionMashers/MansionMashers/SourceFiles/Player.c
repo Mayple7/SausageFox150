@@ -70,6 +70,9 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, 2 * CurrentPlayer->PlayerSprite->Width / 3, CurrentPlayer->PlayerSprite->Height / 2, newID);
 	CurrentPlayer->PlayerCollider.Offset.y = -20.0f;
 
+	//Collider Debug
+	CurrentPlayer->PlayerCollider.collisionDebug = TRUE;
+
 	//Initialize rigidbody
 	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, CurrentPlayer->PlayerSprite->Width, CurrentPlayer->PlayerSprite->Height);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
