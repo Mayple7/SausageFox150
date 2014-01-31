@@ -241,7 +241,6 @@ void freeObject(Sprite* objectNext)
 		//Free the mesh and texture data
 		objectNext->Created = 0;
 		AEGfxMeshFree(objectNext->SpriteMesh);
-		//AEGfxTextureUnload(objectNext->SpriteTexture);
 	}
 }
 
