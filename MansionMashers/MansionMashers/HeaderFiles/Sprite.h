@@ -56,6 +56,7 @@ typedef struct Sprite
 
 Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
+AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation);
 void UpdateMesh(Sprite *currentSprite);
 void DrawSprite(Sprite *currentSprite);
 

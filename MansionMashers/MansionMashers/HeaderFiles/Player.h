@@ -57,7 +57,7 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID);
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
 void DetectPlayerCollision(void);
-void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy);
+void LegAnimation(Player *Object, Sprite *LegUpr, Sprite *LegUpr2, Sprite *LegLwr, Sprite *LegLwr2, Sprite *Bdy, Sprite *ArmUpr, Sprite *ArmLwr);
 
 //Updating non-modifiable player stats
 void updateMaxHealth(PlayerStats *CurrentPlayerStats);

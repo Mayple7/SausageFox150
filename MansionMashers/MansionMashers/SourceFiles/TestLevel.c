@@ -54,6 +54,8 @@ Sprite *LegLower;
 Sprite *LegUpper2;
 Sprite *LegLower2;
 Sprite *Body;
+Sprite *ArmUpper;
+Sprite *ArmLower;
 
 Food *Hammy;
 Sprite *Hammy2;
@@ -90,35 +92,25 @@ void InitializeTestLevel(void)
 
 	// Create the HAMs
 	Hammy = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++);
-	Hammy2 = CreateSprite("TextureFiles/Ham.png", 150.0f, 140.0f, 22, 1, 1);
 
 	// Collision for the first HAM
 	UpdateFoodPosition(Hammy, 400, 0);
 
-	// Collision for the second HAM
-	Hammy2->Position.y = -100.0f;
-	Hammy2->Position.x = -500.0f;
-
 	// Create the legs of the player
-	Body = CreateSprite("TextureFiles/Body.png", 128.0f, 128.0f, 22, 1, 1);
-	Body->Position.y = -100.0f;
-	Body->Position.x = 0.0f;
 
 	LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
-	LegUpper->Position.y = -100.0f;
-	LegUpper->Position.x = 0.0f;
 
 	LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
-	LegLower->Position.y = -100.0f;
-	LegLower->Position.x = 0.0f;
 
 	LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
-	LegUpper2->Position.y = -100.0f;
-	LegUpper2->Position.x = 0.0f;
 
 	LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
-	LegLower2->Position.y = -100.0f;
-	LegLower2->Position.x = 0.0f;
+
+	Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 1, 1);
+
+	ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
+
+	ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
 
 	// Creating the HUD items
 	HUD1 = CreateSprite("TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1);
@@ -191,7 +183,7 @@ void UpdateTestLevel(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	// Update/Draw them legs
-	LegAnimation(&CurrentPlayer, LegUpper, LegUpper2, LegLower, LegLower2, Body);
+	LegAnimation(&CurrentPlayer, LegUpper, LegUpper2, LegLower, LegLower2, Body, ArmUpper, ArmLower);
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))

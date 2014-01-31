@@ -185,6 +185,14 @@ void DrawShowcase(void)
 	// Draws the object list and sets the camera to the correct location
 	drawObjectList();
 	SetCamera(&CurrentPlayer.Position, 250, &HUDList);
+
+	/*
+	TODO: 
+		- Make loop for drawing collidebox
+		- Make loop for removing collide box on free
+		- Make loop for freeing all collision items
+	*/
+	displayCollisionDebug(&Ham->FoodCollider);
 }
 
 /*************************************************************************/
