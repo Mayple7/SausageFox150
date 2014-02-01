@@ -53,6 +53,7 @@ Platform *Crate;
 Sprite *OverlayGrid;
 Sprite *FoxBig;
 Sprite *FoxSmall;
+Sprite *Letters;
 
 Player CurrentPlayer;
 
@@ -155,6 +156,11 @@ void InitializeShowcase(void)
 	FoxBig->Position.x = -300;
 	FoxSmall = CreateSprite("Textures/GinkoSmall.png", 148.5, 270, 20, 1, 1);
 	FoxSmall->Position.x = -800;
+
+	Letters = CreateSprite("TextureFiles/Rumple_TextSheet.png", 92, 100, 20, 11, 4);
+	Letters->AnimationSpeed = 60;
+	Letters->Position.x = -1200;
+	Letters->Position.y = 100;
 
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
