@@ -483,6 +483,7 @@ void Animation(Player *Object)
 	Sprite *ArmUpr2 = Object->PlayerSpriteParts.ArmUpper2;
 	Sprite *ArmLwr = Object->PlayerSpriteParts.ArmLower;
 	Sprite *ArmLwr2 = Object->PlayerSpriteParts.ArmLower2;
+	Sprite *Skrt = Object->PlayerSpriteParts.Skirt;
 	Sprite *Bdy = Object->PlayerSpriteParts.Body;
 	Sprite *Weap = Object->PlayerSpriteParts.Weapon;
 	Sprite *Tail = Object->PlayerSpriteParts.Tail;
@@ -507,6 +508,8 @@ void Animation(Player *Object)
 
 	Bdy->Position.x = Object->Position.x;
 	Bdy->Position.y = Object->Position.y - (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
+	Skrt->Position = Bdy->Position;
+	Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection*4));
 	Tail->Position.y = Bdy->Position.y+10;
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
 
@@ -603,9 +606,10 @@ void Animation(Player *Object)
 			ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f;
 		}
 
-		Weap->Position.x = ArmLwr->Position.x - (float)cos(ArmLwr->Rotation) * 37;
-		Weap->Position.y = ArmLwr->Position.y - (float)sin(ArmLwr->Rotation) * 37;
-		Weap->Rotation = ArmLwr->Rotation;
+		Weap->Position.x = ArmLwr2->Position.x - (float)cos(ArmLwr2->Rotation) * 37;
+		Weap->Position.y = ArmLwr2->Position.y - (float)sin(ArmLwr2->Rotation) * 37;
+		Weap->Rotation = ArmLwr2->Rotation;
+		Weap->ZIndex = 21;
 
 	}
 	else
@@ -659,6 +663,7 @@ void Animation(Player *Object)
 		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * 37;
 		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * 37;
 		Weap->Rotation = ArmLwr->Rotation;
+		Weap->ZIndex = 22;
 
 
 	}
@@ -668,9 +673,9 @@ void Animation(Player *Object)
 
 void CreatePlayerSprites(Player *Player)
 {
-	Player->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
+	Player->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 20, 1, 1);
 
-	Player->PlayerSpriteParts.ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
+	Player->PlayerSpriteParts.ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 20, 1, 1);
 
 	Player->PlayerSpriteParts.LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
 
@@ -679,6 +684,10 @@ void CreatePlayerSprites(Player *Player)
 	Player->PlayerSpriteParts.LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
 
 	Player->PlayerSpriteParts.LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
+
+	Player->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/Skirt.png", 300.0f, 300.0f, 22, 4, 1);
+
+	Player->PlayerSpriteParts.Skirt->AnimationActive = 0;
 
 	Player->PlayerSpriteParts.Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 4, 1);
 
