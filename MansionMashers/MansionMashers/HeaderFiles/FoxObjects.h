@@ -2,7 +2,7 @@
 #define FOX_OBJECTS
 
 //Create object list
-#define OBJECTAMOUNT 50
+#define OBJECTAMOUNT 250
 //Create collide list
 #define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
 

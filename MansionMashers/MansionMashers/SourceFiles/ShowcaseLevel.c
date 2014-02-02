@@ -81,6 +81,7 @@ void LoadShowcase(void)
 void InitializeShowcase(void)
 {
 	Vec2 startingCamera;
+	Vec3 textTint;
 	int hudLoop;
 
 	newID = 1;
@@ -161,6 +162,24 @@ void InitializeShowcase(void)
 	Letters->AnimationSpeed = 60;
 	Letters->Position.x = -1200;
 	Letters->Position.y = 100;
+
+	Vec3Set(&textTint, 0.6f, 0.169f, 0.8f);
+	CreateText("Hi Juli, This is dynamic!", 100, 300, 100, textTint);
+
+	Vec3Set(&textTint, 1.0f, 1.0f, 0.0f);
+	CreateText("Luke is muy grande.", 100, 200, 100, textTint);
+
+	Vec3Set(&textTint, 1.0f, 0.0f, 0.0f);
+	CreateText("+1 to kaden for being 100% less of a kevin this week", 100, 100, 100, textTint);
+
+	Vec3Set(&textTint, 0.01f, 0.6f, 0.39f);
+	CreateText("Dan is just way too awesome, hahahaha!!!", 300, 0, 150, textTint);
+
+	Vec3Set(&textTint, 1.0f, 1.0f, 1.0f);
+	CreateText("The quick brown fox jumps over the lazy dog! -+!.,%()", 100, -200, 200, textTint);
+
+	Vec3Set(&textTint, 0.0f, 0.0f, 0.0f);
+	CreateText("(These are the letters and symbols that you can display)", 300, -300, 50, textTint);
 
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);

@@ -17,5 +17,6 @@
 #include "GameStateManager.h"
 #include "GameStateList.h"
 #include "SearchIntArray.h"
+#include "TextCreation.h"
 
 #endif

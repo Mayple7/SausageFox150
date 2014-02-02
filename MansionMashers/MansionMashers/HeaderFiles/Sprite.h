@@ -3,6 +3,7 @@
 
 #include "../AEEngine.h"
 #include "Vector2.h"
+#include "Vector3.h"
 #include "TextureManager.h"
 #include "CollisionManager.h"
 
@@ -43,6 +44,8 @@ typedef struct Sprite
 	char TextureName[256];
 	int NumHeightFrames;
 	int NumWidthFrames;
+
+	Vec3 Tint;
 
 	float Alpha;
 	int Visible;
