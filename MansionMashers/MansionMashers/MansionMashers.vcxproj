@@ -109,6 +109,7 @@
     <ClInclude Include="HeaderFiles\StartSlides.h" />
     <ClInclude Include="HeaderFiles\System.h" />
     <ClInclude Include="HeaderFiles\TestLevel.h" />
+    <ClInclude Include="HeaderFiles\TextCreation.h" />
     <ClInclude Include="HeaderFiles\TextureManager.h" />
     <ClInclude Include="HeaderFiles\TutorialLevel.h" />
     <ClInclude Include="HeaderFiles\Vector2.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="SourceFiles\StartSlides.c" />
     <ClCompile Include="SourceFiles\System.c" />
     <ClCompile Include="SourceFiles\TestLevel.c" />
+    <ClCompile Include="SourceFiles\TextCreation.c" />
     <ClCompile Include="SourceFiles\TextureManager.c" />
     <ClCompile Include="SourceFiles\TutorialLevel.c" />
     <ClCompile Include="SourceFiles\Vector2.c" />

@@ -161,6 +161,10 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->NumHeightFrames = yFrames;
 	CurrentSprite->NumWidthFrames = xFrames;
 
+	CurrentSprite->Tint.x = 1.0f;
+	CurrentSprite->Tint.y = 1.0f;
+	CurrentSprite->Tint.z = 1.0f;
+
 	CurrentSprite->Alpha = 1.0f;
 	CurrentSprite->Visible = TRUE;
 	CurrentSprite->FlipX = FALSE;
@@ -191,6 +195,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	float offsetY = 0.0f;
 	//Set draw mode to texture
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(CurrentSprite->Tint.x, CurrentSprite->Tint.y, CurrentSprite->Tint.z, 1.0f);
 	// Set position for the sprite drawing
 	AEGfxSetPosition(CurrentSprite->Position.x, CurrentSprite->Position.y);
 
@@ -226,7 +231,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	{
 		// Sets the correct offset for the current frame
 		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
-		offsetY = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumHeightFrames) * offsetDiffY;
+		offsetY = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiffY;
 	}
 	// Updates the rotation and mesh of the object to draw
 	if (CurrentSprite->Rotation != CurrentSprite->RotationPrev || CurrentSprite->FlipX != CurrentSprite->FlipXPrev || CurrentSprite->FlipY != CurrentSprite->FlipYPrev)
