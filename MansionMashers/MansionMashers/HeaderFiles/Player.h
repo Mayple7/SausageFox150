@@ -14,6 +14,7 @@ typedef struct PlayerParts
 	Sprite *LegLower;
 	Sprite *LegUpper2;
 	Sprite *LegLower2;
+	Sprite *Skirt;
 	Sprite *Body;
 	Sprite *Tail;
 	Sprite *ArmUpper;
@@ -21,6 +22,7 @@ typedef struct PlayerParts
 	Sprite *ArmUpper2;
 	Sprite *ArmLower2;
 	Sprite *Weapon;
+	int BlinkTimer;
 }PlayerParts;
 
 typedef struct PlayerStats
@@ -61,6 +63,7 @@ typedef struct Player
 	float Speed;
 
 	float LegSinValue;
+	float TailSinValue;
   
 	enum Direction PlayerDirection;
 

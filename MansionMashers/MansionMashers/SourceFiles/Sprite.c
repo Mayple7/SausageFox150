@@ -150,9 +150,9 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->CurrentFrame = 0;
 	CurrentSprite->TotalFrames = xFrames * yFrames;
 	if(CurrentSprite->TotalFrames > 1)
-		CurrentSprite->AnimationActive = 1;
+		CurrentSprite->AnimationActive = TRUE;
 	else
-		CurrentSprite->AnimationActive = 0;
+		CurrentSprite->AnimationActive = FALSE;
 	CurrentSprite->AnimationSpeed = 12;
 	CurrentSprite->AnimationTimer = 0;
 
@@ -162,13 +162,13 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->NumWidthFrames = xFrames;
 
 	CurrentSprite->Alpha = 1.0f;
-	CurrentSprite->Visible = 1;
-	CurrentSprite->FlipX = 0;
-	CurrentSprite->FlipY = 0;
-	CurrentSprite->FlipXPrev = 0;
-	CurrentSprite->FlipYPrev = 0;
+	CurrentSprite->Visible = TRUE;
+	CurrentSprite->FlipX = FALSE;
+	CurrentSprite->FlipY = FALSE;
+	CurrentSprite->FlipXPrev = FALSE;
+	CurrentSprite->FlipYPrev = FALSE;
 
-	CurrentSprite->Created = 1;
+	CurrentSprite->Created = TRUE;
 
 	return CurrentSprite;
 }
