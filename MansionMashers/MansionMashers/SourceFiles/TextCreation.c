@@ -8,6 +8,8 @@
 
 \par				Functions:
 \li					CreateText
+\li					ConvertToGlyph
+\li					DrawGlyphs
 
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -21,6 +23,30 @@
 #include "../HeaderFiles/TextCreation.h"
 #include <stdio.h>
 
+/*************************************************************************/
+/*!
+	\brief
+	Creates the string of text and sprites in the correct positions
+	
+	\param string
+	The string to make text of
+
+	\param xPos
+	The starting X position of the first letter
+
+	\param yPos
+	The starting Y position of the first letter
+
+	\param fontSize
+	The size of the text
+
+	\param TextColor
+	Vec3 of the text color to create
+
+	\return
+	Returns a pointer to the first element in the text linked list
+*/
+/*************************************************************************/
 Text* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor)
 {
 	Text *textString, *firstLetter, *nextLetter;
@@ -59,6 +85,18 @@ Text* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextCo
 	return firstLetter;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Converts a character in the string to a sprite glyph
+	
+	\param character
+	The letter to make a glyph of
+
+	\param fontsize
+	The size of the letters
+*/
+/*************************************************************************/
 Sprite* ConvertToGlyph(char character, int fontSize)
 {
 	int frame = -1;
@@ -110,6 +148,15 @@ Sprite* ConvertToGlyph(char character, int fontSize)
 
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Draws the list of glyphs to the screen
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
 void DrawGlyphs(Text *FirstLetter)
 {
 	Text* nextLetter = FirstLetter;
