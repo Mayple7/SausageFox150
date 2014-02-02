@@ -91,7 +91,7 @@ void displayCollisionDebug(CollisionBox *Collider)
 {
 	//Sprite Graphics Properties
 	AEGfxSetPosition(Collider->Position.x + Collider->Offset.x, Collider->Position.y + Collider->Offset.y);
-
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxTextureSet(Collider->DebugTexture, 1.0f, 1.0f);
 	AEGfxMeshDraw(Collider->DebugMesh, AE_GFX_MDM_TRIANGLES);
 

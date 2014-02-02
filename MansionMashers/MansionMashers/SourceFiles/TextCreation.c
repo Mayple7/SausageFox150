@@ -43,15 +43,18 @@ Text* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextCo
 		
 		nextLetter->letter = character;
 		nextLetter->Glyph = ConvertToGlyph(character, fontSize);
+		nextLetter->NextLetter = NULL;
 		if(nextLetter->Glyph)
 		{
 			nextLetter->Glyph->Position.x = xPos + (i * fontSize * 0.45f);
 			nextLetter->Glyph->Position.y = yPos;
 			nextLetter->Glyph->Tint = TextColor;
+			nextLetter->Glyph->isHUD = TRUE;
 		}
+		if(i != 0)
+			textString->NextLetter = nextLetter;
 
 		textString = nextLetter;
-		textString->NextLetter = NULL;
 	}
 	return firstLetter;
 }
@@ -106,12 +109,19 @@ Sprite* ConvertToGlyph(char character, int fontSize)
 		return NULL;
 
 }
-/*
-void DrawText(Text *FirstLetter)
+
+void DrawGlyphs(Text *FirstLetter)
 {
+	Text* nextLetter = FirstLetter;
 
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+			DrawSprite(nextLetter->Glyph);
+		nextLetter = nextLetter->NextLetter;
+	}
 }
-
+/*
 void FreeText(Text *FirstLetter)
 {
 
