@@ -26,5 +26,6 @@ void resetObjectList(void);
 void drawObjectList(void);
 void freeObjectList(void);
 void freeObject(Sprite* objectNext);
+void DrawCollisionList(void);
 
 #endif
