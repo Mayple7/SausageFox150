@@ -10,6 +10,7 @@
 \li					CreateText
 \li					ConvertToGlyph
 \li					DrawGlyphs
+\li					FreeText
 
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -168,8 +169,24 @@ void DrawGlyphs(Text *FirstLetter)
 		nextLetter = nextLetter->NextLetter;
 	}
 }
-/*
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees the entire linked list of Text objects
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
 void FreeText(Text *FirstLetter)
 {
+	Text *NextLetter;
 
-}*/
+	while(FirstLetter)
+	{
+		NextLetter = FirstLetter->NextLetter;
+		free(FirstLetter);
+		FirstLetter = NextLetter;
+	}
+}

@@ -288,6 +288,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Pictures\fox_head.ico" />
+    <Image Include="..\fox_head.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MansionMashers.rc" />
   </ItemGroup>
 </Project>
