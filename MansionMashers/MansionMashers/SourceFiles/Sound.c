@@ -16,6 +16,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../FMODHeaders/fmod_errors.h"
 #include <stdio.h>
 #include "../HeaderFiles/Sound.h"
+#include "../HeaderFiles/FoxEngine.h"
 
 
 
@@ -28,7 +29,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 */
 
 int success = 0;
-static FMOD_SYSTEM *FMsystem = 0;
+FMOD_SYSTEM *FMsystem = 0;
 
 FMOD_SYSTEM * GetSoundSystem(void)
 {
@@ -78,20 +79,35 @@ void FMODQuit()
 	}
 }
 
-void CreateSound(char *Filename, FMOD_SOUND *sound)
+void CreateSound(char *Filename, FMOD_SOUND **sound)
 {
 	FMOD_RESULT result;
-	result = FMOD_System_CreateSound(FMsystem, Filename, FMOD_HARDWARE, 0, &sound);
+	result = FMOD_System_CreateSound(FMsystem, Filename, FMOD_HARDWARE, 0, sound);
 	FMODErrCheck(result);
 	success = 0;
 }
 
 
-void Play_Sound(FMOD_SOUND *sound, FMOD_CHANNEL *channel)
+void PlayAudio(FMOD_SOUND *sound, FMOD_CHANNEL **channel)
 {
 	FMOD_RESULT result;
-	result = FMOD_System_PlaySound(FMsystem, FMOD_CHANNEL_FREE, sound, 0, &channel);
-	FMODErrCheck(result);
+	FMOD_BOOL Playing = FALSE;
+	
+	if(*channel)
+	{
+		result = FMOD_Channel_IsPlaying(*channel, &Playing);
+		if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN))
+		{
+		    FMODErrCheck(result);
+		}
+	}
+	
+	
+	if(Playing == FALSE)
+	{
+		result = FMOD_System_PlaySound(FMsystem, FMOD_CHANNEL_FREE, sound, 0, channel);
+		FMODErrCheck(result);
+	}
 	success = 0;
 }
 
@@ -107,3 +123,7 @@ void ReleaseSound(FMOD_SOUND *sound)
 		success = 0;
 	}
 }
+
+/* result = FMOD_Channel_IsPlaying(channel, &playing);
+                if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN))*/
+
