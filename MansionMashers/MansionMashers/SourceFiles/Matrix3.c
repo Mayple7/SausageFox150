@@ -231,7 +231,7 @@ void Matrix3Sub(Matrix3* Result, Matrix3* Operand1, Matrix3* Operand2)
 /*************************************************************************/
 void Matrix3Mult(Matrix3* Result, Matrix3* Operand1, Matrix3* Operand2)
 {
-	if(Result == Operand1 || Result == Operand1)
+	if(Result == Operand1 || Result == Operand2)
 	{
 		Matrix3 tempResult;
 		int i, j;
