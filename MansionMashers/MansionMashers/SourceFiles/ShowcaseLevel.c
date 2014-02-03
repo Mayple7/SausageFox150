@@ -204,10 +204,16 @@ void UpdateShowcase(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	// Return to main menu with ESC
-	if(AEInputCheckTriggered(VK_ESCAPE))
+	if(AEInputCheckTriggered(VK_RSHIFT))
 	{
 		SetNextState(GS_MainMenu);
 	}
+	if(AEInputCheckTriggered(VK_ESCAPE))
+	{
+		InitializePause(&DrawShowcase);
+		UpdatePause();
+	}
+
 }
 
 /*************************************************************************/

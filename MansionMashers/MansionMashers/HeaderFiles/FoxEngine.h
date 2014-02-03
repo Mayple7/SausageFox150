@@ -19,4 +19,7 @@
 #include "SearchIntArray.h"
 #include "TextCreation.h"
 
+//Special level include
+#include "PauseMenu.h"
+
 #endif

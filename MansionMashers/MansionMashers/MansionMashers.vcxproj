@@ -97,6 +97,7 @@
     <ClInclude Include="HeaderFiles\Movement.h" />
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
     <ClInclude Include="HeaderFiles\Options.h" />
+    <ClInclude Include="HeaderFiles\PauseMenu.h" />
     <ClInclude Include="HeaderFiles\Physics.h" />
     <ClInclude Include="HeaderFiles\PhysicsConstants.h" />
     <ClInclude Include="HeaderFiles\Platform.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="SourceFiles\Matrix3.c" />
     <ClCompile Include="SourceFiles\Movement.c" />
     <ClCompile Include="SourceFiles\ObjectManager.c" />
+    <ClCompile Include="SourceFiles\PauseMenu.c" />
     <ClCompile Include="SourceFiles\Platform.c" />
     <ClCompile Include="SourceFiles\Player.c" />
     <ClCompile Include="SourceFiles\PlayerCollision.c" />
