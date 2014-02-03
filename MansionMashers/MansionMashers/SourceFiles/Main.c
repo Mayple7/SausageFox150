@@ -25,7 +25,8 @@
 #include "../AEEngine.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/System.h"
-#include "../fmod.h"
+#include "../FMODHeaders/fmod.h"
+#include "../HeaderFiles/Sound.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -48,10 +49,11 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int Previous;										//Local State Variables
 	int Current;										//Local State Variables
 	int Next;											//Local State Variables
+	FMOD_SYSTEM *SoundSystem = 0;
 	LARGE_INTEGER CycleStart, CycleEnd, Frequency; 		//for framerate controller
 	double DeltaTime = 0;
 	int FrameRate = 60;									//Make a define in the future
-	FMOD_SYSTEM *FMsystem = 0;
+	//FMOD_SYSTEM *FMsystem = 0;
 	AESysInitInfo sysInitInfo;
 
 	//Creates the console window
@@ -87,7 +89,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
 	//GSM Start
-	FoxSystemInitialize(FMsystem);
+	FoxSystemInitialize();
+	SoundSystem = GetSoundSystem();
 	GSMInitialize(GS_MainMenu);
 
 	while(GameRunning)
@@ -100,7 +103,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		//Checking if wanting to quit
 		if(Current == GS_Quit)
 		{
-			FoxSystemExit(FMsystem);
+			FoxSystemExit();
 			AESysExit();
 			return 0;
 		}
@@ -129,6 +132,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 			AEInputUpdate();
 			GSMPointers.pUpdate();
+			FMOD_System_Update(SoundSystem);
 			GSMPointers.pDraw();
 			Next = GetNextState();
 

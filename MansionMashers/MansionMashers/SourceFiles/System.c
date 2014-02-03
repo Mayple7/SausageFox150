@@ -13,19 +13,19 @@ written consent of DigiPen Institute of Technology is prohibited.
 */ 
 
 #include <stdio.h>
-#include "../fmod.h"
+#include "../FMODHeaders/fmod.h"
 #include "../HeaderFiles/Sound.h"
 
 FMOD_RESULT result;
 
-void FoxSystemInitialize(FMOD_SYSTEM *FMsystem)
+void FoxSystemInitialize(void)
 {
-	FMODInit(FMsystem);
+	FMODInit();
 }
 
-void FoxSystemExit(FMOD_SYSTEM *FMsystem)
+void FoxSystemExit(void)
 {
 	
-	FMODQuit(FMsystem);
+	FMODQuit();
 
 }

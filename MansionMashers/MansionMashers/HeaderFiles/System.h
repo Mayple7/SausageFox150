@@ -1,9 +1,9 @@
 #ifndef FOX_SYSTEM
 #define FOX_SYSTEM
 
-#include "../fmod.h"
+#include "../FMODHeaders/fmod.h"
 
-void FoxSystemInitialize(FMOD_SYSTEM *system);
-void FoxSystemExit(FMOD_SYSTEM *system);
+void FoxSystemInitialize(void);
+void FoxSystemExit(void);
 
 #endif

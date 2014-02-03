@@ -1,12 +1,16 @@
-#ifndef FOX_CAMERA
-#define FOX_CAMERA
+#ifndef FOX_SOUND
+#define FOX_SOUND
 
-#include "../fmod.h"
+#include "../FMODHeaders/fmod.h"
 
 #define MAX_SOUND_CHANNELS 100 
 
+FMOD_SYSTEM * GetSoundSystem(void);
 void FMODErrCheck(FMOD_RESULT result);
-void FMODInit(FMOD_SYSTEM *system);
-void FMODQuit(FMOD_SYSTEM *system);
+void FMODInit(void);
+void FMODQuit(void);
+void CreateSound(char *Filename, FMOD_SOUND *sound);
+void Play_Sound(FMOD_SOUND *sound, FMOD_CHANNEL *channel);
+void ReleaseSound(FMOD_SOUND *sound);
 
 #endif

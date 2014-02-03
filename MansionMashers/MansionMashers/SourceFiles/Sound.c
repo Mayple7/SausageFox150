@@ -12,8 +12,8 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited. 
 */ 
 
-#include "../fmod.h"
-#include "../fmod_errors.h"
+#include "../FMODHeaders/fmod.h"
+#include "../FMODHeaders/fmod_errors.h"
 #include <stdio.h>
 #include "../HeaderFiles/Sound.h"
 
@@ -28,7 +28,12 @@ written consent of DigiPen Institute of Technology is prohibited.
 */
 
 int success = 0;
+static FMOD_SYSTEM *FMsystem = 0;
 
+FMOD_SYSTEM * GetSoundSystem(void)
+{
+	return FMsystem;
+}
 
 void FMODErrCheck(FMOD_RESULT result)
 {
@@ -39,14 +44,14 @@ void FMODErrCheck(FMOD_RESULT result)
 }
 
 
-void FMODInit(FMOD_SYSTEM *system)
+void FMODInit()
 {
 	FMOD_RESULT result;
 
-	result = FMOD_System_Create(&system);
+	result = FMOD_System_Create(&FMsystem);
 	FMODErrCheck(result);
 
-	result = FMOD_System_Init(system, MAX_SOUND_CHANNELS, FMOD_INIT_NORMAL, 0);
+	result = FMOD_System_Init(FMsystem, MAX_SOUND_CHANNELS, FMOD_INIT_NORMAL, 0);
 	FMODErrCheck(result);
 
 	if(success = 1)
@@ -57,18 +62,48 @@ void FMODInit(FMOD_SYSTEM *system)
 
 }
 
-void FMODQuit(FMOD_SYSTEM *system)
+void FMODQuit()
 {
 	FMOD_RESULT result;
 
-	result = FMOD_System_Close(system);
+	result = FMOD_System_Close(FMsystem);
 	FMODErrCheck(result);
-	result = FMOD_System_Release(system);
+	result = FMOD_System_Release(FMsystem);
 	FMODErrCheck(result);
 
 	if(success = 1)
 	{
 		printf("FMOD CLOSED AND RELEASED\n");
+		success = 0;
+	}
+}
+
+void CreateSound(char *Filename, FMOD_SOUND *sound)
+{
+	FMOD_RESULT result;
+	result = FMOD_System_CreateSound(FMsystem, Filename, FMOD_HARDWARE, 0, &sound);
+	FMODErrCheck(result);
+	success = 0;
+}
+
+
+void Play_Sound(FMOD_SOUND *sound, FMOD_CHANNEL *channel)
+{
+	FMOD_RESULT result;
+	result = FMOD_System_PlaySound(FMsystem, FMOD_CHANNEL_FREE, sound, 0, &channel);
+	FMODErrCheck(result);
+	success = 0;
+}
+
+void ReleaseSound(FMOD_SOUND *sound)
+{
+	FMOD_RESULT result;
+	result = FMOD_Sound_Release(sound);
+	FMODErrCheck(result);
+	
+	if(success = 1)
+	{
+		printf("SOUND RELEASED\n");
 		success = 0;
 	}
 }
