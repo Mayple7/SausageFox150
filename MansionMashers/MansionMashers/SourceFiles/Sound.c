@@ -88,14 +88,14 @@ void CreateSound(char *Filename, FMOD_SOUND **sound)
 }
 
 
-void PlayAudio(FMOD_SOUND *sound, FMOD_CHANNEL **channel)
+void PlayAudio(FoxSound *sound)
 {
 	FMOD_RESULT result;
 	FMOD_BOOL Playing = FALSE;
 	
-	if(*channel)
+	if(sound->channel)
 	{
-		result = FMOD_Channel_IsPlaying(*channel, &Playing);
+		result = FMOD_Channel_IsPlaying(sound->channel, &Playing);
 		if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN))
 		{
 		    FMODErrCheck(result);
@@ -105,7 +105,7 @@ void PlayAudio(FMOD_SOUND *sound, FMOD_CHANNEL **channel)
 	
 	if(Playing == FALSE)
 	{
-		result = FMOD_System_PlaySound(FMsystem, FMOD_CHANNEL_FREE, sound, 0, channel);
+		result = FMOD_System_PlaySound(FMsystem, FMOD_CHANNEL_FREE, sound->sound, 0, &sound->channel);
 		FMODErrCheck(result);
 	}
 	success = 0;
@@ -122,6 +122,12 @@ void ReleaseSound(FMOD_SOUND *sound)
 		printf("SOUND RELEASED\n");
 		success = 0;
 	}
+}
+
+void InitSoundStruct(FoxSound *snd)
+{
+	snd->sound = 0;
+	snd->channel = 0;
 }
 
 /* result = FMOD_Channel_IsPlaying(channel, &playing);

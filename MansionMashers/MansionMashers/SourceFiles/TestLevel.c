@@ -52,8 +52,9 @@ HUDLayer HUDList;
 
 FMOD_SOUND *Sound1;
 FMOD_SOUND *Sound2;
-FMOD_CHANNEL *Channel1 = 0;
-FMOD_CHANNEL *Channel2 = 0;
+FMOD_CHANNEL *Channel1;
+FMOD_CHANNEL *Channel2;
+FoxSound snd;
 
 Food *Hammy;
 Sprite *Hammy2;
@@ -143,8 +144,9 @@ void InitializeTestLevel(void)
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
 	//Adding sounds
-	CreateSound("Sounds/drumloop.wav", &Sound1);
+	CreateSound("Sounds/drumloop.wav", &snd.sound);
 	CreateSound("Sounds/jaguar.wav", &Sound2);
+
 
 	// Reset camera to (0,0)
 	ResetCamera();
@@ -171,9 +173,13 @@ void UpdateTestLevel(void)
 
 	//Play sounds
 	if(AEInputCheckTriggered('D'))
-		PlayAudio(Sound1, &Channel1);
+	{
+		PlayAudio(&snd);
+	}
 	if(AEInputCheckCurr('A'))
-		PlayAudio(Sound2, &Channel2);
+	{
+		//PlayAudio(Sound2, &Channel2);
+	}
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))
@@ -206,6 +212,8 @@ void DrawTestLevel(void)
 void FreeTestLevel(void)
 {
 	freeObjectList();
+	ReleaseSound(Sound1);
+	ReleaseSound(Sound2);
 }
 
 /*************************************************************************/
@@ -218,8 +226,7 @@ void UnloadTestLevel(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
-	ReleaseSound(Sound1);
-	ReleaseSound(Sound2);
+	
 }
 
 /*************************************************************************/
