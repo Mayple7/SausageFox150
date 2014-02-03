@@ -85,7 +85,7 @@ int CollisionRectangles(CollisionBox* objA, CollisionBox* objB)
 	float bottomBy = topBy - objB->height;
 
 	//Check if all requires for collision are true
-	if (leftAx < rightBx && rightAx > leftBx && topAy > bottomBy && bottomAy < topBy)
+	if (leftAx <= rightBx && rightAx >= leftBx && topAy >= bottomBy && bottomAy <= topBy)
 		return TRUE;
 	else
 		return FALSE;
