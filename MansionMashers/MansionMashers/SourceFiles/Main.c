@@ -34,8 +34,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
-int GameRunning  = 1;
-int debugConsole = 1;
+int GameRunning;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -54,6 +53,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	LARGE_INTEGER CycleStart, CycleEnd, Frequency; 		//for framerate controller
 	double DeltaTime = 0;
 	int FrameRate = 60;									//Make a define in the future
+	int debugConsole = 1;
 	//FMOD_SYSTEM *FMsystem = 0;
 	AESysInitInfo sysInitInfo;
 	WNDCLASS	winClass;
@@ -90,7 +90,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	winClass.cbClsExtra		= 0;
 	winClass.cbWndExtra		= 0;
 	winClass.hInstance		= sysInitInfo.mAppInstance;
-	winClass.hIcon			= LoadIcon(NULL,IDI_EXCLAMATION);
+	winClass.hIcon			= LoadIcon(instanceH,MAKEINTRESOURCE(101));
 	winClass.hCursor		= LoadCursor(NULL,IDC_ARROW);
 	winClass.hbrBackground	= (HBRUSH)GetStockObject(WHITE_BRUSH);
 	winClass.lpszMenuName	= NULL;
@@ -117,7 +117,12 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mWindowHandle		= winHandle;
 
 	if(0 == AESysInit (&sysInitInfo))
+	{
+		GameRunning = 0;
 		printf("System Init Failed!\n");
+	}
+	else
+		GameRunning = 1;
 	
 	// reset the system modules
 	AESysReset();

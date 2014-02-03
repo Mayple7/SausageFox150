@@ -245,6 +245,12 @@ void DrawShowcase(void)
 void FreeShowcase(void)
 {
 	freeObjectList();
+	FreeText(Juli);
+	FreeText(Luke);
+	FreeText(Kaden);
+	FreeText(Dan);
+	FreeText(Fox);
+	FreeText(subText);
 }
 
 /*************************************************************************/

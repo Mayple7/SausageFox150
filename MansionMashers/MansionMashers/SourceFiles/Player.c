@@ -552,6 +552,7 @@ void Animation(Player *Object)
 	LegUpr2->FlipX = Object->PlayerSprite->FlipX;
 	LegLwr2->FlipX = Object->PlayerSprite->FlipX;
 	Bdy->FlipX = Object->PlayerSprite->FlipX;
+	Skrt->FlipX = Object->PlayerSprite->FlipX;
 	Tail->FlipX = Object->PlayerSprite->FlipX;
 	ArmUpr->FlipX = Object->PlayerSprite->FlipX;
 	ArmLwr->FlipX = Object->PlayerSprite->FlipX;

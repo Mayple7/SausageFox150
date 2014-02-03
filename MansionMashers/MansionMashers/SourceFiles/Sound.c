@@ -14,7 +14,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 #include "../FMODHeaders/fmod.h"
 #include "../FMODHeaders/fmod_errors.h"
-#include <stdio.h>
+//#include <stdio.h>  // There is no reason to include this -Dan
 #include "../HeaderFiles/Sound.h"
 #include "../HeaderFiles/FoxEngine.h"
 
@@ -28,8 +28,9 @@ written consent of DigiPen Institute of Technology is prohibited.
 	In SystemExit: Close & release system
 */
 
-int success = 0;
-FMOD_SYSTEM *FMsystem = 0;
+// Also don't initialize global variables it will cause problems in the future.
+int success;
+FMOD_SYSTEM *FMsystem;
 
 FMOD_SYSTEM * GetSoundSystem(void)
 {

@@ -151,7 +151,10 @@
     <ClCompile Include="SourceFiles\Vector3.c" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Pictures\fox_head.ico" />
+    <Image Include="..\fox_head.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MansionMashers.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
