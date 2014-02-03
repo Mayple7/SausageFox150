@@ -508,7 +508,10 @@ void Animation(Player *Object)
 	Bdy->Position.x = Object->Position.x;
 	Bdy->Position.y = Object->Position.y - (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
 	Skrt->Position = Bdy->Position;
-	Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection*4));
+	if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+		Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection*4));
+	else
+		Skrt->CurrentFrame = 3;
 	Tail->Position.y = Bdy->Position.y+10;
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
 
