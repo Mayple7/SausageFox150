@@ -30,6 +30,7 @@
 #include "../HeaderFiles/TestLevel.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
+#include "../HeaderFiles/Sound.h"
 
 // ---------------------------------------------------------------------------
 // Globals
@@ -48,6 +49,11 @@ Sprite *ColliderInvisible;
 Player CurrentPlayer;
 Enemy *CurrentEnemy;
 HUDLayer HUDList;
+
+FMOD_SOUND *Sound1;
+FMOD_SOUND *Sound2;
+FMOD_CHANNEL *Channel1 = 0;
+FMOD_CHANNEL *Channel2 = 0;
 
 Food *Hammy;
 Sprite *Hammy2;
@@ -136,6 +142,10 @@ void InitializeTestLevel(void)
 	// Adds the player and enemy to the collilde list
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
+	//Adding sounds
+	CreateSound("Sounds/drumloop.wav", &Sound1);
+	CreateSound("Sounds/jaguar.wav", &Sound2);
+
 	// Reset camera to (0,0)
 	ResetCamera();
 }
@@ -158,6 +168,12 @@ void UpdateTestLevel(void)
 
 	// Update the player's position
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	//Play sounds
+	if(AEInputCheckTriggered('D'))
+		PlayAudio(Sound1, &Channel1);
+	if(AEInputCheckCurr('A'))
+		PlayAudio(Sound2, &Channel2);
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))
@@ -202,6 +218,8 @@ void UnloadTestLevel(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
+	ReleaseSound(Sound1);
+	ReleaseSound(Sound2);
 }
 
 /*************************************************************************/

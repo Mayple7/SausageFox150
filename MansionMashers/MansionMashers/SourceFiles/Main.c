@@ -39,6 +39,7 @@ int debugConsole = 1;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
+LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp);
 
 // ---------------------------------------------------------------------------
 // main
@@ -55,6 +56,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int FrameRate = 60;									//Make a define in the future
 	//FMOD_SYSTEM *FMsystem = 0;
 	AESysInitInfo sysInitInfo;
+	WNDCLASS	winClass;
+	HWND winHandle;
+	RECT rect;
 
 	//Creates the console window
 	if(debugConsole && AllocConsole())
@@ -71,16 +75,49 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	// Initialize the system 
 	sysInitInfo.mAppInstance		= instanceH;
 	sysInitInfo.mShow				= show;
-	sysInitInfo.mWinWidth			= 1280;
-	sysInitInfo.mWinHeight			= 720;
+	sysInitInfo.mWinWidth			= 1920;
+	sysInitInfo.mWinHeight			= 1080;
 	sysInitInfo.mCreateConsole		= 0;
 	sysInitInfo.mMaxFrameRate		= 0;
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
-	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;											
+	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;
 	sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
 	AESysInit (&sysInitInfo);
-	AESysSetWindowTitle("Mansion Mashers!");
-	
+
+
+	winClass.style			= sysInitInfo.mClassStyle;
+	winClass.lpfnWndProc	= MyWinCallBack;//(pSysInitInfo->mpWinCallBack) ? pSysInitInfo->mpWinCallBack : winCallBack;
+	winClass.cbClsExtra		= 0;
+	winClass.cbWndExtra		= 0;
+	winClass.hInstance		= sysInitInfo.mAppInstance;
+	winClass.hIcon			= LoadIcon(NULL,IDI_EXCLAMATION);
+	winClass.hCursor		= LoadCursor(NULL,IDC_ARROW);
+	winClass.hbrBackground	= (HBRUSH)GetStockObject(WHITE_BRUSH);
+	winClass.lpszMenuName	= NULL;
+	winClass.lpszClassName	= "Window Class Name";
+
+	RegisterClass(&winClass);
+
+
+	rect.left = 0;
+	rect.top = 0;
+	rect.right = sysInitInfo.mWinWidth;//WinWidth;
+	rect.bottom = sysInitInfo.mWinHeight;//WinHeight;
+
+
+	AdjustWindowRect(&rect, sysInitInfo.mWindowStyle, 0);
+
+	winHandle = CreateWindow(winClass.lpszClassName, "Mansion Mashers", sysInitInfo.mWindowStyle, 100, 100, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, sysInitInfo.mAppInstance, NULL);
+
+	ShowWindow	(winHandle, show);
+	UpdateWindow(winHandle);
+
+
+	sysInitInfo.mCreateWindow		= 0;
+	sysInitInfo.mWindowHandle		= winHandle;
+
+	if(0 == AESysInit (&sysInitInfo))
+		printf("System Init Failed!\n");
 	
 	// reset the system modules
 	AESysReset();
@@ -164,4 +201,48 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	//End of GSM
 
 	return 1;
+}
+
+LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp) 
+{
+	HDC dc;   
+	PAINTSTRUCT ps;
+
+	switch (msg)
+	{
+	// when the window is created
+	case WM_CREATE:
+		printf("My own code in window create message!\n");
+		break;
+
+	// when the rectangle is drawn
+	case WM_PAINT:
+		dc = BeginPaint(hWin, &ps);
+
+		// Cleans up the painting process
+		EndPaint(hWin, &ps);
+		break;
+
+	// When it's time for the window to go away
+	case WM_DESTROY:
+		//PostQuitMessage(0);
+		//gAESysWinExists = false;
+		break;
+
+	// called any time the window is moved
+	case WM_MOVE:
+		// Invalidate the rect to force a redraw
+		InvalidateRect(hWin, NULL, FALSE);
+		break;
+
+	case WM_ACTIVATE:
+		// DO NOT REMOVE THIS
+		// *(AESysGetAppActive()) = (LOWORD(wp) == WA_INACTIVE) ? 0 : 1;
+		break;
+
+	default:
+		return DefWindowProc(hWin, msg, wp, lp);
+	}
+
+	return 0;
 }

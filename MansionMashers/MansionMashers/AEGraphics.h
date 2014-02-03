@@ -33,6 +33,7 @@ typedef enum
 	AE_GFX_BM_NONE = 0, 
 	AE_GFX_BM_BLEND,  
 	AE_GFX_BM_ADD,  
+	AE_GFX_BM_MULTIPLY,  
 
 	AE_GFX_BM_NUM
 }AEGfxBlendMode;

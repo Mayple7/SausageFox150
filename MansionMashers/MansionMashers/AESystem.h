@@ -17,14 +17,7 @@
 // ---------------------------------------------------------------------------
 
 // window related variables
-extern HINSTANCE	ghAESysAppInstance;
 extern HWND			gAESysWindowHandle;
-extern WNDCLASS		winClass;
-
-extern const char*	gpAESysWinTitle;
-extern const char*	gpAESysWinClassName;
-
-extern AE_API int	gAESysAppActive;
 
 // ---------------------------------------------------------------------------
 
@@ -33,6 +26,8 @@ extern AE_API int	gAESysAppActive;
 typedef struct AESysInitInfo
 {
 #if(EXPORT_WINDOWS == 1)
+	int				mCreateWindow;
+	HWND			mWindowHandle;
 	HINSTANCE		mAppInstance;
 	int				mShow;
 	int				mWinWidth, mWinHeight;
