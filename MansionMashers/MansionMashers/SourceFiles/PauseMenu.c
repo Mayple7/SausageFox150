@@ -1,14 +1,34 @@
+/*****************************************************************************/
+/*!
+\file				PauseMenu.c
+\author				Dan Muller (d.muller)
+\date				Feb 2, 2014
+
+\brief				Pause menu functions
+
+\par				Functions:
+\li					InitializePause
+\li					UpdatePause
+\li					DrawPause
+\li					FreePause
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
+*/ 
+/*****************************************************************************/
 
 #include "../HeaderFiles/PauseMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
 
 Sprite* PauseText;
 
-void (*LevelToDraw)(void);
+void (*LevelToDraw)();
 
 int pause;
 
-void InitializePause(void (*DrawLevel))
+void InitializePause(void (*DrawLevel)())
 {
 	pause = TRUE;
 	PauseText = CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1);
@@ -30,7 +50,7 @@ void UpdatePause(void)
 	{
 		AESysFrameStart();
 			
-			//FrameRate Controller
+		//FrameRate Controller
 		QueryPerformanceCounter(&CycleStart);			
 
 		AEInputUpdate();
@@ -44,6 +64,12 @@ void UpdatePause(void)
 		{
 			pause = FALSE;
 		}
+		if(AEInputCheckTriggered(VK_RSHIFT))
+		{
+			pause = FALSE;
+			SetNextState(GS_MainMenu);
+		}
+
 		DrawPause();
 
 		//Framerate controller
