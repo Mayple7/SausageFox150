@@ -191,7 +191,10 @@
     <ClInclude Include="HeaderFiles\MapLevel.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\TextCreation.h">
+    <ClInclude Include="HeaderFiles\Sound.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\System.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -271,7 +274,10 @@
     <ClCompile Include="SourceFiles\MapLevel.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\TextCreation.c">
+    <ClCompile Include="SourceFiles\Sound.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\System.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>

@@ -48,7 +48,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Winmm.lib;</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Winmm.lib;fmodex_vc.lib;fmodexL_vc.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -104,8 +104,10 @@
     <ClInclude Include="HeaderFiles\PlayerCollision.h" />
     <ClInclude Include="HeaderFiles\RigidBody.h" />
     <ClInclude Include="HeaderFiles\SearchIntArray.h" />
+    <ClInclude Include="HeaderFiles\Sound.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
     <ClInclude Include="HeaderFiles\StartSlides.h" />
+    <ClInclude Include="HeaderFiles\System.h" />
     <ClInclude Include="HeaderFiles\TestLevel.h" />
     <ClInclude Include="HeaderFiles\TextCreation.h" />
     <ClInclude Include="HeaderFiles\TextureManager.h" />
@@ -137,8 +139,10 @@
     <ClCompile Include="SourceFiles\RigidBody.c" />
     <ClCompile Include="SourceFiles\SearchIntArray.c" />
     <ClCompile Include="SourceFiles\ShowcaseLevel.c" />
+    <ClCompile Include="SourceFiles\Sound.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />
+    <ClCompile Include="SourceFiles\System.c" />
     <ClCompile Include="SourceFiles\TestLevel.c" />
     <ClCompile Include="SourceFiles\TextCreation.c" />
     <ClCompile Include="SourceFiles\TextureManager.c" />

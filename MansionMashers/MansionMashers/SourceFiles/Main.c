@@ -24,6 +24,8 @@
 #include "../HeaderFiles/TestLevel.h"
 #include "../AEEngine.h"
 #include "../HeaderFiles/FoxEngine.h"
+#include "../HeaderFiles/System.h"
+#include "../fmod.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -49,6 +51,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	LARGE_INTEGER CycleStart, CycleEnd, Frequency; 		//for framerate controller
 	double DeltaTime = 0;
 	int FrameRate = 60;									//Make a define in the future
+	FMOD_SYSTEM *FMsystem = 0;
 	AESysInitInfo sysInitInfo;
 
 	//Creates the console window
@@ -84,6 +87,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
 	//GSM Start
+	FoxSystemInitialize(FMsystem);
 	GSMInitialize(GS_MainMenu);
 
 	while(GameRunning)
@@ -96,6 +100,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		//Checking if wanting to quit
 		if(Current == GS_Quit)
 		{
+			FoxSystemExit(FMsystem);
 			AESysExit();
 			return 0;
 		}
