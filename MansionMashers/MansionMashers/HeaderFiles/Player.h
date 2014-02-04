@@ -2,8 +2,8 @@
 #define FOX_PLAYER
 
 #define MAX_INVENTORY 20
-#define PLAYER_WIDTH 300
-#define PLAYER_HEIGHT 300
+#define PLAYER_WIDTH 100
+#define PLAYER_HEIGHT 200
 
 #include "Vector2.h"
 #include "RigidBody.h"

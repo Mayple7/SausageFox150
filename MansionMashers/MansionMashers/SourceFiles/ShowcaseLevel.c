@@ -97,6 +97,7 @@ void InitializeShowcase(void)
 
 	CurrentPlayer.Position.x = -1380;
 	CurrentPlayer.Position.y = -220;
+	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
@@ -150,7 +151,6 @@ void InitializeShowcase(void)
 	BouncePad->Position.y = -200;
 	BouncePad->PlatformCollider.Position = BouncePad->Position;
 	BouncePad->PlatformSprite->Position = BouncePad->Position;
-	BouncePad->PlatformRigidBody.Restitution = 1.9f;
 
 	FoxBig = CreateSprite("Textures/GinkoArt.png", 148.5, 270, 20, 1, 1);
 	FoxBig->Position.x = -300;
@@ -230,20 +230,18 @@ void DrawShowcase(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	drawObjectList();
-<<<<<<< HEAD
 	DrawHUD(&HUDList);
 	SetCamera(&CurrentPlayer.Position, 250);
-	
-=======
+
 	DrawCollisionList();
-	SetCamera(&CurrentPlayer.Position, 250, &HUDList);
->>>>>>> c19b4e929e38156b3c1edd5c1bd6851c562e09f0
+	SetCamera(&CurrentPlayer.Position, 250);
 	DrawGlyphs(Juli);
 	DrawGlyphs(Luke);
 	DrawGlyphs(Kaden);
 	DrawGlyphs(Dan);
 	DrawGlyphs(Fox);
 	DrawGlyphs(subText);
+	UpdatePlayerCollider(&CurrentPlayer.PlayerCollider);
 
 	/*
 	TODO: 

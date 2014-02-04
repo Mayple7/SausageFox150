@@ -107,6 +107,33 @@ void UpdatePlatformCollider(CollisionBox *Collider, float width, float height)
 /*************************************************************************/
 /*!
 	\brief
+	Updates the size of the collision box
+	
+	\param Collider
+	The collision box object
+
+	\param width
+	The width of the collision box
+
+	\param height
+	The height of the collision box
+*/
+/*************************************************************************/
+void UpdatePlayerCollider(CollisionBox *Collider)
+{
+	//Update collision size
+	Collider->width = Collider->width;
+	Collider->height = Collider->height;
+
+	//Update collision debug box
+	AEGfxMeshFree(Collider->DebugMesh);
+	Collider->DebugMesh = createMesh(Collider->width, Collider->height, 1.0f, 1.0f, 0.0f);
+	displayCollisionDebug(Collider);
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Draws the collision debug box
 	
 	\param Collider
