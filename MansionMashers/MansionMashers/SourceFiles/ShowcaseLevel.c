@@ -59,8 +59,6 @@ Text *Juli, *Luke, *Kaden, *Dan, *Fox, *subText;
 
 //FoxSound BackgroundSnd;
 
-Player CurrentPlayer;
-
 Food *Ham;
 Food *Hammy;
 
@@ -125,14 +123,13 @@ void InitializeShowcase(void)
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 123, 245, newID++);
 	UpdatePlatformPosition(Shelf, 475, -115);
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
-	UpdatePlatformCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, 60);
-	Shelf->PlatformCollider.collisionDebug = TRUE;
+	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, 60);
 	
 	// Create and initialize the crate sprite
 	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 859, 260.5f, newID++);
 	UpdatePlatformPosition(Crate, 1400, -180);
 	Crate->PlatformCollider.Offset.y = Crate->PlatformSprite->Height / 2 - 60;
-	Crate->PlatformCollider.width = Crate->PlatformCollider.width - 100;
+	UpdateCollider(&Crate->PlatformCollider, Crate->PlatformCollider.width - 100, 60);
 	Crate->PlatformCollider.height = 60;
 
 	Ham = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++);
@@ -184,7 +181,6 @@ void InitializeShowcase(void)
 	//Sounds
 	//CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 
-
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
 	SetCamera(&startingCamera, 250);
@@ -230,7 +226,7 @@ void UpdateShowcase(void)
 void DrawShowcase(void)
 {
 	// Draws the object list and sets the camera to the correct location
-	drawObjectList();
+	DrawObjectList();
 	DrawHUD(&HUDList);
 	SetCamera(&CurrentPlayer.Position, 250);
 
@@ -242,15 +238,6 @@ void DrawShowcase(void)
 	DrawGlyphs(Dan);
 	DrawGlyphs(Fox);
 	DrawGlyphs(subText);
-	UpdatePlayerCollider(&CurrentPlayer.PlayerCollider);
-
-	/*
-	TODO: 
-		- Make loop for drawing collidebox
-		- Make loop for removing collide box on free
-		- Make loop for freeing all collision items
-	*/
-	//displayCollisionDebug(&Ham->FoodCollider);
 }
 
 /*************************************************************************/

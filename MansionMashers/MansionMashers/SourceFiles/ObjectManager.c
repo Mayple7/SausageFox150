@@ -11,7 +11,7 @@
 \li					AddObject
 \li					AddCollidable
 \li					resetObjectList
-\li					drawObjectList
+\li					DrawObjectList
 \li					freeObject
 \li					freeObjectList
   
@@ -97,7 +97,6 @@ Platform* AddPlatform(void)
 			printf("Platform at %i Created\n", i);
 			return &platformList[i];
 		}
-
 	}
 	return NULL;
 }
@@ -121,7 +120,6 @@ Food* AddFood(void)
 			printf("Food at %i Created\n", i);
 			return &foodList[i];
 		}
-
 	}
 	return NULL;
 }
@@ -145,7 +143,6 @@ Enemy* AddEnemy(void)
 			printf("Enemy at %i Created\n", i);
 			return &enemyList[i];
 		}
-
 	}
 	return NULL;
 }
@@ -194,7 +191,7 @@ void resetObjectList(void)
 	Draws all the objects in the object list
 */
 /*************************************************************************/
-void drawObjectList(void)
+void DrawObjectList(void)
 {
 	int currentZ = 0;
 	int nextZ    = 0;
@@ -224,6 +221,12 @@ void drawObjectList(void)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Draws all collide boxes when needed
+*/
+/*************************************************************************/
 void DrawCollisionList(void)
 {
 	int i;
@@ -235,6 +238,24 @@ void DrawCollisionList(void)
 			//Free the mesh and texture data
 			displayCollisionDebug(&platformList[i].PlatformCollider);
 		}
+		//Make sure the sprite exists
+		if (foodList[i].objID && foodList[i].FoodCollider.collisionDebug)
+		{
+			//Free the mesh and texture data
+			displayCollisionDebug(&foodList[i].FoodCollider);
+		}
+		//Make sure the sprite exists
+		if (enemyList[i].objID && enemyList[i].EnemyCollider.collisionDebug)
+		{
+			//Free the mesh and texture data
+			displayCollisionDebug(&enemyList[i].EnemyCollider);
+		}
+	}
+
+	//Players are special
+	if(CurrentPlayer.PlayerCollider.collisionDebug)
+	{
+		displayCollisionDebug(&CurrentPlayer.PlayerCollider);
 	}
 }
 

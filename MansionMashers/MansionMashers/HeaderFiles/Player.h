@@ -80,6 +80,10 @@ typedef struct Player
 
 }Player;
 
+//Player Global
+Player CurrentPlayer;
+
+//Functions
 void InitializePlayer(struct Player *CurrentPlayer, int newID);
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);

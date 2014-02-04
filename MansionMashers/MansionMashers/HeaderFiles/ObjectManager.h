@@ -23,7 +23,7 @@ Food* AddFood(void);
 Enemy* AddEnemy(void);
 void AddCollidable(Sprite *newCollidable);
 void resetObjectList(void);
-void drawObjectList(void);
+void DrawObjectList(void);
 void freeObjectList(void);
 void freeObject(Sprite* objectNext);
 void DrawCollisionList(void);

@@ -45,7 +45,6 @@ Sprite *HUD3item;
 Sprite *HUD4item;
 Sprite *Background;
 Sprite *ColliderInvisible;
-Player CurrentPlayer;
 Enemy *CurrentEnemy;
 HUDLayer HUDList;
 
@@ -195,11 +194,12 @@ void UpdateTestLevel(void)
 void DrawTestLevel(void)
 {
 	// Draws the objects in the object list
-	drawObjectList();
+	DrawObjectList();
 	DrawHUD(&HUDList);
 	//Camera follows player
 	SetCamera(&CurrentPlayer.Position, 250);
 	
+	DrawCollisionList();
 }
 
 /*************************************************************************/

@@ -66,7 +66,9 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 
 	//Collision properties
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, newID);
-	CurrentPlayer->PlayerCollider.Offset.y = 30;
+	CurrentPlayer->PlayerCollider.Offset.y = 20;
+	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20;
+	UpdateCollider(&CurrentPlayer->PlayerCollider, CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 
 	//Collider Debug
 	CurrentPlayer->PlayerCollider.collisionDebug = TRUE;
@@ -211,11 +213,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 /*************************************************************************/
 void UpdatePlayerPosition(Player *CurrentPlayer)
 {
-	if(CurrentPlayer->PlayerCollider.collisionDebug)
-	{
-		displayCollisionDebug(&CurrentPlayer->PlayerCollider);
-	}
-
 	//Stop velocity and acceleration when the player lands on the floor
 	if(CurrentPlayer->Position.y <= GROUNDLEVEL || CurrentPlayer->PlayerRigidBody.onGround)
 	{
