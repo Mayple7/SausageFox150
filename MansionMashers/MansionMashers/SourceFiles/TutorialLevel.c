@@ -73,6 +73,17 @@ void UpdateTutorial(void)
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
 
+	if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
+	{
+		CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
+	}
+	else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * TutorialBackground->Width / 16)
+	{
+		CurrentPlayer.Position.x = (7 * TutorialBackground->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+	}
+
+
+
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
 	if(AEInputCheckTriggered(VK_RSHIFT))
@@ -109,8 +120,4 @@ void EventTutorial(void)
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
-
-	// check if forcing the application to quit
-	if (0 == AESysDoesWindowExist())
-		SetNextState(GS_Quit);
 }
