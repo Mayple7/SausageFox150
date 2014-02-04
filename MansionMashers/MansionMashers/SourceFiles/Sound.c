@@ -359,3 +359,124 @@ void ReleaseChannelGroups(FoxChannels *chnl)
 
 	success = FALSE;
 }
+
+/*************************************************************************/
+/*!
+	\brief
+	Set a channel group's volume
+
+	\param chnl
+	Pointer to channel group object struct
+	
+	\param type
+	Which channel group to adjust
+
+	\param volume
+	Value to set channel group to
+*/
+/*************************************************************************/
+void SetChannelGroupVolume(FoxChannels *chnl, int type, float volume)
+{
+	FMOD_RESULT result;
+
+	switch (type)
+	{
+		case AllTypes:
+			result = FMOD_ChannelGroup_SetVolume(chnl->Music, volume);
+			FMODErrCheck(result);
+		case EffectType:
+			result = FMOD_ChannelGroup_SetVolume(chnl->Effects, volume);
+			FMODErrCheck(result);
+			break;
+		case MusicType:
+			result = FMOD_ChannelGroup_SetVolume(chnl->Music, volume);
+			FMODErrCheck(result);
+			break;
+	}
+
+	success = FALSE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Set a channels/sounds volume
+
+	\param snd
+	Pointer to sound object struct
+
+	\param volume
+	Value to set sound to
+*/
+/*************************************************************************/
+void SetSoundVolume(FoxSound *snd, float volume)
+{
+	FMOD_RESULT result;
+
+	result = FMOD_Channel_SetVolume(snd->Channel, volume);
+	FMODErrCheck(result);
+
+	success = FALSE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Gets the volume of a sound
+
+	\param snd
+	Pointer to sound object struct
+
+	\return
+	Returns the current volume of that sound
+*/
+/*************************************************************************/
+float GetSoundVolume(FoxSound *snd)
+{
+	FMOD_RESULT result;
+	float volume;
+
+	result = FMOD_Channel_GetVolume(snd->Channel, &volume);
+	FMODErrCheck(result);
+
+	success = FALSE;
+
+	return volume;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Gets the volume of a channel group
+
+	\param snd
+	Pointer to channel group object struct
+
+	\param type
+	Which channel group's volume to get
+
+	\return
+	Returns the current volume of specified channel group
+*/
+/*************************************************************************/
+float GetChannelGroupVolume(FoxChannels * chnl, int type)
+{
+	FMOD_RESULT result;
+	float volume;
+
+	switch (type)
+	{
+		case EffectType:
+			result = FMOD_ChannelGroup_GetVolume(chnl->Effects, &volume);
+			FMODErrCheck(result);
+			break;
+		case MusicType:
+			result = FMOD_ChannelGroup_GetVolume(chnl->Music, &volume);
+			FMODErrCheck(result);
+			break;
+	}
+
+	success = FALSE;
+
+	return volume;
+}
