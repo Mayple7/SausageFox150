@@ -18,6 +18,8 @@
 #include "GameStateList.h"
 #include "SearchIntArray.h"
 #include "TextCreation.h"
+#include "Sound.h"
+#include "System.h"
 
 //Special level include
 #include "PauseMenu.h"

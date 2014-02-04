@@ -24,9 +24,7 @@
 #include "../HeaderFiles/TestLevel.h"
 #include "../AEEngine.h"
 #include "../HeaderFiles/FoxEngine.h"
-#include "../HeaderFiles/System.h"
 #include "../FMODHeaders/fmod.h"
-#include "../HeaderFiles/Sound.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -49,7 +47,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int Previous;										//Local State Variables
 	int Current;										//Local State Variables
 	int Next;											//Local State Variables
-	FMOD_SYSTEM *SoundSystem = 0;
+	FMOD_SYSTEM *SoundSystem = 0;						//Local Sound System
 	LARGE_INTEGER CycleStart, CycleEnd, Frequency; 		//for framerate controller
 	double DeltaTime = 0;
 	int FrameRate = 60;									//Make a define in the future

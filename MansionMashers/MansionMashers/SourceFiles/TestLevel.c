@@ -30,7 +30,6 @@
 #include "../HeaderFiles/TestLevel.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
-#include "../HeaderFiles/Sound.h"
 
 // ---------------------------------------------------------------------------
 // Globals
@@ -50,11 +49,9 @@ Player CurrentPlayer;
 Enemy *CurrentEnemy;
 HUDLayer HUDList;
 
-FMOD_SOUND *Sound1;
-FMOD_SOUND *Sound2;
-FMOD_CHANNEL *Channel1;
-FMOD_CHANNEL *Channel2;
-FoxSound snd;
+FoxSound BackgroundSnd;
+FoxSound Sound1;
+FoxSound Sound2;
 
 Food *Hammy;
 Sprite *Hammy2;
@@ -152,9 +149,9 @@ void InitializeTestLevel(void)
 	AddCollidable(CurrentPlayer.PlayerSprite);
 
 	//Adding sounds
-	CreateSound("Sounds/drumloop.wav", &snd.sound);
-	CreateSound("Sounds/jaguar.wav", &Sound2);
-
+	CreateSound("Sounds/drumloop.wav", &Sound1, SmallSnd);
+	CreateSound("Sounds/jaguar.wav", &Sound2, SmallSnd);
+	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 
 	// Reset camera to (0,0)
 	ResetCamera();
@@ -175,14 +172,12 @@ void UpdateTestLevel(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	//Play sounds
+	PlayAudio(&BackgroundSnd);
+
 	if(AEInputCheckTriggered('D'))
-	{
-		PlayAudio(&snd);
-	}
+		PlayAudio(&Sound1);
 	if(AEInputCheckCurr('A'))
-	{
-		//PlayAudio(Sound2, &Channel2);
-	}
+		PlayAudio(&Sound2);
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))
@@ -216,8 +211,9 @@ void DrawTestLevel(void)
 void FreeTestLevel(void)
 {
 	freeObjectList();
-	ReleaseSound(Sound1);
-	ReleaseSound(Sound2);
+	ReleaseSound(Sound1.Sound);
+	ReleaseSound(Sound2.Sound);
+	ReleaseSound(BackgroundSnd.Sound);
 }
 
 /*************************************************************************/

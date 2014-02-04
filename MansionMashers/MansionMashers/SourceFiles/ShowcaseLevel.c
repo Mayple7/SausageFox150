@@ -57,6 +57,8 @@ Sprite *Letters;
 
 Text *Juli, *Luke, *Kaden, *Dan, *Fox, *subText;
 
+//FoxSound BackgroundSnd;
+
 Player CurrentPlayer;
 
 Food *Ham;
@@ -122,7 +124,8 @@ void InitializeShowcase(void)
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 123, 245, newID++);
 	UpdatePlatformPosition(Shelf, 475, -115);
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
-	Shelf->PlatformCollider.height = 60;
+	UpdatePlatformCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, 60);
+	Shelf->PlatformCollider.collisionDebug = TRUE;
 	
 	// Create and initialize the crate sprite
 	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 859, 260.5f, newID++);
@@ -177,6 +180,10 @@ void InitializeShowcase(void)
 	Vec3Set(&textTint, 0.0f, 0.0f, 0.0f);
 	subText = CreateText("(These are the letters and symbols that you can display)", 300, -300, 50, textTint);
 
+	//Sounds
+	//CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
+
+
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
 	SetCamera(&startingCamera, 250);
@@ -195,6 +202,10 @@ void UpdateShowcase(void)
 
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	//Sound
+	//PlayAudio(&BackgroundSnd);
+
 
 	// Return to main menu with ESC
 	if(AEInputCheckTriggered(VK_RSHIFT))
@@ -219,9 +230,14 @@ void DrawShowcase(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	drawObjectList();
+<<<<<<< HEAD
 	DrawHUD(&HUDList);
 	SetCamera(&CurrentPlayer.Position, 250);
 	
+=======
+	DrawCollisionList();
+	SetCamera(&CurrentPlayer.Position, 250, &HUDList);
+>>>>>>> c19b4e929e38156b3c1edd5c1bd6851c562e09f0
 	DrawGlyphs(Juli);
 	DrawGlyphs(Luke);
 	DrawGlyphs(Kaden);
@@ -235,7 +251,7 @@ void DrawShowcase(void)
 		- Make loop for removing collide box on free
 		- Make loop for freeing all collision items
 	*/
-	displayCollisionDebug(&Ham->FoodCollider);
+	//displayCollisionDebug(&Ham->FoodCollider);
 }
 
 /*************************************************************************/
@@ -253,6 +269,8 @@ void FreeShowcase(void)
 	FreeText(Dan);
 	FreeText(Fox);
 	FreeText(subText);
+	//ReleaseSound(BackgroundSnd.Sound);
+
 }
 
 /*************************************************************************/
