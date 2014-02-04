@@ -93,7 +93,7 @@ void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition)
 	The height of the collision box
 */
 /*************************************************************************/
-void UpdatePlatformCollider(CollisionBox *Collider, float width, float height)
+void UpdateCollider(CollisionBox *Collider, float width, float height)
 {
 	//Update collision size
 	Collider->width = width;
@@ -120,7 +120,4 @@ void displayCollisionDebug(CollisionBox *Collider)
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxTextureSet(Collider->DebugTexture, 1.0f, 1.0f);
 	AEGfxMeshDraw(Collider->DebugMesh, AE_GFX_MDM_TRIANGLES);
-
-	//NEED TO FREE THIS
-	//AEGfxMeshFree(DebugMesh);
 }

@@ -126,7 +126,7 @@ void UpdateMainMenu(void)
 /*************************************************************************/
 void DrawMainMenu(void)
 {
-	drawObjectList();
+	DrawObjectList();
 }
 
 /*************************************************************************/
@@ -191,6 +191,10 @@ void InputHandling(void)
 		// Exit button
 		else if(selectedButton == 2)
 			SetNextState(GS_Quit);
+	}
+	if(AEInputCheckTriggered(VK_RSHIFT))
+	{
+		SetNextState(GS_Tutorial);
 	}
 
 	// check if forcing the application to quit

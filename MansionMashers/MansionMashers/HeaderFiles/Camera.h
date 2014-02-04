@@ -10,8 +10,8 @@ typedef struct HUDLayer
 	Sprite* HudItem[20];
 }HUDLayer;
 
-void SetCamera(Vec2 *playerX, int offset, HUDLayer *hudmain); 
+void SetCamera(Vec2 *playerX, int offset); 
 void ResetCamera(void);
-void DrawHUD(struct HUDLayer *hud, float camx, float camy);
+void DrawHUD(struct HUDLayer *hud);
 
 #endif

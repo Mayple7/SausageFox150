@@ -4,6 +4,8 @@
 #define FALSE 0
 #define TRUE 1
 
+#define GROUNDLEVEL -350
+
 //-------------------------------------------------------------------------
 // Fox engine includes
 

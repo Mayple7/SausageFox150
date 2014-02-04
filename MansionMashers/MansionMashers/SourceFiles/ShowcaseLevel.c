@@ -59,8 +59,6 @@ Text *Juli, *Luke, *Kaden, *Dan, *Fox, *subText;
 
 //FoxSound BackgroundSnd;
 
-Player CurrentPlayer;
-
 Food *Ham;
 Food *Hammy;
 
@@ -97,7 +95,6 @@ void InitializeShowcase(void)
 
 	CurrentPlayer.Position.x = -1380;
 	CurrentPlayer.Position.y = -220;
-	CurrentPlayer.PlayerSprite->Position = CurrentPlayer.Position;
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
@@ -115,25 +112,24 @@ void InitializeShowcase(void)
 	HUDitem->isHUD = TRUE;
 
 	// Create the background sprite
-	Background = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
+	Background = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1);
 	
 	// Create the offset background sprite
-	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
-	Background2->Position.x = 3840;
+	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1);
+	Background2->Position.x = 5760;
 	Background2->FlipX = TRUE;
 
 	// Create the shelf sprite and initialize to be collidable
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 123, 245, newID++);
 	UpdatePlatformPosition(Shelf, 475, -115);
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
-	UpdatePlatformCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, 60);
-	Shelf->PlatformCollider.collisionDebug = TRUE;
+	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, 60);
 	
 	// Create and initialize the crate sprite
 	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 859, 260.5f, newID++);
 	UpdatePlatformPosition(Crate, 1400, -180);
 	Crate->PlatformCollider.Offset.y = Crate->PlatformSprite->Height / 2 - 60;
-	Crate->PlatformCollider.width = Crate->PlatformCollider.width - 100;
+	UpdateCollider(&Crate->PlatformCollider, Crate->PlatformCollider.width - 100, 60);
 	Crate->PlatformCollider.height = 60;
 
 	Ham = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++);
@@ -147,16 +143,12 @@ void InitializeShowcase(void)
 	HUDList.HudItem[0] = HUD;
 	HUDList.HudItem[1] = HUDitem;
 
-	// Add the enemy and player to the collidable list
-	AddCollidable(CurrentPlayer.PlayerSprite);
-	CurrentPlayer.PlayerSprite->Visible = TRUE;
-
 	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 400, 100, newID++);
 	BouncePad->Position.x = -1000;
 	BouncePad->Position.y = -200;
 	BouncePad->PlatformCollider.Position = BouncePad->Position;
 	BouncePad->PlatformSprite->Position = BouncePad->Position;
-	BouncePad->PlatformRigidBody.Restitution = 1.9f;
+	BouncePad->PlatformRigidBody.Restitution = 1.8f;
 
 	FoxBig = CreateSprite("Textures/GinkoArt.png", 148.5, 270, 20, 1, 1);
 	FoxBig->Position.x = -300;
@@ -189,10 +181,9 @@ void InitializeShowcase(void)
 	//Sounds
 	//CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 
-
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
-	SetCamera(&startingCamera, 250, &HUDList);
+	SetCamera(&startingCamera, 250);
 }
 
 /*************************************************************************/
@@ -237,23 +228,18 @@ void UpdateShowcase(void)
 void DrawShowcase(void)
 {
 	// Draws the object list and sets the camera to the correct location
-	drawObjectList();
+	DrawObjectList();
+	DrawHUD(&HUDList);
+	SetCamera(&CurrentPlayer.Position, 250);
+
 	DrawCollisionList();
-	SetCamera(&CurrentPlayer.Position, 250, &HUDList);
+	SetCamera(&CurrentPlayer.Position, 250);
 	DrawGlyphs(Juli);
 	DrawGlyphs(Luke);
 	DrawGlyphs(Kaden);
 	DrawGlyphs(Dan);
 	DrawGlyphs(Fox);
 	DrawGlyphs(subText);
-
-	/*
-	TODO: 
-		- Make loop for drawing collidebox
-		- Make loop for removing collide box on free
-		- Make loop for freeing all collision items
-	*/
-	//displayCollisionDebug(&Ham->FoodCollider);
 }
 
 /*************************************************************************/

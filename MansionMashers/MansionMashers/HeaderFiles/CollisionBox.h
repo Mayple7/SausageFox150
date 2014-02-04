@@ -23,7 +23,7 @@ typedef struct CollisionBox
 
 void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGroup, float width, float height, int newID);
 void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition);
-void UpdatePlatformCollider(CollisionBox *Collider, float width, float height);
+void UpdateCollider(CollisionBox *Collider, float width, float height);
 void displayCollisionDebug(CollisionBox *Collider);
 
 #endif
