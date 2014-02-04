@@ -57,6 +57,8 @@ Sprite *Letters;
 
 Text *Juli, *Luke, *Kaden, *Dan, *Fox, *subText;
 
+//FoxSound BackgroundSnd;
+
 Player CurrentPlayer;
 
 Food *Ham;
@@ -183,6 +185,10 @@ void InitializeShowcase(void)
 	Vec3Set(&textTint, 0.0f, 0.0f, 0.0f);
 	subText = CreateText("(These are the letters and symbols that you can display)", 300, -300, 50, textTint);
 
+	//Sounds
+	//CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
+
+
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
 	SetCamera(&startingCamera, 250, &HUDList);
@@ -201,6 +207,10 @@ void UpdateShowcase(void)
 
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	//Sound
+	//PlayAudio(&BackgroundSnd);
+
 
 	// Return to main menu with ESC
 	if(AEInputCheckTriggered(VK_RSHIFT))
@@ -257,6 +267,8 @@ void FreeShowcase(void)
 	FreeText(Dan);
 	FreeText(Fox);
 	FreeText(subText);
+	//ReleaseSound(BackgroundSnd.Sound);
+
 }
 
 /*************************************************************************/
