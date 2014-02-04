@@ -459,7 +459,7 @@ void Animation(Player *Object)
 	Bdy->Position.x = Object->Position.x;
 	Bdy->Position.y = Object->Position.y - (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
 	Skrt->Position = Bdy->Position;
-	if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
 		Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection*4));
 	else
 		Skrt->CurrentFrame = 3;
@@ -479,7 +479,7 @@ void Animation(Player *Object)
 		Object->PlayerSpriteParts.Tail->AnimationSpeed = 5;
 	}
 
-	if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
 	{
     if (LegUpperDirection < 0)
         LegLowerDirection = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
@@ -514,45 +514,45 @@ void Animation(Player *Object)
 
 	if (Object->FlipX == FALSE)
 	{
-		Tail->Position.x = Bdy->Position.x+15;
+		Tail->Position.x = Bdy->Position.x+(Bdy->Width/20);
 		
 		LegUpr->Rotation = LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
 		}
 		LegUpr->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.x;
-		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.y;
+		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
+		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
 		
 		
 		LegUpr2->Rotation = -LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
 		}
 		LegUpr2->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.x;
-		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.y;
+		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
+		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
 		
 
 		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
 		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
 		ArmUpr->Position.x = Bdy->Position.x;
-		ArmUpr->Position.y = Bdy->Position.y + 50;
-		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * 40;
-		ArmLwr->Position.y = ArmUpr->Position.y - (float)sin(ArmUpr->Rotation) * 40;
+		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/6);
+		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
+		ArmLwr->Position.y = ArmUpr->Position.y - (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 
 		ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
 		ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
 		ArmUpr2->Position.x = Bdy->Position.x;
-		ArmUpr2->Position.y = Bdy->Position.y + 50;
-		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * 40;
-		ArmLwr2->Position.y = ArmUpr2->Position.y - (float)sin(ArmUpr2->Rotation) * 40;
+		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/6);
+		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
+		ArmLwr2->Position.y = ArmUpr2->Position.y - (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
 		if (Object->Speed < 0.01)
 		{
@@ -560,53 +560,53 @@ void Animation(Player *Object)
 			ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f;
 		}
 
-		Weap->Position.x = ArmLwr2->Position.x - (float)cos(ArmLwr2->Rotation) * 37;
-		Weap->Position.y = ArmLwr2->Position.y - (float)sin(ArmLwr2->Rotation) * 37;
+		Weap->Position.x = ArmLwr2->Position.x - (float)cos(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
+		Weap->Position.y = ArmLwr2->Position.y - (float)sin(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
 		Weap->Rotation = ArmLwr2->Rotation;
 		Weap->ZIndex = 21;
 
 	}
 	else
 	{
-		Tail->Position.x = Bdy->Position.x-15;
+		Tail->Position.x = Bdy->Position.x-(Bdy->Width/20);
 		
 		LegUpr->Rotation = -LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
 		}
 		LegUpr->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.x;
-		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * 30 + LegUpr->Position.y;
+		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
+		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
 		
 
 		LegUpr2->Rotation = LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= -225)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
 		}
 		LegUpr2->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
-		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.x;
-		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * 30 + LegUpr2->Position.y;
+		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
+		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
 		
 
 		ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
 		ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
 		ArmUpr->Position.x = Bdy->Position.x;
-		ArmUpr->Position.y = Bdy->Position.y + 50;
-		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * 40;
-		ArmLwr->Position.y = ArmUpr->Position.y + (float)sin(ArmUpr->Rotation) * 40;
+		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/6);
+		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
+		ArmLwr->Position.y = ArmUpr->Position.y + (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 
 		ArmUpr2->Rotation = LegUpperDirection/1.5f - 1.5f;
 		ArmLwr2->Rotation = -(ArmUpr->Rotation + 1.75f - LegUpperDirection/2.0f);
 		ArmUpr2->Position.x = Bdy->Position.x;
-		ArmUpr2->Position.y = Bdy->Position.y + 50;
-		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * 40;
-		ArmLwr2->Position.y = ArmUpr2->Position.y + (float)sin(ArmUpr2->Rotation) * 40;
+		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/6);
+		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
+		ArmLwr2->Position.y = ArmUpr2->Position.y + (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
 		if (Object->Speed < 0.01)
 		{
@@ -614,8 +614,8 @@ void Animation(Player *Object)
 			ArmLwr2->Rotation = ArmUpr2->Rotation + 0.5f;
 		}
 
-		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * 37;
-		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * 37;
+		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
+		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
 		Weap->Rotation = ArmLwr->Rotation;
 		Weap->ZIndex = 22;
 

@@ -70,5 +70,5 @@ void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 	printf("YUM YUM YUM YUM  DELICIOUSO\n");
 	/*AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
 	CurrentFood->objID = 0;*/
-	freeObject(CurrentFood->FoodSprite);
+	FreeFood(CurrentFood);
 }
