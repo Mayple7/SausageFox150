@@ -28,4 +28,8 @@ void freeObjectList(void);
 void freeObject(Sprite* objectNext);
 void DrawCollisionList(void);
 
+void FreeFood(Food *CurrentFood);
+void FreePlatform(Platform *CurrentPlatform);
+void FreeEnemy(Enemy *CurrentEnemy);
+
 #endif
