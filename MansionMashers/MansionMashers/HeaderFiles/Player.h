@@ -2,6 +2,9 @@
 #define FOX_PLAYER
 
 #define MAX_INVENTORY 20
+#define PLAYER_WIDTH 300
+#define PLAYER_HEIGHT 300
+
 #include "Vector2.h"
 #include "RigidBody.h"
 #include "Sprite.h"
@@ -64,6 +67,11 @@ typedef struct Player
 
 	float LegSinValue;
 	float TailSinValue;
+
+	int FlipX;
+	int FlipY;
+	int FlipXPrev;
+	int FlipYPrev;
   
 	enum Direction PlayerDirection;
 

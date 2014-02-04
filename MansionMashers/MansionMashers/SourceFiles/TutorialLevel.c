@@ -31,32 +31,62 @@
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 
+// ---------------------------------------------------------------------------
+// Libraries
+#pragma comment (lib, "Alpha_Engine.lib")
+
+Sprite* TutorialBackground;
+Sprite* OverlayGrid;
+Platform* Shelf;
+int newID;
+
 void LoadTutorial(void)
 {
-
+	CreateTextureList();
 }
 
 void InitializeTutorial(void)
 {
+	newID = 1;
+	resetObjectList();
 
+	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1);
+	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1);
+
+	// Create the shelf sprite and initialize to be collidable
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++);
+	UpdatePlatformPosition(Shelf, 475, -170);
+	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
+	Shelf->PlatformCollider.height = 60;
+
+	ResetCamera();
 }
 
 void UpdateTutorial(void)
 {
-
+	// Return to main menu with ESC
+	if(AEInputCheckTriggered(VK_RSHIFT))
+	{
+		SetNextState(GS_MainMenu);
+	}
+	if(AEInputCheckTriggered(VK_ESCAPE))
+	{
+		InitializePause(&DrawTutorial);
+		UpdatePause();
+	}
 }
 
 void DrawTutorial(void)
 {
-
+	drawObjectList();
 }
 
 void FreeTutorial(void)
 {
-
+	freeObjectList();
 }
 
 void UnloadTutorial(void)
 {
-
+	DestroyTextureList();
 }

@@ -192,6 +192,10 @@ void InputHandling(void)
 		else if(selectedButton == 2)
 			SetNextState(GS_Quit);
 	}
+	if(AEInputCheckTriggered(VK_RSHIFT))
+	{
+		SetNextState(GS_Tutorial);
+	}
 
 	// check if forcing the application to quit
 	if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())

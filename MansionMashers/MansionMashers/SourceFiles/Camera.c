@@ -22,15 +22,12 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 // ---------------------------------------------------------------------------
 
-void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
+void SetCamera(Vec2 *playerX, int offset)
 {
 	float camX, camY;	
 
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
-
-	//Update/Draw the HUD
-	DrawHUD(hudmain, camX, camY);
 
 	//Moves camera Right
 	if(playerX->x > (camX + offset))
@@ -39,8 +36,6 @@ void SetCamera(Vec2 *playerX, int offset, struct HUDLayer* hudmain)
 	//Moves camera Left
 	else if(playerX->x < (camX - offset))
 		AEGfxSetCamPosition(playerX->x + offset, camY);
-
-
 }
 
 void ResetCamera(void)
@@ -48,21 +43,26 @@ void ResetCamera(void)
 	AEGfxSetCamPosition(0.0, 0.0);
 }
 
-void DrawHUD(struct HUDLayer *hud, float camx, float camy)
+void DrawHUD(struct HUDLayer *hud)
 {
 	int i;
+	float camX, camY;	
+
+	//Get camera position
+	AEGfxGetCamPosition(&camX, &camY);
+
 	for (i = 0; hud->HudItem[i]; i++)
 	{
 		if (i % 2 == 0)
 		{
-			hud->HudItem[i]->Position.x = camx - 480 + ((i/2)*320);
-			hud->HudItem[i]->Position.y = camy + 275;
+			hud->HudItem[i]->Position.x = camX - 480 + ((i/2)*320);
+			hud->HudItem[i]->Position.y = camY + 275;
 			DrawSprite(hud->HudItem[i]);
 		}
 		else
 		{
-			hud->HudItem[i]->Position.x = camx - 480 - 70 + (((i-1)/2)*320);
-			hud->HudItem[i]->Position.y = camy + 275 - 23;
+			hud->HudItem[i]->Position.x = camX - 480 - 70 + (((i-1)/2)*320);
+			hud->HudItem[i]->Position.y = camY + 275 - 23;
 			DrawSprite(hud->HudItem[i]);
 		}
 	}

@@ -95,8 +95,6 @@ void InitializeShowcase(void)
 
 	CurrentPlayer.Position.x = -1380;
 	CurrentPlayer.Position.y = -220;
-	CurrentPlayer.PlayerSprite->Position = CurrentPlayer.Position;
-	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
@@ -144,10 +142,6 @@ void InitializeShowcase(void)
 	HUDList.HudItem[0] = HUD;
 	HUDList.HudItem[1] = HUDitem;
 
-	// Add the enemy and player to the collidable list
-	AddCollidable(CurrentPlayer.PlayerSprite);
-	CurrentPlayer.PlayerSprite->Visible = TRUE;
-
 	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 400, 100, newID++);
 	BouncePad->Position.x = -1000;
 	BouncePad->Position.y = -200;
@@ -185,7 +179,7 @@ void InitializeShowcase(void)
 
 	// Set the camera to the starting position
 	Vec2Set(&startingCamera, -1280, 0.0f);
-	SetCamera(&startingCamera, 250, &HUDList);
+	SetCamera(&startingCamera, 250);
 }
 
 /*************************************************************************/
@@ -225,7 +219,9 @@ void DrawShowcase(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	drawObjectList();
-	SetCamera(&CurrentPlayer.Position, 250, &HUDList);
+	DrawHUD(&HUDList);
+	SetCamera(&CurrentPlayer.Position, 250);
+	
 	DrawGlyphs(Juli);
 	DrawGlyphs(Luke);
 	DrawGlyphs(Kaden);

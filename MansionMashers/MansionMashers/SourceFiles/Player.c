@@ -54,30 +54,27 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	}
 
 	//Creates the sprite for the player
-	CurrentPlayer->PlayerSprite = CreateSprite("TextureFiles/SausageFox.png", 250.0f, 150.0f, 10, 4, 2);
+	CreatePlayerSprites(CurrentPlayer);
 
 	//Default position of the player
 	CurrentPlayer->Position.x = 0.0f;
 	CurrentPlayer->Position.y = 0.0f;
-
-	CurrentPlayer->PlayerSprite->Visible = FALSE;
-
-	//Animation properties
-	CurrentPlayer->PlayerSprite->AnimationSpeed = 4; // STOP CHANGING HIS LEG SPEED -The Supreme Sausage
+	CurrentPlayer->FlipX = FALSE;
+	CurrentPlayer->FlipY = FALSE;
+	CurrentPlayer->FlipXPrev = FALSE;
+	CurrentPlayer->FlipYPrev = FALSE;
 
 	//Collision properties
-	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, 2 * CurrentPlayer->PlayerSprite->Width / 3, CurrentPlayer->PlayerSprite->Height / 2, newID);
+	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, newID);
 	CurrentPlayer->PlayerCollider.Offset.y = -20.0f;
 
 	//Collider Debug
 	CurrentPlayer->PlayerCollider.collisionDebug = TRUE;
 
 	//Initialize rigidbody
-	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, CurrentPlayer->PlayerSprite->Width, CurrentPlayer->PlayerSprite->Height);
+	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, PLAYER_WIDTH, PLAYER_HEIGHT);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
-
-	CreatePlayerSprites(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -144,54 +141,16 @@ void InputPlayer(struct Player *CurrentPlayer)
 	// Move left if A is pressed
 	if(AEInputCheckCurr('A'))
 	{
-		if(CurrentPlayer->Position.y > -225 && !CurrentPlayer->PlayerRigidBody.onGround)
-		{
-			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
-				CurrentPlayer->PlayerSprite->AnimationActive = 0;
-			else
-				CurrentPlayer->PlayerSprite->AnimationActive = 1;
-		}
-		else
-			CurrentPlayer->PlayerSprite->AnimationActive = 1;
-		CurrentPlayer->PlayerSprite->FlipX = 0;
+		CurrentPlayer->FlipX = 0;
 		CurrentPlayer->PlayerDirection = LEFT;
 		CurrentPlayer->Speed = 8.0f;
 	}
 	// Move right if D is pressed
 	else if(AEInputCheckCurr('D'))
 	{
-		if(CurrentPlayer->Position.y > -225 && !CurrentPlayer->PlayerRigidBody.onGround)
-		{
-			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
-				CurrentPlayer->PlayerSprite->AnimationActive = 0;
-			else
-				CurrentPlayer->PlayerSprite->AnimationActive = 1;
-		}
-		else
-			CurrentPlayer->PlayerSprite->AnimationActive = 1;
-		CurrentPlayer->PlayerSprite->FlipX = 1;
+		CurrentPlayer->FlipX = 1;
 		CurrentPlayer->PlayerDirection = RIGHT;
 		CurrentPlayer->Speed = 8.0f;
-	}
-	//Stop moving when A and D are not pushed, stop animation correctly as well
-	else
-	{
-		if(CurrentPlayer->Position.y > -225 && !CurrentPlayer->PlayerRigidBody.onGround)
-		{
-			if(CurrentPlayer->PlayerSprite->CurrentFrame == 2)
-				CurrentPlayer->PlayerSprite->AnimationActive = 0;
-			else
-				CurrentPlayer->PlayerSprite->AnimationActive = 1;
-		}
-		else
-		{
-			if(CurrentPlayer->PlayerSprite->CurrentFrame == 0)
-				CurrentPlayer->PlayerSprite->AnimationActive = 0;
-			else if(CurrentPlayer->PlayerSprite->CurrentFrame == 4)
-				CurrentPlayer->PlayerSprite->CurrentFrame = 0;
-			else
-				CurrentPlayer->PlayerSprite->AnimationActive = 1;
-		}
 	}
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(AEInputCheckTriggered(VK_SPACE))
@@ -278,10 +237,6 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Update velocity and acceleration
 	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
 	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &CurrentPlayer->PlayerRigidBody.Velocity);
-
-	//Updates the sprite
-	CurrentPlayer->PlayerSprite->Position.x = CurrentPlayer->Position.x;
-	CurrentPlayer->PlayerSprite->Position.y = CurrentPlayer->Position.y;
 
 	//Updates the collision box
 	UpdateCollisionPosition(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position);
@@ -547,21 +502,21 @@ void Animation(Player *Object)
 		LegLowerDirection = LegUpperDirection + 0.5f;
 		LegLowerDirection2 = LegUpperDirection2 - 0.5f;
 	}
-	LegUpr->FlipX = Object->PlayerSprite->FlipX;
-	LegLwr->FlipX = Object->PlayerSprite->FlipX;
-	LegUpr2->FlipX = Object->PlayerSprite->FlipX;
-	LegLwr2->FlipX = Object->PlayerSprite->FlipX;
-	Bdy->FlipX = Object->PlayerSprite->FlipX;
-	Skrt->FlipX = Object->PlayerSprite->FlipX;
-	Tail->FlipX = Object->PlayerSprite->FlipX;
-	ArmUpr->FlipX = Object->PlayerSprite->FlipX;
-	ArmLwr->FlipX = Object->PlayerSprite->FlipX;
-	ArmUpr2->FlipX = Object->PlayerSprite->FlipX;
-	ArmLwr2->FlipX = Object->PlayerSprite->FlipX;
-	Weap->FlipX = Object->PlayerSprite->FlipX;
+	LegUpr->FlipX = Object->FlipX;
+	LegLwr->FlipX = Object->FlipX;
+	LegUpr2->FlipX = Object->FlipX;
+	LegLwr2->FlipX = Object->FlipX;
+	Bdy->FlipX = Object->FlipX;
+	Skrt->FlipX = Object->FlipX;
+	Tail->FlipX = Object->FlipX;
+	ArmUpr->FlipX = Object->FlipX;
+	ArmLwr->FlipX = Object->FlipX;
+	ArmUpr2->FlipX = Object->FlipX;
+	ArmLwr2->FlipX = Object->FlipX;
+	Weap->FlipX = Object->FlipX;
 	
 
-	if (Object->PlayerSprite->FlipX == FALSE)
+	if (Object->FlipX == FALSE)
 	{
 		Tail->Position.x = Bdy->Position.x+15;
 		
