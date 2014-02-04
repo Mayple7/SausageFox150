@@ -53,6 +53,7 @@ void InitializeTutorial(void)
 	resetObjectList();
 
 	InitializePlayer(&CurrentPlayer, newID++);
+	CurrentPlayer.Position.y = GROUNDLEVEL + 1;
 
 	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1);
 	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1);
