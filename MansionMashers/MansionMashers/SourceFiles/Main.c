@@ -52,7 +52,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int Current;										//Local State Variables
 	int Next;											//Local State Variables
 	FMOD_SYSTEM *SoundSystem = 0;						//Local Sound System
-	LARGE_INTEGER CycleStart, CycleEnd, Frequency; 		//for framerate controller
 	double DeltaTime = 0;
 	int FrameRate = 60;									//Make a define in the future
 	int debugConsole = 1;
@@ -182,9 +181,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		while(Current == Next)
 		{
 			AESysFrameStart();
-			
-			//FrameRate Controller
-			QueryPerformanceCounter(&CycleStart);			
+			StartFoxFrame();						
 
 			AEInputUpdate();
 			GSMPointers.pUpdate();
@@ -192,19 +189,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			GSMPointers.pDraw();
 			Next = GetNextState();
 
-			//FrameRate Controller
-			QueryPerformanceCounter(&CycleEnd);				
-			QueryPerformanceFrequency(&Frequency);			
-			DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Frequency.QuadPart);
-			
-			//Framerate controller
-			while(DeltaTime < (1.0/FrameRate))
-			{
-				QueryPerformanceCounter(&CycleEnd);
-				DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Frequency.QuadPart);
-			}
-			//printf("%f\n", DeltaTime);
-
+			EndFoxFrame();
 			AESysFrameEnd();
 		}
 

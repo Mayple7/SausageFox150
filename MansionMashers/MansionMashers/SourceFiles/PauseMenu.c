@@ -49,17 +49,10 @@ void UpdatePause(void)
 	while(pause)
 	{
 		AESysFrameStart();
-			
-		//FrameRate Controller
-		QueryPerformanceCounter(&CycleStart);			
+		StartFoxFrame();		
 
 		AEInputUpdate();
 
-		//FrameRate Controller
-		QueryPerformanceCounter(&CycleEnd);				
-		QueryPerformanceFrequency(&Frequency);			
-		DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Frequency.QuadPart);
-		
 		if(AEInputCheckTriggered(VK_ESCAPE))
 		{
 			pause = FALSE;
@@ -72,13 +65,7 @@ void UpdatePause(void)
 
 		DrawPause();
 
-		//Framerate controller
-		while(DeltaTime < (1.0/FrameRate))
-		{
-			QueryPerformanceCounter(&CycleEnd);
-			DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Frequency.QuadPart);
-		}
-
+		EndFoxFrame();
 		AESysFrameEnd();
 	}
 	FreePause();

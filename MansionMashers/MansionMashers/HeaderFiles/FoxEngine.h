@@ -22,6 +22,7 @@
 #include "TextCreation.h"
 #include "Sound.h"
 #include "System.h"
+#include "FrameRate.h"
 
 //Special level include
 #include "PauseMenu.h"
