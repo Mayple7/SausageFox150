@@ -179,13 +179,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	if(AEInputCheckCurr(VK_BACK))
 	{
 		Vec2 force;
-		RECT rect;
-		if(GetClientRect(AESysGetWindowHandle(), &rect))
-		{
-		  int width = rect.right - rect.left;
-		  int height = rect.bottom - rect.top;
-		  printf("%d, %d\n", width, height);
-		}
+
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 		Vec2Set(&force, 0.0f, 15.0f);

@@ -27,6 +27,7 @@ void DrawObjectList(void);
 void freeObjectList(void);
 void freeObject(Sprite* objectNext);
 void DrawCollisionList(void);
+/*void ResizeObjects(double ratio);*/
 
 void FreeFood(Food *CurrentFood);
 void FreePlatform(Platform *CurrentPlatform);
