@@ -268,15 +268,75 @@ void DrawCollisionList(void)
 	The pointer to a sprite whose memory is to be deallocated
 */
 /*************************************************************************/
-void freeObject(Sprite* objectNext)
+void freeObject(Sprite* object)
 {
 	//Make sure the sprite exists
-	if (objectNext && objectNext->Created == 1)
+	if (object->Created)
 	{
 		//Free the mesh and texture data
-		objectNext->Created = 0;
-		AEGfxMeshFree(objectNext->SpriteMesh);
+		object->Created = 0;
+		AEGfxMeshFree(object->SpriteMesh);
 	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees the object being passed
+	
+	\param objectNext
+	The pointer to a object whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreeFood(Food *CurrentFood)
+{
+	//BECAUSE EVERYONE LIKES FREE FOOD
+	CurrentFood->objID = 0;
+	CurrentFood->FoodCollider.collisionDebug = FALSE;
+	AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
+
+	if (CurrentFood->FoodSprite->Created)
+		freeObject(CurrentFood->FoodSprite);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees the object being passed
+	
+	\param objectNext
+	The pointer to a object whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreePlatform(Platform *CurrentPlatform)
+{
+	//Free that platform
+	CurrentPlatform->objID = 0;
+	CurrentPlatform->PlatformCollider.collisionDebug = FALSE;
+	AEGfxMeshFree(CurrentPlatform->PlatformCollider.DebugMesh);
+
+	if (CurrentPlatform->PlatformSprite->Created)
+		freeObject(CurrentPlatform->PlatformSprite);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees the object being passed
+	
+	\param objectNext
+	The pointer to a object whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreeEnemy(Enemy *CurrentEnemy)
+{
+	//I'm sure someone will miss you enemy
+	CurrentEnemy->objID = 0;
+	CurrentEnemy->EnemyCollider.collisionDebug = FALSE;
+	AEGfxMeshFree(CurrentEnemy->EnemyCollider.DebugMesh);
+
+	if (CurrentEnemy->EnemySprite->Created)
+		freeObject(CurrentEnemy->EnemySprite);
 }
 
 /*************************************************************************/
@@ -292,37 +352,39 @@ void freeObjectList(void)
 	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (drawList[i].Created == 1)
+		if (drawList[i].Created)
 		{
 			//Free the mesh and texture data
-			AEGfxMeshFree(drawList[i].SpriteMesh);
+			freeObject(&drawList[i]);
 			printf("Slot %i is now empty\n", i);
 		}
 	}
-	//Free the object list data allocation
-	free(drawList);
 
 	////////--Freeing the collision objects and textures
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (platformList[i].objID)
+		if (platformList[i].objID > 0)
 		{
 			//Free the mesh and texture data
-			AEGfxMeshFree(platformList[i].PlatformCollider.DebugMesh);
+			FreePlatform(&platformList[i]);
 			printf("Platform %i is now freed\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (foodList[i].objID)
+		if (foodList[i].objID > 0)
 		{
 			//Free the mesh and texture data
-			AEGfxMeshFree(foodList[i].FoodCollider.DebugMesh);
+			FreeFood(&foodList[i]);
 			printf("Food %i is now freed\n", i);
 		}
 	}
+
+	//Free the object list data allocation
+	free(drawList);
+
 	//Free collision lists data allocation
 	free(platformList);
 	free(foodList);

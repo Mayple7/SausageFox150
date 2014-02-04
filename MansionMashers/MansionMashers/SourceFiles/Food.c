@@ -40,6 +40,7 @@ Food* CreateFood(char* textureName, int collisionGroup, float width, float heigh
 
 	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, collisionGroup, width, height, newID);
 	CurrentFood->objID = newID;
+	CurrentFood->FoodCollider.collisionDebug = TRUE;
 
 	return CurrentFood;
 }
