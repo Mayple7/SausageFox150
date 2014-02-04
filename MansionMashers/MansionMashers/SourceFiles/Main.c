@@ -25,6 +25,7 @@
 #include "../AEEngine.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../FMODHeaders/fmod.h"
+#include "../HeaderFiles/ObjectManager.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -33,6 +34,8 @@
 // ---------------------------------------------------------------------------
 // globals
 int GameRunning;
+double winWidth;
+double winHeight;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -96,20 +99,20 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	RegisterClass(&winClass);
 
-
 	rect.left = 0;
 	rect.top = 0;
 	rect.right = sysInitInfo.mWinWidth;//WinWidth;
 	rect.bottom = sysInitInfo.mWinHeight;//WinHeight;
 
-
 	AdjustWindowRect(&rect, sysInitInfo.mWindowStyle, 0);
 
 	winHandle = CreateWindow(winClass.lpszClassName, "Mansion Mashers", sysInitInfo.mWindowStyle, 100, 100, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, sysInitInfo.mAppInstance, NULL);
 
-	ShowWindow	(winHandle, show);
+	ShowWindow	(winHandle, SW_SHOWMAXIMIZED);
 	UpdateWindow(winHandle);
 
+	winWidth = rect.right - rect.left;
+	winHeight = rect.bottom - rect.top;
 
 	sysInitInfo.mCreateWindow		= 0;
 	sysInitInfo.mWindowHandle		= winHandle;
@@ -210,9 +213,31 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 {
 	HDC dc;   
 	PAINTSTRUCT ps;
+	RECT rect;
 
 	switch (msg)
 	{
+/*	case WM_SIZE:
+		if(GetClientRect(AESysGetWindowHandle(), &rect))
+		{
+			double ratio;
+			double width = rect.right - rect.left;
+			double height = rect.bottom - rect.top;
+			if(width / height >= 16.0f / 9.0f)
+			{
+				ratio = height / winHeight;
+				winWidth = winWidth * ratio;
+				winHeight = winHeight * ratio;
+			}
+			else
+			{
+				ratio = width / winWidth;
+				winWidth = winWidth * ratio;
+				winHeight = winHeight * ratio;
+			}
+			ResizeObjects(ratio);
+		}
+		break;*/
 	// when the window is created
 	case WM_CREATE:
 		printf("Hi Juli, I'm still here!\n");
@@ -228,8 +253,7 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 
 	// When it's time for the window to go away
 	case WM_DESTROY:
-		//PostQuitMessage(0);
-		//gAESysWinExists = false;
+		SetNextState(GS_Quit);
 		break;
 
 	// called any time the window is moved

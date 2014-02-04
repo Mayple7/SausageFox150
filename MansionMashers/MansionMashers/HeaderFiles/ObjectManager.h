@@ -27,5 +27,6 @@ void drawObjectList(void);
 void freeObjectList(void);
 void freeObject(Sprite* objectNext);
 void DrawCollisionList(void);
+/*void ResizeObjects(double ratio);*/
 
 #endif
