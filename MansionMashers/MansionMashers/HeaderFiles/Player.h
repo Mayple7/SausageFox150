@@ -84,7 +84,7 @@ typedef struct Player
 Player CurrentPlayer;
 
 //Functions
-void InitializePlayer(struct Player *CurrentPlayer, int newID);
+void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float yPos);
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
 void DetectPlayerCollision(void);

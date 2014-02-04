@@ -52,21 +52,18 @@ void InitializeTutorial(void)
 	newID = 1;
 	resetObjectList();
 
-	InitializePlayer(&CurrentPlayer, newID++);
-	CurrentPlayer.Position.y = GROUNDLEVEL + 1;
+	InitializePlayer(&CurrentPlayer, newID++, 0, GROUNDLEVEL + 1);
 
-	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1);
-	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1);
+	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
+	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
 
 	// Create the shelf sprite and initialize to be collidable
-	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++);
-	UpdatePlatformPosition(Shelf, 475, -170);
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 475, -170);
 	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f); 
-	Shelf->PlatformCollider.Offset.y = 3 * Shelf->PlatformSprite->Height / 8;
+	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height * 3 / 8;
 	Shelf->PlatformCollider.collisionDebug = TRUE;
 
-	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++);
-	UpdatePlatformPosition(ShortShelf, 280, -280);
+	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
 	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
 	ShortShelf->PlatformCollider.collisionDebug = TRUE;

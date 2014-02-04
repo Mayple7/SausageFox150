@@ -31,7 +31,7 @@ int pause;
 void InitializePause(void (*DrawLevel)())
 {
 	pause = TRUE;
-	PauseText = CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1);
+	PauseText = CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, 0, 0);
 	LevelToDraw = DrawLevel;
 }
 

@@ -44,7 +44,7 @@ Player CurrentPlayer;
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-void InitializePlayer(struct Player *CurrentPlayer, int newID)
+void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float yPos)
 {
 	int i;
 
@@ -57,8 +57,8 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	CreatePlayerSprites(CurrentPlayer);
 
 	//Default position of the player
-	CurrentPlayer->Position.x = 0.0f;
-	CurrentPlayer->Position.y = 0.0f;
+	CurrentPlayer->Position.x = xPos * GetLoadRatio();
+	CurrentPlayer->Position.y = yPos * GetLoadRatio();
 	CurrentPlayer->FlipX = FALSE;
 	CurrentPlayer->FlipY = FALSE;
 	CurrentPlayer->FlipXPrev = FALSE;
@@ -66,8 +66,8 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 
 	//Collision properties
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, newID);
-	CurrentPlayer->PlayerCollider.Offset.y = 20;
-	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20;
+	CurrentPlayer->PlayerCollider.Offset.y = 20 * GetLoadRatio();
+	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20 * GetLoadRatio();
 	UpdateCollider(&CurrentPlayer->PlayerCollider, CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 
 	//Collider Debug
@@ -115,7 +115,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	// not key press for direction then slow down!
 	if(!AEInputCheckCurr('D') && !AEInputCheckCurr('A'))
 	{
-		if (!(CurrentPlayer->Position.y > GROUNDLEVEL) && !CurrentPlayer->PlayerRigidBody.onGround)
+		if (!(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			if (CurrentPlayer->Speed - 0.8f >= 0.0f)
 			{
@@ -145,14 +145,14 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->FlipX = 0;
 		CurrentPlayer->PlayerDirection = LEFT;
-		CurrentPlayer->Speed = 8.0f;
+		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
 	}
 	// Move right if D is pressed
 	else if(AEInputCheckCurr('D'))
 	{
 		CurrentPlayer->FlipX = 1;
 		CurrentPlayer->PlayerDirection = RIGHT;
-		CurrentPlayer->Speed = 8.0f;
+		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
 	}
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(AEInputCheckTriggered(VK_SPACE))
@@ -166,11 +166,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 
 		
-		Vec2Set(&velocity, 0.0f, 12.0f);
-		if(CurrentPlayer->Position.y < GROUNDLEVEL || CurrentPlayer->PlayerRigidBody.onGround)
+		Vec2Set(&velocity, 0.0f, 12.0f * GetLoadRatio());
+		if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			if(CurrentPlayer->Position.y < GROUNDLEVEL)
-				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, GROUNDLEVEL + 0.1f);
+			if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
+				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
 		}
@@ -182,8 +182,8 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
-		Vec2Set(&force, 0.0f, 15.0f);
-		if(CurrentPlayer->Position.y > GROUNDLEVEL)
+		Vec2Set(&force, 0.0f, 15.0f * GetLoadRatio());
+		if(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio())
 		{
 			ApplyForce(&CurrentPlayer->PlayerRigidBody, &force);
 		}
@@ -208,7 +208,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 void UpdatePlayerPosition(Player *CurrentPlayer)
 {
 	//Stop velocity and acceleration when the player lands on the floor
-	if(CurrentPlayer->Position.y <= GROUNDLEVEL || CurrentPlayer->PlayerRigidBody.onGround)
+	if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 	{
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Velocity);
@@ -217,7 +217,7 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Set gravity if not on floor or on a platform
 	else
 	{
-		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -15.0f);
+		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -15.0f * GetLoadRatio());
 	}
 	//Player position updated when dropping down from a platform
 	if(CurrentPlayer->dropDown)
@@ -225,7 +225,7 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 		CurrentPlayer->Position.y -= 5.0f;
 		if(CurrentPlayer->PlayerRigidBody.Velocity.y < 0)
 		{
-			CurrentPlayer->PlayerRigidBody.Velocity.y = -5.0f;
+			CurrentPlayer->PlayerRigidBody.Velocity.y = -5.0f * GetLoadRatio();
 			CurrentPlayer->dropDown = FALSE;
 		}
 	}
@@ -420,7 +420,7 @@ void DetectPlayerCollision(void)
 /*************************************************************************/
 void Animation(Player *Object)
 {
-	float LegDistance = 9.5f-Object->Speed;
+	float LegDistance = 9.5f-(Object->Speed / GetLoadRatio());
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
@@ -459,7 +459,7 @@ void Animation(Player *Object)
 	Bdy->Position.x = Object->Position.x;
 	Bdy->Position.y = Object->Position.y - (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
 	Skrt->Position = Bdy->Position;
-	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection*4));
 	else
 		Skrt->CurrentFrame = 3;
@@ -479,7 +479,7 @@ void Animation(Player *Object)
 		Object->PlayerSpriteParts.Tail->AnimationSpeed = 5;
 	}
 
-	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 	{
     if (LegUpperDirection < 0)
         LegLowerDirection = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
@@ -518,7 +518,7 @@ void Animation(Player *Object)
 		
 		LegUpr->Rotation = LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
 		}
@@ -530,7 +530,7 @@ void Animation(Player *Object)
 		
 		LegUpr2->Rotation = -LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
 		}
@@ -572,7 +572,7 @@ void Animation(Player *Object)
 		
 		LegUpr->Rotation = -LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
 		}
@@ -584,7 +584,7 @@ void Animation(Player *Object)
 
 		LegUpr2->Rotation = LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
 		}
@@ -625,39 +625,39 @@ void Animation(Player *Object)
 	//*************************************************************************************************
 }
 
-void CreatePlayerSprites(Player *Player)
+void CreatePlayerSprites(Player *CurrentPlayer)
 {
-	Player->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 20, 1, 1);
+	CurrentPlayer->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 20, 1, 1, 0, 0);
 
-	Player->PlayerSpriteParts.ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 20, 1, 1);
+	CurrentPlayer->PlayerSpriteParts.ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 20, 1, 1, 0, 0);
 
-	Player->PlayerSpriteParts.LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
+	CurrentPlayer->PlayerSpriteParts.LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
 
-	Player->PlayerSpriteParts.LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
+	CurrentPlayer->PlayerSpriteParts.LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
 
-	Player->PlayerSpriteParts.LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
+	CurrentPlayer->PlayerSpriteParts.LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
 
-	Player->PlayerSpriteParts.LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
+	CurrentPlayer->PlayerSpriteParts.LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
 
-	Player->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/Skirt.png", 300.0f, 300.0f, 22, 4, 1);
+	CurrentPlayer->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/Skirt.png", 300.0f, 300.0f, 22, 4, 1, 0, 0);
 
-	Player->PlayerSpriteParts.Skirt->AnimationActive = 0;
+	CurrentPlayer->PlayerSpriteParts.Skirt->AnimationActive = 0;
 
-	Player->PlayerSpriteParts.Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 4, 1);
+	CurrentPlayer->PlayerSpriteParts.Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 4, 1, 0, 0);
 
-	Player->PlayerSpriteParts.Body->AnimationSpeed = 3;
+	CurrentPlayer->PlayerSpriteParts.Body->AnimationSpeed = 3;
 
-	Player->PlayerSpriteParts.BlinkTimer = 0;
+	CurrentPlayer->PlayerSpriteParts.BlinkTimer = 0;
 
-	Player->PlayerSpriteParts.Tail = CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, 22, 7, 2);
+	CurrentPlayer->PlayerSpriteParts.Tail = CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, 22, 7, 2, 0, 0);
 
-	Player->PlayerSpriteParts.Tail->AnimationSpeed = Player->Speed/2 + 3;
+	CurrentPlayer->PlayerSpriteParts.Tail->AnimationSpeed = CurrentPlayer->Speed/2 + 3;
 
-	Player->TailSinValue = 0;
+	CurrentPlayer->TailSinValue = 0;
 
-	Player->PlayerSpriteParts.Weapon = CreateSprite("TextureFiles/Axe.png", 256.0f, 256.0f, 22, 1, 1);
+	CurrentPlayer->PlayerSpriteParts.Weapon = CreateSprite("TextureFiles/Axe.png", 256.0f, 256.0f, 22, 1, 1, 0, 0);
 
-	Player->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
+	CurrentPlayer->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
 
-	Player->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
+	CurrentPlayer->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
 }

@@ -36,7 +36,7 @@ typedef struct Enemy
 
 }Enemy;
 
-Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float height, int objID);
+Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float height, int objID, float xPos, float yPos);
 void UpdateEnemy(Enemy *CurrentEnemy);
 void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer);
 

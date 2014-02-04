@@ -32,11 +32,11 @@
 	A pointer to the platform to be initialized
 */
 /*************************************************************************/
-Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int newID)
+Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int newID, float xPos, float yPos)
 {
 	Food *CurrentFood = AddFood();
 
-	CurrentFood->FoodSprite = CreateSprite(textureName, width, height, 10, 1, 1);
+	CurrentFood->FoodSprite = CreateSprite(textureName, width, height, 10, 1, 1, xPos, yPos);
 
 	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, collisionGroup, width, height, newID);
 	CurrentFood->objID = newID;

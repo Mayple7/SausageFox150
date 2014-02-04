@@ -83,24 +83,16 @@ void InitializeMainMenu(void)
 	resetObjectList();
 
 	// Create the start button
-	StartButton = CreateSprite("TextureFiles/StartButton.png", 480.0f, 180.0f, 1, 1, 1);
-	StartButton->Position.x = 0.0f;
-	StartButton->Position.y = 200.0f;
+	StartButton = CreateSprite("TextureFiles/StartButton.png", 480.0f, 180.0f, 1, 1, 1, 0, 200);
 
 	// Creates the showcase button
-	ShowcaseButton = CreateSprite("TextureFiles/ShowcaseButton.png", 640.0f, 180.0f, 1, 1, 1);
-	ShowcaseButton->Position.x = 0.0f;
-	ShowcaseButton->Position.y = 0.0f;
-
+	ShowcaseButton = CreateSprite("TextureFiles/ShowcaseButton.png", 640.0f, 180.0f, 1, 1, 1, 0, 0);
+	
 	// Creates the exit button
-	ExitButton = CreateSprite("TextureFiles/ExitButton.png", 480.0f, 180.0f, 1, 1, 1);
-	ExitButton->Position.x = 0.0f;
-	ExitButton->Position.y = -200.0f;
+	ExitButton = CreateSprite("TextureFiles/ExitButton.png", 480.0f, 180.0f, 1, 1, 1, 0, -200);
 
 	// Creates the selector button - set to default position of the start button
-	Selector = CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 0, 1, 1);
-	Selector->Position.x = 100.0f;
-	Selector->Position.y = 0.0f;
+	Selector = CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 0, 1, 1, 100, 0);
 	
 	// Set camera to (0,0)
 	ResetCamera();
@@ -198,7 +190,7 @@ void InputHandling(void)
 	}
 
 	// check if forcing the application to quit
-	if (AEInputCheckTriggered(VK_ESCAPE) || 0 == AESysDoesWindowExist())
+	if (AEInputCheckTriggered(VK_ESCAPE))
 		SetNextState(GS_Quit);
 }
 
@@ -217,22 +209,22 @@ void UpdateSelector(struct Sprite *Selector)
 	{
 		case 0:
 			Selector->Position = StartButton->Position;
-			Selector->Width = 500;
+			Selector->Width = 500 * GetLoadRatio();
 			UpdateMesh(Selector);
 			break;
 		case 1:
 			Selector->Position = ShowcaseButton->Position;
-			Selector->Width = 660;
+			Selector->Width = 660 * GetLoadRatio();
 			UpdateMesh(Selector);
 			break;
 		case 2:
 			Selector->Position = ExitButton->Position;
-			Selector->Width = 500;
+			Selector->Width = 500 * GetLoadRatio();
 			UpdateMesh(Selector);
 			break;
 		default:
 			Selector->Position = StartButton->Position;
-			Selector->Width = 500;
+			Selector->Width = 500 * GetLoadRatio();
 			UpdateMesh(Selector);
 			break;
 	}

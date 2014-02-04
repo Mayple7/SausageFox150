@@ -39,12 +39,12 @@ int LogicTimer;
 	A pointer to the enemy object to be initialized
 */
 /*************************************************************************/
-Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float height, int objID)
+Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float height, int objID, float xPos, float yPos)
 {
 	Enemy *CurrentEnemy = AddEnemy();
 
 	//Creates the enemy sprite
-	CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/EasyEnemy.png", width, height, 8, 8, 1);
+	CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/EasyEnemy.png", width, height, 8, 8, 1, xPos, yPos);
 
 	//Physics variables initialized
 	InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, width, height);

@@ -69,12 +69,10 @@ Text* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextCo
 			character = string[i];
 		
 		nextLetter->letter = character;
-		nextLetter->Glyph = ConvertToGlyph(character, fontSize);
+		nextLetter->Glyph = ConvertToGlyph(character, fontSize, xPos + (i * fontSize * 0.45f), yPos);
 		nextLetter->NextLetter = NULL;
 		if(nextLetter->Glyph)
 		{
-			nextLetter->Glyph->Position.x = xPos + (i * fontSize * 0.45f);
-			nextLetter->Glyph->Position.y = yPos;
 			nextLetter->Glyph->Tint = TextColor;
 			nextLetter->Glyph->isHUD = TRUE;
 		}
@@ -98,7 +96,7 @@ Text* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextCo
 	The size of the letters
 */
 /*************************************************************************/
-Sprite* ConvertToGlyph(char character, int fontSize)
+Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 {
 	int frame = -1;
 	Sprite *temp;
@@ -139,7 +137,7 @@ Sprite* ConvertToGlyph(char character, int fontSize)
 	}
 	if(frame >= 0)
 	{
-		temp = CreateSprite("TextureFiles/Rumple_TextSheet_White.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 101, 11, 4);
+		temp = CreateSprite("TextureFiles/Rumple_TextSheet_White.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 101, 11, 4, xPos, yPos);
 		temp->AnimationActive = FALSE;
 		temp->CurrentFrame = frame;
 		return temp;

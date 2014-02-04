@@ -36,6 +36,7 @@
 int GameRunning;
 double winWidth;
 double winHeight;
+double loadRatio;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -113,6 +114,18 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	winWidth = rect.right - rect.left;
 	winHeight = rect.bottom - rect.top;
+	if(winWidth / winHeight >= 16.0f / 9.0f)
+	{
+		loadRatio = winHeight / 1080;
+		winWidth = winWidth * loadRatio;
+		winHeight = winHeight * loadRatio;
+	}
+	else
+	{
+		loadRatio = winWidth / 1920;
+		winWidth = winWidth * loadRatio;
+		winHeight = winHeight * loadRatio;
+	}
 
 	sysInitInfo.mCreateWindow		= 0;
 	sysInitInfo.mWindowHandle		= winHandle;
@@ -217,7 +230,7 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 
 	switch (msg)
 	{
-/*	case WM_SIZE:
+	case WM_SIZE:
 		if(GetClientRect(AESysGetWindowHandle(), &rect))
 		{
 			double ratio;
@@ -226,18 +239,20 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 			if(width / height >= 16.0f / 9.0f)
 			{
 				ratio = height / winHeight;
+				loadRatio = height / 1080;
 				winWidth = winWidth * ratio;
 				winHeight = winHeight * ratio;
 			}
 			else
 			{
 				ratio = width / winWidth;
+				loadRatio = width / 1920;
 				winWidth = winWidth * ratio;
 				winHeight = winHeight * ratio;
 			}
-			ResizeObjects(ratio);
+			ResizeObjects((float)ratio);
 		}
-		break;*/
+		break;
 	// when the window is created
 	case WM_CREATE:
 		printf("Hi Juli, I'm still here!\n");
@@ -272,4 +287,9 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 	}
 
 	return 0;
+}
+
+float GetLoadRatio(void)
+{
+	return (float)loadRatio;
 }

@@ -13,7 +13,7 @@ typedef struct Text
 }Text;
 
 Text* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor);
-Sprite* ConvertToGlyph(char character, int fontSize);
+Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos);
 void DrawGlyphs(Text *FirstLetter);
 void FreeText(Text *FirstLetter);
 

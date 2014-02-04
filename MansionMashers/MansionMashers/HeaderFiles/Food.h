@@ -13,7 +13,7 @@ typedef struct Food
 	int objID;
 }Food;
 
-Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int objID);
+Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int objID, float xPos, float yPos);
 void UpdateFoodPosition(Food *CurrentFood, float x, float y);
 
 #endif

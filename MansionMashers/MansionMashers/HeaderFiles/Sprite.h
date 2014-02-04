@@ -57,7 +57,7 @@ typedef struct Sprite
 	float RotationPrev;
 }Sprite;
 
-Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames);
+Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, float xPos, float yPos);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
 AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation);
 void UpdateMesh(Sprite *currentSprite);

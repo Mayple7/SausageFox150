@@ -90,75 +90,60 @@ void InitializeShowcase(void)
 	resetObjectList();
 
 	// Create the player
-	if(NULL != malloc(sizeof(Player)))
-		InitializePlayer(&CurrentPlayer, newID++);
+	InitializePlayer(&CurrentPlayer, newID++, -1380, -220);
 
-	CurrentPlayer.Position.x = -1380;
-	CurrentPlayer.Position.y = -220;
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
 
-	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1);
+	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
 
 	// Create single player HUD sprite
-	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
 	HUD->isHUD = TRUE;
 
 	// Create single player HUD item sprite
-	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
 	HUDitem->ItemType = 0;
 	HUDitem->isHUD = TRUE;
 
 	// Create the background sprite
-	Background = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1);
+	Background = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1, 0, 0);
 	
 	// Create the offset background sprite
-	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1);
-	Background2->Position.x = 5760;
+	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1, 5760, 0);
 	Background2->FlipX = TRUE;
 
 	// Create the shelf sprite and initialize to be collidable
-	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 123, 245, newID++);
-	UpdatePlatformPosition(Shelf, 475, -115);
-	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 123, 245, newID++, 475, -115);
+	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height * GetLoadRatio() / 2 - 30;
 	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, 60);
 	
 	// Create and initialize the crate sprite
-	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 859, 260.5f, newID++);
-	UpdatePlatformPosition(Crate, 1400, -180);
-	Crate->PlatformCollider.Offset.y = Crate->PlatformSprite->Height / 2 - 60;
+	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 859, 260.5f, newID++, 1400, -180);
+	Crate->PlatformCollider.Offset.y = Crate->PlatformSprite->Height * GetLoadRatio() / 2 - 60;
 	UpdateCollider(&Crate->PlatformCollider, Crate->PlatformCollider.width - 100, 60);
 	Crate->PlatformCollider.height = 60;
 
-	Ham = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++);
-	Ham->Position.x = 0.0f;
+	Ham = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++, 0, 0);
 
 	// Create and initialize the HAM sprite
-	Hammy = CreateFood("TextureFiles/Ham.png", FoodType, 150.0f, 140.0f, newID++);
-	UpdateFoodPosition(Hammy, -1000.0f, 0.0f);
+	Hammy = CreateFood("TextureFiles/Ham.png", FoodType, 150.0f, 140.0f, newID++, -1000, 0);
 
 	// Add the HUD sprites to the HUDlist
 	HUDList.HudItem[0] = HUD;
 	HUDList.HudItem[1] = HUDitem;
 
-	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 400, 100, newID++);
-	BouncePad->Position.x = -1000;
-	BouncePad->Position.y = -200;
+	BouncePad = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 400, 100, newID++, -1000, -200);
 	BouncePad->PlatformCollider.Position = BouncePad->Position;
-	BouncePad->PlatformSprite->Position = BouncePad->Position;
 	BouncePad->PlatformRigidBody.Restitution = 1.8f;
 
-	FoxBig = CreateSprite("Textures/GinkoArt.png", 148.5, 270, 20, 1, 1);
-	FoxBig->Position.x = -300;
-	FoxSmall = CreateSprite("Textures/GinkoSmall.png", 148.5, 270, 20, 1, 1);
-	FoxSmall->Position.x = -800;
+	FoxBig = CreateSprite("Textures/GinkoArt.png", 148.5, 270, 20, 1, 1, -300, 0);
+	FoxSmall = CreateSprite("Textures/GinkoSmall.png", 148.5, 270, 20, 1, 1, -800, 0);
 
-	Letters = CreateSprite("TextureFiles/Rumple_TextSheet.png", 92, 100, 20, 11, 4);
+	Letters = CreateSprite("TextureFiles/Rumple_TextSheet.png", 92, 100, 20, 11, 4, -1200, 100);
 	Letters->AnimationSpeed = 60;
-	Letters->Position.x = -1200;
-	Letters->Position.y = 100;
 
 	Vec3Set(&textTint, 0.6f, 0.169f, 0.8f);
 	Juli = CreateText("Hi Juli, This is dynamic!", 100, 300, 100, textTint);
@@ -182,7 +167,7 @@ void InitializeShowcase(void)
 	//CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 
 	// Set the camera to the starting position
-	Vec2Set(&startingCamera, -1280, 0.0f);
+	Vec2Set(&startingCamera, -1280 * GetLoadRatio(), 0.0f);
 	SetCamera(&startingCamera, 250);
 }
 
