@@ -18,6 +18,8 @@
 \li					InitSoundStruct
 \li					TogglePauseSound
 \li					ToggglePauseChannel
+\li					CreateChannelGroups
+\li					ReleaseChannelGroups
 
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
