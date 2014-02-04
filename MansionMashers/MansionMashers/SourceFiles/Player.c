@@ -372,7 +372,7 @@ void DetectPlayerCollision(void)
 					CurrentPlayer.CollisionData[-hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
 					PlayerCollideFood(&CurrentPlayer, fList);
-					fList->objID = -1;
+					fList->objID = 0;
 				}
 				// Found target, hit previous frame, on persistant
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -387,7 +387,7 @@ void DetectPlayerCollision(void)
 					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
 					PlayerCollideFood(&CurrentPlayer, fList);
-					fList->objID = -1;
+					fList->objID = 0;
 				}
 			}
 			else

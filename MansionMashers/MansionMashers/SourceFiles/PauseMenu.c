@@ -38,7 +38,6 @@ void InitializePause(void (*DrawLevel)())
 void UpdatePause(void)
 {
 	float camX, camY;
-	LARGE_INTEGER CycleStart, CycleEnd, Frequency; 		//for framerate controller
 	double DeltaTime = 0;
 	int FrameRate = 60;									//Make a define in the future
 

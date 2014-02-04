@@ -35,10 +35,12 @@
 Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int newID, float xPos, float yPos)
 {
 	Food *CurrentFood = AddFood();
-
+	Vec2 newPos;
+	newPos.x = xPos * GetLoadRatio();
+	newPos.y = yPos * GetLoadRatio();
 	CurrentFood->FoodSprite = CreateSprite(textureName, width, height, 10, 1, 1, xPos, yPos);
 
-	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, collisionGroup, width, height, newID);
+	CreateCollisionBox(&CurrentFood->FoodCollider, &newPos, collisionGroup, width, height, newID);
 	CurrentFood->objID = newID;
 	CurrentFood->FoodCollider.collisionDebug = TRUE;
 

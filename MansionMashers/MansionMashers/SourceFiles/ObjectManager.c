@@ -120,6 +120,7 @@ Food* AddFood(void)
 			printf("Food at %i Created\n", i);
 			return &foodList[i];
 		}
+		
 	}
 	return NULL;
 }
@@ -291,12 +292,15 @@ void freeObject(Sprite* object)
 void FreeFood(Food *CurrentFood)
 {
 	//BECAUSE EVERYONE LIKES FREE FOOD
-	CurrentFood->objID = 0;
-	CurrentFood->FoodCollider.collisionDebug = FALSE;
-	AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
+	if(CurrentFood->objID)
+	{
+		CurrentFood->objID = 0;
+		CurrentFood->FoodCollider.collisionDebug = FALSE;
+		AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
 
-	if (CurrentFood->FoodSprite->Created)
-		freeObject(CurrentFood->FoodSprite);
+		if (CurrentFood->FoodSprite->Created)
+			freeObject(CurrentFood->FoodSprite);
+	}
 }
 
 /*************************************************************************/
@@ -364,7 +368,7 @@ void freeObjectList(void)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (platformList[i].objID > 0)
+		if (platformList[i].objID)
 		{
 			//Free the mesh and texture data
 			FreePlatform(&platformList[i]);
@@ -374,7 +378,7 @@ void freeObjectList(void)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (foodList[i].objID > 0)
+		if (foodList[i].objID)
 		{
 			//Free the mesh and texture data
 			FreeFood(&foodList[i]);
