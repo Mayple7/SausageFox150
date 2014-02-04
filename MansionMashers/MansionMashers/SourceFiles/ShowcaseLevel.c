@@ -151,6 +151,7 @@ void InitializeShowcase(void)
 	BouncePad->Position.y = -200;
 	BouncePad->PlatformCollider.Position = BouncePad->Position;
 	BouncePad->PlatformSprite->Position = BouncePad->Position;
+	BouncePad->PlatformRigidBody.Restitution = 1.8f;
 
 	FoxBig = CreateSprite("Textures/GinkoArt.png", 148.5, 270, 20, 1, 1);
 	FoxBig->Position.x = -300;

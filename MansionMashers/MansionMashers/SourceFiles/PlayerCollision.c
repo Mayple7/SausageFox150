@@ -46,7 +46,7 @@ void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform)
 			}
 			else if(CurrentPlayer->PlayerRigidBody.Velocity.y != 0 && CurrentPlatform->PlatformCollider.collisionGroup == BounceType)
 			{
-				if(CurrentPlayer->PlayerRigidBody.Velocity.y > -0.5)
+				if(CurrentPlayer->PlayerRigidBody.Velocity.y > -(CurrentPlatform->PlatformRigidBody.Restitution + CurrentPlayer->PlayerRigidBody.Restitution))
 				{
 					CurrentPlayer->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2 - 0.01f;
 					CurrentPlayer->PlayerRigidBody.onGround = TRUE;
@@ -55,6 +55,7 @@ void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform)
 				{
 					CurrentPlayer->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2 + 0.5f;
 					BounceObject(&CurrentPlayer->PlayerRigidBody, &CurrentPlatform->PlatformRigidBody);
+					
 				}
 			}
 			else
