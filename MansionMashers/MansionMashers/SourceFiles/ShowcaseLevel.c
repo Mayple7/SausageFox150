@@ -126,7 +126,8 @@ void InitializeShowcase(void)
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 123, 245, newID++);
 	UpdatePlatformPosition(Shelf, 475, -115);
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
-	Shelf->PlatformCollider.height = 60;
+	UpdatePlatformCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, 60);
+	Shelf->PlatformCollider.collisionDebug = TRUE;
 	
 	// Create and initialize the crate sprite
 	Crate = CreatePlatform("TextureFiles/Crate.png", PlatformType, 859, 260.5f, newID++);
@@ -235,6 +236,7 @@ void DrawShowcase(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	drawObjectList();
+	DrawCollisionList();
 	SetCamera(&CurrentPlayer.Position, 250, &HUDList);
 	DrawGlyphs(Juli);
 	DrawGlyphs(Luke);
@@ -249,7 +251,7 @@ void DrawShowcase(void)
 		- Make loop for removing collide box on free
 		- Make loop for freeing all collision items
 	*/
-	displayCollisionDebug(&Ham->FoodCollider);
+	//displayCollisionDebug(&Ham->FoodCollider);
 }
 
 /*************************************************************************/

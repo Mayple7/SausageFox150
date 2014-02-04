@@ -215,7 +215,7 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 	{
 	// when the window is created
 	case WM_CREATE:
-		printf("My own code in window create message!\n");
+		printf("Hi Juli, I'm still here!\n");
 		break;
 
 	// when the rectangle is drawn

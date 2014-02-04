@@ -81,6 +81,32 @@ void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition)
 /*************************************************************************/
 /*!
 	\brief
+	Updates the size of the collision box
+	
+	\param Collider
+	The collision box object
+
+	\param width
+	The width of the collision box
+
+	\param height
+	The height of the collision box
+*/
+/*************************************************************************/
+void UpdatePlatformCollider(CollisionBox *Collider, float width, float height)
+{
+	//Update collision size
+	Collider->width = width;
+	Collider->height = height;
+
+	//Update collision debug box
+	AEGfxMeshFree(Collider->DebugMesh);
+	Collider->DebugMesh = createMesh(width, height, 1.0f, 1.0f, 0.0f);
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Draws the collision debug box
 	
 	\param Collider

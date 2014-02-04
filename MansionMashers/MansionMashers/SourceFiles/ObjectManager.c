@@ -224,6 +224,20 @@ void drawObjectList(void)
 	}
 }
 
+void DrawCollisionList(void)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (platformList[i].objID && platformList[i].PlatformCollider.collisionDebug)
+		{
+			//Free the mesh and texture data
+			displayCollisionDebug(&platformList[i].PlatformCollider);
+		}
+	}
+}
+
 /*************************************************************************/
 /*!
 	\brief
