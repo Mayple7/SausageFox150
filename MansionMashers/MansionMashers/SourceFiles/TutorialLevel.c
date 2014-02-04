@@ -38,6 +38,7 @@
 Sprite* TutorialBackground;
 Sprite* OverlayGrid;
 Platform* Shelf;
+Platform* ShortShelf;
 
 int newID;
 
@@ -59,8 +60,15 @@ void InitializeTutorial(void)
 	// Create the shelf sprite and initialize to be collidable
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++);
 	UpdatePlatformPosition(Shelf, 475, -170);
-	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height / 2 - 30;
-	Shelf->PlatformCollider.height = 60;
+	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f); 
+	Shelf->PlatformCollider.Offset.y = 3 * Shelf->PlatformSprite->Height / 8;
+	Shelf->PlatformCollider.collisionDebug = TRUE;
+
+	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++);
+	UpdatePlatformPosition(ShortShelf, 280, -280);
+	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
+	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
+	ShortShelf->PlatformCollider.collisionDebug = TRUE;
 
 	ResetCamera();
 }
@@ -82,6 +90,20 @@ void UpdateTutorial(void)
 		CurrentPlayer.Position.x = (7 * TutorialBackground->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
 	}
 
+	if(AEInputCheckTriggered('U'))
+	{
+		ShortShelf->PlatformCollider.collisionDebug = FALSE;
+		Shelf->PlatformCollider.collisionDebug = FALSE;
+		CurrentPlayer.PlayerCollider.collisionDebug = FALSE;
+		OverlayGrid->Visible = FALSE;
+	}
+	if(AEInputCheckTriggered('I'))
+	{
+		ShortShelf->PlatformCollider.collisionDebug = TRUE;
+		Shelf->PlatformCollider.collisionDebug = TRUE;
+		CurrentPlayer.PlayerCollider.collisionDebug = TRUE;
+		OverlayGrid->Visible = TRUE;
+	}
 
 
 	// Return to main menu with RSHIFT
