@@ -39,7 +39,6 @@ Sprite* TutorialBackground;
 Sprite* OverlayGrid;
 Platform* Shelf;
 
-Player CurrentPlayer;
 int newID;
 
 void LoadTutorial(void)
@@ -100,8 +99,9 @@ void UpdateTutorial(void)
 
 void DrawTutorial(void)
 {
-	drawObjectList();
-	UpdatePlayerCollider(&CurrentPlayer.PlayerCollider);
+	DrawObjectList();
+
+	DrawCollisionList();
 }
 
 void FreeTutorial(void)

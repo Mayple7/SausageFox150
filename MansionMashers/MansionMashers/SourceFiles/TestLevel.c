@@ -30,6 +30,7 @@
 #include "../HeaderFiles/TestLevel.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
+#include "../FMODHeaders/fmod.h"
 
 // ---------------------------------------------------------------------------
 // Globals
@@ -45,13 +46,15 @@ Sprite *HUD3item;
 Sprite *HUD4item;
 Sprite *Background;
 Sprite *ColliderInvisible;
-Player CurrentPlayer;
 Enemy *CurrentEnemy;
 HUDLayer HUDList;
 
 FoxSound BackgroundSnd;
 FoxSound Sound1;
 FoxSound Sound2;
+FoxChannels ChannelController;
+
+
 
 Food *Hammy;
 Sprite *Hammy2;
@@ -152,6 +155,7 @@ void InitializeTestLevel(void)
 	CreateSound("Sounds/drumloop.wav", &Sound1, SmallSnd);
 	CreateSound("Sounds/jaguar.wav", &Sound2, SmallSnd);
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
+	CreateChannelGroups(&ChannelController);
 
 	// Reset camera to (0,0)
 	ResetCamera();
@@ -172,12 +176,19 @@ void UpdateTestLevel(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	//Play sounds
-	PlayAudio(&BackgroundSnd);
+	PlayAudio(&BackgroundSnd, &ChannelController);
 
 	if(AEInputCheckTriggered('D'))
-		PlayAudio(&Sound1);
+		PlayAudio(&Sound1, &ChannelController);
 	if(AEInputCheckCurr('A'))
-		PlayAudio(&Sound2);
+		PlayAudio(&Sound2, &ChannelController);
+	if(AEInputCheckTriggered('P'))
+	{
+		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseChannel(&ChannelController, EffectType);
+	}
+	//(&ChannelController, EffectType);
+
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))
@@ -195,11 +206,12 @@ void UpdateTestLevel(void)
 void DrawTestLevel(void)
 {
 	// Draws the objects in the object list
-	drawObjectList();
+	DrawObjectList();
 	DrawHUD(&HUDList);
 	//Camera follows player
 	SetCamera(&CurrentPlayer.Position, 250);
 	
+	DrawCollisionList();
 }
 
 /*************************************************************************/
@@ -211,6 +223,7 @@ void DrawTestLevel(void)
 void FreeTestLevel(void)
 {
 	freeObjectList();
+	ReleaseChannelGroups(&ChannelController);
 	ReleaseSound(Sound1.Sound);
 	ReleaseSound(Sound2.Sound);
 	ReleaseSound(BackgroundSnd.Sound);

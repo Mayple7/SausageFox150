@@ -93,7 +93,7 @@ void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition)
 	The height of the collision box
 */
 /*************************************************************************/
-void UpdatePlatformCollider(CollisionBox *Collider, float width, float height)
+void UpdateCollider(CollisionBox *Collider, float width, float height)
 {
 	//Update collision size
 	Collider->width = width;
@@ -102,33 +102,6 @@ void UpdatePlatformCollider(CollisionBox *Collider, float width, float height)
 	//Update collision debug box
 	AEGfxMeshFree(Collider->DebugMesh);
 	Collider->DebugMesh = createMesh(width, height, 1.0f, 1.0f, 0.0f);
-}
-
-/*************************************************************************/
-/*!
-	\brief
-	Updates the size of the collision box
-	
-	\param Collider
-	The collision box object
-
-	\param width
-	The width of the collision box
-
-	\param height
-	The height of the collision box
-*/
-/*************************************************************************/
-void UpdatePlayerCollider(CollisionBox *Collider)
-{
-	//Update collision size
-	Collider->width = Collider->width;
-	Collider->height = Collider->height;
-
-	//Update collision debug box
-	AEGfxMeshFree(Collider->DebugMesh);
-	Collider->DebugMesh = createMesh(Collider->width, Collider->height, 1.0f, 1.0f, 0.0f);
-	displayCollisionDebug(Collider);
 }
 
 /*************************************************************************/
@@ -147,7 +120,4 @@ void displayCollisionDebug(CollisionBox *Collider)
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxTextureSet(Collider->DebugTexture, 1.0f, 1.0f);
 	AEGfxMeshDraw(Collider->DebugMesh, AE_GFX_MDM_TRIANGLES);
-
-	//NEED TO FREE THIS
-	//AEGfxMeshFree(DebugMesh);
 }
