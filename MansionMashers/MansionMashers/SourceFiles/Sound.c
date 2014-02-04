@@ -16,7 +16,9 @@
 \li					PlayAudio
 \li					ReleaseSound
 \li					InitSoundStruct
-  
+\li					TogglePauseSound
+\li					ToggglePauseChannel
+
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
  Reproduction or disclosure of this file or its contents without the prior 
@@ -32,9 +34,9 @@
 
 /*	In SystemInit:	FMOD_System_Create, FMODInit
 	In Update:	FMOD_System_Update
-	In LvlInit: create sounds
+	In LvlInit: create sounds, create channel groups
 	In LvlUpdate: play sound
-	In LvlFree: sound release
+	In LvlFree: sound release, release channel groups
 	In SystemExit: Close & release system
 */
 
@@ -136,7 +138,7 @@ void FMODQuit(void)
 void CreateSound(char *Filename, FoxSound *snd, int type)
 {
 	FMOD_RESULT result;
-	InitSoundStruct(snd);
+	InitSoundStruct(snd, type);
 	
 	if(type == SmallSnd)
 		result = FMOD_System_CreateSound(FMsystem, Filename, FMOD_DEFAULT, NULL, &snd->Sound);
@@ -156,7 +158,7 @@ void CreateSound(char *Filename, FoxSound *snd, int type)
 
 */
 /*************************************************************************/
-void PlayAudio(FoxSound *snd)
+void PlayAudio(FoxSound *snd, FoxChannels *channels)
 {
 	FMOD_RESULT result;
 	
@@ -170,9 +172,24 @@ void PlayAudio(FoxSound *snd)
 	
 	if(snd->Playing == FALSE)
 	{
-		result = FMOD_System_PlaySound(FMsystem, FMOD_CHANNEL_FREE, snd->Sound, FALSE, &snd->Channel);
+		result = FMOD_System_PlaySound(FMsystem, FMOD_CHANNEL_FREE, snd->Sound, TRUE, &snd->Channel);
 		FMODErrCheck(result);
+		snd->Paused = TRUE;
+	
+		if(snd->Type == SmallSnd)
+		{
+			result = FMOD_Channel_SetChannelGroup(snd->Channel, channels->Effects);
+			FMODErrCheck(result);
+		}
+		else if(snd->Type == LargeSnd)
+		{
+			result = FMOD_Channel_SetChannelGroup(snd->Channel, channels->Music);
+			FMODErrCheck(result);
+		}
+
+		TogglePauseSound(snd);
 	}
+
 	success = FALSE;
 }
 
@@ -205,14 +222,138 @@ void ReleaseSound(FMOD_SOUND *sound)
 
 	\param snd
 	A pointer to a sound object struct
+
+	\param type
+	Label of what kind of sound this is.
 */
 /*************************************************************************/
-void InitSoundStruct(FoxSound *snd)
+void InitSoundStruct(FoxSound *snd, int type)
 {
 	snd->Sound = 0;
 	snd->Channel = 0;
 	snd->Playing = FALSE;
 	snd->Paused = FALSE;
+	snd->Type = type;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Pauses/UnPauses a sound/channel
 
+	\param
+	Pointer to sound object struct
+*/
+/*************************************************************************/
+
+void TogglePauseSound(FoxSound * snd)
+{
+	FMOD_RESULT result;
+
+	if(snd->Paused == FALSE)
+	{
+		result = FMOD_Channel_SetPaused(snd->Channel, TRUE);
+		FMODErrCheck(result);
+		snd->Paused = TRUE;
+	}
+	else if(snd->Paused == TRUE)
+	{
+		result = FMOD_Channel_SetPaused(snd->Channel, FALSE);
+		FMODErrCheck(result);
+		snd->Paused = FALSE;
+	}
+	
+	success = FALSE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Pauses/UnPauses all sounds on a channel
+
+	\param
+	Pointer to channel group object struct
+*/
+/*************************************************************************/
+
+void TogglePauseChannel(FoxChannels * chnls, int ChnlType)
+{
+	FMOD_RESULT result;
+
+	if(ChnlType == EffectType)
+	{
+		if(chnls->EffectsPaused == FALSE)
+		{
+			result = FMOD_ChannelGroup_SetPaused(chnls->Effects, TRUE);
+			FMODErrCheck(result);
+			chnls->EffectsPaused = TRUE;
+		}
+		else if(chnls->EffectsPaused == TRUE)
+		{
+			result = FMOD_ChannelGroup_SetPaused(chnls->Effects, FALSE);
+			FMODErrCheck(result);
+			chnls->EffectsPaused = FALSE;
+		}
+	}
+	else if(ChnlType == MusicType)
+	{
+		if(chnls->MusicPaused == FALSE)
+		{
+			result = FMOD_ChannelGroup_SetPaused(chnls->Music, TRUE);
+			FMODErrCheck(result);
+			chnls->MusicPaused = TRUE;
+		}
+		else if(chnls->MusicPaused == TRUE)
+		{
+			result = FMOD_ChannelGroup_SetPaused(chnls->Music, FALSE);
+			FMODErrCheck(result);
+			chnls->MusicPaused = FALSE;
+		}
+	}
+	
+	success = FALSE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Create channel groups
+
+	\param
+	Pointer to channel group object struct
+*/
+/*************************************************************************/
+
+void CreateChannelGroups(FoxChannels *chnl)
+{
+	FMOD_RESULT result;
+
+	result = FMOD_System_CreateChannelGroup(FMsystem, NULL, &chnl->Effects);
+	FMODErrCheck(result);
+
+	result = FMOD_System_CreateChannelGroup(FMsystem, NULL, &chnl->Music);
+	FMODErrCheck(result);
+
+	success = FALSE;
+
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	FMOD releases channel groups
+
+	\param
+	Pointer to channel group object struct
+*/
+/*************************************************************************/
+void ReleaseChannelGroups(FoxChannels *chnl)
+{
+	FMOD_RESULT result;
+
+	result = FMOD_ChannelGroup_Release(chnl->Effects);
+	FMODErrCheck(result);
+	result = FMOD_ChannelGroup_Release(chnl->Music);
+
+	success = FALSE;
+}

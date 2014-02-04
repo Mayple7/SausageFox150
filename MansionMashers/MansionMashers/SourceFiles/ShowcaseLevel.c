@@ -221,7 +221,9 @@ void UpdateShowcase(void)
 	if(AEInputCheckTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawShowcase);
+		//TogglePauseSound(&BackgroundSnd);
 		UpdatePause();
+		//TogglePauseSound(&BackgroundSnd);
 	}
 
 }
