@@ -15,6 +15,7 @@ typedef enum ChannelType
 {
 	EffectType,
 	MusicType,
+	AllTypes,
 };
 
 typedef struct FoxSound
@@ -48,5 +49,9 @@ void TogglePauseSound(FoxSound * SoundStruct);
 void TogglePauseChannel(FoxChannels * ChannelGroups, int ChannelType);
 void CreateChannelGroups(FoxChannels *chnl);
 void ReleaseChannelGroups(FoxChannels *chnl);
+void SetChannelGroupVolume(FoxChannels *chnl, int type, float volume);
+void SetSoundVolume(FoxSound *snd, float volume);
+float GetSoundVolume(FoxSound *snd);
+float GetChannelGroupVolume(FoxChannels * chnl, int type);
 
 #endif
