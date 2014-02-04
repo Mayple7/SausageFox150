@@ -113,7 +113,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	// not key press for direction then slow down!
 	if(!AEInputCheckCurr('D') && !AEInputCheckCurr('A'))
 	{
-		if (!(CurrentPlayer->Position.y > -225) && !CurrentPlayer->PlayerRigidBody.onGround)
+		if (!(CurrentPlayer->Position.y > GROUNDLEVEL) && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			if (CurrentPlayer->Speed - 0.8f >= 0.0f)
 			{
@@ -165,10 +165,10 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 		
 		Vec2Set(&velocity, 0.0f, 12.0f);
-		if(CurrentPlayer->Position.y < -225 || CurrentPlayer->PlayerRigidBody.onGround)
+		if(CurrentPlayer->Position.y < GROUNDLEVEL || CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			if(CurrentPlayer->Position.y < -225)
-				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, -224.9f);
+			if(CurrentPlayer->Position.y < GROUNDLEVEL)
+				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, GROUNDLEVEL + 0.1f);
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
 		}
@@ -187,7 +187,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 		Vec2Set(&force, 0.0f, 15.0f);
-		if(CurrentPlayer->Position.y > -225)
+		if(CurrentPlayer->Position.y > GROUNDLEVEL)
 		{
 			ApplyForce(&CurrentPlayer->PlayerRigidBody, &force);
 		}
@@ -217,7 +217,7 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	}
 
 	//Stop velocity and acceleration when the player lands on the floor
-	if(CurrentPlayer->Position.y <= -225 || CurrentPlayer->PlayerRigidBody.onGround)
+	if(CurrentPlayer->Position.y <= GROUNDLEVEL || CurrentPlayer->PlayerRigidBody.onGround)
 	{
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Velocity);

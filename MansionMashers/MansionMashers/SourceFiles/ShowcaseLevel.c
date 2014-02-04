@@ -114,11 +114,11 @@ void InitializeShowcase(void)
 	HUDitem->isHUD = TRUE;
 
 	// Create the background sprite
-	Background = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
+	Background = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1);
 	
 	// Create the offset background sprite
-	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 3840.0f, 720.0f, 0, 1, 1);
-	Background2->Position.x = 3840;
+	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1);
+	Background2->Position.x = 5760;
 	Background2->FlipX = TRUE;
 
 	// Create the shelf sprite and initialize to be collidable

@@ -38,6 +38,8 @@
 Sprite* TutorialBackground;
 Sprite* OverlayGrid;
 Platform* Shelf;
+
+Player CurrentPlayer;
 int newID;
 
 void LoadTutorial(void)
@@ -49,6 +51,8 @@ void InitializeTutorial(void)
 {
 	newID = 1;
 	resetObjectList();
+
+	InitializePlayer(&CurrentPlayer, newID++);
 
 	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1);
 	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1);
@@ -64,7 +68,14 @@ void InitializeTutorial(void)
 
 void UpdateTutorial(void)
 {
-	// Return to main menu with ESC
+	// Handle any events such as collision
+	EventTutorial();
+
+	// Update the player position
+	UpdatePlayerPosition(&CurrentPlayer);
+
+	// Return to main menu with RSHIFT
+	// Pause with ESCAPE
 	if(AEInputCheckTriggered(VK_RSHIFT))
 	{
 		SetNextState(GS_MainMenu);
@@ -79,6 +90,7 @@ void UpdateTutorial(void)
 void DrawTutorial(void)
 {
 	drawObjectList();
+	UpdatePlayerCollider(&CurrentPlayer.PlayerCollider);
 }
 
 void FreeTutorial(void)
@@ -89,4 +101,16 @@ void FreeTutorial(void)
 void UnloadTutorial(void)
 {
 	DestroyTextureList();
+}
+
+void EventTutorial(void)
+{
+	// Check for any collision and handle the results
+	DetectPlayerCollision();
+	// Handle any input for the current player
+	InputPlayer(&CurrentPlayer);
+
+	// check if forcing the application to quit
+	if (0 == AESysDoesWindowExist())
+		SetNextState(GS_Quit);
 }

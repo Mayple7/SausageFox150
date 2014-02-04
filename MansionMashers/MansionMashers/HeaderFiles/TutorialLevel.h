@@ -8,4 +8,6 @@ void DrawTutorial(void);
 void FreeTutorial(void);
 void UnloadTutorial(void);
 
+void EventTutorial(void);
+
 #endif
