@@ -68,7 +68,5 @@ void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform)
 void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 {
 	printf("YUM YUM YUM YUM  DELICIOUSO\n");
-	/*AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
-	CurrentFood->objID = 0;*/
 	FreeFood(CurrentFood);
 }
