@@ -65,6 +65,8 @@ typedef struct Player
 
 	float Speed;
 
+	int isAttacking;
+
 	float LegSinValue;
 	float TailSinValue;
 

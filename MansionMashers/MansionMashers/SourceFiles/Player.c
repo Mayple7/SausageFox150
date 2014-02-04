@@ -77,6 +77,10 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, PLAYER_WIDTH, PLAYER_HEIGHT);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
+
+	//Initializing the Stats
+	CurrentPlayer->CurrentPlayerStats.AttackSpeed = 1;
+	CurrentPlayer->isAttacking = 0;
 }
 
 /*************************************************************************/
