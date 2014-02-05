@@ -48,18 +48,18 @@
 	Returns a pointer to the first element in the text linked list
 */
 /*************************************************************************/
-Text* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor)
+TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor)
 {
-	Text *textString, *firstLetter, *nextLetter;
+	TextGlyphs *textString, *firstLetter, *nextLetter;
 	int length, i, character;
 	length = strlen(string);
 	
-	firstLetter = (Text *) calloc(1, sizeof(Text));
+	firstLetter = (TextGlyphs *) calloc(1, sizeof(TextGlyphs));
 	// Uppercases the letters then creates a glyph
 	for(i = 0; i < length; i++)
 	{
 		if(i != 0)
-			nextLetter = (Text *) calloc(1, sizeof(Text));
+			nextLetter = (TextGlyphs *) calloc(1, sizeof(TextGlyphs));
 		else
 			nextLetter = firstLetter;
 
@@ -156,9 +156,9 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 	A pointer to the first letter in the text.
 */
 /*************************************************************************/
-void DrawGlyphs(Text *FirstLetter)
+void DrawGlyphs(TextGlyphs *FirstLetter)
 {
-	Text* nextLetter = FirstLetter;
+	TextGlyphs* nextLetter = FirstLetter;
 
 	while(nextLetter)
 	{
@@ -177,9 +177,9 @@ void DrawGlyphs(Text *FirstLetter)
 	A pointer to the first letter in the text.
 */
 /*************************************************************************/
-void FreeText(Text *FirstLetter)
+void FreeText(TextGlyphs *FirstLetter)
 {
-	Text *NextLetter;
+	TextGlyphs *NextLetter;
 
 	while(FirstLetter)
 	{

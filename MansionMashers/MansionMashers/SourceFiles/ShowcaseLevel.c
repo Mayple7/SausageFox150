@@ -55,7 +55,7 @@ Sprite *FoxBig;
 Sprite *FoxSmall;
 Sprite *Letters;
 
-Text *Juli, *Luke, *Kaden, *Dan, *Fox, *subText;
+TextGlyphs *Juli, *Luke, *Kaden, *Dan, *Fox, *subText;
 
 //FoxSound BackgroundSnd;
 

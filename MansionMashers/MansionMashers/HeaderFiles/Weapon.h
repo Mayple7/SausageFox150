@@ -26,9 +26,10 @@ typedef struct Weapon
 	Vec2 Position;
 
 	Sprite* WeaponSprite;
+	struct TextGlyphs* WeaponGlyphs;
 
 	CollisionBox WeaponPickup;
-	CollisionBox WeaponAttack;
+	//CollisionBox WeaponAttack;
 }Weapon;
 
 Weapon* CreateDroppedWeapon(int collisionGroup, int weaponRarity, float width, float height, int objID, float xPos, float yPos);

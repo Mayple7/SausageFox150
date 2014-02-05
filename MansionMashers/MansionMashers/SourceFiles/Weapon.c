@@ -25,7 +25,9 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 {
 	Weapon *CurrentWeapon = AddWeapon();
 	Vec2 ColliderPos;
+	Vec3 TextTint;
 	Vec2Set(&ColliderPos, xPos, yPos);
+	Vec3Set(&TextTint, 0, 0, 0);
 
 	CurrentWeapon->WeaponFOF = PlayerWeapon; // Friend or Foe tag
 	CurrentWeapon->objID = objID;
@@ -34,6 +36,10 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CurrentWeapon->WeaponName = (char *) calloc(MAX_NAME_LENGTH, MAX_NAME_LENGTH * sizeof(char));
 	if(CurrentWeapon->WeaponName)
 		CreateWeaponName(&CurrentWeapon->WeaponName, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity);
+	else
+		CurrentWeapon->WeaponName = "Error: Memory Allocation Failed!";
+
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, xPos + 300, yPos + 200, 50, TextTint);
 
 	CreateWeaponStats(CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, &CurrentWeapon->BonusStrength, &CurrentWeapon->BonusAgility, &CurrentWeapon->BonusDefense);
 

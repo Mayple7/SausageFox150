@@ -43,8 +43,8 @@ Platform* ShortShelf;
 Weapon* StarterAxe;
 Weapon* StarterSword;
 Vec3 TextColor;
-Text* AxeName;
-Text* SwordName;
+TextGlyphs* AxeName;
+TextGlyphs* SwordName;
 
 int newID;
 

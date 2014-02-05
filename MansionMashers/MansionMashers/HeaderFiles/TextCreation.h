@@ -5,16 +5,16 @@
 #include "FoxMath.h"
 #include "Sprite.h"
 
-typedef struct Text
+typedef struct TextGlyphs
 {
 	Sprite *Glyph;
 	char letter;
-	struct Text *NextLetter;
-}Text;
+	struct TextGlyphs *NextLetter;
+}TextGlyphs;
 
-Text* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor);
+TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor);
 Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos);
-void DrawGlyphs(Text *FirstLetter);
-void FreeText(Text *FirstLetter);
+void DrawGlyphs(TextGlyphs *FirstLetter);
+void FreeText(TextGlyphs *FirstLetter);
 
 #endif
