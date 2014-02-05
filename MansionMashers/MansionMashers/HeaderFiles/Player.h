@@ -26,6 +26,7 @@ typedef struct PlayerParts
 	Sprite *ArmLower2;
 	Sprite *Weapon;
 	int BlinkTimer;
+	float ArmRot;
 }PlayerParts;
 
 typedef struct PlayerStats
@@ -100,5 +101,6 @@ void updateAttackSpeed(PlayerStats *CurrentPlayerStats);
 void updateDamageReduction(PlayerStats *CurrentPlayerStats);
 //void updateDamage(PlayerStats *CurrentPlayerStats, Weapon *EquippedWeapon);
 
+float RotateToAngle(float angle, float angleTo, float speed);
 
 #endif

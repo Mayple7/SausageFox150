@@ -30,6 +30,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
+#include "math.h"
 
 // ---------------------------------------------------------------------------
 // globals
@@ -96,6 +97,14 @@ void InputPlayer(struct Player *CurrentPlayer)
 {
 	Animation(CurrentPlayer);
 
+	if (AEInputCheckTriggered('F'))
+	{
+		CurrentPlayer->isAttacking = TRUE;
+		if (CurrentPlayer->FlipX)
+			CurrentPlayer->PlayerSpriteParts.ArmUpper->Rotation = (float)FOX_PI / 2;
+		else
+			CurrentPlayer->PlayerSpriteParts.ArmUpper2->Rotation = (float)FOX_PI * 1.5f;
+	}
 	if (AEInputCheckTriggered('1'))
 		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/Sword.png");
 	if (AEInputCheckTriggered('2'))
@@ -429,6 +438,7 @@ void Animation(Player *Object)
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection2;
+	
 	Sprite *LegUpr = Object->PlayerSpriteParts.LegUpper;
 	Sprite *LegUpr2 = Object->PlayerSpriteParts.LegUpper2;
 	Sprite *LegLwr = Object->PlayerSpriteParts.LegLower;
@@ -543,7 +553,7 @@ void Animation(Player *Object)
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
 		
-
+		
 		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
 		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
 		ArmUpr->Position.x = Bdy->Position.x;
@@ -551,7 +561,12 @@ void Animation(Player *Object)
 		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 		ArmLwr->Position.y = ArmUpr->Position.y - (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 
-		ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
+		if (Object->isAttacking)
+		{
+			ArmUpr2->Rotation = RotateToAngle(ArmUpr2->Rotation, (float)FOX_PI-2.0f, 0.25f);
+		}
+		else
+			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
 		ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
 		ArmUpr2->Position.x = Bdy->Position.x;
 		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/6);
@@ -597,8 +612,12 @@ void Animation(Player *Object)
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
 		
-
-		ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
+		if (Object->isAttacking)
+		{
+			ArmUpr->Rotation = RotateToAngle(ArmUpr->Rotation, (float)FOX_PI+2.0f, 0.25f);
+		}
+		else
+			ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
 		ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
 		ArmUpr->Position.x = Bdy->Position.x;
 		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/6);
@@ -620,7 +639,7 @@ void Animation(Player *Object)
 
 		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
 		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
-		Weap->Rotation = ArmLwr->Rotation;
+		Weap->Rotation = ArmLwr->Rotation + Object->PlayerSpriteParts.ArmRot;
 		Weap->ZIndex = 22;
 
 
@@ -629,39 +648,65 @@ void Animation(Player *Object)
 	//*************************************************************************************************
 }
 
-void CreatePlayerSprites(Player *Player)
+void CreatePlayerSprites(Player *Object)
 {
-	Player->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 20, 1, 1);
+	Object->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 20, 1, 1);
 
-	Player->PlayerSpriteParts.ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 20, 1, 1);
+	Object->PlayerSpriteParts.ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 20, 1, 1);
 
-	Player->PlayerSpriteParts.LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
+	Object->PlayerSpriteParts.LegUpper = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
 
-	Player->PlayerSpriteParts.LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
+	Object->PlayerSpriteParts.LegLower = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
 
-	Player->PlayerSpriteParts.LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
+	Object->PlayerSpriteParts.LegUpper2 = CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, 22, 1, 1);
 
-	Player->PlayerSpriteParts.LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
+	Object->PlayerSpriteParts.LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1);
 
-	Player->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/Skirt.png", 300.0f, 300.0f, 22, 4, 1);
+	Object->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/Skirt.png", 300.0f, 300.0f, 22, 4, 1);
 
-	Player->PlayerSpriteParts.Skirt->AnimationActive = 0;
+	Object->PlayerSpriteParts.Skirt->AnimationActive = 0;
 
-	Player->PlayerSpriteParts.Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 4, 1);
+	Object->PlayerSpriteParts.Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 4, 1);
 
-	Player->PlayerSpriteParts.Body->AnimationSpeed = 3;
+	Object->PlayerSpriteParts.Body->AnimationSpeed = 3;
 
-	Player->PlayerSpriteParts.BlinkTimer = 0;
+	Object->PlayerSpriteParts.BlinkTimer = 0;
 
-	Player->PlayerSpriteParts.Tail = CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, 22, 7, 2);
+	Object->PlayerSpriteParts.Tail = CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, 22, 7, 2);
 
-	Player->PlayerSpriteParts.Tail->AnimationSpeed = Player->Speed/2 + 3;
+	Object->PlayerSpriteParts.Tail->AnimationSpeed = Object->Speed/2 + 3;
 
-	Player->TailSinValue = 0;
+	Object->TailSinValue = 0;
 
-	Player->PlayerSpriteParts.Weapon = CreateSprite("TextureFiles/Axe.png", 256.0f, 256.0f, 22, 1, 1);
+	Object->PlayerSpriteParts.Weapon = CreateSprite("TextureFiles/Axe.png", 256.0f, 256.0f, 22, 1, 1);
 
-	Player->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
+	Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1);
 
-	Player->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
+	Object->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1);
+
+	Object->PlayerSpriteParts.ArmRot = 0;
+}
+
+
+float RotateToAngle(float angle, float angleTo, float speed)
+{
+	int diff;
+	
+	diff = (((( (int)(angleTo/(float)FOX_PI * 180) - (int)(angle/(float)FOX_PI * 180) ) % 360) + 540) % 360) - 180;
+	
+	if (diff > 0)
+	{
+		if ((diff*(float)FOX_PI / 180) < speed)
+			return angleTo;
+	}
+	else
+	{
+		if (-(diff*(float)FOX_PI / 180) < speed)
+			return angleTo;
+	}
+	if (abs(diff) > 0)
+		diff = diff / abs(diff);
+	else
+		return angleTo;
+	return angle + diff * speed;	
 }
