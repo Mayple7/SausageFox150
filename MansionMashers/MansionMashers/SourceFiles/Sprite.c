@@ -25,6 +25,7 @@
 #include "../HeaderFiles/Sprite.h"
 #include "../HeaderFiles/ObjectManager.h"
 #include "../HeaderFiles/TextureManager.h"
+#include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -116,7 +117,7 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	A pointer to the sprite object
 */
 /*************************************************************************/
-Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames)
+Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, float xPos, float yPos)
 {	
 	//Adds the sprite to the object manager list
 	Sprite *CurrentSprite = AddObject();
@@ -132,16 +133,16 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->RotationPrev = 0.0f;
 
 	//Sprite Graphics Properties
-	CurrentSprite->SpriteMesh = createMesh(width, height, CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
+	CurrentSprite->SpriteMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
 	CurrentSprite->SpriteTexture = LoadTexture(texture);
 
 	// Size of the sprite
-	CurrentSprite->Width = width;
-	CurrentSprite->Height = height;
+	CurrentSprite->Width = width * GetLoadRatio();
+	CurrentSprite->Height = height * GetLoadRatio();
 
 	//Position of the sprite
-	CurrentSprite->Position.x = 0.0f;
-	CurrentSprite->Position.y = 0.0f;
+	CurrentSprite->Position.x = xPos * GetLoadRatio();
+	CurrentSprite->Position.y = yPos * GetLoadRatio();
 	CurrentSprite->ZIndex     = ZIndex;
 
 	//Animation Properties

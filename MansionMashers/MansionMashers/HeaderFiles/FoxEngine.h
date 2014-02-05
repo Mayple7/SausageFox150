@@ -27,4 +27,6 @@
 //Special level include
 #include "PauseMenu.h"
 
+float GetLoadRatio(void);
+
 #endif

@@ -46,14 +46,15 @@
 void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGroup, float width, float height, int newID)
 {
 	newBox->canCollide = TRUE;
+	Vec2Scale(newPosition, newPosition, GetLoadRatio());
 	newBox->Position = *newPosition;
 	newBox->collisionGroup = collisionGroup;
 	newBox->collisionID = newID;
-	newBox->width = width;
-	newBox->height = height;
+	newBox->width = width * GetLoadRatio();
+	newBox->height = height * GetLoadRatio();
 	newBox->Offset.x = 0;
 	newBox->Offset.y = 0;
-	newBox->DebugMesh = createMesh(width, height, 1.0f, 1.0f, 0.0f);
+	newBox->DebugMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), 1.0f, 1.0f, 0.0f);
 	newBox->DebugTexture = LoadTexture("TextureFiles/DebugBox.png");
 }
 
@@ -72,10 +73,6 @@ void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGr
 void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition)
 {
 	Collider->Position = *newPosition;
-
-	//Check if debug should be displayed
-	if (Collider->collisionDebug)
-		displayCollisionDebug(Collider);
 }
 
 /*************************************************************************/
@@ -95,13 +92,16 @@ void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition)
 /*************************************************************************/
 void UpdateCollider(CollisionBox *Collider, float width, float height)
 {
-	//Update collision size
-	Collider->width = width;
-	Collider->height = height;
+	if(Collider->collisionID)
+	{
+		//Update collision size
+		Collider->width = width;
+		Collider->height = height;
 
-	//Update collision debug box
-	AEGfxMeshFree(Collider->DebugMesh);
-	Collider->DebugMesh = createMesh(width, height, 1.0f, 1.0f, 0.0f);
+		//Update collision debug box
+		AEGfxMeshFree(Collider->DebugMesh);
+		Collider->DebugMesh = createMesh(width, height, 1.0f, 1.0f, 0.0f);
+	}
 }
 
 /*************************************************************************/

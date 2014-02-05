@@ -31,14 +31,13 @@ int pause;
 void InitializePause(void (*DrawLevel)())
 {
 	pause = TRUE;
-	PauseText = CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1);
+	PauseText = CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, 0, 0);
 	LevelToDraw = DrawLevel;
 }
 
 void UpdatePause(void)
 {
 	float camX, camY;
-	LARGE_INTEGER CycleStart, CycleEnd, Frequency; 		//for framerate controller
 	double DeltaTime = 0;
 	int FrameRate = 60;									//Make a define in the future
 

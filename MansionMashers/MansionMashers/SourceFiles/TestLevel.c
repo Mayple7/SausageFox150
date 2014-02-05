@@ -90,35 +90,31 @@ void InitializeTestLevel(void)
 		HUDList.HudItem[hudLoop] = 0;
 
 	// Create the HAMs
-	Hammy = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++);
-
-	// Collision for the first HAM
-	UpdateFoodPosition(Hammy, 400, 0);
-
+	Hammy = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++, 400, 0);
 
 	// Creating the HUD items
-	HUD1 = CreateSprite("TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD1 = CreateSprite("TextureFiles/GinkoHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
 	HUD1->isHUD = TRUE;
-	HUD2 = CreateSprite("TextureFiles/HollyHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD2 = CreateSprite("TextureFiles/HollyHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
 	HUD2->isHUD = TRUE;
-	HUD3 = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD3 = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
 	HUD3->isHUD = TRUE;
-	HUD4 = CreateSprite("TextureFiles/KayaHUD.png", 320.0f, 137.0f, 200, 1, 1);
+	HUD4 = CreateSprite("TextureFiles/KayaHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
 	HUD4->isHUD = TRUE;
 
-	HUD1item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD1item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
 	HUD1item->isHUD = TRUE;
 	HUD1item->ItemType = 0;
 
-	HUD2item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD2item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
 	HUD2item->isHUD = TRUE;
 	HUD2item->ItemType = 0;
 
-	HUD3item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD3item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
 	HUD3item->isHUD = TRUE;
 	HUD3item->ItemType = 0;
 
-	HUD4item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1);
+	HUD4item = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
 	HUD4item->isHUD = TRUE;
 	HUD4item->ItemType = 0;
 
@@ -133,20 +129,17 @@ void InitializeTestLevel(void)
 	HUDList.HudItem[7] = HUD4item;
 
 	// Create the background
-	Background = CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1);
+	Background = CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1, 0, 0);
 
 	// Secret invisible collider GO!
-	ColliderInvisible = CreateSprite("TextureFiles/LevelGrassground.png", 300.0f, 80.0f, 0, 1, 1);
+	ColliderInvisible = CreateSprite("TextureFiles/LevelGrassground.png", 300.0f, 80.0f, 0, 1, 1, -1020.0f, -40.0f);
 	ColliderInvisible->Visible = FALSE;
-	ColliderInvisible->Position.x = -1020.0f;
-	ColliderInvisible->Position.y = -40.0f;
 
 	// Creates the player
-	if(NULL != malloc(sizeof(Player)))
-		InitializePlayer(&CurrentPlayer, newID++);
+	InitializePlayer(&CurrentPlayer, newID++, 0, 0);
 
 	// Creates the enemy
-	CurrentEnemy = CreateEnemy("TextureFiles/EasyEnemy.png", EnemyType, 150, 150, newID++);
+	CurrentEnemy = CreateEnemy("TextureFiles/EasyEnemy.png", EnemyType, 150, 150, newID++, 0, 0);
 
 	// Adds the player and enemy to the collilde list
 	AddCollidable(CurrentPlayer.PlayerSprite);

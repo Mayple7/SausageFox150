@@ -120,6 +120,7 @@ Food* AddFood(void)
 			printf("Food at %i Created\n", i);
 			return &foodList[i];
 		}
+		
 	}
 	return NULL;
 }
@@ -291,12 +292,15 @@ void freeObject(Sprite* object)
 void FreeFood(Food *CurrentFood)
 {
 	//BECAUSE EVERYONE LIKES FREE FOOD
-	CurrentFood->objID = 0;
-	CurrentFood->FoodCollider.collisionDebug = FALSE;
-	AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
+	if(CurrentFood->objID)
+	{
+		CurrentFood->objID = 0;
+		CurrentFood->FoodCollider.collisionDebug = FALSE;
+		AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
 
-	if (CurrentFood->FoodSprite->Created)
-		freeObject(CurrentFood->FoodSprite);
+		if (CurrentFood->FoodSprite->Created)
+			freeObject(CurrentFood->FoodSprite);
+	}
 }
 
 /*************************************************************************/
@@ -364,7 +368,7 @@ void freeObjectList(void)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (platformList[i].objID > 0)
+		if (platformList[i].objID)
 		{
 			//Free the mesh and texture data
 			FreePlatform(&platformList[i]);
@@ -374,7 +378,7 @@ void freeObjectList(void)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (foodList[i].objID > 0)
+		if (foodList[i].objID)
 		{
 			//Free the mesh and texture data
 			FreeFood(&foodList[i]);
@@ -389,11 +393,11 @@ void freeObjectList(void)
 	free(platformList);
 	free(foodList);
 }
-/*
-void ResizeObjects(double ratio)
+
+void ResizeObjects(float ratio)
 {
 	int i;
-
+	printf("Ratio: %f\n", ratio);
 	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
 		//Make sure the sprite exists
@@ -402,9 +406,9 @@ void ResizeObjects(double ratio)
 			//Update sprite mesh
 			drawList[i].Height *= ratio;
 			drawList[i].Width *= ratio;
-			Vec2Scale(&drawList[i].Position, &drawList[i].Position, (float)ratio);
+			Vec2Scale(&drawList[i].Position, &drawList[i].Position, ratio);
 			UpdateMesh(&drawList[i]);
-			printf("Slot %i is now updated\n", i);
+			//printf("Slot %i is now updated\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -415,10 +419,11 @@ void ResizeObjects(double ratio)
 			//Update platform collider
 			platformList[i].PlatformCollider.width *= ratio;
 			platformList[i].PlatformCollider.height *= ratio;
-			platformList[i].PlatformCollider.Offset.x *= ratio;
-			platformList[i].PlatformCollider.Offset.y *= ratio;
-			Vec2Scale(&platformList[i].Position, &platformList[i].Position, (float)ratio);
-			printf("Platform %i is now updated\n", i);
+			Vec2Scale(&platformList[i].PlatformCollider.Offset, &platformList[i].PlatformCollider.Offset, ratio);
+			Vec2Scale(&platformList[i].Position, &platformList[i].Position, ratio);
+			UpdateCollisionPosition(&platformList[i].PlatformCollider, &platformList[i].Position);
+			UpdateCollider(&platformList[i].PlatformCollider, platformList[i].PlatformCollider.width, platformList[i].PlatformCollider.height);
+			//printf("Platform %i is now updated\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -427,12 +432,21 @@ void ResizeObjects(double ratio)
 		if (foodList[i].objID)
 		{
 			//Free the mesh and texture data
+			Vec2Scale(&foodList[i].Position, &foodList[i].Position, ratio);
 			foodList[i].FoodCollider.width *= ratio;
 			foodList[i].FoodCollider.height *= ratio;
 			foodList[i].FoodCollider.Offset.x *= ratio;
 			foodList[i].FoodCollider.Offset.y *= ratio;
-			printf("Platform %i is now freed\n", i);
+			//printf("Platform %i is now freed\n", i);
 		}
 	}
+	Vec2Scale(&CurrentPlayer.PlayerCollider.Position, &CurrentPlayer.PlayerCollider.Position, ratio);
+	Vec2Scale(&CurrentPlayer.Position, &CurrentPlayer.Position, ratio);
+	CurrentPlayer.PlayerCollider.width *= ratio;
+	CurrentPlayer.PlayerCollider.height *= ratio;
+	UpdateCollider(&CurrentPlayer.PlayerCollider, CurrentPlayer.PlayerCollider.width, CurrentPlayer.PlayerCollider.height);
+
+	Vec2Scale(&CurrentPlayer.PlayerCollider.Offset, &CurrentPlayer.PlayerCollider.Offset, ratio);
+
 }
-*/
+
