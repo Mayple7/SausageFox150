@@ -19,6 +19,7 @@
 #include "../HeaderFiles/Weapon.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
+#include "../HeaderFiles/WeaponNames.h"
 
 Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float height, int objID, float xPos, float yPos)
 {
@@ -30,14 +31,15 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CurrentWeapon->objID = objID;
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
-
-	CreateWeaponName(CurrentWeapon->WeaponName, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity);
+	CurrentWeapon->WeaponName = (char *) calloc(MAX_NAME_LENGTH, MAX_NAME_LENGTH * sizeof(char));
+	if(CurrentWeapon->WeaponName)
+		CreateWeaponName(&CurrentWeapon->WeaponName, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity);
 
 	CreateWeaponStats(CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, &CurrentWeapon->BonusStrength, &CurrentWeapon->BonusAgility, &CurrentWeapon->BonusDefense);
 
 	Vec2Set(&CurrentWeapon->Position, xPos * GetLoadRatio(), yPos * GetLoadRatio());
 
-	CreateWeaponSprite(&CurrentWeapon->WeaponSprite, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, xPos, yPos);
+	CurrentWeapon->WeaponSprite = CreateWeaponSprite(CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, xPos, yPos);
 
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 3, height, objID);
 	//CollisionBox WeaponAttack;
@@ -45,9 +47,28 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	return CurrentWeapon;
 }
 
-void CreateWeaponName(char* Name, int Type, int Rarity)
+void CreateWeaponName(char** Name, int WType, int WRarity)
 {
-	
+	if(WRarity == Common)
+	{
+		strcpy(*Name, GetCommonStart());
+		switch(WType)
+		{
+		case Sword:
+			strcat(*Name, GetSwordSynonym());
+			break;
+		case Axe:
+			strcat(*Name, GetAxeSynonym());
+			break;
+		case Hammer:
+			strcat(*Name, GetHammerSynonym());
+			break;
+		case Spear:
+			strcat(*Name, GetSpearSynonym());
+			break;
+		}
+		strcat(*Name, GetCommonEnd());
+	}
 }
 
 void CreateWeaponStats(int WType, int WRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense)
@@ -87,27 +108,29 @@ void CreateWeaponStats(int WType, int WRarity, int* BonusStrength, int* BonusAgi
 
 }
 
-void CreateWeaponSprite(Sprite *WeaponSprite, int WType, int WRarity, float xPos, float yPos)
+Sprite* CreateWeaponSprite(int WType, int WRarity, float xPos, float yPos)
 {
+	Sprite *WeaponSprite;
 	if(WRarity == Common)
 	{
 		switch(WType)
 		{
 		case Sword:
-			CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, xPos, yPos);
+			WeaponSprite = CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, xPos, yPos);
 			break;
 		case Axe:
-			CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, xPos, yPos);
+			WeaponSprite = CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, xPos, yPos);
 			break;
 		case Hammer:
-			CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, xPos, yPos);
+			WeaponSprite = CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, xPos, yPos);
 			break;
 		case Spear:
-			CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, xPos, yPos);
+			WeaponSprite = CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, xPos, yPos);
 			break;
 		case FoxWeapon:
-			CreateSprite("TextureFiles/GinkoSmall.png", 256, 256, 5, 1, 1, xPos, yPos);
+			WeaponSprite = CreateSprite("TextureFiles/GinkoSmall.png", 256, 256, 5, 1, 1, xPos, yPos);
 			break;
 		};
 	}
+	return WeaponSprite;
 }

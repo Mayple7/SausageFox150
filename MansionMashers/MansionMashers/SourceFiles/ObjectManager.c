@@ -195,7 +195,7 @@ void resetObjectList(void)
 		collidables  = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 
 		//Make sure the malloc is not NULL
-		if (collideList && collidables && platformList && foodList)
+		if (collideList && collidables && platformList && foodList && enemyList && weaponList)
 		{
 			printf("COLLIDE LIST SET UP COMPLETE\n\n");
 		}
@@ -370,8 +370,8 @@ void FreeWeapon(Weapon *CurrentWeapon)
 		CurrentWeapon->WeaponPickup.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentWeapon->WeaponPickup.DebugMesh);
 
-		if(CurrentWeapon->WeaponSprite.Created)
-			freeObject(&CurrentWeapon->WeaponSprite);
+		if(CurrentWeapon->WeaponSprite->Created)
+			freeObject(CurrentWeapon->WeaponSprite);
 	}
 }
 

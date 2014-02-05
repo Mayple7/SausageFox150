@@ -41,6 +41,10 @@ Platform* Shelf;
 Platform* ShortShelf;
 
 Weapon* StarterAxe;
+Weapon* StarterSword;
+Vec3 TextColor;
+Text* AxeName;
+Text* SwordName;
 
 int newID;
 
@@ -70,8 +74,16 @@ void InitializeTutorial(void)
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
 	ShortShelf->PlatformCollider.collisionDebug = TRUE;
 
-	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -250, -320);
-	StarterAxe->WeaponSprite.Rotation = FOX_PI / 2;
+	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -250, -340);
+	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 4;
+
+	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 475, 0);
+	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
+
+	Vec3Set(&TextColor, 0, 0, 0);
+	AxeName = CreateText(StarterAxe->WeaponName, -500, 250, 100, TextColor);
+	SwordName = CreateText(StarterSword->WeaponName, -500, 250, 100, TextColor);
+
 
 	ResetCamera();
 }
@@ -121,7 +133,10 @@ void UpdateTutorial(void)
 void DrawTutorial(void)
 {
 	DrawObjectList();
-
+	if(CurrentPlayer.Position.x > 0)
+		DrawGlyphs(SwordName);
+	else
+		DrawGlyphs(AxeName);
 	DrawCollisionList();
 }
 
