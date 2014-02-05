@@ -69,7 +69,7 @@ Text* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextCo
 			character = string[i];
 		
 		nextLetter->letter = character;
-		nextLetter->Glyph = ConvertToGlyph(character, fontSize, xPos + (i * fontSize * 0.45f), yPos);
+		nextLetter->Glyph = ConvertToGlyph(character, fontSize, xPos + (i * fontSize * 0.4f), yPos);
 		nextLetter->NextLetter = NULL;
 		if(nextLetter->Glyph)
 		{

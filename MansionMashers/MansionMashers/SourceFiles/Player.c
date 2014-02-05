@@ -225,7 +225,7 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Set gravity if not on floor or on a platform
 	else
 	{
-		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -15.0f * GetLoadRatio());
+		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, FOX_GRAVITY_Y * GetLoadRatio());
 	}
 	//Player position updated when dropping down from a platform
 	if(CurrentPlayer->dropDown)

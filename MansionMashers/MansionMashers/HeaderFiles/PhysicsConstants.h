@@ -3,7 +3,7 @@
 
 // Global Constants
 #define FOX_GRAVITY_X 0.0f
-#define FOX_GRAVITY_Y -20.0f
+#define FOX_GRAVITY_Y -15.0f
 #define FOX_AIRDRAG 0.5f
 
 // Default RigidBody Values
