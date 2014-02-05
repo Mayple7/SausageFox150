@@ -298,6 +298,9 @@
     <ClCompile Include="SourceFiles\FrameRateController.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFiles\Weapon.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\fox_head.ico" />

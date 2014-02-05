@@ -39,7 +39,7 @@ int slideTextureNum = 0;
 int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 int slideTimer = 0;
 
-Sprite *Sausage;
+Sprite *SausageFox;
 Sprite *Title;
 Sprite *Digipen;
 
@@ -76,7 +76,7 @@ void InitializeStartScreen(void)
 	// Create the slide sprites
 	Title = CreateSprite("TextureFiles/MansionMashersLogo.png", 1280.0f, 720.0f, 0, 1, 1, 0, 0);
 	Digipen = CreateSprite("TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1, 0, 0);
-	Sausage = CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 1280.0f, 720.0f, 0, 1, 1, 0, 0);
+	SausageFox = CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 1280.0f, 720.0f, 0, 1, 1, 0, 0);
 }
 
 /*************************************************************************/
@@ -118,11 +118,11 @@ void DrawStartScreen(void)
 	//Sausage Fox Logo
 	if(slideTextureNum == 1)
 	{
-		Sausage->Alpha = alpha;
-		DrawSprite(Sausage);
+		SausageFox->Alpha = alpha;
+		DrawSprite(SausageFox);
 	}
 	else
-		Sausage->Alpha = 0.0f;
+		SausageFox->Alpha = 0.0f;
 
 	//Mansion Mashers Logo
 	if(slideTextureNum == 2)

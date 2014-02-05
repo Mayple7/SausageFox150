@@ -3,6 +3,19 @@
 
 #include "FoxMath.h"
 
+enum collisionGroup{DefaultType, 
+					PlayerType,
+					EnemyType, 
+					BackgroundType, 
+					FoodType, 
+					HudType, 
+					PlatformType, 
+					BounceType, 
+					ButtonType, 
+					WeaponDrop, 
+					WeaponFriendly, 
+					WeaponEnemy};
+
 typedef struct CollisionBox
 {
 	int canCollide;

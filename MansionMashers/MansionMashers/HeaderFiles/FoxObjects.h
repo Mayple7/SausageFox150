@@ -6,6 +6,8 @@
 //Create collide list
 #define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
 
+enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
+
 //-------------------------------------------------------------------------
 // Fox object includes
 
@@ -14,5 +16,6 @@
 #include "Enemy.h"
 #include "PlayerCollision.h"
 #include "Food.h"
+#include "Weapon.h"
 
 #endif

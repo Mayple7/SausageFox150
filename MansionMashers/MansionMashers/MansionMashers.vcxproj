@@ -154,6 +154,7 @@
     <ClCompile Include="SourceFiles\TutorialLevel.c" />
     <ClCompile Include="SourceFiles\Vector2.c" />
     <ClCompile Include="SourceFiles\Vector3.c" />
+    <ClCompile Include="SourceFiles\Weapon.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\fox_head.ico" />

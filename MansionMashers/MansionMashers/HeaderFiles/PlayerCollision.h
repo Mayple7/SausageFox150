@@ -1,8 +1,6 @@
 #ifndef FOX_PLAYER_COLLISION
 #define FOX_PLAYER_COLLISION
 
-enum collisionGroup{ PlayerType, EnemyType, PartType, BackgroundType, FoodType, HudType, PlatformType, BounceType, ButtonType};
-
 #include "FoxObjects.h"
 #include "Food.h"
 
