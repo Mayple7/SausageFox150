@@ -30,7 +30,6 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
-#include "math.h"
 
 // ---------------------------------------------------------------------------
 // globals
@@ -45,7 +44,7 @@ Player CurrentPlayer;
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-void InitializePlayer(struct Player *CurrentPlayer, int newID)
+void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float yPos)
 {
 	int i;
 
@@ -58,8 +57,8 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	CreatePlayerSprites(CurrentPlayer);
 
 	//Default position of the player
-	CurrentPlayer->Position.x = 0.0f;
-	CurrentPlayer->Position.y = 0.0f;
+	CurrentPlayer->Position.x = xPos * GetLoadRatio();
+	CurrentPlayer->Position.y = yPos * GetLoadRatio();
 	CurrentPlayer->FlipX = FALSE;
 	CurrentPlayer->FlipY = FALSE;
 	CurrentPlayer->FlipXPrev = FALSE;
@@ -67,8 +66,8 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 
 	//Collision properties
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, newID);
-	CurrentPlayer->PlayerCollider.Offset.y = 20;
-	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20;
+	CurrentPlayer->PlayerCollider.Offset.y = 20 * GetLoadRatio();
+	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20 * GetLoadRatio();
 	UpdateCollider(&CurrentPlayer->PlayerCollider, CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 
 	//Collider Debug
@@ -78,10 +77,6 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID)
 	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, PLAYER_WIDTH, PLAYER_HEIGHT);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
-
-	//Initializing the Stats
-	CurrentPlayer->CurrentPlayerStats.AttackSpeed = 1;
-	CurrentPlayer->isAttacking = 0;
 }
 
 /*************************************************************************/
@@ -128,7 +123,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	// not key press for direction then slow down!
 	if(!AEInputCheckCurr('D') && !AEInputCheckCurr('A'))
 	{
-		if (!(CurrentPlayer->Position.y > GROUNDLEVEL) && !CurrentPlayer->PlayerRigidBody.onGround)
+		if (!(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			if (CurrentPlayer->Speed - 0.8f >= 0.0f)
 			{
@@ -158,14 +153,14 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->FlipX = 0;
 		CurrentPlayer->PlayerDirection = LEFT;
-		CurrentPlayer->Speed = 8.0f;
+		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
 	}
 	// Move right if D is pressed
 	else if(AEInputCheckCurr('D'))
 	{
 		CurrentPlayer->FlipX = 1;
 		CurrentPlayer->PlayerDirection = RIGHT;
-		CurrentPlayer->Speed = 8.0f;
+		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
 	}
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(AEInputCheckTriggered(VK_SPACE))
@@ -179,11 +174,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 
 		
-		Vec2Set(&velocity, 0.0f, 12.0f);
-		if(CurrentPlayer->Position.y < GROUNDLEVEL || CurrentPlayer->PlayerRigidBody.onGround)
+		Vec2Set(&velocity, 0.0f, 12.0f * GetLoadRatio());
+		if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			if(CurrentPlayer->Position.y < GROUNDLEVEL)
-				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, GROUNDLEVEL + 0.1f);
+			if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
+				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
 		}
@@ -195,8 +190,8 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
-		Vec2Set(&force, 0.0f, 15.0f);
-		if(CurrentPlayer->Position.y > GROUNDLEVEL)
+		Vec2Set(&force, 0.0f, 15.0f * GetLoadRatio());
+		if(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio())
 		{
 			ApplyForce(&CurrentPlayer->PlayerRigidBody, &force);
 		}
@@ -221,7 +216,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 void UpdatePlayerPosition(Player *CurrentPlayer)
 {
 	//Stop velocity and acceleration when the player lands on the floor
-	if(CurrentPlayer->Position.y <= GROUNDLEVEL || CurrentPlayer->PlayerRigidBody.onGround)
+	if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 	{
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Velocity);
@@ -230,7 +225,7 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Set gravity if not on floor or on a platform
 	else
 	{
-		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -15.0f);
+		SetGravity(&CurrentPlayer->PlayerRigidBody, 0.0f, -15.0f * GetLoadRatio());
 	}
 	//Player position updated when dropping down from a platform
 	if(CurrentPlayer->dropDown)
@@ -238,7 +233,7 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 		CurrentPlayer->Position.y -= 5.0f;
 		if(CurrentPlayer->PlayerRigidBody.Velocity.y < 0)
 		{
-			CurrentPlayer->PlayerRigidBody.Velocity.y = -5.0f;
+			CurrentPlayer->PlayerRigidBody.Velocity.y = -5.0f * GetLoadRatio();
 			CurrentPlayer->dropDown = FALSE;
 		}
 	}
@@ -385,7 +380,7 @@ void DetectPlayerCollision(void)
 					CurrentPlayer.CollisionData[-hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
 					PlayerCollideFood(&CurrentPlayer, fList);
-					fList->objID = -1;
+					fList->objID = 0;
 				}
 				// Found target, hit previous frame, on persistant
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -400,7 +395,7 @@ void DetectPlayerCollision(void)
 					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = fList->FoodCollider.collisionID * 10 + 1;
 					PlayerCollideFood(&CurrentPlayer, fList);
-					fList->objID = -1;
+					fList->objID = 0;
 				}
 			}
 			else
@@ -564,6 +559,8 @@ void Animation(Player *Object)
 		if (Object->isAttacking)
 		{
 			ArmUpr2->Rotation = RotateToAngle(ArmUpr2->Rotation, (float)FOX_PI-2.0f, 0.25f);
+			if (ArmUpr2->Rotation == (float)FOX_PI-2.0f)
+				Object->isAttacking = FALSE;
 		}
 		else
 			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
@@ -615,6 +612,8 @@ void Animation(Player *Object)
 		if (Object->isAttacking)
 		{
 			ArmUpr->Rotation = RotateToAngle(ArmUpr->Rotation, (float)FOX_PI+2.0f, 0.25f);
+			if (ArmUpr->Rotation == (float)FOX_PI+2.0f)
+				Object->isAttacking = FALSE;
 		}
 		else
 			ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
@@ -710,3 +709,4 @@ float RotateToAngle(float angle, float angleTo, float speed)
 		return angleTo;
 	return angle + diff * speed;	
 }
+
