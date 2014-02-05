@@ -90,17 +90,13 @@ void UpdateTutorial(void)
 
 	if(AEInputCheckTriggered('U'))
 	{
-		ShortShelf->PlatformCollider.collisionDebug = FALSE;
-		Shelf->PlatformCollider.collisionDebug = FALSE;
-		CurrentPlayer.PlayerCollider.collisionDebug = FALSE;
-		OverlayGrid->Visible = FALSE;
+		SetDebugMode();
+		OverlayGrid->Visible = TRUE;
 	}
 	if(AEInputCheckTriggered('I'))
 	{
-		ShortShelf->PlatformCollider.collisionDebug = TRUE;
-		Shelf->PlatformCollider.collisionDebug = TRUE;
-		CurrentPlayer.PlayerCollider.collisionDebug = TRUE;
-		OverlayGrid->Visible = TRUE;
+		RemoveDebugMode();
+		OverlayGrid->Visible = FALSE;
 	}
 
 

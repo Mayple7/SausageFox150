@@ -397,7 +397,7 @@ void freeObjectList(void)
 void ResizeObjects(float ratio)
 {
 	int i;
-	printf("Ratio: %f\n", ratio);
+	
 	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
 		//Make sure the sprite exists
@@ -450,3 +450,52 @@ void ResizeObjects(float ratio)
 
 }
 
+void SetDebugMode(void)
+{
+	int i;
+
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (platformList[i].objID)
+		{
+			//Free the mesh and texture data
+			platformList[i].PlatformCollider.collisionDebug = TRUE;
+		}
+	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (foodList[i].objID)
+		{
+			//Free the mesh and texture data
+			foodList[i].FoodCollider.collisionDebug = TRUE;
+		}
+	}
+	CurrentPlayer.PlayerCollider.collisionDebug = TRUE;
+}
+
+void RemoveDebugMode(void)
+{
+	int i;
+
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (platformList[i].objID)
+		{
+			//Free the mesh and texture data
+			platformList[i].PlatformCollider.collisionDebug = FALSE;
+		}
+	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (foodList[i].objID)
+		{
+			//Free the mesh and texture data
+			foodList[i].FoodCollider.collisionDebug = FALSE;
+		}
+	}
+	CurrentPlayer.PlayerCollider.collisionDebug = FALSE;
+}

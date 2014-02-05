@@ -2,14 +2,21 @@
 #define FOX_WEAPON
 
 #include "Sprite.h"
+#include "CollisionBox.h"
 
 struct Weapon
 {
-	int BonusDamage;
-	int SwingSpeed;
+	char *WeaponName;
 
-	struct Sprite WeaponSprite;
+	int WeaponID;
 
+	int BonusStrength;
+	int BonusAgility;
+	int BonusDefense;
+
+	Sprite WeaponSprite;
+
+	CollisionBox WeaponPickup;
 };
 
 #endif

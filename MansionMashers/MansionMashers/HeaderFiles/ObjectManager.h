@@ -33,4 +33,7 @@ void FreeFood(Food *CurrentFood);
 void FreePlatform(Platform *CurrentPlatform);
 void FreeEnemy(Enemy *CurrentEnemy);
 
+void SetDebugMode(void);
+void RemoveDebugMode(void);
+
 #endif

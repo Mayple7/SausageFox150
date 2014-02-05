@@ -46,6 +46,7 @@ Sprite *HUD3item;
 Sprite *HUD4item;
 Sprite *Background;
 Sprite *ColliderInvisible;
+Sprite *OverlayGrid;
 Enemy *CurrentEnemy;
 HUDLayer HUDList;
 
@@ -88,6 +89,8 @@ void InitializeTestLevel(void)
 	// Set the HUDlist to 0
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
+
+	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
 
 	// Create the HAMs
 	Hammy = CreateFood("TextureFiles/Ham.png", FoodType, 150, 140, newID++, 400, 0);
@@ -182,6 +185,16 @@ void UpdateTestLevel(void)
 	}
 	//(&ChannelController, EffectType);
 
+	if(AEInputCheckTriggered('U'))
+	{
+		SetDebugMode();
+		OverlayGrid->Visible = TRUE;
+	}
+	if(AEInputCheckTriggered('I'))
+	{
+		RemoveDebugMode();
+		OverlayGrid->Visible = FALSE;
+	}
 
 	// Go back to main menu with ESC
 	if(AEInputCheckTriggered(VK_ESCAPE))
@@ -243,6 +256,9 @@ void UnloadTestLevel(void)
 /*************************************************************************/
 void EventTestLevel(void)
 {
+	// Detect Player collision
+	DetectPlayerCollision();
+
 	// Handle any input for the player
 	InputPlayer(&CurrentPlayer);
 

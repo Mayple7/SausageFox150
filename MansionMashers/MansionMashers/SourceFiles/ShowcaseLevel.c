@@ -295,6 +295,17 @@ void EventShowcase(void)
 		AEGfxSetViewportPositionAndDimensions(0, 0, 1920, 1080);
 		printf("16:9\n");
 	}
+
+	if(AEInputCheckTriggered('U'))
+	{
+		SetDebugMode();
+		OverlayGrid->Visible = TRUE;
+	}
+	if(AEInputCheckTriggered('I'))
+	{
+		RemoveDebugMode();
+		OverlayGrid->Visible = FALSE;
+	}
 }
 
 
