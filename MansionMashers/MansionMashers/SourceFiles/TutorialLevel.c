@@ -40,6 +40,8 @@ Sprite* OverlayGrid;
 Platform* Shelf;
 Platform* ShortShelf;
 
+Weapon* StarterAxe;
+
 int newID;
 
 void LoadTutorial(void)
@@ -67,6 +69,9 @@ void InitializeTutorial(void)
 	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
 	ShortShelf->PlatformCollider.collisionDebug = TRUE;
+
+	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -250, -320);
+	StarterAxe->WeaponSprite.Rotation = FOX_PI / 2;
 
 	ResetCamera();
 }

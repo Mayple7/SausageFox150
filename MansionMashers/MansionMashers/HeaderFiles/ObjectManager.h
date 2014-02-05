@@ -15,12 +15,15 @@ Sprite *collidables;
 Platform *platformList;
 Food *foodList;
 Enemy *enemyList;
+Weapon *weaponList;
 
 //Functionz
 Sprite* AddObject(void);
 Platform* AddPlatform(void);
 Food* AddFood(void);
+Weapon* AddWeapon(void);
 Enemy* AddEnemy(void);
+
 void AddCollidable(Sprite *newCollidable);
 void resetObjectList(void);
 void DrawObjectList(void);
@@ -32,6 +35,7 @@ void ResizeObjects(float ratio);
 void FreeFood(Food *CurrentFood);
 void FreePlatform(Platform *CurrentPlatform);
 void FreeEnemy(Enemy *CurrentEnemy);
+void FreeWeapon(Weapon *CurrentWeapon);
 
 void SetDebugMode(void);
 void RemoveDebugMode(void);

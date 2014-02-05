@@ -20,12 +20,14 @@
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
 
-Weapon* CreateDroppedWeapon(char* textureName, int weaponType, int weaponRarity, float width, float height, int objID, float xPos, float yPos)
+Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float height, int objID, float xPos, float yPos)
 {
-	Weapon *CurrentWeapon;
+	Weapon *CurrentWeapon = AddWeapon();
+	Vec2 ColliderPos;
+	Vec2Set(&ColliderPos, xPos, yPos);
 
 	CurrentWeapon->WeaponFOF = PlayerWeapon; // Friend or Foe tag
-	CurrentWeapon->WeaponID = objID;
+	CurrentWeapon->objID = objID;
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
 
@@ -33,25 +35,79 @@ Weapon* CreateDroppedWeapon(char* textureName, int weaponType, int weaponRarity,
 
 	CreateWeaponStats(CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, &CurrentWeapon->BonusStrength, &CurrentWeapon->BonusAgility, &CurrentWeapon->BonusDefense);
 
-	Vec2Set(&CurrentWeapon->Position, xPos, yPos);
+	Vec2Set(&CurrentWeapon->Position, xPos * GetLoadRatio(), yPos * GetLoadRatio());
 
-	CreateWeaponSprite(&CurrentWeapon->WeaponSprite, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity);
+	CreateWeaponSprite(&CurrentWeapon->WeaponSprite, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, xPos, yPos);
 
-	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width, height, objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 3, height, objID);
 	//CollisionBox WeaponAttack;
+
+	return CurrentWeapon;
 }
 
 void CreateWeaponName(char* Name, int Type, int Rarity)
 {
+	
+}
+
+void CreateWeaponStats(int WType, int WRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense)
+{
+	if(WRarity == Common)
+	{
+		switch(WType)
+		{
+		case Sword:
+			*BonusStrength = 0;
+			*BonusAgility = 1;
+			*BonusDefense = 1;
+			break;
+		case Axe:
+			*BonusStrength = 1;
+			*BonusAgility = 1;
+			*BonusDefense = 0;
+			break;
+		case Hammer:
+			*BonusStrength = 1;
+			*BonusAgility = 0;
+			*BonusDefense = 1;
+			break;
+		case Spear:
+			*BonusStrength = 0;
+			*BonusAgility = 2;
+			*BonusDefense = 0;
+			break;
+		case FoxWeapon:
+			*BonusStrength = 1;
+			*BonusAgility = 1;
+			*BonusDefense = 1;
+			break;
+		}
+
+	}
 
 }
 
-void CreateWeaponStats(int WeaponType, int WeaponRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense)
+void CreateWeaponSprite(Sprite *WeaponSprite, int WType, int WRarity, float xPos, float yPos)
 {
-
-}
-
-void CreateWeaponSprite(Sprite *WeaponSprite, int WeaponType, int WeaponRarity)
-{
-
+	if(WRarity == Common)
+	{
+		switch(WType)
+		{
+		case Sword:
+			CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, xPos, yPos);
+			break;
+		case Axe:
+			CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, xPos, yPos);
+			break;
+		case Hammer:
+			CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, xPos, yPos);
+			break;
+		case Spear:
+			CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, xPos, yPos);
+			break;
+		case FoxWeapon:
+			CreateSprite("TextureFiles/GinkoSmall.png", 256, 256, 5, 1, 1, xPos, yPos);
+			break;
+		};
+	}
 }

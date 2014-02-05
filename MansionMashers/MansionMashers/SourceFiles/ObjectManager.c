@@ -134,6 +134,29 @@ Food* AddFood(void)
 	The enemy added to the list
 */
 /*************************************************************************/
+Weapon* AddWeapon(void)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if(weaponList[i].objID == 0)
+		{
+			printf("Weapon at %i Created\n", i);
+			return &weaponList[i];
+		}
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Adds an enemy to the enemy list
+	
+	\return
+	The enemy added to the list
+*/
+/*************************************************************************/
 Enemy* AddEnemy(void)
 {
 	int i;
@@ -167,6 +190,7 @@ void resetObjectList(void)
 		platformList = (Platform *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Platform));
 		foodList     = (Food *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Food));
 		enemyList    = (Enemy *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Enemy));
+		weaponList   = (Weapon *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Weapon));
 		collideList  = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 		collidables  = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 
@@ -251,6 +275,11 @@ void DrawCollisionList(void)
 			//Free the mesh and texture data
 			displayCollisionDebug(&enemyList[i].EnemyCollider);
 		}
+		if (weaponList[i].objID && weaponList[i].WeaponPickup.collisionDebug)
+		{
+			//Free the mesh and texture data
+			displayCollisionDebug(&weaponList[i].WeaponPickup);
+		}
 	}
 
 	//Players are special
@@ -328,6 +357,29 @@ void FreePlatform(Platform *CurrentPlatform)
 	\brief
 	Frees the object being passed
 	
+	\param CurrentWeapon
+	The pointer to the weapon whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreeWeapon(Weapon *CurrentWeapon)
+{
+	//BECAUSE EVERYONE LIKES FREE FOOD
+	if(CurrentWeapon->objID)
+	{
+		CurrentWeapon->objID = 0;
+		CurrentWeapon->WeaponPickup.collisionDebug = FALSE;
+		AEGfxMeshFree(CurrentWeapon->WeaponPickup.DebugMesh);
+
+		if(CurrentWeapon->WeaponSprite.Created)
+			freeObject(&CurrentWeapon->WeaponSprite);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees the object being passed
+	
 	\param objectNext
 	The pointer to a object whose memory is to be deallocated
 */
@@ -385,6 +437,16 @@ void freeObjectList(void)
 			printf("Food %i is now freed\n", i);
 		}
 	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (weaponList[i].objID)
+		{
+			//Free the mesh and texture data
+			FreeWeapon(&weaponList[i]);
+			printf("Weapon %i is now freed\n", i);
+		}
+	}
 
 	//Free the object list data allocation
 	free(drawList);
@@ -392,6 +454,7 @@ void freeObjectList(void)
 	//Free collision lists data allocation
 	free(platformList);
 	free(foodList);
+	free(weaponList);
 }
 
 void ResizeObjects(float ratio)
@@ -423,6 +486,21 @@ void ResizeObjects(float ratio)
 			Vec2Scale(&platformList[i].Position, &platformList[i].Position, ratio);
 			UpdateCollisionPosition(&platformList[i].PlatformCollider, &platformList[i].Position);
 			UpdateCollider(&platformList[i].PlatformCollider, platformList[i].PlatformCollider.width, platformList[i].PlatformCollider.height);
+			//printf("Platform %i is now updated\n", i);
+		}
+	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (weaponList[i].objID)
+		{
+			//Update platform collider
+			weaponList[i].WeaponPickup.width *= ratio;
+			weaponList[i].WeaponPickup.height *= ratio;
+			Vec2Scale(&weaponList[i].WeaponPickup.Offset, &weaponList[i].WeaponPickup.Offset, ratio);
+			Vec2Scale(&weaponList[i].Position, &weaponList[i].Position, ratio);
+			UpdateCollisionPosition(&weaponList[i].WeaponPickup, &weaponList[i].Position);
+			UpdateCollider(&weaponList[i].WeaponPickup, weaponList[i].WeaponPickup.width, weaponList[i].WeaponPickup.height);
 			//printf("Platform %i is now updated\n", i);
 		}
 	}
@@ -466,6 +544,15 @@ void SetDebugMode(void)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
+		if (weaponList[i].objID)
+		{
+			//Free the mesh and texture data
+			weaponList[i].WeaponPickup.collisionDebug = TRUE;
+		}
+	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
 		if (foodList[i].objID)
 		{
 			//Free the mesh and texture data
@@ -486,6 +573,15 @@ void RemoveDebugMode(void)
 		{
 			//Free the mesh and texture data
 			platformList[i].PlatformCollider.collisionDebug = FALSE;
+		}
+	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (weaponList[i].objID)
+		{
+			//Free the mesh and texture data
+			weaponList[i].WeaponPickup.collisionDebug = FALSE;
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)

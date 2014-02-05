@@ -13,7 +13,7 @@ typedef struct Weapon
 	char *WeaponName;
 
 	int WeaponFOF; // Friend or Foe tag
-	int WeaponID;
+	int objID;
 	int WeaponRarity;
 	int WeaponType;
 
@@ -29,9 +29,9 @@ typedef struct Weapon
 	CollisionBox WeaponAttack;
 }Weapon;
 
-Weapon* CreateWeapon(char* textureName, int collisionGroup, float width, float height, int objID, float xPos, float yPos);
+Weapon* CreateDroppedWeapon(int collisionGroup, int weaponRarity, float width, float height, int objID, float xPos, float yPos);
 void CreateWeaponName(char* Name, int Type, int Rarity);
 void CreateWeaponStats(int WeaponType, int WeaponRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense);
-void CreateWeaponSprite(Sprite *WeaponSprite, int WeaponType, int WeaponRarity);
+void CreateWeaponSprite(Sprite *WeaponSprite, int WeaponType, int WeaponRarity, float xPos, float yPos);
 
 #endif

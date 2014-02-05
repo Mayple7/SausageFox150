@@ -61,6 +61,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	HWND winHandle;
 	RECT rect;
 
+	srand(timeGetTime());								// Sets the random number gen seed
+
 	//Creates the console window
 	if(debugConsole && AllocConsole())
 	{
