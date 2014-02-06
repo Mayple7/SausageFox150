@@ -21,6 +21,34 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/WeaponNames.h"
 
+Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int weaponRarity, int collisionGroup, float width, float height, int objID)
+{
+	Weapon *CurrentWeapon = AddWeapon();
+	Vec3 TextTint;
+	Vec3Set(&TextTint, 0, 0, 0);
+	CurrentWeapon->WeaponFOF = PlayerWeapon; // Friend or Foe tag
+	CurrentWeapon->objID = objID;
+	CurrentWeapon->WeaponRarity = weaponRarity;
+	CurrentWeapon->WeaponType = weaponType;
+	CurrentWeapon->WeaponName = (char *) calloc(MAX_NAME_LENGTH, MAX_NAME_LENGTH * sizeof(char));
+	if(CurrentWeapon->WeaponName)
+		strcpy(CurrentWeapon->WeaponName, weaponName);
+	else
+		CurrentWeapon->WeaponName = "Error: Memory Allocation Failed!";
+
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, -500, 250, 50, TextTint);
+
+	SetWeaponStats(CurrentWeapon, 0, 0, 0);
+
+	CurrentWeapon->WeaponSprite = CreateSprite(weaponTexture, 256, 256, 22, 1, 1, 0, 0);
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, width / 3, height / 4, objID);
+	CurrentWeapon->WeaponAttack.Offset.y += 5 * CurrentWeapon->WeaponAttack.height / 8;
+
+	return CurrentWeapon;
+}
+
+
 Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float height, int objID, float xPos, float yPos)
 {
 	Weapon *CurrentWeapon = AddWeapon();
@@ -29,7 +57,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	Vec2Set(&ColliderPos, xPos, yPos);
 	Vec3Set(&TextTint, 0, 0, 0);
 
-	CurrentWeapon->WeaponFOF = PlayerWeapon; // Friend or Foe tag
+	CurrentWeapon->WeaponFOF = DroppedWeapon; // Friend or Foe tag
 	CurrentWeapon->objID = objID;
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
@@ -39,16 +67,16 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	else
 		CurrentWeapon->WeaponName = "Error: Memory Allocation Failed!";
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, xPos + 300, yPos + 200, 50, TextTint);
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, -500, 250, 50, TextTint);
 
 	CreateWeaponStats(CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, &CurrentWeapon->BonusStrength, &CurrentWeapon->BonusAgility, &CurrentWeapon->BonusDefense);
 
 	Vec2Set(&CurrentWeapon->Position, xPos * GetLoadRatio(), yPos * GetLoadRatio());
-
 	CurrentWeapon->WeaponSprite = CreateWeaponSprite(CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, xPos, yPos);
-
-	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 3, height, objID);
-	//CollisionBox WeaponAttack;
+	if (!strcmp(CurrentWeapon->WeaponName,"Sausage Sausage of sausage"))
+		CurrentWeapon->WeaponSprite->SpriteTexture = LoadTexture("TextureFiles/BattleAxe.png");
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
 
 	return CurrentWeapon;
 }
@@ -75,6 +103,13 @@ void CreateWeaponName(char** Name, int WType, int WRarity)
 		}
 		strcat(*Name, GetCommonEnd());
 	}
+}
+
+void SetWeaponStats(Weapon* CurrentWeapon, int BonusStrength, int BonusAgility, int BonusDefense)
+{
+	CurrentWeapon->BonusAgility = BonusAgility;
+	CurrentWeapon->BonusDefense = BonusDefense;
+	CurrentWeapon->BonusStrength = BonusStrength;
 }
 
 void CreateWeaponStats(int WType, int WRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense)
@@ -140,3 +175,45 @@ Sprite* CreateWeaponSprite(int WType, int WRarity, float xPos, float yPos)
 	}
 	return WeaponSprite;
 }
+
+void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
+{
+	Weapon temp;
+	
+	temp.WeaponPickup = firstWeapon->WeaponPickup;
+	temp.WeaponPickup.Position = firstWeapon->WeaponPickup.Position;
+	temp.WeaponRarity = firstWeapon->WeaponRarity;
+	temp.WeaponGlyphs = firstWeapon->WeaponGlyphs;
+	temp.WeaponAttack = firstWeapon->WeaponAttack;
+	temp.Position = firstWeapon->Position;
+	temp.objID = firstWeapon->objID;
+	temp.WeaponSprite = firstWeapon->WeaponSprite;
+	temp.WeaponName = firstWeapon->WeaponName;
+	temp.WeaponType = firstWeapon->WeaponType;
+	SetWeaponStats(&temp, firstWeapon->BonusStrength, firstWeapon->BonusAgility, firstWeapon->BonusDefense);
+
+	firstWeapon->WeaponPickup = secondWeapon->WeaponPickup;
+	firstWeapon->WeaponPickup.Position = secondWeapon->WeaponPickup.Position;
+	firstWeapon->WeaponRarity = secondWeapon->WeaponRarity;
+	firstWeapon->WeaponGlyphs = secondWeapon->WeaponGlyphs;
+	firstWeapon->WeaponAttack = secondWeapon->WeaponAttack;
+	firstWeapon->Position = secondWeapon->Position;
+	firstWeapon->objID = secondWeapon->objID;
+	firstWeapon->WeaponSprite = secondWeapon->WeaponSprite;
+	firstWeapon->WeaponName = secondWeapon->WeaponName;
+	firstWeapon->WeaponType = secondWeapon->WeaponType;
+	SetWeaponStats(firstWeapon, secondWeapon->BonusStrength, secondWeapon->BonusAgility, secondWeapon->BonusDefense);
+
+	secondWeapon->WeaponPickup = temp.WeaponPickup;
+	secondWeapon->WeaponPickup.Position = firstWeapon->WeaponPickup.Position;
+	secondWeapon->WeaponRarity =  temp.WeaponRarity;
+	secondWeapon->WeaponGlyphs = temp.WeaponGlyphs;
+	secondWeapon->WeaponAttack = temp.WeaponAttack;
+	secondWeapon->Position = temp.Position;
+	secondWeapon->objID = temp.objID;
+	secondWeapon->WeaponSprite =  temp.WeaponSprite;
+	secondWeapon->WeaponName = temp.WeaponName;
+	secondWeapon->WeaponType =  temp.WeaponType;
+	SetWeaponStats(secondWeapon, temp.BonusStrength, temp.BonusAgility, temp.BonusDefense);
+}
+

@@ -26,7 +26,6 @@ typedef struct PlayerParts
 	Sprite *ArmLower2;
 	Sprite *Weapon;
 	int BlinkTimer;
-	float ArmRot;
 }PlayerParts;
 
 typedef struct PlayerStats
@@ -59,6 +58,7 @@ typedef struct Player
 	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;
 	CollisionBox PlayerCollider;
+	struct Weapon* PlayerWeapon;
 	int CollisionData[COLLIDEAMOUNT];
 
 	PlayerParts PlayerSpriteParts;

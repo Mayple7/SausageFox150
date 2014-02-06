@@ -133,10 +133,10 @@ void UpdateTutorial(void)
 void DrawTutorial(void)
 {
 	DrawObjectList();
-	if(CurrentPlayer.Position.x > 0)
+	/*if(CurrentPlayer.Position.x > 0)
 		DrawGlyphs(SwordName);
 	else
-		DrawGlyphs(AxeName);
+		DrawGlyphs(AxeName);*/
 	DrawCollisionList();
 }
 

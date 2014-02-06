@@ -20,6 +20,7 @@
 // includes
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/ObjectManager.h"
+#include "../HeaderFiles/TextCreation.h"
 
 /*************************************************************************/
 /*!
@@ -69,4 +70,21 @@ void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 {
 	printf("YUM YUM YUM YUM  DELICIOUSO\n");
 	FreeFood(CurrentFood);
+}
+
+void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
+{
+	// Need to pop up weapon info //
+	if(AEInputCheckTriggered('E'))
+	{
+		SwapWeapons(CurrentPlayer->PlayerWeapon, wList);
+		CurrentPlayer->PlayerWeapon->WeaponSprite->ZIndex = (unsigned short)22;
+		CurrentPlayer->PlayerWeapon->WeaponFOF = PlayerWeapon;
+		CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
+		
+		wList->WeaponSprite->ZIndex = (unsigned short)5;
+		wList->WeaponFOF = DroppedWeapon;
+		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
+		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
+	}
 }
