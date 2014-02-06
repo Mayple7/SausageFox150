@@ -178,45 +178,47 @@ Sprite* CreateWeaponSprite(int WType, int WRarity, float xPos, float yPos)
 
 void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 {
+	
 	Weapon temp;
-	temp.WeaponName = (char *) calloc(MAX_NAME_LENGTH, MAX_NAME_LENGTH * sizeof(char));
-
-	SetWeaponStats(&temp, firstWeapon->BonusStrength, firstWeapon->BonusAgility, firstWeapon->BonusDefense);
-	temp.objID = firstWeapon->objID;
-	temp.Position = firstWeapon->Position;
-	temp.WeaponAttack = firstWeapon->WeaponAttack;
-	temp.WeaponFOF = firstWeapon->WeaponFOF;
-	temp.WeaponGlyphs = firstWeapon->WeaponGlyphs;
-	strcpy(temp.WeaponName, firstWeapon->WeaponName);
+	//temp.WeaponName = (char *) calloc(MAX_NAME_LENGTH, MAX_NAME_LENGTH * sizeof(char));
+	printf("-%s\n",firstWeapon->WeaponName);
+	
+	//temp.WeaponFOF = firstWeapon->WeaponFOF;
 	temp.WeaponPickup = firstWeapon->WeaponPickup;
 	temp.WeaponRarity = firstWeapon->WeaponRarity;
+	temp.WeaponGlyphs = firstWeapon->WeaponGlyphs;
+	temp.WeaponAttack = firstWeapon->WeaponAttack;
+	temp.Position = firstWeapon->Position;
+	temp.objID = firstWeapon->objID;
 	temp.WeaponSprite = firstWeapon->WeaponSprite;
+	temp.WeaponName = firstWeapon->WeaponName;
 	temp.WeaponType = firstWeapon->WeaponType;
+	SetWeaponStats(&temp, firstWeapon->BonusStrength, firstWeapon->BonusAgility, firstWeapon->BonusDefense);
 
-	SetWeaponStats(firstWeapon, secondWeapon->BonusStrength, secondWeapon->BonusAgility, secondWeapon->BonusDefense);
-	firstWeapon->objID = secondWeapon->objID;
-	firstWeapon->Position = secondWeapon->Position;
-	firstWeapon->WeaponAttack = secondWeapon->WeaponAttack;
-	firstWeapon->WeaponFOF = secondWeapon->WeaponFOF;
-	firstWeapon->WeaponGlyphs = secondWeapon->WeaponGlyphs;
-	strcpy(firstWeapon->WeaponName, secondWeapon->WeaponName);
+	//firstWeapon->WeaponFOF = secondWeapon->WeaponFOF;
 	firstWeapon->WeaponPickup = secondWeapon->WeaponPickup;
 	firstWeapon->WeaponRarity = secondWeapon->WeaponRarity;
+	firstWeapon->WeaponGlyphs = secondWeapon->WeaponGlyphs;
+	firstWeapon->WeaponAttack = secondWeapon->WeaponAttack;
+	firstWeapon->Position = secondWeapon->Position;
+	firstWeapon->objID = secondWeapon->objID;
 	firstWeapon->WeaponSprite = secondWeapon->WeaponSprite;
+	firstWeapon->WeaponName = secondWeapon->WeaponName;
 	firstWeapon->WeaponType = secondWeapon->WeaponType;
+	SetWeaponStats(firstWeapon, secondWeapon->BonusStrength, secondWeapon->BonusAgility, secondWeapon->BonusDefense);
 
-	SetWeaponStats(secondWeapon, temp.BonusStrength, temp.BonusAgility, temp.BonusDefense);
-	secondWeapon->objID = temp.objID;
-	secondWeapon->Position = temp.Position;
-	secondWeapon->WeaponAttack = temp.WeaponAttack;
-	secondWeapon->WeaponFOF = temp.WeaponFOF;
-	secondWeapon->WeaponGlyphs = temp.WeaponGlyphs;
-	strcpy(secondWeapon->WeaponName, temp.WeaponName);
+	//secondWeapon->WeaponFOF = temp.WeaponFOF;
 	secondWeapon->WeaponPickup = temp.WeaponPickup;
-	secondWeapon->WeaponRarity = temp.WeaponRarity;
-	secondWeapon->WeaponSprite = temp.WeaponSprite;
-	secondWeapon->WeaponType = temp.WeaponType;
+	secondWeapon->WeaponRarity =  temp.WeaponRarity;
+	secondWeapon->WeaponGlyphs = temp.WeaponGlyphs;
+	secondWeapon->WeaponAttack = temp.WeaponAttack;
+	secondWeapon->Position = temp.Position;
+	secondWeapon->objID = temp.objID;
+	secondWeapon->WeaponSprite =  temp.WeaponSprite;
+	secondWeapon->WeaponName = temp.WeaponName;
+	secondWeapon->WeaponType =  temp.WeaponType;
+	SetWeaponStats(secondWeapon, temp.BonusStrength, temp.BonusAgility, temp.BonusDefense);
 
-	free(temp.WeaponName);
+	printf("-%s\n",firstWeapon->WeaponName);
 }
 
