@@ -96,7 +96,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 {
 	Animation(CurrentPlayer);
 
-	if (AEInputCheckTriggered('F'))
+	if (AEInputCheckTriggered('F') && !CurrentPlayer->isAttacking)
 	{
 		CurrentPlayer->isAttacking = TRUE;
 		if (CurrentPlayer->FlipX)
@@ -747,9 +747,9 @@ void CreatePlayerSprites(Player *Object)
 
 	Object->TailSinValue = 0;
 
-	Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 23, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 23, 1, 1, 0, 0);
 }
 
 
