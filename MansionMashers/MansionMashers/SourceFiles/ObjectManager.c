@@ -92,7 +92,7 @@ Platform* AddPlatform(void)
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
-		if(platformList[i].objID == 0)
+		if(platformList[i].objID == 0 || platformList[i].objID == -1 )
 		{
 			printf("Platform at %i Created\n", i);
 			return &platformList[i];
@@ -115,7 +115,7 @@ Food* AddFood(void)
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
-		if(foodList[i].objID == 0)
+		if(foodList[i].objID == 0 || foodList[i].objID == -1)
 		{
 			printf("Food at %i Created\n", i);
 			return &foodList[i];
@@ -139,7 +139,7 @@ Weapon* AddWeapon(void)
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
-		if(weaponList[i].objID == 0)
+		if(weaponList[i].objID == 0 || weaponList[i].objID == -1)
 		{
 			printf("Weapon at %i Created\n", i);
 			return &weaponList[i];
@@ -162,7 +162,7 @@ Enemy* AddEnemy(void)
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
-		if(enemyList[i].objID == 0)
+		if(enemyList[i].objID == 0 || enemyList[i].objID == -1)
 		{
 			printf("Enemy at %i Created\n", i);
 			return &enemyList[i];
@@ -179,6 +179,7 @@ Enemy* AddEnemy(void)
 /*************************************************************************/
 void resetObjectList(void)
 {
+	int i;
 	//Set up the memory to fit the desired amount of objects
 	drawList  = (Sprite *) calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite));
 	//Make sure the calloc is not NULL
@@ -193,6 +194,15 @@ void resetObjectList(void)
 		weaponList   = (Weapon *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Weapon));
 		collideList  = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
 		collidables  = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
+
+		for(i = 0; i < COLLIDEAMOUNT; i++)
+		{
+			platformList[i].objID = -1;
+			foodList[i].objID = -1;
+			enemyList[i].objID = -1;
+			weaponList[i].objID = -1;
+		}
+
 
 		//Make sure the malloc is not NULL
 		if (collideList && collidables && platformList && foodList && enemyList && weaponList)
@@ -321,9 +331,9 @@ void freeObject(Sprite* object)
 void FreeFood(Food *CurrentFood)
 {
 	//BECAUSE EVERYONE LIKES FREE FOOD
-	if(CurrentFood->objID)
+	if(CurrentFood->objID > -1)
 	{
-		CurrentFood->objID = 0;
+		CurrentFood->objID = -1;
 		CurrentFood->FoodCollider.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
 
@@ -343,13 +353,16 @@ void FreeFood(Food *CurrentFood)
 /*************************************************************************/
 void FreePlatform(Platform *CurrentPlatform)
 {
-	//Free that platform
-	CurrentPlatform->objID = 0;
-	CurrentPlatform->PlatformCollider.collisionDebug = FALSE;
-	AEGfxMeshFree(CurrentPlatform->PlatformCollider.DebugMesh);
+	if(CurrentPlatform->objID > -1)
+	{
+		//Free that platform
+		CurrentPlatform->objID = -1;
+		CurrentPlatform->PlatformCollider.collisionDebug = FALSE;
+		AEGfxMeshFree(CurrentPlatform->PlatformCollider.DebugMesh);
 
-	if (CurrentPlatform->PlatformSprite->Created)
-		freeObject(CurrentPlatform->PlatformSprite);
+		if (CurrentPlatform->PlatformSprite->Created)
+			freeObject(CurrentPlatform->PlatformSprite);
+	}
 }
 
 /*************************************************************************/
@@ -364,9 +377,9 @@ void FreePlatform(Platform *CurrentPlatform)
 void FreeWeapon(Weapon *CurrentWeapon)
 {
 	//BECAUSE EVERYONE LIKES FREE FOOD
-	if(CurrentWeapon->objID)
+	if(CurrentWeapon->objID > -1)
 	{
-		CurrentWeapon->objID = 0;
+		CurrentWeapon->objID = -1;
 		CurrentWeapon->WeaponPickup.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentWeapon->WeaponPickup.DebugMesh);
 
@@ -386,13 +399,16 @@ void FreeWeapon(Weapon *CurrentWeapon)
 /*************************************************************************/
 void FreeEnemy(Enemy *CurrentEnemy)
 {
-	//I'm sure someone will miss you enemy
-	CurrentEnemy->objID = 0;
-	CurrentEnemy->EnemyCollider.collisionDebug = FALSE;
-	AEGfxMeshFree(CurrentEnemy->EnemyCollider.DebugMesh);
+	if(CurrentEnemy->objID > -1)
+	{
+		//I'm sure someone will miss you enemy
+		CurrentEnemy->objID = -1;
+		CurrentEnemy->EnemyCollider.collisionDebug = FALSE;
+		AEGfxMeshFree(CurrentEnemy->EnemyCollider.DebugMesh);
 
-	if (CurrentEnemy->EnemySprite->Created)
-		freeObject(CurrentEnemy->EnemySprite);
+		if (CurrentEnemy->EnemySprite->Created)
+			freeObject(CurrentEnemy->EnemySprite);
+	}
 }
 
 /*************************************************************************/

@@ -336,7 +336,7 @@ void DetectPlayerCollision(void)
 	int hit = 0;
 	int hitPrev = 0;
 
-	while(pList->objID != 0)
+	while(pList->objID != -1)
 	{
 		if(pList->objID > 0)
 		{
@@ -381,7 +381,7 @@ void DetectPlayerCollision(void)
 		}
 		pList++;
 	}
-	while(fList->objID != 0)
+	while(fList->objID != -1)
 	{
 		if(fList->objID > 0)
 		{
@@ -403,7 +403,7 @@ void DetectPlayerCollision(void)
 				{
 					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					PlayerCollideFood(&CurrentPlayer, fList);
-					fList->objID = -1;
+					fList->objID = 0;
 				}
 				// Found target, did not hit previous frame, on start collision
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
@@ -430,7 +430,7 @@ void DetectPlayerCollision(void)
 		}
 		fList++;
 	}
-	while(wList->objID != 0)
+	while(wList->objID != -1)
 	{
 		if(wList->objID > 0 && wList->WeaponFOF == DroppedWeapon)
 		{
