@@ -699,8 +699,6 @@ void CreatePlayerSprites(Player *Object)
 	Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
 
 	Object->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
-
-	Object->PlayerSpriteParts.ArmRot = 0;
 }
 
 
