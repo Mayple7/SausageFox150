@@ -41,7 +41,7 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	SetWeaponStats(CurrentWeapon, 0, 0, 0);
 
 	CurrentWeapon->WeaponSprite = CreateSprite(weaponTexture, 256, 256, 22, 1, 1, 0, 0);
-	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 3, height, objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, width / 3, height / 4, objID);
 	CurrentWeapon->WeaponAttack.Offset.y += 5 * CurrentWeapon->WeaponAttack.height / 8;
 
@@ -75,7 +75,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CurrentWeapon->WeaponSprite = CreateWeaponSprite(CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, xPos, yPos);
 	if (!strcmp(CurrentWeapon->WeaponName,"Sausage Sausage of sausage"))
 		CurrentWeapon->WeaponSprite->SpriteTexture = LoadTexture("TextureFiles/BattleAxe.png");
-	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 3, height, objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
 
 	return CurrentWeapon;
@@ -178,13 +178,10 @@ Sprite* CreateWeaponSprite(int WType, int WRarity, float xPos, float yPos)
 
 void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 {
-	
 	Weapon temp;
-	//temp.WeaponName = (char *) calloc(MAX_NAME_LENGTH, MAX_NAME_LENGTH * sizeof(char));
-	printf("-%s\n",firstWeapon->WeaponName);
 	
-	//temp.WeaponFOF = firstWeapon->WeaponFOF;
 	temp.WeaponPickup = firstWeapon->WeaponPickup;
+	temp.WeaponPickup.Position = firstWeapon->WeaponPickup.Position;
 	temp.WeaponRarity = firstWeapon->WeaponRarity;
 	temp.WeaponGlyphs = firstWeapon->WeaponGlyphs;
 	temp.WeaponAttack = firstWeapon->WeaponAttack;
@@ -195,8 +192,8 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	temp.WeaponType = firstWeapon->WeaponType;
 	SetWeaponStats(&temp, firstWeapon->BonusStrength, firstWeapon->BonusAgility, firstWeapon->BonusDefense);
 
-	//firstWeapon->WeaponFOF = secondWeapon->WeaponFOF;
 	firstWeapon->WeaponPickup = secondWeapon->WeaponPickup;
+	firstWeapon->WeaponPickup.Position = secondWeapon->WeaponPickup.Position;
 	firstWeapon->WeaponRarity = secondWeapon->WeaponRarity;
 	firstWeapon->WeaponGlyphs = secondWeapon->WeaponGlyphs;
 	firstWeapon->WeaponAttack = secondWeapon->WeaponAttack;
@@ -207,8 +204,8 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	firstWeapon->WeaponType = secondWeapon->WeaponType;
 	SetWeaponStats(firstWeapon, secondWeapon->BonusStrength, secondWeapon->BonusAgility, secondWeapon->BonusDefense);
 
-	//secondWeapon->WeaponFOF = temp.WeaponFOF;
 	secondWeapon->WeaponPickup = temp.WeaponPickup;
+	secondWeapon->WeaponPickup.Position = firstWeapon->WeaponPickup.Position;
 	secondWeapon->WeaponRarity =  temp.WeaponRarity;
 	secondWeapon->WeaponGlyphs = temp.WeaponGlyphs;
 	secondWeapon->WeaponAttack = temp.WeaponAttack;
@@ -218,7 +215,5 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	secondWeapon->WeaponName = temp.WeaponName;
 	secondWeapon->WeaponType =  temp.WeaponType;
 	SetWeaponStats(secondWeapon, temp.BonusStrength, temp.BonusAgility, temp.BonusDefense);
-
-	printf("-%s\n",firstWeapon->WeaponName);
 }
 
