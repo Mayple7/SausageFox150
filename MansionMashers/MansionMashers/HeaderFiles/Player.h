@@ -26,7 +26,6 @@ typedef struct PlayerParts
 	Sprite *ArmLower2;
 	Sprite *Weapon;
 	int BlinkTimer;
-	float ArmRot;
 }PlayerParts;
 
 typedef struct PlayerStats
