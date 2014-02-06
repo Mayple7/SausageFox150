@@ -58,6 +58,7 @@ typedef struct Player
 	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;
 	CollisionBox PlayerCollider;
+	struct Weapon* PlayerWeapon;
 	int CollisionData[COLLIDEAMOUNT];
 
 	PlayerParts PlayerSpriteParts;

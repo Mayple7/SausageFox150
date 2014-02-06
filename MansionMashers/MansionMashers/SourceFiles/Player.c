@@ -77,6 +77,10 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, PLAYER_WIDTH, PLAYER_HEIGHT);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
+
+	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
+
+	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 }
 
 /*************************************************************************/
@@ -106,7 +110,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 			CurrentPlayer->PlayerSpriteParts.ArmLower2->Rotation = CurrentPlayer->PlayerSpriteParts.ArmUpper2->Rotation + 1;
 		}
 	}
-	if (AEInputCheckTriggered('1'))
+/*	if (AEInputCheckTriggered('1'))
 		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/Sword.png");
 	if (AEInputCheckTriggered('2'))
 		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/Axe.png");
@@ -124,6 +128,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/Sausage.png");
 	if (AEInputCheckTriggered('P'))
 		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("Textures/GinkoSmall.png");
+		*/
 
 
 
@@ -695,8 +700,6 @@ void CreatePlayerSprites(Player *Object)
 	Object->PlayerSpriteParts.Tail->AnimationSpeed = Object->Speed/2 + 3;
 
 	Object->TailSinValue = 0;
-
-	Object->PlayerSpriteParts.Weapon = CreateSprite("TextureFiles/Axe.png", 256.0f, 256.0f, 22, 1, 1, 0, 0);
 
 	Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
 

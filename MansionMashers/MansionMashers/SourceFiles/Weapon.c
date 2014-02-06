@@ -21,6 +21,31 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/WeaponNames.h"
 
+Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int weaponRarity, int collisionGroup, float width, float height, int objID)
+{
+	Weapon *CurrentWeapon = AddWeapon();
+	
+	CurrentWeapon->WeaponFOF = PlayerWeapon; // Friend or Foe tag
+	CurrentWeapon->objID = objID;
+	CurrentWeapon->WeaponRarity = weaponRarity;
+	CurrentWeapon->WeaponType = weaponType;
+	CurrentWeapon->WeaponName = (char *) calloc(MAX_NAME_LENGTH, MAX_NAME_LENGTH * sizeof(char));
+	if(CurrentWeapon->WeaponName)
+		strcpy(CurrentWeapon->WeaponName, weaponName);
+	else
+		CurrentWeapon->WeaponName = "Error: Memory Allocation Failed!";
+
+	SetWeaponStats(CurrentWeapon, 0, 0, 0);
+
+	CurrentWeapon->WeaponSprite = CreateSprite(weaponTexture, 256, 256, 22, 1, 1, 0, 0);
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 3, height, objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, width / 3, height / 4, objID);
+	CurrentWeapon->WeaponAttack.Offset.y += 5 * CurrentWeapon->WeaponAttack.height / 8;
+
+	return CurrentWeapon;
+}
+
+
 Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float height, int objID, float xPos, float yPos)
 {
 	Weapon *CurrentWeapon = AddWeapon();
@@ -29,7 +54,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	Vec2Set(&ColliderPos, xPos, yPos);
 	Vec3Set(&TextTint, 0, 0, 0);
 
-	CurrentWeapon->WeaponFOF = PlayerWeapon; // Friend or Foe tag
+	CurrentWeapon->WeaponFOF = DroppedWeapon; // Friend or Foe tag
 	CurrentWeapon->objID = objID;
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
@@ -48,7 +73,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	if (!strcmp(CurrentWeapon->WeaponName,"Sausage Sausage of sausage"))
 		CurrentWeapon->WeaponSprite->SpriteTexture = LoadTexture("TextureFiles/BattleAxe.png");
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 3, height, objID);
-	//CollisionBox WeaponAttack;
+	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
 
 	return CurrentWeapon;
 }
@@ -75,6 +100,13 @@ void CreateWeaponName(char** Name, int WType, int WRarity)
 		}
 		strcat(*Name, GetCommonEnd());
 	}
+}
+
+void SetWeaponStats(Weapon* CurrentWeapon, int BonusStrength, int BonusAgility, int BonusDefense)
+{
+	CurrentWeapon->BonusAgility = BonusAgility;
+	CurrentWeapon->BonusDefense = BonusDefense;
+	CurrentWeapon->BonusStrength = BonusStrength;
 }
 
 void CreateWeaponStats(int WType, int WRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense)

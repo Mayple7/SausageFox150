@@ -7,7 +7,7 @@
 
 #define MAX_NAME_LENGTH 50
 
-enum WeaponAlly {PlayerWeapon, EnemyWeapon};
+enum WeaponAlly {PlayerWeapon, EnemyWeapon, DroppedWeapon};
 enum WeaponType {Sword, Axe, Hammer, Spear, FoxWeapon};
 
 typedef struct Weapon
@@ -29,11 +29,13 @@ typedef struct Weapon
 	struct TextGlyphs* WeaponGlyphs;
 
 	CollisionBox WeaponPickup;
-	//CollisionBox WeaponAttack;
+	CollisionBox WeaponAttack;
 }Weapon;
 
+Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int weaponRarity, int collisionGroup, float width, float height, int objID);
 Weapon* CreateDroppedWeapon(int collisionGroup, int weaponRarity, float width, float height, int objID, float xPos, float yPos);
 void CreateWeaponName(char** Name, int Type, int Rarity);
+void SetWeaponStats(Weapon* CurrentWeapon, int BonusStrength, int BonusAgility, int BonusDefense);
 void CreateWeaponStats(int WeaponType, int WeaponRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense);
 Sprite* CreateWeaponSprite(int WeaponType, int WeaponRarity, float xPos, float yPos);
 
