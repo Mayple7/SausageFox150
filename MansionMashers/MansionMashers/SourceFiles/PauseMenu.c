@@ -33,6 +33,9 @@ void InitializePause(void (*DrawLevel)())
 	pause = TRUE;
 	PauseText = CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, 0, 0);
 	LevelToDraw = DrawLevel;
+	CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
+	CurrentPlayer.PlayerSpriteParts.Body->CurrentFrame = 0;
+	CurrentPlayer.PlayerSpriteParts.BlinkTimer = 0;
 }
 
 void UpdatePause(void)

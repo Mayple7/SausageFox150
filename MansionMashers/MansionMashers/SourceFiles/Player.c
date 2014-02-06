@@ -489,7 +489,7 @@ void DetectPlayerCollision(void)
 /*************************************************************************/
 void Animation(Player *Object)
 {
-	float LegDistance = 9.5f-Object->Speed;
+	float LegDistance = 9.5f-(Object->Speed / GetLoadRatio());
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
@@ -527,20 +527,20 @@ void Animation(Player *Object)
 	}
 
 	Bdy->Position.x = Object->Position.x;
-	Bdy->Position.y = Object->Position.y - (float)sin(-Object->LegSinValue*2)*5/(LegDistance);
+	Bdy->Position.y = Object->Position.y - ((float)sin(-Object->LegSinValue*2)*5/(LegDistance)) * GetLoadRatio();
 	Skrt->Position = Bdy->Position;
-	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection*4));
 	else
 		Skrt->CurrentFrame = 3;
 	Tail->Position.y = Bdy->Position.y+10;
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
 
-	if (Object->Speed > 1.5f)
+	if (Object->Speed * GetLoadRatio() > 1.5f * GetLoadRatio())
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailRun.png");
 		Object->TailSinValue += 0.1f;
-		Object->PlayerSpriteParts.Tail->AnimationSpeed = Object->Speed/2 + 3;
+		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
 	}
 	else
 	{
@@ -549,7 +549,7 @@ void Animation(Player *Object)
 		Object->PlayerSpriteParts.Tail->AnimationSpeed = 5;
 	}
 
-	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 	{
     if (LegUpperDirection < 0)
         LegLowerDirection = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
@@ -588,11 +588,11 @@ void Animation(Player *Object)
 		
 		LegUpr->Rotation = LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
-			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
+			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance) * GetLoadRatio();
 		}
-		LegUpr->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegUpr->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance)) * GetLoadRatio();
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
@@ -600,11 +600,11 @@ void Animation(Player *Object)
 		
 		LegUpr2->Rotation = -LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
-			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
+			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance) * GetLoadRatio();
 		}
-		LegUpr2->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegUpr2->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance)) * GetLoadRatio();
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
@@ -636,7 +636,7 @@ void Animation(Player *Object)
 		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		ArmLwr2->Position.y = ArmUpr2->Position.y - (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
-		if (Object->Speed < 0.01)
+		if ((Object->Speed * GetLoadRatio()) < 0.01f * GetLoadRatio())
 		{
 			ArmLwr->Rotation = ArmUpr->Rotation - 0.5f;
 			ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f;
@@ -650,15 +650,15 @@ void Animation(Player *Object)
 	}
 	else
 	{
-		Tail->Position.x = Bdy->Position.x-(Bdy->Width/20);
+		Tail->Position.x = Bdy->Position.x-(Bdy->Width/22);
 		
 		LegUpr->Rotation = -LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
-			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
+			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance) * GetLoadRatio();
 		}
-		LegUpr->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegUpr->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance)) * GetLoadRatio();
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
@@ -666,11 +666,11 @@ void Animation(Player *Object)
 
 		LegUpr2->Rotation = LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
-		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
-			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
+			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance) * GetLoadRatio();
 		}
-		LegUpr2->Position.y = Object->Position.y + (float)sin(Object->LegSinValue*2)*5/(LegDistance);
+		LegUpr2->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance)) * GetLoadRatio();
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
@@ -694,13 +694,13 @@ void Animation(Player *Object)
 		ArmLwr->Position.y = ArmUpr->Position.y + (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 
 		ArmUpr2->Rotation = LegUpperDirection/1.5f - 1.5f;
-		ArmLwr2->Rotation = -(ArmUpr->Rotation + 1.75f - LegUpperDirection/2.0f);
+		ArmLwr2->Rotation = ArmUpr2->Rotation + 1.25f + LegUpperDirection/2.0f;
 		ArmUpr2->Position.x = Bdy->Position.x;
 		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/6);
 		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		ArmLwr2->Position.y = ArmUpr2->Position.y + (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
-		if (Object->Speed < 0.01)
+		if ((Object->Speed * GetLoadRatio()) < 0.01f * GetLoadRatio())
 		{
 			ArmLwr->Rotation = ArmUpr->Rotation + 0.5f;
 			ArmLwr2->Rotation = ArmUpr2->Rotation + 0.5f;
@@ -743,7 +743,7 @@ void CreatePlayerSprites(Player *Object)
 
 	Object->PlayerSpriteParts.Tail = CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, 22, 7, 2, 0, 0);
 
-	Object->PlayerSpriteParts.Tail->AnimationSpeed = Object->Speed/2 + 3;
+	Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
 
 	Object->TailSinValue = 0;
 
