@@ -120,6 +120,8 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/FlameThrower.png");
 	if (AEInputCheckTriggered('7'))
 		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/BattleAxe.png");
+	if (AEInputCheckTriggered('8'))
+		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/Sausage.png");
 	if (AEInputCheckTriggered('P'))
 		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("Textures/GinkoSmall.png");
 
