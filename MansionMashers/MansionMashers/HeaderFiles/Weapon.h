@@ -38,5 +38,6 @@ void CreateWeaponName(char** Name, int Type, int Rarity);
 void SetWeaponStats(Weapon* CurrentWeapon, int BonusStrength, int BonusAgility, int BonusDefense);
 void CreateWeaponStats(int WeaponType, int WeaponRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense);
 Sprite* CreateWeaponSprite(int WeaponType, int WeaponRarity, float xPos, float yPos);
+void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon);
 
 #endif

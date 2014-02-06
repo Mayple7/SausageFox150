@@ -20,6 +20,7 @@
 // includes
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/ObjectManager.h"
+#include "../HeaderFiles/TextCreation.h"
 
 /*************************************************************************/
 /*!
@@ -69,4 +70,12 @@ void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 {
 	printf("YUM YUM YUM YUM  DELICIOUSO\n");
 	FreeFood(CurrentFood);
+}
+
+void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
+{
+	if(AEInputCheckTriggered('E'))
+	{
+		SwapWeapons(CurrentPlayer->PlayerWeapon, wList);
+	}
 }

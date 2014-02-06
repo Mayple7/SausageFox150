@@ -332,6 +332,7 @@ void DetectPlayerCollision(void)
 {
 	Platform* pList = platformList;
 	Food* fList = foodList;
+	Weapon* wList = weaponList;
 	int hit = 0;
 	int hitPrev = 0;
 
@@ -428,6 +429,51 @@ void DetectPlayerCollision(void)
 			}
 		}
 		fList++;
+	}
+	while(wList->objID != 0)
+	{
+		if(wList->objID > 0 && wList->WeaponFOF == DroppedWeapon)
+		{
+			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &wList->WeaponPickup);
+			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, wList->WeaponPickup.collisionID);
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentPlayer.CollisionData[-hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
+					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+				}
+				// Found target, collision ended
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = 0;
+				}
+			}
+		}
+		wList++;
 	}
 
 	// Check projectile collisions
