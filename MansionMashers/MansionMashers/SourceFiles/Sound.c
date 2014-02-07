@@ -20,6 +20,7 @@
 \li					ToggglePauseChannel
 \li					CreateChannelGroups
 \li					ReleaseChannelGroups
+\li					UpdateSoundSystem
 
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -479,4 +480,15 @@ float GetChannelGroupVolume(FoxChannels * chnl, int type)
 	success = FALSE;
 
 	return volume;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Updates sound system.
+*/
+/*************************************************************************/
+void UpdateSoundSystem(void)
+{
+	FMOD_System_Update(FMsystem);
 }

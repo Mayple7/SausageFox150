@@ -50,12 +50,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	// Variable declaration	
 	int Previous;										//Local State Variables
 	int Current;										//Local State Variables
-	int Next;											//Local State Variables
-	FMOD_SYSTEM *SoundSystem = 0;						//Local Sound System
-	double DeltaTime = 0;
-	int FrameRate = 60;									//Make a define in the future
+	int Next;											//Local State Variables					
 	int debugConsole = 1;
-	//FMOD_SYSTEM *FMsystem = 0;
 	AESysInitInfo sysInitInfo;
 	WNDCLASS	winClass;
 	HWND winHandle;
@@ -147,7 +143,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	//GSM Start
 	FoxSystemInitialize();
-	SoundSystem = GetSoundSystem();
 	GSMInitialize(GS_MainMenu);
 
 	while(GameRunning)
@@ -187,7 +182,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 			AEInputUpdate();
 			GSMPointers.pUpdate();
-			FMOD_System_Update(SoundSystem);
+			UpdateSoundSystem();
 			GSMPointers.pDraw();
 			Next = GetNextState();
 
