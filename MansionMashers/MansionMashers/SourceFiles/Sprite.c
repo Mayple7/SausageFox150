@@ -285,11 +285,11 @@ Matrix3 CreateTranslationMtx(struct Sprite *CurrentSprite)
 	transMtx.m[2][1] = 0;
 	transMtx.m[2][2] = 1;
 
-	scalMtx.m[0][0] = (((2*CurrentSprite->FlipX)-1)*-1);
+	scalMtx.m[0][0] = (float)(((2*CurrentSprite->FlipX)-1)*-1);
 	scalMtx.m[0][1] = 0;
 	scalMtx.m[0][2] = 0;
 	scalMtx.m[1][0] = 0;
-	scalMtx.m[1][1] = (((2*CurrentSprite->FlipY)-1)*-1);
+	scalMtx.m[1][1] = (float)(((2*CurrentSprite->FlipY)-1)*-1);
 	scalMtx.m[1][2] = 0;
 	scalMtx.m[2][0] = 0;
 	scalMtx.m[2][1] = 0;
