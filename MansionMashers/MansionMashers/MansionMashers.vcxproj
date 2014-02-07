@@ -98,6 +98,7 @@
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\MapLevel.h" />
     <ClInclude Include="HeaderFiles\Matrix3.h" />
+    <ClInclude Include="HeaderFiles\MemoryManager.h" />
     <ClInclude Include="HeaderFiles\Movement.h" />
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
     <ClInclude Include="HeaderFiles\Options.h" />
@@ -138,6 +139,7 @@
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\MapLevel.c" />
     <ClCompile Include="SourceFiles\Matrix3.c" />
+    <ClCompile Include="SourceFiles\MemoryManager.c" />
     <ClCompile Include="SourceFiles\Movement.c" />
     <ClCompile Include="SourceFiles\ObjectManager.c" />
     <ClCompile Include="SourceFiles\PauseMenu.c" />

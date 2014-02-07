@@ -152,6 +152,10 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		Current = GetCurrentState();
 		Next = GetNextState();
 
+		//Memory start
+		TotalMemoryAllocs = 0;
+		TotalMemoryFrees  = 0;
+
 		//Checking if wanting to quit
 		if(Current == GS_Quit)
 		{
@@ -191,6 +195,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		}
 
 		GSMPointers.pFree();
+
+		printf("\nMEMORY NOT FREED: %i\n\n", TotalMemoryAllocs - TotalMemoryFrees);
 
 		if(Next != GS_Restart)
 			GSMPointers.pUnload();

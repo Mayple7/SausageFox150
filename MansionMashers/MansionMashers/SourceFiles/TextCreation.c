@@ -54,12 +54,12 @@ TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 
 	int length, i, character;
 	length = strlen(string);
 	
-	firstLetter = (TextGlyphs *) calloc(1, sizeof(TextGlyphs));
+	firstLetter = (TextGlyphs *) CallocMyAlloc(1, sizeof(TextGlyphs));
 	// Uppercases the letters then creates a glyph
 	for(i = 0; i < length; i++)
 	{
 		if(i != 0)
-			nextLetter = (TextGlyphs *) calloc(1, sizeof(TextGlyphs));
+			nextLetter = (TextGlyphs *) CallocMyAlloc(1, sizeof(TextGlyphs));
 		else
 			nextLetter = firstLetter;
 
@@ -185,7 +185,7 @@ void FreeText(TextGlyphs *FirstLetter)
 	while(FirstLetter)
 	{
 		NextLetter = FirstLetter->NextLetter;
-		free(FirstLetter);
+		FreeMyAlloc(FirstLetter);
 		FirstLetter = NextLetter;
 	}
 }

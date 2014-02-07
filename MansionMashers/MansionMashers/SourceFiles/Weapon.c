@@ -30,7 +30,7 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	CurrentWeapon->objID = objID;
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
-	CurrentWeapon->WeaponName = (char *) calloc(MAX_NAME_LENGTH, MAX_NAME_LENGTH * sizeof(char));
+	CurrentWeapon->WeaponName = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
 	if(CurrentWeapon->WeaponName)
 		strcpy(CurrentWeapon->WeaponName, weaponName);
 	else
@@ -61,7 +61,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CurrentWeapon->objID = objID;
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
-	CurrentWeapon->WeaponName = (char *) calloc(MAX_NAME_LENGTH, MAX_NAME_LENGTH * sizeof(char));
+	CurrentWeapon->WeaponName = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
 	if(CurrentWeapon->WeaponName)
 		CreateWeaponName(&CurrentWeapon->WeaponName, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity);
 	else
