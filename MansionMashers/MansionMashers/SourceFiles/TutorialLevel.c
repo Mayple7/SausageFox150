@@ -124,22 +124,21 @@ void UpdateTutorial(void)
 		OverlayGrid->Visible = FALSE;
 	}
 	PlayAudio(&BackgroundSnd, &ChannelController);
-	volume = 100.0f* GetChannelGroupVolume(&ChannelController, EffectType);
-	//printf("BG Volume: %i\n", (int)volume);
 
 	if(AEInputCheckCurr(VK_DOWN))
 	{
-		volume = (volume - 1) / 100.0f;
+		if(volume > 0)
+			volume = volume - 0.01;
 		SetChannelGroupVolume(&ChannelController, EffectType, volume);
-		ChangeTextString(TestText, VolumetoString(volumestring, volume));
+		ChangeTextString(TestText, VolumetoString(volumestring, (int)(volume * 100)));
 	}
 	if(AEInputCheckCurr(VK_UP))
 	{
-		volume = (volume + 1) / 100.0f;
-		SetChannelGroupVolume(&ChannelController, EffectType, volume);
-		ChangeTextString(TestText, VolumetoString(volumestring, volume));
+		if(volume < 1)
+			volume = volume + 0.01;
+		SetChannelGroupVolume(&ChannelController, EffectType, (int)(volume* 100));
+		ChangeTextString(TestText, VolumetoString(volumestring, (int)(volume * 100)));
 	}
-	printf("%s\n", volumestring);
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
 	if(AEInputCheckTriggered(VK_RSHIFT))
