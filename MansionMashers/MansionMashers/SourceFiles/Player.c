@@ -101,14 +101,16 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->isAttacking = TRUE;
 		if (CurrentPlayer->FlipX)
 		{
-			CurrentPlayer->PlayerSpriteParts.ArmUpper->Rotation = (float)FOX_PI / 2;
-			CurrentPlayer->PlayerSpriteParts.ArmLower->Rotation = CurrentPlayer->PlayerSpriteParts.ArmUpper->Rotation - 1;
+			CurrentPlayer->PlayerSpriteParts.ArmUpper->Rotation = (float)FOX_PI / 2 - 0.5f;
+			CurrentPlayer->PlayerSpriteParts.ArmLower->Rotation = CurrentPlayer->PlayerSpriteParts.ArmUpper->Rotation - (float)FOX_PI;
 		}
 		else
 		{
-			CurrentPlayer->PlayerSpriteParts.ArmUpper2->Rotation = (float)FOX_PI * 1.5f;
-			CurrentPlayer->PlayerSpriteParts.ArmLower2->Rotation = CurrentPlayer->PlayerSpriteParts.ArmUpper2->Rotation + 1;
+			CurrentPlayer->PlayerSpriteParts.ArmUpper2->Rotation = (float)FOX_PI * 1.5f + 0.5f;
+			CurrentPlayer->PlayerSpriteParts.ArmLower2->Rotation = CurrentPlayer->PlayerSpriteParts.ArmUpper2->Rotation + (float)FOX_PI;
 		}
+		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
+		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
 	}
 /*	if (AEInputCheckTriggered('1'))
 		CurrentPlayer->PlayerSpriteParts.Weapon->SpriteTexture = LoadTexture("TextureFiles/Sword.png");
@@ -622,15 +624,19 @@ void Animation(Player *Object)
 		// Attacking!
 		if (Object->isAttacking)
 		{
-			ArmUpr2->Rotation = RotateToAngle(ArmUpr2->Rotation, (float)FOX_PI-2.0f, 0.25f);
-			ArmLwr2->Rotation = ArmUpr2->Rotation;
-			if (ArmUpr2->Rotation == (float)FOX_PI-2.0f)
+			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, (float)FOX_PI/6, 0.2f);
+			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, 0.2f);
+			ArmUpr2->Rotation = (float)FOX_PI * 1.5f + 0.5f - Object->PlayerSpriteParts.AttackRotationArm;
+			ArmLwr2->Rotation = ArmUpr2->Rotation - Object->PlayerSpriteParts.AttackRotation/2 + Object->PlayerSpriteParts.AttackRotation;
+			Weap->Rotation = ArmLwr2->Rotation + Object->PlayerSpriteParts.AttackRotation;
+			if (Object->PlayerSpriteParts.AttackRotationArm == (float)FOX_PI)
 				Object->isAttacking = FALSE;
 		}
 		else
 		{
 			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
 			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
+			Weap->Rotation = ArmLwr2->Rotation;
 		}
 		
 		ArmUpr2->Position.x = Bdy->Position.x;
@@ -640,13 +646,14 @@ void Animation(Player *Object)
 
 		if ((Object->Speed * GetLoadRatio()) < 0.01f * GetLoadRatio())
 		{
-			ArmLwr->Rotation = ArmUpr->Rotation - 0.5f;
+			ArmLwr->Rotation = ArmUpr->Rotation - 0.2f;
 			ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f;
+			if (!Object->isAttacking)
+				Weap->Rotation = ArmLwr2->Rotation;
 		}
 
 		Weap->Position.x = ArmLwr2->Position.x - (float)cos(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
 		Weap->Position.y = ArmLwr2->Position.y - (float)sin(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
-		Weap->Rotation = ArmLwr2->Rotation;
 		Weap->ZIndex = 21;
 
 	}
@@ -680,15 +687,19 @@ void Animation(Player *Object)
 		// Attacking!
 		if (Object->isAttacking)
 		{
-			ArmUpr->Rotation = RotateToAngle(ArmUpr->Rotation, (float)FOX_PI+2.0f, 0.25f);
-			ArmLwr->Rotation = ArmUpr->Rotation;
-			if (ArmUpr->Rotation == (float)FOX_PI+2.0f)
+			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, (float)FOX_PI/6, 0.2f);
+			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, 0.2f);
+			ArmUpr->Rotation = (float)FOX_PI / 2 - 0.5f + Object->PlayerSpriteParts.AttackRotationArm;
+			ArmLwr->Rotation = ArmUpr->Rotation + Object->PlayerSpriteParts.AttackRotation/2 - Object->PlayerSpriteParts.AttackRotation;
+			Weap->Rotation = ArmLwr->Rotation - Object->PlayerSpriteParts.AttackRotation;
+			if (Object->PlayerSpriteParts.AttackRotationArm == (float)FOX_PI)
 				Object->isAttacking = FALSE;
 		}
 		else
 		{
 			ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
 			ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
+			Weap->Rotation = ArmLwr->Rotation;
 		}
 		ArmUpr->Position.x = Bdy->Position.x;
 		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/6);
@@ -705,12 +716,13 @@ void Animation(Player *Object)
 		if ((Object->Speed * GetLoadRatio()) < 0.01f * GetLoadRatio())
 		{
 			ArmLwr->Rotation = ArmUpr->Rotation + 0.5f;
-			ArmLwr2->Rotation = ArmUpr2->Rotation + 0.5f;
+			ArmLwr2->Rotation = ArmUpr2->Rotation + 0.2f;
+			if (!Object->isAttacking)
+				Weap->Rotation = ArmLwr->Rotation;
 		}
 
 		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
 		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
-		Weap->Rotation = ArmLwr->Rotation;
 		Weap->ZIndex = 22;
 
 

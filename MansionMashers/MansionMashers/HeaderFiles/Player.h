@@ -25,6 +25,8 @@ typedef struct PlayerParts
 	Sprite *ArmUpper2;
 	Sprite *ArmLower2;
 	Sprite *Weapon;
+	float AttackRotation;
+	float AttackRotationArm;
 	int BlinkTimer;
 }PlayerParts;
 
