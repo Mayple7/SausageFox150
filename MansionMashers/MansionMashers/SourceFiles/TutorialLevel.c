@@ -43,8 +43,7 @@ Platform* ShortShelf;
 Weapon* StarterAxe;
 Weapon* StarterSword;
 Vec3 TextColor;
-TextGlyphs* AxeName;
-TextGlyphs* SwordName;
+TextGlyphs* TestText;
 
 int newID;
 
@@ -81,9 +80,8 @@ void InitializeTutorial(void)
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
 
 	Vec3Set(&TextColor, 0, 0, 0);
-	AxeName = CreateText(StarterAxe->WeaponName, -500, 250, 100, TextColor);
-	SwordName = CreateText(StarterSword->WeaponName, -500, 250, 100, TextColor);
-
+	TestText = CreateText("Woo! This is some text.", -500, 250, 100, TextColor);
+	ChangeTextVisibility(TestText);
 
 	ResetCamera();
 }
@@ -115,6 +113,14 @@ void UpdateTutorial(void)
 		RemoveDebugMode();
 		OverlayGrid->Visible = FALSE;
 	}
+	if(AEInputCheckTriggered('M'))
+	{
+		if(TestText->letter == 'W')
+			ChangeTextString(TestText, "Hopefully this will change as well?");
+		else
+			ChangeTextString(TestText, "Woo! This is some text.");
+	}
+
 
 
 	// Return to main menu with RSHIFT
@@ -133,8 +139,6 @@ void UpdateTutorial(void)
 void DrawTutorial(void)
 {
 	DrawObjectList();
-	DrawGlyphs(SwordName);
-	DrawGlyphs(AxeName);
 	DrawCollisionList();
 }
 

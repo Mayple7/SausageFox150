@@ -18,5 +18,6 @@ void DrawGlyphs(TextGlyphs *FirstLetter);
 void FreeText(TextGlyphs *FirstLetter);
 void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 Offset);
 void ChangeTextVisibility(TextGlyphs* FirstLetter);
+void ChangeTextString(TextGlyphs* FirstLetter, char* newString);
 
 #endif
