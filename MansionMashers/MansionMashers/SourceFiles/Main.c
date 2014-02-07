@@ -215,6 +215,22 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 	PAINTSTRUCT ps;
 	RECT rect;
 
+	if(msg == WM_SYSCOMMAND && wp == SC_MINIMIZE)
+	{
+		ShowWindow(hWin, SW_SHOWMINIMIZED);
+		return 0;
+	}
+	else if(msg == WM_SYSCOMMAND && wp == SC_MAXIMIZE)
+	{
+		ShowWindow(hWin, SW_SHOWMAXIMIZED);
+		return 0;
+	}
+	else if(msg == WM_SYSCOMMAND && wp == SC_RESTORE)
+	{
+		ShowWindow(hWin, SW_SHOWNORMAL);
+		return 0;
+	}
+
 	switch (msg)
 	{
 	case WM_SIZE:
@@ -223,21 +239,24 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 			double ratio;
 			double width = rect.right - rect.left;
 			double height = rect.bottom - rect.top;
-			if(width / height >= 16.0f / 9.0f)
+			if(width / height >= 16.0f / 9.0f && height != 0)
 			{
 				ratio = height / winHeight;
 				loadRatio = height / 1080;
 				winWidth = winWidth * ratio;
 				winHeight = winHeight * ratio;
+				ResizeObjects((float)ratio);
 			}
-			else
+			else if (width != 0)
 			{
 				ratio = width / winWidth;
 				loadRatio = width / 1920;
 				winWidth = winWidth * ratio;
 				winHeight = winHeight * ratio;
+				ResizeObjects((float)ratio);
 			}
-			ResizeObjects((float)ratio);
+			else
+				ratio = loadRatio;
 		}
 		break;
 	// when the window is created

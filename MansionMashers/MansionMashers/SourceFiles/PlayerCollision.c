@@ -82,6 +82,8 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		CurrentPlayer->PlayerWeapon->WeaponFOF = PlayerWeapon;
 		CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 		
+		wList->Position.x = CurrentPlayer->PlayerWeapon->Position.x;
+		wList->Position.y = CurrentPlayer->PlayerWeapon->Position.y;
 		wList->WeaponSprite->ZIndex = (unsigned short)5;
 		wList->WeaponFOF = DroppedWeapon;
 		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
