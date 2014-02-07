@@ -86,11 +86,13 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		if(CurrentPlayer->PlayerWeapon->WeaponGlyphs->Glyph->Visible)
 			ChangeTextVisibility(CurrentPlayer->PlayerWeapon->WeaponGlyphs);
 		
+		
 		wList->Position.x = CurrentPlayer->PlayerWeapon->Position.x;
 		wList->Position.y = CurrentPlayer->PlayerWeapon->Position.y;
 		wList->WeaponSprite->ZIndex = (unsigned short)5;
 		wList->WeaponFOF = DroppedWeapon;
 		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
 		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
+		ChangeTextPosition(wList->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponGlyphs->Glyph->Position);
 	}
 }

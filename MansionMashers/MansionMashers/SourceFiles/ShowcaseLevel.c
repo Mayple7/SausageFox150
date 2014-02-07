@@ -147,21 +147,27 @@ void InitializeShowcase(void)
 
 	Vec3Set(&textTint, 0.6f, 0.169f, 0.8f);
 	Juli = CreateText("Hi Juli, This is dynamic!", 100, 300, 100, textTint);
+	ChangeTextVisibility(Juli);
 
 	Vec3Set(&textTint, 1.0f, 1.0f, 0.0f);
 	Luke = CreateText("Luke is muy grande.", 100, 200, 100, textTint);
+	ChangeTextVisibility(Luke);
 
 	Vec3Set(&textTint, 1.0f, 0.0f, 0.0f);
 	Kaden = CreateText("+1 to kaden for being 100% less of a kevin this week", 100, 100, 100, textTint);
+	ChangeTextVisibility(Kaden);
 
 	Vec3Set(&textTint, 0.01f, 0.6f, 0.39f);
 	Dan = CreateText("Dan is just way too awesome, hahahaha!!!", 300, 0, 150, textTint);
+	ChangeTextVisibility(Dan);
 
 	Vec3Set(&textTint, 1.0f, 1.0f, 1.0f);
 	Fox = CreateText("The quick brown fox jumps over the lazy dog! -+!.,%()", 100, -200, 200, textTint);
+	ChangeTextVisibility(Fox);
 
 	Vec3Set(&textTint, 0.0f, 0.0f, 0.0f);
 	subText = CreateText("(These are the letters and symbols that you can display)", 300, -300, 50, textTint);
+	ChangeTextVisibility(subText);
 
 	//Sounds
 	//CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
@@ -219,12 +225,6 @@ void DrawShowcase(void)
 
 	DrawCollisionList();
 	SetCamera(&CurrentPlayer.Position, 250);
-	DrawGlyphs(Juli);
-	DrawGlyphs(Luke);
-	DrawGlyphs(Kaden);
-	DrawGlyphs(Dan);
-	DrawGlyphs(Fox);
-	DrawGlyphs(subText);
 }
 
 /*************************************************************************/
@@ -235,13 +235,13 @@ void DrawShowcase(void)
 /*************************************************************************/
 void FreeShowcase(void)
 {
-	freeObjectList();
 	FreeText(Juli);
 	FreeText(Luke);
 	FreeText(Kaden);
 	FreeText(Dan);
 	FreeText(Fox);
 	FreeText(subText);
+	freeObjectList();
 	//ReleaseSound(BackgroundSnd.Sound);
 
 }

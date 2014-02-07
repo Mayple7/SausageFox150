@@ -8,10 +8,6 @@
 //Objects that are in the workspace
 Sprite *drawList;
 
-//Objects that have been collided with
-Sprite *collideList;
-//Objects that search for collision
-Sprite *collidables;
 Platform *platformList;
 Food *foodList;
 Enemy *enemyList;
@@ -24,7 +20,6 @@ Food* AddFood(void);
 Weapon* AddWeapon(void);
 Enemy* AddEnemy(void);
 
-void AddCollidable(Sprite *newCollidable);
 void resetObjectList(void);
 void DrawObjectList(void);
 void freeObjectList(void);

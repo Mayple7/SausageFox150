@@ -209,6 +209,9 @@
     <ClInclude Include="HeaderFiles\WeaponNames.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\MemoryManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -305,6 +308,9 @@
       <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\WeaponNames.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\MemoryManager.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>

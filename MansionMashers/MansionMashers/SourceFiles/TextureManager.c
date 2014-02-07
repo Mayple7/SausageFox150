@@ -29,31 +29,15 @@
 /*************************************************************************/
 /*!
 	\brief
-	Keeps track of what memory is used.
-*/
-/*************************************************************************/
-void *__cdecl DynamicAllocate(int count, int size)
-{
-	//Print it out for all those viewers at home
-	printf("CALLOC: Amount:  %i  Size:  %i\n", count, count * size);
-
-	//Give them what they really came for
-	return calloc(count, count * size);
-}
-
-
-/*************************************************************************/
-/*!
-	\brief
 	Dynamically allocates the texture list
 */
 /*************************************************************************/
 void CreateTextureList(void)
 {
 	//Load my dick into the driver and then texturize me captain
-	textureList = (Texture *) DynamicAllocate(TEXTUREAMOUNT, sizeof(Texture));
+	textureList = (Texture *) CallocMyAlloc(TEXTUREAMOUNT, sizeof(Texture));
 
-	//Make sure the calloc is not NULL
+	//Make sure the allocation is not NULL
 	if (textureList)
 	{
 		printf("\nTEXTURE LIST SET UP COMPLETE\n");
@@ -82,7 +66,7 @@ void DestroyTextureList(void)
 		}
 	}
 
-	free(textureList);
+	FreeMyAlloc(textureList);
 }
 
 /*************************************************************************/

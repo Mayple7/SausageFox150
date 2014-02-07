@@ -43,8 +43,7 @@ Platform* ShortShelf;
 Weapon* StarterAxe;
 Weapon* StarterSword;
 Vec3 TextColor;
-TextGlyphs* AxeName;
-TextGlyphs* SwordName;
+TextGlyphs* TestText;
 
 int newID;
 
@@ -74,16 +73,15 @@ void InitializeTutorial(void)
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
 	ShortShelf->PlatformCollider.collisionDebug = TRUE;
 
-	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -250, -340);
-	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 4;
+	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -200, -300);
+	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;
 
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 475, 0);
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
 
 	Vec3Set(&TextColor, 0, 0, 0);
-	AxeName = CreateText(StarterAxe->WeaponName, -500, 250, 100, TextColor);
-	SwordName = CreateText(StarterSword->WeaponName, -500, 250, 100, TextColor);
-
+	TestText = CreateText("Woo! This is some text.", -500, 250, 100, TextColor);
+	ChangeTextVisibility(TestText);
 
 	ResetCamera();
 }
@@ -115,6 +113,14 @@ void UpdateTutorial(void)
 		RemoveDebugMode();
 		OverlayGrid->Visible = FALSE;
 	}
+	if(AEInputCheckTriggered('M'))
+	{
+		if(TestText->letter == 'W')
+			ChangeTextString(TestText, "Hopefully this will change as well?");
+		else
+			ChangeTextString(TestText, "Woo! This is some text.");
+	}
+
 
 
 	// Return to main menu with RSHIFT
@@ -128,18 +134,11 @@ void UpdateTutorial(void)
 		InitializePause(&DrawTutorial);
 		UpdatePause();
 	}
-	if(AEInputCheckTriggered('M'))
-	{
-		ChangeTextVisibility(AxeName);
-	}
-
 }
 
 void DrawTutorial(void)
 {
 	DrawObjectList();
-	DrawGlyphs(SwordName);
-	DrawGlyphs(AxeName);
 	DrawCollisionList();
 }
 

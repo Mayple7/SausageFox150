@@ -55,6 +55,9 @@ FoxSound Sound1;
 FoxSound Sound2;
 FoxChannels ChannelController;
 float volume;
+TextGlyphs * volumetext;
+Sprite *Letters;
+char volumestring[4];
 
 
 Food *Hammy;
@@ -81,6 +84,10 @@ void LoadTestLevel(void)
 void InitializeTestLevel(void)
 {	
 	int hudLoop;
+
+	//For volume
+	Vec3 textTint;
+	
 
 	newID = 1;
 	// Reset the object list
@@ -144,14 +151,21 @@ void InitializeTestLevel(void)
 	// Creates the enemy
 	CurrentEnemy = CreateEnemy("TextureFiles/EasyEnemy.png", EnemyType, 150, 150, newID++, 0, 0);
 
-	// Adds the player and enemy to the collilde list
-	AddCollidable(CurrentPlayer.PlayerSprite);
-
 	//Adding sounds
 	CreateSound("Sounds/drumloop.wav", &Sound1, SmallSnd);
 	CreateSound("Sounds/jaguar.wav", &Sound2, SmallSnd);
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 	CreateChannelGroups(&ChannelController);
+	
+	Letters = CreateSprite("TextureFiles/Rumple_TextSheet.png", 92, 100, 20, 11, 4, -1200, 100);
+	Letters->AnimationSpeed = 60;
+	volumestring[0] = '1';
+	volumestring[1] = '0';
+	volumestring[2] = '0';
+	volumestring[3] = '\0';
+	Vec3Set(&textTint, 0.6f, 0.169f, 0.8f);
+	volumetext = CreateText(volumestring, 0.0f, 0.0f, 150, textTint);
+	
 
 	// Reset camera to (0,0)
 	ResetCamera();
@@ -165,6 +179,9 @@ void InitializeTestLevel(void)
 /*************************************************************************/
 void UpdateTestLevel(void)
 {
+	int i = 0; 
+	int voltemp;
+
 	// Handle test level events
 	EventTestLevel();
 
@@ -189,14 +206,17 @@ void UpdateTestLevel(void)
 
 	if(AEInputCheckCurr(VK_DOWN))
 	{
-		volume = (volume - 5) / 100.0f;
+		volume = (volume - 1) / 100.0f;
 		SetChannelGroupVolume(&ChannelController, EffectType, volume);
 	}
 	if(AEInputCheckCurr(VK_UP))
 	{
-		volume = (volume + 5) / 100.0f;
+		volume = (volume + 1) / 100.0f;
 		SetChannelGroupVolume(&ChannelController, EffectType, volume);
 	}
+
+	printf("Volume %s: %i\n", VolumetoString(volumestring, volume), (int)volume);
+
 
 	//************************************
 
@@ -231,7 +251,6 @@ void DrawTestLevel(void)
 	DrawHUD(&HUDList);
 	//Camera follows player
 	SetCamera(&CurrentPlayer.Position, 250);
-	
 	DrawCollisionList();
 }
 
