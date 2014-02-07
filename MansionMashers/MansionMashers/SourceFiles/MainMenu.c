@@ -43,6 +43,7 @@ Sprite* StartButton;
 Sprite* ExitButton;
 Sprite* Selector;
 Sprite* ShowcaseButton;
+Sprite* Logo;
 
 Sprite* HUD2;
 Sprite* HUD;
@@ -83,16 +84,19 @@ void InitializeMainMenu(void)
 	resetObjectList();
 
 	// Create the start button
-	StartButton = CreateSprite("TextureFiles/StartButton.png", 480.0f, 180.0f, 1, 1, 1, 0, 200);
+	Logo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 300);
+
+	// Create the start button
+	StartButton = CreateSprite("TextureFiles/StartButton.png", 480.0f, 180.0f, 3, 1, 1, 0, 0);
 
 	// Creates the showcase button
-	ShowcaseButton = CreateSprite("TextureFiles/ShowcaseButton.png", 640.0f, 180.0f, 1, 1, 1, 0, 0);
+	ShowcaseButton = CreateSprite("TextureFiles/ShowcaseButton.png", 640.0f, 180.0f, 3, 1, 1, 0, -200);
 	
 	// Creates the exit button
-	ExitButton = CreateSprite("TextureFiles/ExitButton.png", 480.0f, 180.0f, 1, 1, 1, 0, -200);
+	ExitButton = CreateSprite("TextureFiles/ExitButton.png", 480.0f, 180.0f, 3, 1, 1, 0, -400);
 
 	// Creates the selector button - set to default position of the start button
-	Selector = CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 0, 1, 1, 100, 0);
+	Selector = CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 2, 1, 1, 100, 0);
 	
 	// Set camera to (0,0)
 	ResetCamera();
