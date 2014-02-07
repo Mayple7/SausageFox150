@@ -13,6 +13,7 @@
 #include "Movement.h"
 #include "ObjectManager.h"
 #include "TextureManager.h"
+#include "MemoryManager.h"
 #include "Physics.h"
 #include "RigidBody.h"
 #include "Sprite.h"

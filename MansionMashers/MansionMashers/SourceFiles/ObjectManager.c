@@ -47,7 +47,7 @@ Sprite* AddObject(void)
 		//Find a sprite that is empty
 		if (drawList[i].Created != 1)
 		{
-			printf("Slot %i is now filled\n", i);
+			//printf("Slot %i is now filled\n", i);
 			return &drawList[i];
 		}
 	}
@@ -57,32 +57,7 @@ Sprite* AddObject(void)
 /*************************************************************************/
 /*!
 	\brief
-	Adds a collidable sprite to the collidable list
-	
-	\param newCollidable
-	The sprite of a collidable to add to the list
-*/
-/*************************************************************************/
-void AddCollidable(Sprite *newCollidable)
-{
-	int i;
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Find a sprite that is empty
-		if (collidables[i].Created != 1)
-		{
-			printf("Slot %i is now collidable\n", i);
-			collidables = newCollidable;
-			return;
-		}
-	}
-}
-
-/*************************************************************************/
-/*!
-	\brief
 	Adds a platform to the platform list
-	
 	\return
 	The platform added to the list
 */
@@ -94,7 +69,7 @@ Platform* AddPlatform(void)
 	{
 		if(platformList[i].objID == 0 || platformList[i].objID == -1 )
 		{
-			printf("Platform at %i Created\n", i);
+			//printf("Platform at %i Created\n", i);
 			return &platformList[i];
 		}
 	}
@@ -117,7 +92,7 @@ Food* AddFood(void)
 	{
 		if(foodList[i].objID == 0 || foodList[i].objID == -1)
 		{
-			printf("Food at %i Created\n", i);
+			//printf("Food at %i Created\n", i);
 			return &foodList[i];
 		}
 		
@@ -141,7 +116,7 @@ Weapon* AddWeapon(void)
 	{
 		if(weaponList[i].objID == 0 || weaponList[i].objID == -1)
 		{
-			printf("Weapon at %i Created\n", i);
+			//printf("Weapon at %i Created\n", i);
 			return &weaponList[i];
 		}
 	}
@@ -164,7 +139,7 @@ Enemy* AddEnemy(void)
 	{
 		if(enemyList[i].objID == 0 || enemyList[i].objID == -1)
 		{
-			printf("Enemy at %i Created\n", i);
+			//printf("Enemy at %i Created\n", i);
 			return &enemyList[i];
 		}
 	}
@@ -181,19 +156,18 @@ void resetObjectList(void)
 {
 	int i;
 	//Set up the memory to fit the desired amount of objects
-	drawList  = (Sprite *) calloc(OBJECTAMOUNT, OBJECTAMOUNT * sizeof(Sprite));
-	//Make sure the calloc is not NULL
+	drawList  = (Sprite *) CallocMyAlloc(OBJECTAMOUNT, sizeof(Sprite));
+
+	//Make sure the allocation is not NULL
 	if (drawList)
 	{
 		printf("\nOBJECT LIST SET UP COMPLETE\n\n");
 
 		//Set up object lists
-		platformList = (Platform *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Platform));
-		foodList     = (Food *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Food));
-		enemyList    = (Enemy *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Enemy));
-		weaponList   = (Weapon *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Weapon));
-		collideList  = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
-		collidables  = (Sprite *) calloc(COLLIDEAMOUNT, COLLIDEAMOUNT * sizeof(Sprite));
+		platformList = (Platform *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Platform));
+		foodList     = (Food *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Food));
+		enemyList    = (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
+		weaponList   = (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
 
 		for(i = 0; i < COLLIDEAMOUNT; i++)
 		{
@@ -201,17 +175,6 @@ void resetObjectList(void)
 			foodList[i].objID = -1;
 			enemyList[i].objID = -1;
 			weaponList[i].objID = -1;
-		}
-
-
-		//Make sure the malloc is not NULL
-		if (collideList && collidables && platformList && foodList && enemyList && weaponList)
-		{
-			printf("COLLIDE LIST SET UP COMPLETE\n\n");
-		}
-		else
-		{
-			printf("COLLIDE LIST SET UP FAILED\n\n");
 		}
 	}
 	else
@@ -311,7 +274,7 @@ void DrawCollisionList(void)
 void freeObject(Sprite* object)
 {
 	//Make sure the sprite exists
-	if (object->Created)
+	if (object && object->Created)
 	{
 		//Free the mesh and texture data
 		object->Created = 0;
@@ -428,7 +391,7 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			freeObject(&drawList[i]);
-			printf("Slot %i is now empty\n", i);
+			//printf("Slot %i is now empty\n", i);
 		}
 	}
 
@@ -440,7 +403,7 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			FreePlatform(&platformList[i]);
-			printf("Platform %i is now freed\n", i);
+			//printf("Platform %i is now freed\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -450,7 +413,7 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			FreeFood(&foodList[i]);
-			printf("Food %i is now freed\n", i);
+			//printf("Food %i is now freed\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -460,17 +423,18 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			FreeWeapon(&weaponList[i]);
-			printf("Weapon %i is now freed\n", i);
+			//printf("Weapon %i is now freed\n", i);
 		}
 	}
 
 	//Free the object list data allocation
-	free(drawList);
+	FreeMyAlloc(drawList);
 
 	//Free collision lists data allocation
-	free(platformList);
-	free(foodList);
-	free(weaponList);
+	FreeMyAlloc(platformList);
+	FreeMyAlloc(foodList);
+	FreeMyAlloc(enemyList);
+	FreeMyAlloc(weaponList);
 }
 
 void ResizeObjects(float ratio)

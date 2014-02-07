@@ -152,6 +152,10 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		Current = GetCurrentState();
 		Next = GetNextState();
 
+		//Memory start
+		TotalMemoryAllocs = 0;
+		TotalMemoryFrees  = 0;
+
 		//Checking if wanting to quit
 		if(Current == GS_Quit)
 		{
@@ -194,6 +198,13 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 		if(Next != GS_Restart)
 			GSMPointers.pUnload();
+
+		/*
+			No algorythm here, just checking how many times the 
+			functions are called for freeing and allocing.
+		*/
+		printf("\nMEMORY NOT FREED: %i   <- This can't be right...?\n\n", TotalMemoryAllocs - TotalMemoryFrees);
+		printf("----------------A NEW DAY----------------\n\n");
 		
 		SetPreviousState(Current);
 		SetCurrentState(Next);
