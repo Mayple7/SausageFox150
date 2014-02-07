@@ -192,12 +192,17 @@ void DrawSprite(struct Sprite *CurrentSprite)
 	float offsetDiffY = 1.0f / CurrentSprite->NumHeightFrames;
 	float offsetX = 0.0f;
 	float offsetY = 0.0f;
+	
+	Matrix3 Mtx; 
 	//Set draw mode to texture
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(CurrentSprite->Tint.x, CurrentSprite->Tint.y, CurrentSprite->Tint.z, 1.0f);
 	// Set position for the sprite drawing
-	AEGfxSetPosition(CurrentSprite->Position.x, CurrentSprite->Position.y);
 
+	Mtx = CreateTranslationMtx(CurrentSprite);
+
+	AEGfxSetTransform(Mtx.m);
+	
 	// Update the transparency of the sprite if visible or not
 	if(CurrentSprite->Visible == FALSE)
 	{
@@ -232,14 +237,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
 		offsetY = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiffY;
 	}
-	// Updates the rotation and mesh of the object to draw
-	if (CurrentSprite->Rotation != CurrentSprite->RotationPrev || CurrentSprite->FlipX != CurrentSprite->FlipXPrev || CurrentSprite->FlipY != CurrentSprite->FlipYPrev)
-	{
-		CurrentSprite->SpriteMesh = createMesh(CurrentSprite->Width * (((2*CurrentSprite->FlipX)-1)*-1), CurrentSprite->Height * (((2*CurrentSprite->FlipY)-1)*-1), CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
-		CurrentSprite->RotationPrev = CurrentSprite->Rotation;
-		CurrentSprite->FlipXPrev = CurrentSprite->FlipX;
-		CurrentSprite->FlipYPrev = CurrentSprite->FlipY;
-	}
+
 	// Draws the texture on the mesh
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
 	// Draws the mesh
@@ -260,3 +258,46 @@ void UpdateMesh(Sprite *currentSprite)
 	currentSprite->SpriteMesh = createMesh(currentSprite->Width, currentSprite->Height, currentSprite->OffsetX, currentSprite->OffsetY, currentSprite->Rotation);
 }
 
+Matrix3 CreateTranslationMtx(struct Sprite *CurrentSprite)
+{
+	Matrix3 tempMtx;
+	Matrix3 rotMtx; 
+	Matrix3 transMtx; 
+	Matrix3 scalMtx; 
+
+	rotMtx.m[0][0] = (float)cos(CurrentSprite->Rotation);
+	rotMtx.m[0][1] = (float)-sin(CurrentSprite->Rotation);
+	rotMtx.m[0][2] = 0;
+	rotMtx.m[1][0] = (float)sin(CurrentSprite->Rotation);
+	rotMtx.m[1][1] = (float)cos(CurrentSprite->Rotation);
+	rotMtx.m[1][2] = 0;
+	rotMtx.m[2][0] = 0;
+	rotMtx.m[2][1] = 0;
+	rotMtx.m[2][2] = 1;
+
+	transMtx.m[0][0] = 1;
+	transMtx.m[0][1] = 0;
+	transMtx.m[0][2] = CurrentSprite->Position.x;
+	transMtx.m[1][0] = 0;
+	transMtx.m[1][1] = 1;
+	transMtx.m[1][2] = CurrentSprite->Position.y;
+	transMtx.m[2][0] = 0;
+	transMtx.m[2][1] = 0;
+	transMtx.m[2][2] = 1;
+
+	scalMtx.m[0][0] = (((2*CurrentSprite->FlipX)-1)*-1);
+	scalMtx.m[0][1] = 0;
+	scalMtx.m[0][2] = 0;
+	scalMtx.m[1][0] = 0;
+	scalMtx.m[1][1] = (((2*CurrentSprite->FlipY)-1)*-1);
+	scalMtx.m[1][2] = 0;
+	scalMtx.m[2][0] = 0;
+	scalMtx.m[2][1] = 0;
+	scalMtx.m[2][2] = 1;
+
+	Matrix3Mult(&tempMtx, &rotMtx, &scalMtx);
+
+	Matrix3Mult(&tempMtx, &transMtx, &tempMtx);
+
+	return tempMtx;
+}
