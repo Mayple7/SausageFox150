@@ -36,7 +36,7 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	else
 		CurrentWeapon->WeaponName = "Error: Memory Allocation Failed!";
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, -500, 250, 50, TextTint);
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, -500, 250, 25, TextTint);
 
 	SetWeaponStats(CurrentWeapon, 0, 0, 0);
 

@@ -205,12 +205,14 @@ void FreeText(TextGlyphs *FirstLetter)
 void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 newPosition)
 {
 	TextGlyphs* nextLetter = FirstLetter;
+	int i = 0;
 
 	while(nextLetter)
 	{
 		if(nextLetter->Glyph)
-			Vec2Set(&nextLetter->Glyph->Position, newPosition.x, newPosition.y);
+			Vec2Set(&nextLetter->Glyph->Position, newPosition.x + (i * nextLetter->Glyph->Height * 0.4f), newPosition.y);
 		nextLetter = nextLetter->NextLetter;
+		i++;
 	}
 }
 
