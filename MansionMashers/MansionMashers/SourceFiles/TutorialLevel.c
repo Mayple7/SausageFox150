@@ -140,8 +140,6 @@ void DrawTutorial(void)
 {
 	DrawObjectList();
 	DrawCollisionList();
-	DrawGlyphs(SwordName);
-	DrawGlyphs(AxeName);
 }
 
 void FreeTutorial(void)

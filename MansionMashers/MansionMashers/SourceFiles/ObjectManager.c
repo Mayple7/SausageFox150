@@ -274,7 +274,7 @@ void DrawCollisionList(void)
 void freeObject(Sprite* object)
 {
 	//Make sure the sprite exists
-	if (object->Created)
+	if (object && object->Created)
 	{
 		//Free the mesh and texture data
 		object->Created = 0;

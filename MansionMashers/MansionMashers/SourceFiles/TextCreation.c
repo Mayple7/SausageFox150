@@ -148,27 +148,6 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 /*************************************************************************/
 /*!
 	\brief
-	Draws the list of glyphs to the screen
-	
-	\param FirstLetter
-	A pointer to the first letter in the text.
-*/
-/*************************************************************************/
-void DrawGlyphs(TextGlyphs *FirstLetter)
-{
-	TextGlyphs* nextLetter = FirstLetter;
-
-	while(nextLetter)
-	{
-		if(nextLetter->Glyph)
-			DrawSprite(nextLetter->Glyph);
-		nextLetter = nextLetter->NextLetter;
-	}
-}
-
-/*************************************************************************/
-/*!
-	\brief
 	Frees the entire linked list of Text objects
 	
 	\param FirstLetter
@@ -302,7 +281,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 		else if(nextLetter)
 		{
 			nextLetter->letter = *newString;
-			nextLetter->Glyph = ConvertToGlyph(*newString, FirstLetter->Glyph->Height, FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y);
+			nextLetter->Glyph = ConvertToGlyph(*newString, (int)FirstLetter->Glyph->Height, FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y);
 		}
 		else
 		{
@@ -310,7 +289,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 			
 			prevLetter->NextLetter = nextLetter;
 			nextLetter->letter = *newString;
-			nextLetter->Glyph = ConvertToGlyph(*newString, FirstLetter->Glyph->Height, FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y);
+			nextLetter->Glyph = ConvertToGlyph(*newString, (int)FirstLetter->Glyph->Height, FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y);
 			nextLetter->NextLetter = NULL;
 		}
 		if(nextLetter->Glyph)
