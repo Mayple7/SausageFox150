@@ -43,7 +43,7 @@ int main(void)
 	printf("Press 'enter' to quit.\n");
 	while(getchar() != '\n')
 	{
-		printf("Press 'enter' to quit.\n");
+		// Sausage Fox for lyf!!!1!!1!!
 	}
 	return 0;
 }
