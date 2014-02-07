@@ -34,7 +34,7 @@ int main(void)
 
 	printArray(dataArray);
 
-	sortArray();
+	sortArray(dataArray);
 
 	printArray(dataArray);
 
@@ -81,18 +81,17 @@ Donald Knuth, The Art of Computer Programming
 
 static void sortArray(int * dataArray)
 {
-	int i, j;
+	int i, j, temp;
 
 	for(i = 0; i < 10; ++i)
 	{
-		for(j = 0; j < 10 - i; ++j)
+		for(j = i+1; j < 10; ++j)
 		{
-			if (dataArray[j] > dataArray[j+1])
+			if (dataArray[i] > dataArray[j])
 			{
-				int temp;
-				temp = dataArray[j];
-				dataArray[j] = dataArray[j+1];
-				dataArray[j+1] = temp;
+				temp = dataArray[i];
+				dataArray[i] = dataArray[j];
+				dataArray[j] = temp;
 			}
 		}
 	}
