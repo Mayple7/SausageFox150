@@ -57,32 +57,7 @@ Sprite* AddObject(void)
 /*************************************************************************/
 /*!
 	\brief
-	Adds a collidable sprite to the collidable list
-	
-	\param newCollidable
-	The sprite of a collidable to add to the list
-*/
-/*************************************************************************/
-void AddCollidable(Sprite *newCollidable)
-{
-	int i;
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Find a sprite that is empty
-		if (collidables[i].Created != 1)
-		{
-			//printf("Slot %i is now collidable\n", i);
-			collidables = newCollidable;
-			return;
-		}
-	}
-}
-
-/*************************************************************************/
-/*!
-	\brief
 	Adds a platform to the platform list
-	
 	\return
 	The platform added to the list
 */
@@ -193,8 +168,6 @@ void resetObjectList(void)
 		foodList     = (Food *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Food));
 		enemyList    = (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
 		weaponList   = (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
-		collideList  = (Sprite *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Sprite));
-		collidables  = (Sprite *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Sprite));
 
 		for(i = 0; i < COLLIDEAMOUNT; i++)
 		{
@@ -202,17 +175,6 @@ void resetObjectList(void)
 			foodList[i].objID = -1;
 			enemyList[i].objID = -1;
 			weaponList[i].objID = -1;
-		}
-
-
-		//Make sure the allocation is not NULL
-		if (collideList && collidables && platformList && foodList && enemyList && weaponList)
-		{
-			printf("COLLIDE LIST SET UP COMPLETE\n\n");
-		}
-		else
-		{
-			printf("COLLIDE LIST SET UP FAILED\n\n");
 		}
 	}
 	else
@@ -471,6 +433,7 @@ void freeObjectList(void)
 	//Free collision lists data allocation
 	FreeMyAlloc(platformList);
 	FreeMyAlloc(foodList);
+	FreeMyAlloc(enemyList);
 	FreeMyAlloc(weaponList);
 }
 

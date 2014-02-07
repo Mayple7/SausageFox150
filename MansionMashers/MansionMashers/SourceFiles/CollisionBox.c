@@ -54,7 +54,7 @@ void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGr
 	newBox->height = height * GetLoadRatio();
 	newBox->Offset.x = 0;
 	newBox->Offset.y = 0;
-	newBox->DebugMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), 1.0f, 1.0f, 0.0f);
+	newBox->DebugMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), 1.0f, 1.0f);
 	newBox->DebugTexture = LoadTexture("TextureFiles/DebugBox.png");
 }
 
@@ -100,7 +100,7 @@ void UpdateCollider(CollisionBox *Collider, float width, float height)
 
 		//Update collision debug box
 		AEGfxMeshFree(Collider->DebugMesh);
-		Collider->DebugMesh = createMesh(width, height, 1.0f, 1.0f, 0.0f);
+		Collider->DebugMesh = createMesh(width, height, 1.0f, 1.0f);
 	}
 }
 
