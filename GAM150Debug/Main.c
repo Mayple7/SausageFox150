@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <Windows.h>
 
+#define ARRAYLENGTH 10
+
 static void printArray(int * dataArray);
 static void sortArray();
 
@@ -83,9 +85,9 @@ static void sortArray(int * dataArray)
 {
 	int i, j, temp;
 
-	for(i = 0; i < 10; ++i)
+	for(i = 0; i < ARRAYLENGTH; ++i)
 	{
-		for(j = i+1; j < 10; ++j)
+		for(j = i+1; j < ARRAYLENGTH; ++j)
 		{
 			if (dataArray[i] > dataArray[j])
 			{
