@@ -65,11 +65,11 @@
 	The lest of vertecies for the mesh creation
 */
 /*************************************************************************/
-AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation)
+AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY)
 {
 	float halfWidth = width / 2;
 	float halfHeight = height / 2;
-
+	float Rotation = 0;
 	float len = (float)sqrt(halfWidth*halfWidth + halfHeight*halfHeight);
 
 	// Informing the library that we're about to start adding triangles
@@ -133,7 +133,7 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->RotationPrev = 0.0f;
 
 	//Sprite Graphics Properties
-	CurrentSprite->SpriteMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
+	CurrentSprite->SpriteMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), CurrentSprite->OffsetX, CurrentSprite->OffsetY);
 	CurrentSprite->SpriteTexture = LoadTexture(texture);
 
 	// Size of the sprite
@@ -237,7 +237,10 @@ void DrawSprite(struct Sprite *CurrentSprite)
 		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
 		offsetY = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiffY;
 	}
-
+	if (GetLoadRatio() < 0.75f)
+		AEGfxSetTextureMode(AE_GFX_TM_AVERAGE);
+	else
+		AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
 	// Draws the texture on the mesh
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
 	// Draws the mesh
@@ -255,7 +258,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 /*************************************************************************/
 void UpdateMesh(Sprite *currentSprite)
 {
-	currentSprite->SpriteMesh = createMesh(currentSprite->Width, currentSprite->Height, currentSprite->OffsetX, currentSprite->OffsetY, currentSprite->Rotation);
+	currentSprite->SpriteMesh = createMesh(currentSprite->Width, currentSprite->Height, currentSprite->OffsetX, currentSprite->OffsetY);
 }
 
 Matrix3 CreateTranslationMtx(struct Sprite *CurrentSprite)
@@ -285,11 +288,11 @@ Matrix3 CreateTranslationMtx(struct Sprite *CurrentSprite)
 	transMtx.m[2][1] = 0;
 	transMtx.m[2][2] = 1;
 
-	scalMtx.m[0][0] = (((2*CurrentSprite->FlipX)-1)*-1);
+	scalMtx.m[0][0] = (float)(((2*CurrentSprite->FlipX)-1)*-1);
 	scalMtx.m[0][1] = 0;
 	scalMtx.m[0][2] = 0;
 	scalMtx.m[1][0] = 0;
-	scalMtx.m[1][1] = (((2*CurrentSprite->FlipY)-1)*-1);
+	scalMtx.m[1][1] = (float)(((2*CurrentSprite->FlipY)-1)*-1);
 	scalMtx.m[1][2] = 0;
 	scalMtx.m[2][0] = 0;
 	scalMtx.m[2][1] = 0;
