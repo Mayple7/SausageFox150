@@ -54,6 +54,8 @@ int main(void)
 Prints an array of ints to the output window.
 \param dataArray
 Pointer to the data array to be sorted.
+\param length
+Length of array to print
 */
 /******************************************************************************/
 
@@ -74,6 +76,8 @@ static void printArray(int * dataArray, int length)
 Sorts an array of ints using bubble sort.
 \param dataArray
 Pointer to the data array to be sorted.
+\param length
+Length of array to be sorted
 \note
 "the bubble sort seems to have nothing to recommend it, except a catchy name
 and the fact that it leads to some interesting theoretical problems"
