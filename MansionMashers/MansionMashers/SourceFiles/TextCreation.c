@@ -74,7 +74,7 @@ TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 
 		if(nextLetter->Glyph)
 		{
 			nextLetter->Glyph->Tint = TextColor;
-			nextLetter->Glyph->isHUD = TRUE;
+			//nextLetter->Glyph->isHUD = TRUE;
 		}
 		if(i != 0)
 			textString->NextLetter = nextLetter;
@@ -138,6 +138,7 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 	if(frame >= 0)
 	{
 		temp = CreateSprite("TextureFiles/Rumple_TextSheet_White.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 101, 11, 4, xPos, yPos);
+		temp->Visible = FALSE;
 		temp->AnimationActive = FALSE;
 		temp->CurrentFrame = frame;
 		return temp;
@@ -186,5 +187,50 @@ void FreeText(TextGlyphs *FirstLetter)
 		NextLetter = FirstLetter->NextLetter;
 		free(FirstLetter);
 		FirstLetter = NextLetter;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Changes the position of the text
+	
+	\param firstLetter
+	A pointer to the first letter in the text.
+
+	\param newPosition
+	New position to move the text to.
+*/
+/*************************************************************************/
+void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 newPosition)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+			Vec2Set(&nextLetter->Glyph->Position, newPosition.x, newPosition.y);
+		nextLetter = nextLetter->NextLetter;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees the entire linked list of Text objects
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
+void ChangeTextVisibility(TextGlyphs* FirstLetter)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+			nextLetter->Glyph->Visible = !(nextLetter->Glyph->Visible);
+		nextLetter = nextLetter->NextLetter;
 	}
 }

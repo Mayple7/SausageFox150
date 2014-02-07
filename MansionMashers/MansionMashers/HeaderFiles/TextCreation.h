@@ -16,5 +16,7 @@ TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 
 Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos);
 void DrawGlyphs(TextGlyphs *FirstLetter);
 void FreeText(TextGlyphs *FirstLetter);
+void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 Offset);
+void ChangeTextVisibility(TextGlyphs* FirstLetter);
 
 #endif

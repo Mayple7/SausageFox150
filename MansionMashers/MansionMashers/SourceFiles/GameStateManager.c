@@ -33,6 +33,7 @@
 #include "../HeaderFiles/LevelShowcase.h"
 #include "../HeaderFiles/TutorialLevel.h"
 #include "../HeaderFiles/MapLevel.h"
+#include <stdio.h>
 
 // ---------------------------------------------------------------------------
 // Globals
@@ -123,7 +124,10 @@ int GetNextState(void)
 /*************************************************************************/
 void SetPreviousState(int PreviousState)
 {
-	State.Previous = PreviousState;
+	if(PreviousState >= GS_MAX)
+		printf("ERROR INVALID NEXT LEVEL STATE PARAMETER");
+	else	
+		State.Previous = PreviousState;
 }
 
 /*************************************************************************/
@@ -137,7 +141,10 @@ void SetPreviousState(int PreviousState)
 /*************************************************************************/
 void SetCurrentState(int CurrentState)
 {
-	State.Current = CurrentState;
+	if(CurrentState >= GS_MAX)
+		printf("ERROR INVALID NEXT LEVEL STATE PARAMETER");
+	else
+		State.Current = CurrentState;
 }
 
 /*************************************************************************/
@@ -151,7 +158,10 @@ void SetCurrentState(int CurrentState)
 /*************************************************************************/
 void SetNextState(int NextState)
 {
-	State.Next = NextState;
+	if(NextState >= GS_MAX)
+		printf("ERROR INVALID NEXT LEVEL STATE PARAMETER");
+	else
+		State.Next = NextState;
 }
 
 /*************************************************************************/
