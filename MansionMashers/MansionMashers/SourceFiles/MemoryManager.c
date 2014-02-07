@@ -9,6 +9,7 @@
 \par				Functions:
 \li					CallocMyAlloc
 \li					MallocMyAlloc
+\li					FreeMyAlloc
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -65,5 +66,6 @@ void __cdecl FreeMyAlloc(void *memory)
 	//Print it out for all those viewers at home
 	printf("FREEING DATA:  Total Frees: %i\n", ++TotalMemoryFrees);
 
+	//Let my people go!
 	free(memory);
 }

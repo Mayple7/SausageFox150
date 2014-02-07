@@ -182,7 +182,7 @@ void resetObjectList(void)
 	int i;
 	//Set up the memory to fit the desired amount of objects
 	drawList  = (Sprite *) CallocMyAlloc(OBJECTAMOUNT, sizeof(Sprite));
-	printf("%i\n", drawList);
+
 	//Make sure the allocation is not NULL
 	if (drawList)
 	{
