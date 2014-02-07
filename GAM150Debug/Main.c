@@ -24,7 +24,7 @@
 #include <Windows.h>
 
 static void printArray(int * dataArray);
-static void sortArray();
+static void sortArray(int * dataArray, int numValues);
 
 int main(void)
 {
@@ -79,7 +79,7 @@ Donald Knuth, The Art of Computer Programming
 */
 /******************************************************************************/
 
-static void sortArray(int * dataArray)
+static void sortArray(int * dataArray, int numValues)
 {
 	int i, j, temp;
 
