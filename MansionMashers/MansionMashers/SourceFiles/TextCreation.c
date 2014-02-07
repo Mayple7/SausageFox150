@@ -281,7 +281,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 		else if(nextLetter)
 		{
 			nextLetter->letter = *newString;
-			nextLetter->Glyph = ConvertToGlyph(*newString, (int)FirstLetter->Glyph->Height / GetLoadRatio(), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio());
+			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio());
 		}
 		else
 		{
@@ -289,7 +289,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 			
 			prevLetter->NextLetter = nextLetter;
 			nextLetter->letter = *newString;
-			nextLetter->Glyph = ConvertToGlyph(*newString, (int)FirstLetter->Glyph->Height / GetLoadRatio(), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio());
+			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio());
 			nextLetter->NextLetter = NULL;
 		}
 		if(nextLetter->Glyph)
