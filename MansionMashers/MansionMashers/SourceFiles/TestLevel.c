@@ -178,9 +178,6 @@ void InitializeTestLevel(void)
 /*************************************************************************/
 void UpdateTestLevel(void)
 {
-	int i = 0; 
-	int voltemp;
-
 	// Handle test level events
 	EventTestLevel();
 
