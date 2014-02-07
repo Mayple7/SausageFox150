@@ -492,3 +492,42 @@ void UpdateSoundSystem(void)
 {
 	FMOD_System_Update(FMsystem);
 }
+
+char * VolumetoString(char *string, float volume)
+{
+	int i;
+	int voltemp = (int)volume;
+
+	for(i = 0; i <= 4; i++)
+	{
+		if (voltemp == 100)
+		{
+			string[0] = '1';
+			string[1] = '0';
+			string[2] = '0';
+			string[3] = '\0';
+			break;
+		}
+		else if(voltemp > 9)
+		{
+			int temp = voltemp;
+			temp /= 10;
+			string[i] = temp + 48;
+			voltemp -= 10 * temp;
+			if(voltemp == 0)
+			{
+				string[i + 1] = '0';
+				string[i + 2] = '\0';
+				break;
+			}
+		}
+		else if(voltemp >= 0 && voltemp <= 9)
+		{
+			string[i] = voltemp + 48;
+			string[i + 1] = '\0';
+			break;
+		}
+	}
+
+	return string;
+}
