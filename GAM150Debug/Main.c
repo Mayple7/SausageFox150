@@ -25,20 +25,20 @@
 
 #define ARRAYLENGTH 10
 
-static void printArray(int * dataArray);
-static void sortArray(int * dataArray, int numValues);
+static void printArray(int * dataArray, int length);
+static void sortArray(int * dataArray, int length);
 
 int main(void)
 {
-	int dataArray[10] = { 1000, 1, 10, 100, 500, 30, 22, 8, 50 };
+	int dataArray[ARRAYLENGTH] = { 1000, 1, 10, 100, 500, 30, 22, 8, 50 };
 
 	SetConsoleTitle((LPCSTR)"GAM150Debug");
 
-	printArray(dataArray);
+	printArray(dataArray, ARRAYLENGTH);
 
-	sortArray(dataArray);
+	sortArray(dataArray, ARRAYLENGTH);
 
-	printArray(dataArray);
+	printArray(dataArray, ARRAYLENGTH);
 
 	printf("Press 'enter' to quit.\n");
 	while(getchar() != '\n')
@@ -57,11 +57,11 @@ Pointer to the data array to be sorted.
 */
 /******************************************************************************/
 
-static void printArray(int * dataArray)
+static void printArray(int * dataArray, int length)
 {
 	int i;
 
-	for(i = 0; i < 10; ++i)
+	for(i = 0; i < length; ++i)
 	{
 		printf("%6d ", dataArray[i]);
 	}
@@ -81,13 +81,13 @@ Donald Knuth, The Art of Computer Programming
 */
 /******************************************************************************/
 
-static void sortArray(int * dataArray, int numValues)
+static void sortArray(int * dataArray, int length)
 {
 	int i, j, temp;
 
-	for(i = 0; i < ARRAYLENGTH; ++i)
+	for(i = 0; i < length; ++i)
 	{
-		for(j = i+1; j < ARRAYLENGTH; ++j)
+		for(j = i+1; j < length; ++j)
 		{
 			if (dataArray[i] > dataArray[j])
 			{
