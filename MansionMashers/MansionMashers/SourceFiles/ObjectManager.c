@@ -493,7 +493,7 @@ void ResizeObjects(float ratio)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (platformList[i].objID)
+		if (platformList[i].objID > 0)
 		{
 			//Update platform collider
 			platformList[i].PlatformCollider.width *= ratio;
@@ -508,14 +508,14 @@ void ResizeObjects(float ratio)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (weaponList[i].objID)
+		if (weaponList[i].objID > 0)
 		{
 			//Update platform collider
 			weaponList[i].WeaponPickup.width *= ratio;
 			weaponList[i].WeaponPickup.height *= ratio;
 			Vec2Scale(&weaponList[i].WeaponPickup.Offset, &weaponList[i].WeaponPickup.Offset, ratio);
+			Vec2Scale(&weaponList[i].WeaponPickup.Position, &weaponList[i].WeaponPickup.Position, ratio);
 			Vec2Scale(&weaponList[i].Position, &weaponList[i].Position, ratio);
-			UpdateCollisionPosition(&weaponList[i].WeaponPickup, &weaponList[i].Position);
 			UpdateCollider(&weaponList[i].WeaponPickup, weaponList[i].WeaponPickup.width, weaponList[i].WeaponPickup.height);
 			//printf("Platform %i is now updated\n", i);
 		}
@@ -523,7 +523,7 @@ void ResizeObjects(float ratio)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (foodList[i].objID)
+		if (foodList[i].objID > 0)
 		{
 			//Free the mesh and texture data
 			Vec2Scale(&foodList[i].Position, &foodList[i].Position, ratio);
