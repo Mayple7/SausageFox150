@@ -73,8 +73,8 @@ void InitializeTutorial(void)
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
 	ShortShelf->PlatformCollider.collisionDebug = TRUE;
 
-	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -250, -340);
-	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 4;
+	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -200, -300);
+	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;
 
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 475, 0);
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
