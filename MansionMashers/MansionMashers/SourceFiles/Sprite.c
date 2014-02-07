@@ -237,7 +237,10 @@ void DrawSprite(struct Sprite *CurrentSprite)
 		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
 		offsetY = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiffY;
 	}
-
+	if (GetLoadRatio() < 0.75f)
+		AEGfxSetTextureMode(AE_GFX_TM_AVERAGE);
+	else
+		AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
 	// Draws the texture on the mesh
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
 	// Draws the mesh
