@@ -535,7 +535,7 @@ void Animation(Player *Object)
 		Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection*4));
 	else
 		Skrt->CurrentFrame = 3;
-	Tail->Position.y = Bdy->Position.y+10;
+	Tail->Position.y = Bdy->Position.y + (Bdy->Height/30);
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
 
 	if (Object->Speed * GetLoadRatio() > 1.5f * GetLoadRatio())
@@ -652,7 +652,7 @@ void Animation(Player *Object)
 	}
 	else
 	{
-		Tail->Position.x = Bdy->Position.x-(Bdy->Width/22);
+		Tail->Position.x = Bdy->Position.x-(Bdy->Width/20);
 		
 		LegUpr->Rotation = -LegUpperDirection;
 		LegUpr->Position.x = Object->Position.x;

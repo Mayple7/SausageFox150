@@ -65,11 +65,11 @@
 	The lest of vertecies for the mesh creation
 */
 /*************************************************************************/
-AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY, float Rotation)
+AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY)
 {
 	float halfWidth = width / 2;
 	float halfHeight = height / 2;
-
+	float Rotation = 0;
 	float len = (float)sqrt(halfWidth*halfWidth + halfHeight*halfHeight);
 
 	// Informing the library that we're about to start adding triangles
@@ -133,7 +133,7 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->RotationPrev = 0.0f;
 
 	//Sprite Graphics Properties
-	CurrentSprite->SpriteMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), CurrentSprite->OffsetX, CurrentSprite->OffsetY, CurrentSprite->Rotation);
+	CurrentSprite->SpriteMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), CurrentSprite->OffsetX, CurrentSprite->OffsetY);
 	CurrentSprite->SpriteTexture = LoadTexture(texture);
 
 	// Size of the sprite
@@ -255,7 +255,7 @@ void DrawSprite(struct Sprite *CurrentSprite)
 /*************************************************************************/
 void UpdateMesh(Sprite *currentSprite)
 {
-	currentSprite->SpriteMesh = createMesh(currentSprite->Width, currentSprite->Height, currentSprite->OffsetX, currentSprite->OffsetY, currentSprite->Rotation);
+	currentSprite->SpriteMesh = createMesh(currentSprite->Width, currentSprite->Height, currentSprite->OffsetX, currentSprite->OffsetY);
 }
 
 Matrix3 CreateTranslationMtx(struct Sprite *CurrentSprite)
