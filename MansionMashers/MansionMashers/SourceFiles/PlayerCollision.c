@@ -75,12 +75,16 @@ void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 {
 	// Need to pop up weapon info //
+	if(!wList->WeaponGlyphs->Glyph->Visible)
+		ChangeTextVisibility(wList->WeaponGlyphs);
 	if(AEInputCheckTriggered('E'))
 	{
 		SwapWeapons(CurrentPlayer->PlayerWeapon, wList);
 		CurrentPlayer->PlayerWeapon->WeaponSprite->ZIndex = (unsigned short)22;
 		CurrentPlayer->PlayerWeapon->WeaponFOF = PlayerWeapon;
 		CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
+		if(CurrentPlayer->PlayerWeapon->WeaponGlyphs->Glyph->Visible)
+			ChangeTextVisibility(CurrentPlayer->PlayerWeapon->WeaponGlyphs);
 		
 		wList->Position.x = CurrentPlayer->PlayerWeapon->Position.x;
 		wList->Position.y = CurrentPlayer->PlayerWeapon->Position.y;

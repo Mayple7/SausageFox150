@@ -128,15 +128,18 @@ void UpdateTutorial(void)
 		InitializePause(&DrawTutorial);
 		UpdatePause();
 	}
+	if(AEInputCheckTriggered('M'))
+	{
+		ChangeTextVisibility(AxeName);
+	}
+
 }
 
 void DrawTutorial(void)
 {
 	DrawObjectList();
-	/*if(CurrentPlayer.Position.x > 0)
-		DrawGlyphs(SwordName);
-	else
-		DrawGlyphs(AxeName);*/
+	DrawGlyphs(SwordName);
+	DrawGlyphs(AxeName);
 	DrawCollisionList();
 }
 
