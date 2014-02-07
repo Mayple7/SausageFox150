@@ -218,18 +218,17 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 	if(msg == WM_SYSCOMMAND && wp == SC_MINIMIZE)
 	{
 		ShowWindow(hWin, SW_SHOWMINIMIZED);
-		return;
+		return 0;
 	}
 	else if(msg == WM_SYSCOMMAND && wp == SC_MAXIMIZE)
 	{
-		printf("MAXIMIZE ME CAPTN");
 		ShowWindow(hWin, SW_SHOWMAXIMIZED);
-		return;
+		return 0;
 	}
 	else if(msg == WM_SYSCOMMAND && wp == SC_RESTORE)
 	{
 		ShowWindow(hWin, SW_SHOWNORMAL);
-		return;
+		return 0;
 	}
 
 	switch (msg)
