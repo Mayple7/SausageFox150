@@ -38,8 +38,12 @@ int main(void)
 
 	printArray(dataArray);
 
-	printf("Press 'enter' to quit.");
-	getchar();
+	printf("Press 'enter' to quit.\n");
+	while(getchar() != '\n')
+	{
+		printf("Press 'enter' to quit.\n");
+	}
+	return 0;
 }
 
 /******************************************************************************/
