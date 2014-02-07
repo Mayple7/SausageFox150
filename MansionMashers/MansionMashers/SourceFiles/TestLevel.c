@@ -54,7 +54,7 @@ FoxSound BackgroundSnd;
 FoxSound Sound1;
 FoxSound Sound2;
 FoxChannels ChannelController;
-
+float volume;
 
 
 Food *Hammy;
@@ -183,7 +183,22 @@ void UpdateTestLevel(void)
 		//TogglePauseSound(&BackgroundSnd);
 		TogglePauseChannel(&ChannelController, EffectType);
 	}
-	//(&ChannelController, EffectType);
+	
+	volume = 100.0f* GetChannelGroupVolume(&ChannelController, EffectType);
+	//printf("BG Volume: %i\n", (int)volume);
+
+	if(AEInputCheckCurr(VK_DOWN))
+	{
+		volume = (volume - 5) / 100.0f;
+		SetChannelGroupVolume(&ChannelController, EffectType, volume);
+	}
+	if(AEInputCheckCurr(VK_UP))
+	{
+		volume = (volume + 5) / 100.0f;
+		SetChannelGroupVolume(&ChannelController, EffectType, volume);
+	}
+
+	//************************************
 
 	if(AEInputCheckTriggered('U'))
 	{

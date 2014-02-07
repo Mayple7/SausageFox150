@@ -53,5 +53,6 @@ void SetChannelGroupVolume(FoxChannels *chnl, int type, float volume);
 void SetSoundVolume(FoxSound *snd, float volume);
 float GetSoundVolume(FoxSound *snd);
 float GetChannelGroupVolume(FoxChannels * chnl, int type);
+void UpdateSoundSystem(void);
 
 #endif
