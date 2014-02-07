@@ -30,7 +30,7 @@ int main(void)
 {
 	int dataArray[10] = { 1000, 1, 10, 100, 500, 30, 22, 8, 50 };
 
-	SetConsoleTitle((LPCWSTR)"GAM150Debug");
+	SetConsoleTitle((LPCSTR)"GAM150Debug");
 
 	printArray(dataArray);
 
@@ -83,12 +83,12 @@ static void sortArray(int * dataArray)
 	{
 		for(j = 0; j < 10 - i; ++j)
 		{
-			if (dataArray[j] > dataArray[j+1])
+			if (dataArray[j] > dataArray[i + 1])
 			{
 				int temp;
 				temp = dataArray[j];
-				dataArray[j] = dataArray[j+1];
-				dataArray[j+1] = temp;
+				dataArray[j] = dataArray[i + 1];
+				dataArray[j + 1] = temp;
 			}
 		}
 	}
