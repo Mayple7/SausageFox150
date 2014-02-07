@@ -45,6 +45,10 @@ Weapon* StarterSword;
 Vec3 TextColor;
 TextGlyphs* TestText;
 
+FoxSound BackgroundSnd;
+FoxChannels ChannelController;
+float volume;
+char volumestring[4];
 int newID;
 
 void LoadTutorial(void)
@@ -56,7 +60,13 @@ void InitializeTutorial(void)
 {
 	newID = 1;
 	resetObjectList();
+	CreateChannelGroups(&ChannelController);
 
+	volumestring[0] = '1';
+	volumestring[1] = '0';
+	volumestring[2] = '0';
+	volumestring[3] = '\0';
+	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 	InitializePlayer(&CurrentPlayer, newID++, 0, GROUNDLEVEL + 1);
 
 	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
@@ -80,7 +90,7 @@ void InitializeTutorial(void)
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
 
 	Vec3Set(&TextColor, 0, 0, 0);
-	TestText = CreateText("Woo! This is some text.", -500, 250, 100, TextColor);
+	TestText = CreateText(volumestring, -500, 350, 100, TextColor);
 	ChangeTextVisibility(TestText);
 
 	ResetCamera();
@@ -90,7 +100,7 @@ void UpdateTutorial(void)
 {
 	// Handle any events such as collision
 	EventTutorial();
-
+	
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
 
@@ -113,16 +123,23 @@ void UpdateTutorial(void)
 		RemoveDebugMode();
 		OverlayGrid->Visible = FALSE;
 	}
-	if(AEInputCheckTriggered('M'))
+	PlayAudio(&BackgroundSnd, &ChannelController);
+	volume = 100.0f* GetChannelGroupVolume(&ChannelController, EffectType);
+	//printf("BG Volume: %i\n", (int)volume);
+
+	if(AEInputCheckCurr(VK_DOWN))
 	{
-		if(TestText->letter == 'W')
-			ChangeTextString(TestText, "Hopefully this will change as well?");
-		else
-			ChangeTextString(TestText, "Woo! This is some text.");
+		volume = (volume - 1) / 100.0f;
+		SetChannelGroupVolume(&ChannelController, EffectType, volume);
+		ChangeTextString(TestText, VolumetoString(volumestring, volume));
 	}
-
-
-
+	if(AEInputCheckCurr(VK_UP))
+	{
+		volume = (volume + 1) / 100.0f;
+		SetChannelGroupVolume(&ChannelController, EffectType, volume);
+		ChangeTextString(TestText, VolumetoString(volumestring, volume));
+	}
+	printf("%s\n", volumestring);
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
 	if(AEInputCheckTriggered(VK_RSHIFT))

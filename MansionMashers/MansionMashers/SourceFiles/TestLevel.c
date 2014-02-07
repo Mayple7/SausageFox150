@@ -156,15 +156,14 @@ void InitializeTestLevel(void)
 	CreateSound("Sounds/jaguar.wav", &Sound2, SmallSnd);
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 	CreateChannelGroups(&ChannelController);
-	
-	Letters = CreateSprite("TextureFiles/Rumple_TextSheet.png", 92, 100, 20, 11, 4, -1200, 100);
-	Letters->AnimationSpeed = 60;
+	volume = GetSoundVolume(&BackgroundSnd);
 	volumestring[0] = '1';
 	volumestring[1] = '0';
 	volumestring[2] = '0';
 	volumestring[3] = '\0';
-	Vec3Set(&textTint, 0.6f, 0.169f, 0.8f);
-	volumetext = CreateText(volumestring, 0.0f, 0.0f, 150, textTint);
+	Vec3Set(&textTint, 1, 1, 1);
+	volumetext = CreateText(volumestring, -300.0f, 350.0f, 150, textTint);
+	ChangeTextVisibility(volumetext);
 	
 
 	// Reset camera to (0,0)
@@ -201,22 +200,22 @@ void UpdateTestLevel(void)
 		TogglePauseChannel(&ChannelController, EffectType);
 	}
 	
-	volume = 100.0f* GetChannelGroupVolume(&ChannelController, EffectType);
 	//printf("BG Volume: %i\n", (int)volume);
 
 	if(AEInputCheckCurr(VK_DOWN))
 	{
-		volume = (volume - 1) / 100.0f;
+		if(volume > 0)
+			volume = volume - 0.01;
 		SetChannelGroupVolume(&ChannelController, EffectType, volume);
+		ChangeTextString(volumetext, VolumetoString(volumestring, (int)(volume * 100)));
 	}
 	if(AEInputCheckCurr(VK_UP))
 	{
-		volume = (volume + 1) / 100.0f;
-		SetChannelGroupVolume(&ChannelController, EffectType, volume);
+		if(volume < 1)
+			volume = volume + 0.01;
+		SetChannelGroupVolume(&ChannelController, EffectType, (int)(volume* 100));
+		ChangeTextString(volumetext, VolumetoString(volumestring, (int)(volume * 100)));
 	}
-
-	printf("Volume %s: %i\n", VolumetoString(volumestring, volume), (int)volume);
-
 
 	//************************************
 
