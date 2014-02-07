@@ -30,7 +30,7 @@ int main(void)
 {
 	int dataArray[10] = { 1000, 1, 10, 100, 500, 30, 22, 8, 50 };
 
-	SetConsoleTitle("GAM150Debug");
+	SetConsoleTitle((LPCWSTR)"GAM150Debug");
 
 	printArray(dataArray);
 
