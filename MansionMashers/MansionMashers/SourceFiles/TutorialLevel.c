@@ -133,9 +133,9 @@ void UpdateTutorial(void)
 void DrawTutorial(void)
 {
 	DrawObjectList();
+	DrawCollisionList();
 	DrawGlyphs(SwordName);
 	DrawGlyphs(AxeName);
-	DrawCollisionList();
 }
 
 void FreeTutorial(void)
