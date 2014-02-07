@@ -128,11 +128,6 @@ void UpdateTutorial(void)
 		InitializePause(&DrawTutorial);
 		UpdatePause();
 	}
-	if(AEInputCheckTriggered('M'))
-	{
-		ChangeTextVisibility(AxeName);
-	}
-
 }
 
 void DrawTutorial(void)

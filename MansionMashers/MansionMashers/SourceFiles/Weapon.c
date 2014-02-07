@@ -67,8 +67,6 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	else
 		CurrentWeapon->WeaponName = "Error: Memory Allocation Failed!";
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, -500, 250, 50, TextTint);
-
 	CreateWeaponStats(CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, &CurrentWeapon->BonusStrength, &CurrentWeapon->BonusAgility, &CurrentWeapon->BonusDefense);
 
 	Vec2Set(&CurrentWeapon->Position, xPos, yPos);
@@ -77,6 +75,8 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 		CurrentWeapon->WeaponSprite->SpriteTexture = LoadTexture("TextureFiles/BattleAxe.png");
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
+
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x - ((float)25 * strlen(CurrentWeapon->WeaponName) / 2 * 92.0f / 100.0f), CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height, 25, TextTint);
 
 	return CurrentWeapon;
 }
