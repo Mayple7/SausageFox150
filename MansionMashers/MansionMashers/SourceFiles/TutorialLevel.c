@@ -128,16 +128,16 @@ void UpdateTutorial(void)
 	if(AEInputCheckCurr(VK_DOWN))
 	{
 		if(volume > 0)
-			volume = volume - 0.01;
+			volume = volume - 0.01f;
 		SetChannelGroupVolume(&ChannelController, EffectType, volume);
-		ChangeTextString(TestText, VolumetoString(volumestring, (int)(volume * 100)));
+		ChangeTextString(TestText, VolumetoString(volumestring, volume * 100));
 	}
 	if(AEInputCheckCurr(VK_UP))
 	{
 		if(volume < 1)
-			volume = volume + 0.01;
-		SetChannelGroupVolume(&ChannelController, EffectType, (int)(volume* 100));
-		ChangeTextString(TestText, VolumetoString(volumestring, (int)(volume * 100)));
+			volume = volume + 0.01f;
+		SetChannelGroupVolume(&ChannelController, EffectType, (volume * 100));
+		ChangeTextString(TestText, VolumetoString(volumestring, (volume * 100)));
 	}
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
