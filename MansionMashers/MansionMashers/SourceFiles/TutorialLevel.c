@@ -161,6 +161,8 @@ void DrawTutorial(void)
 void FreeTutorial(void)
 {
 	freeObjectList();
+	ReleaseChannelGroups(&ChannelController);
+	ReleaseSound(BackgroundSnd.Sound);
 }
 
 void UnloadTutorial(void)
