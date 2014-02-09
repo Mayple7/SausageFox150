@@ -19,6 +19,8 @@
 
 // ---------------------------------------------------------------------------
 // includes
+//#include <windows.h>
+//#include <vld.h>
 #include "../HeaderFiles/StartSlides.h"
 #include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/TestLevel.h"
