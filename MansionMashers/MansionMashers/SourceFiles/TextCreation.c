@@ -193,11 +193,28 @@ void FreeText(TextGlyphs *FirstLetter)
 	New position to move the text to.
 */
 /*************************************************************************/
-void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 newPosition)
+void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 newPosition, int alignment)
 {
 	TextGlyphs* nextLetter = FirstLetter;
 	int i = 0;
+	while(nextLetter)
+	{
+		nextLetter = nextLetter->NextLetter;
+		i++;
+	}
 
+
+	if(alignment == Center)
+	{
+		newPosition.x = newPosition.x - (i * FirstLetter->Glyph->Height * 0.4f) / 2;
+	}
+	else if(alignment == Right)
+	{
+		newPosition.x = newPosition.x - (i * FirstLetter->Glyph->Height * 0.4f);
+	}
+
+	i = 0;
+	nextLetter = FirstLetter;
 	while(nextLetter)
 	{
 		if(nextLetter->Glyph)

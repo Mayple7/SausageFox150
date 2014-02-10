@@ -152,9 +152,6 @@
     <ClInclude Include="HeaderFiles\LevelShowcase.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\Weapon.h">
-      <Filter>Fox Header Files\Fox Engine Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\PhysicsConstants.h">
       <Filter>Fox Header Files\Fox Math Headers</Filter>
     </ClInclude>
@@ -220,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="HeaderFiles\EP2Slides.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Weapon.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

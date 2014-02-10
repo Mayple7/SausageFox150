@@ -61,8 +61,8 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 
 		InitializeEnemyStats(CurrentEnemy, 100, 0, 0, 0, 0, 0, 10);
 		
-		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, 2 * height / 3, objID);
-		CurrentEnemy->EnemyCollider.Offset.y = CurrentEnemy->EnemyCollider.height / 6;
+		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, height / 2, objID);
+		CurrentEnemy->EnemyCollider.Offset.y = -CurrentEnemy->EnemyCollider.height / 6;
 		break;
 	case BasicMelee:
 		break;

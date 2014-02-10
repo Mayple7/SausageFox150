@@ -473,7 +473,10 @@ void DetectPlayerCollision(void)
 					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = 0;
 					if(wList->WeaponGlyphs->Glyph->Visible)
+					{
 						ChangeTextVisibility(wList->WeaponGlyphs);
+						ChangeTextVisibility(wList->WeaponStatsGlyphs);
+					}
 				}
 			}
 		}

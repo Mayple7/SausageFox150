@@ -31,15 +31,17 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
 	CurrentWeapon->WeaponName = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
+	CurrentWeapon->WeaponStatsString = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
+	SetWeaponStats(CurrentWeapon, 0, 0, 0);
 	if(CurrentWeapon->WeaponName)
 		strcpy(CurrentWeapon->WeaponName, weaponName);
 	else
 		CurrentWeapon->WeaponName = "Error: Memory Allocation Failed!";
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, -500, 250, 25, TextTint, Left);
-
-	SetWeaponStats(CurrentWeapon, 0, 0, 0);
-
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f, 40, TextTint, Center);
+	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);
+	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) - 40 * GetLoadRatio(), 40, TextTint, Center);
+	
 	CurrentWeapon->WeaponSprite = CreateSprite(weaponTexture, 256, 256, 22, 1, 1, 0, 0);
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, width / 3, height / 4, objID);
@@ -62,6 +64,8 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
 	CurrentWeapon->WeaponName = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
+	CurrentWeapon->WeaponStatsString = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
+
 	if(CurrentWeapon->WeaponName)
 		CreateWeaponName(&CurrentWeapon->WeaponName, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity);
 	else
@@ -76,7 +80,9 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height, 25, TextTint, Left);
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f, 40, TextTint, Center);
+	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);
+	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height *1.5f) - 40 * GetLoadRatio(), 40, TextTint, Center);
 
 	return CurrentWeapon;
 }
@@ -184,11 +190,13 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	temp.WeaponPickup.Position = firstWeapon->WeaponPickup.Position;
 	temp.WeaponRarity = firstWeapon->WeaponRarity;
 	temp.WeaponGlyphs = firstWeapon->WeaponGlyphs;
+	temp.WeaponStatsGlyphs = firstWeapon->WeaponStatsGlyphs;
 	temp.WeaponAttack = firstWeapon->WeaponAttack;
 	temp.Position = firstWeapon->Position;
 	temp.objID = firstWeapon->objID;
 	temp.WeaponSprite = firstWeapon->WeaponSprite;
 	temp.WeaponName = firstWeapon->WeaponName;
+	temp.WeaponStatsString = firstWeapon->WeaponStatsString;
 	temp.WeaponType = firstWeapon->WeaponType;
 	SetWeaponStats(&temp, firstWeapon->BonusStrength, firstWeapon->BonusAgility, firstWeapon->BonusDefense);
 
@@ -196,11 +204,13 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	firstWeapon->WeaponPickup.Position = secondWeapon->WeaponPickup.Position;
 	firstWeapon->WeaponRarity = secondWeapon->WeaponRarity;
 	firstWeapon->WeaponGlyphs = secondWeapon->WeaponGlyphs;
+	firstWeapon->WeaponStatsGlyphs = secondWeapon->WeaponStatsGlyphs;
 	firstWeapon->WeaponAttack = secondWeapon->WeaponAttack;
 	firstWeapon->Position = secondWeapon->Position;
 	firstWeapon->objID = secondWeapon->objID;
 	firstWeapon->WeaponSprite = secondWeapon->WeaponSprite;
 	firstWeapon->WeaponName = secondWeapon->WeaponName;
+	firstWeapon->WeaponStatsString = secondWeapon->WeaponStatsString;
 	firstWeapon->WeaponType = secondWeapon->WeaponType;
 	SetWeaponStats(firstWeapon, secondWeapon->BonusStrength, secondWeapon->BonusAgility, secondWeapon->BonusDefense);
 
@@ -208,12 +218,29 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	secondWeapon->WeaponPickup.Position = firstWeapon->WeaponPickup.Position;
 	secondWeapon->WeaponRarity =  temp.WeaponRarity;
 	secondWeapon->WeaponGlyphs = temp.WeaponGlyphs;
+	secondWeapon->WeaponStatsGlyphs = temp.WeaponStatsGlyphs;
 	secondWeapon->WeaponAttack = temp.WeaponAttack;
 	secondWeapon->Position = temp.Position;
 	secondWeapon->objID = temp.objID;
 	secondWeapon->WeaponSprite =  temp.WeaponSprite;
 	secondWeapon->WeaponName = temp.WeaponName;
+	secondWeapon->WeaponStatsString = temp.WeaponStatsString;
 	secondWeapon->WeaponType =  temp.WeaponType;
 	SetWeaponStats(secondWeapon, temp.BonusStrength, temp.BonusAgility, temp.BonusDefense);
 }
 
+void CreateStatsString(char* StatsString, int str, int agi, int def)
+{
+	char num[10];
+
+	strcpy(StatsString, "+");
+	sprintf(num, "%d", str);
+	strcat(StatsString, num);
+	strcat(StatsString, "str +");
+	sprintf(num, "%d", agi);
+	strcat(StatsString, num);
+	strcat(StatsString, "agi +");
+	sprintf(num, "%d", def);
+	strcat(StatsString, num);
+	strcat(StatsString, "def");
+}

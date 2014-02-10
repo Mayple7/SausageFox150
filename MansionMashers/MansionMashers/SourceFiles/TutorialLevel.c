@@ -49,6 +49,7 @@ Sprite* GameLogo;
 Weapon* StarterAxe;
 Weapon* StarterSword;
 Vec3 TextColor;
+TextGlyphs* VolumeText;
 TextGlyphs* TestText;
 
 FoxSound BackgroundSnd;
@@ -98,7 +99,7 @@ void InitializeTutorial(void)
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 475, 0);
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
 
-	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750, -300);
+	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750, -250);
 
 	BlackOverlay = CreateSprite("TextureFiles/BouncePad.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Alpha = 0;
@@ -110,9 +111,11 @@ void InitializeTutorial(void)
 	DoorOverlay = CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	Vec3Set(&TextColor, 0, 0, 0);
-	TestText = CreateText(volumestring, -500, 350, 100, TextColor, Left);
+	VolumeText = CreateText("Volume ", -400, 350, 100, TextColor, Right);
+	TestText = CreateText(volumestring, -400, 350, 100, TextColor, Left);
 	SetChannelGroupVolume(&ChannelController, EffectType, 0);
 	ChangeTextVisibility(TestText);
+	ChangeTextVisibility(VolumeText);
 
 	RemoveDebugMode();
 	OverlayGrid->Visible = FALSE;
@@ -154,6 +157,8 @@ void UpdateTutorial(void)
 			if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width > TutorialBackground->Width / 2)
 			{
 				CurrentPlayer.Position.x = 50000;
+				RemoveDebugMode();
+				OverlayGrid->Visible = FALSE;
 				fadeToEnd();
 			}
 		}

@@ -13,6 +13,7 @@ enum WeaponType {Sword, Axe, Hammer, Spear, FoxWeapon};
 typedef struct Weapon
 {
 	char *WeaponName;
+	char *WeaponStatsString;
 
 	int WeaponFOF; // Friend or Foe tag
 	int objID;
@@ -27,6 +28,7 @@ typedef struct Weapon
 
 	Sprite* WeaponSprite;
 	struct TextGlyphs* WeaponGlyphs;
+	struct TextGlyphs* WeaponStatsGlyphs;
 
 	CollisionBox WeaponPickup;
 	CollisionBox WeaponAttack;
@@ -39,5 +41,6 @@ void SetWeaponStats(Weapon* CurrentWeapon, int BonusStrength, int BonusAgility, 
 void CreateWeaponStats(int WeaponType, int WeaponRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense);
 Sprite* CreateWeaponSprite(int WeaponType, int WeaponRarity, float xPos, float yPos);
 void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon);
+void CreateStatsString(char* StatsString, int str, int agi, int def);
 
 #endif
