@@ -42,6 +42,7 @@ Platform* ShortShelf;
 Platform* BouncyBed;
 Enemy* StrawDummy;
 
+Sprite* DoorOverlay;
 Sprite* BlackOverlay;
 Sprite* GameLogo;
 
@@ -105,6 +106,8 @@ void InitializeTutorial(void)
 
 	GameLogo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920, 1080, 4001, 1, 1, 0, 0);
 	GameLogo->Alpha = 0;
+
+	DoorOverlay = CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	Vec3Set(&TextColor, 0, 0, 0);
 	TestText = CreateText(volumestring, -500, 350, 100, TextColor);
@@ -190,6 +193,11 @@ void UpdateTutorial(void)
 			InitializePause(&DrawTutorial);
 			UpdatePause();
 		}
+		else if(GameLogo->Alpha > 0.8)
+		{
+			SetNextState(GS_EPMenu);
+		}
+
 	}
 	if(AEInputCheckTriggered('J'))
 	{
