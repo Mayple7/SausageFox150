@@ -1,0 +1,44 @@
+ENGINE PROOF FORMAT
+
+All in Engine
+
+Navigation bar
+slides made in pp, exported to png
+
+EP1
+Splash Screen
+Main Menu
+Tutorial
+Ep2
+
+EP1-> first set of slides
+EP2-> second set of slides (strech goals)
+
+EP1:
+Intro
+High Concept
+
+'Demo':
+Menus
+Tutorial
+-Animation
+-moving, jumping, physics (bed bounce pad)
+-collision (managers)
+-platforms, drop down
+-text, hover text
+-weapon swapping
+-swinging
+-grabbing buff
+-sound
+-pause menu/ volume -resize window
+-atttacking dummy
+-exiting tutorial level
+(black fade in logo)
+
+EP2:
+Stretch Goals
+Closing
+
+
+High Concept: 2D fast-paced, side scrolling hack and slash game set in a cartoon fantasy world with character ability progression.
+

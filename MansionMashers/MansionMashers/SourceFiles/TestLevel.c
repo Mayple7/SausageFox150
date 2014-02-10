@@ -202,16 +202,16 @@ void UpdateTestLevel(void)
 	if(AEInputCheckCurr(VK_DOWN))
 	{
 		if(volume > 0)
-			volume = volume - 0.01;
+			volume = volume - 0.01f;
 		SetChannelGroupVolume(&ChannelController, EffectType, volume);
-		ChangeTextString(volumetext, VolumetoString(volumestring, (int)(volume * 100)));
+		ChangeTextString(volumetext, VolumetoString(volumestring, volume * 100));
 	}
 	if(AEInputCheckCurr(VK_UP))
 	{
 		if(volume < 1)
-			volume = volume + 0.01;
-		SetChannelGroupVolume(&ChannelController, EffectType, (int)(volume* 100));
-		ChangeTextString(volumetext, VolumetoString(volumestring, (int)(volume * 100)));
+			volume = volume + 0.01f;
+		SetChannelGroupVolume(&ChannelController, EffectType, volume * 100);
+		ChangeTextString(volumetext, VolumetoString(volumestring, volume * 100));
 	}
 
 	//************************************
