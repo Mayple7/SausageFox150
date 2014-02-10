@@ -180,31 +180,31 @@ void UpdateEPSelector(struct Sprite *Selector)
 	{
 		case EP1But:
 			Selector->Position = EP1Button->Position;
-			Selector->Width = EP1Button->Width * 1.1 * GetLoadRatio();
-			Selector->Height = EP1Button->Height * 1.2 * GetLoadRatio();
+			Selector->Width = EP1Button->Width * 1.1;
+			Selector->Height = EP1Button->Height * 1.2;
 			UpdateMesh(Selector);
 			break;
 		case EP2But:
 			Selector->Position = EP2Button->Position;
-			Selector->Width = EP2Button->Width * 1.1 * GetLoadRatio();
-			Selector->Height = EP1Button->Height * 1.2 * GetLoadRatio();
+			Selector->Width = EP2Button->Width * 1.1;
+			Selector->Height = EP1Button->Height * 1.2;
 			UpdateMesh(Selector);
 			break;
 		case TutBut:
 			Selector->Position = TutorialButton->Position;
-			Selector->Width = TutorialButton->Width * 1.1 * GetLoadRatio();
-			Selector->Height = EP1Button->Height * 1.2 * GetLoadRatio();
+			Selector->Width = TutorialButton->Width * 1.1;
+			Selector->Height = EP1Button->Height * 1.2;
 			UpdateMesh(Selector);
 			break;
 		case QuitBut:
 			Selector->Position = QuitButton->Position;
-			Selector->Width = QuitButton->Width * 1.1 * GetLoadRatio();
-			Selector->Height = EP1Button->Height * 1.2 * GetLoadRatio();
+			Selector->Width = QuitButton->Width * 1.1;
+			Selector->Height = EP1Button->Height * 1.2;
 			UpdateMesh(Selector);
 			break;
 		default:
 			Selector->Position = EP1Button->Position;
-			Selector->Width = EP1Button->Width * 1.1 * GetLoadRatio();
+			Selector->Width = EP1Button->Width * 1.1;
 			UpdateMesh(Selector);
 			break;
 	}
