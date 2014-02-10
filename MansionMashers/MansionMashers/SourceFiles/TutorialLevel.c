@@ -42,6 +42,9 @@ Platform* ShortShelf;
 Platform* BouncyBed;
 Enemy* StrawDummy;
 
+Sprite* BlackOverlay;
+Sprite* GameLogo;
+
 Weapon* StarterAxe;
 Weapon* StarterSword;
 Vec3 TextColor;
@@ -96,6 +99,13 @@ void InitializeTutorial(void)
 
 	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750, -300);
 
+	BlackOverlay = CreateSprite("TextureFiles/BouncePad.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Alpha = 0;
+	Vec3Set(&BlackOverlay->Tint, 0, 0, 0);
+
+	GameLogo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920, 1080, 4001, 1, 1, 0, 0);
+	GameLogo->Alpha = 0;
+
 	Vec3Set(&TextColor, 0, 0, 0);
 	TestText = CreateText(volumestring, -500, 350, 100, TextColor);
 	SetChannelGroupVolume(&ChannelController, EffectType, 0);
@@ -114,14 +124,31 @@ void UpdateTutorial(void)
 	
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
+	
+	if(StrawDummy->objID > 0)
+	{
+		if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x)
+		{
+			CurrentPlayer.Position.x = (StrawDummy->Position.x) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+		}
 
-	if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
-	{
-		CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
 	}
-	else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * TutorialBackground->Width / 16)
+	else
 	{
-		CurrentPlayer.Position.x = (7 * TutorialBackground->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+		if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
+		{
+			CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
+		}
+		/*else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * TutorialBackground->Width / 16)
+		{
+			CurrentPlayer.Position.x = (7 * TutorialBackground->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+		}*/
+		else if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width > TutorialBackground->Width / 2)
+		{
+			CurrentPlayer.Position.x = 50000;
+			fadeToEnd();
+		}
+
 	}
 
 	if(AEInputCheckTriggered('U'))
@@ -158,9 +185,17 @@ void UpdateTutorial(void)
 	}
 	if(AEInputCheckTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawTutorial);
-		UpdatePause();
+		if(BlackOverlay->Alpha < 0.1)
+		{
+			InitializePause(&DrawTutorial);
+			UpdatePause();
+		}
 	}
+	if(AEInputCheckTriggered('J'))
+	{
+		FreeEnemy(StrawDummy);
+	}
+
 }
 
 void DrawTutorial(void)
@@ -187,4 +222,31 @@ void EventTutorial(void)
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
+}
+
+void fadeToEnd(void)
+{
+	if(BlackOverlay->Alpha >= 1.0f)
+	{
+		BlackOverlay->Alpha = 1.0f;
+		if(GameLogo->Alpha >= 1.0f)
+		{
+			GameLogo->Alpha = 1.0f;
+			if(AEInputCheckTriggered(VK_SPACE))
+			{
+				SetNextState(GS_EPMenu);
+			}
+		}
+		else
+		{
+			GameLogo->Alpha += GetDeltaTime();
+		}
+
+	}
+	else
+	{
+		BlackOverlay->Alpha += GetDeltaTime();
+	}
+
+
 }
