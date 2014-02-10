@@ -28,7 +28,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
-int LogicTimer;
+static int LogicTimer = 0;
 
 /*************************************************************************/
 /*!
@@ -39,16 +39,38 @@ int LogicTimer;
 	A pointer to the enemy object to be initialized
 */
 /*************************************************************************/
-Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float height, int objID, float xPos, float yPos)
+Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos)
 {
+	float width, height;
+	Vec2 position;
 	Enemy *CurrentEnemy = AddEnemy();
 
-	//Creates the enemy sprite
-	CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/EasyEnemy.png", width, height, 8, 8, 1, xPos, yPos);
+	switch(enemyType)
+	{
+	case Dummy:
+		width = 261.0f;
+		height = 373.0f;
+		Vec2Set(&position, xPos, yPos);
+		Vec2Scale(&CurrentEnemy->Position, &position, GetLoadRatio());
+		CurrentEnemy->EnemyType = Dummy;
+		CurrentEnemy->objID = objID;
+		//Creates the enemy sprite
+		CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
+		
+		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
-	//Physics variables initialized
-	InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, width, height);
-
+		InitializeEnemyStats(CurrentEnemy, 100, 0, 0, 0, 0, 0, 10);
+		
+		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, 2 * height / 3, objID);
+		CurrentEnemy->EnemyCollider.Offset.y = CurrentEnemy->EnemyCollider.height / 6;
+		break;
+	case BasicMelee:
+		break;
+	case BasicRanged:
+		break;
+	default:
+		break;
+	}
 	return CurrentEnemy;
 }
 
@@ -63,6 +85,21 @@ Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float hei
 /*************************************************************************/
 void UpdateEnemy(Enemy *CurrentEnemy)
 {
+	switch(CurrentEnemy->EnemyType)
+	{
+	case Dummy:
+		// Too dummy to do anything lololol
+		break;
+	case BasicMelee:
+		// Call enemy logic here
+		break;
+	case BasicRanged:
+		// Call enemy logic here
+		break;
+	default:
+		break;
+	}
+	/*
 	//Check if enemy is on the floor
 	if(CurrentEnemy->Position.y <= -225)
 	{
@@ -80,6 +117,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	Vec2Add(&CurrentEnemy->Position, &CurrentEnemy->Position, &CurrentEnemy->EnemyRigidBody.Velocity);
 	CurrentEnemy->EnemySprite->Position = CurrentEnemy->Position;
 	CurrentEnemy->EnemyCollider.Position = CurrentEnemy->Position;
+	*/
 }
 
 /*************************************************************************/
@@ -96,6 +134,11 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 /*************************************************************************/
 void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer)
 {
+	// ************************** //
+	//	   THIS IS DEPRECATED	  //
+	// ************************** //
+
+	/*
 	LogicTimer++;
 
 	//Resets the logic timer
@@ -124,6 +167,20 @@ void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer)
 	{
 		ZeroAcceleration(&CurrentEnemy->EnemyRigidBody);
 	}
+	*/
+}
 
+void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp)
+{
+	CurrentEnemy->CurrentEnemyStats.MaxHealth = maxHP;
+	CurrentEnemy->CurrentEnemyStats.CurrentHealth = maxHP;
 
+	CurrentEnemy->CurrentEnemyStats.MoveSpeed = movSpeed;
+	CurrentEnemy->CurrentEnemyStats.AttackSpeed = atkSpeed;
+
+	CurrentEnemy->CurrentEnemyStats.DamageReduction = dmgReduction;
+	CurrentEnemy->CurrentEnemyStats.Damage = dmg;
+
+	CurrentEnemy->CurrentEnemyStats.Money = money;
+	CurrentEnemy->CurrentEnemyStats.Experience = exp;
 }

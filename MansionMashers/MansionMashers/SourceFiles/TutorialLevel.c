@@ -40,6 +40,7 @@ Sprite* OverlayGrid;
 Platform* Shelf;
 Platform* ShortShelf;
 Platform* BouncyBed;
+Enemy* StrawDummy;
 
 Weapon* StarterAxe;
 Weapon* StarterSword;
@@ -92,6 +93,8 @@ void InitializeTutorial(void)
 
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 475, 0);
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
+
+	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750, -300);
 
 	Vec3Set(&TextColor, 0, 0, 0);
 	TestText = CreateText(volumestring, -500, 350, 100, TextColor);
