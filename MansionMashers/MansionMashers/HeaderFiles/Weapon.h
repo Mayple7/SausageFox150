@@ -27,6 +27,7 @@ typedef struct Weapon
 	Vec2 Position;
 
 	Sprite* WeaponSprite;
+	Sprite* WeaponHoverBackground;
 	struct TextGlyphs* WeaponGlyphs;
 	struct TextGlyphs* WeaponStatsGlyphs;
 

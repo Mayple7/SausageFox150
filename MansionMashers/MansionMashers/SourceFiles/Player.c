@@ -476,6 +476,7 @@ void DetectPlayerCollision(void)
 					{
 						ChangeTextVisibility(wList->WeaponGlyphs);
 						ChangeTextVisibility(wList->WeaponStatsGlyphs);
+						wList->WeaponHoverBackground->Visible = FALSE;
 					}
 				}
 			}

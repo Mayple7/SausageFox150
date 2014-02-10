@@ -80,6 +80,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	if(!wList->WeaponGlyphs->Glyph->Visible)
 	{
 		ChangeTextVisibility(wList->WeaponGlyphs);
+		wList->WeaponHoverBackground->Visible = TRUE;
 	}
 	if(!wList->WeaponStatsGlyphs->Glyph->Visible)
 	{

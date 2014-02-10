@@ -25,6 +25,7 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 {
 	Weapon *CurrentWeapon = AddWeapon();
 	Vec3 TextTint;
+	int nameLen, statsLen;
 	Vec3Set(&TextTint, 0, 0, 0);
 	CurrentWeapon->WeaponFOF = PlayerWeapon; // Friend or Foe tag
 	CurrentWeapon->objID = objID;
@@ -47,6 +48,18 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, width / 3, height / 4, objID);
 	CurrentWeapon->WeaponAttack.Offset.y += 5 * CurrentWeapon->WeaponAttack.height / 8;
 
+	nameLen = strlen(CurrentWeapon->WeaponName);
+	statsLen = strlen(CurrentWeapon->WeaponStatsString);
+	if(nameLen >= statsLen)
+	{
+		CurrentWeapon->WeaponHoverBackground = CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 20, 100, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) - 20);
+	}
+	else
+	{
+		CurrentWeapon->WeaponHoverBackground = CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 20, 100, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) - 20);
+	}
+	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
+
 	return CurrentWeapon;
 }
 
@@ -56,6 +69,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	Weapon *CurrentWeapon = AddWeapon();
 	Vec2 ColliderPos;
 	Vec3 TextTint;
+	int nameLen, statsLen;
 	Vec2Set(&ColliderPos, xPos, yPos);
 	Vec3Set(&TextTint, 0, 0, 0);
 
@@ -82,8 +96,20 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 
 	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f, 40, TextTint, Center);
 	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);
-	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height *1.5f) - 40 * GetLoadRatio(), 40, TextTint, Center);
+	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height *1.5f) - 40, 40, TextTint, Center);
 
+	nameLen = strlen(CurrentWeapon->WeaponName);
+	statsLen = strlen(CurrentWeapon->WeaponStatsString);
+	if(nameLen >= statsLen)
+	{
+		CurrentWeapon->WeaponHoverBackground = CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 20, 100, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) - 20);
+	}
+	else
+	{
+		CurrentWeapon->WeaponHoverBackground = CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 20, 100, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) - 20);
+	}
+	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
+	
 	return CurrentWeapon;
 }
 
@@ -198,6 +224,7 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	temp.WeaponName = firstWeapon->WeaponName;
 	temp.WeaponStatsString = firstWeapon->WeaponStatsString;
 	temp.WeaponType = firstWeapon->WeaponType;
+	temp.WeaponHoverBackground = firstWeapon->WeaponHoverBackground;
 	SetWeaponStats(&temp, firstWeapon->BonusStrength, firstWeapon->BonusAgility, firstWeapon->BonusDefense);
 
 	firstWeapon->WeaponPickup = secondWeapon->WeaponPickup;
@@ -212,6 +239,7 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	firstWeapon->WeaponName = secondWeapon->WeaponName;
 	firstWeapon->WeaponStatsString = secondWeapon->WeaponStatsString;
 	firstWeapon->WeaponType = secondWeapon->WeaponType;
+	firstWeapon->WeaponHoverBackground = secondWeapon->WeaponHoverBackground;
 	SetWeaponStats(firstWeapon, secondWeapon->BonusStrength, secondWeapon->BonusAgility, secondWeapon->BonusDefense);
 
 	secondWeapon->WeaponPickup = temp.WeaponPickup;
@@ -226,6 +254,8 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	secondWeapon->WeaponName = temp.WeaponName;
 	secondWeapon->WeaponStatsString = temp.WeaponStatsString;
 	secondWeapon->WeaponType =  temp.WeaponType;
+	secondWeapon->WeaponHoverBackground = temp.WeaponHoverBackground;
+
 	SetWeaponStats(secondWeapon, temp.BonusStrength, temp.BonusAgility, temp.BonusDefense);
 }
 
