@@ -39,6 +39,7 @@ Sprite* TutorialBackground;
 Sprite* OverlayGrid;
 Platform* Shelf;
 Platform* ShortShelf;
+Platform* BouncyBed;
 
 Weapon* StarterAxe;
 Weapon* StarterSword;
@@ -67,6 +68,7 @@ void InitializeTutorial(void)
 	volumestring[2] = '0';
 	volumestring[3] = '\0';
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
+
 	InitializePlayer(&CurrentPlayer, newID++, 0, GROUNDLEVEL + 1);
 
 	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
@@ -76,12 +78,14 @@ void InitializeTutorial(void)
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 475, -170);
 	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f); 
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height * 3 / 8;
-	Shelf->PlatformCollider.collisionDebug = TRUE;
 
 	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
 	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
-	ShortShelf->PlatformCollider.collisionDebug = TRUE;
+
+	BouncyBed = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 375.0f, 100.0f, newID++, -225, -350);
+	BouncyBed->PlatformSprite->Visible = FALSE;
+	BouncyBed->PlatformRigidBody.Restitution = 1.9f;
 
 	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -200, -300);
 	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;
@@ -91,6 +95,7 @@ void InitializeTutorial(void)
 
 	Vec3Set(&TextColor, 0, 0, 0);
 	TestText = CreateText(volumestring, -500, 350, 100, TextColor);
+	SetChannelGroupVolume(&ChannelController, EffectType, 0);
 	ChangeTextVisibility(TestText);
 
 	ResetCamera();
