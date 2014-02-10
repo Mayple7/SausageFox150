@@ -6,6 +6,8 @@
 #include "Sprite.h"
 #include "CollisionBox.h"
 
+enum EnemyType { Dummy, BasicMelee, BasicRanged, AdvancedMelee, AdvancedRanged, ExpertMelee, ExpertRanged};
+
 typedef struct EnemyStats
 {
 	int MaxHealth;
@@ -18,8 +20,6 @@ typedef struct EnemyStats
 	//Defeated enemy rewards
 	int Money;
 	int Experience;
-
-	//struct Weapon CurrentWeapon;
 }EnemyStats;
 
 typedef struct Enemy
@@ -31,12 +31,14 @@ typedef struct Enemy
 	RigidBody EnemyRigidBody;
 	EnemyStats CurrentEnemyStats;
 	CollisionBox EnemyCollider;
+	struct Weapon* EnemyWeapon;
 
 	Vec2 Position;
 
 }Enemy;
 
-Enemy* CreateEnemy(char* textureName, int collisionGroup, float width, float height, int objID, float xPos, float yPos);
+Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos);
+void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp);
 void UpdateEnemy(Enemy *CurrentEnemy);
 void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer);
 

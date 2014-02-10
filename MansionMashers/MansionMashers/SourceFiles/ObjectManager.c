@@ -139,7 +139,7 @@ Enemy* AddEnemy(void)
 	{
 		if(enemyList[i].objID == 0 || enemyList[i].objID == -1)
 		{
-			//printf("Enemy at %i Created\n", i);
+			printf("Enemy at %i Created\n", i);
 			return &enemyList[i];
 		}
 	}
@@ -426,6 +426,16 @@ void freeObjectList(void)
 			//printf("Weapon %i is now freed\n", i);
 		}
 	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (enemyList[i].objID)
+		{
+			//Free the mesh and texture data
+			FreeEnemy(&enemyList[i]);
+			//printf("Weapon %i is now freed\n", i);
+		}
+	}
 
 	//Free the object list data allocation
 	FreeMyAlloc(drawList);
@@ -498,6 +508,22 @@ void ResizeObjects(float ratio)
 			//printf("Platform %i is now freed\n", i);
 		}
 	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (enemyList[i].objID > 0)
+		{
+			printf("%f : %f\n", enemyList[i].EnemyCollider.Position.x, enemyList[i].EnemyCollider.Position.y);
+			//Update enemy collider
+			enemyList[i].EnemyCollider.width *= ratio;
+			enemyList[i].EnemyCollider.height *= ratio;
+			Vec2Scale(&enemyList[i].EnemyCollider.Offset, &enemyList[i].EnemyCollider.Offset, ratio);
+			Vec2Scale(&enemyList[i].Position, &enemyList[i].Position, ratio);
+			UpdateCollisionPosition(&enemyList[i].EnemyCollider, &enemyList[i].Position);
+			UpdateCollider(&enemyList[i].EnemyCollider, enemyList[i].EnemyCollider.width, enemyList[i].EnemyCollider.height);
+			printf("%f : %f\n", enemyList[i].EnemyCollider.Position.x, enemyList[i].EnemyCollider.Position.y);
+		}
+	}
 	Vec2Scale(&CurrentPlayer.PlayerCollider.Position, &CurrentPlayer.PlayerCollider.Position, ratio);
 	Vec2Scale(&CurrentPlayer.Position, &CurrentPlayer.Position, ratio);
 	CurrentPlayer.PlayerCollider.width *= ratio;
@@ -539,6 +565,16 @@ void SetDebugMode(void)
 			foodList[i].FoodCollider.collisionDebug = TRUE;
 		}
 	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (enemyList[i].objID)
+		{
+			//Free the mesh and texture data
+			enemyList[i].EnemyCollider.collisionDebug = TRUE;
+		}
+	}
+
 	CurrentPlayer.PlayerCollider.collisionDebug = TRUE;
 }
 
@@ -571,6 +607,15 @@ void RemoveDebugMode(void)
 		{
 			//Free the mesh and texture data
 			foodList[i].FoodCollider.collisionDebug = FALSE;
+		}
+	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (enemyList[i].objID)
+		{
+			//Free the mesh and texture data
+			enemyList[i].EnemyCollider.collisionDebug = FALSE;
 		}
 	}
 	CurrentPlayer.PlayerCollider.collisionDebug = FALSE;

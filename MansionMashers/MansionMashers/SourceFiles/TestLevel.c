@@ -149,7 +149,7 @@ void InitializeTestLevel(void)
 	InitializePlayer(&CurrentPlayer, newID++, 0, 0);
 
 	// Creates the enemy
-	CurrentEnemy = CreateEnemy("TextureFiles/EasyEnemy.png", EnemyType, 150, 150, newID++, 0, 0);
+	//CurrentEnemy = CreateEnemy("TextureFiles/EasyEnemy.png", EnemyType, 150, 150, newID++, 0, 0);
 
 	//Adding sounds
 	CreateSound("Sounds/drumloop.wav", &Sound1, SmallSnd);

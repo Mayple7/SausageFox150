@@ -39,6 +39,11 @@ Sprite* TutorialBackground;
 Sprite* OverlayGrid;
 Platform* Shelf;
 Platform* ShortShelf;
+Platform* BouncyBed;
+Enemy* StrawDummy;
+
+Sprite* BlackOverlay;
+Sprite* GameLogo;
 
 Weapon* StarterAxe;
 Weapon* StarterSword;
@@ -67,6 +72,7 @@ void InitializeTutorial(void)
 	volumestring[2] = '0';
 	volumestring[3] = '\0';
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
+
 	InitializePlayer(&CurrentPlayer, newID++, 0, GROUNDLEVEL + 1);
 
 	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
@@ -76,12 +82,14 @@ void InitializeTutorial(void)
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 475, -170);
 	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f); 
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height * 3 / 8;
-	Shelf->PlatformCollider.collisionDebug = TRUE;
 
 	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
 	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
-	ShortShelf->PlatformCollider.collisionDebug = TRUE;
+
+	BouncyBed = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 375.0f, 100.0f, newID++, -225, -350);
+	BouncyBed->PlatformSprite->Visible = FALSE;
+	BouncyBed->PlatformRigidBody.Restitution = 2.2f;
 
 	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -200, -300);
 	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;
@@ -89,9 +97,22 @@ void InitializeTutorial(void)
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 475, 0);
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
 
+	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750, -300);
+
+	BlackOverlay = CreateSprite("TextureFiles/BouncePad.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Alpha = 0;
+	Vec3Set(&BlackOverlay->Tint, 0, 0, 0);
+
+	GameLogo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920, 1080, 4001, 1, 1, 0, 0);
+	GameLogo->Alpha = 0;
+
 	Vec3Set(&TextColor, 0, 0, 0);
 	TestText = CreateText(volumestring, -500, 350, 100, TextColor);
+	SetChannelGroupVolume(&ChannelController, EffectType, 0);
 	ChangeTextVisibility(TestText);
+
+	RemoveDebugMode();
+	OverlayGrid->Visible = FALSE;
 
 	ResetCamera();
 }
@@ -103,14 +124,31 @@ void UpdateTutorial(void)
 	
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
+	
+	if(StrawDummy->objID > 0)
+	{
+		if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x)
+		{
+			CurrentPlayer.Position.x = (StrawDummy->Position.x) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+		}
 
-	if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
-	{
-		CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
 	}
-	else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * TutorialBackground->Width / 16)
+	else
 	{
-		CurrentPlayer.Position.x = (7 * TutorialBackground->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+		if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
+		{
+			CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
+		}
+		/*else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * TutorialBackground->Width / 16)
+		{
+			CurrentPlayer.Position.x = (7 * TutorialBackground->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+		}*/
+		else if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width > TutorialBackground->Width / 2)
+		{
+			CurrentPlayer.Position.x = 50000;
+			fadeToEnd();
+		}
+
 	}
 
 	if(AEInputCheckTriggered('U'))
@@ -147,9 +185,17 @@ void UpdateTutorial(void)
 	}
 	if(AEInputCheckTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawTutorial);
-		UpdatePause();
+		if(BlackOverlay->Alpha < 0.1)
+		{
+			InitializePause(&DrawTutorial);
+			UpdatePause();
+		}
 	}
+	if(AEInputCheckTriggered('J'))
+	{
+		FreeEnemy(StrawDummy);
+	}
+
 }
 
 void DrawTutorial(void)
@@ -176,4 +222,31 @@ void EventTutorial(void)
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
+}
+
+void fadeToEnd(void)
+{
+	if(BlackOverlay->Alpha >= 1.0f)
+	{
+		BlackOverlay->Alpha = 1.0f;
+		if(GameLogo->Alpha >= 1.0f)
+		{
+			GameLogo->Alpha = 1.0f;
+			if(AEInputCheckTriggered(VK_SPACE))
+			{
+				SetNextState(GS_EPMenu);
+			}
+		}
+		else
+		{
+			GameLogo->Alpha += GetDeltaTime();
+		}
+
+	}
+	else
+	{
+		BlackOverlay->Alpha += GetDeltaTime();
+	}
+
+
 }

@@ -47,12 +47,6 @@ typedef struct PlayerStats
 	int Damage;
 
 	int Money;
-	/*struct Inventory
-	{
-		Weapon InvWeapons[MAX_INVENTORY];
-	};*/
-
-	//struct Weapon CurrentWeapon;
 }PlayerStats;
 
 typedef struct Player

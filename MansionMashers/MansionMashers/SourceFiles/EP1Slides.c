@@ -1,18 +1,18 @@
 /*****************************************************************************/
 /*!
-\file				StartSlides.c
+\file				EP1Slides.c
 \author				Dan Muller (d.muller
 \date				Jan 8, 2014
 
 \brief				Functions for fading in and out all the splash screen slides
 
 \par				Functions:
-\li					LoadStartScreen
-\li					InitializeStartScreen
-\li					UpdateStartScreen
-\li					DrawStartScreen
-\li					FreeStartScreen
-\li					UnloadStartScreen
+\li					LoadEP1Screen
+\li					InitializeEP1Screen
+\li					UpdateEP1Screen
+\li					DrawEP1Screen
+\li					FreeEP1Screen
+\li					UnloadEP1Screen
 \li					fadeLogic
   
 \par 
@@ -26,7 +26,7 @@
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/StartSlides.h"
+#include "../HeaderFiles/EP1Slides.h"
 #include "../HeaderFiles/FoxEngine.h"
 
 // ---------------------------------------------------------------------------
@@ -39,10 +39,13 @@ static float alpha = 0.0f;
 static int slideTextureNum = 0;
 static int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 static int slideTimer = 0;
+static int slideDir;								//1: Forward, 0: Backward
 
-Sprite *SausageFox;
-Sprite *Title;
-Sprite *Digipen;
+static Sprite *SausageFox;
+static Sprite *Title;
+static Sprite *Digipen;
+
+static enum Slides { Slide1, Slide2, Slide3, MaxSlides};
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -54,10 +57,10 @@ static int fadeLogic(void);
 /*************************************************************************/
 /*!
 	\brief
-	Loads the assets for the start screen
+	Loads the assets for the EP1 screen
 */
 /*************************************************************************/
-void LoadStartScreen(void)
+void LoadEP1Screen(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
@@ -66,10 +69,10 @@ void LoadStartScreen(void)
 /*************************************************************************/
 /*!
 	\brief
-	Initializes the objects for the start screen
+	Initializes the objects for the EP1 screen
 */
 /*************************************************************************/
-void InitializeStartScreen(void)
+void InitializeEP1Screen(void)
 {
 	// Reset the object list
 	resetObjectList();
@@ -83,18 +86,21 @@ void InitializeStartScreen(void)
 /*************************************************************************/
 /*!
 	\brief
-	Updates the start screen
+	Updates the EP1 screen
 */
 /*************************************************************************/
-void UpdateStartScreen(void)
+void UpdateEP1Screen(void)
 {
 	int changeLevel;
 
 	// Fades the slides if needed to and returns when to change levels
 	changeLevel = fadeLogic();
 
+	if(AEInputCheckTriggered(VK_ESCAPE))
+		SetNextState(GS_EPMenu);
+
 	if(changeLevel == 1)
-		SetNextState(GS_Tutorial);
+		SetNextState(GS_EPMenu);
 	else if(changeLevel == -1)
 		SetNextState(GS_Quit);
 }
@@ -105,10 +111,10 @@ void UpdateStartScreen(void)
 	Draws the slides to the screen
 */
 /*************************************************************************/
-void DrawStartScreen(void)
+void DrawEP1Screen(void)
 {
 	//Digipen Logo
-	if(slideTextureNum == 0)
+	if(slideTextureNum == Slide1)
 	{
 		Digipen->Alpha = alpha;
 		DrawSprite(Digipen);
@@ -117,7 +123,7 @@ void DrawStartScreen(void)
 		Digipen->Alpha = 0.0f;
 
 	//Sausage Fox Logo
-	if(slideTextureNum == 1)
+	if(slideTextureNum == Slide2)
 	{
 		SausageFox->Alpha = alpha;
 		DrawSprite(SausageFox);
@@ -126,7 +132,7 @@ void DrawStartScreen(void)
 		SausageFox->Alpha = 0.0f;
 
 	//Mansion Mashers Logo
-	if(slideTextureNum == 2)
+	if(slideTextureNum == Slide3)
 	{
 		Title->Alpha = alpha;
 		DrawSprite(Title);
@@ -142,7 +148,7 @@ void DrawStartScreen(void)
 	Frees the objects from the level
 */
 /*************************************************************************/
-void FreeStartScreen(void)
+void FreeEP1Screen(void)
 {
 	// Freeing the objects and textures
 	freeObjectList();
@@ -151,10 +157,10 @@ void FreeStartScreen(void)
 /*************************************************************************/
 /*!
 	\brief
-	Unloads the assets from the start screen
+	Unloads the assets from the EP1 screen
 */
 /*************************************************************************/
-void UnloadStartScreen(void)
+void UnloadEP1Screen(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
@@ -187,16 +193,27 @@ static int fadeLogic(void)
 		fade = 0;
 	}
 	// The fade out is done and it is not the last slide
-	else if(alpha < 0.0 && slideTextureNum != 2)
+	else if(alpha < 0.0 && slideTextureNum != MaxSlides - 1)
 	{
-		slideTextureNum += 1;
+		if(slideDir)
+			slideTextureNum += 1;
+		else if(slideTextureNum)
+			slideTextureNum -= 1;
 		fade = 1;
 		alpha = 0.0f;
 	}
 	// The fade out is done, go to main menu
 	else if(alpha < 0.0)
 	{
-		return 1;
+		if(slideDir)
+			return 1;
+		else
+		{
+			slideTextureNum -= 1;
+			fade = 1;
+			alpha = 0.0f;
+		}
+
 	}
 
 	// Timer for the slide staying visible
@@ -204,10 +221,20 @@ static int fadeLogic(void)
 		slideTimer += 1;
 
 	// Start fading out the slide after some time
-	if(slideTimer == 120)
+	if(AEInputCheckTriggered(VK_SPACE) && alpha > 0.5)
 	{
+		slideDir = 1;
 		fade = 2;
 		slideTimer = 0;
+	}
+	else if(AEInputCheckTriggered(VK_BACK) && alpha > 0.5)
+	{
+		if(slideTextureNum != Slide1)
+		{
+			slideDir = 0;
+			fade = 2;
+			slideTimer = 0;
+		}
 	}
 
 	// Do not change levels

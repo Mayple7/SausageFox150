@@ -9,5 +9,6 @@ void FreeTutorial(void);
 void UnloadTutorial(void);
 
 void EventTutorial(void);
+void fadeToEnd(void);
 
 #endif
