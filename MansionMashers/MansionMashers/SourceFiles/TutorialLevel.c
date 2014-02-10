@@ -85,7 +85,7 @@ void InitializeTutorial(void)
 
 	BouncyBed = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 375.0f, 100.0f, newID++, -225, -350);
 	BouncyBed->PlatformSprite->Visible = FALSE;
-	BouncyBed->PlatformRigidBody.Restitution = 1.9f;
+	BouncyBed->PlatformRigidBody.Restitution = 2.2f;
 
 	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -200, -300);
 	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;

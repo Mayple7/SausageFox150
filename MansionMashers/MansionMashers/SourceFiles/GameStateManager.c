@@ -34,6 +34,8 @@
 #include "../HeaderFiles/TutorialLevel.h"
 #include "../HeaderFiles/MapLevel.h"
 #include "../HeaderFiles/EPMenu.h"
+#include "../HeaderFiles/EP1Slides.h"
+#include "../HeaderFiles/EP2Slides.h"
 #include <stdio.h>
 
 // ---------------------------------------------------------------------------
@@ -233,6 +235,22 @@ void GSMUpdate(int CurState)
 			GSMPointers.pFree = FreeEPMenu;
 			GSMPointers.pDraw = DrawEPMenu;
 			GSMPointers.pUnload = UnloadEPMenu;
+			break;
+		case GS_EP1Slides:
+			GSMPointers.pLoad = LoadEP1Screen;
+			GSMPointers.pInit = InitializeEP1Screen;
+			GSMPointers.pUpdate = UpdateEP1Screen;
+			GSMPointers.pFree = FreeEP1Screen;
+			GSMPointers.pDraw = DrawEP1Screen;
+			GSMPointers.pUnload = UnloadEP1Screen;
+			break;
+		case GS_EP2Slides:
+			GSMPointers.pLoad = LoadEP2Screen;
+			GSMPointers.pInit = InitializeEP2Screen;
+			GSMPointers.pUpdate = UpdateEP2Screen;
+			GSMPointers.pFree = FreeEP2Screen;
+			GSMPointers.pDraw = DrawEP2Screen;
+			GSMPointers.pUnload = UnloadEP2Screen;
 			break;
 	}
 }

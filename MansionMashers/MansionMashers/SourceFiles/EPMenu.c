@@ -101,7 +101,7 @@ void EPMenuInput(void)
 		}
 		else if(AEInputCheckTriggered(VK_RETURN) || AEInputCheckTriggered(VK_SPACE))
 		{
-			SetNextState(GS_MainMenu);
+			SetNextState(GS_EP1Slides);
 		}
 		break;
 	case EP2But:
@@ -117,7 +117,7 @@ void EPMenuInput(void)
 		}
 		else if(AEInputCheckTriggered(VK_RETURN) || AEInputCheckTriggered(VK_SPACE))
 		{
-			SetNextState(GS_MainMenu);
+			SetNextState(GS_EP2Slides);
 		}
 		break;
 	case TutBut:
