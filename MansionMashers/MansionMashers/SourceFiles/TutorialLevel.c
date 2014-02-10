@@ -98,6 +98,9 @@ void InitializeTutorial(void)
 	SetChannelGroupVolume(&ChannelController, EffectType, 0);
 	ChangeTextVisibility(TestText);
 
+	RemoveDebugMode();
+	OverlayGrid->Visible = FALSE;
+
 	ResetCamera();
 }
 

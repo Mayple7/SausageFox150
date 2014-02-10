@@ -93,7 +93,7 @@ void UpdateStartScreen(void)
 	changeLevel = fadeLogic();
 
 	if(changeLevel == 1)
-		SetNextState(GS_MainMenu);
+		SetNextState(GS_Tutorial);
 	else if(changeLevel == -1)
 		SetNextState(GS_Quit);
 }

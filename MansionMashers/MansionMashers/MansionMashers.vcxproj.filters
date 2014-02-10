@@ -212,6 +212,9 @@
     <ClInclude Include="HeaderFiles\MemoryManager.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\EPMenu.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -312,6 +315,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\MemoryManager.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\EPMenu.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

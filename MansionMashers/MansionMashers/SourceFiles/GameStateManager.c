@@ -33,6 +33,7 @@
 #include "../HeaderFiles/LevelShowcase.h"
 #include "../HeaderFiles/TutorialLevel.h"
 #include "../HeaderFiles/MapLevel.h"
+#include "../HeaderFiles/EPMenu.h"
 #include <stdio.h>
 
 // ---------------------------------------------------------------------------
@@ -225,7 +226,13 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawMapLevel;
 			GSMPointers.pUnload = UnloadMapLevel;
 			break;
-		case GS_Level2:
+		case GS_EPMenu:
+			GSMPointers.pLoad = LoadEPMenu;
+			GSMPointers.pInit = InitializeEPMenu;
+			GSMPointers.pUpdate = UpdateEPMenu;
+			GSMPointers.pFree = FreeEPMenu;
+			GSMPointers.pDraw = DrawEPMenu;
+			GSMPointers.pUnload = UnloadEPMenu;
 			break;
 	}
 }

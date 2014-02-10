@@ -145,7 +145,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	//GSM Start
 	FoxSystemInitialize();
-	GSMInitialize(GS_MainMenu);
+	GSMInitialize(GS_EPMenu);
 
 	while(GameRunning)
 	{
