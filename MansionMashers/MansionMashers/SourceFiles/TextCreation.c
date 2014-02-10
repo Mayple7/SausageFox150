@@ -22,7 +22,6 @@
 // ---------------------------------------------------------------------------
 // includes
 #include "../HeaderFiles/TextCreation.h"
-#include <stdio.h>
 
 /*************************************************************************/
 /*!
@@ -48,12 +47,26 @@
 	Returns a pointer to the first element in the text linked list
 */
 /*************************************************************************/
-TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor)
+TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor, int alignment)
 {
 	TextGlyphs *textString, *firstLetter, *nextLetter;
 	int length, i;
+	float firstXPos;
 	length = strlen(string);
 	
+	if(alignment == Center)
+	{
+		firstXPos = xPos - (length * fontSize * 0.4f) / 2;
+	}
+	else if(alignment == Right)
+	{
+		firstXPos = xPos - (length * fontSize * 0.4f);
+	}
+	else
+	{
+		firstXPos = xPos;
+	}
+
 	firstLetter = (TextGlyphs *) CallocMyAlloc(1, sizeof(TextGlyphs));
 	// Uppercases the letters then creates a glyph
 	for(i = 0; i < length; i++)
@@ -64,7 +77,7 @@ TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 
 			nextLetter = firstLetter;
 		
 		nextLetter->letter = string[i];
-		nextLetter->Glyph = ConvertToGlyph(string[i], fontSize, xPos + (i * fontSize * 0.4f), yPos);
+		nextLetter->Glyph = ConvertToGlyph(string[i], fontSize, firstXPos + (i * fontSize * 0.4f), yPos);
 		nextLetter->NextLetter = NULL;
 		if(nextLetter->Glyph)
 		{
