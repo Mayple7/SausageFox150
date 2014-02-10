@@ -162,7 +162,7 @@ void InitializeTestLevel(void)
 	volumestring[2] = '0';
 	volumestring[3] = '\0';
 	Vec3Set(&textTint, 1, 1, 1);
-	volumetext = CreateText(volumestring, -300.0f, 350.0f, 150, textTint);
+	volumetext = CreateText(volumestring, -300.0f, 350.0f, 150, textTint, Left);
 	ChangeTextVisibility(volumetext);
 	
 

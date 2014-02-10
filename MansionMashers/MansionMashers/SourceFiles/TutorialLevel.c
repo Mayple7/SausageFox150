@@ -110,7 +110,7 @@ void InitializeTutorial(void)
 	DoorOverlay = CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	Vec3Set(&TextColor, 0, 0, 0);
-	TestText = CreateText(volumestring, -500, 350, 100, TextColor);
+	TestText = CreateText(volumestring, -500, 350, 100, TextColor, Left);
 	SetChannelGroupVolume(&ChannelController, EffectType, 0);
 	ChangeTextVisibility(TestText);
 
@@ -142,16 +142,21 @@ void UpdateTutorial(void)
 		{
 			CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
 		}
-		/*else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * TutorialBackground->Width / 16)
+		else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * TutorialBackground->Width / 16 && CurrentPlayer.Position.y + CurrentPlayer.PlayerCollider.height / 2 > -TutorialBackground->Height / 8)
 		{
 			CurrentPlayer.Position.x = (7 * TutorialBackground->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
-		}*/
-		else if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width > TutorialBackground->Width / 2)
-		{
-			CurrentPlayer.Position.x = 50000;
-			fadeToEnd();
 		}
-
+		else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * TutorialBackground->Width / 16)
+		{
+			if(CurrentPlayer.PlayerRigidBody.Velocity.y > 0 && CurrentPlayer.Position.y + CurrentPlayer.PlayerCollider.height / 2 > -TutorialBackground->Height / 7)
+				ZeroVelocity(&CurrentPlayer.PlayerRigidBody);
+			
+			if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width > TutorialBackground->Width / 2)
+			{
+				CurrentPlayer.Position.x = 50000;
+				fadeToEnd();
+			}
+		}
 	}
 
 	if(AEInputCheckTriggered('U'))
@@ -177,7 +182,7 @@ void UpdateTutorial(void)
 	{
 		if(volume < 1)
 			volume = volume + 0.01f;
-		SetChannelGroupVolume(&ChannelController, EffectType, (volume * 100));
+		SetChannelGroupVolume(&ChannelController, EffectType, volume);
 		ChangeTextString(TestText, VolumetoString(volumestring, (volume * 100)));
 	}
 	// Return to main menu with RSHIFT

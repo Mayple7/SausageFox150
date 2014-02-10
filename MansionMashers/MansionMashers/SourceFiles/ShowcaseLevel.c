@@ -90,7 +90,7 @@ void InitializeShowcase(void)
 	resetObjectList();
 
 	// Create the player
-	InitializePlayer(&CurrentPlayer, newID++, -1380, -220);
+	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
 
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
@@ -146,27 +146,27 @@ void InitializeShowcase(void)
 	Letters->AnimationSpeed = 60;
 
 	Vec3Set(&textTint, 0.6f, 0.169f, 0.8f);
-	Juli = CreateText("Hi Juli, This is dynamic!", 100, 300, 100, textTint);
+	Juli = CreateText("Hi Juli, This is dynamic!", 0, 300, 100, textTint, Right);
 	ChangeTextVisibility(Juli);
 
 	Vec3Set(&textTint, 1.0f, 1.0f, 0.0f);
-	Luke = CreateText("Luke is muy grande.", 100, 200, 100, textTint);
+	Luke = CreateText("Luke is muy grande.", 100, 200, 100, textTint, Left);
 	ChangeTextVisibility(Luke);
 
 	Vec3Set(&textTint, 1.0f, 0.0f, 0.0f);
-	Kaden = CreateText("+1 to kaden for being 100% less of a kevin this week", 100, 100, 100, textTint);
+	Kaden = CreateText("+1 to kaden for being 100% less of a kevin this week", 100, 100, 100, textTint, Left);
 	ChangeTextVisibility(Kaden);
 
 	Vec3Set(&textTint, 0.01f, 0.6f, 0.39f);
-	Dan = CreateText("Dan is just way too awesome, hahahaha!!!", 300, 0, 150, textTint);
+	Dan = CreateText("Dan is just way too awesome, hahahaha!!!", 300, 0, 150, textTint, Left);
 	ChangeTextVisibility(Dan);
 
 	Vec3Set(&textTint, 1.0f, 1.0f, 1.0f);
-	Fox = CreateText("The quick brown fox jumps over the lazy dog! -+!.,%()", 100, -200, 200, textTint);
+	Fox = CreateText("The quick brown fox jumps over the lazy dog! -+!.,%()", 100, -200, 200, textTint, Left);
 	ChangeTextVisibility(Fox);
 
 	Vec3Set(&textTint, 0.0f, 0.0f, 0.0f);
-	subText = CreateText("(These are the letters and symbols that you can display)", 300, -300, 50, textTint);
+	subText = CreateText("(These are the letters and symbols that you can display)", 300, -300, 50, textTint, Left);
 	ChangeTextVisibility(subText);
 
 	//Sounds

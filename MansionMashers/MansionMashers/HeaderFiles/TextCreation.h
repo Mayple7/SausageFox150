@@ -12,7 +12,9 @@ typedef struct TextGlyphs
 	struct TextGlyphs *NextLetter;
 }TextGlyphs;
 
-TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor);
+enum TextAlignment { Left, Center, Right };
+
+TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor, int alignment);
 Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos);
 void FreeText(TextGlyphs *FirstLetter);
 void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 Offset);
