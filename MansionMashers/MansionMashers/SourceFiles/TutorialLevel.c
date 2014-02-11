@@ -128,7 +128,7 @@ void UpdateTutorial(void)
 {
 	// Handle any events such as collision
 	EventTutorial();
-	
+
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
 	
@@ -242,6 +242,9 @@ void EventTutorial(void)
 {
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
+
+	UpdateEnemy(StrawDummy);
+
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 }

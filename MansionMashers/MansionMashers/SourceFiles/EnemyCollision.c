@@ -83,6 +83,5 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
 	CurrentEnemy->CurrentEnemyStats.CurrentHealth -= damageDealt;
-	printf("%i\n", CurrentEnemy->CurrentEnemyStats.CurrentHealth);
 	// Create Floating Combat Text
 }

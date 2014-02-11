@@ -107,9 +107,11 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	default:
 		break;
 	}
+	printf("Hello?\n");
 	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
 		// Run on death stuff here
+		printf("FREE ME!!!!\n");
 		FreeEnemy(CurrentEnemy);
 	}
 
@@ -204,14 +206,14 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 	Weapon* wList = weaponList;
 	int hit = 0;
 	int hitPrev = 0;
-
+	
 	while(wList->objID != -1)
 	{
-		if(wList->objID > 0 && wList->WeaponFOF == PlayerWeapon && CurrentPlayer.isAttacking)
+		if(wList->objID > 0 && wList->WeaponFOF == PlayerWeapon)
 		{
 			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &wList->WeaponAttack);
 			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, wList->WeaponAttack.collisionID);
-			if(hit)
+			if(hit && CurrentPlayer.isAttacking)
 			{
 				// New target, on start collision
 				if(hitPrev < 0)
@@ -233,6 +235,10 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 					EnemyCollideWeapon(CurrentEnemy);
 				}
 			}
+			else if(hitPrev > 0 && !CurrentPlayer.isAttacking)
+			{
+				CurrentEnemy->CollisionData[hitPrev] = 0;
+			}
 			else
 			{
 				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
@@ -244,7 +250,7 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
 				{
 					//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-					CurrentEnemy->CollisionData[hitPrev] = 0;
+					//CurrentEnemy->CollisionData[hitPrev] = 0;
 				}
 			}
 		}

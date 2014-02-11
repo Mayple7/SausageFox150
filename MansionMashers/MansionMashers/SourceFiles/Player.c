@@ -79,8 +79,9 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 	CurrentPlayer->dropDown = FALSE;
 
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
-
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
+
+	CurrentPlayer->CurrentPlayerStats.Damage = 10;
 }
 
 /*************************************************************************/
