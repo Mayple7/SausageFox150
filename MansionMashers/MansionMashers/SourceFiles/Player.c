@@ -732,6 +732,9 @@ void Animation(Player *Object)
 
 	}
 
+	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation) * Object->PlayerWeapon->WeaponLength);
+	Object->PlayerWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation) * Object->PlayerWeapon->WeaponLength);
+
 	//*************************************************************************************************
 }
 

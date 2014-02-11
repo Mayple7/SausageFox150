@@ -24,6 +24,9 @@ typedef struct Weapon
 	int BonusAgility;
 	int BonusDefense;
 
+	int WeaponLength;
+	Vec2 WeaponAttackPosition;
+
 	Vec2 Position;
 
 	Sprite* WeaponSprite;
