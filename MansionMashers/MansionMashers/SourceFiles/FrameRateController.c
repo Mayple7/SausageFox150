@@ -5,7 +5,7 @@
 \author				Juli Gregg (j.gregg)
 \date				Feb 3, 2014
 
-\brief				Functions for Sound/FMOD
+\brief				Functions for the framerate controller
 
 \par				Functions:
 \li					StartFoxFrame
