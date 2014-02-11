@@ -25,6 +25,7 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 {
 	Weapon *CurrentWeapon = AddWeapon();
 	Vec3 TextTint;
+	int nameLen, statsLen;
 	Vec3Set(&TextTint, 0, 0, 0);
 	CurrentWeapon->WeaponFOF = PlayerWeapon; // Friend or Foe tag
 	CurrentWeapon->objID = objID;
@@ -32,20 +33,33 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	CurrentWeapon->WeaponType = weaponType;
 	CurrentWeapon->WeaponName = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
 	CurrentWeapon->WeaponStatsString = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
+	CurrentWeapon->WeaponLength = 30;
 	SetWeaponStats(CurrentWeapon, 0, 0, 0);
 	if(CurrentWeapon->WeaponName)
 		strcpy(CurrentWeapon->WeaponName, weaponName);
 	else
 		CurrentWeapon->WeaponName = "Error: Memory Allocation Failed!";
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f, 40, TextTint, Center);
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f + 25, 50, TextTint, Center);
 	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);
-	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) - 40 * GetLoadRatio(), 40, TextTint, Center);
+	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f - 25), 50, TextTint, Center);
 	
 	CurrentWeapon->WeaponSprite = CreateSprite(weaponTexture, 256, 256, 22, 1, 1, 0, 0);
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, width / 3, height / 4, objID);
 	CurrentWeapon->WeaponAttack.Offset.y += 5 * CurrentWeapon->WeaponAttack.height / 8;
+
+	nameLen = strlen(CurrentWeapon->WeaponName);
+	statsLen = strlen(CurrentWeapon->WeaponStatsString);
+	if(nameLen >= statsLen)
+	{
+		CurrentWeapon->WeaponHoverBackground = CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f));
+	}
+	else
+	{
+		CurrentWeapon->WeaponHoverBackground = CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f));
+	}
+	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
 
 	return CurrentWeapon;
 }
@@ -56,6 +70,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	Weapon *CurrentWeapon = AddWeapon();
 	Vec2 ColliderPos;
 	Vec3 TextTint;
+	int nameLen, statsLen;
 	Vec2Set(&ColliderPos, xPos, yPos);
 	Vec3Set(&TextTint, 0, 0, 0);
 
@@ -65,6 +80,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CurrentWeapon->WeaponType = weaponType;
 	CurrentWeapon->WeaponName = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
 	CurrentWeapon->WeaponStatsString = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
+	CurrentWeapon->WeaponLength = 30;
 
 	if(CurrentWeapon->WeaponName)
 		CreateWeaponName(&CurrentWeapon->WeaponName, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity);
@@ -80,10 +96,22 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f, 40, TextTint, Center);
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f + 25), 50, TextTint, Center);
 	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);
-	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height *1.5f) - 40 * GetLoadRatio(), 40, TextTint, Center);
+	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f - 25), 50, TextTint, Center);
 
+	nameLen = strlen(CurrentWeapon->WeaponName);
+	statsLen = strlen(CurrentWeapon->WeaponStatsString);
+	if(nameLen >= statsLen)
+	{
+		CurrentWeapon->WeaponHoverBackground = CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+	}
+	else
+	{
+		CurrentWeapon->WeaponHoverBackground = CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+	}
+	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
+	
 	return CurrentWeapon;
 }
 
@@ -198,6 +226,7 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	temp.WeaponName = firstWeapon->WeaponName;
 	temp.WeaponStatsString = firstWeapon->WeaponStatsString;
 	temp.WeaponType = firstWeapon->WeaponType;
+	temp.WeaponHoverBackground = firstWeapon->WeaponHoverBackground;
 	SetWeaponStats(&temp, firstWeapon->BonusStrength, firstWeapon->BonusAgility, firstWeapon->BonusDefense);
 
 	firstWeapon->WeaponPickup = secondWeapon->WeaponPickup;
@@ -212,6 +241,7 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	firstWeapon->WeaponName = secondWeapon->WeaponName;
 	firstWeapon->WeaponStatsString = secondWeapon->WeaponStatsString;
 	firstWeapon->WeaponType = secondWeapon->WeaponType;
+	firstWeapon->WeaponHoverBackground = secondWeapon->WeaponHoverBackground;
 	SetWeaponStats(firstWeapon, secondWeapon->BonusStrength, secondWeapon->BonusAgility, secondWeapon->BonusDefense);
 
 	secondWeapon->WeaponPickup = temp.WeaponPickup;
@@ -226,6 +256,7 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	secondWeapon->WeaponName = temp.WeaponName;
 	secondWeapon->WeaponStatsString = temp.WeaponStatsString;
 	secondWeapon->WeaponType =  temp.WeaponType;
+	secondWeapon->WeaponHoverBackground = temp.WeaponHoverBackground;
 	SetWeaponStats(secondWeapon, temp.BonusStrength, temp.BonusAgility, temp.BonusDefense);
 }
 

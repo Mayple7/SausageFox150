@@ -80,6 +80,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	if(!wList->WeaponGlyphs->Glyph->Visible)
 	{
 		ChangeTextVisibility(wList->WeaponGlyphs);
+		wList->WeaponHoverBackground->Visible = TRUE;
 	}
 	if(!wList->WeaponStatsGlyphs->Glyph->Visible)
 	{
@@ -99,7 +100,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		{
 			ChangeTextVisibility(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs);
 		}
-
+		CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 		
 		
 		wList->Position.x = CurrentPlayer->PlayerWeapon->Position.x;
@@ -108,9 +109,13 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		wList->WeaponFOF = DroppedWeapon;
 		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
 		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
-		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height *1.5f));
+		wList->WeaponHoverBackground->Position.x = wList->WeaponPickup.Position.x;
+		wList->WeaponHoverBackground->Position.y = wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f;
+		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f + wList->WeaponGlyphs->Glyph->Height / 2));
 		ChangeTextPosition(wList->WeaponGlyphs, glyphPos, Center);
-		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height *1.5f) - 40 * GetLoadRatio());
+		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f - wList->WeaponGlyphs->Glyph->Height / 2));
 		ChangeTextPosition(wList->WeaponStatsGlyphs, glyphPos, Center);
+		wList->WeaponHoverBackground->Position = CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Position;
 	}
 }
+// height +/- (fontsize/2)

@@ -476,6 +476,7 @@ void DetectPlayerCollision(void)
 					{
 						ChangeTextVisibility(wList->WeaponGlyphs);
 						ChangeTextVisibility(wList->WeaponStatsGlyphs);
+						wList->WeaponHoverBackground->Visible = FALSE;
 					}
 				}
 			}
@@ -620,7 +621,7 @@ void Animation(Player *Object)
 		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
 		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
 		ArmUpr->Position.x = Bdy->Position.x;
-		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/6);
+		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 		ArmLwr->Position.y = ArmUpr->Position.y - (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 
@@ -643,7 +644,7 @@ void Animation(Player *Object)
 		}
 		
 		ArmUpr2->Position.x = Bdy->Position.x;
-		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/6);
+		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		ArmLwr2->Position.y = ArmUpr2->Position.y - (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
@@ -705,14 +706,14 @@ void Animation(Player *Object)
 			Weap->Rotation = ArmLwr->Rotation;
 		}
 		ArmUpr->Position.x = Bdy->Position.x;
-		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/6);
+		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 		ArmLwr->Position.y = ArmUpr->Position.y + (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 
 		ArmUpr2->Rotation = LegUpperDirection/1.5f - 1.5f;
 		ArmLwr2->Rotation = ArmUpr2->Rotation + 1.25f + LegUpperDirection/2.0f;
 		ArmUpr2->Position.x = Bdy->Position.x;
-		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/6);
+		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		ArmLwr2->Position.y = ArmUpr2->Position.y + (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
@@ -730,6 +731,9 @@ void Animation(Player *Object)
 
 
 	}
+
+	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation) * Object->PlayerWeapon->WeaponLength);
+	Object->PlayerWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation) * Object->PlayerWeapon->WeaponLength);
 
 	//*************************************************************************************************
 }

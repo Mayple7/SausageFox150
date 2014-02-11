@@ -137,7 +137,10 @@ void UpdateTutorial(void)
 		{
 			CurrentPlayer.Position.x = (StrawDummy->Position.x) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
 		}
-
+		else if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
+		{
+			CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
+		}
 	}
 	else
 	{
