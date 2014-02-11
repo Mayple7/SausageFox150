@@ -44,6 +44,12 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 	float width, height;
 	Vec2 position;
 	Enemy *CurrentEnemy = AddEnemy();
+	int i;
+
+	for(i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		CurrentEnemy->CollisionData[i] = -1;
+	}
 
 	switch(enemyType)
 	{
@@ -59,7 +65,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
-		InitializeEnemyStats(CurrentEnemy, 100, 0, 0, 0, 0, 0, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 0, 10);
 		
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, height / 2, objID);
 		CurrentEnemy->EnemyCollider.Offset.y = -CurrentEnemy->EnemyCollider.height / 6;
@@ -89,6 +95,8 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	{
 	case Dummy:
 		// Too dummy to do anything lololol
+		//Still need to check collision :-/
+		DetectEnemyCollision(CurrentEnemy);
 		break;
 	case BasicMelee:
 		// Call enemy logic here
@@ -99,6 +107,12 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	default:
 		break;
 	}
+	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
+	{
+		// Run on death stuff here
+		FreeEnemy(CurrentEnemy);
+	}
+
 	/*
 	//Check if enemy is on the floor
 	if(CurrentEnemy->Position.y <= -225)
@@ -132,13 +146,13 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	The pointer to the player struct
 */
 /*************************************************************************/
-void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer)
+/*void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer)
 {
 	// ************************** //
 	//	   THIS IS DEPRECATED	  //
 	// ************************** //
 
-	/*
+	
 	LogicTimer++;
 
 	//Resets the logic timer
@@ -167,8 +181,8 @@ void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer)
 	{
 		ZeroAcceleration(&CurrentEnemy->EnemyRigidBody);
 	}
-	*/
-}
+	
+}*/
 
 void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp)
 {
@@ -183,4 +197,57 @@ void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float 
 
 	CurrentEnemy->CurrentEnemyStats.Money = money;
 	CurrentEnemy->CurrentEnemyStats.Experience = exp;
+}
+
+void DetectEnemyCollision(Enemy *CurrentEnemy)
+{
+	Weapon* wList = weaponList;
+	int hit = 0;
+	int hitPrev = 0;
+
+	while(wList->objID != -1)
+	{
+		if(wList->objID > 0 && wList->WeaponFOF == PlayerWeapon && CurrentPlayer.isAttacking)
+		{
+			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &wList->WeaponAttack);
+			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, wList->WeaponAttack.collisionID);
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentEnemy->CollisionData[-hitPrev] = wList->WeaponAttack.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					EnemyCollideWeapon(CurrentEnemy);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
+					EnemyCollideWeapon(CurrentEnemy);
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = 0;
+				}
+			}
+		}
+		wList++;
+	}
 }

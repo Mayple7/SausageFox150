@@ -26,6 +26,7 @@ typedef struct Enemy
 {
 	int EnemyType;
 	int objID;
+	int CollisionData[COLLIDEAMOUNT];
 
 	Sprite *EnemySprite;
 	RigidBody EnemyRigidBody;
@@ -41,5 +42,6 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp);
 void UpdateEnemy(Enemy *CurrentEnemy);
 void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer);
+void DetectEnemyCollision(Enemy *CurrentEnemy);
 
 #endif

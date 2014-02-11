@@ -114,6 +114,7 @@ void InitializeTutorial(void)
 	VolumeText = CreateText("Volume ", -400, 350, 100, TextColor, Right);
 	TestText = CreateText(volumestring, -400, 350, 100, TextColor, Left);
 	SetChannelGroupVolume(&ChannelController, EffectType, 0);
+	ChangeTextString(TestText, VolumetoString(volumestring, 0));
 	ChangeTextVisibility(TestText);
 	ChangeTextVisibility(VolumeText);
 
@@ -133,9 +134,9 @@ void UpdateTutorial(void)
 	
 	if(StrawDummy->objID > 0)
 	{
-		if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x)
+		if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2)
 		{
-			CurrentPlayer.Position.x = (StrawDummy->Position.x) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+			CurrentPlayer.Position.x = (StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
 		}
 		else if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
 		{
