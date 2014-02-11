@@ -90,6 +90,7 @@
     <ClInclude Include="HeaderFiles\CollisionBox.h" />
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
     <ClInclude Include="HeaderFiles\Enemy.h" />
+    <ClInclude Include="HeaderFiles\EnemyCollision.h" />
     <ClInclude Include="HeaderFiles\EP1Slides.h" />
     <ClInclude Include="HeaderFiles\EP2Slides.h" />
     <ClInclude Include="HeaderFiles\EPMenu.h" />
@@ -138,6 +139,7 @@
     <ClCompile Include="SourceFiles\CollisionBox.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
     <ClCompile Include="SourceFiles\Enemy.c" />
+    <ClCompile Include="SourceFiles\EnemyCollision.c" />
     <ClCompile Include="SourceFiles\EP1Slides.c" />
     <ClCompile Include="SourceFiles\EP2Slides.c" />
     <ClCompile Include="SourceFiles\EPMenu.c" />

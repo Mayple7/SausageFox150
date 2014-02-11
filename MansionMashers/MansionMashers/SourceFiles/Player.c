@@ -79,8 +79,9 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 	CurrentPlayer->dropDown = FALSE;
 
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
-
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
+
+	CurrentPlayer->CurrentPlayerStats.Damage = 10;
 }
 
 /*************************************************************************/
@@ -95,6 +96,7 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 void InputPlayer(struct Player *CurrentPlayer)
 {
 	Animation(CurrentPlayer);
+	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
 	if (AEInputCheckTriggered('F') && !CurrentPlayer->isAttacking)
 	{
@@ -372,6 +374,7 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -421,6 +424,7 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -466,6 +470,7 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -732,8 +737,8 @@ void Animation(Player *Object)
 
 	}
 
-	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation) * Object->PlayerWeapon->WeaponLength);
-	Object->PlayerWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation) * Object->PlayerWeapon->WeaponLength);
+	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
+	Object->PlayerWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
 
 	//*************************************************************************************************
 }

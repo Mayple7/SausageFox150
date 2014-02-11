@@ -252,6 +252,7 @@ void DrawCollisionList(void)
 		{
 			//Free the mesh and texture data
 			displayCollisionDebug(&weaponList[i].WeaponPickup);
+			displayCollisionDebug(&weaponList[i].WeaponAttack);
 		}
 	}
 
@@ -487,10 +488,22 @@ void ResizeObjects(float ratio)
 			//Update platform collider
 			weaponList[i].WeaponPickup.width *= ratio;
 			weaponList[i].WeaponPickup.height *= ratio;
+
+			weaponList[i].WeaponAttack.width *= ratio;
+			weaponList[i].WeaponAttack.height *= ratio;
+
 			Vec2Scale(&weaponList[i].WeaponPickup.Offset, &weaponList[i].WeaponPickup.Offset, ratio);
+			Vec2Scale(&weaponList[i].WeaponAttack.Offset, &weaponList[i].WeaponAttack.Offset, ratio);
+
 			Vec2Scale(&weaponList[i].WeaponPickup.Position, &weaponList[i].WeaponPickup.Position, ratio);
+			//Vec2Scale(&weaponList[i].WeaponAttack.Position, &weaponList[i].WeaponAttack.Position, ratio);
+
 			Vec2Scale(&weaponList[i].Position, &weaponList[i].Position, ratio);
+			
 			UpdateCollider(&weaponList[i].WeaponPickup, weaponList[i].WeaponPickup.width, weaponList[i].WeaponPickup.height);
+			UpdateCollider(&weaponList[i].WeaponAttack, weaponList[i].WeaponAttack.width, weaponList[i].WeaponAttack.height);
+			
+			weaponList[i].WeaponLength *= ratio;
 			//printf("Platform %i is now updated\n", i);
 		}
 	}
@@ -554,6 +567,7 @@ void SetDebugMode(void)
 		{
 			//Free the mesh and texture data
 			weaponList[i].WeaponPickup.collisionDebug = TRUE;
+			weaponList[i].WeaponAttack.collisionDebug = TRUE;
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -598,6 +612,7 @@ void RemoveDebugMode(void)
 		{
 			//Free the mesh and texture data
 			weaponList[i].WeaponPickup.collisionDebug = FALSE;
+			weaponList[i].WeaponAttack.collisionDebug = FALSE;
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
