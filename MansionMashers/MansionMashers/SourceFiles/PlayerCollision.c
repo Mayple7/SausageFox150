@@ -74,9 +74,18 @@ void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 
 void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 {
+	Vec2 glyphPos;
+	
 	// Need to pop up weapon info //
 	if(!wList->WeaponGlyphs->Glyph->Visible)
+	{
 		ChangeTextVisibility(wList->WeaponGlyphs);
+		wList->WeaponHoverBackground->Visible = TRUE;
+	}
+	if(!wList->WeaponStatsGlyphs->Glyph->Visible)
+	{
+		ChangeTextVisibility(wList->WeaponStatsGlyphs);
+	}
 	if(AEInputCheckTriggered('E'))
 	{
 		SwapWeapons(CurrentPlayer->PlayerWeapon, wList);
@@ -84,7 +93,14 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		CurrentPlayer->PlayerWeapon->WeaponFOF = PlayerWeapon;
 		CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 		if(CurrentPlayer->PlayerWeapon->WeaponGlyphs->Glyph->Visible)
+		{
 			ChangeTextVisibility(CurrentPlayer->PlayerWeapon->WeaponGlyphs);
+		}
+		if(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs->Glyph->Visible)
+		{
+			ChangeTextVisibility(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs);
+		}
+		CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 		
 		
 		wList->Position.x = CurrentPlayer->PlayerWeapon->Position.x;
@@ -93,6 +109,13 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		wList->WeaponFOF = DroppedWeapon;
 		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
 		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
-		ChangeTextPosition(wList->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponGlyphs->Glyph->Position);
+		wList->WeaponHoverBackground->Position.x = wList->WeaponPickup.Position.x;
+		wList->WeaponHoverBackground->Position.y = wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f;
+		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f + wList->WeaponGlyphs->Glyph->Height / 2));
+		ChangeTextPosition(wList->WeaponGlyphs, glyphPos, Center);
+		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f - wList->WeaponGlyphs->Glyph->Height / 2));
+		ChangeTextPosition(wList->WeaponStatsGlyphs, glyphPos, Center);
+		wList->WeaponHoverBackground->Position = CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Position;
 	}
 }
+// height +/- (fontsize/2)

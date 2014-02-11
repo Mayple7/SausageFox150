@@ -147,7 +147,7 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 	}
 	if(frame >= 0)
 	{
-		temp = CreateSprite("TextureFiles/Rumple_TextSheet_White.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 101, 11, 4, xPos, yPos);
+		temp = CreateSprite("TextureFiles/Rumple_TextSheet_White.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 11, 11, 4, xPos, yPos);
 		temp->Visible = FALSE;
 		temp->AnimationActive = FALSE;
 		temp->CurrentFrame = frame;
@@ -193,11 +193,28 @@ void FreeText(TextGlyphs *FirstLetter)
 	New position to move the text to.
 */
 /*************************************************************************/
-void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 newPosition)
+void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 newPosition, int alignment)
 {
 	TextGlyphs* nextLetter = FirstLetter;
 	int i = 0;
+	while(nextLetter)
+	{
+		nextLetter = nextLetter->NextLetter;
+		i++;
+	}
 
+
+	if(alignment == Center)
+	{
+		newPosition.x = newPosition.x - (i * FirstLetter->Glyph->Height * 0.4f) / 2;
+	}
+	else if(alignment == Right)
+	{
+		newPosition.x = newPosition.x - (i * FirstLetter->Glyph->Height * 0.4f);
+	}
+
+	i = 0;
+	nextLetter = FirstLetter;
 	while(nextLetter)
 	{
 		if(nextLetter->Glyph)
