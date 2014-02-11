@@ -107,7 +107,6 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	default:
 		break;
 	}
-	printf("Hello?\n");
 	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
 		// Run on death stuff here

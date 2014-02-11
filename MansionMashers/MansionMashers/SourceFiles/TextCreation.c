@@ -340,3 +340,36 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 		FreeText(nextLetter);
 	}
 }
+
+void UpdateFloatingText(TextGlyphs *FirstLetter)
+{
+	TextGlyphs *nextLetter;
+	nextLetter = FirstLetter;
+
+	if(nextLetter->Glyph->Alpha <= 0.0f)
+	{
+		FreeFloatingText(FirstLetter);
+		return;
+	}
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph->Alpha > 0.9f)
+		{
+			nextLetter->Glyph->Alpha -= 0.001f;
+			nextLetter->Glyph->Position.y += 1.5f;
+		}
+		else if(nextLetter->Glyph->Alpha > 0.3f)
+		{
+			nextLetter->Glyph->Alpha -= 0.02f;
+			nextLetter->Glyph->Position.y += 1.5f;
+		}
+		else
+		{
+			nextLetter->Glyph->Alpha -= 0.04f;
+			nextLetter->Glyph->Position.y += 1.5f;
+		}
+		nextLetter = nextLetter->NextLetter;
+	}
+
+}

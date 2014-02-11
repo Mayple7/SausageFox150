@@ -78,10 +78,18 @@ void EnemyCollidePlatform(Enemy *CurrentEnemy, Platform *CurrentPlatform)
 void EnemyCollideWeapon(Enemy *CurrentEnemy)
 {
 	int damageDealt;
+	char num[10];
+	Vec3 textColor;
+	TextGlyphs *FirstLetter;
+	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
 
 	// Calculate damage including enemy's damage reduction
 	damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
 	CurrentEnemy->CurrentEnemyStats.CurrentHealth -= damageDealt;
+	sprintf(num, "%d", damageDealt);
 	// Create Floating Combat Text
+	FirstLetter = CreateText(num, CurrentEnemy->Position.x, CurrentEnemy->Position.y, 100, textColor, Center);
+	AddFloatingText(FirstLetter);
+	ChangeTextVisibility(FirstLetter);
 }

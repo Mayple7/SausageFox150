@@ -35,6 +35,10 @@
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
 
+Sprite *HUD;
+Sprite *HUDitem;
+HUDLayer HUDList;
+
 Sprite* TutorialBackground;
 Sprite* OverlayGrid;
 Platform* Shelf;
@@ -65,6 +69,8 @@ void LoadTutorial(void)
 
 void InitializeTutorial(void)
 {
+	int hudLoop;
+
 	newID = 1;
 	resetObjectList();
 	CreateChannelGroups(&ChannelController);
@@ -76,6 +82,22 @@ void InitializeTutorial(void)
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 
 	InitializePlayer(&CurrentPlayer, newID++, 0, GROUNDLEVEL + 1);
+
+	for (hudLoop = 0; hudLoop < 20; hudLoop++)
+		HUDList.HudItem[hudLoop] = 0;
+
+	// Create single player HUD sprite
+	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
+	HUD->isHUD = TRUE;
+
+	// Create single player HUD item sprite
+	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
+	HUDitem->ItemType = 0;
+	HUDitem->isHUD = TRUE;
+
+	// Add the HUD sprites to the HUDlist
+	HUDList.HudItem[0] = HUD;
+	HUDList.HudItem[1] = HUDitem;
 
 	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
 	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
@@ -196,10 +218,6 @@ void UpdateTutorial(void)
 	}
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
-	if(AEInputCheckTriggered(VK_RSHIFT))
-	{
-		SetNextState(GS_MainMenu);
-	}
 	if(AEInputCheckTriggered(VK_ESCAPE))
 	{
 		if(BlackOverlay->Alpha < 0.1)
@@ -211,19 +229,23 @@ void UpdateTutorial(void)
 		{
 			SetNextState(GS_EPMenu);
 		}
-
 	}
+
 	if(AEInputCheckTriggered('J'))
 	{
 		FreeEnemy(StrawDummy);
 	}
-
+	if(AEInputCheckTriggered(VK_RSHIFT))
+	{
+		SetNextState(GS_MainMenu);
+	}
 }
 
 void DrawTutorial(void)
 {
 	DrawObjectList();
 	DrawCollisionList();
+	DrawHUD(&HUDList);
 }
 
 void FreeTutorial(void)
@@ -240,10 +262,19 @@ void UnloadTutorial(void)
 
 void EventTutorial(void)
 {
+	int i = 0;
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
+	if(StrawDummy->objID > 0)
+		UpdateEnemy(StrawDummy);
 
-	UpdateEnemy(StrawDummy);
+	while(i < COLLIDEAMOUNT)
+	{
+		if(floatTextList[i] > 0)
+			UpdateFloatingText(floatTextList[i]);
+		i++;
+	}
+
 
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);

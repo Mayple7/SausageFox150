@@ -95,7 +95,7 @@ void updateMaxHealth(PlayerStats *CurrentPlayerStats);
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats);
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats);
 void updateDamageReduction(PlayerStats *CurrentPlayerStats);
-//void updateDamage(PlayerStats *CurrentPlayerStats, Weapon *EquippedWeapon);
+void updateDamage(PlayerStats *CurrentPlayerStats);
 
 float RotateToAngle(float angle, float angleTo, float speed);
 

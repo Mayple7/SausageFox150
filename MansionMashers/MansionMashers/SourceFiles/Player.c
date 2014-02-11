@@ -15,6 +15,7 @@
 \li					updateMoveSpeed
 \li					updateAttackSpeed
 \li					updateDamageReduction
+\li					updateDamage
 \li					DetectPlayerCollision
   
 \par 
@@ -81,7 +82,7 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 
-	CurrentPlayer->CurrentPlayerStats.Damage = 10;
+	updateDamage(&CurrentPlayer->CurrentPlayerStats);
 }
 
 /*************************************************************************/
@@ -329,6 +330,21 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 /*************************************************************************/
 /*!
 	\brief
+	Update the player's damage reduction based on their defense
+	
+	\param CurrentPlayerStats
+	A pointer to the player's stats to update
+*/
+/*************************************************************************/
+void updateDamage(PlayerStats *CurrentPlayerStats)
+{
+	//Placeholder damage reduction formula
+	CurrentPlayerStats->Damage = 10 + (CurrentPlayerStats->Strength + CurrentPlayer.PlayerWeapon->BonusStrength) * 5;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Detects collisions with the player and calls the correct resolution functions
 */
 /*************************************************************************/
@@ -450,12 +466,14 @@ void DetectPlayerCollision(void)
 					CurrentPlayer.CollisionData[-hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
 					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+					updateDamage(&CurrentPlayer.CurrentPlayerStats);
 				}
 				// Found target, hit previous frame, on persistant
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
 				{
 					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+					updateDamage(&CurrentPlayer.CurrentPlayerStats);
 				}
 				// Found target, did not hit previous frame, on start collision
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
@@ -463,6 +481,7 @@ void DetectPlayerCollision(void)
 					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
 					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+					updateDamage(&CurrentPlayer.CurrentPlayerStats);
 				}
 			}
 			else
