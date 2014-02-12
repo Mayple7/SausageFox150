@@ -46,7 +46,7 @@ void UpdatePause(void)
 
 	AEGfxGetCamPosition(&camX, &camY);
 	PauseText->Position.x = camX;
-	PauseText->Position.y = camY;
+	PauseText->Position.y = 350 * GetLoadRatio();
 
 	while(pause)
 	{
