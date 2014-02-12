@@ -24,7 +24,7 @@ typedef struct Weapon
 	int BonusAgility;
 	int BonusDefense;
 
-	int WeaponLength;
+	float WeaponLength;
 	Vec2 WeaponAttackPosition;
 
 	Vec2 Position;
