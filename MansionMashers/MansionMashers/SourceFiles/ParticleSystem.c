@@ -23,14 +23,14 @@
 #include <stdlib.h>
 
 
-ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float posY, int ID, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife)
+ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float posY, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife)
 {
 	ParticleSystem *CurrentSystem = AddParticleSystem();
 
 	CurrentSystem->ParticleSprite = particleTexture;
 	CurrentSystem->Position.x = posX;
 	CurrentSystem->Position.y = posY;
-	CurrentSystem->objID = ID;
+	CurrentSystem->objID = 1;
 	CurrentSystem->amountTotal = amountTotal;
 	CurrentSystem->emitAmount = emitAmount;
 	CurrentSystem->emitSpeed = emitSpeed;
@@ -45,7 +45,7 @@ ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float
 	return CurrentSystem;
 }
 
-void CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX, float VelY, float Life, float Scale, int ID)
+void CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX, float VelY, float Life, float Scale)
 {
 	Particle *CurrentParticle = AddParticle();
 
@@ -58,7 +58,7 @@ void CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX
 	CurrentParticle->LifetimeMax = Life;
 	CurrentParticle->ParticleSprite->ScaleX = Scale;
 	CurrentParticle->ParticleSprite->ScaleY = Scale;
-	CurrentParticle->objID = ID;
+	CurrentParticle->objID = 1;
 	srand( lastRandomNumber );
 	lastRandomNumber = rand();
 	CurrentParticle->RotationSpeed = (float)(((int)lastRandomNumber % 100 - 50) / 400.0f);
@@ -154,8 +154,7 @@ void ParticleSystemUpdate(void)
 										vel.x,
 										vel.y, 
 										particleSystemList[i].emitLife, 
-										particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f), 
-										1);
+										particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f));
 
 					particleSystemList[i].amountTotal--;
 				}
