@@ -36,8 +36,8 @@
 // ---------------------------------------------------------------------------
 // globals
 int GameRunning;
-double winWidth;
-double winHeight;
+int winWidth;
+int winHeight;
 double loadRatio;
 
 // ---------------------------------------------------------------------------
@@ -110,22 +110,26 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	ShowWindow	(winHandle, SW_SHOWMAXIMIZED);
 	UpdateWindow(winHandle);
-
-	winWidth = rect.right - rect.left;
-	winHeight = rect.bottom - rect.top;
-	if(winWidth / winHeight >= 16.0f / 9.0f)
+	if(GetClientRect(winHandle, &rect))
 	{
-		loadRatio = winHeight / 1080;
-		winWidth = winWidth * loadRatio;
-		winHeight = winHeight * loadRatio;
+		winWidth = (int)rect.right - (int)rect.left;
+		winHeight = (int)rect.bottom - (int)rect.top;
+		printf("%i : %i\n", winWidth, winHeight);
+		if(winWidth / (double)winHeight <= 16.0f / 9.0f)
+		{
+			loadRatio = winHeight / 1080.0;
+			winWidth = (int)(winWidth / loadRatio);
+			winHeight = (int)(winHeight / loadRatio);
+		}
+		else
+		{
+			loadRatio = winWidth / 1920.0;
+			winWidth = (int)(winWidth / loadRatio);
+			winHeight = (int)(winHeight / loadRatio);
+		}
+		printf("%i : %i\n", winWidth, winHeight);
+		printf("%f\n", loadRatio);
 	}
-	else
-	{
-		loadRatio = winWidth / 1920;
-		winWidth = winWidth * loadRatio;
-		winHeight = winHeight * loadRatio;
-	}
-
 	sysInitInfo.mCreateWindow		= 0;
 	sysInitInfo.mWindowHandle		= winHandle;
 
@@ -251,20 +255,21 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 			{
 				ratio = height / winHeight;
 				loadRatio = height / 1080;
-				winWidth = winWidth * ratio;
-				winHeight = winHeight * ratio;
+				winWidth = (int)(winWidth * ratio);
+				winHeight = (int)(winHeight * ratio);
 				ResizeObjects((float)ratio);
 			}
 			else if (width != 0)
 			{
 				ratio = width / winWidth;
 				loadRatio = width / 1920;
-				winWidth = winWidth * ratio;
-				winHeight = winHeight * ratio;
+				winWidth = (int)(winWidth * ratio);
+				winHeight = (int)(winHeight * ratio);
 				ResizeObjects((float)ratio);
 			}
 			else
 				ratio = loadRatio;
+			//printf("%i : %i\n", winWidth, winHeight);
 		}
 		break;
 	// when the window is created

@@ -24,14 +24,36 @@
 
 Sprite* PauseText;
 
+Sprite* SFXSliderGuide;
+Sprite* BGMSliderGuide;
+
+Sprite* SFXSliderBack;
+Sprite* BGMSliderBack;
+
+Sprite* SFXSlider;
+Sprite* BGMSlider;
+
 void (*LevelToDraw)();
 
 int pause;
 
 void InitializePause(void (*DrawLevel)())
 {
+	float camX, camY;
+
+	AEGfxGetCamPosition(&camX, &camY);
 	pause = TRUE;
-	PauseText = CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, 0, 0);
+	PauseText = CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, camX, 350);
+
+	SFXSliderGuide = CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, 100);
+	BGMSliderGuide = CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, -100);
+
+	SFXSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, 100);
+	BGMSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, -100);
+
+	SFXSlider = CreateSprite("TextureFiles/fox_head.png", 80, 80, 553, 1, 1, camX, 100);
+	BGMSlider = CreateSprite("TextureFiles/fox_head.png", 80, 80, 553, 1, 1, camX, -100);
+
 	LevelToDraw = DrawLevel;
 	CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
 	CurrentPlayer.PlayerSpriteParts.Body->CurrentFrame = 0;
@@ -40,14 +62,6 @@ void InitializePause(void (*DrawLevel)())
 
 void UpdatePause(void)
 {
-	float camX, camY;
-	double DeltaTime = 0;
-	int FrameRate = 60;									//Make a define in the future
-
-	AEGfxGetCamPosition(&camX, &camY);
-	PauseText->Position.x = camX;
-	PauseText->Position.y = camY;
-
 	while(pause)
 	{
 		AESysFrameStart();
@@ -83,4 +97,10 @@ void DrawPause(void)
 void FreePause(void)
 {
 	freeObject(PauseText);
+	freeObject(SFXSliderGuide);
+	freeObject(BGMSliderGuide);
+	freeObject(SFXSliderBack);
+	freeObject(BGMSliderBack);
+	freeObject(SFXSlider);
+	freeObject(BGMSlider);
 }

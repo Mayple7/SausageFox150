@@ -2,7 +2,7 @@
 #define FOX_OBJECTS
 
 //Create object list
-#define OBJECTAMOUNT 250
+#define OBJECTAMOUNT 300
 //Create collide list
 #define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
 
@@ -14,6 +14,7 @@ enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 #include "Player.h"
 #include "Platform.h"
 #include "Enemy.h"
+#include "EnemyCollision.h"
 #include "PlayerCollision.h"
 #include "Food.h"
 #include "Weapon.h"

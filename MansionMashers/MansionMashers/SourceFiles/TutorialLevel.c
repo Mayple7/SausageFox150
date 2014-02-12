@@ -35,6 +35,16 @@
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
 
+Sprite *HUD;
+Sprite *HUDitem;
+HUDLayer HUDList;
+
+//Bounding Boxes
+Sprite *BoundTop;
+Sprite *BoundBottom;
+Sprite *BoundLeft;
+Sprite *BoundRight;
+
 Sprite* TutorialBackground;
 Sprite* OverlayGrid;
 Platform* Shelf;
@@ -65,6 +75,11 @@ void LoadTutorial(void)
 
 void InitializeTutorial(void)
 {
+	Vec3 BoundingTint;
+	int hudLoop;
+
+	Vec3Set(&BoundingTint, 0.0f, 0.0f, 0.0f);
+
 	newID = 1;
 	resetObjectList();
 	CreateChannelGroups(&ChannelController);
@@ -75,10 +90,37 @@ void InitializeTutorial(void)
 	volumestring[3] = '\0';
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 
-	InitializePlayer(&CurrentPlayer, newID++, 0, GROUNDLEVEL + 1);
+	InitializePlayer(&CurrentPlayer, newID++, 0, GROUNDLEVEL * GetLoadRatio() + 1);
+
+	for (hudLoop = 0; hudLoop < 20; hudLoop++)
+		HUDList.HudItem[hudLoop] = 0;
+
+	// Create single player HUD sprite
+	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
+	HUD->isHUD = TRUE;
+
+	// Create single player HUD item sprite
+	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
+	HUDitem->ItemType = 0;
+	HUDitem->isHUD = TRUE;
+
+	// Add the HUD sprites to the HUDlist
+	HUDList.HudItem[0] = HUD;
+	HUDList.HudItem[1] = HUDitem;
 
 	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
 	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
+
+	//Bounding Boxes
+	BoundTop = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
+	BoundBottom = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, -1080);
+	BoundLeft = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, -1920, 0);
+	BoundRight = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 1920, 0);
+
+	BoundTop->Tint = BoundingTint;
+	BoundBottom->Tint = BoundingTint;
+	BoundLeft->Tint = BoundingTint;
+	BoundRight->Tint = BoundingTint;
 
 	// Create the shelf sprite and initialize to be collidable
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 475, -170);
@@ -114,6 +156,7 @@ void InitializeTutorial(void)
 	VolumeText = CreateText("Volume ", -400, 350, 100, TextColor, Right);
 	TestText = CreateText(volumestring, -400, 350, 100, TextColor, Left);
 	SetChannelGroupVolume(&ChannelController, EffectType, 0);
+	ChangeTextString(TestText, VolumetoString(volumestring, 0));
 	ChangeTextVisibility(TestText);
 	ChangeTextVisibility(VolumeText);
 
@@ -127,15 +170,15 @@ void UpdateTutorial(void)
 {
 	// Handle any events such as collision
 	EventTutorial();
-	
+
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
 	
 	if(StrawDummy->objID > 0)
 	{
-		if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x)
+		if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2)
 		{
-			CurrentPlayer.Position.x = (StrawDummy->Position.x) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+			CurrentPlayer.Position.x = (StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
 		}
 		else if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
 		{
@@ -162,6 +205,14 @@ void UpdateTutorial(void)
 				CurrentPlayer.Position.x = 50000;
 				RemoveDebugMode();
 				OverlayGrid->Visible = FALSE;
+				
+				HUD->Tint.x -= GetDeltaTime();
+				HUD->Tint.y -= GetDeltaTime();
+				HUD->Tint.z -= GetDeltaTime();
+				HUDitem->Tint.x -= GetDeltaTime();
+				HUDitem->Tint.y -= GetDeltaTime();
+				HUDitem->Tint.z -= GetDeltaTime();
+
 				fadeToEnd();
 			}
 		}
@@ -195,10 +246,6 @@ void UpdateTutorial(void)
 	}
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
-	if(AEInputCheckTriggered(VK_RSHIFT))
-	{
-		SetNextState(GS_MainMenu);
-	}
 	if(AEInputCheckTriggered(VK_ESCAPE))
 	{
 		if(BlackOverlay->Alpha < 0.1)
@@ -210,19 +257,23 @@ void UpdateTutorial(void)
 		{
 			SetNextState(GS_EPMenu);
 		}
-
 	}
+
 	if(AEInputCheckTriggered('J'))
 	{
 		FreeEnemy(StrawDummy);
 	}
-
+	if(AEInputCheckTriggered(VK_RSHIFT))
+	{
+		SetNextState(GS_MainMenu);
+	}
 }
 
 void DrawTutorial(void)
 {
 	DrawObjectList();
 	DrawCollisionList();
+	DrawHUD(&HUDList);
 }
 
 void FreeTutorial(void)
@@ -239,8 +290,20 @@ void UnloadTutorial(void)
 
 void EventTutorial(void)
 {
+	int i = 0;
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
+	if(StrawDummy->objID > 0)
+		UpdateEnemy(StrawDummy);
+
+	while(i < COLLIDEAMOUNT)
+	{
+		if(floatTextList[i] > 0)
+			UpdateFloatingText(floatTextList[i]);
+		i++;
+	}
+
+
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 }

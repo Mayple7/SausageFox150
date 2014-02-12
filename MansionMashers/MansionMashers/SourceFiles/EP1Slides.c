@@ -41,9 +41,9 @@ static int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 static int slideTimer = 0;
 static int slideDir;								//1: Forward, 0: Backward
 
-static Sprite *SausageFox;
+static Sprite *IntroSlide;
 static Sprite *Title;
-static Sprite *Digipen;
+static Sprite *HighConcept;
 
 static enum Slides { Slide1, Slide2, Slide3, MaxSlides};
 
@@ -76,11 +76,18 @@ void InitializeEP1Screen(void)
 {
 	// Reset the object list
 	resetObjectList();
+	
+	alpha = 0.0f;
+	slideTextureNum = 0;
+	fade = 1;								//0: no fade, 1: fade in, 2: fade out
+	slideTimer = 0;
+	slideDir = 0;
+
 
 	// Create the slide sprites
+	IntroSlide = CreateSprite("TextureFiles/Slide1.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 	Title = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	Digipen = CreateSprite("TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1, 0, 0);
-	SausageFox = CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	HighConcept = CreateSprite("TextureFiles/Slide3.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 }
 
 /*************************************************************************/
@@ -113,32 +120,32 @@ void UpdateEP1Screen(void)
 /*************************************************************************/
 void DrawEP1Screen(void)
 {
-	//Digipen Logo
+	//Intro Slide Logo
 	if(slideTextureNum == Slide1)
 	{
-		Digipen->Alpha = alpha;
-		DrawSprite(Digipen);
+		IntroSlide->Alpha = alpha;
+		DrawSprite(IntroSlide);
 	}
 	else
-		Digipen->Alpha = 0.0f;
-
-	//Sausage Fox Logo
-	if(slideTextureNum == Slide2)
-	{
-		SausageFox->Alpha = alpha;
-		DrawSprite(SausageFox);
-	}
-	else
-		SausageFox->Alpha = 0.0f;
+		IntroSlide->Alpha = 0.0f;
 
 	//Mansion Mashers Logo
-	if(slideTextureNum == Slide3)
+	if(slideTextureNum == Slide2)
 	{
 		Title->Alpha = alpha;
 		DrawSprite(Title);
 	}
 	else
 		Title->Alpha = 0.0f;
+
+	//Mansion Mashers Logo
+	if(slideTextureNum == Slide3)
+	{
+		HighConcept->Alpha = alpha;
+		DrawSprite(HighConcept);
+	}
+	else
+		HighConcept->Alpha = 0.0f;
 
 }
 

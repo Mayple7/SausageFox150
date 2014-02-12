@@ -149,6 +149,29 @@ Enemy* AddEnemy(void)
 /*************************************************************************/
 /*!
 	\brief
+	Adds an enemy to the enemy list
+	
+	\return
+	The enemy added to the list
+*/
+/*************************************************************************/
+void AddFloatingText(TextGlyphs* FirstLetter)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if(!floatTextList[i])
+		{
+			floatTextList[i] = FirstLetter;
+			printf("Floating Text at %i Created\n", i);
+			return;
+		}
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Resets all the objects in the list and callocs a new array of sprites
 */
 /*************************************************************************/
@@ -168,6 +191,7 @@ void resetObjectList(void)
 		foodList     = (Food *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Food));
 		enemyList    = (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
 		weaponList   = (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
+		floatTextList   = (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs));
 
 		for(i = 0; i < COLLIDEAMOUNT; i++)
 		{
@@ -252,6 +276,7 @@ void DrawCollisionList(void)
 		{
 			//Free the mesh and texture data
 			displayCollisionDebug(&weaponList[i].WeaponPickup);
+			displayCollisionDebug(&weaponList[i].WeaponAttack);
 		}
 	}
 
@@ -377,6 +402,32 @@ void FreeEnemy(Enemy *CurrentEnemy)
 /*************************************************************************/
 /*!
 	\brief
+	Frees the object being passed
+	
+	\param objectNext
+	The pointer to a object whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreeFloatingText(TextGlyphs *FirstLetter)
+{
+	int i = 0;
+
+	while(floatTextList[i] != FirstLetter)
+	{
+		i++;
+	}
+	if(floatTextList[i] == FirstLetter)
+	{
+		floatTextList[i] = NULL;
+
+		FreeText(FirstLetter);
+	}
+
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Cycles through the object list freeing all objects in the list
 */
 /*************************************************************************/
@@ -436,6 +487,14 @@ void freeObjectList(void)
 			//printf("Weapon %i is now freed\n", i);
 		}
 	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if (floatTextList[i])
+		{
+			FreeText(floatTextList[i]);
+		}
+
+	}
 
 	//Free the object list data allocation
 	FreeMyAlloc(drawList);
@@ -445,6 +504,7 @@ void freeObjectList(void)
 	FreeMyAlloc(foodList);
 	FreeMyAlloc(enemyList);
 	FreeMyAlloc(weaponList);
+	FreeMyAlloc(floatTextList);
 }
 
 void ResizeObjects(float ratio)
@@ -487,11 +547,23 @@ void ResizeObjects(float ratio)
 			//Update platform collider
 			weaponList[i].WeaponPickup.width *= ratio;
 			weaponList[i].WeaponPickup.height *= ratio;
+
+			weaponList[i].WeaponAttack.width *= ratio;
+			weaponList[i].WeaponAttack.height *= ratio;
+
 			Vec2Scale(&weaponList[i].WeaponPickup.Offset, &weaponList[i].WeaponPickup.Offset, ratio);
+			Vec2Scale(&weaponList[i].WeaponAttack.Offset, &weaponList[i].WeaponAttack.Offset, ratio);
+
 			Vec2Scale(&weaponList[i].WeaponPickup.Position, &weaponList[i].WeaponPickup.Position, ratio);
+			//Vec2Scale(&weaponList[i].WeaponAttack.Position, &weaponList[i].WeaponAttack.Position, ratio);
+
 			Vec2Scale(&weaponList[i].Position, &weaponList[i].Position, ratio);
+			
 			UpdateCollider(&weaponList[i].WeaponPickup, weaponList[i].WeaponPickup.width, weaponList[i].WeaponPickup.height);
-			//printf("Platform %i is now updated\n", i);
+			UpdateCollider(&weaponList[i].WeaponAttack, weaponList[i].WeaponAttack.width, weaponList[i].WeaponAttack.height);
+			
+			weaponList[i].WeaponLength *= ratio;
+			//printf("Weapon %i is now updated\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -554,6 +626,7 @@ void SetDebugMode(void)
 		{
 			//Free the mesh and texture data
 			weaponList[i].WeaponPickup.collisionDebug = TRUE;
+			weaponList[i].WeaponAttack.collisionDebug = TRUE;
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -598,6 +671,7 @@ void RemoveDebugMode(void)
 		{
 			//Free the mesh and texture data
 			weaponList[i].WeaponPickup.collisionDebug = FALSE;
+			weaponList[i].WeaponAttack.collisionDebug = FALSE;
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)

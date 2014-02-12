@@ -221,8 +221,8 @@
     <ClInclude Include="HeaderFiles\Weapon.h">
       <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\ParticleSystem.h">
-      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    <ClInclude Include="HeaderFiles\EnemyCollision.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -334,8 +334,8 @@
     <ClCompile Include="SourceFiles\EP2Slides.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\ParticleSystem.c">
-      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    <ClCompile Include="SourceFiles\EnemyCollision.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -41,11 +41,11 @@ static int fade = 1;								//0: no fade, 1: fade in, 2: fade out
 static int slideTimer = 0;
 static int slideDir;								//1: Forward, 0: Backward
 
-static Sprite *SausageFox;
+static Sprite *StretchGoals;
 static Sprite *Title;
-static Sprite *Digipen;
 
-static enum Slides { Slide1, Slide2, Slide3, MaxSlides};
+
+static enum Slides { Slide1, Slide2, MaxSlides};
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -76,11 +76,17 @@ void InitializeEP2Screen(void)
 {
 	// Reset the object list
 	resetObjectList();
+	
+	alpha = 0.0f;
+	slideTextureNum = 0;
+	fade = 1;								//0: no fade, 1: fade in, 2: fade out
+	slideTimer = 0;
 	slideDir = 0;
+
 	// Create the slide sprites
 	Title = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	Digipen = CreateSprite("TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1, 0, 0);
-	SausageFox = CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	StretchGoals = CreateSprite("TextureFiles/Slide4.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	
 }
 
 /*************************************************************************/
@@ -113,32 +119,24 @@ void UpdateEP2Screen(void)
 /*************************************************************************/
 void DrawEP2Screen(void)
 {
-	//Digipen Logo
+	//Stretch Goals
 	if(slideTextureNum == Slide1)
 	{
-		Digipen->Alpha = alpha;
-		DrawSprite(Digipen);
+		StretchGoals->Alpha = alpha;
+		DrawSprite(StretchGoals);
 	}
 	else
-		Digipen->Alpha = 0.0f;
+		StretchGoals->Alpha = 0.0f;
 
-	//Sausage Fox Logo
+	//Mansion Mashers
 	if(slideTextureNum == Slide2)
-	{
-		SausageFox->Alpha = alpha;
-		DrawSprite(SausageFox);
-	}
-	else
-		SausageFox->Alpha = 0.0f;
-
-	//Mansion Mashers Logo
-	if(slideTextureNum == Slide3)
 	{
 		Title->Alpha = alpha;
 		DrawSprite(Title);
 	}
 	else
 		Title->Alpha = 0.0f;
+
 
 }
 
