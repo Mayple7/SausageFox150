@@ -39,6 +39,12 @@ Sprite *HUD;
 Sprite *HUDitem;
 HUDLayer HUDList;
 
+//Bounding Boxes
+Sprite *BoundTop;
+Sprite *BoundBottom;
+Sprite *BoundLeft;
+Sprite *BoundRight;
+
 Sprite* TutorialBackground;
 Sprite* OverlayGrid;
 Platform* Shelf;
@@ -69,7 +75,10 @@ void LoadTutorial(void)
 
 void InitializeTutorial(void)
 {
+	Vec3 BoundingTint;
 	int hudLoop;
+
+	Vec3Set(&BoundingTint, 0.0f, 0.0f, 0.0f);
 
 	newID = 1;
 	resetObjectList();
@@ -101,6 +110,17 @@ void InitializeTutorial(void)
 
 	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
 	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
+
+	//Bounding Boxes
+	BoundTop = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
+	BoundBottom = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, -1080);
+	BoundLeft = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, -1920, 0);
+	BoundRight = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 1920, 0);
+
+	BoundTop->Tint = BoundingTint;
+	BoundBottom->Tint = BoundingTint;
+	BoundLeft->Tint = BoundingTint;
+	BoundRight->Tint = BoundingTint;
 
 	// Create the shelf sprite and initialize to be collidable
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 475, -170);
@@ -182,7 +202,6 @@ void UpdateTutorial(void)
 			
 			if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width > TutorialBackground->Width / 2)
 			{
-				int i;
 				CurrentPlayer.Position.x = 50000;
 				RemoveDebugMode();
 				OverlayGrid->Visible = FALSE;
