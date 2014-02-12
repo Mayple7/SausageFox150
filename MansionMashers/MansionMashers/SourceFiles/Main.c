@@ -36,8 +36,8 @@
 // ---------------------------------------------------------------------------
 // globals
 int GameRunning;
-double winWidth;
-double winHeight;
+int winWidth;
+int winHeight;
 double loadRatio;
 
 // ---------------------------------------------------------------------------
@@ -110,9 +110,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	ShowWindow	(winHandle, SW_SHOWMAXIMIZED);
 	UpdateWindow(winHandle);
-
-	winWidth = rect.right - rect.left;
-	winHeight = rect.bottom - rect.top;
+	winWidth = (int)rect.right - (int)rect.left;
+	winHeight = (int)rect.bottom - (int)rect.top;
 	if(winWidth / winHeight >= 16.0f / 9.0f)
 	{
 		loadRatio = winHeight / 1080;
@@ -125,6 +124,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		winWidth = winWidth * loadRatio;
 		winHeight = winHeight * loadRatio;
 	}
+
+	ShowWindow(winHandle, SW_SHOWMAXIMIZED);
 
 	sysInitInfo.mCreateWindow		= 0;
 	sysInitInfo.mWindowHandle		= winHandle;
@@ -302,6 +303,12 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 
 	return 0;
 }
+
+void SetLoadRatio(double ratio)
+{
+	loadRatio = ratio;
+}
+
 
 float GetLoadRatio(void)
 {
