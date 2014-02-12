@@ -43,9 +43,11 @@ static int slideDir;								//1: Forward, 0: Backward
 
 static Sprite *StretchGoals;
 static Sprite *Title;
+static Sprite *Interface;
 
 
-static enum Slides { Slide1, Slide2, MaxSlides};
+
+static enum Slides { Slide1, Slide2, Slide3, MaxSlides};
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -86,7 +88,7 @@ void InitializeEP2Screen(void)
 	// Create the slide sprites
 	Title = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 	StretchGoals = CreateSprite("TextureFiles/Slide4.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	
+	Interface = CreateSprite("TextureFiles/Slide2.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 }
 
 /*************************************************************************/
@@ -119,8 +121,17 @@ void UpdateEP2Screen(void)
 /*************************************************************************/
 void DrawEP2Screen(void)
 {
-	//Stretch Goals
+	//Mansion Mashers
 	if(slideTextureNum == Slide1)
+	{
+		Interface->Alpha = alpha;
+		DrawSprite(Interface);
+	}
+	else
+		Interface->Alpha = 0.0f;
+	
+	//Stretch Goals
+	if(slideTextureNum == Slide2)
 	{
 		StretchGoals->Alpha = alpha;
 		DrawSprite(StretchGoals);
@@ -128,8 +139,8 @@ void DrawEP2Screen(void)
 	else
 		StretchGoals->Alpha = 0.0f;
 
-	//Mansion Mashers
-	if(slideTextureNum == Slide2)
+		//Mansion Mashers
+	if(slideTextureNum == Slide3)
 	{
 		Title->Alpha = alpha;
 		DrawSprite(Title);
