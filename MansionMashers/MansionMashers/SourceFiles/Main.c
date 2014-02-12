@@ -110,23 +110,26 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	ShowWindow	(winHandle, SW_SHOWMAXIMIZED);
 	UpdateWindow(winHandle);
-	winWidth = (int)rect.right - (int)rect.left;
-	winHeight = (int)rect.bottom - (int)rect.top;
-	printf("%i : %i\n", winWidth, winHeight);
-	if(winWidth / (double)winHeight <= 16.0f / 9.0f)
+	if(GetClientRect(winHandle, &rect))
 	{
-		loadRatio = winHeight / 1080.0;
-		winWidth = winWidth / loadRatio;
-		winHeight = winHeight / loadRatio;
+		winWidth = (int)rect.right - (int)rect.left;
+		winHeight = (int)rect.bottom - (int)rect.top;
+		printf("%i : %i\n", winWidth, winHeight);
+		if(winWidth / (double)winHeight <= 16.0f / 9.0f)
+		{
+			loadRatio = winHeight / 1080.0;
+			winWidth = winWidth / loadRatio;
+			winHeight = winHeight / loadRatio;
+		}
+		else
+		{
+			loadRatio = winWidth / 1920.0;
+			winWidth = winWidth / loadRatio;
+			winHeight = winHeight / loadRatio;
+		}
+		printf("%i : %i\n", winWidth, winHeight);
+		printf("%f\n", loadRatio);
 	}
-	else
-	{
-		loadRatio = winWidth / 1920.0;
-		winWidth = winWidth / loadRatio;
-		winHeight = winHeight / loadRatio;
-	}
-	printf("%i : %i\n", winWidth, winHeight);
-	printf("%f\n", loadRatio);
 	sysInitInfo.mCreateWindow		= 0;
 	sysInitInfo.mWindowHandle		= winHandle;
 
