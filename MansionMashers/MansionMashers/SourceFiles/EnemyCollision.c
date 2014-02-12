@@ -87,6 +87,7 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
 	CurrentEnemy->CurrentEnemyStats.CurrentHealth -= damageDealt;
+	CurrentEnemy->EnemyParticleSystem->amountTotal += 5;
 	sprintf(num, "%d", damageDealt);
 	// Create Floating Combat Text
 	FirstLetter = CreateText(num, CurrentEnemy->Position.x / GetLoadRatio(), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2) / GetLoadRatio(), 100, textColor, Center);

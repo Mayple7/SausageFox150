@@ -32,6 +32,7 @@ typedef struct Enemy
 	RigidBody EnemyRigidBody;
 	EnemyStats CurrentEnemyStats;
 	CollisionBox EnemyCollider;
+	struct ParticleSystem* EnemyParticleSystem;
 	struct Weapon* EnemyWeapon;
 
 	Vec2 Position;

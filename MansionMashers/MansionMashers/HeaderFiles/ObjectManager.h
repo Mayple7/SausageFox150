@@ -14,8 +14,8 @@ Food *foodList;
 Enemy *enemyList;
 Weapon *weaponList;
 struct TextGlyphs **floatTextList;
-ParticleSystem *particleSystemList;
-Particle *particleList;
+struct ParticleSystem *particleSystemList;
+struct Particle *particleList;
 
 //Functionz
 Sprite* AddObject(void);
@@ -24,8 +24,8 @@ Food* AddFood(void);
 Weapon* AddWeapon(void);
 Enemy* AddEnemy(void);
 void AddFloatingText(struct TextGlyphs* FirstLetter);
-ParticleSystem *AddParticleSystem(void);
-Particle *AddParticle(void);
+struct ParticleSystem *AddParticleSystem(void);
+struct Particle *AddParticle(void);
 
 void resetObjectList(void);
 void DrawObjectList(void);

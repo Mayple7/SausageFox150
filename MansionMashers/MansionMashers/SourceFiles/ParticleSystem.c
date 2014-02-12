@@ -106,7 +106,7 @@ void ParticleUpdate(void)
 	}
 }
 
-void ParticleSystemUpdate(int *ID)
+void ParticleSystemUpdate(void)
 {
 	int i;
 	for (i = 0; i < PARTICLESYSTEMAMOUNT; i++)

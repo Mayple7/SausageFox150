@@ -2,13 +2,13 @@
 #define FOX_OBJECTS
 
 //Create object list
-#define OBJECTAMOUNT 1000
+#define OBJECTAMOUNT 1500
 //Create collide list
 #define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
 //Create particle system
 #define PARTICLESYSTEMAMOUNT 10
 //Create particle list
-#define PARTICLEAMOUNT 100
+#define PARTICLEAMOUNT 500
 
 enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 
