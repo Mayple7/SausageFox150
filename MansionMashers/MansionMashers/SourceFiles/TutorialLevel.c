@@ -182,9 +182,18 @@ void UpdateTutorial(void)
 			
 			if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width > TutorialBackground->Width / 2)
 			{
+				int i;
 				CurrentPlayer.Position.x = 50000;
 				RemoveDebugMode();
 				OverlayGrid->Visible = FALSE;
+				
+				HUD->Tint.x -= GetDeltaTime();
+				HUD->Tint.y -= GetDeltaTime();
+				HUD->Tint.z -= GetDeltaTime();
+				HUDitem->Tint.x -= GetDeltaTime();
+				HUDitem->Tint.y -= GetDeltaTime();
+				HUDitem->Tint.z -= GetDeltaTime();
+
 				fadeToEnd();
 			}
 		}
