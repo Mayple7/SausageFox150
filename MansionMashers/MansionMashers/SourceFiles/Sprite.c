@@ -171,6 +171,10 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->FlipXPrev = FALSE;
 	CurrentSprite->FlipYPrev = FALSE;
 
+	CurrentSprite->ScaleX = 1.0f;
+	CurrentSprite->ScaleY = 1.0f;
+
+
 	CurrentSprite->Created = TRUE;
 
 	return CurrentSprite;
@@ -288,11 +292,11 @@ Matrix3 CreateTranslationMtx(struct Sprite *CurrentSprite)
 	transMtx.m[2][1] = 0;
 	transMtx.m[2][2] = 1;
 
-	scalMtx.m[0][0] = (float)(((2*CurrentSprite->FlipX)-1)*-1);
+	scalMtx.m[0][0] = (float)(((2*CurrentSprite->FlipX)-1)*-1) * CurrentSprite->ScaleX;
 	scalMtx.m[0][1] = 0;
 	scalMtx.m[0][2] = 0;
 	scalMtx.m[1][0] = 0;
-	scalMtx.m[1][1] = (float)(((2*CurrentSprite->FlipY)-1)*-1);
+	scalMtx.m[1][1] = (float)(((2*CurrentSprite->FlipY)-1)*-1) * CurrentSprite->ScaleY;
 	scalMtx.m[1][2] = 0;
 	scalMtx.m[2][0] = 0;
 	scalMtx.m[2][1] = 0;

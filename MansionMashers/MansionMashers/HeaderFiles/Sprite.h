@@ -55,6 +55,10 @@ typedef struct Sprite
 	int FlipYPrev;
 	float Rotation;
 	float RotationPrev;
+
+	float ScaleX;
+	float ScaleY;
+
 }Sprite;
 
 Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, float xPos, float yPos);

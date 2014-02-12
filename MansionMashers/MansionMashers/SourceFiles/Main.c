@@ -118,14 +118,14 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		if(winWidth / (double)winHeight <= 16.0f / 9.0f)
 		{
 			loadRatio = winHeight / 1080.0;
-			winWidth = winWidth / loadRatio;
-			winHeight = winHeight / loadRatio;
+			winWidth = (int)(winWidth / loadRatio);
+			winHeight = (int)(winHeight / loadRatio);
 		}
 		else
 		{
 			loadRatio = winWidth / 1920.0;
-			winWidth = winWidth / loadRatio;
-			winHeight = winHeight / loadRatio;
+			winWidth = (int)(winWidth / loadRatio);
+			winHeight = (int)(winHeight / loadRatio);
 		}
 		printf("%i : %i\n", winWidth, winHeight);
 		printf("%f\n", loadRatio);
@@ -255,16 +255,16 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 			{
 				ratio = height / winHeight;
 				loadRatio = height / 1080;
-				winWidth = winWidth * ratio;
-				winHeight = winHeight * ratio;
+				winWidth = (int)(winWidth * ratio);
+				winHeight = (int)(winHeight * ratio);
 				ResizeObjects((float)ratio);
 			}
 			else if (width != 0)
 			{
 				ratio = width / winWidth;
 				loadRatio = width / 1920;
-				winWidth = winWidth * ratio;
-				winHeight = winHeight * ratio;
+				winWidth = (int)(winWidth * ratio);
+				winHeight = (int)(winHeight * ratio);
 				ResizeObjects((float)ratio);
 			}
 			else

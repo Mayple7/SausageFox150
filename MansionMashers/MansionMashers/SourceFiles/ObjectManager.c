@@ -172,6 +172,52 @@ void AddFloatingText(TextGlyphs* FirstLetter)
 /*************************************************************************/
 /*!
 	\brief
+	Adds a particle system to the particle system list
+	
+	\return
+	The particle system added to the list
+*/
+/*************************************************************************/
+ParticleSystem* AddParticleSystem(void)
+{
+	int i;
+	for (i = 0; i < PARTICLESYSTEMAMOUNT; i++)
+	{
+		if(particleSystemList[i].objID == 0 || particleSystemList[i].objID == -1)
+		{
+			printf("ParticleSystem at %i Created\n", i);
+			return &particleSystemList[i];
+		}
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Adds a particle system to the particle system list
+	
+	\return
+	The particle system added to the list
+*/
+/*************************************************************************/
+Particle* AddParticle(void)
+{
+	int i;
+	for (i = 0; i < PARTICLEAMOUNT; i++)
+	{
+		if(particleList[i].objID == 0 || particleList[i].objID == -1)
+		{
+			printf("Particle at %i Created\n", i);
+			return &particleList[i];
+		}
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Resets all the objects in the list and callocs a new array of sprites
 */
 /*************************************************************************/
@@ -192,6 +238,8 @@ void resetObjectList(void)
 		enemyList    = (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
 		weaponList   = (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
 		floatTextList   = (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs));
+		particleList		= (Particle *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Particle));
+		particleSystemList  = (ParticleSystem *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(ParticleSystem));
 
 		for(i = 0; i < COLLIDEAMOUNT; i++)
 		{
@@ -199,6 +247,16 @@ void resetObjectList(void)
 			foodList[i].objID = -1;
 			enemyList[i].objID = -1;
 			weaponList[i].objID = -1;
+		}
+				
+		for(i = 0; i < PARTICLEAMOUNT; i++)
+		{
+			particleList[i].objID = -1;
+		}
+
+		for(i = 0; i < PARTICLESYSTEMAMOUNT; i++)
+		{
+			particleSystemList[i].objID = -1;
 		}
 	}
 	else
@@ -428,6 +486,45 @@ void FreeFloatingText(TextGlyphs *FirstLetter)
 /*************************************************************************/
 /*!
 	\brief
+	Frees the object being passed
+	
+	\param CurrentSystem
+	The pointer to a object whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreeParticleSystem(ParticleSystem *CurrentSystem)
+{
+	if(CurrentSystem->objID > -1)
+	{
+		//I'm sure everyone will miss you particle system
+		CurrentSystem->objID = -1;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees the object being passed
+	
+	\param CurrentParticle
+	The pointer to a object whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreeParticle(Particle *CurrentParticle)
+{
+	if(CurrentParticle->objID > -1)
+	{
+		//I'm sure everyone will miss you particle
+		CurrentParticle->objID = -1;
+
+		if (CurrentParticle->ParticleSprite->Created)
+			freeObject(CurrentParticle->ParticleSprite);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Cycles through the object list freeing all objects in the list
 */
 /*************************************************************************/
@@ -496,8 +593,22 @@ void freeObjectList(void)
 
 	}
 
+	for (i = 0; i < PARTICLEAMOUNT; i++)
+	{
+			//Free the mesh and texture data
+			FreeParticle(&particleList[i]);
+	}
+
+	for (i = 0; i < PARTICLESYSTEMAMOUNT; i++)
+	{
+		//Free the mesh and texture data
+		FreeParticleSystem(&particleSystemList[i]);
+	}
+
 	//Free the object list data allocation
 	FreeMyAlloc(drawList);
+	FreeMyAlloc(particleList);
+	FreeMyAlloc(particleSystemList);
 
 	//Free collision lists data allocation
 	FreeMyAlloc(platformList);
