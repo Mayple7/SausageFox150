@@ -90,7 +90,7 @@ void InitializeTutorial(void)
 	volumestring[3] = '\0';
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 
-	InitializePlayer(&CurrentPlayer, newID++, 0, GROUNDLEVEL + 1);
+	InitializePlayer(&CurrentPlayer, newID++, 0, GROUNDLEVEL * GetLoadRatio() + 1);
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
