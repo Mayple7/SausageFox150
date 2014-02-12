@@ -237,6 +237,7 @@ void InitSoundStruct(FoxSound *snd, int type)
 	snd->Playing = FALSE;
 	snd->Paused = FALSE;
 	snd->Type = type;
+	snd->sndId = 1;
 }
 
 /*************************************************************************/
@@ -330,6 +331,9 @@ void TogglePauseChannel(FoxChannels * chnls, int ChnlType)
 void CreateChannelGroups(FoxChannels *chnl)
 {
 	FMOD_RESULT result;
+	chnl->sndID = 1;
+	chnl->EffectsPaused = FALSE;
+	chnl->MusicPaused = FALSE;
 
 	result = FMOD_System_CreateChannelGroup(FMsystem, NULL, &chnl->Effects);
 	FMODErrCheck(result);
@@ -493,6 +497,18 @@ void UpdateSoundSystem(void)
 	FMOD_System_Update(FMsystem);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Converts a number volume to a string
+
+	\param
+	Pointer to a character string
+
+	\param 
+	The number volume
+*/
+/*************************************************************************/
 char * VolumetoString(char *string, float volume)
 {
 	int i;
@@ -530,4 +546,127 @@ char * VolumetoString(char *string, float volume)
 	}
 
 	return string;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Adds a sound to the soundList
+
+	\return
+	Returns a pointer to a FoxSound struct
+*/
+/*************************************************************************/
+FoxSound * AddSound(void)
+{
+	int i;
+
+	for(i = 0; i < MAX_SOUND_CHANNELS; i++)
+	{
+		if(soundList[i].sndId == 0 || soundList[i].sndId == -1)
+			return &soundList[i];
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Sets the objects in the soundList and channelGroupsList to zero
+
+*/
+/*************************************************************************/
+
+void resetSoundList(void)
+{
+	int i;
+
+	soundList  = (FoxSound *) CallocMyAlloc(MAX_SOUND_CHANNELS, sizeof(FoxSound));
+
+	if(soundList)
+	{
+		for(i = 0; i < MAX_SOUND_CHANNELS; i++)
+		{
+			soundList[i].sndId = -1;
+		}
+		printf("Sound List Setup Successful\n");
+	}
+	else
+		printf("Sound List Setup Failed\n");
+
+	channelGroupList = (FoxChannels *) CallocMyAlloc(MAX_CHANNEL_GROUPS, sizeof(FoxChannels));
+
+	if(channelGroupList)
+	{
+		for(i = 0; i < MAX_CHANNEL_GROUPS; i ++)
+		{
+			channelGroupList[i].sndID = -1;
+		}
+		printf("Channel List Setup Successful\n");
+	}
+	else
+		printf("Channel List Setup Failed\n");
+
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees a sound from the sound list
+
+	\param
+	Pointer to a FoxSound struct
+*/
+/*************************************************************************/
+void freeSound(FoxSound * soundObj)
+{
+	if(soundObj && soundObj->sndId)
+	{
+		soundObj->sndId = 0;
+		ReleaseSound(soundObj->Sound);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees a channel group from the list
+
+	\param
+	Pointer to channel group object struct
+*/
+/*************************************************************************/
+void freeChannelGroups(FoxChannels * chanGrpObj)
+{
+	if(chanGrpObj && chanGrpObj->sndID)
+	{
+		chanGrpObj->sndID = 0;
+		ReleaseChannelGroups(chanGrpObj);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees sounds and channel groups from lists and release memory
+*/
+/*************************************************************************/
+void freeSoundList(void)
+{
+	int i;
+
+	for(i = 0; i < MAX_SOUND_CHANNELS; i++)
+	{
+		if(soundList[i].sndId)
+			freeSound(&soundList[i]);
+	}
+
+	for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
+	{
+		if(channelGroupList[i].sndID)
+			freeChannelGroups(&channelGroupList[i]);
+	}
+	
+	FreeMyAlloc(soundList);
+	FreeMyAlloc(channelGroupList);
 }

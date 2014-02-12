@@ -3,7 +3,8 @@
 
 #include "../FMODHeaders/fmod.h"
 
-#define MAX_SOUND_CHANNELS 100 
+#define MAX_SOUND_CHANNELS 40
+#define MAX_CHANNEL_GROUPS 2
 
 typedef enum SoundType
 {
@@ -25,6 +26,7 @@ typedef struct FoxSound
 	FMOD_BOOL Playing;
 	FMOD_BOOL Paused;
 	int Type;
+	int sndId;
 } FoxSound;
 
 typedef struct FoxChannels
@@ -34,8 +36,11 @@ typedef struct FoxChannels
 	FMOD_BOOL EffectsPaused;
 	FMOD_CHANNELGROUP * Music;
 	FMOD_BOOL MusicPaused;
-
+	int sndID;
 } FoxChannels;
+
+FoxSound * soundList;
+FoxChannels * channelGroupList;
 
 FMOD_SYSTEM * GetSoundSystem(void);
 void FMODErrCheck(FMOD_RESULT result);
@@ -55,5 +60,11 @@ float GetSoundVolume(FoxSound *snd);
 float GetChannelGroupVolume(FoxChannels * chnl, int type);
 void UpdateSoundSystem(void);
 char * VolumetoString(char *string, float volume);
+
+FoxSound * AddSound(void);
+void resetSoundList(void);
+void freeSound(FoxSound * soundObj);
+void freeChannelGroups(FoxChannels * chanGrpObj);
+void freeSoundList(void);
 
 #endif
