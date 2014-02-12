@@ -66,6 +66,8 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
 		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 0, 10);
+
+		//CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("../TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, 1, 0, 5, 1.0f, 270, 180, 1.0f, 50, 49, 50, 2.0f);
 		
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, height / 2, objID);
 		CurrentEnemy->EnemyCollider.Offset.y = -CurrentEnemy->EnemyCollider.height / 6;

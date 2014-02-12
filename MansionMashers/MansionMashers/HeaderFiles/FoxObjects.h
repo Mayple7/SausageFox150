@@ -2,9 +2,13 @@
 #define FOX_OBJECTS
 
 //Create object list
-#define OBJECTAMOUNT 300
+#define OBJECTAMOUNT 1000
 //Create collide list
 #define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
+//Create particle system
+#define PARTICLESYSTEMAMOUNT 10
+//Create particle list
+#define PARTICLEAMOUNT 100
 
 enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 
@@ -18,5 +22,6 @@ enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 #include "PlayerCollision.h"
 #include "Food.h"
 #include "Weapon.h"
+#include "ParticleSystem.h"
 
 #endif

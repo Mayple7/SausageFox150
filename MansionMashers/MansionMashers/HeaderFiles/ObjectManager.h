@@ -14,6 +14,8 @@ Food *foodList;
 Enemy *enemyList;
 Weapon *weaponList;
 struct TextGlyphs **floatTextList;
+ParticleSystem *particleSystemList;
+Particle *particleList;
 
 //Functionz
 Sprite* AddObject(void);
@@ -22,6 +24,8 @@ Food* AddFood(void);
 Weapon* AddWeapon(void);
 Enemy* AddEnemy(void);
 void AddFloatingText(struct TextGlyphs* FirstLetter);
+ParticleSystem *AddParticleSystem(void);
+Particle *AddParticle(void);
 
 void resetObjectList(void);
 void DrawObjectList(void);
@@ -35,6 +39,8 @@ void FreePlatform(Platform *CurrentPlatform);
 void FreeEnemy(Enemy *CurrentEnemy);
 void FreeWeapon(Weapon *CurrentWeapon);
 void FreeFloatingText(struct TextGlyphs *FirstLetter);
+void FreeParticleSystem(ParticleSystem *CurrentSystem);
+void FreeParticle(Particle *CurrentParticle);
 
 void SetDebugMode(void);
 void RemoveDebugMode(void);

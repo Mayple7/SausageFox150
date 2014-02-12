@@ -58,9 +58,9 @@ typedef struct Particle
 
 ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float posY, int ID, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife);
 
-Particle* CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX, float VelY, float Life, float Scale, int ID);
+void CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX, float VelY, float Life, float Scale, int ID);
 
-void ParticleSystemUpdate(int *ID);
+void ParticleSystemUpdate(void);
 void ParticleUpdate(void);
 
 #endif

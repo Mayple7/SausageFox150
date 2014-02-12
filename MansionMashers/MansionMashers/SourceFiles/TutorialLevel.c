@@ -151,6 +151,8 @@ void InitializeTutorial(void)
 	GameLogo->Alpha = 0;
 
 	DoorOverlay = CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
+	
+	//CreateFoxParticleSystem("../TextureFiles/StrawParticle.png", 0, 0, newID++, 0, 5, 0.0f, 270, 180, 1.0f, 50, 49, 50, 2.0f);
 
 	Vec3Set(&TextColor, 0, 0, 0);
 	VolumeText = CreateText("Volume ", -400, 350, 100, TextColor, Right);
@@ -173,6 +175,8 @@ void UpdateTutorial(void)
 
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	ParticleSystemUpdate();
 	
 	if(StrawDummy->objID > 0)
 	{

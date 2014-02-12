@@ -45,11 +45,11 @@ ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float
 	return CurrentSystem;
 }
 
-Particle* CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX, float VelY, float Life, float Scale, int ID)
+void CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX, float VelY, float Life, float Scale, int ID)
 {
 	Particle *CurrentParticle = AddParticle();
 
-	CurrentParticle->ParticleSprite = CreateSprite(particleTexture, 64, 64, 100, 1, 1, posX, posY);
+	CurrentParticle->ParticleSprite = CreateSprite(particleTexture, 64.0f, 64.0f, 100, 1, 1, posX, posY);
 	CurrentParticle->Position.x = posX;
 	CurrentParticle->Position.y = posY;
 	CurrentParticle->Velocity.x = VelX;
@@ -67,7 +67,6 @@ Particle* CreateFoxParticle(char* particleTexture, float posX, float posY, float
 	lastRandomNumber = rand();
 	CurrentParticle->ParticleSprite->Rotation = (float)((int)lastRandomNumber % 360) / 180.0f * (float)FOX_PI;
 
-	return CurrentParticle;
 }
 
 void ParticleUpdate(void)
@@ -134,7 +133,6 @@ void ParticleSystemUpdate(int *ID)
 				if (particleSystemList[i].amountTotal > 0)
 				{
 					Vec2 vel;
-					Particle* particle;
 					float diff = (float)((int)lastRandomNumber % 100) / 100.0f + 0.5f;
 					vel.x = particleSystemList[i].emitVelocity * diff;
 					vel.y = 0;
@@ -150,14 +148,14 @@ void ParticleSystemUpdate(int *ID)
 					lastRandomNumber = rand();
 					Vec2RotateDegrees(&vel, particleSystemList[i].emitAngle + ((float)((int)lastRandomNumber % particleSystemList[i].emitAngleRandom - (particleSystemList[i].emitAngleRandom/2))));
 
-					particle = CreateFoxParticle(	particleSystemList[i].ParticleSprite, 
-													particleSystemList[i].Position.x + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementX - (particleSystemList[i].emitDisplacementX/2))),
-													particleSystemList[i].Position.y + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementY - (particleSystemList[i].emitDisplacementY/2))), 
-													vel.x,
-													vel.y, 
-													particleSystemList[i].emitLife, 
-													particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f), 
-													(*ID)++);
+					CreateFoxParticle(	particleSystemList[i].ParticleSprite, 
+										particleSystemList[i].Position.x + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementX - (particleSystemList[i].emitDisplacementX/2))),
+										particleSystemList[i].Position.y + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementY - (particleSystemList[i].emitDisplacementY/2))), 
+										vel.x,
+										vel.y, 
+										particleSystemList[i].emitLife, 
+										particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f), 
+										1);
 
 					particleSystemList[i].amountTotal--;
 				}
