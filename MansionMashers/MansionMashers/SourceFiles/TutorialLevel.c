@@ -96,11 +96,11 @@ void InitializeTutorial(void)
 		HUDList.HudItem[hudLoop] = 0;
 
 	// Create single player HUD sprite
-	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
+	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 448.0f, 192.0f, 200, 1, 1, 0, 0);
 	HUD->isHUD = TRUE;
 
 	// Create single player HUD item sprite
-	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
+	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 66.0f, 66.0f, 200, 1, 1, 0, 0);
 	HUDitem->ItemType = 0;
 	HUDitem->isHUD = TRUE;
 
@@ -157,8 +157,8 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640, -140, 201, -1, 5, 0.01f, 90, 45, 0.5f, -20.0f, 9, 10, 200, 0.25f);
 
 	Vec3Set(&TextColor, 0, 0, 0);
-	VolumeText = CreateText("Volume ", -400, 350, 100, TextColor, Right);
-	TestText = CreateText(volumestring, -400, 350, 100, TextColor, Left);
+	VolumeText = CreateText("Volume ", -400, 300, 100, TextColor, Right);
+	TestText = CreateText(volumestring, -400, 300, 100, TextColor, Left);
 	SetChannelGroupVolume(&ChannelController, EffectType, 0);
 	ChangeTextString(TestText, VolumetoString(volumestring, 0));
 	ChangeTextVisibility(TestText);

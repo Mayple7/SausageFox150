@@ -56,13 +56,13 @@ void DrawHUD(struct HUDLayer *hud)
 		if (i % 2 == 0)
 		{
 			hud->HudItem[i]->Position.x = camX - (725 - ((i/2)*480)) * GetLoadRatio();
-			hud->HudItem[i]->Position.y = camY + (405 * GetLoadRatio());
+			hud->HudItem[i]->Position.y = camY + (350 * GetLoadRatio());
 			DrawSprite(hud->HudItem[i]);
 		}
 		else
 		{
-			hud->HudItem[i]->Position.x = camX - (725 - (((i-1)/2)*480)) * GetLoadRatio() - (70 * GetLoadRatio());
-			hud->HudItem[i]->Position.y = camY + (405 - 23) * GetLoadRatio();
+			hud->HudItem[i]->Position.x = camX - (725 - (((i-1)/2)*480)) * GetLoadRatio() - (98 * GetLoadRatio());
+			hud->HudItem[i]->Position.y = camY + (350 - 34) * GetLoadRatio();
 			DrawSprite(hud->HudItem[i]);
 		}
 	}
