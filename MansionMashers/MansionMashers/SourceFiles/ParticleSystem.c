@@ -135,7 +135,12 @@ void ParticleSystemUpdate(void)
 				if (particleSystemList[i].amountTotal > 0 || particleSystemList[i].amountTotal == -1)
 				{
 					Vec2 vel;
-					float diff = (float)((int)lastRandomNumber % 100) / 100.0f + 0.5f;
+
+
+					float diff;
+
+					diff = (float)((int)lastRandomNumber % 100) / 100.0f + 0.5f;
+
 					vel.x = particleSystemList[i].emitVelocity * diff;
 					vel.y = 0;
 
@@ -163,7 +168,8 @@ void ParticleSystemUpdate(void)
 
 					if (particleSystemList[i].amountTotal > 0)
 						particleSystemList[i].amountTotal--;
-					srand( (unsigned int)time(NULL) );
+					srand( rand() % (rand() + 1) );
+					lastRandomNumber = rand();
 				}
 			}
 			particleSystemList[i].emitSpeedTimer = particleSystemList[i].emitSpeed;
