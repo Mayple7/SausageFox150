@@ -2,6 +2,7 @@
 #define FOX_PARTICLES
 
 #define NUMBER_OF_PARTICLE_SYSTEMS 10
+#define SPRITE_NAME_LENGTH 50
 
 #include "Vector2.h"
 #include "Sprite.h"
@@ -12,7 +13,7 @@ unsigned long lastRandomNumber;
 
 typedef struct ParticleSystem
 {
-	char *ParticleSprite;
+	char ParticleSprite[SPRITE_NAME_LENGTH];
   
 	Vec2 Position;
 
@@ -28,6 +29,7 @@ typedef struct ParticleSystem
 	int emitAngleRandom;			// Degrees
 
 	float emitScale;
+	float emitScaleSpeed;
 
 	float emitVelocity;
 	float emitLife;
@@ -35,6 +37,9 @@ typedef struct ParticleSystem
 	int emitDisplacementX;
 	int emitDisplacementY;
 
+	struct AEGfxVertexList* emitMesh;
+
+	int ZIndex;
 
 }ParticleSystem;
 
@@ -54,11 +59,13 @@ typedef struct Particle
 
 	float RotationSpeed;
 
+	float ScaleSpeed;
+
 }Particle;
 
-ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float posY, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife);
+ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float posY, int ZIndex, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, float emitScaleSpeed, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife);
 
-void CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX, float VelY, float Life, float Scale);
+void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX, float posY, int ZIndex, float VelX, float VelY, float Life, float Scale, float ScaleSpeed);
 
 void ParticleSystemUpdate(void);
 void ParticleUpdate(void);

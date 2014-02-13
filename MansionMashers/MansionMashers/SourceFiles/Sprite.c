@@ -136,6 +136,100 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->SpriteMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), CurrentSprite->OffsetX, CurrentSprite->OffsetY);
 	CurrentSprite->SpriteTexture = LoadTexture(texture);
 
+	CurrentSprite->MeshOwner = TRUE;
+
+	// Size of the sprite
+	CurrentSprite->Width = width * GetLoadRatio();
+	CurrentSprite->Height = height * GetLoadRatio();
+
+	//Position of the sprite
+	CurrentSprite->Position.x = xPos * GetLoadRatio();
+	CurrentSprite->Position.y = yPos * GetLoadRatio();
+	CurrentSprite->ZIndex     = ZIndex;
+
+	//Animation Properties
+	CurrentSprite->CurrentFrame = 0;
+	CurrentSprite->TotalFrames = xFrames * yFrames;
+	if(CurrentSprite->TotalFrames > 1)
+		CurrentSprite->AnimationActive = TRUE;
+	else
+		CurrentSprite->AnimationActive = FALSE;
+	CurrentSprite->AnimationSpeed = 12;
+	CurrentSprite->AnimationTimer = 0;
+
+	//Texture Properties
+	//strcpy(CurrentSprite->TextureName, texture);
+	CurrentSprite->NumHeightFrames = yFrames;
+	CurrentSprite->NumWidthFrames = xFrames;
+
+	CurrentSprite->Tint.x = 1.0f;
+	CurrentSprite->Tint.y = 1.0f;
+	CurrentSprite->Tint.z = 1.0f;
+
+	CurrentSprite->Alpha = 1.0f;
+	CurrentSprite->Visible = TRUE;
+	CurrentSprite->FlipX = FALSE;
+	CurrentSprite->FlipY = FALSE;
+	CurrentSprite->FlipXPrev = FALSE;
+	CurrentSprite->FlipYPrev = FALSE;
+
+	CurrentSprite->ScaleX = 1.0f;
+	CurrentSprite->ScaleY = 1.0f;
+
+
+	CurrentSprite->Created = TRUE;
+
+	return CurrentSprite;
+}
+
+
+/*************************************************************************/
+/*!
+	\brief
+	Creates and returns the sprite and adds it to the object manager list
+
+	\param texture
+	Location of the texture for the sprite
+	
+	\param width
+	The width of the sprite
+	
+	\param height
+	The height of the sprite
+
+	\param ZIndex
+	The index for drawing the object (Highest number = drawn on top)
+
+	\param xFrames
+	The number of frames in the x direction
+
+	\param yFrames
+	The number of frames in the y direction
+
+	\return
+	A pointer to the sprite object
+*/
+/*************************************************************************/
+Sprite* CreateSpriteNoMesh(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, float xPos, float yPos)
+{	
+	//Adds the sprite to the object manager list
+	Sprite *CurrentSprite = AddObject();
+
+	CurrentSprite->isHUD = FALSE;
+
+	//Animation offset if needed
+	CurrentSprite->OffsetX = 1.0f / xFrames;
+	CurrentSprite->OffsetY = 1.0f / yFrames;
+
+	//Rotation default to 0
+	CurrentSprite->Rotation = 0.0f;
+	CurrentSprite->RotationPrev = 0.0f;
+
+	//Sprite Graphics Properties
+	CurrentSprite->SpriteTexture = LoadTexture(texture);
+
+	CurrentSprite->MeshOwner = FALSE;
+
 	// Size of the sprite
 	CurrentSprite->Width = width * GetLoadRatio();
 	CurrentSprite->Height = height * GetLoadRatio();

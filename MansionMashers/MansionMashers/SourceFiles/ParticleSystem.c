@@ -21,13 +21,15 @@
 #include "../HeaderFiles/ObjectManager.h"
 #include "../HeaderFiles/FrameRate.h"
 #include <stdlib.h>
+#include <time.h>
 
 
-ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float posY, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife)
+ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float posY, int ZIndex, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, float emitScaleSpeed, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife)
 {
 	ParticleSystem *CurrentSystem = AddParticleSystem();
 
-	CurrentSystem->ParticleSprite = particleTexture;
+	strcpy(CurrentSystem->ParticleSprite, particleTexture);
+	CurrentSystem->emitMesh = createMesh(64.0f * GetLoadRatio(), 64.0f * GetLoadRatio(), 1, 1);
 	CurrentSystem->Position.x = posX;
 	CurrentSystem->Position.y = posY;
 	CurrentSystem->objID = 1;
@@ -38,18 +40,21 @@ ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float
 	CurrentSystem->emitAngle = emitAngle;
 	CurrentSystem->emitAngleRandom = emitAngleRandom;
 	CurrentSystem->emitScale = emitScale;
+	CurrentSystem->emitScaleSpeed = emitScaleSpeed;
 	CurrentSystem->emitDisplacementX = emitDisplacementX;
 	CurrentSystem->emitDisplacementY = emitDisplacementY;
 	CurrentSystem->emitVelocity = emitVelocity;
 	CurrentSystem->emitLife = emitLife;
+	CurrentSystem->ZIndex = ZIndex;
 	return CurrentSystem;
 }
 
-void CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX, float VelY, float Life, float Scale)
+void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX, float posY, int ZIndex, float VelX, float VelY, float Life, float Scale, float ScaleSpeed)
 {
 	Particle *CurrentParticle = AddParticle();
 
-	CurrentParticle->ParticleSprite = CreateSprite(particleTexture, 64.0f, 64.0f, 100, 1, 1, posX, posY);
+	CurrentParticle->ParticleSprite = CreateSpriteNoMesh(particleTexture, 64.0f, 64.0f, ZIndex, 1, 1, posX, posY);
+	CurrentParticle->ParticleSprite->SpriteMesh = mesh;
 	CurrentParticle->Position.x = posX;
 	CurrentParticle->Position.y = posY;
 	CurrentParticle->Velocity.x = VelX;
@@ -58,6 +63,7 @@ void CreateFoxParticle(char* particleTexture, float posX, float posY, float VelX
 	CurrentParticle->LifetimeMax = Life;
 	CurrentParticle->ParticleSprite->ScaleX = Scale;
 	CurrentParticle->ParticleSprite->ScaleY = Scale;
+	CurrentParticle->ScaleSpeed = ScaleSpeed;
 	CurrentParticle->objID = 1;
 	srand( lastRandomNumber );
 	lastRandomNumber = rand();
@@ -95,8 +101,8 @@ void ParticleUpdate(void)
 		if (particleList[i].LifetimeMax != 0)
 			particleList[i].ParticleSprite->Alpha = particleList[i].Lifetime / particleList[i].LifetimeMax;
 
-		particleList[i].ParticleSprite->ScaleX *= 0.995f;
-		particleList[i].ParticleSprite->ScaleY *= 0.995f;
+		particleList[i].ParticleSprite->ScaleX *= (1 + (particleList[i].ScaleSpeed / 1000.0f));
+		particleList[i].ParticleSprite->ScaleY *= (1 + (particleList[i].ScaleSpeed / 1000.0f));
 
 		if (particleList[i].Lifetime <= 0)
 		{
@@ -121,16 +127,12 @@ void ParticleSystemUpdate(void)
 			break;
 		}
 
-		if (AEInputCheckTriggered(VK_UP))
-		{
-			particleSystemList[i].amountTotal += 100;
-		}
 		if (particleSystemList[i].emitSpeedTimer <= 0)
 		{
 			int j;
 			for(j = 0; j < particleSystemList[i].emitAmount; j++)
 			{
-				if (particleSystemList[i].amountTotal > 0)
+				if (particleSystemList[i].amountTotal > 0 || particleSystemList[i].amountTotal == -1)
 				{
 					Vec2 vel;
 					float diff = (float)((int)lastRandomNumber % 100) / 100.0f + 0.5f;
@@ -149,14 +151,19 @@ void ParticleSystemUpdate(void)
 					Vec2RotateDegrees(&vel, particleSystemList[i].emitAngle + ((float)((int)lastRandomNumber % particleSystemList[i].emitAngleRandom - (particleSystemList[i].emitAngleRandom/2))));
 
 					CreateFoxParticle(	particleSystemList[i].ParticleSprite, 
+										particleSystemList[i].emitMesh,
 										particleSystemList[i].Position.x + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementX - (particleSystemList[i].emitDisplacementX/2))),
 										particleSystemList[i].Position.y + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementY - (particleSystemList[i].emitDisplacementY/2))), 
+										particleSystemList[i].ZIndex,
 										vel.x,
 										vel.y, 
 										particleSystemList[i].emitLife, 
-										particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f));
+										particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f),
+										particleSystemList[i].emitScaleSpeed);
 
-					particleSystemList[i].amountTotal--;
+					if (particleSystemList[i].amountTotal > 0)
+						particleSystemList[i].amountTotal--;
+					srand( (unsigned int)time(NULL) );
 				}
 			}
 			particleSystemList[i].emitSpeedTimer = particleSystemList[i].emitSpeed;

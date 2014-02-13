@@ -361,7 +361,8 @@ void freeObject(Sprite* object)
 	{
 		//Free the mesh and texture data
 		object->Created = 0;
-		AEGfxMeshFree(object->SpriteMesh);
+		if (object->MeshOwner)
+			AEGfxMeshFree(object->SpriteMesh);
 	}
 }
 
@@ -517,8 +518,8 @@ void FreeParticle(Particle *CurrentParticle)
 		//I'm sure everyone will miss you particle
 		CurrentParticle->objID = -1;
 
-		if (CurrentParticle->ParticleSprite->Created)
-			freeObject(CurrentParticle->ParticleSprite);
+		//if (CurrentParticle->ParticleSprite->Created)
+		//	freeObject(CurrentParticle->ParticleSprite);
 	}
 }
 

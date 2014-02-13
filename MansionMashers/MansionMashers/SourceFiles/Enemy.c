@@ -67,7 +67,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 
 		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 0, 10);
 
-		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, 0, 5, 0.0f, 270, 90, 1.0f, 25, 24, 50, 2.0f);
+		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f);
 
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, height / 2, objID);
 		CurrentEnemy->EnemyCollider.Offset.y = -CurrentEnemy->EnemyCollider.height / 6;
@@ -118,6 +118,9 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		CurrentEnemy->EnemyParticleSystem->emitAmount = 20;
 		CurrentEnemy->EnemyParticleSystem->emitDisplacementX = 100;
 		CurrentEnemy->EnemyParticleSystem->emitDisplacementY = 101;
+		strcpy(CurrentEnemy->EnemyParticleSystem->ParticleSprite, "TextureFiles/Particle.png");
+		CurrentEnemy->EnemyParticleSystem->emitScale = 2.0f;
+		CurrentEnemy->EnemyParticleSystem->emitLife = 1.0f;
 
 		FreeEnemy(CurrentEnemy);
 	}
