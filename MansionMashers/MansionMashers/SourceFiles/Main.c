@@ -251,7 +251,7 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 			double ratio;
 			double width = rect.right - rect.left;
 			double height = rect.bottom - rect.top;
-			if(width / height >= 16.0f / 9.0f && height != 0)
+			if(width / height <= 16.0f / 9.0f && height != 0)
 			{
 				ratio = height / winHeight;
 				loadRatio = height / 1080;
