@@ -29,5 +29,6 @@
 #include "PauseMenu.h"
 
 float GetLoadRatio(void);
+void SetLoadRatio(double ratio);
 
 #endif
