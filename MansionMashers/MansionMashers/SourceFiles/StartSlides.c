@@ -73,7 +73,10 @@ void InitializeStartScreen(void)
 {
 	// Reset the object list
 	resetObjectList();
-
+	alpha = 0.0f;
+	slideTextureNum = 0;
+	fade = 1;								//0: no fade, 1: fade in, 2: fade out
+	slideTimer = 0;
 	// Create the slide sprites
 	Title = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 	Digipen = CreateSprite("TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1, 0, 0);
