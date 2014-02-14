@@ -49,15 +49,15 @@ void InitWindow(void)
 		{
 			ratio = winHeight / 1080.0;
 			SetLoadRatio(ratio);
-			winWidth = 1920 * ratio;
-			winHeight = 1080 * ratio;
+			winWidth = (int)(1920 * ratio);
+			winHeight = (int)(1080 * ratio);
 		}
 		else
 		{
 			ratio = winWidth / 1920.0;
 			SetLoadRatio(ratio);
-			winWidth = 1920 * ratio;
-			winHeight = 1080 * ratio;
+			winWidth = (int)(1920 * ratio);
+			winHeight = (int)(1080 * ratio);
 		}
 		
 	}

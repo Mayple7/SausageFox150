@@ -206,7 +206,6 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 {
 	HDC dc;   
 	PAINTSTRUCT ps;
-	RECT rect;
 
 	if(msg == WM_SYSCOMMAND && wp == SC_MINIMIZE)
 	{
