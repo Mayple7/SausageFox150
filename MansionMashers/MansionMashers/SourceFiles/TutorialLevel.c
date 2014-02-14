@@ -152,9 +152,9 @@ void InitializeTutorial(void)
 
 	DoorOverlay = CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 530, -55, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 745, -85, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f);
 
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640, -140, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 900, -205, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f);
 
 	Vec3Set(&TextColor, 0, 0, 0);
 	VolumeText = CreateText("Volume ", -400, 300, 100, TextColor, Right);

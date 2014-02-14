@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int Previous;										//Local State Variables
 	int Current;										//Local State Variables
 	int Next;											//Local State Variables					
-	int debugConsole = 1;
+	int debugConsole = 0;
 	AESysInitInfo sysInitInfo;
 	WNDCLASS	winClass;
 	HWND winHandle;

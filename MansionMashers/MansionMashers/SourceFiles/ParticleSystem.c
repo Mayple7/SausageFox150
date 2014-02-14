@@ -55,14 +55,14 @@ void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX,
 
 	CurrentParticle->ParticleSprite = CreateSpriteNoMesh(particleTexture, 64.0f, 64.0f, ZIndex, 1, 1, posX, posY);
 	CurrentParticle->ParticleSprite->SpriteMesh = mesh;
-	CurrentParticle->Position.x = posX;
-	CurrentParticle->Position.y = posY;
+	CurrentParticle->Position.x = posX * GetLoadRatio();
+	CurrentParticle->Position.y = posY * GetLoadRatio();
 	CurrentParticle->Velocity.x = VelX;
 	CurrentParticle->Velocity.y = VelY;
 	CurrentParticle->Lifetime = Life;
 	CurrentParticle->LifetimeMax = Life;
-	CurrentParticle->ParticleSprite->ScaleX = Scale;
-	CurrentParticle->ParticleSprite->ScaleY = Scale;
+	CurrentParticle->ParticleSprite->ScaleX = Scale * GetLoadRatio();
+	CurrentParticle->ParticleSprite->ScaleY = Scale * GetLoadRatio();
 	CurrentParticle->ScaleSpeed = ScaleSpeed;
 	CurrentParticle->objID = 1;
 	srand( lastRandomNumber );

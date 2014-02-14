@@ -104,14 +104,14 @@ void UpdateWindowSize(void)
 		}
 		//printf("%i : %i\n", winWidth, winHeight);
 		//printf("%i : %i\n", width, height);
-		if(winWidth > maxWidth + 16)
+		/*if(winWidth > maxWidth + 16)
 		{
 			updateRatio = maxWidth / (double)winWidth;
 		}
 		if(winHeight > maxHeight + 9)
 		{
 			updateRatio = maxHeight / (double)winHeight;
-		}
+		}*/
 
 
 		ResizeObjects((float)updateRatio);
