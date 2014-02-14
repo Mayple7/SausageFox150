@@ -63,8 +63,9 @@ void InitWindow(void)
 	}
 	if(GetWindowRect(winHandle, &rect))
 	{
-		maxWidth = (int)rect.right;
-		maxHeight = (int)rect.bottom;
+		maxWidth = GetSystemMetrics(SM_CXSCREEN);
+		maxHeight = GetSystemMetrics(SM_CYSCREEN);
+		printf("%i : %i\n", maxWidth, maxHeight);
 	}
 }
 
@@ -79,20 +80,39 @@ void UpdateWindowSize(void)
 	{
 		width = rect.right - rect.left;
 		height = rect.bottom - rect.top;
-		printf("%i : %i\n", width, height);
 		if(!width || !height)
 			return;
 		if(width / (double)height >= 16.0f / 9.0f)
 		{
-			ratio = height / 1080.0;
-			SetLoadRatio(ratio);
-			updateRatio = height / (double)winHeight;
-			if(width / (double)winWidth > updateRatio && updateRatio > 1)
+			if(width > winWidth && height > winHeight)
 			{
-				updateRatio = width / (double)winWidth;
+				ratio = height / winHeight;
+				if(ratio > width / winWidth)
+				{
+					ratio = height / 1080.0;
+					SetLoadRatio(ratio);
+					updateRatio = height / (double)winHeight;
+					winWidth = width;
+					winHeight = height;
+				}
+				else
+				{
+					ratio = width / 1920.0;
+					SetLoadRatio(ratio);
+					updateRatio = width / (double)winWidth;
+					winWidth = width;
+					winHeight = height;
+				}
+
 			}
-			winWidth = width;
-			winHeight = height;
+			else
+			{
+				ratio = height / 1080.0;
+				SetLoadRatio(ratio);
+				updateRatio = height / (double)winHeight;
+				winWidth = width;
+				winHeight = height;
+			}
 		}
 		else
 		{
@@ -102,23 +122,23 @@ void UpdateWindowSize(void)
 			winWidth = width;
 			winHeight = height;
 		}
-		//printf("%i : %i\n", winWidth, winHeight);
-		//printf("%i : %i\n", width, height);
-		/*if(winWidth > maxWidth + 16)
+		if(winWidth > maxWidth)
 		{
+			ratio = maxWidth / 1920.0;
+			SetLoadRatio(ratio);
 			updateRatio = maxWidth / (double)winWidth;
+			winWidth = maxWidth;
+			winHeight = maxHeight;
 		}
-		if(winHeight > maxHeight + 9)
+		if(winHeight > maxHeight)
 		{
+			ratio = maxHeight / 1080.0;
+			SetLoadRatio(ratio);
 			updateRatio = maxHeight / (double)winHeight;
-		}*/
-
-
+			winWidth = maxWidth;
+			winHeight = maxHeight;
+		}
 		ResizeObjects((float)updateRatio);
-		//updateRatio = height / (double)winHeight;
-		//printf("%f\n", updateRatio);
-		//updateRatio = width / (double)winWidth;
-		//printf("%f\n", updateRatio);
 	}
 }
 
