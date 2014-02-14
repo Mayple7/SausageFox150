@@ -63,6 +63,7 @@ TextGlyphs* VolumeText;
 TextGlyphs* TestText;
 
 FoxSound BackgroundSnd;
+FoxSound GongSnd;
 FoxChannels ChannelController;
 float volume;
 char volumestring[4];
@@ -89,6 +90,7 @@ void InitializeTutorial(void)
 	volumestring[2] = '0';
 	volumestring[3] = '\0';
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
+	CreateSound("Sounds/GongHit.wav", &GongSnd, SmallSnd);
 
 	InitializePlayer(&CurrentPlayer, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
@@ -152,9 +154,9 @@ void InitializeTutorial(void)
 
 	DoorOverlay = CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 530, -55, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 745, -85, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640, -140, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 900, -205, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	Vec3Set(&TextColor, 0, 0, 0);
 	VolumeText = CreateText("Volume ", -400, 300, 100, TextColor, Right);
@@ -287,6 +289,7 @@ void FreeTutorial(void)
 	freeObjectList();
 	ReleaseChannelGroups(&ChannelController);
 	ReleaseSound(BackgroundSnd.Sound);
+	ReleaseSound(GongSnd.Sound);
 }
 
 void UnloadTutorial(void)
@@ -330,6 +333,12 @@ void fadeToEnd(void)
 		else
 		{
 			GameLogo->Alpha += GetDeltaTime();
+			if (!BackgroundSnd.Paused)
+			{
+			TogglePauseSound(&BackgroundSnd);
+			SetChannelGroupVolume(&ChannelController, EffectType, 50);
+			}
+			PlayAudio(&GongSnd, &ChannelController);
 		}
 
 	}

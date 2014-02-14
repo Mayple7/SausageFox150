@@ -45,6 +45,10 @@ static Sprite *StretchGoals;
 static Sprite *Title;
 static Sprite *Interface;
 static Sprite *Risks;
+static ParticleSystem *FirstParticle;
+static ParticleSystem *SecondParticle;
+static ParticleSystem *ThirdParticle;
+static ParticleSystem *FourthParticle;
 
 
 
@@ -91,7 +95,10 @@ void InitializeEP2Screen(void)
 	StretchGoals = CreateSprite("TextureFiles/Slide4.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 	Interface = CreateSprite("TextureFiles/Slide2.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 	Risks = CreateSprite("TextureFiles/Slide6.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-
+	FirstParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png", -705, 30, 201, -1, 5, 0.01f, 90, 45, 1.5f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
+	SecondParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png", -310, 30, 201, -1, 5, 0.01f, 90, 45, 1.5f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
+	ThirdParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png",  195, 30, 201, -1, 5, 0.01f, 90, 45, 1.5f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
+	FourthParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png",  895, 30, 201, -1, 5, 0.01f, 90, 45, 1.5f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
 }
 
 /*************************************************************************/
@@ -128,7 +135,7 @@ void DrawEP2Screen(void)
 	if(slideTextureNum == Slide1)
 	{
 		Interface->Alpha = alpha;
-		DrawSprite(Interface);
+		//DrawSprite(Interface);
 	}
 	else
 		Interface->Alpha = 0.0f;
@@ -137,7 +144,7 @@ void DrawEP2Screen(void)
 	if(slideTextureNum == Slide2)
 	{
 		Risks->Alpha = alpha;
-		DrawSprite(Risks);
+		//DrawSprite(Risks);
 	}
 	else
 		Risks->Alpha = 0.0f;
@@ -146,7 +153,7 @@ void DrawEP2Screen(void)
 	if(slideTextureNum == Slide3)
 	{
 		StretchGoals->Alpha = alpha;
-		DrawSprite(StretchGoals);
+		//DrawSprite(StretchGoals);
 	}
 	else
 		StretchGoals->Alpha = 0.0f;
@@ -155,12 +162,19 @@ void DrawEP2Screen(void)
 	if(slideTextureNum == Slide4)
 	{
 		Title->Alpha = alpha;
-		DrawSprite(Title);
+		//DrawSprite(Title);
 	}
 	else
 		Title->Alpha = 0.0f;
 
+	FirstParticle->ParticleStartAlpha	= Risks->Alpha;
+	SecondParticle->ParticleStartAlpha	= Risks->Alpha;
+	ThirdParticle->ParticleStartAlpha	= Risks->Alpha;
+	FourthParticle->ParticleStartAlpha	= Risks->Alpha;
 
+	ParticleSystemUpdate();
+
+	DrawObjectList();
 }
 
 /*************************************************************************/
