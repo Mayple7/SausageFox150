@@ -12,15 +12,18 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited. 
 */ 
 
-#include <stdio.h>
+#include "../AEEngine.h"
+#include "../HeaderFiles/FoxEngine.h"
 #include "../FMODHeaders/fmod.h"
 #include "../HeaderFiles/Sound.h"
 
 FMOD_RESULT result;
+int winWidth, winHeight;
 
 void FoxSystemInitialize(void)
 {
 	FMODInit();
+	InitWindow();
 }
 
 void FoxSystemExit(void)
@@ -29,3 +32,78 @@ void FoxSystemExit(void)
 	FMODQuit();
 
 }
+
+void InitWindow(void)
+{
+	RECT rect;
+	HWND winHandle = AESysGetWindowHandle();
+	double ratio;
+
+	if(GetClientRect(winHandle, &rect))
+	{
+		winWidth = rect.right - rect.left;
+		winHeight = rect.bottom - rect.top;
+
+		if(winWidth / (double)winHeight >= 16.0f / 9.0f)
+		{
+			ratio = winHeight / 1080.0;
+			SetLoadRatio(ratio);
+			winWidth = 1920 * ratio;
+			winHeight = 1080 * ratio;
+		}
+		else
+		{
+			ratio = winWidth / 1920.0;
+			SetLoadRatio(ratio);
+			winWidth = 1920 * ratio;
+			winHeight = 1080 * ratio;
+		}
+	}
+}
+
+void UpdateWindowSize(void)
+{
+	RECT rect;
+	HWND winHandle = AESysGetWindowHandle();
+	double ratio, updateRatio;
+	int width, height;
+
+	if(GetClientRect(winHandle, &rect))
+	{
+		width = rect.right - rect.left;
+		height = rect.bottom - rect.top;
+		printf("%i : %i\n", width, height);
+		if(!width || !height)
+			return;
+		if(width / (double)height >= 16.0f / 9.0f)
+		{
+			ratio = height / 1080.0;
+			SetLoadRatio(ratio);
+			updateRatio = height / (double)winHeight;
+			/*if(width > winWidth)
+			{
+				updateRatio = width / (double)winWidth;
+			}*/
+
+			winWidth = width;
+			winHeight = height;
+		}
+		else
+		{
+			ratio = width / 1920.0;
+			SetLoadRatio(ratio);
+			updateRatio = width / (double)winWidth;
+			winWidth = width;
+			winHeight = height;
+		}
+		//printf("%i : %i\n", winWidth, winHeight);
+		//printf("%i : %i\n", width, height);
+		
+		ResizeObjects((float)updateRatio);
+		//updateRatio = height / (double)winHeight;
+		//printf("%f\n", updateRatio);
+		//updateRatio = width / (double)winWidth;
+		//printf("%f\n", updateRatio);
+	}
+}
+

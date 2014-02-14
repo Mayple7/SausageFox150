@@ -110,26 +110,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	ShowWindow	(winHandle, SW_SHOWMAXIMIZED);
 	UpdateWindow(winHandle);
-	if(GetClientRect(winHandle, &rect))
-	{
-		winWidth = (int)rect.right - (int)rect.left;
-		winHeight = (int)rect.bottom - (int)rect.top;
-		printf("%i : %i\n", winWidth, winHeight);
-		if(winWidth / (double)winHeight <= 16.0f / 9.0f)
-		{
-			loadRatio = winHeight / 1080.0;
-			winWidth = (int)(winWidth / loadRatio);
-			winHeight = (int)(winHeight / loadRatio);
-		}
-		else
-		{
-			loadRatio = winWidth / 1920.0;
-			winWidth = (int)(winWidth / loadRatio);
-			winHeight = (int)(winHeight / loadRatio);
-		}
-		printf("%i : %i\n", winWidth, winHeight);
-		printf("%f\n", loadRatio);
-	}
+	
 	sysInitInfo.mCreateWindow		= 0;
 	sysInitInfo.mWindowHandle		= winHandle;
 
@@ -246,6 +227,9 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 	switch (msg)
 	{
 	case WM_SIZE:
+		UpdateWindowSize();
+		
+		/*
 		if(GetClientRect(AESysGetWindowHandle(), &rect))
 		{
 			double ratio;
@@ -270,7 +254,7 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 			else
 				ratio = loadRatio;
 			//printf("%i : %i\n", winWidth, winHeight);
-		}
+		}*/
 		break;
 	// when the window is created
 	case WM_CREATE:
@@ -312,3 +296,9 @@ float GetLoadRatio(void)
 {
 	return (float)loadRatio;
 }
+
+void SetLoadRatio(double ratio)
+{
+	loadRatio = ratio;
+}
+
