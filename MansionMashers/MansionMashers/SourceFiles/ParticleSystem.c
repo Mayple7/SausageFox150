@@ -145,11 +145,11 @@ void ParticleSystemUpdate(void)
 					vel.y = 0;
 
 					if (particleSystemList[i].emitAngleRandom == 0)
-						particleSystemList[i].emitAngleRandom += 1;
+						particleSystemList[i].emitAngleRandom++;
 					if (particleSystemList[i].emitDisplacementX == 0)
-						particleSystemList[i].emitDisplacementX += 1;
+						particleSystemList[i].emitDisplacementX++;
 					if (particleSystemList[i].emitDisplacementY == 0)
-						particleSystemList[i].emitDisplacementY += 1;
+						particleSystemList[i].emitDisplacementY++;
 
 					srand( lastRandomNumber );
 					lastRandomNumber = rand();
