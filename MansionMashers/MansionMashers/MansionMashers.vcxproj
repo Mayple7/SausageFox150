@@ -104,6 +104,7 @@
     <ClInclude Include="HeaderFiles\FrameRate.h" />
     <ClInclude Include="HeaderFiles\GameStateList.h" />
     <ClInclude Include="HeaderFiles\GameStateManager.h" />
+    <ClInclude Include="HeaderFiles\Input.h" />
     <ClInclude Include="HeaderFiles\LevelShowcase.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\MapLevel.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="SourceFiles\Food.c" />
     <ClCompile Include="SourceFiles\FrameRateController.c" />
     <ClCompile Include="SourceFiles\GameStateManager.c" />
+    <ClCompile Include="SourceFiles\Input.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\MapLevel.c" />

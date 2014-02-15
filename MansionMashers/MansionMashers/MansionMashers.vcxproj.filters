@@ -227,6 +227,9 @@
     <ClInclude Include="HeaderFiles\ParticleSystem.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Input.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -341,6 +344,9 @@
       <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\ParticleSystem.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Input.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>
