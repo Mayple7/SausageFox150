@@ -47,7 +47,6 @@ Sprite* AddObject(void)
 		//Find a sprite that is empty
 		if (drawList[i].Created != 1)
 		{
-			//printf("Slot %i is now filled\n", i);
 			return &drawList[i];
 		}
 	}
@@ -69,7 +68,6 @@ Platform* AddPlatform(void)
 	{
 		if(platformList[i].objID == 0 || platformList[i].objID == -1 )
 		{
-			//printf("Platform at %i Created\n", i);
 			return &platformList[i];
 		}
 	}
@@ -92,7 +90,6 @@ Food* AddFood(void)
 	{
 		if(foodList[i].objID == 0 || foodList[i].objID == -1)
 		{
-			//printf("Food at %i Created\n", i);
 			return &foodList[i];
 		}
 		
@@ -116,7 +113,6 @@ Weapon* AddWeapon(void)
 	{
 		if(weaponList[i].objID == 0 || weaponList[i].objID == -1)
 		{
-			//printf("Weapon at %i Created\n", i);
 			return &weaponList[i];
 		}
 	}
@@ -233,11 +229,11 @@ void resetObjectList(void)
 		printf("\nOBJECT LIST SET UP COMPLETE\n\n");
 
 		//Set up object lists
-		platformList = (Platform *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Platform));
-		foodList     = (Food *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Food));
-		enemyList    = (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
-		weaponList   = (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
-		floatTextList   = (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs));
+		platformList		= (Platform *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Platform));
+		foodList			= (Food *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Food));
+		enemyList			= (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
+		weaponList			= (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
+		floatTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs));
 		particleList		= (Particle *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Particle));
 		particleSystemList  = (ParticleSystem *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(ParticleSystem));
 
@@ -283,15 +279,18 @@ void DrawObjectList(void)
 		for (i = 0; i < OBJECTAMOUNT; i++)
 		{
 			Sprite* objectNext = (drawList + i);
+
 			//Make sure the sprite exists
 			if (objectNext && objectNext->Created && objectNext->ZIndex >= currentZ && !objectNext->isHUD)
 			{
 				if (objectNext->ZIndex == currentZ)
 				{
+					//Go to sprite.c itself and draw it
 					DrawSprite(objectNext);
 				}
 				else
 				{
+					//Find the next Z index
 					if (nextZ == -1 || nextZ > objectNext->ZIndex)
 						nextZ = objectNext->ZIndex;
 				}
@@ -540,7 +539,6 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			freeObject(&drawList[i]);
-			//printf("Slot %i is now empty\n", i);
 		}
 	}
 
@@ -552,7 +550,6 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			FreePlatform(&platformList[i]);
-			//printf("Platform %i is now freed\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -562,7 +559,6 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			FreeFood(&foodList[i]);
-			//printf("Food %i is now freed\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -572,7 +568,6 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			FreeWeapon(&weaponList[i]);
-			//printf("Weapon %i is now freed\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -582,7 +577,6 @@ void freeObjectList(void)
 		{
 			//Free the mesh and texture data
 			FreeEnemy(&enemyList[i]);
-			//printf("Weapon %i is now freed\n", i);
 		}
 	}
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -596,8 +590,8 @@ void freeObjectList(void)
 
 	for (i = 0; i < PARTICLEAMOUNT; i++)
 	{
-			//Free the mesh and texture data
-			FreeParticle(&particleList[i]);
+		//Free the mesh and texture data
+		FreeParticle(&particleList[i]);
 	}
 
 	for (i = 0; i < PARTICLESYSTEMAMOUNT; i++)
@@ -715,7 +709,6 @@ void ResizeObjects(float ratio)
 	UpdateCollider(&CurrentPlayer.PlayerCollider, CurrentPlayer.PlayerCollider.width, CurrentPlayer.PlayerCollider.height);
 
 	Vec2Scale(&CurrentPlayer.PlayerCollider.Offset, &CurrentPlayer.PlayerCollider.Offset, ratio);
-
 }
 
 void SetDebugMode(void)

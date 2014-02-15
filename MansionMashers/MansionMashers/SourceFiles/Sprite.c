@@ -158,7 +158,6 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->AnimationTimer = 0;
 
 	//Texture Properties
-	//strcpy(CurrentSprite->TextureName, texture);
 	CurrentSprite->NumHeightFrames = yFrames;
 	CurrentSprite->NumWidthFrames = xFrames;
 
@@ -176,12 +175,10 @@ Sprite* CreateSprite(char texture[], float width, float height, unsigned short Z
 	CurrentSprite->ScaleX = 1.0f;
 	CurrentSprite->ScaleY = 1.0f;
 
-
 	CurrentSprite->Created = TRUE;
 
 	return CurrentSprite;
 }
-
 
 /*************************************************************************/
 /*!
@@ -277,40 +274,23 @@ Sprite* CreateSpriteNoMesh(char texture[], float width, float height, unsigned s
 /*************************************************************************/
 /*!
 	\brief
-	Draws the sprite and updates the animation properties if needed
+	Updates the animation properties if needed
 
 	\param CurrentSprite
-	The sprite object to draw
+	The sprite object to update
+
+	\param offset
+	The sprite offset to form
 */
 /*************************************************************************/
-void DrawSprite(struct Sprite *CurrentSprite)
+void updateSpriteAnimation(Sprite *CurrentSprite, Vec2 *offset)
 {
 	//Calculate the offset difference between frames
-	float offsetDiffX = 1.0f / CurrentSprite->NumWidthFrames;
-	float offsetDiffY = 1.0f / CurrentSprite->NumHeightFrames;
-	float offsetX = 0.0f;
-	float offsetY = 0.0f;
-	
-	Matrix3 Mtx; 
-	//Set draw mode to texture
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetTintColor(CurrentSprite->Tint.x, CurrentSprite->Tint.y, CurrentSprite->Tint.z, 1.0f);
-	// Set position for the sprite drawing
+	Vec2 offsetDiff;
 
-	Mtx = CreateTranslationMtx(CurrentSprite);
+	Vec2Set(&offsetDiff, 1.0f / CurrentSprite->NumWidthFrames, 1.0f / CurrentSprite->NumHeightFrames);
+	Vec2Zero(offset);
 
-	AEGfxSetTransform(Mtx.m);
-	
-	// Update the transparency of the sprite if visible or not
-	if(CurrentSprite->Visible == FALSE)
-	{
-		AEGfxSetTransparency(0.0f);
-	}
-	else
-	{
-		AEGfxSetTransparency(CurrentSprite->Alpha);
-	}
-	// Update the current frame on the animation
 	if(CurrentSprite->AnimationActive)
 	{
 		// Updates to the next frame of animation if needed
@@ -326,22 +306,57 @@ void DrawSprite(struct Sprite *CurrentSprite)
 			CurrentSprite->AnimationTimer = 0;
 		}
 		// Sets the correct offset after updating the animation frame
-		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
-		offsetY = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiffY;
+		offset->x = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiff.x;
+		offset->y = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiff.y;
 	}
 	else
 	{
 		// Sets the correct offset for the current frame
-		offsetX = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiffX;
-		offsetY = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiffY;
+		offset->x = ((CurrentSprite->CurrentFrame) % CurrentSprite->NumWidthFrames) * offsetDiff.x;
+		offset->y = ((CurrentSprite->CurrentFrame) / CurrentSprite->NumWidthFrames) * offsetDiff.y;
 	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Draws the sprite
+
+	\param CurrentSprite
+	The sprite object to draw
+*/
+/*************************************************************************/
+void DrawSprite(Sprite *CurrentSprite)
+{
+	Vec2 offset;  //For the sprite animation
+	Matrix3 Mtx;  //For the sprite position, rotation and scale
+
+	//Set draw mode to texture
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(CurrentSprite->Tint.x, CurrentSprite->Tint.y, CurrentSprite->Tint.z, 1.0f);
+
+	//Set position for the sprite drawing
+	Mtx = CreateTranslationMtx(CurrentSprite);
+	AEGfxSetTransform(Mtx.m);
+	
+	//Update the transparency of the sprite if visible or not
+	if(CurrentSprite->Visible == FALSE)
+		AEGfxSetTransparency(0.0f);
+	else
+		AEGfxSetTransparency(CurrentSprite->Alpha);
+
+	//Update the current frame on the animation
+	updateSpriteAnimation(CurrentSprite, &offset);
+
+	//Draw it like you wanna draw it gurl
 	if (GetLoadRatio() < 0.75f)
 		AEGfxSetTextureMode(AE_GFX_TM_AVERAGE);
 	else
 		AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
-	// Draws the texture on the mesh
-	AEGfxTextureSet(CurrentSprite->SpriteTexture, offsetX, offsetY);
-	// Draws the mesh
+
+	//Draws the texture on the mesh
+	AEGfxTextureSet(CurrentSprite->SpriteTexture, offset.x, offset.y);
+	//Draws the mesh
 	AEGfxMeshDraw(CurrentSprite->SpriteMesh, AE_GFX_MDM_TRIANGLES);
 }
 

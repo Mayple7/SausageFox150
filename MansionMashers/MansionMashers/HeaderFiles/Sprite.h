@@ -12,9 +12,6 @@ typedef struct Sprite
 	//Created (BOOL 1 or 0 only)
 	int Created;
 
-	//Name
-	char SpriteName[24];
-	
 	//Collision Group
 	int isHUD;
 
@@ -66,7 +63,7 @@ typedef struct Sprite
 Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, float xPos, float yPos);
 Sprite* CreateSpriteNoMesh(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, float xPos, float yPos);
 Sprite CreateAnimation(Sprite currentSprite, int verticalFrames, int horizontalFrames, int framesPerSecond);
-Matrix3 CreateTranslationMtx(struct Sprite *CurrentSprite);
+Matrix3 CreateTranslationMtx(Sprite *CurrentSprite);
 AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY);
 void UpdateMesh(Sprite *currentSprite);
 void DrawSprite(Sprite *currentSprite);
