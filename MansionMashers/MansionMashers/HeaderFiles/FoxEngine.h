@@ -24,6 +24,7 @@
 #include "Sound.h"
 #include "System.h"
 #include "FrameRate.h"
+#include "Input.h"
 
 //Special level include
 #include "PauseMenu.h"

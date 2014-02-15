@@ -2,7 +2,7 @@
 #define FOX_OBJECTS
 
 //Create object list
-#define OBJECTAMOUNT 1500
+#define OBJECTAMOUNT 1000
 //Create collide list
 #define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
 //Create particle system
