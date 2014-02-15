@@ -58,6 +58,23 @@ void *__cdecl MallocMyAlloc(int count, int size)
 /*************************************************************************/
 /*!
 	\brief
+	Sets memory to all the one value that you desire. [MEMSET]
+	I'm actually not sure why I made this one, I just like to make
+	functions that already exsist I guess.
+*/
+/*************************************************************************/
+void *__cdecl MemsetMyAlloc(int count, int size, int value, void *list)
+{
+	//Print out something
+	printf("Congratz for using this function.\n");
+
+	//Set the memory given to the desired value
+	return memset(list, value, count * size);
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Keeps track of what memory is used. [FREE]
 */
 /*************************************************************************/

@@ -10,6 +10,8 @@ int TotalMemoryFrees;
 void *__cdecl CallocMyAlloc(int count, int size);
 //Plain old mallocing
 void *__cdecl MallocMyAlloc(int count, int size);
+//Plain old memsetting
+void *__cdecl MemsetMyAlloc(int count, int size, int value, void *list);
 //Plain old freeing
 void __cdecl FreeMyAlloc(void *memory);
 
