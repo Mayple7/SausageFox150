@@ -230,34 +230,6 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 	switch (msg)
 	{
 	case WM_SIZE:
-		UpdateWindowSize();
-		
-		/*
-		if(GetClientRect(AESysGetWindowHandle(), &rect))
-		{
-			double ratio;
-			double width = rect.right - rect.left;
-			double height = rect.bottom - rect.top;
-			if(width / height <= 16.0f / 9.0f && height != 0)
-			{
-				ratio = height / winHeight;
-				loadRatio = height / 1080;
-				winWidth = (int)(winWidth * ratio);
-				winHeight = (int)(winHeight * ratio);
-				ResizeObjects((float)ratio);
-			}
-			else if (width != 0)
-			{
-				ratio = width / winWidth;
-				loadRatio = width / 1920;
-				winWidth = (int)(winWidth * ratio);
-				winHeight = (int)(winHeight * ratio);
-				ResizeObjects((float)ratio);
-			}
-			else
-				ratio = loadRatio;
-			//printf("%i : %i\n", winWidth, winHeight);
-		}*/
 		break;
 	// when the window is created
 	case WM_CREATE:

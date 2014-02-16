@@ -6,6 +6,5 @@
 void FoxSystemInitialize(void);
 void FoxSystemExit(void);
 void InitWindow(void);
-void UpdateWindowSize(void);
 
 #endif
