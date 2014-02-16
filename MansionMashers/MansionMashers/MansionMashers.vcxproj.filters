@@ -239,6 +239,9 @@
     <ClInclude Include="HeaderFiles\Level4.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\TemplateLevel.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -368,6 +371,9 @@
       <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Level4.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\TemplateLevel.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
   </ItemGroup>
