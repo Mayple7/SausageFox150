@@ -14,7 +14,6 @@ static char buttonTriggeredStates[MOUSE_BUTTON_COUNT] = { 0 };
 
 static char keyStates[0xff] = { 0 };
 static char keyTriggeredStates[0xff] = { 0 };
-static char keyTriggeredStatesPrev[0xff] = { 0 };
 
 static int mouseX = -1, mouseY = -1;
 static char mouseWithinWindow = 0;
@@ -44,11 +43,11 @@ void FoxInput_PassEvent(unsigned int messageType, int param)
     break;
   case WM_KEYDOWN:
     if (param >= 0 && param < 0xff)
-      keyStates[param] = keyTriggeredStates[param] = DOWN; 
+      keyStates[param] = DOWN; 
     break;
   case WM_KEYUP:
     if (param >= 0 && param < 0xff)
-      keyStates[param] = keyTriggeredStates[param] = UP; 
+      keyStates[param] = UP; 
     break;
   }
 }
@@ -60,8 +59,7 @@ void FoxInput_Update(void)
   HWND alphaWindowHandle;
 
   memset(buttonTriggeredStates, UP, sizeof(buttonTriggeredStates));
-  memcpy(keyTriggeredStatesPrev, keyTriggeredStates, sizeof(keyTriggeredStates));
-  //memset(keyTriggeredStates, UP, sizeof(keyTriggeredStates));
+  memcpy(keyTriggeredStates, keyStates, sizeof(keyStates));
 
   alphaWindowHandle = AESysGetWindowHandle();
 
@@ -126,7 +124,7 @@ int FoxInput_KeyDown(unsigned char key)
 
 int FoxInput_KeyTriggered(unsigned char key)
 {
-  return (keyTriggeredStates[key] == DOWN && keyTriggeredStatesPrev[key] == UP);
+  return (keyStates[key] == DOWN && keyTriggeredStates[key] == UP);
 }
 
 int FoxInput_KeyUp(unsigned char key)
