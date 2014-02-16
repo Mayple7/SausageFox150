@@ -89,6 +89,7 @@
     <ClInclude Include="AETypes.h" />
     <ClInclude Include="AEUtil.h" />
     <ClInclude Include="AEVec2.h" />
+    <ClInclude Include="HeaderFiles\ArmGuy.h" />
     <ClInclude Include="HeaderFiles\Camera.h" />
     <ClInclude Include="HeaderFiles\CollisionBox.h" />
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
@@ -99,12 +100,15 @@
     <ClInclude Include="HeaderFiles\EPMenu.h" />
     <ClInclude Include="HeaderFiles\Food.h" />
     <ClInclude Include="HeaderFiles\FoxEngine.h" />
+    <ClInclude Include="HeaderFiles\FoxLevels.h" />
     <ClInclude Include="HeaderFiles\FoxMath.h" />
     <ClInclude Include="HeaderFiles\FoxObjects.h" />
     <ClInclude Include="HeaderFiles\FrameRate.h" />
     <ClInclude Include="HeaderFiles\GameStateList.h" />
     <ClInclude Include="HeaderFiles\GameStateManager.h" />
+    <ClInclude Include="HeaderFiles\HandGuy.h" />
     <ClInclude Include="HeaderFiles\Input.h" />
+    <ClInclude Include="HeaderFiles\Kevin.h" />
     <ClInclude Include="HeaderFiles\Level1.h" />
     <ClInclude Include="HeaderFiles\Level2.h" />
     <ClInclude Include="HeaderFiles\Level3.h" />
@@ -138,12 +142,14 @@
     <ClInclude Include="HeaderFiles\Vector3.h" />
     <ClInclude Include="HeaderFiles\Weapon.h" />
     <ClInclude Include="HeaderFiles\WeaponNames.h" />
+    <ClInclude Include="HeaderFiles\YeahGuy.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Point4.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SourceFiles\ArmGuy.c" />
     <ClCompile Include="SourceFiles\Camera.c" />
     <ClCompile Include="SourceFiles\CollisionBox.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
@@ -155,7 +161,9 @@
     <ClCompile Include="SourceFiles\Food.c" />
     <ClCompile Include="SourceFiles\FrameRateController.c" />
     <ClCompile Include="SourceFiles\GameStateManager.c" />
+    <ClCompile Include="SourceFiles\HandGuy.c" />
     <ClCompile Include="SourceFiles\Input.c" />
+    <ClCompile Include="SourceFiles\Kevin.c" />
     <ClCompile Include="SourceFiles\Level1.c" />
     <ClCompile Include="SourceFiles\Level2.c" />
     <ClCompile Include="SourceFiles\Level3.c" />
@@ -188,6 +196,7 @@
     <ClCompile Include="SourceFiles\Vector3.c" />
     <ClCompile Include="SourceFiles\Weapon.c" />
     <ClCompile Include="SourceFiles\WeaponNames.c" />
+    <ClCompile Include="SourceFiles\YeahGuy.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\fox_head.ico" />

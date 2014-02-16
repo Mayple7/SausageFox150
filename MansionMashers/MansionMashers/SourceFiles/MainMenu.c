@@ -211,6 +211,14 @@ void InputHandling(void)
 			SetNextState(GS_Level3);
 		else if(selectedButton == 3)
 			SetNextState(GS_Level4);
+		else if(selectedButton == 4)
+			SetNextState(GS_ArmGuy);
+		else if(selectedButton == 5)
+			SetNextState(GS_HandGuy);
+		else if(selectedButton == 6)
+			SetNextState(GS_YeahGuy);
+		else if(selectedButton == 7)
+			SetNextState(GS_Kevin);
 	}
 
 	// check if forcing the application to quit

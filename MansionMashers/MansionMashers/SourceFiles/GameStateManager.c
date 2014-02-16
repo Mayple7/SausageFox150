@@ -27,19 +27,7 @@
 // Includes
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/StartSlides.h"
-#include "../HeaderFiles/MainMenu.h"
-#include "../HeaderFiles/TestLevel.h"
-#include "../HeaderFiles/LevelShowcase.h"
-#include "../HeaderFiles/TutorialLevel.h"
-#include "../HeaderFiles/MapLevel.h"
-#include "../HeaderFiles/EPMenu.h"
-#include "../HeaderFiles/EP1Slides.h"
-#include "../HeaderFiles/EP2Slides.h"
-#include "../HeaderFiles/Level1.h"
-#include "../HeaderFiles/Level2.h"
-#include "../HeaderFiles/Level3.h"
-#include "../HeaderFiles/Level4.h"
+#include "../HeaderFiles/FoxLevels.h"
 #include <stdio.h>
 
 // ---------------------------------------------------------------------------
@@ -264,6 +252,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawLevel1;
 			GSMPointers.pUnload = UnloadLevel1;
 			break;
+		case GS_ArmGuy:
+			GSMPointers.pLoad = LoadArmGuy;
+			GSMPointers.pInit = InitializeArmGuy;
+			GSMPointers.pUpdate = UpdateArmGuy;
+			GSMPointers.pFree = FreeArmGuy;
+			GSMPointers.pDraw = DrawArmGuy;
+			GSMPointers.pUnload = UnloadArmGuy;
+			break;
 		case GS_Level2:
 			GSMPointers.pLoad = LoadLevel2;
 			GSMPointers.pInit = InitializeLevel2;
@@ -271,6 +267,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pFree = FreeLevel2;
 			GSMPointers.pDraw = DrawLevel2;
 			GSMPointers.pUnload = UnloadLevel2;
+			break;
+		case GS_HandGuy:
+			GSMPointers.pLoad = LoadHandGuy;
+			GSMPointers.pInit = InitializeHandGuy;
+			GSMPointers.pUpdate = UpdateHandGuy;
+			GSMPointers.pFree = FreeHandGuy;
+			GSMPointers.pDraw = DrawHandGuy;
+			GSMPointers.pUnload = UnloadHandGuy;
 			break;
 		case GS_Level3:
 			GSMPointers.pLoad = LoadLevel3;
@@ -280,6 +284,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawLevel3;
 			GSMPointers.pUnload = UnloadLevel3;
 			break;
+		case GS_YeahGuy:
+			GSMPointers.pLoad = LoadYeahGuy;
+			GSMPointers.pInit = InitializeYeahGuy;
+			GSMPointers.pUpdate = UpdateYeahGuy;
+			GSMPointers.pFree = FreeYeahGuy;
+			GSMPointers.pDraw = DrawYeahGuy;
+			GSMPointers.pUnload = UnloadYeahGuy;
+			break;
 		case GS_Level4:
 			GSMPointers.pLoad = LoadLevel4;
 			GSMPointers.pInit = InitializeLevel4;
@@ -287,6 +299,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pFree = FreeLevel4;
 			GSMPointers.pDraw = DrawLevel4;
 			GSMPointers.pUnload = UnloadLevel4;
+			break;
+		case GS_Kevin:
+			GSMPointers.pLoad = LoadKevin;
+			GSMPointers.pInit = InitializeKevin;
+			GSMPointers.pUpdate = UpdateKevin;
+			GSMPointers.pFree = FreeKevin;
+			GSMPointers.pDraw = DrawKevin;
+			GSMPointers.pUnload = UnloadKevin;
 			break;
 	}
 }
