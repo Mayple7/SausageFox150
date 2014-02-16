@@ -145,7 +145,7 @@ void EventHandGuy(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawHandGuy);
+		//InitializePause(&DrawHandGuy);
 		//TogglePauseSound(&BackgroundSnd);
 		SetNextState(GS_MainMenu);
 		//UpdatePause();

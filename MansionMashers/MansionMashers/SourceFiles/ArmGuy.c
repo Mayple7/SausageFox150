@@ -145,10 +145,10 @@ void EventArmGuy(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawArmGuy);
+		//InitializePause(&DrawArmGuy);
+		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 		SetNextState(GS_MainMenu);
-		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 }

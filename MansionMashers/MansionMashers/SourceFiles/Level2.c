@@ -145,10 +145,10 @@ void EventLevel2(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawLevel2);
+		//InitializePause(&DrawLevel2);
 		//TogglePauseSound(&BackgroundSnd);
-		//SetNextState(GS_MainMenu);
-		UpdatePause();
+		SetNextState(GS_MainMenu);
+		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 }

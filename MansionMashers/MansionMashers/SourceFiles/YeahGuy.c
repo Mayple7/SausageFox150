@@ -145,7 +145,7 @@ void EventYeahGuy(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawYeahGuy);
+		//InitializePause(&DrawYeahGuy);
 		//TogglePauseSound(&BackgroundSnd);
 		SetNextState(GS_MainMenu);
 		//UpdatePause();

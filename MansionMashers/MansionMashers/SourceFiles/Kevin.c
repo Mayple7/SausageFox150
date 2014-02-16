@@ -145,7 +145,7 @@ void EventKevin(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawKevin);
+		//InitializePause(&DrawKevin);
 		//TogglePauseSound(&BackgroundSnd);
 		SetNextState(GS_MainMenu);
 		//UpdatePause();
