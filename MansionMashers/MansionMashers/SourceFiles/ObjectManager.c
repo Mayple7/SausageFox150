@@ -213,6 +213,28 @@ Particle* AddParticle(void)
 /*************************************************************************/
 /*!
 	\brief
+	Adds a particle system to the particle system list
+	
+	\return
+	The particle system added to the list
+*/
+/*************************************************************************/
+Button* AddButton(void)
+{
+	int i;
+	for (i = 0; i < BUTTONAMOUNT; i++)
+	{
+		if(!buttonList[i].ButtonSprite)
+		{
+			return &buttonList[i];
+		}
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Resets all the objects in the list and callocs a new array of sprites
 */
 /*************************************************************************/
@@ -235,6 +257,7 @@ void resetObjectList(void)
 		floatTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs));
 		particleList		= (Particle *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Particle));
 		particleSystemList  = (ParticleSystem *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(ParticleSystem));
+		buttonList			= (Button *) CallocMyAlloc(BUTTONAMOUNT, sizeof(Button));
 
 		for(i = 0; i < COLLIDEAMOUNT; i++)
 		{
@@ -524,6 +547,26 @@ void FreeParticle(Particle *CurrentParticle)
 /*************************************************************************/
 /*!
 	\brief
+	Frees the button being passed
+	
+	\param objectNext
+	The pointer to a button whose memory is to be deallocated
+*/
+/*************************************************************************/
+void freeButton(Button* CurrentButton)
+{
+	//Make sure the sprite exists
+	if (CurrentButton->ButtonSprite && CurrentButton->ButtonSprite->Created)
+	{
+		freeObject(CurrentButton->ButtonSprite);
+		//Free the mesh and texture data
+		FreeMyAlloc(CurrentButton);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Cycles through the object list freeing all objects in the list
 */
 /*************************************************************************/
@@ -599,6 +642,16 @@ void freeObjectList(void)
 		FreeParticleSystem(&particleSystemList[i]);
 	}
 
+	for (i = 0; i < BUTTONAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (&buttonList[i])
+		{
+			//Free the mesh and texture data
+			freeButton(&buttonList[i]);
+		}
+	}
+
 	//Free the object list data allocation
 	FreeMyAlloc(drawList);
 	FreeMyAlloc(particleList);
@@ -610,6 +663,7 @@ void freeObjectList(void)
 	FreeMyAlloc(enemyList);
 	FreeMyAlloc(weaponList);
 	FreeMyAlloc(floatTextList);
+	FreeMyAlloc(buttonList);
 }
 
 void SetDebugMode(void)

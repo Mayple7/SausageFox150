@@ -90,3 +90,32 @@ int CollisionRectangles(CollisionBox* objA, CollisionBox* objB)
 	else
 		return FALSE;
 }
+
+/*************************************************************************/
+/*!
+	\brief
+	Determines if there is a collision between a point and a rectangle
+	  
+	\param objA
+	The object being collided
+	  
+	\param Point
+	The point of collision
+*/
+/*************************************************************************/
+int PointRectCollision(CollisionBox* objA, Vec2* objB)
+{
+	Vec2 posA = objA->Position;
+	Vec2 offA = objA->Offset;
+
+	//Collidable 1
+	float leftAx   = posA.x + offA.x - (objA->width / 2);
+	float rightAx  = leftAx + objA->width;
+	float topAy    = posA.y + offA.y + (objA->height / 2);
+	float bottomAy = topAy - objA->height;
+
+	if(objB->x >= leftAx && objB->x <= rightAx && objB->y >= bottomAy && objB->y <= topAy)
+		return TRUE;
+	else
+		return FALSE;
+}

@@ -112,6 +112,14 @@ void FoxInput_GetMousePosition(int *mx, int *my)
     *my = mouseY;
 }
 
+void FoxInput_GetWorldPosition(int *mx, int *my)
+{
+  if (mx != NULL)
+    *mx = mouseX - GetWindowWidth() / 2;
+  if (my != NULL)
+    *my = mouseY - GetWindowHeight() / 2;
+}
+
 int FoxInput_MouseWithinWindow(void)
 {
   return mouseWithinWindow;

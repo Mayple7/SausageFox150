@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "FoxObjects.h"
 #include "TextCreation.h"
+#include "UIButton.h"
 
 //Objects that are in the workspace
 Sprite *drawList;
@@ -13,6 +14,7 @@ Platform *platformList;
 Food *foodList;
 Enemy *enemyList;
 Weapon *weaponList;
+Button *buttonList;
 struct TextGlyphs **floatTextList;
 struct ParticleSystem *particleSystemList;
 struct Particle *particleList;
@@ -23,9 +25,11 @@ Platform* AddPlatform(void);
 Food* AddFood(void);
 Weapon* AddWeapon(void);
 Enemy* AddEnemy(void);
+Button* AddButton(void);
 void AddFloatingText(struct TextGlyphs* FirstLetter);
 struct ParticleSystem *AddParticleSystem(void);
 struct Particle *AddParticle(void);
+
 
 void resetObjectList(void);
 void DrawObjectList(void);
@@ -36,6 +40,7 @@ void DrawCollisionList(void);
 void FreeFood(Food *CurrentFood);
 void FreePlatform(Platform *CurrentPlatform);
 void FreeEnemy(Enemy *CurrentEnemy);
+void FreeButton(Button *CurrentButton);
 void FreeWeapon(Weapon *CurrentWeapon);
 void FreeFloatingText(struct TextGlyphs *FirstLetter);
 void FreeParticleSystem(ParticleSystem *CurrentSystem);

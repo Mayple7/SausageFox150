@@ -30,6 +30,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+#include "../HeaderFiles/UIButton.h"
 
 
 // ---------------------------------------------------------------------------
@@ -39,6 +40,7 @@
 // ---------------------------------------------------------------------------
 // globals
 int newID;					// ID number
+static Button* TestButton;
 
 /*************************************************************************/
 /*!
@@ -67,6 +69,8 @@ void InitializeArmGuy(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	TestButton = CreateButton("TextureFiles/StartButton.png", 0, 0, 400, 100, newID++);
 }
 
 /*************************************************************************/
@@ -77,9 +81,12 @@ void InitializeArmGuy(void)
 /*************************************************************************/
 void UpdateArmGuy(void)
 {
-	EventArmGuy();
+	int worldX, worldY;
 
+	FoxInput_GetWorldPosition(&worldX, &worldY);
+	EventArmGuy();
 	// This should be the last line in this function
+
 	UpdatePlayerPosition(&CurrentPlayer);
 }
 
@@ -151,4 +158,27 @@ void EventArmGuy(void)
 		SetNextState(GS_MainMenu);
 		//TogglePauseSound(&BackgroundSnd);
 	}
+	if(FoxInput_MouseDown(MOUSE_BUTTON_LEFT));
+	{
+		int i, worldX, worldY;
+		Vec2 MouseClick;
+
+		FoxInput_GetWorldPosition(&worldX, &worldY);
+		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
+		for(i = 0; i < BUTTONAMOUNT; i++)
+		{
+			if(buttonList[i].ButtonCollider.collisionID)
+			{
+				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+				{
+					SetNextState(GS_Tutorial);
+				}
+
+			}
+
+		}
+
+	}
+
 }

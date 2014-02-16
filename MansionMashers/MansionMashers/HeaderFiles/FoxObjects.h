@@ -9,6 +9,8 @@
 #define PARTICLESYSTEMAMOUNT 10
 //Create particle list
 #define PARTICLEAMOUNT 500
+//Number of buttons
+#define BUTTONAMOUNT 20
 
 enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 
