@@ -147,8 +147,8 @@ void EventLevel2(void)
 	{
 		InitializePause(&DrawLevel2);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
+		//SetNextState(GS_MainMenu);
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 }
