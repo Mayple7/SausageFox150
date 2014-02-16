@@ -1,13 +1,13 @@
-#ifndef FOX_LEVEL1
-#define FOX_LEVEL1
+#ifndef FOX_LEVEL
+#define FOX_LEVEL
 
-void LoadLevel1(void);
-void InitializeLevel1(void);
-void UpdateLevel1(void);
-void DrawLevel1(void);
-void FreeLevel1(void);
-void UnloadLevel1(void);
+void LoadLevel(void);
+void InitializeLevel(void);
+void UpdateLevel(void);
+void DrawLevel(void);
+void FreeLevel(void);
+void UnloadLevel(void);
 
-void EventLevel1(void);
+void EventLevel(void);
 
 #endif
