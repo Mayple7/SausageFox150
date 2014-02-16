@@ -28,6 +28,7 @@
 #include "../HeaderFiles/FoxEngine.h"
 #include "../FMODHeaders/fmod.h"
 #include "../HeaderFiles/ObjectManager.h"
+#include "../HeaderFiles/Input.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -53,7 +54,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int Previous;										//Local State Variables
 	int Current;										//Local State Variables
 	int Next;											//Local State Variables					
-	int debugConsole = 0;
+	int debugConsole = 1;
 	AESysInitInfo sysInitInfo;
 	WNDCLASS	winClass;
 	HWND winHandle;
@@ -206,7 +207,8 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 {
 	HDC dc;   
 	PAINTSTRUCT ps;
-	RECT rect;
+
+	FoxInput_PassEvent((unsigned int) msg, (int) wp);
 
 	if(msg == WM_SYSCOMMAND && wp == SC_MINIMIZE)
 	{

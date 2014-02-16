@@ -38,7 +38,7 @@ void InitializeEPMenu(void)
 
 	selectedEPButton = EP1But;
 
-	GameLogo = CreateSprite("TextureFiles/MansionMashersLogoDebug.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
+	GameLogo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
 
 	// Create the start button
 	EP1Button = CreateSprite("TextureFiles/EP1_button.png", 300.0f, 100.0f, 3, 1, 1, -500, 300);

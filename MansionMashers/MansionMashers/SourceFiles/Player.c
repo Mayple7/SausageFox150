@@ -99,7 +99,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	Animation(CurrentPlayer);
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
-	if (AEInputCheckTriggered('F') && !CurrentPlayer->isAttacking)
+	if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer->isAttacking)
 	{
 		CurrentPlayer->isAttacking = TRUE;
 		if (CurrentPlayer->FlipX)
@@ -123,7 +123,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);
 
 	// not key press for direction then slow down!
-	if(!AEInputCheckCurr('D') && !AEInputCheckCurr('A'))
+	if(!FoxInput_KeyDown('D') && !FoxInput_KeyDown('A'))
 	{
 		if (!(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
@@ -151,25 +151,25 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 	}
 	// Move left if A is pressed
-	if(AEInputCheckCurr('A'))
+	if(FoxInput_KeyDown('A'))
 	{
 		CurrentPlayer->FlipX = 0;
 		CurrentPlayer->PlayerDirection = LEFT;
 		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
 	}
 	// Move right if D is pressed
-	else if(AEInputCheckCurr('D'))
+	else if(FoxInput_KeyDown('D'))
 	{
 		CurrentPlayer->FlipX = 1;
 		CurrentPlayer->PlayerDirection = RIGHT;
 		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
 	}
 	//Jump when space is pushed or drop down if S is pushed as well
-	if(AEInputCheckTriggered(VK_SPACE))
+	if(FoxInput_KeyTriggered(VK_SPACE))
 	{
 		Vec2 velocity;
 		
-		if(AEInputCheckCurr('S') && CurrentPlayer->PlayerRigidBody.onGround)
+		if(FoxInput_KeyDown('S') && CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			CurrentPlayer->dropDown = TRUE;
@@ -186,7 +186,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 	}
 	//Throw an upward force on the fox when backspace is pushed
-	if(AEInputCheckCurr(VK_BACK))
+	if(FoxInput_KeyDown(VK_BACK))
 	{
 		Vec2 force;
 

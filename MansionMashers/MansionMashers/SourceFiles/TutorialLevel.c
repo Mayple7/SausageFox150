@@ -78,7 +78,8 @@ void InitializeTutorial(void)
 {
 	Vec3 BoundingTint;
 	int hudLoop;
-
+	
+	FoxInput_Update();
 	Vec3Set(&BoundingTint, 0.0f, 0.0f, 0.0f);
 
 	newID = 1;
@@ -225,27 +226,27 @@ void UpdateTutorial(void)
 			}
 		}
 	}
-
-	if(AEInputCheckTriggered('U'))
+	
+	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
 		OverlayGrid->Visible = TRUE;
 	}
-	if(AEInputCheckTriggered('I'))
+	if(FoxInput_KeyTriggered('I'))
 	{
 		RemoveDebugMode();
 		OverlayGrid->Visible = FALSE;
 	}
 	PlayAudio(&BackgroundSnd, &ChannelController);
 
-	if(AEInputCheckCurr(VK_DOWN))
+	if(FoxInput_KeyDown(VK_DOWN))
 	{
 		if(volume > 0)
 			volume = volume - 0.01f;
 		SetChannelGroupVolume(&ChannelController, EffectType, volume);
 		ChangeTextString(TestText, VolumetoString(volumestring, volume * 100));
 	}
-	if(AEInputCheckCurr(VK_UP))
+	if(FoxInput_KeyDown(VK_UP))
 	{
 		if(volume < 1)
 			volume = volume + 0.01f;
@@ -254,7 +255,7 @@ void UpdateTutorial(void)
 	}
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
-	if(AEInputCheckTriggered(VK_ESCAPE))
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		if(BlackOverlay->Alpha < 0.1)
 		{
@@ -267,11 +268,11 @@ void UpdateTutorial(void)
 		}
 	}
 
-	if(AEInputCheckTriggered('J'))
+	if(FoxInput_KeyTriggered('J'))
 	{
 		FreeEnemy(StrawDummy);
 	}
-	if(AEInputCheckTriggered(VK_RSHIFT))
+	if(FoxInput_KeyTriggered(VK_RSHIFT))
 	{
 		SetNextState(GS_MainMenu);
 	}
@@ -300,6 +301,7 @@ void UnloadTutorial(void)
 void EventTutorial(void)
 {
 	int i = 0;
+
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	if(StrawDummy->objID > 0)
@@ -315,6 +317,8 @@ void EventTutorial(void)
 
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
+
+	FoxInput_Update();
 }
 
 void fadeToEnd(void)
@@ -325,7 +329,7 @@ void fadeToEnd(void)
 		if(GameLogo->Alpha >= 1.0f)
 		{
 			GameLogo->Alpha = 1.0f;
-			if(AEInputCheckTriggered(VK_SPACE))
+			if(FoxInput_KeyTriggered(VK_SPACE))
 			{
 				SetNextState(GS_EPMenu);
 			}
