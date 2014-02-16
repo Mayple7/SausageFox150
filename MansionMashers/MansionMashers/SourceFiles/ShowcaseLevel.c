@@ -185,9 +185,11 @@ void InitializeShowcase(void)
 /*************************************************************************/
 void UpdateShowcase(void)
 {
+	int XPos, YPos;
+	FoxInput_GetMousePosition(&XPos, &YPos);
 	// Handle any events such as collision
 	EventShowcase();
-
+	printf("%i : %i\n", XPos, YPos);
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
 

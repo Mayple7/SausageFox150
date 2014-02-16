@@ -277,3 +277,12 @@ void SetLoadRatio(double ratio)
 	loadRatio = ratio;
 }
 
+int GetWindowWidth(void)
+{
+	return winWidth;
+}
+
+int GetWindowHeight(void)
+{
+	return winHeight;
+}

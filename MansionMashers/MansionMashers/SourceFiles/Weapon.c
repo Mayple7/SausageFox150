@@ -180,7 +180,6 @@ void CreateWeaponStats(int WType, int WRarity, int* BonusStrength, int* BonusAgi
 		}
 
 	}
-
 }
 
 Sprite* CreateWeaponSprite(int WType, int WRarity, float xPos, float yPos)

@@ -32,4 +32,7 @@
 float GetLoadRatio(void);
 void SetLoadRatio(double ratio);
 
+int GetWindowWidth(void);
+int GetWindowHeight(void);
+
 #endif

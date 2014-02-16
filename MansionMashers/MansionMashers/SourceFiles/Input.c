@@ -108,7 +108,6 @@ int FoxInput_MouseUp(MouseButton button)
 
 void FoxInput_GetMousePosition(int *mx, int *my)
 {
-
   if (mx != NULL)
     *mx = mouseX;
   if (my != NULL)

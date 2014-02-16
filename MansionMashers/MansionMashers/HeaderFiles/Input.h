@@ -26,7 +26,6 @@ extern int FoxInput_KeyTriggered(unsigned char key);
 
 extern int FoxInput_KeyUp(unsigned char key);
 
-
 extern void FoxInput_PassEvent(unsigned int messageType, int param);
 
 extern void FoxInput_Update(void);
