@@ -318,7 +318,6 @@ void EventTutorial(void)
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
-	FoxInput_Update();
 }
 
 void fadeToEnd(void)

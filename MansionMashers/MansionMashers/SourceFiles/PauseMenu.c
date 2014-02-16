@@ -67,18 +67,17 @@ void UpdatePause(void)
 		AESysFrameStart();
 		StartFoxFrame();		
 
-		AEInputUpdate();
-
-		if(AEInputCheckTriggered(VK_ESCAPE))
+		if(FoxInput_KeyTriggered(VK_ESCAPE))
 		{
 			pause = FALSE;
 		}
-		if(AEInputCheckTriggered(VK_RSHIFT))
+		if(FoxInput_KeyTriggered(VK_SHIFT))
 		{
 			pause = FALSE;
 			SetNextState(GS_MainMenu);
 		}
 
+		FoxInput_Update();
 		DrawPause();
 
 		EndFoxFrame();

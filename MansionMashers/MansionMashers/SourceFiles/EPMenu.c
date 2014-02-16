@@ -89,78 +89,78 @@ void EPMenuInput(void)
 	{
 	// EP 1 button
 	case EP1But:
-		if(AEInputCheckTriggered(VK_DOWN) || AEInputCheckTriggered('S'))
+		if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
 		{
 			selectedEPButton = TutBut;
 			UpdateEPSelector(Selector);
 		}
-		else if(AEInputCheckTriggered(VK_RIGHT) || AEInputCheckTriggered('D'))
+		else if(FoxInput_KeyTriggered(VK_RIGHT) || FoxInput_KeyTriggered('D'))
 		{
 			selectedEPButton = EP2But;
 			UpdateEPSelector(Selector);
 		}
-		else if(AEInputCheckTriggered(VK_RETURN) || AEInputCheckTriggered(VK_SPACE))
+		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
 		{
 			SetNextState(GS_EP1Slides);
 		}
 		break;
 	case EP2But:
-		if(AEInputCheckTriggered(VK_DOWN) || AEInputCheckTriggered('S'))
+		if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
 		{
 			selectedEPButton = QuitBut;
 			UpdateEPSelector(Selector);
 		}
-		else if(AEInputCheckTriggered(VK_LEFT) || AEInputCheckTriggered('A'))
+		else if(FoxInput_KeyTriggered(VK_LEFT) || FoxInput_KeyTriggered('A'))
 		{
 			selectedEPButton = EP1But;
 			UpdateEPSelector(Selector);
 		}
-		else if(AEInputCheckTriggered(VK_RETURN) || AEInputCheckTriggered(VK_SPACE))
+		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
 		{
 			SetNextState(GS_EP2Slides);
 		}
 		break;
 	case TutBut:
-		if(AEInputCheckTriggered(VK_UP) || AEInputCheckTriggered('W'))
+		if(FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
 		{
 			selectedEPButton = EP1But;
 			UpdateEPSelector(Selector);
 		}
-		else if(AEInputCheckTriggered(VK_RIGHT) || AEInputCheckTriggered('D'))
+		else if(FoxInput_KeyTriggered(VK_RIGHT) || FoxInput_KeyTriggered('D'))
 		{
 			selectedEPButton = QuitBut;
 			UpdateEPSelector(Selector);
 		}
-		else if(AEInputCheckTriggered(VK_RETURN) || AEInputCheckTriggered(VK_SPACE))
+		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
 		{
 			SetNextState(GS_SplashScreen);
 		}
 		break;
 	case QuitBut:
-		if(AEInputCheckTriggered(VK_UP) || AEInputCheckTriggered('W'))
+		if(FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
 		{
 			selectedEPButton = EP2But;
 			UpdateEPSelector(Selector);
 		}
-		else if(AEInputCheckTriggered(VK_LEFT) || AEInputCheckTriggered('A'))
+		else if(FoxInput_KeyTriggered(VK_LEFT) || FoxInput_KeyTriggered('A'))
 		{
 			selectedEPButton = TutBut;
 			UpdateEPSelector(Selector);
 		}
-		else if(AEInputCheckTriggered(VK_RETURN) || AEInputCheckTriggered(VK_SPACE))
+		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
 		{
 			SetNextState(GS_Quit);
 		}
 		break;
 	}
 
-	if(AEInputCheckTriggered(VK_RSHIFT))
+	if(FoxInput_KeyTriggered(VK_SHIFT))
 	{
 		SetNextState(GS_MainMenu);
 	}
 
 	// check if forcing the application to quit
-	if (AEInputCheckTriggered(VK_ESCAPE))
+	if (FoxInput_KeyTriggered(VK_ESCAPE))
 		SetNextState(GS_Quit);
 }
 

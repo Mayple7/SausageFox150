@@ -174,6 +174,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 			AEInputUpdate();
 			GSMPointers.pUpdate();
+			FoxInput_Update();
 			UpdateSoundSystem();
 			GSMPointers.pDraw();
 			Next = GetNextState();

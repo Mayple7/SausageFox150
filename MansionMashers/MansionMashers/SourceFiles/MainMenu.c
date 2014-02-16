@@ -158,7 +158,7 @@ void UnloadMainMenu(void)
 void InputHandling(void)
 {
 	// check if forcing the application to quit
-	if (AEInputCheckTriggered(VK_UP) || AEInputCheckTriggered('W'))
+	if (FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
 	{
 		if(selectedButton == 0)
 			selectedButton = numMenuButtons - 1;
@@ -167,7 +167,7 @@ void InputHandling(void)
 
 		UpdateSelector(Selector);
 	}
-	else if(AEInputCheckTriggered(VK_DOWN) || AEInputCheckTriggered('S'))
+	else if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
 	{
 		if(selectedButton == numMenuButtons - 1)
 			selectedButton = 0;
@@ -176,7 +176,7 @@ void InputHandling(void)
 
 		UpdateSelector(Selector);
 	}
-	else if(AEInputCheckTriggered(VK_RETURN) || AEInputCheckTriggered(VK_SPACE))
+	else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
 	{
 		// Play le gaem
 		if(selectedButton == 0)
@@ -188,13 +188,13 @@ void InputHandling(void)
 		else if(selectedButton == 2)
 			SetNextState(GS_Quit);
 	}
-	if(AEInputCheckTriggered(VK_RSHIFT))
+	if(FoxInput_KeyTriggered(VK_SHIFT))
 	{
 		SetNextState(GS_Tutorial);
 	}
 
 	// check if forcing the application to quit
-	if (AEInputCheckTriggered(VK_ESCAPE))
+	if (FoxInput_KeyTriggered(VK_ESCAPE))
 		SetNextState(GS_Quit);
 }
 
