@@ -54,7 +54,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	int Previous;										//Local State Variables
 	int Current;										//Local State Variables
 	int Next;											//Local State Variables					
-	int debugConsole = 1;
 	AESysInitInfo sysInitInfo;
 	WNDCLASS	winClass;
 	HWND winHandle;
@@ -62,8 +61,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	srand(timeGetTime());								// Sets the random number gen seed
 
+#if defined _DEBUG
 	//Creates the console window
-	if(debugConsole && AllocConsole())
+	if(AllocConsole())
 	{
 		FILE* file;
  
@@ -73,6 +73,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 		SetConsoleTitle("Alpha Engine - Console");
 	}
+#endif
 
 	// Initialize the system 
 	sysInitInfo.mAppInstance		= instanceH;
@@ -83,7 +84,11 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mMaxFrameRate		= 0;
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
 	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;
-	sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
+#ifndef _DEBUG
+	sysInitInfo.mWindowStyle		= WS_POPUP & ~WS_THICKFRAME;
+#else
+	sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
+#endif
 	AESysInit (&sysInitInfo);
 
 
@@ -110,6 +115,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	winHandle = CreateWindow(winClass.lpszClassName, "Mansion Mashers", sysInitInfo.mWindowStyle, 100, 100, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, sysInitInfo.mAppInstance, NULL);
 
 	ShowWindow	(winHandle, SW_SHOWMAXIMIZED);
+	
 	UpdateWindow(winHandle);
 	
 	sysInitInfo.mCreateWindow		= 0;

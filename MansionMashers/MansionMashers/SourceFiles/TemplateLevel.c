@@ -24,7 +24,7 @@
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/Level1.h"
+#include "../HeaderFiles/TemplateLevel.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
@@ -46,7 +46,7 @@ int newID;					// ID number
 	Loads assets for the showcase level
 */
 /*************************************************************************/
-void LoadLevel1(void)
+void LoadLevel(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
@@ -58,7 +58,7 @@ void LoadLevel1(void)
 	Initializes the objects for the level
 */
 /*************************************************************************/
-void InitializeLevel1(void)
+void InitializeLevel(void)
 {
 	newID = 1;
 	resetObjectList();
@@ -75,9 +75,9 @@ void InitializeLevel1(void)
 	Updates the level
 */
 /*************************************************************************/
-void UpdateLevel1(void)
+void UpdateLevel(void)
 {
-	EventLevel1();
+	EventLevel();
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -89,7 +89,7 @@ void UpdateLevel1(void)
 	Draws the level
 */
 /*************************************************************************/
-void DrawLevel1(void)
+void DrawLevel(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
@@ -103,7 +103,7 @@ void DrawLevel1(void)
 	Frees all the objects in the level
 */
 /*************************************************************************/
-void FreeLevel1(void)
+void FreeLevel(void)
 {
 	freeObjectList();
 }
@@ -114,7 +114,7 @@ void FreeLevel1(void)
 	Unloads all the assets in the level
 */
 /*************************************************************************/
-void UnloadLevel1(void)
+void UnloadLevel(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
@@ -126,7 +126,7 @@ void UnloadLevel1(void)
 	Handles all events in the level
 */
 /*************************************************************************/
-void EventLevel1(void)
+void EventLevel(void)
 {
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
@@ -145,7 +145,7 @@ void EventLevel1(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawLevel1);
+		InitializePause(&DrawLevel);
 		//TogglePauseSound(&BackgroundSnd);
 		SetNextState(GS_MainMenu);
 		//UpdatePause();
