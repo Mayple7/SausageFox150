@@ -115,7 +115,6 @@
     <ClInclude Include="HeaderFiles\Options.h" />
     <ClInclude Include="HeaderFiles\ParticleSystem.h" />
     <ClInclude Include="HeaderFiles\PauseMenu.h" />
-    <ClInclude Include="HeaderFiles\Physics.h" />
     <ClInclude Include="HeaderFiles\PhysicsConstants.h" />
     <ClInclude Include="HeaderFiles\Platform.h" />
     <ClInclude Include="HeaderFiles\Player.h" />

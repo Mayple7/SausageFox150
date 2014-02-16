@@ -204,7 +204,6 @@ Particle* AddParticle(void)
 	{
 		if(particleList[i].objID == 0 || particleList[i].objID == -1)
 		{
-			printf("Particle at %i Created\n", i);
 			return &particleList[i];
 		}
 	}

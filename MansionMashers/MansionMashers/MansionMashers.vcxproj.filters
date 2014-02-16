@@ -119,9 +119,6 @@
     <ClInclude Include="HeaderFiles\FoxEngine.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\Physics.h">
-      <Filter>Fox Header Files\Fox Engine Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\Sprite.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
