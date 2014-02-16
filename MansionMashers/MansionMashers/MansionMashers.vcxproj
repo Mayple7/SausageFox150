@@ -105,6 +105,10 @@
     <ClInclude Include="HeaderFiles\GameStateList.h" />
     <ClInclude Include="HeaderFiles\GameStateManager.h" />
     <ClInclude Include="HeaderFiles\Input.h" />
+    <ClInclude Include="HeaderFiles\Level1.h" />
+    <ClInclude Include="HeaderFiles\Level2.h" />
+    <ClInclude Include="HeaderFiles\Level3.h" />
+    <ClInclude Include="HeaderFiles\Level4.h" />
     <ClInclude Include="HeaderFiles\LevelShowcase.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\MapLevel.h" />
@@ -151,6 +155,10 @@
     <ClCompile Include="SourceFiles\FrameRateController.c" />
     <ClCompile Include="SourceFiles\GameStateManager.c" />
     <ClCompile Include="SourceFiles\Input.c" />
+    <ClCompile Include="SourceFiles\Level1.c" />
+    <ClCompile Include="SourceFiles\Level2.c" />
+    <ClCompile Include="SourceFiles\Level3.c" />
+    <ClCompile Include="SourceFiles\Level4.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\MapLevel.c" />

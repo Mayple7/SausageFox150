@@ -203,15 +203,14 @@ void InputHandling(void)
 	}
 	else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
 	{
-		// Play le gaem
 		if(selectedButton == 0)
-			SetNextState(GS_TestLevel);
-		// Showcase button
+			SetNextState(GS_Level1);
 		else if(selectedButton == 1)
-			SetNextState(GS_ShowcaseLevel);
-		// Exit button
+			SetNextState(GS_Level2);
 		else if(selectedButton == 2)
-			SetNextState(GS_Tutorial);
+			SetNextState(GS_Level3);
+		else if(selectedButton == 3)
+			SetNextState(GS_Level4);
 	}
 
 	// check if forcing the application to quit

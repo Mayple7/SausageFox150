@@ -36,6 +36,10 @@
 #include "../HeaderFiles/EPMenu.h"
 #include "../HeaderFiles/EP1Slides.h"
 #include "../HeaderFiles/EP2Slides.h"
+#include "../HeaderFiles/Level1.h"
+#include "../HeaderFiles/Level2.h"
+#include "../HeaderFiles/Level3.h"
+#include "../HeaderFiles/Level4.h"
 #include <stdio.h>
 
 // ---------------------------------------------------------------------------
@@ -251,6 +255,38 @@ void GSMUpdate(int CurState)
 			GSMPointers.pFree = FreeEP2Screen;
 			GSMPointers.pDraw = DrawEP2Screen;
 			GSMPointers.pUnload = UnloadEP2Screen;
+			break;
+		case GS_Level1:
+			GSMPointers.pLoad = LoadLevel1;
+			GSMPointers.pInit = InitializeLevel1;
+			GSMPointers.pUpdate = UpdateLevel1;
+			GSMPointers.pFree = FreeLevel1;
+			GSMPointers.pDraw = DrawLevel1;
+			GSMPointers.pUnload = UnloadLevel1;
+			break;
+		case GS_Level2:
+			GSMPointers.pLoad = LoadLevel2;
+			GSMPointers.pInit = InitializeLevel2;
+			GSMPointers.pUpdate = UpdateLevel2;
+			GSMPointers.pFree = FreeLevel2;
+			GSMPointers.pDraw = DrawLevel2;
+			GSMPointers.pUnload = UnloadLevel2;
+			break;
+		case GS_Level3:
+			GSMPointers.pLoad = LoadLevel3;
+			GSMPointers.pInit = InitializeLevel3;
+			GSMPointers.pUpdate = UpdateLevel3;
+			GSMPointers.pFree = FreeLevel3;
+			GSMPointers.pDraw = DrawLevel3;
+			GSMPointers.pUnload = UnloadLevel3;
+			break;
+		case GS_Level4:
+			GSMPointers.pLoad = LoadLevel4;
+			GSMPointers.pInit = InitializeLevel4;
+			GSMPointers.pUpdate = UpdateLevel4;
+			GSMPointers.pFree = FreeLevel4;
+			GSMPointers.pDraw = DrawLevel4;
+			GSMPointers.pUnload = UnloadLevel4;
 			break;
 	}
 }

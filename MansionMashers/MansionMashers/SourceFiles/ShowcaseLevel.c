@@ -287,16 +287,6 @@ void EventShowcase(void)
 			HUDitem->ItemType = 0;
 		}
 	}
-	if(AEInputCheckTriggered('9'))
-	{
-		AEGfxSetViewportPositionAndDimensions(1000, 0, 800, 600);
-		printf("4:3\n");
-	}
-	if(AEInputCheckTriggered('0'))
-	{
-		AEGfxSetViewportPositionAndDimensions(0, 0, 1920, 1080);
-		printf("16:9\n");
-	}
 
 	if(AEInputCheckTriggered('U'))
 	{
