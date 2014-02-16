@@ -133,7 +133,7 @@ void EPMenuInput(void)
 		}
 		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
 		{
-			SetNextState(GS_SplashScreen);
+			SetNextState(GS_Tutorial);
 		}
 		break;
 	case QuitBut:

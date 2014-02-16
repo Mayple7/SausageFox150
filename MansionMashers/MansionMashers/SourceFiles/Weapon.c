@@ -153,29 +153,29 @@ void CreateWeaponStats(int WType, int WRarity, int* BonusStrength, int* BonusAgi
 		switch(WType)
 		{
 		case Sword:
-			*BonusStrength = 0;
-			*BonusAgility = 1;
-			*BonusDefense = 1;
+			*BonusStrength = rand() % 2;
+			*BonusAgility = rand() % 2 + 1;
+			*BonusDefense = rand() % 2 + 1;
 			break;
 		case Axe:
-			*BonusStrength = 1;
-			*BonusAgility = 1;
-			*BonusDefense = 0;
+			*BonusStrength = rand() % 2 + 1;
+			*BonusAgility = rand() % 2 + 1;
+			*BonusDefense = rand() % 2;
 			break;
 		case Hammer:
-			*BonusStrength = 1;
-			*BonusAgility = 0;
-			*BonusDefense = 1;
+			*BonusStrength = rand() % 2 + 1;
+			*BonusAgility = rand() % 2;
+			*BonusDefense = rand() % 2 + 1;
 			break;
 		case Spear:
-			*BonusStrength = 0;
-			*BonusAgility = 2;
-			*BonusDefense = 0;
+			*BonusStrength = rand() % 2;
+			*BonusAgility = rand() % 2 + 2;
+			*BonusDefense = rand() % 2;
 			break;
 		case FoxWeapon:
-			*BonusStrength = 1;
-			*BonusAgility = 1;
-			*BonusDefense = 1;
+			*BonusStrength = rand() % 2 + 1;
+			*BonusAgility = rand() % 2 + 1;
+			*BonusDefense = rand() % 2 + 1;
 			break;
 		}
 
