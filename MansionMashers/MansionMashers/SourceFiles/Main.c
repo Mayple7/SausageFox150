@@ -83,7 +83,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mMaxFrameRate		= 0;
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
 	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;
-	sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
+	sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
 	AESysInit (&sysInitInfo);
 
 
@@ -110,6 +110,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	winHandle = CreateWindow(winClass.lpszClassName, "Mansion Mashers", sysInitInfo.mWindowStyle, 100, 100, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, sysInitInfo.mAppInstance, NULL);
 
 	ShowWindow	(winHandle, SW_SHOWMAXIMIZED);
+	
 	UpdateWindow(winHandle);
 	
 	sysInitInfo.mCreateWindow		= 0;
