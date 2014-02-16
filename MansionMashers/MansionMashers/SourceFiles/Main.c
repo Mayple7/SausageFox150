@@ -173,11 +173,14 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			StartFoxFrame();						
 
 			AEInputUpdate();
+			
+
 			GSMPointers.pUpdate();
-			FoxInput_Update();
 			UpdateSoundSystem();
 			GSMPointers.pDraw();
 			Next = GetNextState();
+
+			FoxInput_Update();
 
 			EndFoxFrame();
 			AESysFrameEnd();

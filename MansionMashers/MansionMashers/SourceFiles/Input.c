@@ -48,7 +48,7 @@ void FoxInput_PassEvent(unsigned int messageType, int param)
     break;
   case WM_KEYUP:
     if (param >= 0 && param < 0xff)
-      keyStates[param] = UP; 
+      keyStates[param] = keyTriggeredStates[param] = UP; 
     break;
   }
 }
@@ -61,7 +61,7 @@ void FoxInput_Update(void)
 
   memset(buttonTriggeredStates, UP, sizeof(buttonTriggeredStates));
   memcpy(keyTriggeredStatesPrev, keyTriggeredStates, sizeof(keyTriggeredStates));
-  memset(keyTriggeredStates, UP, sizeof(keyTriggeredStates));
+  //memset(keyTriggeredStates, UP, sizeof(keyTriggeredStates));
 
   alphaWindowHandle = AESysGetWindowHandle();
 
@@ -126,7 +126,7 @@ int FoxInput_KeyDown(unsigned char key)
 
 int FoxInput_KeyTriggered(unsigned char key)
 {
-  return keyTriggeredStatesPrev[key] == DOWN;
+  return (keyTriggeredStates[key] == DOWN && keyTriggeredStatesPrev[key] == UP);
 }
 
 int FoxInput_KeyUp(unsigned char key)

@@ -58,6 +58,8 @@ void InitializePause(void (*DrawLevel)())
 	CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
 	CurrentPlayer.PlayerSpriteParts.Body->CurrentFrame = 0;
 	CurrentPlayer.PlayerSpriteParts.BlinkTimer = 0;
+
+	FoxInput_Update();
 }
 
 void UpdatePause(void)
@@ -65,7 +67,7 @@ void UpdatePause(void)
 	while(pause)
 	{
 		AESysFrameStart();
-		StartFoxFrame();		
+		StartFoxFrame();
 
 		if(FoxInput_KeyTriggered(VK_ESCAPE))
 		{
@@ -76,10 +78,8 @@ void UpdatePause(void)
 			pause = FALSE;
 			SetNextState(GS_MainMenu);
 		}
-
-		FoxInput_Update();
 		DrawPause();
-
+		FoxInput_Update();
 		EndFoxFrame();
 		AESysFrameEnd();
 	}
