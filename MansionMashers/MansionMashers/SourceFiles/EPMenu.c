@@ -34,7 +34,7 @@ void LoadEPMenu(void)
 void InitializeEPMenu(void)
 {
 	// Reset the object list
-	resetObjectList();
+	ResetObjectList();
 
 	selectedEPButton = EP1But;
 
@@ -73,7 +73,7 @@ void DrawEPMenu(void)
 void FreeEPMenu(void)
 {
 	// Freeing the objects and textures
-	freeObjectList();
+	FreeObjectList();
 }
 
 void UnloadEPMenu(void)

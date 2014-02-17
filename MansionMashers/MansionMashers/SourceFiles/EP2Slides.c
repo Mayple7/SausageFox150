@@ -82,7 +82,7 @@ void LoadEP2Screen(void)
 void InitializeEP2Screen(void)
 {
 	// Reset the object list
-	resetObjectList();
+	ResetObjectList();
 	
 	alpha = 0.0f;
 	slideTextureNum = 0;
@@ -186,7 +186,7 @@ void DrawEP2Screen(void)
 void FreeEP2Screen(void)
 {
 	// Freeing the objects and textures
-	freeObjectList();
+	FreeObjectList();
 }
 
 /*************************************************************************/

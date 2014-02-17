@@ -31,9 +31,9 @@ struct ParticleSystem *AddParticleSystem(void);
 struct Particle *AddParticle(void);
 
 
-void resetObjectList(void);
+void ResetObjectList(void);
 void DrawObjectList(void);
-void freeObjectList(void);
+void FreeObjectList(void);
 void freeObject(Sprite* objectNext);
 void DrawCollisionList(void);
 

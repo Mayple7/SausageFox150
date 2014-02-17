@@ -64,7 +64,7 @@ void InitializeHandGuy(void)
 	Vec3 TextTint;
 
 	newID = 1;
-	resetObjectList();
+	ResetObjectList();
 	ResetCamera();
 
 	// Initialize the player
@@ -112,7 +112,7 @@ void DrawHandGuy(void)
 /*************************************************************************/
 void FreeHandGuy(void)
 {
-	freeObjectList();
+	FreeObjectList();
 }
 
 /*************************************************************************/

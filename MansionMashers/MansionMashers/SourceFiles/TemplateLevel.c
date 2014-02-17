@@ -61,7 +61,7 @@ void LoadLevel(void)
 void InitializeLevel(void)
 {
 	newID = 1;
-	resetObjectList();
+	ResetObjectList();
 	ResetCamera();
 
 	// Initialize the player
@@ -105,7 +105,7 @@ void DrawLevel(void)
 /*************************************************************************/
 void FreeLevel(void)
 {
-	freeObjectList();
+	FreeObjectList();
 }
 
 /*************************************************************************/

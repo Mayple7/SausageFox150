@@ -175,7 +175,8 @@
     <ClCompile Include="SourceFiles\Matrix3.c" />
     <ClCompile Include="SourceFiles\MemoryManager.c" />
     <ClCompile Include="SourceFiles\Movement.c" />
-    <ClCompile Include="SourceFiles\ObjectManager.c" />
+    <ClCompile Include="SourceFiles\ObjectManagerFree.c" />
+    <ClCompile Include="SourceFiles\ObjectManagerMake.c" />
     <ClCompile Include="SourceFiles\ParticleSystem.c" />
     <ClCompile Include="SourceFiles\PauseMenu.c" />
     <ClCompile Include="SourceFiles\Platform.c" />
