@@ -549,14 +549,14 @@ void Animation(Player *Object)
 	if (Object->Speed * GetLoadRatio() > 90.0f * GetDeltaTime() * GetLoadRatio())
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailRun.png");
-		Object->TailSinValue += 0.1f;
-		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
+		Object->TailSinValue += 6.0f * GetDeltaTime();
+		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3 * FRAMERATE / 60;
 	}
 	else
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailIdle.png");
 		Object->TailSinValue = 0;
-		Object->PlayerSpriteParts.Tail->AnimationSpeed = 5;
+		Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
 	}
 
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
@@ -620,8 +620,8 @@ void Animation(Player *Object)
 		LegLwr2->Rotation = -LegLowerDirection2;
 		
 		
-		ArmUpr->Rotation = LegUpperDirection/1.5f + 90.0f * GetDeltaTime();
-		ArmLwr->Rotation = ArmUpr->Rotation - 75.0f * GetDeltaTime() + LegUpperDirection/2.0f;
+		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
+		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
 		ArmUpr->Position.x = Bdy->Position.x;
 		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
@@ -641,8 +641,8 @@ void Animation(Player *Object)
 		}
 		else
 		{
-			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 90.0f * GetDeltaTime();
-			ArmLwr2->Rotation = -(ArmUpr->Rotation - 105.0f * GetDeltaTime() + LegUpperDirection/2.0f);
+			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
+			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
 			//Weap->Rotation = ArmLwr2->Rotation;
 		}
 		Weap->Rotation = ArmLwr2->Rotation;
@@ -655,8 +655,8 @@ void Animation(Player *Object)
 		{
 			if (!Object->isAttacking)
 			{
-				ArmLwr->Rotation = ArmUpr->Rotation - 12.0f * GetDeltaTime();
-				ArmLwr2->Rotation = ArmUpr2->Rotation - 30.0f * GetDeltaTime();
+				ArmLwr->Rotation = ArmUpr->Rotation - 0.2f;
+				ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f;
 				Weap->Rotation = ArmLwr2->Rotation;
 			}
 		}
@@ -707,8 +707,8 @@ void Animation(Player *Object)
 		}
 		else
 		{
-			ArmUpr->Rotation = -LegUpperDirection/1.5f - 90.0f * GetDeltaTime();
-			ArmLwr->Rotation = ArmUpr->Rotation + 75.0f * GetDeltaTime() - LegUpperDirection/2.0f;
+			ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
+			ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
 		}
 		Weap->Rotation = ArmLwr->Rotation;
 		ArmUpr->Position.x = Bdy->Position.x;
@@ -716,19 +716,19 @@ void Animation(Player *Object)
 		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 		ArmLwr->Position.y = ArmUpr->Position.y + (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 
-		ArmUpr2->Rotation = LegUpperDirection/1.5f - 90.0f * GetDeltaTime();
-		ArmLwr2->Rotation = ArmUpr2->Rotation + 75.0f * GetDeltaTime() + LegUpperDirection/2.0f;
+		ArmUpr2->Rotation = LegUpperDirection/1.5f - 1.5f;
+		ArmLwr2->Rotation = ArmUpr2->Rotation + 1.25f + LegUpperDirection/2.0f;
 		ArmUpr2->Position.x = Bdy->Position.x;
 		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		ArmLwr2->Position.y = ArmUpr2->Position.y + (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
-		if ((Object->Speed * GetLoadRatio()) < 0.01f * GetLoadRatio())
+		if ((Object->Speed * GetLoadRatio()) < 0.6f * GetDeltaTime() * GetLoadRatio())
 		{
 			if (!Object->isAttacking)
 			{
-				ArmLwr->Rotation = ArmUpr->Rotation + 30.0f * GetDeltaTime();
-				ArmLwr2->Rotation = ArmUpr2->Rotation + 12.0f * GetDeltaTime();
+				ArmLwr->Rotation = ArmUpr->Rotation + 0.5f;
+				ArmLwr2->Rotation = ArmUpr2->Rotation + 0.2f;
 				Weap->Rotation = ArmLwr->Rotation;
 			}
 		}
