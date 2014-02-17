@@ -255,8 +255,8 @@ void resetObjectList(void)
 		enemyList			= (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
 		weaponList			= (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
 		floatTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs));
-		particleList		= (Particle *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Particle));
-		particleSystemList  = (ParticleSystem *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(ParticleSystem));
+		particleList		= (Particle *) CallocMyAlloc(PARTICLEAMOUNT, sizeof(Particle));
+		particleSystemList  = (ParticleSystem *) CallocMyAlloc(PARTICLESYSTEMAMOUNT, sizeof(ParticleSystem));
 		buttonList			= (Button *) CallocMyAlloc(BUTTONAMOUNT, sizeof(Button));
 
 		for(i = 0; i < COLLIDEAMOUNT; i++)
