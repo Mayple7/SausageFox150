@@ -494,7 +494,7 @@ void DetectPlayerCollision(void)
 /*************************************************************************/
 void Animation(Player *Object)
 {
-	float LegDistance = (600.0f * GetDeltaTime())-(Object->Speed / GetLoadRatio());
+	float LegDistance = ((500.0f * GetDeltaTime() * GetLoadRatio()) + 1.5f)-(Object->Speed);
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
