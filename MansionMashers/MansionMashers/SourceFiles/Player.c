@@ -561,22 +561,22 @@ void Animation(Player *Object)
 
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 	{
-    if (LegUpperDirection < 0)
-        LegLowerDirection = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
-    else
-        LegLowerDirection = (LegUpperDirection + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
+		if (LegUpperDirection < 0)
+			LegLowerDirection = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
+		else
+			LegLowerDirection = (LegUpperDirection + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 
-    if (LegUpperDirection2 > 0)
-        LegLowerDirection2 = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
-    else
-        LegLowerDirection2 = (LegUpperDirection2 + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
+		if (LegUpperDirection2 > 0)
+			LegLowerDirection2 = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
+		else
+			LegLowerDirection2 = (LegUpperDirection2 + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
 	}
 	else
 	{
-		LegUpperDirection = (float)sin(LegDistance/10) - 60.0f * GetDeltaTime();
-		LegUpperDirection2 = (float)sin(LegDistance/10) - 60.0f * GetDeltaTime();
-		LegLowerDirection = LegUpperDirection + 30.0f * GetDeltaTime();
-		LegLowerDirection2 = LegUpperDirection2 - 30.0f * GetDeltaTime();
+		LegUpperDirection = (float)sin(LegDistance/10) - 1.0f;
+		LegUpperDirection2 = (float)sin(LegDistance/10) - 1.0f;//60.0f * GetDeltaTime();
+		LegLowerDirection = LegUpperDirection + 0.5f;//30.0f * GetDeltaTime();
+		LegLowerDirection2 = LegUpperDirection2 - 0.5f;//30.0f * GetDeltaTime();
 	}
 	LegUpr->FlipX = Object->FlipX;
 	LegLwr->FlipX = Object->FlipX;
