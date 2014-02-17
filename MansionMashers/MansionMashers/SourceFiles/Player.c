@@ -107,17 +107,16 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
 	}
 
-	// Move the direction based on the speed
-	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);
+	
 
 	// not key press for direction then slow down!
 	if(!FoxInput_KeyDown('D') && !FoxInput_KeyDown('A'))
 	{
 		if (!(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			if (CurrentPlayer->Speed - 0.8f >= 0.0f)
+			if (CurrentPlayer->Speed - 48.0f * GetDeltaTime() >= 0.0f)
 			{
-				CurrentPlayer->Speed -= 0.8f;
+				CurrentPlayer->Speed -= 48.0f * GetDeltaTime();
 			}
 			else
 			{
@@ -127,9 +126,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 		else
 		{
-			if (CurrentPlayer->Speed - 0.8f >= 0.0f)
+			if (CurrentPlayer->Speed - 48.0f * GetDeltaTime() >= 0.0f)
 			{
-				CurrentPlayer->Speed -= 0.8f;
+				CurrentPlayer->Speed -= 48.0f * GetDeltaTime();
 			}
 			else
 			{
@@ -143,14 +142,14 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->FlipX = 0;
 		CurrentPlayer->PlayerDirection = LEFT;
-		CurrentPlayer->Speed = 500.0f * GetLoadRatio() * GetDeltaTime();
+		CurrentPlayer->Speed = 600.0f * GetLoadRatio() * GetDeltaTime();
 	}
 	// Move right if D is pressed
 	else if(FoxInput_KeyDown('D'))
 	{
 		CurrentPlayer->FlipX = 1;
 		CurrentPlayer->PlayerDirection = RIGHT;
-		CurrentPlayer->Speed = 500.0f * GetLoadRatio() * GetDeltaTime();
+		CurrentPlayer->Speed = 600.0f * GetLoadRatio() * GetDeltaTime();
 	}
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(FoxInput_KeyTriggered(VK_SPACE))
@@ -192,6 +191,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 	}
+	printf("%f\n", CurrentPlayer->Speed);
+	// Move the direction based on the speed
+	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);
 }
 
 /*************************************************************************/
