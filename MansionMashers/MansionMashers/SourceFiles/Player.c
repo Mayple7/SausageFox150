@@ -143,14 +143,14 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->FlipX = 0;
 		CurrentPlayer->PlayerDirection = LEFT;
-		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
+		CurrentPlayer->Speed = 500.0f * GetLoadRatio() * GetDeltaTime();
 	}
 	// Move right if D is pressed
 	else if(FoxInput_KeyDown('D'))
 	{
 		CurrentPlayer->FlipX = 1;
 		CurrentPlayer->PlayerDirection = RIGHT;
-		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
+		CurrentPlayer->Speed = 500.0f * GetLoadRatio() * GetDeltaTime();
 	}
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(FoxInput_KeyTriggered(VK_SPACE))
@@ -164,7 +164,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 
 		
-		Vec2Set(&velocity, 0.0f, 12.0f * GetLoadRatio());
+		Vec2Set(&velocity, 0.0f, 18.0f * GetLoadRatio());
 		if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
@@ -180,7 +180,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
-		Vec2Set(&force, 0.0f, 15.0f * GetLoadRatio());
+		Vec2Set(&force, 0.0f, -FOX_GRAVITY_Y * GetLoadRatio());
 		if(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio())
 		{
 			ApplyForce(&CurrentPlayer->PlayerRigidBody, &force);
@@ -230,6 +230,8 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 
 	//Update velocity and acceleration
 	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
+	//Vec2Scale(&CurrentPlayer->PlayerRigidBody.Velocity, &CurrentPlayer->PlayerRigidBody.Velocity, GetDeltaTime());
+	
 	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &CurrentPlayer->PlayerRigidBody.Velocity);
 
 	//Updates the collision box

@@ -567,6 +567,7 @@ void freeButton(Button* CurrentButton)
 	if (CurrentButton->ButtonSprite && CurrentButton->ButtonSprite->Created)
 	{
 		freeObject(CurrentButton->ButtonSprite);
+		CurrentButton->ButtonCollider.collisionID = 0;
 		//Free the mesh and texture data
 		FreeMyAlloc(CurrentButton);
 	}

@@ -1,7 +1,7 @@
 #ifndef FOX_FRAMERATE
 #define FOX_FRAMERATE
 
-#define FRAMERATE 120
+#define FRAMERATE 60
 
 void StartFoxFrame(void);
 void EndFoxFrame(void);
