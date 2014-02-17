@@ -23,50 +23,52 @@
 #include "../AEEngine.h"
 #include "../HeaderFiles/FoxEngine.h"
 
-static unsigned long CycleStart, CycleEnd; 		//for framerate controller
-static unsigned long DeltaTime;
+static LARGE_INTEGER CycleStart, CycleEnd, Freq; 		//for framerate controller
+static double DeltaTime;
 
 /*************************************************************************/
 /*!
 	\brief
-	Get Current time
+	Getting CPU Cycles
 */
 /*************************************************************************/
 void StartFoxFrame(void)
 {
-	CycleStart = timeGetTime();
+	QueryPerformanceCounter(&CycleStart);
 }
 
 /*************************************************************************/
 /*!
 	\brief
-	Gets time and keeps game from going to fast
+	Gets CPU Cycles & Frequency and calculates DeltaTime in order
+	to keep game from going to fast.
 
 */
 /*************************************************************************/
 void EndFoxFrame(void)
 {
-	CycleEnd = timeGetTime();
-	DeltaTime = CycleEnd - CycleStart;
-	while(DeltaTime < 1000.0f/FRAMERATE)
+	QueryPerformanceCounter(&CycleEnd);
+	QueryPerformanceFrequency(&Freq);
+	DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
+	while(DeltaTime < 1.0f/FRAMERATE)
 	{
-		CycleEnd = timeGetTime();
-		DeltaTime = CycleEnd - CycleStart;
+		QueryPerformanceCounter(&CycleEnd);
+		DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
 	}
-	//printf("%d\n", DeltaTime);
+	printf("%f\n", DeltaTime);
 }
 
 /*************************************************************************/
 /*!
 	\brief
-	Converts deltatime to seconds
+	DeltaTime (60fps = .016667)
 
 	\return
-	Returns deltatime in seconds
+	Returns DeltaTime
 
 */
 /*************************************************************************/
 float GetDeltaTime(void)
 {
-	return DeltaTime / 1000.0f;	
+	return DeltaTime;	
 }
