@@ -176,7 +176,7 @@ void UpdateVelocity(RigidBody* CurrentRigidBody) // V = Vi + at
 		Vec2 accelerationTime;
 		applyDrag(CurrentRigidBody);
 		applyGravity(CurrentRigidBody);
-		Vec2Scale(&accelerationTime, &CurrentRigidBody->Acceleration, 60 * GetDeltaTime());
+		Vec2Scale(&accelerationTime, &CurrentRigidBody->Acceleration, GetDeltaTime());
 		printf("%f\n", accelerationTime.y);
 		Vec2Add(&CurrentRigidBody->Velocity, &CurrentRigidBody->Velocity, &accelerationTime);
 	}

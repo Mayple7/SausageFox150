@@ -164,7 +164,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 
 		
-		Vec2Set(&velocity, 0.0f, 18.0f * GetLoadRatio());
+		Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
 		if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
