@@ -60,8 +60,9 @@ void DestroyTextureList(void)
 	for (i = 0; i < TEXTUREAMOUNT; i++)
 	{
 		//Find a sprite that is empty
-		if (textureList[i].Created)
+		if (textureList[i].Created & CREATED)
 		{
+			textureList[i].Created = 0;
 			AEGfxTextureUnload(textureList[i].TextureObject);
 		}
 	}
@@ -84,25 +85,26 @@ AEGfxTexture *LoadTexture(char *texture)
 	//Search to see if  that texture has already been created
 	for (i = 0; i < TEXTUREAMOUNT; i++)
 	{
-		//Find a sprite that is empty
-		if (textureList[i].Created && !strcmp(textureList[i].TextureObject->mpName, texture))
+		/* If an object is already created with that texture, 
+		   share it like a good person should. */
+		if (textureList[i].Created & CREATED)
 		{
-			//printf("Reusing an old texture for slot: %i\n", i);
-			return textureList[i].TextureObject;
+			if (!strcmp(textureList[i].TextureObject->mpName, texture))
+			{
+				return textureList[i].TextureObject;
+			}
 		}
-	}
-	//Creates the needed texture
-	for (i = 0; i < TEXTUREAMOUNT; i++)
-	{
-		//Find a sprite that is empty
-		if (!textureList[i].Created)
+		//No spot currently has the texture
+		else
 		{
-			//printf("Creating a texture for slot: %i\n", i);
+			//Create a new texture
 			textureList[i].Created = 1;
 			textureList[i].TextureObject = AEGfxTextureLoad(texture);
 			return textureList[i].TextureObject;
 		}
 	}
+
 	//Everything borked if it gets here
+	printf("We got a serious problem boss.");
 	return NULL;
 }
