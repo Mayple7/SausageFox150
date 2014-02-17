@@ -158,7 +158,7 @@ void EventArmGuy(void)
 		SetNextState(GS_MainMenu);
 		//TogglePauseSound(&BackgroundSnd);
 	}
-	if(FoxInput_MouseDown(MOUSE_BUTTON_LEFT));
+	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 	{
 		int i, worldX, worldY;
 		Vec2 MouseClick;

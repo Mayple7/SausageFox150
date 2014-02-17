@@ -24,19 +24,19 @@ void FoxInput_PassEvent(unsigned int messageType, int param)
   switch (messageType)
   {
   case WM_LBUTTONDOWN:
-    buttonStates[MOUSE_BUTTON_LEFT] = buttonTriggeredStates[MOUSE_BUTTON_LEFT] = DOWN; 
+    buttonStates[MOUSE_BUTTON_LEFT] = DOWN; 
     break;
   case WM_LBUTTONUP:
     buttonStates[MOUSE_BUTTON_LEFT] = UP; 
     break;
   case WM_MBUTTONDOWN:
-    buttonStates[MOUSE_BUTTON_MIDDLE] = buttonTriggeredStates[MOUSE_BUTTON_MIDDLE] = DOWN; 
+    buttonStates[MOUSE_BUTTON_MIDDLE] = DOWN; 
     break;
   case WM_MBUTTONUP:
     buttonStates[MOUSE_BUTTON_MIDDLE] = UP; 
     break;
   case WM_RBUTTONDOWN:
-    buttonStates[MOUSE_BUTTON_RIGHT] = buttonTriggeredStates[MOUSE_BUTTON_RIGHT] = DOWN;
+    buttonStates[MOUSE_BUTTON_RIGHT] = DOWN;
     break;
   case WM_RBUTTONUP:
     buttonStates[MOUSE_BUTTON_RIGHT] = UP;
@@ -58,8 +58,8 @@ void FoxInput_Update(void)
   RECT rcClient;
   HWND alphaWindowHandle;
 
-  memset(buttonTriggeredStates, UP, sizeof(buttonTriggeredStates));
   memcpy(keyTriggeredStates, keyStates, sizeof(keyStates));
+  memcpy(buttonTriggeredStates, buttonStates, sizeof(buttonStates));
 
   alphaWindowHandle = AESysGetWindowHandle();
 
@@ -96,7 +96,7 @@ int FoxInput_MouseDown(MouseButton button)
 
 int FoxInput_MouseTriggered(MouseButton button)
 {
-  return buttonTriggeredStates[button] == DOWN;
+  return (buttonStates[button] == DOWN && buttonTriggeredStates[button] == UP);
 }
 
 int FoxInput_MouseUp(MouseButton button)
