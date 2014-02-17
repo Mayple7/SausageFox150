@@ -205,6 +205,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 /*************************************************************************/
 void UpdatePlayerPosition(Player *CurrentPlayer)
 {
+	Vec2 velocityTime;
 	//Stop velocity and acceleration when the player lands on the floor
 	if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 	{
@@ -230,9 +231,9 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 
 	//Update velocity and acceleration
 	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
-	//Vec2Scale(&CurrentPlayer->PlayerRigidBody.Velocity, &CurrentPlayer->PlayerRigidBody.Velocity, GetDeltaTime());
+	Vec2Scale(&velocityTime, &CurrentPlayer->PlayerRigidBody.Velocity, GetDeltaTime());
 	
-	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &CurrentPlayer->PlayerRigidBody.Velocity);
+	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &velocityTime);
 
 	//Updates the collision box
 	UpdateCollisionPosition(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position);
