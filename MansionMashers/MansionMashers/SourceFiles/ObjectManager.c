@@ -358,6 +358,14 @@ void DrawCollisionList(void)
 			displayCollisionDebug(&weaponList[i].WeaponAttack);
 		}
 	}
+	for(i = 0; i < BUTTONAMOUNT; i++)
+	{
+		if (&buttonList[i] && buttonList[i].ButtonCollider.collisionDebug)
+		{
+			//Free the mesh and texture data
+			displayCollisionDebug(&buttonList[i].ButtonCollider);
+		}
+	}
 
 	//Players are special
 	if(CurrentPlayer.PlayerCollider.collisionDebug)
@@ -705,6 +713,15 @@ void SetDebugMode(void)
 		{
 			//Free the mesh and texture data
 			enemyList[i].EnemyCollider.collisionDebug = TRUE;
+		}
+	}
+	for (i = 0; i < BUTTONAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (&buttonList[i])
+		{
+			//Free the mesh and texture data
+			buttonList[i].ButtonCollider.collisionDebug = TRUE;
 		}
 	}
 

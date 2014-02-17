@@ -39,6 +39,7 @@
 // ---------------------------------------------------------------------------
 // globals
 int newID;					// ID number
+TextGlyphs* LevelName;
 
 /*************************************************************************/
 /*!
@@ -60,6 +61,8 @@ void LoadHandGuy(void)
 /*************************************************************************/
 void InitializeHandGuy(void)
 {
+	Vec3 TextTint;
+
 	newID = 1;
 	resetObjectList();
 	ResetCamera();
@@ -67,6 +70,10 @@ void InitializeHandGuy(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	Vec3Set(&TextTint, 1, 1, 1);
+	LevelName = CreateText("HandGuy Level", 0, 300, 100, TextTint, Center);
+	ChangeTextVisibility(LevelName);
 }
 
 /*************************************************************************/

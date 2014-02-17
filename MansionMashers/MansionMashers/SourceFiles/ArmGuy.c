@@ -40,7 +40,7 @@
 // ---------------------------------------------------------------------------
 // globals
 int newID;					// ID number
-static Button* TestButton;
+TextGlyphs* LevelName;
 
 /*************************************************************************/
 /*!
@@ -62,6 +62,7 @@ void LoadArmGuy(void)
 /*************************************************************************/
 void InitializeArmGuy(void)
 {
+	Vec3 TextTint;
 	newID = 1;
 	resetObjectList();
 	ResetCamera();
@@ -70,7 +71,9 @@ void InitializeArmGuy(void)
 	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
-	TestButton = CreateButton("TextureFiles/StartButton.png", 0, 0, 400, 100, newID++);
+	Vec3Set(&TextTint, 1, 1, 1);
+	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center);
+	ChangeTextVisibility(LevelName);
 }
 
 /*************************************************************************/
@@ -81,9 +84,6 @@ void InitializeArmGuy(void)
 /*************************************************************************/
 void UpdateArmGuy(void)
 {
-	int worldX, worldY;
-
-	FoxInput_GetWorldPosition(&worldX, &worldY);
 	EventArmGuy();
 	// This should be the last line in this function
 
@@ -158,27 +158,4 @@ void EventArmGuy(void)
 		SetNextState(GS_MainMenu);
 		//TogglePauseSound(&BackgroundSnd);
 	}
-	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
-	{
-		int i, worldX, worldY;
-		Vec2 MouseClick;
-
-		FoxInput_GetWorldPosition(&worldX, &worldY);
-		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
-
-		for(i = 0; i < BUTTONAMOUNT; i++)
-		{
-			if(buttonList[i].ButtonCollider.collisionID)
-			{
-				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-				{
-					SetNextState(GS_Tutorial);
-				}
-
-			}
-
-		}
-
-	}
-
 }

@@ -39,15 +39,15 @@
 // ---------------------------------------------------------------------------
 // globals
 
-Sprite* Level1;
-Sprite* Level2;
-Sprite* Level3;
-Sprite* Level4;
+Button* Level1;
+Button* Level2;
+Button* Level3;
+Button* Level4;
 
-Sprite* ArmGuy;
-Sprite* HandGuy;
-Sprite* YeahGuy;
-Sprite* Kevin;
+Button* ArmGuy;
+Button* HandGuy;
+Button* YeahGuy;
+Button* Kevin;
 
 Sprite* Selector;
 Sprite* Logo;
@@ -63,6 +63,7 @@ AEGfxTexture *ExitButtonTexture;
 
 int numMenuButtons = 8;
 int selectedButton = 0;								//0: start, 1: showcase 2: exit
+int newID;
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -87,6 +88,7 @@ void LoadMainMenu(void)
 /*************************************************************************/
 void InitializeMainMenu(void)
 {
+	newID = 1;
 	// Reset the object list
 	resetObjectList();
 
@@ -94,15 +96,15 @@ void InitializeMainMenu(void)
 	Logo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
 
 	// Create the start button
-	Level1 = CreateSprite("TextureFiles/Level1.png", 400.0f, 100.0f, 3, 1, 1, -300, 300);
-	Level2 = CreateSprite("TextureFiles/Level2.png", 400.0f, 100.0f, 3, 1, 1, -300, 100);
-	Level3 = CreateSprite("TextureFiles/Level3.png", 400.0f, 100.0f, 3, 1, 1, -300, -100);
-	Level4 = CreateSprite("TextureFiles/Level4.png", 400.0f, 100.0f, 3, 1, 1, -300, -300);
+	Level1 = CreateButton("TextureFiles/Level1.png", -300, 300, 400.0f, 100.0f, newID++);
+	Level2 = CreateButton("TextureFiles/Level2.png", -300, 100, 400.0f, 100.0f, newID++);
+	Level3 = CreateButton("TextureFiles/Level3.png", -300, -100, 400.0f, 100.0f, newID++);
+	Level4 = CreateButton("TextureFiles/Level4.png", -300, -300, 400.0f, 100.0f, newID++);
 
-	ArmGuy = CreateSprite("TextureFiles/ArmGuy.png", 400.0f, 100.0f, 3, 1, 1, 300, 300);
-	HandGuy = CreateSprite("TextureFiles/HandGuy.png", 400.0f, 100.0f, 3, 1, 1, 300, 100);
-	YeahGuy = CreateSprite("TextureFiles/YeahGuy.png", 400.0f, 100.0f, 3, 1, 1, 300, -100);
-	Kevin = CreateSprite("TextureFiles/Kevin.png", 400.0f, 100.0f, 3, 1, 1, 300, -300);
+	ArmGuy = CreateButton("TextureFiles/ArmGuy.png", 300, 300, 400.0f, 100.0f, newID++);
+	HandGuy = CreateButton("TextureFiles/HandGuy.png", 300, 100, 400.0f, 100.0f, newID++);
+	YeahGuy = CreateButton("TextureFiles/YeahGuy.png", 300, -100, 400.0f, 100.0f, newID++);
+	Kevin = CreateButton("TextureFiles/Kevin.png", 300, -300, 400.0f, 100.0f, newID++);
 
 	// Creates the selector button - set to default position of the start button
 	Selector = CreateSprite("TextureFiles/Selector.png", 420.0f, 120.0f, 2, 1, 1, 100, 0);
@@ -132,6 +134,7 @@ void UpdateMainMenu(void)
 void DrawMainMenu(void)
 {
 	DrawObjectList();
+	DrawCollisionList();
 }
 
 /*************************************************************************/
@@ -220,10 +223,90 @@ void InputHandling(void)
 		else if(selectedButton == 7)
 			SetNextState(GS_Kevin);
 	}
-
+	if(FoxInput_KeyTriggered('U'))
+	{
+		SetDebugMode();
+		//OverlayGrid->Visible = TRUE;
+	}
+	if(FoxInput_KeyTriggered('I'))
+	{
+		RemoveDebugMode();
+		//OverlayGrid->Visible = FALSE;
+	}
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
 		SetNextState(GS_Quit);
+
+	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+	{
+		int i, worldX, worldY;
+		Vec2 MouseClick;
+
+		FoxInput_GetWorldPosition(&worldX, &worldY);
+		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
+		for(i = 0; i < BUTTONAMOUNT; i++)
+		{
+			if(!buttonList[i].ButtonCollider.collisionID)
+				continue;
+			else if(buttonList[i].ButtonCollider.collisionID == Level1->ButtonCollider.collisionID)
+			{
+				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+				{
+					SetNextState(GS_Level1);
+				}
+			}
+			else if(buttonList[i].ButtonCollider.collisionID == Level2->ButtonCollider.collisionID)
+			{
+				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+				{
+					SetNextState(GS_Level2);
+				}
+			}
+			else if(buttonList[i].ButtonCollider.collisionID == Level3->ButtonCollider.collisionID)
+			{
+				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+				{
+					SetNextState(GS_Level3);
+				}
+			}
+			else if(buttonList[i].ButtonCollider.collisionID == Level4->ButtonCollider.collisionID)
+			{
+				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+				{
+					SetNextState(GS_Level4);
+				}
+			}
+			else if(buttonList[i].ButtonCollider.collisionID == ArmGuy->ButtonCollider.collisionID)
+			{
+				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+				{
+					SetNextState(GS_ArmGuy);
+				}
+			}
+			else if(buttonList[i].ButtonCollider.collisionID == HandGuy->ButtonCollider.collisionID)
+			{
+				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+				{
+					SetNextState(GS_HandGuy);
+				}
+			}
+			else if(buttonList[i].ButtonCollider.collisionID == YeahGuy->ButtonCollider.collisionID)
+			{
+				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+				{
+					SetNextState(GS_YeahGuy);
+				}
+			}
+			else if(buttonList[i].ButtonCollider.collisionID == Kevin->ButtonCollider.collisionID)
+			{
+				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+				{
+					SetNextState(GS_Kevin);
+				}
+			}
+		}
+	}
 }
 
 /*************************************************************************/

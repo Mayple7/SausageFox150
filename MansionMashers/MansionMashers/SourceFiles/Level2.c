@@ -39,6 +39,7 @@
 // ---------------------------------------------------------------------------
 // globals
 int newID;					// ID number
+TextGlyphs* LevelName;
 
 /*************************************************************************/
 /*!
@@ -60,6 +61,8 @@ void LoadLevel2(void)
 /*************************************************************************/
 void InitializeLevel2(void)
 {
+	Vec3 TextTint;
+
 	newID = 1;
 	resetObjectList();
 	ResetCamera();
@@ -67,6 +70,10 @@ void InitializeLevel2(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	Vec3Set(&TextTint, 1, 1, 1);
+	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
+	ChangeTextVisibility(LevelName);
 }
 
 /*************************************************************************/
