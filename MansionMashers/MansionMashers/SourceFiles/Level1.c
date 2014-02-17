@@ -41,6 +41,8 @@
 int newID;					// ID number
 TextGlyphs* LevelName;
 
+Sprite* Level1Panel1;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -73,6 +75,8 @@ void InitializeLevel1(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 1", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
+
+	Level1Panel1 = CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
 }
 
 /*************************************************************************/
@@ -101,6 +105,7 @@ void DrawLevel1(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
+
 }
 
 /*************************************************************************/
