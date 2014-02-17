@@ -42,6 +42,10 @@ int newID;					// ID number
 TextGlyphs* LevelName;
 
 Sprite* Level1Panel1;
+Platform* Table1;
+Platform* Table2;
+Platform* Table3;
+Platform* Table4;
 
 /*************************************************************************/
 /*!
@@ -76,7 +80,19 @@ void InitializeLevel1(void)
 	LevelName = CreateText("Level 1", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 
+	//Background: Panel 1
 	Level1Panel1 = CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
+
+	//Platforms
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 165.0f, 30.0f, newID++, -718, -320);
+	Table1->PlatformSprite->Visible = FALSE;
+
+	Table2 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 165.0f, 30.0f, newID++, -244, -310);
+	Table2->PlatformSprite->Visible = FALSE;
+
+	Table3 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 165.0f, 30.0f, newID++, 191, -310);
+	Table3->PlatformSprite->Visible = FALSE;
+
 }
 
 /*************************************************************************/

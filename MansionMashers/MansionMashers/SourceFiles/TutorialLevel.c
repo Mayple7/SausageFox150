@@ -134,7 +134,7 @@ void InitializeTutorial(void)
 	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
 
-	BouncyBed = CreatePlatform("TextureFiles/BouncePad.png", BounceType, 375.0f, 100.0f, newID++, -225, -350);
+	BouncyBed = CreatePlatform("TextureFiles/BlankPlatform.png", BounceType, 375.0f, 100.0f, newID++, -225, -350);
 	BouncyBed->PlatformSprite->Visible = FALSE;
 	BouncyBed->PlatformRigidBody.Restitution = 2.2f;
 
