@@ -91,7 +91,7 @@ void InitializeTestLevel(void)
 
 	newID = 1;
 	// Reset the object list
-	resetObjectList();
+	ResetObjectList();
 
 	// Set the HUDlist to 0
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
@@ -258,7 +258,7 @@ void DrawTestLevel(void)
 /*************************************************************************/
 void FreeTestLevel(void)
 {
-	freeObjectList();
+	FreeObjectList();
 	ReleaseChannelGroups(&ChannelController);
 	ReleaseSound(Sound1.Sound);
 	ReleaseSound(Sound2.Sound);

@@ -286,9 +286,6 @@
     <ClCompile Include="SourceFiles\Camera.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\ObjectManager.c">
-      <Filter>Fox Source Files\Fox Engine Sources</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\Movement.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
@@ -408,6 +405,12 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\UIButton.c">
       <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\ObjectManagerFree.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\ObjectManagerMake.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -90,7 +90,7 @@ void InitializeMainMenu(void)
 {
 	newID = 1;
 	// Reset the object list
-	resetObjectList();
+	ResetObjectList();
 
 	// Create the start button
 	Logo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
@@ -146,7 +146,7 @@ void DrawMainMenu(void)
 void FreeMainMenu(void)
 {
 	// Freeing the objects and textures
-	freeObjectList();
+	FreeObjectList();
 }
 
 /*************************************************************************/

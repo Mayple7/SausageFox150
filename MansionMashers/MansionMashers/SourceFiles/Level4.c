@@ -64,7 +64,7 @@ void InitializeLevel4(void)
 	Vec3 TextTint;
 
 	newID = 1;
-	resetObjectList();
+	ResetObjectList();
 	ResetCamera();
 
 	// Initialize the player
@@ -112,7 +112,7 @@ void DrawLevel4(void)
 /*************************************************************************/
 void FreeLevel4(void)
 {
-	freeObjectList();
+	FreeObjectList();
 }
 
 /*************************************************************************/

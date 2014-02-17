@@ -143,14 +143,14 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->FlipX = 0;
 		CurrentPlayer->PlayerDirection = LEFT;
-		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
+		CurrentPlayer->Speed = 500.0f * GetLoadRatio() * GetDeltaTime();
 	}
 	// Move right if D is pressed
 	else if(FoxInput_KeyDown('D'))
 	{
 		CurrentPlayer->FlipX = 1;
 		CurrentPlayer->PlayerDirection = RIGHT;
-		CurrentPlayer->Speed = 8.0f * GetLoadRatio();
+		CurrentPlayer->Speed = 500.0f * GetLoadRatio() * GetDeltaTime();
 	}
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(FoxInput_KeyTriggered(VK_SPACE))
@@ -164,7 +164,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 
 		
-		Vec2Set(&velocity, 0.0f, 12.0f * GetLoadRatio());
+		Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
 		if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 		{
 			if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
@@ -180,7 +180,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
-		Vec2Set(&force, 0.0f, 15.0f * GetLoadRatio());
+		Vec2Set(&force, 0.0f, -FOX_GRAVITY_Y * GetLoadRatio());
 		if(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio())
 		{
 			ApplyForce(&CurrentPlayer->PlayerRigidBody, &force);
@@ -205,6 +205,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 /*************************************************************************/
 void UpdatePlayerPosition(Player *CurrentPlayer)
 {
+	Vec2 velocityTime;
 	//Stop velocity and acceleration when the player lands on the floor
 	if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 	{
@@ -230,7 +231,9 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 
 	//Update velocity and acceleration
 	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
-	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &CurrentPlayer->PlayerRigidBody.Velocity);
+	Vec2Scale(&velocityTime, &CurrentPlayer->PlayerRigidBody.Velocity, GetDeltaTime());
+	
+	Vec2Add(&CurrentPlayer->Position, &CurrentPlayer->Position, &velocityTime);
 
 	//Updates the collision box
 	UpdateCollisionPosition(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position);
@@ -491,7 +494,7 @@ void DetectPlayerCollision(void)
 /*************************************************************************/
 void Animation(Player *Object)
 {
-	float LegDistance = 9.5f-(Object->Speed / GetLoadRatio());
+	float LegDistance = (600.0f * GetDeltaTime())-(Object->Speed / GetLoadRatio());
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);

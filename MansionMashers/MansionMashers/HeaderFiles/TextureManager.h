@@ -3,7 +3,7 @@
 
 #include "../AEEngine.h"
 
-#define TEXTUREAMOUNT 50
+#define TEXTUREAMOUNT 500
 
 typedef struct Texture
 {
