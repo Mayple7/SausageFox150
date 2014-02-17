@@ -115,7 +115,7 @@ void UpdateCollider(CollisionBox *Collider, float width, float height)
 /*************************************************************************/
 void displayCollisionDebug(CollisionBox *Collider)
 {
-	if(Collider->collisionID > 0)
+	if(Collider->collisionID > 0 && Collider->DebugTexture)
 	{
 		//Sprite Graphics Properties
 		AEGfxSetPosition(Collider->Position.x + Collider->Offset.x, Collider->Position.y + Collider->Offset.y);
