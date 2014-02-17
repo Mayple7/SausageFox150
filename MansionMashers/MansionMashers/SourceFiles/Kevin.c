@@ -64,7 +64,7 @@ void InitializeKevin(void)
 	Vec3 TextTint;
 
 	newID = 1;
-	resetObjectList();
+	ResetObjectList();
 	ResetCamera();
 
 	// Initialize the player
@@ -112,7 +112,7 @@ void DrawKevin(void)
 /*************************************************************************/
 void FreeKevin(void)
 {
-	freeObjectList();
+	FreeObjectList();
 }
 
 /*************************************************************************/

@@ -87,7 +87,7 @@ void InitializeShowcase(void)
 	int hudLoop;
 
 	newID = 1;
-	resetObjectList();
+	ResetObjectList();
 
 	// Create the player
 	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
@@ -243,7 +243,7 @@ void FreeShowcase(void)
 	FreeText(Dan);
 	FreeText(Fox);
 	FreeText(subText);
-	freeObjectList();
+	FreeObjectList();
 	//ReleaseSound(BackgroundSnd.Sound);
 
 }

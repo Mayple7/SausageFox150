@@ -83,7 +83,7 @@ void InitializeTutorial(void)
 	Vec3Set(&BoundingTint, 0.0f, 0.0f, 0.0f);
 
 	newID = 1;
-	resetObjectList();
+	ResetObjectList();
 	CreateChannelGroups(&ChannelController);
 
 	volumestring[0] = '1';
@@ -287,7 +287,7 @@ void DrawTutorial(void)
 
 void FreeTutorial(void)
 {
-	freeObjectList();
+	FreeObjectList();
 	ReleaseChannelGroups(&ChannelController);
 	ReleaseSound(BackgroundSnd.Sound);
 	ReleaseSound(GongSnd.Sound);

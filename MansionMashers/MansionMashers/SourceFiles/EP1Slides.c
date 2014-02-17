@@ -75,7 +75,7 @@ void LoadEP1Screen(void)
 void InitializeEP1Screen(void)
 {
 	// Reset the object list
-	resetObjectList();
+	ResetObjectList();
 	
 	alpha = 0.0f;
 	slideTextureNum = 0;
@@ -158,7 +158,7 @@ void DrawEP1Screen(void)
 void FreeEP1Screen(void)
 {
 	// Freeing the objects and textures
-	freeObjectList();
+	FreeObjectList();
 }
 
 /*************************************************************************/

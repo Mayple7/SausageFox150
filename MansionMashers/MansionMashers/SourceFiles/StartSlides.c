@@ -72,7 +72,7 @@ void LoadStartScreen(void)
 void InitializeStartScreen(void)
 {
 	// Reset the object list
-	resetObjectList();
+	ResetObjectList();
 	alpha = 0.0f;
 	slideTextureNum = 0;
 	fade = 1;								//0: no fade, 1: fade in, 2: fade out
@@ -148,7 +148,7 @@ void DrawStartScreen(void)
 void FreeStartScreen(void)
 {
 	// Freeing the objects and textures
-	freeObjectList();
+	FreeObjectList();
 }
 
 /*************************************************************************/
