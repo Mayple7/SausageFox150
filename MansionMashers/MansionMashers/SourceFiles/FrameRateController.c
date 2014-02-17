@@ -55,7 +55,6 @@ void EndFoxFrame(void)
 		QueryPerformanceCounter(&CycleEnd);
 		DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
 	}
-	printf("%f\n", DeltaTime);
 }
 
 /*************************************************************************/
@@ -70,5 +69,5 @@ void EndFoxFrame(void)
 /*************************************************************************/
 float GetDeltaTime(void)
 {
-	return DeltaTime;	
+	return (float)DeltaTime;	
 }

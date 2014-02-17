@@ -73,6 +73,24 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyCollider.Offset.y = -CurrentEnemy->EnemyCollider.height / 6;
 		break;
 	case BasicMelee:
+		width = 261.0f;
+		height = 373.0f;
+		Vec2Set(&position, xPos, yPos);
+		Vec2Scale(&CurrentEnemy->Position, &position, GetLoadRatio());
+		CurrentEnemy->EnemyType = BasicMelee;
+		CurrentEnemy->objID = objID;
+
+		//Creates the enemy sprite
+		CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
+		
+		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, width, height);
+
+		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 0, 10);
+
+		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x / GetLoadRatio(), CurrentEnemy->Position.y / GetLoadRatio(), CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
+
+		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, height / 2, objID);
+		CurrentEnemy->EnemyCollider.Offset.y = -CurrentEnemy->EnemyCollider.height / 6;
 		break;
 	case BasicRanged:
 		break;
@@ -145,56 +163,6 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	CurrentEnemy->EnemyCollider.Position = CurrentEnemy->Position;
 	*/
 }
-
-/*************************************************************************/
-/*!
-	\brief
-	Enemy logic and AI function
-	  
-	\param CurrentEnemy
-	The pointer to the enemy struct
-
-	\param CurrentPlayer
-	The pointer to the player struct
-*/
-/*************************************************************************/
-/*void EnemyLogic(Enemy *CurrentEnemy, Player *CurrentPlayer)
-{
-	// ************************** //
-	//	   THIS IS DEPRECATED	  //
-	// ************************** //
-
-	
-	LogicTimer++;
-
-	//Resets the logic timer
-	if(LogicTimer > 180)
-	{
-		LogicTimer = 0;
-	}
-	//Move enemy toward player
-	else if(LogicTimer > 60)
-	{
-		if(CurrentPlayer->Position.x > CurrentEnemy->Position.x)
-			CurrentEnemy->Position.x += 2;
-		else
-			CurrentEnemy->Position.x -= 2;
-	}
-	//Randomly have the enemy jump
-	if(LogicTimer == (int)(rand() / 180) && CurrentEnemy->Position.y <= -225.0f)
-	{
-		Vec2 velocity;
-		Vec2Set(&velocity, 0.0f, 10.0f);
-		if(CurrentEnemy->Position.y < -225)
-			Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, -224.9f);
-		ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
-	}
-	else
-	{
-		ZeroAcceleration(&CurrentEnemy->EnemyRigidBody);
-	}
-	
-}*/
 
 void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp)
 {
