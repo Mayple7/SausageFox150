@@ -65,6 +65,9 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 	CurrentPlayer->FlipXPrev = FALSE;
 	CurrentPlayer->FlipYPrev = FALSE;
 
+	CurrentPlayer->CurrentPlayerStats.MoveSpeed = 600.0f;
+	CurrentPlayer->CurrentPlayerStats.AttackSpeed = 12.0f;
+
 	//Collision properties
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, newID);
 	CurrentPlayer->PlayerCollider.Offset.y = 20 * GetLoadRatio();
@@ -142,14 +145,14 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->FlipX = 0;
 		CurrentPlayer->PlayerDirection = LEFT;
-		CurrentPlayer->Speed = 600.0f * GetLoadRatio() * GetDeltaTime();
+		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 	}
 	// Move right if D is pressed
 	else if(FoxInput_KeyDown('D'))
 	{
 		CurrentPlayer->FlipX = 1;
 		CurrentPlayer->PlayerDirection = RIGHT;
-		CurrentPlayer->Speed = 600.0f * GetLoadRatio() * GetDeltaTime();
+		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 	}
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(FoxInput_KeyTriggered(VK_SPACE))
@@ -496,7 +499,7 @@ void DetectPlayerCollision(void)
 /*************************************************************************/
 void Animation(Player *Object)
 {
-	float LegDistance = ((500.0f * GetDeltaTime() * GetLoadRatio()) + 1.5f)-(Object->Speed);
+	float LegDistance = ((CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + 1.5f)-(Object->Speed);
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
@@ -515,7 +518,7 @@ void Animation(Player *Object)
 	Sprite *Weap = Object->PlayerSpriteParts.Weapon;
 	Sprite *Tail = Object->PlayerSpriteParts.Tail;
 
-	Object->LegSinValue += 0.1f; 
+	Object->LegSinValue += 10.0f * GetDeltaTime(); 
 
 	Object->PlayerSpriteParts.BlinkTimer += 1;
 
@@ -543,17 +546,17 @@ void Animation(Player *Object)
 	Tail->Position.y = Bdy->Position.y + (Bdy->Height/30);
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
 
-	if (Object->Speed * GetLoadRatio() > 1.5f * GetLoadRatio())
+	if (Object->Speed * GetLoadRatio() > 90.0f * GetDeltaTime() * GetLoadRatio())
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailRun.png");
-		Object->TailSinValue += 0.1f;
-		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
+		Object->TailSinValue += 6.0f * GetDeltaTime();
+		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3 * FRAMERATE / 60;
 	}
 	else
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailIdle.png");
 		Object->TailSinValue = 0;
-		Object->PlayerSpriteParts.Tail->AnimationSpeed = 5;
+		Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
 	}
 
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
@@ -570,10 +573,10 @@ void Animation(Player *Object)
 	}
 	else
 	{
-		LegUpperDirection = (float)sin(LegDistance/10)-1.0f;
-		LegUpperDirection2 = (float)sin(LegDistance/10)-1.0f;
-		LegLowerDirection = LegUpperDirection + 0.5f;
-		LegLowerDirection2 = LegUpperDirection2 - 0.5f;
+		LegUpperDirection = (float)sin(LegDistance/10) - 60.0f * GetDeltaTime();
+		LegUpperDirection2 = (float)sin(LegDistance/10) - 60.0f * GetDeltaTime();
+		LegLowerDirection = LegUpperDirection + 30.0f * GetDeltaTime();
+		LegLowerDirection2 = LegUpperDirection2 - 30.0f * GetDeltaTime();
 	}
 	LegUpr->FlipX = Object->FlipX;
 	LegLwr->FlipX = Object->FlipX;
@@ -628,9 +631,9 @@ void Animation(Player *Object)
 		if (Object->isAttacking)
 		{
 			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, 0, 0.2f);
-			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, 0.2f);
-			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, 0.2f);
-			ArmUpr2->Rotation = (float)FOX_PI * 1.5f + 0.5f - Object->PlayerSpriteParts.AttackRotationArm;
+			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			ArmUpr2->Rotation = (float)FOX_PI * 1.5f + 30.0f * GetDeltaTime() - Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr2->Rotation = ArmUpr2->Rotation - (float)FOX_PI/2 + Object->PlayerSpriteParts.AttackRotationArmLower;
 			//Weap->Rotation = ArmLwr2->Rotation + Object->PlayerSpriteParts.AttackRotation;
 			if (Object->PlayerSpriteParts.AttackRotationArm == (float)FOX_PI)
@@ -648,7 +651,7 @@ void Animation(Player *Object)
 		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		ArmLwr2->Position.y = ArmUpr2->Position.y - (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
-		if ((Object->Speed * GetLoadRatio()) < 0.01f * GetLoadRatio())
+		if ((Object->Speed * GetLoadRatio()) < 0.6f * GetDeltaTime() * GetLoadRatio())
 		{
 			if (!Object->isAttacking)
 			{
@@ -693,10 +696,10 @@ void Animation(Player *Object)
 		// Attacking!
 		if (Object->isAttacking)
 		{
-			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, (float)FOX_PI/6, 0.2f);
-			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, 0.2f);
-			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, 0.2f);
-			ArmUpr->Rotation = (float)FOX_PI / 2 - 0.5f + Object->PlayerSpriteParts.AttackRotationArm;
+			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, (float)FOX_PI/6, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			ArmUpr->Rotation = (float)FOX_PI / 2 - 30.0f * GetDeltaTime() + Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr->Rotation = ArmUpr->Rotation + (float)FOX_PI/2 - Object->PlayerSpriteParts.AttackRotationArmLower;
 			//Weap->Rotation = ArmLwr->Rotation - Object->PlayerSpriteParts.AttackRotation;
 			if (Object->PlayerSpriteParts.AttackRotationArm == (float)FOX_PI)
@@ -720,7 +723,7 @@ void Animation(Player *Object)
 		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		ArmLwr2->Position.y = ArmUpr2->Position.y + (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
-		if ((Object->Speed * GetLoadRatio()) < 0.01f * GetLoadRatio())
+		if ((Object->Speed * GetLoadRatio()) < 0.6f * GetDeltaTime() * GetLoadRatio())
 		{
 			if (!Object->isAttacking)
 			{
