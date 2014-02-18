@@ -36,6 +36,8 @@ Button* BGMSlider;
 
 void (*LevelToDraw)();
 
+float SFXSliderPos, BGMSliderPos;
+
 int pause;
 int newID;
 
@@ -54,14 +56,15 @@ void InitializePause(void (*DrawLevel)())
 	SFXSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, 100);
 	BGMSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, -100);
 
-//	SFXSlider = CreateButton("TextureFiles/fox_head.png", camX, 100, 80, 80, newID++);
-	SFXSlider = CreateButton("TextureFiles/fox_head.png", camX, 100, 80, 80, newID++);
+	SFXSliderPos = SFXSliderGuide->Position.x - SFXSliderGuide->Width / 2 + SFXSliderGuide->Width * SFXVolume;
+	BGMSliderPos = BGMSliderGuide->Position.x - BGMSliderGuide->Width / 2 + BGMSliderGuide->Width * BGMVolume;
 
-	BGMSlider = CreateButton("TextureFiles/fox_head.png", camX, -100, 80, 80, newID++);
+	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 100, 80, 80, newID++);
 	SFXSlider->ButtonSprite->ZIndex = 502;
 	SFXSlider->ButtonCollider.width *= 3;
 	SFXSlider->ButtonCollider.height = SFXSliderBack->Height;
 
+	BGMSlider = CreateButton("TextureFiles/fox_head.png", BGMSliderPos, -100, 80, 80, newID++);
 	BGMSlider->ButtonSprite->ZIndex = 502;
 	BGMSlider->ButtonCollider.width *= 3;
 	BGMSlider->ButtonCollider.height = BGMSliderBack->Height;
@@ -101,6 +104,7 @@ void UpdatePause(void)
 		EndFoxFrame();
 		AESysFrameEnd();
 	}
+	SaveVolume();
 	FreePause();
 
 }
@@ -160,6 +164,19 @@ void EventPause(void)
 				BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
 			}
 		}
+		SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
+		BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
 	}
 }
 
+void SaveVolume(void)
+{
+	FILE *fp;
+	
+	fp = fopen("../VolumeSettings.cfg", "wt");
+	if(fp)
+	{
+		fprintf(fp, "SFX: %d\nBGM: %d", (int)(SFXVolume * 100), (int)(BGMVolume * 100));
+		fclose(fp);
+	}
+}

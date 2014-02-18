@@ -262,6 +262,8 @@ void UpdateTutorial(void)
 		{
 			InitializePause(&DrawTutorial);
 			UpdatePause();
+			SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
+			SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
 		}
 		else if(GameLogo->Alpha > 0.8)
 		{
