@@ -7,5 +7,6 @@ void UpdatePause(void);
 void DrawPause(void);
 void FreePause(void);
 void UnloadPause(void);
+void EventPause(void);
 
 #endif

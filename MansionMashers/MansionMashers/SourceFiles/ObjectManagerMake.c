@@ -357,7 +357,7 @@ void DrawCollisionList(void)
 	}
 	for(i = 0; i < BUTTONAMOUNT; i++)
 	{
-		if (&buttonList[i] && buttonList[i].ButtonCollider.collisionDebug)
+		if (buttonList[i].objID && buttonList[i].ButtonCollider.collisionDebug)
 		{
 			//Free the mesh and texture data
 			displayCollisionDebug(&buttonList[i].ButtonCollider);
