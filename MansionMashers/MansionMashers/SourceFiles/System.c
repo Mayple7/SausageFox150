@@ -23,6 +23,36 @@ int maxWidth, maxHeight;
 
 void FoxSystemInitialize(void)
 {
+	FILE *fp;
+	fp = fopen("../VolumeSettings.cfg", "rt");
+	if(!fp)
+	{
+		fp = fopen("../VolumeSettings.cfg", "wt");
+		fprintf(fp, "SFX: 100\nBGM: 100");
+		fclose(fp);
+		fp = fopen("../VolumeSettings.cfg", "rt");
+	}
+
+	if(fp)
+	{
+		int num = 0;
+		num = fscanf(fp, "%*s %f %*s %f", &SFXVolume, &BGMVolume);
+		fclose(fp);
+	}
+	if(SFXVolume > 100)
+		SFXVolume = 100.0f;
+	else if(SFXVolume < 0)
+		SFXVolume = 0.0f;
+	
+	if(BGMVolume > 100)
+		BGMVolume = 100.0f;
+	else if(BGMVolume < 0)
+		BGMVolume = 0.0f;
+
+
+	SFXVolume /= 100.0f;
+	BGMVolume /= 100.0f;
+
 	FMODInit();
 	InitWindow();
 }

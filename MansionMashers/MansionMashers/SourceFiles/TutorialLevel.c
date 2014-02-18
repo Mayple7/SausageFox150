@@ -162,8 +162,9 @@ void InitializeTutorial(void)
 	Vec3Set(&TextColor, 0, 0, 0);
 	VolumeText = CreateText("Volume ", -400, 300, 100, TextColor, Right);
 	TestText = CreateText(volumestring, -400, 300, 100, TextColor, Left);
-	SetChannelGroupVolume(&ChannelController, EffectType, 0);
-	ChangeTextString(TestText, VolumetoString(volumestring, 0));
+	SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
+	SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
+	ChangeTextString(TestText, VolumetoString(volumestring, 100.0f * SFXVolume));
 	ChangeTextVisibility(TestText);
 	ChangeTextVisibility(VolumeText);
 
@@ -241,17 +242,17 @@ void UpdateTutorial(void)
 
 	if(FoxInput_KeyDown(VK_DOWN))
 	{
-		if(volume > 0)
-			volume = volume - 0.01f;
-		SetChannelGroupVolume(&ChannelController, EffectType, volume);
-		ChangeTextString(TestText, VolumetoString(volumestring, volume * 100));
+		if(SFXVolume > 0)
+			SFXVolume = SFXVolume - 0.01f;
+		SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
+		ChangeTextString(TestText, VolumetoString(volumestring, SFXVolume * 100));
 	}
 	if(FoxInput_KeyDown(VK_UP))
 	{
-		if(volume < 1)
-			volume = volume + 0.01f;
-		SetChannelGroupVolume(&ChannelController, EffectType, volume);
-		ChangeTextString(TestText, VolumetoString(volumestring, (volume * 100)));
+		if(SFXVolume < 1)
+			SFXVolume = SFXVolume + 0.01f;
+		SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
+		ChangeTextString(TestText, VolumetoString(volumestring, SFXVolume * 100));
 	}
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE

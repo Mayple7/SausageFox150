@@ -19,6 +19,7 @@
 */ 
 /*****************************************************************************/
 
+#include "../HeaderFiles/UIButton.h"
 #include "../HeaderFiles/PauseMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
 
@@ -30,16 +31,18 @@ Sprite* BGMSliderGuide;
 Sprite* SFXSliderBack;
 Sprite* BGMSliderBack;
 
-Sprite* SFXSlider;
-Sprite* BGMSlider;
+Button* SFXSlider;
+Button* BGMSlider;
 
 void (*LevelToDraw)();
 
 int pause;
+int newID;
 
 void InitializePause(void (*DrawLevel)())
 {
 	float camX, camY;
+	newID = 1;
 
 	AEGfxGetCamPosition(&camX, &camY);
 	pause = TRUE;
@@ -51,8 +54,10 @@ void InitializePause(void (*DrawLevel)())
 	SFXSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, 100);
 	BGMSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, -100);
 
-	SFXSlider = CreateSprite("TextureFiles/fox_head.png", 80, 80, 553, 1, 1, camX, 100);
-	BGMSlider = CreateSprite("TextureFiles/fox_head.png", 80, 80, 553, 1, 1, camX, -100);
+	SFXSlider = CreateButton("TextureFiles/fox_head.png", camX, 100, 80, 80, newID++);
+	BGMSlider = CreateButton("TextureFiles/fox_head.png", camX, -100, 80, 80, newID++);
+	SFXSlider->ButtonSprite->ZIndex = 502;
+	BGMSlider->ButtonSprite->ZIndex = 502;
 
 	LevelToDraw = DrawLevel;
 	CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
@@ -100,6 +105,6 @@ void FreePause(void)
 	freeObject(BGMSliderGuide);
 	freeObject(SFXSliderBack);
 	freeObject(BGMSliderBack);
-	freeObject(SFXSlider);
-	freeObject(BGMSlider);
+	FreeButton(SFXSlider);
+	FreeButton(BGMSlider);
 }

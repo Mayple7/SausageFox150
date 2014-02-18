@@ -221,7 +221,7 @@ Button* AddButton(void)
 	int i;
 	for (i = 0; i < BUTTONAMOUNT; i++)
 	{
-		if(!buttonList[i].ButtonSprite)
+		if(!buttonList[i].objID)
 		{
 			return &buttonList[i];
 		}

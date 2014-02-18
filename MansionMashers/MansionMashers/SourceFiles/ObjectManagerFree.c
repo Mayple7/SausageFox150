@@ -212,14 +212,14 @@ void FreeParticle(Particle *CurrentParticle)
 	The pointer to a button whose memory is to be deallocated
 */
 /*************************************************************************/
-void freeButton(Button* CurrentButton)
+void FreeButton(Button* CurrentButton)
 {
 	//Make sure the sprite exists
-	if (CurrentButton->ButtonSprite && CurrentButton->ButtonSprite->Created)
+	if (CurrentButton->objID && CurrentButton->ButtonSprite->Created)
 	{
 		freeObject(CurrentButton->ButtonSprite);
 		//Free the mesh and texture data
-		FreeMyAlloc(CurrentButton);
+		CurrentButton->objID = 0;
 	}
 }
 
@@ -307,7 +307,7 @@ void FreeObjectList(void)
 		if (&buttonList[i])
 		{
 			//Free the mesh and texture data
-			freeButton(&buttonList[i]);
+			FreeButton(&buttonList[i]);
 		}
 	}
 
