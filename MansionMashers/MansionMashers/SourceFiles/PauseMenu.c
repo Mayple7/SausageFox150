@@ -90,6 +90,11 @@ void UpdatePause(void)
 			pause = FALSE;
 			SetNextState(GS_MainMenu);
 		}
+		if(GetNextState() == GS_Quit)
+		{
+			pause = FALSE;
+		}
+
 		DrawPause();
 		FoxInput_Update();
 		EventPause();
