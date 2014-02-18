@@ -146,7 +146,7 @@ void InitializeTutorial(void)
 
 	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750, -250);
 
-	BlackOverlay = CreateSprite("TextureFiles/BouncePad.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay = CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Alpha = 0;
 	Vec3Set(&BlackOverlay->Tint, 0, 0, 0);
 

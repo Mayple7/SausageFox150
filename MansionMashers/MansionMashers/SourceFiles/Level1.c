@@ -2,6 +2,7 @@
 /*!
 \file				Level1.c
 \author				Dan Muller (d.muller)
+					Juli Gregg (j.gregg)
 \date				Feb 15, 2014
 
 \brief				Functions for the showcase level
@@ -42,6 +43,7 @@ int newID;					// ID number
 TextGlyphs* LevelName;
 
 Sprite* Level1Panel1;
+Sprite* Level1Door1;
 Platform* Table1;
 
 
@@ -80,6 +82,7 @@ void InitializeLevel1(void)
 
 	//Background: Panel 1
 	Level1Panel1 = CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
+	Level1Door1 = 	Level1Panel1 = CreateSprite("TextureFiles/FoxMansion2door.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	//Platforms
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 125.0f, 40.0f, newID++, -693, -305);
@@ -114,6 +117,11 @@ void UpdateLevel1(void)
 
 	if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * Level1Panel1->Width / 16)
 			CurrentPlayer.Position.x = (-7 * Level1Panel1->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
+	else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * Level1Panel1->Width / 16)
+	{
+		if(CurrentPlayer.PlayerRigidBody.Velocity.y > 0 && CurrentPlayer.Position.y + CurrentPlayer.PlayerCollider.height / 2 > -Level1Panel1->Height / 7)
+			ZeroVelocity(&CurrentPlayer.PlayerRigidBody);
+	}
 }
 
 /*************************************************************************/
@@ -128,6 +136,7 @@ void DrawLevel1(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
+	//SetCamera(&CurrentPlayer.Position, 250);
 
 }
 
