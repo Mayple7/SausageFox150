@@ -73,6 +73,9 @@ void InitializePause(void (*DrawLevel)())
 	SFXSliderPos = SFXSliderGuide->Position.x - SFXSliderGuide->Width / 2 + SFXSliderGuide->Width * SFXVolume;
 	BGMSliderPos = BGMSliderGuide->Position.x - BGMSliderGuide->Width / 2 + BGMSliderGuide->Width * BGMVolume;
 
+	SFXSliderPos /= GetLoadRatio();
+	BGMSliderPos /= GetLoadRatio();
+
 	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 100, 80, 80, newID++);
 	SFXSlider->ButtonSprite->ZIndex = 502;
 	SFXSlider->ButtonCollider.width *= 3;
@@ -198,7 +201,14 @@ void EventPause(void)
 			}
 		}
 		SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
+		volumestring = VolumetoString(volumestring, SFXVolume * 100);
+		volumestring = strcat(volumestring, "%");
+		ChangeTextString(SFXText, volumestring);
+
 		BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
+		volumestring = VolumetoString(volumestring, BGMVolume * 100);
+		volumestring = strcat(volumestring, "%");
+		ChangeTextString(BGMText, volumestring);
 	}
 }
 
