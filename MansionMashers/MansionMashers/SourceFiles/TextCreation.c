@@ -248,6 +248,30 @@ void ChangeTextVisibility(TextGlyphs* FirstLetter)
 /*************************************************************************/
 /*!
 	\brief
+	Changes the Zindex of the text string
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+
+	\param newIndex
+	The new Zindex for the text
+*/
+/*************************************************************************/
+void ChangeTextZIndex(TextGlyphs* FirstLetter, int newIndex)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+			nextLetter->Glyph->ZIndex = newIndex;
+		nextLetter = nextLetter->NextLetter;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Changes the letters in the text
 	
 	\param FirstLetter

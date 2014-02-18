@@ -34,16 +34,30 @@ Sprite* BGMSliderBack;
 Button* SFXSlider;
 Button* BGMSlider;
 
+TextGlyphs* SFXText;
+TextGlyphs* BGMText;
+
 void (*LevelToDraw)();
 
 float SFXSliderPos, BGMSliderPos;
+static char* volumestring;
 
-int pause;
-int newID;
+static int pause;
+static int newID;
 
 void InitializePause(void (*DrawLevel)())
 {
 	float camX, camY;
+	Vec3 TextColor;
+
+	volumestring = (char *)MallocMyAlloc(5, sizeof(char));
+
+	volumestring[0] = '1';
+	volumestring[1] = '0';
+	volumestring[2] = '0';
+	volumestring[3] = '%%';
+	volumestring[4] = '\0';
+
 	newID = 1;
 
 	AEGfxGetCamPosition(&camX, &camY);
@@ -68,6 +82,22 @@ void InitializePause(void (*DrawLevel)())
 	BGMSlider->ButtonSprite->ZIndex = 502;
 	BGMSlider->ButtonCollider.width *= 3;
 	BGMSlider->ButtonCollider.height = BGMSliderBack->Height;
+	Vec3Set(&TextColor, 0, 0, 0);
+	
+	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) / GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
+	volumestring = VolumetoString(volumestring, SFXVolume * 100);
+	volumestring = strcat(volumestring, "%");
+	ChangeTextString(SFXText, volumestring);
+	ChangeTextZIndex(SFXText, 510);
+
+	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) / GetLoadRatio() + 50 * GetLoadRatio(), -100, 100, TextColor, Left);
+	volumestring = VolumetoString(volumestring, BGMVolume * 100);
+	volumestring = strcat(volumestring, "%");
+	ChangeTextString(BGMText, volumestring);
+	ChangeTextZIndex(BGMText, 510);
+
+	ChangeTextVisibility(SFXText);
+	ChangeTextVisibility(BGMText);
 
 	LevelToDraw = DrawLevel;
 	CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
@@ -125,6 +155,9 @@ void FreePause(void)
 	freeObject(BGMSliderBack);
 	FreeButton(SFXSlider);
 	FreeButton(BGMSlider);
+	FreeText(SFXText);
+	FreeText(BGMText);
+	FreeMyAlloc(volumestring);
 }
 
 void EventPause(void)
