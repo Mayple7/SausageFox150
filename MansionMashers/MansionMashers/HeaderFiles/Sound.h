@@ -6,6 +6,8 @@
 #define MAX_SOUND_CHANNELS 40
 #define MAX_CHANNEL_GROUPS 2
 
+float SFXVolume, BGMVolume;
+
 typedef enum SoundType
 {
 	SmallSnd,

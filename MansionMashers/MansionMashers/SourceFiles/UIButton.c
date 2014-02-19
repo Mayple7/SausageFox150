@@ -44,7 +44,7 @@ Button* CreateButton(char* texture, float xPos, float yPos, float width, float h
 	if(CurrentButton)
 	{
 		Vec2Set(&CurrentButton->Position, xPos, yPos);
-
+		CurrentButton->objID = objID;
 		CurrentButton->ButtonSprite = CreateSprite(texture, width, height, 10, 1, 1, xPos, yPos);
 		CreateCollisionBox(&CurrentButton->ButtonCollider, &CurrentButton->Position, ButtonType, width, height, objID);
 

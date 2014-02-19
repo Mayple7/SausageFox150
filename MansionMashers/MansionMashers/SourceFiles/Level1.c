@@ -117,6 +117,10 @@ void UpdateLevel1(void)
 
 	if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * Level1Panel1->Width / 16)
 			CurrentPlayer.Position.x = (-7 * Level1Panel1->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
+	else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * Level1Panel1->Width / 16 && CurrentPlayer.Position.y + CurrentPlayer.PlayerCollider.height / 2 > -Level1Panel1->Height / 8)
+	{
+		CurrentPlayer.Position.x = (7 * Level1Panel1->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
+	}
 	else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * Level1Panel1->Width / 16)
 	{
 		if(CurrentPlayer.PlayerRigidBody.Velocity.y > 0 && CurrentPlayer.Position.y + CurrentPlayer.PlayerCollider.height / 2 > -Level1Panel1->Height / 7)
@@ -190,7 +194,7 @@ void EventLevel1(void)
 	{
 		//InitializePause(&DrawLevel1);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
+		SetNextState(GS_Restart);
 		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}

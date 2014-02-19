@@ -58,15 +58,10 @@ Sprite* GameLogo;
 
 Weapon* StarterAxe;
 Weapon* StarterSword;
-Vec3 TextColor;
-TextGlyphs* VolumeText;
-TextGlyphs* TestText;
 
 FoxSound BackgroundSnd;
 FoxSound GongSnd;
 FoxChannels ChannelController;
-float volume;
-char volumestring[4];
 int newID;
 
 void LoadTutorial(void)
@@ -86,10 +81,6 @@ void InitializeTutorial(void)
 	ResetObjectList();
 	CreateChannelGroups(&ChannelController);
 
-	volumestring[0] = '1';
-	volumestring[1] = '0';
-	volumestring[2] = '0';
-	volumestring[3] = '\0';
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 	CreateSound("Sounds/GongHit.wav", &GongSnd, SmallSnd);
 
@@ -159,13 +150,8 @@ void InitializeTutorial(void)
 
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 900, -205, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	Vec3Set(&TextColor, 0, 0, 0);
-	VolumeText = CreateText("Volume ", -400, 300, 100, TextColor, Right);
-	TestText = CreateText(volumestring, -400, 300, 100, TextColor, Left);
-	SetChannelGroupVolume(&ChannelController, EffectType, 0);
-	ChangeTextString(TestText, VolumetoString(volumestring, 0));
-	ChangeTextVisibility(TestText);
-	ChangeTextVisibility(VolumeText);
+	SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
+	SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
 
 	RemoveDebugMode();
 	OverlayGrid->Visible = FALSE;
@@ -239,20 +225,6 @@ void UpdateTutorial(void)
 	}
 	PlayAudio(&BackgroundSnd, &ChannelController);
 
-	if(FoxInput_KeyDown(VK_DOWN))
-	{
-		if(volume > 0)
-			volume = volume - 0.01f;
-		SetChannelGroupVolume(&ChannelController, EffectType, volume);
-		ChangeTextString(TestText, VolumetoString(volumestring, volume * 100));
-	}
-	if(FoxInput_KeyDown(VK_UP))
-	{
-		if(volume < 1)
-			volume = volume + 0.01f;
-		SetChannelGroupVolume(&ChannelController, EffectType, volume);
-		ChangeTextString(TestText, VolumetoString(volumestring, (volume * 100)));
-	}
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
@@ -261,6 +233,8 @@ void UpdateTutorial(void)
 		{
 			InitializePause(&DrawTutorial);
 			UpdatePause();
+			SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
+			SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
 		}
 		else if(GameLogo->Alpha > 0.8)
 		{

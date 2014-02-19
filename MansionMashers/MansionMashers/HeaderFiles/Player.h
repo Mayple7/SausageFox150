@@ -11,6 +11,8 @@
 #include "CollisionBox.h"
 #include "FoxObjects.h"
 
+enum BuffType { None, AtkSpeed, MovSpeed, DmgBuff };
+
 typedef struct PlayerParts
 {
 	Sprite *LegUpper;
@@ -47,6 +49,9 @@ typedef struct PlayerStats
 	float DamageReduction;
 	int Damage;
 
+	enum BuffType CurrentBuff;
+	int BuffTimer;
+
 	int Money;
 }PlayerStats;
 
@@ -60,6 +65,8 @@ typedef struct Player
 
 	PlayerParts PlayerSpriteParts;
 	PlayerStats CurrentPlayerStats;
+
+	enum BuffType BuffHeld;
 
 	float Speed;
 

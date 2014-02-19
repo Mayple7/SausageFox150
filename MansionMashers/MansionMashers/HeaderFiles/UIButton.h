@@ -10,6 +10,7 @@ typedef struct Button
 	Sprite *ButtonSprite;
 	CollisionBox ButtonCollider;
 
+	int objID;
 	Vec2 Position;
 
 }Button;

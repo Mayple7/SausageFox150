@@ -161,7 +161,6 @@ void FreeFloatingText(TextGlyphs *FirstLetter)
 
 		FreeText(FirstLetter);
 	}
-
 }
 
 /*************************************************************************/
@@ -212,14 +211,14 @@ void FreeParticle(Particle *CurrentParticle)
 	The pointer to a button whose memory is to be deallocated
 */
 /*************************************************************************/
-void freeButton(Button* CurrentButton)
+void FreeButton(Button* CurrentButton)
 {
 	//Make sure the sprite exists
-	if (CurrentButton->ButtonSprite && CurrentButton->ButtonSprite->Created)
+	if (CurrentButton->objID && CurrentButton->ButtonSprite->Created)
 	{
 		freeObject(CurrentButton->ButtonSprite);
 		//Free the mesh and texture data
-		FreeMyAlloc(CurrentButton);
+		CurrentButton->objID = 0;
 	}
 }
 
@@ -252,41 +251,28 @@ void FreeObjectList(void)
 			//Free the mesh and texture data
 			FreePlatform(&platformList[i]);
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Make sure the sprite exists
 		if (foodList[i].objID)
 		{
 			//Free the mesh and texture data
 			FreeFood(&foodList[i]);
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (weaponList[i].objID)
 		{
 			//Free the mesh and texture data
 			FreeWeapon(&weaponList[i]);
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (enemyList[i].objID)
 		{
 			//Free the mesh and texture data
 			FreeEnemy(&enemyList[i]);
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
+		//For floating damage text only!
 		if (floatTextList[i])
 		{
 			FreeText(floatTextList[i]);
 		}
-
 	}
 
 	for (i = 0; i < PARTICLEAMOUNT; i++)
@@ -307,7 +293,7 @@ void FreeObjectList(void)
 		if (&buttonList[i])
 		{
 			//Free the mesh and texture data
-			freeButton(&buttonList[i]);
+			FreeButton(&buttonList[i]);
 		}
 	}
 

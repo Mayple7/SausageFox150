@@ -288,6 +288,7 @@ void SetLoadRatio(double ratio)
 
 int GetWindowWidth(void)
 {
+	//printf("%i\n", winWidth);
 	return winWidth;
 }
 

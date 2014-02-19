@@ -221,7 +221,7 @@ Button* AddButton(void)
 	int i;
 	for (i = 0; i < BUTTONAMOUNT; i++)
 	{
-		if(!buttonList[i].ButtonSprite)
+		if(!buttonList[i].objID)
 		{
 			return &buttonList[i];
 		}
@@ -251,7 +251,7 @@ void ResetObjectList(void)
 		foodList			= (Food *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Food));
 		enemyList			= (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
 		weaponList			= (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
-		floatTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs));
+		floatTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs *));
 		particleList		= (Particle *) CallocMyAlloc(PARTICLEAMOUNT, sizeof(Particle));
 		particleSystemList  = (ParticleSystem *) CallocMyAlloc(PARTICLESYSTEMAMOUNT, sizeof(ParticleSystem));
 		buttonList			= (Button *) CallocMyAlloc(BUTTONAMOUNT, sizeof(Button));
@@ -357,7 +357,7 @@ void DrawCollisionList(void)
 	}
 	for(i = 0; i < BUTTONAMOUNT; i++)
 	{
-		if (&buttonList[i] && buttonList[i].ButtonCollider.collisionDebug)
+		if (buttonList[i].objID && buttonList[i].ButtonCollider.collisionDebug)
 		{
 			//Free the mesh and texture data
 			displayCollisionDebug(&buttonList[i].ButtonCollider);

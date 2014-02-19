@@ -248,6 +248,30 @@ void ChangeTextVisibility(TextGlyphs* FirstLetter)
 /*************************************************************************/
 /*!
 	\brief
+	Changes the Zindex of the text string
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+
+	\param newIndex
+	The new Zindex for the text
+*/
+/*************************************************************************/
+void ChangeTextZIndex(TextGlyphs* FirstLetter, int newIndex)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+			nextLetter->Glyph->ZIndex = newIndex;
+		nextLetter = nextLetter->NextLetter;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Changes the letters in the text
 	
 	\param FirstLetter
@@ -321,6 +345,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 			nextLetter->letter = *newString;
 			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio());
 			nextLetter->NextLetter = NULL;
+			nextLetter->Glyph->ZIndex = FirstLetter->Glyph->ZIndex;
 		}
 		if(nextLetter->Glyph)
 		{
@@ -346,7 +371,7 @@ void UpdateFloatingText(TextGlyphs *FirstLetter)
 	TextGlyphs *nextLetter;
 	nextLetter = FirstLetter;
 
-	if(nextLetter->Glyph->Alpha <= 0.0f)
+	if(nextLetter && nextLetter->Glyph->Alpha <= 0.0f)
 	{
 		FreeFloatingText(FirstLetter);
 		return;

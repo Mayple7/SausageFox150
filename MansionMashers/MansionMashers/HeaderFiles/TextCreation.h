@@ -21,5 +21,6 @@ void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 Offset, int alignment);
 void ChangeTextVisibility(TextGlyphs* FirstLetter);
 void ChangeTextString(TextGlyphs* FirstLetter, char* newString);
 void UpdateFloatingText(TextGlyphs *FirstLetter);
+void ChangeTextZIndex(TextGlyphs* FirstLetter, int newIndex);
 
 #endif
