@@ -31,6 +31,8 @@ Sprite* BGMSliderGuide;
 Sprite* SFXSliderBack;
 Sprite* BGMSliderBack;
 
+Sprite* PauseBackground;
+
 Button* SFXSlider;
 Button* BGMSlider;
 
@@ -70,6 +72,11 @@ void InitializePause(void (*DrawLevel)())
 	SFXSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, 100);
 	BGMSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, -100);
 
+	Vec3Set(&TextColor, 0, 0, 0);
+	PauseBackground = CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, camX, 0);
+	PauseBackground->Alpha = 0.5;
+	PauseBackground->Tint = TextColor;
+
 	SFXSliderPos = SFXSliderGuide->Position.x - SFXSliderGuide->Width / 2 + SFXSliderGuide->Width * SFXVolume;
 	BGMSliderPos = BGMSliderGuide->Position.x - BGMSliderGuide->Width / 2 + BGMSliderGuide->Width * BGMVolume;
 
@@ -85,7 +92,8 @@ void InitializePause(void (*DrawLevel)())
 	BGMSlider->ButtonSprite->ZIndex = 502;
 	BGMSlider->ButtonCollider.width *= 3;
 	BGMSlider->ButtonCollider.height = BGMSliderBack->Height;
-	Vec3Set(&TextColor, 0, 0, 0);
+
+	Vec3Set(&TextColor, 1, 1, 1);
 	
 	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) / GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
 	volumestring = VolumetoString(volumestring, SFXVolume * 100);
@@ -156,6 +164,7 @@ void FreePause(void)
 	freeObject(BGMSliderGuide);
 	freeObject(SFXSliderBack);
 	freeObject(BGMSliderBack);
+	freeObject(PauseBackground);
 	FreeButton(SFXSlider);
 	FreeButton(BGMSlider);
 	FreeText(SFXText);
