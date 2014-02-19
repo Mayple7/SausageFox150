@@ -225,10 +225,10 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Player position updated when dropping down from a platform
 	if(CurrentPlayer->dropDown)
 	{
-		CurrentPlayer->Position.y -= 5.0f;
+		CurrentPlayer->Position.y -= 300.0f * GetDeltaTime() * GetLoadRatio();
 		if(CurrentPlayer->PlayerRigidBody.Velocity.y < 0)
 		{
-			CurrentPlayer->PlayerRigidBody.Velocity.y = -5.0f * GetLoadRatio();
+			CurrentPlayer->PlayerRigidBody.Velocity.y = -1800.0f * GetDeltaTime() * GetLoadRatio();
 			CurrentPlayer->dropDown = FALSE;
 		}
 	}
