@@ -9,6 +9,7 @@ typedef struct TextGlyphs
 {
 	Sprite *Glyph;
 	char letter;
+	int Created;
 	struct TextGlyphs *NextLetter;
 }TextGlyphs;
 

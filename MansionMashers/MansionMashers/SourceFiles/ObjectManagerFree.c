@@ -252,27 +252,17 @@ void FreeObjectList(void)
 			//Free the mesh and texture data
 			FreePlatform(&platformList[i]);
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Make sure the sprite exists
 		if (foodList[i].objID)
 		{
 			//Free the mesh and texture data
 			FreeFood(&foodList[i]);
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (weaponList[i].objID)
 		{
 			//Free the mesh and texture data
 			FreeWeapon(&weaponList[i]);
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (enemyList[i].objID)
 		{
@@ -286,7 +276,6 @@ void FreeObjectList(void)
 		{
 			FreeText(floatTextList[i]);
 		}
-
 	}
 
 	for (i = 0; i < PARTICLEAMOUNT; i++)

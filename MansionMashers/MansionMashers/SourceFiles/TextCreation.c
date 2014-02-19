@@ -171,11 +171,11 @@ void FreeText(TextGlyphs *FirstLetter)
 {
 	TextGlyphs *NextLetter;
 
-	while(FirstLetter)
+	while(FirstLetter->Created)
 	{
 		NextLetter = FirstLetter->NextLetter;
-		if(FirstLetter->Glyph)
-			freeObject(FirstLetter->Glyph);
+		//if(FirstLetter->Glyph)
+			//freeObject(FirstLetter->Glyph);
 		FreeMyAlloc(FirstLetter);
 		FirstLetter = NextLetter;
 	}
