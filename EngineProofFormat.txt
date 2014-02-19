@@ -28,9 +28,9 @@ Tutorial
 -text, hover text
 -weapon swapping
 -swinging
--grabbing buff
--sound
--pause menu/ volume -resize window
+-particle effects
+-sound/ volume
+-pause menu
 -atttacking dummy
 -exiting tutorial level
 (black fade in logo)
