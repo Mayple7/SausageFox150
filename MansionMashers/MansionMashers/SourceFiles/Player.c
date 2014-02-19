@@ -67,6 +67,9 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 
 	CurrentPlayer->CurrentPlayerStats.MoveSpeed = 600.0f;
 	CurrentPlayer->CurrentPlayerStats.AttackSpeed = 12.0f;
+	CurrentPlayer->CurrentPlayerStats.CurrentBuff = None;
+	CurrentPlayer->CurrentPlayerStats.BuffTimer = 0;
+	CurrentPlayer->BuffHeld = None;
 
 	//Collision properties
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, newID);
@@ -140,6 +143,54 @@ void InputPlayer(struct Player *CurrentPlayer)
 			}
 		}
 	}
+	if(FoxInput_KeyTriggered('Q'))
+	{
+		if(CurrentPlayer->BuffHeld != None)
+		{
+			CurrentPlayer->CurrentPlayerStats.CurrentBuff = CurrentPlayer->BuffHeld;
+			CurrentPlayer->BuffHeld = None;
+			switch(CurrentPlayer->CurrentPlayerStats.CurrentBuff)
+			{
+			case AtkSpeed:
+				CurrentPlayer->CurrentPlayerStats.AttackSpeed = 24.0f;
+				break;
+			case MovSpeed:
+				CurrentPlayer->CurrentPlayerStats.MoveSpeed += 300.0f;
+				break;
+			}
+
+		}
+	}
+	if(FoxInput_KeyTriggered('1'))
+	{
+		CurrentPlayer->BuffHeld = AtkSpeed;
+	}
+	else if(FoxInput_KeyTriggered('2'))
+	{
+		CurrentPlayer->BuffHeld = MovSpeed;
+	}
+
+	if(CurrentPlayer->CurrentPlayerStats.CurrentBuff != None)
+	{
+		++CurrentPlayer->CurrentPlayerStats.BuffTimer;
+		if(CurrentPlayer->CurrentPlayerStats.BuffTimer > 5 * FRAMERATE)
+		{
+			switch(CurrentPlayer->CurrentPlayerStats.CurrentBuff)
+			{
+			case AtkSpeed:
+				updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
+				break;
+			case MovSpeed:
+				updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
+				break;
+			}
+
+			CurrentPlayer->CurrentPlayerStats.BuffTimer = 0;
+			CurrentPlayer->CurrentPlayerStats.CurrentBuff = None;
+		}
+	}
+	printf("%f : %d\n", CurrentPlayer->CurrentPlayerStats.MoveSpeed, CurrentPlayer->CurrentPlayerStats.BuffTimer);
+
 	// Move left if A is pressed
 	if(FoxInput_KeyDown('A'))
 	{
@@ -271,7 +322,7 @@ void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 {
 	//Placeholder move speed formula
-	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility + 3.0f;
+	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility + 600.0f;
 }
 
 /*************************************************************************/
@@ -286,7 +337,7 @@ void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 {
 	//Placeholder attack speed formula
-	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 5.0f + 10.0f;
+	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 5.0f + 12.0f;
 }
 
 /*************************************************************************/
