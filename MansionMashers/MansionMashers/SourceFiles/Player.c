@@ -143,7 +143,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 			}
 		}
 	}
-	if(FoxInput_KeyTriggered('Q'))
+	if(FoxInput_KeyTriggered('Q') && CurrentPlayer->CurrentPlayerStats.CurrentBuff == None)
 	{
 		if(CurrentPlayer->BuffHeld != None)
 		{
@@ -157,6 +157,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 			case MovSpeed:
 				CurrentPlayer->CurrentPlayerStats.MoveSpeed += 300.0f;
 				break;
+			case DmgBuff:
+				CurrentPlayer->CurrentPlayerStats.Damage += 20;
+				break;
 			}
 
 		}
@@ -169,6 +172,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->BuffHeld = MovSpeed;
 	}
+	else if(FoxInput_KeyTriggered('3'))
+	{
+		CurrentPlayer->BuffHeld = DmgBuff;
+	}
+
 
 	if(CurrentPlayer->CurrentPlayerStats.CurrentBuff != None)
 	{
@@ -183,13 +191,15 @@ void InputPlayer(struct Player *CurrentPlayer)
 			case MovSpeed:
 				updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
 				break;
+			case DmgBuff:
+				updateDamage(&CurrentPlayer->CurrentPlayerStats);
+				break;
 			}
 
 			CurrentPlayer->CurrentPlayerStats.BuffTimer = 0;
 			CurrentPlayer->CurrentPlayerStats.CurrentBuff = None;
 		}
 	}
-	printf("%f : %d\n", CurrentPlayer->CurrentPlayerStats.MoveSpeed, CurrentPlayer->CurrentPlayerStats.BuffTimer);
 
 	// Move left if A is pressed
 	if(FoxInput_KeyDown('A'))

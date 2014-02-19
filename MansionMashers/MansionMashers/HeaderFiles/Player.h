@@ -11,7 +11,7 @@
 #include "CollisionBox.h"
 #include "FoxObjects.h"
 
-enum BuffType { None, AtkSpeed, MovSpeed, HPBuff, DmgBuff };
+enum BuffType { None, AtkSpeed, MovSpeed, DmgBuff };
 
 typedef struct PlayerParts
 {
