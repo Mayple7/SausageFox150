@@ -161,7 +161,6 @@ void FreeFloatingText(TextGlyphs *FirstLetter)
 
 		FreeText(FirstLetter);
 	}
-
 }
 
 /*************************************************************************/
@@ -269,9 +268,7 @@ void FreeObjectList(void)
 			//Free the mesh and texture data
 			FreeEnemy(&enemyList[i]);
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
+		//For floating damage text only!
 		if (floatTextList[i])
 		{
 			FreeText(floatTextList[i]);

@@ -153,10 +153,9 @@ void AddFloatingText(TextGlyphs* FirstLetter)
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
-		if(!floatTextList[i]->Created)
+		if(!floatTextList[i])
 		{
 			floatTextList[i] = FirstLetter;
-			floatTextList[i]->Created = TRUE;
 			printf("Floating Text at %i Created\n", i);
 			return;
 		}
@@ -252,15 +251,7 @@ void ResetObjectList(void)
 		foodList			= (Food *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Food));
 		enemyList			= (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
 		weaponList			= (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
-
-		floatTextComp		= (TextGlyphs *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs));
 		floatTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs *));
-		for (i = 0; i < COLLIDEAMOUNT; i++)
-		{
-			floatTextList[i] = floatTextComp + (sizeof(TextGlyphs) * i);
-			floatTextList[i]->Created = 0;
-		}
-
 		particleList		= (Particle *) CallocMyAlloc(PARTICLEAMOUNT, sizeof(Particle));
 		particleSystemList  = (ParticleSystem *) CallocMyAlloc(PARTICLESYSTEMAMOUNT, sizeof(ParticleSystem));
 		buttonList			= (Button *) CallocMyAlloc(BUTTONAMOUNT, sizeof(Button));

@@ -16,7 +16,6 @@ Enemy *enemyList;
 Weapon *weaponList;
 Button *buttonList;
 struct TextGlyphs **floatTextList;
-struct TextGlyphs *floatTextComp;
 struct ParticleSystem *particleSystemList;
 struct Particle *particleList;
 

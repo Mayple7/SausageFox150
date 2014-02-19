@@ -171,11 +171,11 @@ void FreeText(TextGlyphs *FirstLetter)
 {
 	TextGlyphs *NextLetter;
 
-	while(FirstLetter->Created)
+	while(FirstLetter)
 	{
 		NextLetter = FirstLetter->NextLetter;
-		//if(FirstLetter->Glyph)
-			//freeObject(FirstLetter->Glyph);
+		if(FirstLetter->Glyph)
+			freeObject(FirstLetter->Glyph);
 		FreeMyAlloc(FirstLetter);
 		FirstLetter = NextLetter;
 	}
@@ -371,7 +371,7 @@ void UpdateFloatingText(TextGlyphs *FirstLetter)
 	TextGlyphs *nextLetter;
 	nextLetter = FirstLetter;
 
-	if(nextLetter->Glyph->Alpha <= 0.0f)
+	if(nextLetter && nextLetter->Glyph->Alpha <= 0.0f)
 	{
 		FreeFloatingText(FirstLetter);
 		return;
