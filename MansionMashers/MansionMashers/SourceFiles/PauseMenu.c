@@ -39,6 +39,8 @@ Button* BGMSlider;
 TextGlyphs* SFXText;
 TextGlyphs* BGMText;
 
+FoxSound BackgroundSnd;
+
 void (*LevelToDraw)();
 
 float SFXSliderPos, BGMSliderPos;
@@ -51,6 +53,8 @@ void InitializePause(void (*DrawLevel)())
 {
 	float camX, camY;
 	Vec3 TextColor;
+
+	CreatePauseSound(&BackgroundSnd, "Sounds/awesome.mp3", LargeSnd);
 
 	volumestring = (char *)MallocMyAlloc(5, sizeof(char));
 
@@ -124,6 +128,7 @@ void UpdatePause(void)
 	{
 		AESysFrameStart();
 		StartFoxFrame();
+		PlayAudio(&BackgroundSnd);
 
 		if(FoxInput_KeyTriggered(VK_ESCAPE))
 		{
@@ -140,11 +145,19 @@ void UpdatePause(void)
 		}
 
 		DrawPause();
+		UpdateSoundSystem();
 		FoxInput_Update();
 		EventPause();
+
+		SaveVolume();
+		SetChannelGroupVolume(EffectType, SFXVolume);
+		SetChannelGroupVolume(MusicType, BGMVolume);
+		UpdateSoundSystem();
+
 		EndFoxFrame();
 		AESysFrameEnd();
 	}
+	TogglePauseSound(&BackgroundSnd);
 	SaveVolume();
 	FreePause();
 
@@ -159,6 +172,7 @@ void DrawPause(void)
 
 void FreePause(void)
 {
+	
 	freeObject(PauseText);
 	freeObject(SFXSliderGuide);
 	freeObject(BGMSliderGuide);
@@ -170,6 +184,7 @@ void FreePause(void)
 	FreeText(SFXText);
 	FreeText(BGMText);
 	FreeMyAlloc(volumestring);
+	ReleaseSound(BackgroundSnd.Sound);
 }
 
 void EventPause(void)

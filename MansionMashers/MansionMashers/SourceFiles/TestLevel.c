@@ -50,10 +50,9 @@ Sprite *OverlayGrid;
 Enemy *CurrentEnemy;
 HUDLayer HUDList;
 
-FoxSound BackgroundSnd;
-FoxSound Sound1;
-FoxSound Sound2;
-FoxChannels ChannelController;
+FoxSound *BackgroundSnd;
+FoxSound *Sound1;
+FoxSound *Sound2;
 float volume;
 TextGlyphs * volumetext;
 Sprite *Letters;
@@ -92,6 +91,7 @@ void InitializeTestLevel(void)
 	newID = 1;
 	// Reset the object list
 	ResetObjectList();
+	ResetSoundList();
 
 	// Set the HUDlist to 0
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
@@ -152,11 +152,10 @@ void InitializeTestLevel(void)
 	//CurrentEnemy = CreateEnemy("TextureFiles/EasyEnemy.png", EnemyType, 150, 150, newID++, 0, 0);
 
 	//Adding sounds
-	CreateSound("Sounds/drumloop.wav", &Sound1, SmallSnd);
-	CreateSound("Sounds/jaguar.wav", &Sound2, SmallSnd);
-	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
-	CreateChannelGroups(&ChannelController);
-	volume = GetSoundVolume(&BackgroundSnd);
+	Sound1 = CreateSound("Sounds/drumloop.wav", SmallSnd);
+	Sound2 = CreateSound("Sounds/jaguar.wav", SmallSnd);
+	BackgroundSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
+	volume = GetSoundVolume(BackgroundSnd);
 	volumestring[0] = '1';
 	volumestring[1] = '0';
 	volumestring[2] = '0';
@@ -185,16 +184,16 @@ void UpdateTestLevel(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	//Play sounds
-	PlayAudio(&BackgroundSnd, &ChannelController);
+	PlayAudio(BackgroundSnd);
 
 	if(AEInputCheckTriggered('D'))
-		PlayAudio(&Sound1, &ChannelController);
+		PlayAudio(Sound1);
 	if(AEInputCheckCurr('A'))
-		PlayAudio(&Sound2, &ChannelController);
+		PlayAudio(Sound2);
 	if(AEInputCheckTriggered('P'))
 	{
 		//TogglePauseSound(&BackgroundSnd);
-		TogglePauseChannel(&ChannelController, EffectType);
+		TogglePauseChannel(EffectType);
 	}
 	
 	//printf("BG Volume: %i\n", (int)volume);
@@ -203,14 +202,14 @@ void UpdateTestLevel(void)
 	{
 		if(volume > 0)
 			volume = volume - 0.01f;
-		SetChannelGroupVolume(&ChannelController, EffectType, volume);
+		SetChannelGroupVolume(EffectType, volume);
 		ChangeTextString(volumetext, VolumetoString(volumestring, volume * 100));
 	}
 	if(AEInputCheckCurr(VK_UP))
 	{
 		if(volume < 1)
 			volume = volume + 0.01f;
-		SetChannelGroupVolume(&ChannelController, EffectType, volume * 100);
+		SetChannelGroupVolume(EffectType, volume * 100);
 		ChangeTextString(volumetext, VolumetoString(volumestring, volume * 100));
 	}
 
@@ -259,10 +258,7 @@ void DrawTestLevel(void)
 void FreeTestLevel(void)
 {
 	FreeObjectList();
-	ReleaseChannelGroups(&ChannelController);
-	ReleaseSound(Sound1.Sound);
-	ReleaseSound(Sound2.Sound);
-	ReleaseSound(BackgroundSnd.Sound);
+	FreeSoundList();
 }
 
 /*************************************************************************/
