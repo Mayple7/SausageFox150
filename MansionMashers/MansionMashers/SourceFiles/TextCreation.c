@@ -172,10 +172,12 @@ void FreeText(TextGlyphs *FirstLetter)
 	int i;
 	TextGlyphs *NextLetter;
 
+	//Find the pointer in the list that is the first letter
 	for(i = 0; i < COLLIDEAMOUNT; i++)
 		if (staticTextList[i] == FirstLetter)
 			break;
 
+	//Go through all the letters and free my people
 	while(FirstLetter)
 	{
 		NextLetter = FirstLetter->NextLetter;
@@ -185,6 +187,7 @@ void FreeText(TextGlyphs *FirstLetter)
 		FirstLetter = NextLetter;
 	}
 
+	//Now remove that pointer.
 	staticTextList[i] = NULL;
 }
 
