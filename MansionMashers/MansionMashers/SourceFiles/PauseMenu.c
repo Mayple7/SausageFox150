@@ -147,7 +147,6 @@ void UpdatePause(void)
 	}
 	SaveVolume();
 	FreePause();
-
 }
 
 void DrawPause(void)

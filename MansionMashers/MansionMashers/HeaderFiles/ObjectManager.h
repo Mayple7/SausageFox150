@@ -16,6 +16,7 @@ Enemy *enemyList;
 Weapon *weaponList;
 Button *buttonList;
 struct TextGlyphs **floatTextList;
+struct TextGlyphs **staticTextList;
 struct ParticleSystem *particleSystemList;
 struct Particle *particleList;
 
@@ -27,6 +28,7 @@ Weapon* AddWeapon(void);
 Enemy* AddEnemy(void);
 Button* AddButton(void);
 void AddFloatingText(struct TextGlyphs* FirstLetter);
+void AddStaticText(struct TextGlyphs* FirstLetter);
 struct ParticleSystem *AddParticleSystem(void);
 struct Particle *AddParticle(void);
 

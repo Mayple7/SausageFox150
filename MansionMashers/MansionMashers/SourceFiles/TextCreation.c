@@ -68,7 +68,8 @@ TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 
 	}
 
 	firstLetter = (TextGlyphs *) CallocMyAlloc(1, sizeof(TextGlyphs));
-	// Uppercases the letters then creates a glyph
+	AddStaticText(firstLetter);
+	//Uppercases the letters then creates a glyph
 	for(i = 0; i < length; i++)
 	{
 		if(i != 0)
@@ -155,7 +156,6 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 	}
 	else
 		return NULL;
-
 }
 
 /*************************************************************************/
@@ -169,7 +169,12 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 /*************************************************************************/
 void FreeText(TextGlyphs *FirstLetter)
 {
+	int i;
 	TextGlyphs *NextLetter;
+
+	for(i = 0; i < COLLIDEAMOUNT; i++)
+		if (staticTextList[i] == FirstLetter)
+			break;
 
 	while(FirstLetter)
 	{
@@ -179,6 +184,8 @@ void FreeText(TextGlyphs *FirstLetter)
 		FreeMyAlloc(FirstLetter);
 		FirstLetter = NextLetter;
 	}
+
+	staticTextList[i] = NULL;
 }
 
 /*************************************************************************/
@@ -371,13 +378,13 @@ void UpdateFloatingText(TextGlyphs *FirstLetter)
 	TextGlyphs *nextLetter;
 	nextLetter = FirstLetter;
 
-	if(nextLetter && nextLetter->Glyph->Alpha <= 0.0f)
+	if(nextLetter && nextLetter->Glyph && nextLetter->Glyph->Alpha <= 0.0f)
 	{
 		FreeFloatingText(FirstLetter);
 		return;
 	}
 
-	while(nextLetter)
+	while(nextLetter && nextLetter->Glyph)
 	{
 		if(nextLetter->Glyph->Alpha > 0.9f)
 		{

@@ -237,12 +237,12 @@ void DrawShowcase(void)
 /*************************************************************************/
 void FreeShowcase(void)
 {
-	FreeText(Juli);
-	FreeText(Luke);
-	FreeText(Kaden);
-	FreeText(Dan);
-	FreeText(Fox);
-	FreeText(subText);
+	//FreeText(Juli);
+	//FreeText(Luke);
+	//FreeText(Kaden);
+	//FreeText(Dan);
+	//FreeText(Fox);
+	//FreeText(subText);
 	FreeObjectList();
 	//ReleaseSound(BackgroundSnd.Sound);
 
