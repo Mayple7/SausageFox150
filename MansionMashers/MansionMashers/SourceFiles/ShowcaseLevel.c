@@ -90,7 +90,7 @@ void InitializeShowcase(void)
 	ResetObjectList();
 
 	// Create the player
-	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
 
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 

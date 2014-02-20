@@ -84,7 +84,7 @@ void InitializeTutorial(void)
 	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
 	CreateSound("Sounds/GongHit.wav", &GongSnd, SmallSnd);
 
-	InitializePlayer(&CurrentPlayer, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
+	InitializePlayer(&CurrentPlayer, Ginko, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
@@ -261,6 +261,7 @@ void DrawTutorial(void)
 
 void FreeTutorial(void)
 {
+	SavePlayer(&CurrentPlayer);
 	FreeObjectList();
 	ReleaseChannelGroups(&ChannelController);
 	ReleaseSound(BackgroundSnd.Sound);
@@ -313,7 +314,7 @@ void fadeToEnd(void)
 			if (!BackgroundSnd.Paused)
 			{
 			TogglePauseSound(&BackgroundSnd);
-			SetChannelGroupVolume(&ChannelController, EffectType, 50);
+			//SetChannelGroupVolume(&ChannelController, EffectType, 50);
 			}
 			PlayAudio(&GongSnd, &ChannelController);
 		}
