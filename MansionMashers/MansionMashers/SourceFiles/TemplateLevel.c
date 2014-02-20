@@ -65,7 +65,7 @@ void InitializeLevel(void)
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 }
 

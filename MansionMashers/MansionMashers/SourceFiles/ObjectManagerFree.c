@@ -37,7 +37,7 @@
 void freeObject(Sprite* object)
 {
 	//Make sure the sprite exists
-	if (object && object->Created)
+	if (object && (object->Created & CREATED))
 	{
 		//Free the mesh and texture data
 		object->Created = 0;
@@ -273,6 +273,11 @@ void FreeObjectList(void)
 		{
 			FreeText(floatTextList[i]);
 		}
+		//For static normal text only!
+		if (staticTextList[i])
+		{
+			FreeText(staticTextList[i]);
+		}
 	}
 
 	for (i = 0; i < PARTICLEAMOUNT; i++)
@@ -308,5 +313,6 @@ void FreeObjectList(void)
 	FreeMyAlloc(enemyList);
 	FreeMyAlloc(weaponList);
 	FreeMyAlloc(floatTextList);
+	FreeMyAlloc(staticTextList);
 	FreeMyAlloc(buttonList);
 }

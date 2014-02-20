@@ -45,7 +45,7 @@ Player CurrentPlayer;
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float yPos)
+void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int newID, float xPos, float yPos)
 {
 	int i;
 
@@ -53,6 +53,8 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 	{
 		CurrentPlayer->CollisionData[i] = -1;
 	}
+
+	CurrentPlayer->Princess = Princess;
 
 	//Creates the sprite for the player
 	CreatePlayerSprites(CurrentPlayer);
@@ -88,7 +90,11 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 
-	updateDamage(&CurrentPlayer->CurrentPlayerStats);
+	if(LoadPlayer(CurrentPlayer) < 1)
+	{
+		LoadNewPlayer(CurrentPlayer);
+		AE_ASSERT_MESG("SOMETHING BE BROKED");
+	}
 }
 
 /*************************************************************************/
@@ -865,3 +871,102 @@ float RotateToAngle(float angle, float angleTo, float speed)
 	return angle + diff * speed;	
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Saves the player
+	
+	\param CurrentPlayer
+	A pointer to the player to be saved
+*/
+/*************************************************************************/
+void SavePlayer(Player *CurrentPlayer)
+{
+	FILE *fp;
+	char* string = (char *)MallocMyAlloc(500, 1);
+
+	sprintf(string, "Princess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\n%s",
+		CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
+		CurrentPlayer->PlayerWeapon->WeaponName);
+	
+	fp = fopen("../GameData.cfg", "wt");
+	if(fp)
+	{
+		int num = 0;
+		num = fprintf(fp, "%s", string);
+		fclose(fp);
+	}
+
+	FreeMyAlloc(string);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Loads the player
+	
+	\param CurrentPlayer
+	A pointer to the player to be loaded
+*/
+/*************************************************************************/
+int LoadPlayer(Player *CurrentPlayer)
+{
+	FILE *fp;
+
+	fp = fopen("../GameData.cfg", "rt");
+	if(fp)
+	{
+		int num = 0;
+		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
+			&CurrentPlayer->Princess, &CurrentPlayer->BuffHeld, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
+			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
+			CurrentPlayer->PlayerWeapon->WeaponName);
+
+		fclose(fp);
+		if(num == 10)
+		{
+			updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
+			updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
+			updateDamage(&CurrentPlayer->CurrentPlayerStats);
+			updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
+			updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+			return 1;
+		}
+		else
+			return -1;
+	}
+	else
+	{
+		return 0;
+	}
+
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Loads a new player
+	
+	\param CurrentPlayer
+	A pointer to the player to be loaded
+*/
+/*************************************************************************/
+void LoadNewPlayer(Player *CurrentPlayer)
+{
+	CurrentPlayer->Princess = Mayple;
+	CurrentPlayer->BuffHeld = None;
+
+	CurrentPlayer->CurrentPlayerStats.Agility = 0;
+	CurrentPlayer->CurrentPlayerStats.Strength = 0;
+	CurrentPlayer->CurrentPlayerStats.Defense = 0;
+	
+	updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
+	updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
+	updateDamage(&CurrentPlayer->CurrentPlayerStats);
+	updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
+	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+
+	CurrentPlayer->CurrentPlayerStats.Money = 0;
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+}

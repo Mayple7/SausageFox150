@@ -90,7 +90,7 @@ void InitializeShowcase(void)
 	ResetObjectList();
 
 	// Create the player
-	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
 
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
@@ -237,12 +237,12 @@ void DrawShowcase(void)
 /*************************************************************************/
 void FreeShowcase(void)
 {
-	FreeText(Juli);
-	FreeText(Luke);
-	FreeText(Kaden);
-	FreeText(Dan);
-	FreeText(Fox);
-	FreeText(subText);
+	//FreeText(Juli);
+	//FreeText(Luke);
+	//FreeText(Kaden);
+	//FreeText(Dan);
+	//FreeText(Fox);
+	//FreeText(subText);
 	FreeObjectList();
 	//ReleaseSound(BackgroundSnd.Sound);
 
