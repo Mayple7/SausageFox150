@@ -165,6 +165,29 @@ void AddFloatingText(TextGlyphs* FirstLetter)
 /*************************************************************************/
 /*!
 	\brief
+	Adds an enemy to the enemy list
+	
+	\return
+	The enemy added to the list
+*/
+/*************************************************************************/
+void AddStaticText(TextGlyphs* FirstLetter)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if(!staticTextList[i])
+		{
+			staticTextList[i] = FirstLetter;
+			printf("Static Text at %i Created\n", i);
+			return;
+		}
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Adds a particle system to the particle system list
 	
 	\return
@@ -252,6 +275,7 @@ void ResetObjectList(void)
 		enemyList			= (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
 		weaponList			= (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
 		floatTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs *));
+		staticTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs *));
 		particleList		= (Particle *) CallocMyAlloc(PARTICLEAMOUNT, sizeof(Particle));
 		particleSystemList  = (ParticleSystem *) CallocMyAlloc(PARTICLESYSTEMAMOUNT, sizeof(ParticleSystem));
 		buttonList			= (Button *) CallocMyAlloc(BUTTONAMOUNT, sizeof(Button));
