@@ -160,7 +160,6 @@ void UpdatePause(void)
 	TogglePauseSound(&BackgroundSnd);
 	SaveVolume();
 	FreePause();
-
 }
 
 void DrawPause(void)
