@@ -82,7 +82,7 @@ typedef struct Player
 	int FlipY;
 	int FlipXPrev;
 	int FlipYPrev;
-  
+	
 	enum Direction PlayerDirection;
 
 	Vec2 Position;

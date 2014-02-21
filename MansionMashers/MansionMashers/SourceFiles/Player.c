@@ -309,8 +309,8 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 
 void DestroyPlayer(Player *CurrentPlayer)
 {
-	//FreeMyAlloc(CurrentPlayer->PlayerWeapon->WeaponName);
-	//FreeMyAlloc(CurrentPlayer->PlayerWeapon->WeaponStatsString);
+	CurrentPlayer->PlayerCollider.collisionDebug = FALSE;
+	AEGfxMeshFree(CurrentPlayer->PlayerCollider.DebugMesh);
 }
 
 /*************************************************************************/
