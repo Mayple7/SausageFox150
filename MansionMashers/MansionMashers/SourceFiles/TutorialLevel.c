@@ -59,7 +59,7 @@ Sprite* GameLogo;
 Weapon* StarterAxe;
 Weapon* StarterSword;
 
-FoxSound *BackgroundSnd;
+FoxSound *BackSnd;
 FoxSound *GongSnd;
 
 int newID;
@@ -81,7 +81,7 @@ void InitializeTutorial(void)
 	ResetObjectList();
 	ResetSoundList();
 
-	BackgroundSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
+	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
 	InitializePlayer(&CurrentPlayer, Ginko, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
@@ -223,7 +223,7 @@ void UpdateTutorial(void)
 		RemoveDebugMode();
 		OverlayGrid->Visible = FALSE;
 	}
-	PlayAudio(BackgroundSnd);
+	PlayAudio(BackSnd);
 
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
@@ -231,12 +231,12 @@ void UpdateTutorial(void)
 	{
 		if(BlackOverlay->Alpha < 0.1)
 		{
-			TogglePauseSound(BackgroundSnd);
+			TogglePauseSound(BackSnd);
 			InitializePause(&DrawTutorial);
 			UpdatePause();
 			SetChannelGroupVolume(EffectType, SFXVolume);
 			SetChannelGroupVolume(MusicType, BGMVolume);
-			TogglePauseSound(BackgroundSnd);
+			TogglePauseSound(BackSnd);
 		}
 		else if(GameLogo->Alpha > 0.8)
 		{
@@ -313,9 +313,9 @@ void fadeToEnd(void)
 		else
 		{
 			GameLogo->Alpha += GetDeltaTime();
-			if (!BackgroundSnd->Paused)
+			if (!BackSnd->Paused)
 			{
-			TogglePauseSound(BackgroundSnd);
+			TogglePauseSound(BackSnd);
 			//SetChannelGroupVolume(&ChannelController, EffectType, 50);
 			}
 			PlayAudio(GongSnd);

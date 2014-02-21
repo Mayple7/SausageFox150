@@ -46,6 +46,8 @@ Sprite* Level1Panel1;
 Sprite* Level1Door1;
 Platform* Table1;
 
+FoxSound *testing;
+
 
 /*************************************************************************/
 /*!
@@ -70,6 +72,7 @@ void InitializeLevel1(void)
 	Vec3 TextTint;
 	newID = 1;
 	ResetObjectList();
+	ResetSoundList();
 	ResetCamera();
 
 	// Initialize the player
@@ -109,7 +112,7 @@ void UpdateLevel1(void)
 {
 	EventLevel1();
 
-	
+	PlayAudio(testing);
 
 
 	// This should be the last line in this function
@@ -153,6 +156,7 @@ void DrawLevel1(void)
 void FreeLevel1(void)
 {
 	FreeObjectList();
+	FreeSoundList();
 }
 
 /*************************************************************************/
