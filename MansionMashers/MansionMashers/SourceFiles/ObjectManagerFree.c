@@ -103,10 +103,12 @@ void FreePlatform(Platform *CurrentPlatform)
 /*************************************************************************/
 void FreeWeapon(Weapon *CurrentWeapon)
 {
-	//BECAUSE EVERYONE LIKES FREE FOOD
+	//Weapon, pronounced: "We-pown"
 	if(CurrentWeapon->objID > -1)
 	{
 		CurrentWeapon->objID = -1;
+		FreeMyAlloc(CurrentWeapon->WeaponName);
+		FreeMyAlloc(CurrentWeapon->WeaponStatsString);
 		CurrentWeapon->WeaponPickup.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentWeapon->WeaponPickup.DebugMesh);
 
