@@ -59,8 +59,9 @@ Sprite* GameLogo;
 Weapon* StarterAxe;
 Weapon* StarterSword;
 
-FoxSound * BackgroundSnd;
-FoxSound * GongSnd;
+FoxSound BackgroundSnd;
+FoxSound GongSnd;
+FoxChannels ChannelController;
 int newID;
 
 void LoadTutorial(void)
@@ -78,14 +79,12 @@ void InitializeTutorial(void)
 
 	newID = 1;
 	ResetObjectList();
-	ResetSoundList();
+	CreateChannelGroups(&ChannelController);
 
-	BackgroundSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
-	printf("bgsnd : %i\n", BackgroundSnd);
-	//GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
-	//printf("gongsnd : %i\n", GongSnd);
+	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
+	CreateSound("Sounds/GongHit.wav", &GongSnd, SmallSnd);
 
-	InitializePlayer(&CurrentPlayer, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
+	InitializePlayer(&CurrentPlayer, Ginko, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
@@ -151,8 +150,8 @@ void InitializeTutorial(void)
 
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 900, -205, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	SetChannelGroupVolume(EffectType, SFXVolume);
-	SetChannelGroupVolume(MusicType, BGMVolume);
+	SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
+	SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
 
 	RemoveDebugMode();
 	OverlayGrid->Visible = FALSE;
@@ -224,7 +223,7 @@ void UpdateTutorial(void)
 		RemoveDebugMode();
 		OverlayGrid->Visible = FALSE;
 	}
-	PlayAudio(BackgroundSnd);
+	PlayAudio(&BackgroundSnd, &ChannelController);
 
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
@@ -232,14 +231,10 @@ void UpdateTutorial(void)
 	{
 		if(BlackOverlay->Alpha < 0.1)
 		{
-			TogglePauseSound(BackgroundSnd);
 			InitializePause(&DrawTutorial);
-			
 			UpdatePause();
-			
-			SetChannelGroupVolume(EffectType, SFXVolume);
-			SetChannelGroupVolume(MusicType, BGMVolume);
-			TogglePauseSound(BackgroundSnd);
+			SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
+			SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
 		}
 		else if(GameLogo->Alpha > 0.8)
 		{
@@ -266,13 +261,17 @@ void DrawTutorial(void)
 
 void FreeTutorial(void)
 {
+	SavePlayer(&CurrentPlayer);
 	FreeObjectList();
-	FreeSoundList();
+	ReleaseChannelGroups(&ChannelController);
+	ReleaseSound(BackgroundSnd.Sound);
+	ReleaseSound(GongSnd.Sound);
 }
 
 void UnloadTutorial(void)
 {
 	DestroyTextureList();
+	DestroyPlayer(&CurrentPlayer);
 }
 
 void EventTutorial(void)
@@ -313,12 +312,12 @@ void fadeToEnd(void)
 		else
 		{
 			GameLogo->Alpha += GetDeltaTime();
-			if (!BackgroundSnd->Paused)
+			if (!BackgroundSnd.Paused)
 			{
-			TogglePauseSound(BackgroundSnd);
-			SetChannelGroupVolume(EffectType, 50);
+			TogglePauseSound(&BackgroundSnd);
+			//SetChannelGroupVolume(&ChannelController, EffectType, 50);
 			}
-			PlayAudio(GongSnd);
+			PlayAudio(&GongSnd, &ChannelController);
 		}
 
 	}

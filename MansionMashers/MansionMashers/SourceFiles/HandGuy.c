@@ -68,7 +68,7 @@ void InitializeHandGuy(void)
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
@@ -125,6 +125,7 @@ void UnloadHandGuy(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
+	DestroyPlayer(&CurrentPlayer);
 }
 
 /*************************************************************************/

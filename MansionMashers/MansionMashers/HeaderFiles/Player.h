@@ -12,6 +12,7 @@
 #include "FoxObjects.h"
 
 enum BuffType { None, AtkSpeed, MovSpeed, DmgBuff };
+enum Character { Mayple, Ginko, Holly, Kaya};
 
 typedef struct PlayerParts
 {
@@ -57,6 +58,8 @@ typedef struct PlayerStats
 
 typedef struct Player
 {
+	enum Character Princess;
+
 	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;
 	CollisionBox PlayerCollider;
@@ -79,7 +82,7 @@ typedef struct Player
 	int FlipY;
 	int FlipXPrev;
 	int FlipYPrev;
-  
+	
 	enum Direction PlayerDirection;
 
 	Vec2 Position;
@@ -91,12 +94,16 @@ typedef struct Player
 Player CurrentPlayer;
 
 //Functions
-void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float yPos);
+void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int newID, float xPos, float yPos);
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
+void DestroyPlayer(Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
 void DetectPlayerCollision(void);
 void Animation(Player *Object);
 void CreatePlayerSprites(Player *Player);
+void SavePlayer(Player *CurrentPlayer);
+int LoadPlayer(Player *CurrentPlayer);
+void LoadNewPlayer(Player *CurrentPlayer);
 
 //Updating non-modifiable player stats
 void updateMaxHealth(PlayerStats *CurrentPlayerStats);

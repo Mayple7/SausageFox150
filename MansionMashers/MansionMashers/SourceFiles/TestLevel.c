@@ -146,7 +146,7 @@ void InitializeTestLevel(void)
 	ColliderInvisible->Visible = FALSE;
 
 	// Creates the player
-	InitializePlayer(&CurrentPlayer, newID++, 0, 0);
+	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, 0);
 
 	// Creates the enemy
 	//CurrentEnemy = CreateEnemy("TextureFiles/EasyEnemy.png", EnemyType, 150, 150, newID++, 0, 0);

@@ -45,7 +45,7 @@ Player CurrentPlayer;
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float yPos)
+void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int newID, float xPos, float yPos)
 {
 	int i;
 
@@ -54,8 +54,7 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 		CurrentPlayer->CollisionData[i] = -1;
 	}
 
-	//Creates the sprite for the player
-	CreatePlayerSprites(CurrentPlayer);
+	CurrentPlayer->Princess = Princess;
 
 	//Default position of the player
 	CurrentPlayer->Position.x = xPos * GetLoadRatio();
@@ -88,7 +87,14 @@ void InitializePlayer(struct Player *CurrentPlayer, int newID, float xPos, float
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 
-	updateDamage(&CurrentPlayer->CurrentPlayerStats);
+	if(LoadPlayer(CurrentPlayer) < 1)
+	{
+		LoadNewPlayer(CurrentPlayer);
+		AE_ASSERT_MESG("SOMETHING BE BROKED");
+	}
+
+	//Creates the sprite for the player
+	CreatePlayerSprites(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -112,8 +118,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
 	}
-
-	
 
 	// not key press for direction then slow down!
 	if(!FoxInput_KeyDown('D') && !FoxInput_KeyDown('A'))
@@ -161,7 +165,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 				CurrentPlayer->CurrentPlayerStats.Damage += 20;
 				break;
 			}
-
 		}
 	}
 	if(FoxInput_KeyTriggered('1'))
@@ -176,7 +179,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->BuffHeld = DmgBuff;
 	}
-
 
 	if(CurrentPlayer->CurrentPlayerStats.CurrentBuff != None)
 	{
@@ -303,6 +305,12 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Updates the collision box
 	UpdateCollisionPosition(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
+}
+
+void DestroyPlayer(Player *CurrentPlayer)
+{
+	CurrentPlayer->PlayerCollider.collisionDebug = FALSE;
+	AEGfxMeshFree(CurrentPlayer->PlayerCollider.DebugMesh);
 }
 
 /*************************************************************************/
@@ -650,7 +658,6 @@ void Animation(Player *Object)
 	ArmUpr2->FlipX = Object->FlipX;
 	ArmLwr2->FlipX = Object->FlipX;
 	Weap->FlipX = Object->FlipX;
-	
 
 	if (Object->FlipX == FALSE)
 	{
@@ -667,7 +674,6 @@ void Animation(Player *Object)
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
 		
-		
 		LegUpr2->Rotation = -LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
 		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
@@ -678,7 +684,6 @@ void Animation(Player *Object)
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
-		
 		
 		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
 		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
@@ -724,7 +729,6 @@ void Animation(Player *Object)
 		Weap->Position.x = ArmLwr2->Position.x - (float)cos(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
 		Weap->Position.y = ArmLwr2->Position.y - (float)sin(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
 		Weap->ZIndex = 21;
-
 	}
 	else
 	{
@@ -741,7 +745,6 @@ void Animation(Player *Object)
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
 		
-
 		LegUpr2->Rotation = LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
 		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
@@ -796,8 +799,6 @@ void Animation(Player *Object)
 		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
 		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
 		Weap->ZIndex = 22;
-
-
 	}
 
 	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
@@ -808,7 +809,33 @@ void Animation(Player *Object)
 
 void CreatePlayerSprites(Player *Object)
 {
-	Object->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 20, 1, 1, 0, 0);
+	switch(Object->Princess)
+	{
+	case Mayple:
+		Object->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, 20, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/SkirtMayple.png", 300.0f, 300.0f, 23, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = CreateSprite("TextureFiles/BodyMayple.png", 300.0f, 300.0f, 22, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, 24, 1, 1, 0, 0);
+		break;
+	case Ginko:
+		Object->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, 20, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/SkirtGinko.png", 300.0f, 300.0f, 23, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = CreateSprite("TextureFiles/BodyGinko.png", 300.0f, 300.0f, 22, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, 24, 1, 1, 0, 0);
+		break;
+	case Holly:
+		Object->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, 20, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/SkirtHolly.png", 300.0f, 300.0f, 23, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = CreateSprite("TextureFiles/BodyHolly.png", 300.0f, 300.0f, 22, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, 24, 1, 1, 0, 0);
+		break;
+	case Kaya:
+		Object->PlayerSpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, 20, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/SkirtKaya.png", 300.0f, 300.0f, 23, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = CreateSprite("TextureFiles/BodyKaya.png", 300.0f, 300.0f, 22, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, 24, 1, 1, 0, 0);
+		break;
+	}
 
 	Object->PlayerSpriteParts.ArmLower2 = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 20, 1, 1, 0, 0);
 
@@ -820,11 +847,7 @@ void CreatePlayerSprites(Player *Object)
 
 	Object->PlayerSpriteParts.LegLower2 = CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, 22, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.Skirt = CreateSprite("TextureFiles/Skirt.png", 300.0f, 300.0f, 22, 4, 1, 0, 0);
-
 	Object->PlayerSpriteParts.Skirt->AnimationActive = 0;
-
-	Object->PlayerSpriteParts.Body = CreateSprite("TextureFiles/Body.png", 300.0f, 300.0f, 22, 4, 1, 0, 0);
 
 	Object->PlayerSpriteParts.Body->AnimationSpeed = 3;
 
@@ -836,9 +859,7 @@ void CreatePlayerSprites(Player *Object)
 
 	Object->TailSinValue = 0;
 
-	Object->PlayerSpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpper.png", 128.0f, 128.0f, 23, 1, 1, 0, 0);
-
-	Object->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 23, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 24, 1, 1, 0, 0);
 }
 
 
@@ -865,3 +886,101 @@ float RotateToAngle(float angle, float angleTo, float speed)
 	return angle + diff * speed;	
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Saves the player
+	
+	\param CurrentPlayer
+	A pointer to the player to be saved
+*/
+/*************************************************************************/
+void SavePlayer(Player *CurrentPlayer)
+{
+	FILE *fp;
+	char* string = (char *)MallocMyAlloc(500, 1);
+
+	sprintf(string, "Princess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\n%s",
+		CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
+		CurrentPlayer->PlayerWeapon->WeaponName);
+	
+	fp = fopen("../GameData.cfg", "wt");
+	if(fp)
+	{
+		int num = 0;
+		num = fprintf(fp, "%s", string);
+		fclose(fp);
+	}
+
+	FreeMyAlloc(string);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Loads the player
+	
+	\param CurrentPlayer
+	A pointer to the player to be loaded
+*/
+/*************************************************************************/
+int LoadPlayer(Player *CurrentPlayer)
+{
+	FILE *fp;
+
+	fp = fopen("../GameData.cfg", "rt");
+	if(fp)
+	{
+		int num = 0;
+		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
+			&CurrentPlayer->Princess, &CurrentPlayer->BuffHeld, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
+			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
+			CurrentPlayer->PlayerWeapon->WeaponName);
+
+		fclose(fp);
+		if(num == 10)
+		{
+			updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
+			updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
+			updateDamage(&CurrentPlayer->CurrentPlayerStats);
+			updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
+			updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+			return 1;
+		}
+		else
+			return -1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Loads a new player
+	
+	\param CurrentPlayer
+	A pointer to the player to be loaded
+*/
+/*************************************************************************/
+void LoadNewPlayer(Player *CurrentPlayer)
+{
+	CurrentPlayer->Princess = Mayple;
+	CurrentPlayer->BuffHeld = None;
+
+	CurrentPlayer->CurrentPlayerStats.Agility = 0;
+	CurrentPlayer->CurrentPlayerStats.Strength = 0;
+	CurrentPlayer->CurrentPlayerStats.Defense = 0;
+	
+	updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
+	updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
+	updateDamage(&CurrentPlayer->CurrentPlayerStats);
+	updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
+	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+
+	CurrentPlayer->CurrentPlayerStats.Money = 0;
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+}

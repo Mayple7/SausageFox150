@@ -73,7 +73,7 @@ void InitializeLevel1(void)
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
@@ -165,6 +165,7 @@ void UnloadLevel1(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
+	DestroyPlayer(&CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -194,7 +195,7 @@ void EventLevel1(void)
 	{
 		//InitializePause(&DrawLevel1);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_Restart);
+		SetNextState(GS_MainMenu);
 		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
