@@ -125,6 +125,7 @@ void UnloadLevel2(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
+	DestroyPlayer(&CurrentPlayer);
 }
 
 /*************************************************************************/
