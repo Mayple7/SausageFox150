@@ -84,9 +84,11 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
 
+	//Weapon
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 
+	//Load player stats
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
 		LoadNewPlayer(CurrentPlayer);
@@ -309,6 +311,7 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 
 void DestroyPlayer(Player *CurrentPlayer)
 {
+	//Free the debug box since it isn't getting released in the object manager
 	CurrentPlayer->PlayerCollider.collisionDebug = FALSE;
 	AEGfxMeshFree(CurrentPlayer->PlayerCollider.DebugMesh);
 }
