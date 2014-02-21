@@ -145,7 +145,7 @@ void UpdatePause(void)
 		}
 
 		DrawPause();
-		UpdateSoundSystem();
+
 		FoxInput_Update();
 		EventPause();
 
@@ -183,7 +183,7 @@ void FreePause(void)
 	FreeText(SFXText);
 	FreeText(BGMText);
 	FreeMyAlloc(volumestring);
-	ReleaseSound(BackgroundSnd.Sound);
+	//ReleaseSound(BackgroundSnd.Sound);
 }
 
 void EventPause(void)

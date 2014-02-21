@@ -98,7 +98,6 @@ void FMODInit(void)
 		printf("FMOD CREATED AND INITIALIZED\n");
 		success = FALSE;
 	}
-
 }
 
 /*************************************************************************/
@@ -138,10 +137,11 @@ void FMODQuit(void)
 	Used to tell if object should be stored in memory or streamed
 */
 /*************************************************************************/
-FoxSound* CreateSound(char *Filename, int type)
+FoxSound *CreateSound(char *Filename, int type)
 {
 	FMOD_RESULT result;
 	FoxSound *snd = AddSound();
+	printf("snd : %i\n", snd);
 
 	InitSoundStruct(snd, type);
 	
@@ -571,7 +571,10 @@ FoxSound *AddSound(void)
 	for(i = 0; i < MAX_SOUND_CHANNELS; i++)
 	{
 		if(soundList[i].sndID == 0 || soundList[i].sndID == -1)
+		{
+			printf("sl : %i\n", &soundList[i]);
 			return &soundList[i];
+		}
 	}
 	return NULL;
 }

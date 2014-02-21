@@ -57,7 +57,7 @@ void FMODErrCheck(FMOD_RESULT result);
 void FMODInit(void);
 void FMODQuit(void);
 
-FoxSound* CreateSound(char *Filename, int type);
+FoxSound *CreateSound(char *Filename, int type);
 //void CreateSound(char *Filename, FoxSound *SoundStruct, int Soundtype);
 
 void PlayAudio(FoxSound *snd);

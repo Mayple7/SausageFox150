@@ -81,7 +81,9 @@ void InitializeTutorial(void)
 	ResetSoundList();
 
 	BackgroundSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
-	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
+	printf("bgsnd : %i\n", BackgroundSnd);
+	//GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
+	//printf("gongsnd : %i\n", GongSnd);
 
 	InitializePlayer(&CurrentPlayer, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
