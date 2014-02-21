@@ -368,6 +368,7 @@ void ReleaseChannelGroups(FoxChannels *chnl)
 	result = FMOD_ChannelGroup_Release(chnl->Effects);
 	FMODErrCheck(result);
 	result = FMOD_ChannelGroup_Release(chnl->Music);
+	FMODErrCheck(result);
 
 	success = FALSE;
 }
@@ -705,7 +706,6 @@ void FreeSoundList(void)
 	}
 	
 	FreeMyAlloc(soundList);
-	FreeMyAlloc(channelGroupList);
 }
 
 void FreeChannelGroupList(void)

@@ -224,7 +224,6 @@ void DrawShowcase(void)
 	DrawObjectList();
 	DrawHUD(&HUDList);
 	SetCamera(&CurrentPlayer.Position, 250);
-
 	DrawCollisionList();
 	SetCamera(&CurrentPlayer.Position, 250);
 }

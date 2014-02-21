@@ -6,7 +6,7 @@
 
 //Defines
 #define MAX_SOUND_CHANNELS 40
-#define MAX_CHANNEL_GROUPS 2
+#define MAX_CHANNEL_GROUPS 1
 
 //Global Basic Type Variables
 float SFXVolume, BGMVolume;
@@ -39,17 +39,17 @@ typedef struct FoxSound
 typedef struct FoxChannels
 {
 
-	FMOD_CHANNELGROUP * Effects;
+	FMOD_CHANNELGROUP *Effects;
 	FMOD_BOOL EffectsPaused;
-	FMOD_CHANNELGROUP * Music;
+	FMOD_CHANNELGROUP *Music;
 	FMOD_BOOL MusicPaused;
 	int sndID;
 } FoxChannels;
 
 //Global Sound Type Variables
-FoxSound * soundList;
-FoxChannels * channelGroupList;
-FoxChannels * ChannelController;
+FoxSound *soundList;
+FoxChannels *channelGroupList;
+FoxChannels *ChannelController;
 
 //Functions
 FMOD_SYSTEM * GetSoundSystem(void);

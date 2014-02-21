@@ -59,9 +59,9 @@ Sprite* GameLogo;
 Weapon* StarterAxe;
 Weapon* StarterSword;
 
-FoxSound BackgroundSnd;
-FoxSound GongSnd;
-FoxChannels ChannelController;
+FoxSound *BackgroundSnd;
+FoxSound *GongSnd;
+
 int newID;
 
 void LoadTutorial(void)
@@ -79,10 +79,10 @@ void InitializeTutorial(void)
 
 	newID = 1;
 	ResetObjectList();
-	CreateChannelGroups(&ChannelController);
+	ResetSoundList();
 
-	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
-	CreateSound("Sounds/GongHit.wav", &GongSnd, SmallSnd);
+	BackgroundSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
+	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
 	InitializePlayer(&CurrentPlayer, Ginko, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
@@ -150,8 +150,8 @@ void InitializeTutorial(void)
 
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 900, -205, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
-	SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
+	SetChannelGroupVolume(EffectType, SFXVolume);
+	SetChannelGroupVolume(MusicType, BGMVolume);
 
 	RemoveDebugMode();
 	OverlayGrid->Visible = FALSE;
@@ -223,7 +223,7 @@ void UpdateTutorial(void)
 		RemoveDebugMode();
 		OverlayGrid->Visible = FALSE;
 	}
-	PlayAudio(&BackgroundSnd, &ChannelController);
+	PlayAudio(BackgroundSnd);
 
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
@@ -231,10 +231,12 @@ void UpdateTutorial(void)
 	{
 		if(BlackOverlay->Alpha < 0.1)
 		{
+			TogglePauseSound(BackgroundSnd);
 			InitializePause(&DrawTutorial);
 			UpdatePause();
-			SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
-			SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
+			SetChannelGroupVolume(EffectType, SFXVolume);
+			SetChannelGroupVolume(MusicType, BGMVolume);
+			TogglePauseSound(BackgroundSnd);
 		}
 		else if(GameLogo->Alpha > 0.8)
 		{
@@ -263,9 +265,8 @@ void FreeTutorial(void)
 {
 	SavePlayer(&CurrentPlayer);
 	FreeObjectList();
-	ReleaseChannelGroups(&ChannelController);
-	ReleaseSound(BackgroundSnd.Sound);
-	ReleaseSound(GongSnd.Sound);
+	FreeSoundList();
+	
 }
 
 void UnloadTutorial(void)
@@ -312,12 +313,12 @@ void fadeToEnd(void)
 		else
 		{
 			GameLogo->Alpha += GetDeltaTime();
-			if (!BackgroundSnd.Paused)
+			if (!BackgroundSnd->Paused)
 			{
-			TogglePauseSound(&BackgroundSnd);
+			TogglePauseSound(BackgroundSnd);
 			//SetChannelGroupVolume(&ChannelController, EffectType, 50);
 			}
-			PlayAudio(&GongSnd, &ChannelController);
+			PlayAudio(GongSnd);
 		}
 
 	}
