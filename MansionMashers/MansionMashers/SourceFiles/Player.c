@@ -84,10 +84,12 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
 
+	//Weapon
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
 
+	//Load player stats
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
 		LoadNewPlayer(CurrentPlayer);
@@ -120,8 +122,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
 	}
-
-	
 
 	// not key press for direction then slow down!
 	if(!FoxInput_KeyDown('D') && !FoxInput_KeyDown('A'))
@@ -169,7 +169,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 				CurrentPlayer->CurrentPlayerStats.Damage += 20;
 				break;
 			}
-
 		}
 	}
 	if(FoxInput_KeyTriggered('1'))
@@ -184,7 +183,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->BuffHeld = DmgBuff;
 	}
-
 
 	if(CurrentPlayer->CurrentPlayerStats.CurrentBuff != None)
 	{
@@ -311,6 +309,13 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Updates the collision box
 	UpdateCollisionPosition(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
+}
+
+void DestroyPlayer(Player *CurrentPlayer)
+{
+	//Free the debug box since it isn't getting released in the object manager
+	CurrentPlayer->PlayerCollider.collisionDebug = FALSE;
+	AEGfxMeshFree(CurrentPlayer->PlayerCollider.DebugMesh);
 }
 
 /*************************************************************************/
@@ -658,7 +663,6 @@ void Animation(Player *Object)
 	ArmUpr2->FlipX = Object->FlipX;
 	ArmLwr2->FlipX = Object->FlipX;
 	Weap->FlipX = Object->FlipX;
-	
 
 	if (Object->FlipX == FALSE)
 	{
@@ -675,7 +679,6 @@ void Animation(Player *Object)
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
 		
-		
 		LegUpr2->Rotation = -LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
 		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
@@ -686,7 +689,6 @@ void Animation(Player *Object)
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
-		
 		
 		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
 		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
@@ -732,7 +734,6 @@ void Animation(Player *Object)
 		Weap->Position.x = ArmLwr2->Position.x - (float)cos(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
 		Weap->Position.y = ArmLwr2->Position.y - (float)sin(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
 		Weap->ZIndex = 21;
-
 	}
 	else
 	{
@@ -749,7 +750,6 @@ void Animation(Player *Object)
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
 		
-
 		LegUpr2->Rotation = LegUpperDirection2;
 		LegUpr2->Position.x = Object->Position.x;
 		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
@@ -804,8 +804,6 @@ void Animation(Player *Object)
 		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
 		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
 		Weap->ZIndex = 22;
-
-
 	}
 
 	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
@@ -962,7 +960,6 @@ int LoadPlayer(Player *CurrentPlayer)
 	{
 		return 0;
 	}
-
 }
 
 /*************************************************************************/
