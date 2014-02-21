@@ -86,6 +86,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
+	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
 
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
@@ -95,6 +96,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 
 	//Creates the sprite for the player
 	CreatePlayerSprites(CurrentPlayer);
+	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
 }
 
 /*************************************************************************/
@@ -864,7 +866,7 @@ void CreatePlayerSprites(Player *Object)
 
 	Object->TailSinValue = 0;
 
-	Object->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 24, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, 25, 1, 1, 0, 0);
 }
 
 
@@ -905,10 +907,10 @@ void SavePlayer(Player *CurrentPlayer)
 	FILE *fp;
 	char* string = (char *)MallocMyAlloc(500, 1);
 
-	sprintf(string, "Princess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\n%s",
+	sprintf(string, "Princess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
 		CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
-		CurrentPlayer->PlayerWeapon->WeaponName);
+		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
 	fp = fopen("../GameData.cfg", "wt");
 	if(fp)
@@ -938,10 +940,10 @@ int LoadPlayer(Player *CurrentPlayer)
 	if(fp)
 	{
 		int num = 0;
-		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
+		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
 			&CurrentPlayer->Princess, &CurrentPlayer->BuffHeld, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
 			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
-			CurrentPlayer->PlayerWeapon->WeaponName);
+			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 
 		fclose(fp);
 		if(num == 10)
