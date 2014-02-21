@@ -165,6 +165,7 @@ void UnloadLevel1(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
+	DestroyPlayer(&CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -194,7 +195,7 @@ void EventLevel1(void)
 	{
 		//InitializePause(&DrawLevel1);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_Restart);
+		SetNextState(GS_MainMenu);
 		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}

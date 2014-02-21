@@ -271,6 +271,7 @@ void FreeTutorial(void)
 void UnloadTutorial(void)
 {
 	DestroyTextureList();
+	DestroyPlayer(&CurrentPlayer);
 }
 
 void EventTutorial(void)
