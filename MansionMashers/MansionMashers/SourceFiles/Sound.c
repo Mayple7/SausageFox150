@@ -141,6 +141,7 @@ FoxSound *CreateSound(char *Filename, int type)
 {
 	FMOD_RESULT result;
 	FoxSound *snd = AddSound();
+	printf("snd : %i\n", snd);
 
 	InitSoundStruct(snd, type);
 	
@@ -697,12 +698,6 @@ void FreeSoundList(void)
 		if(soundList[i].sndID)
 			freeSound(&soundList[i]);
 	}
-	/*
-	for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
-	{
-		if(channelGroupList[i].sndID)
-			freeChannelGroups(&channelGroupList[i]);
-	}*/
 	
 	FreeMyAlloc(soundList);
 }
