@@ -129,7 +129,6 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 {
 
 	Vec2 velocityTime;
-	printf("%f : %f\n", CurrentEnemy->EnemyWeapon->WeaponAttack.Position.x, CurrentEnemy->EnemyWeapon->WeaponAttack.Position.y);
 	switch(CurrentEnemy->EnemyType)
 	{
 	case Dummy:

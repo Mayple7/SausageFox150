@@ -600,7 +600,7 @@ void DetectPlayerCollision(void)
 	while(eList->objID != -1)
 	{
 		// If the weapon is the enemy's
-		if(eList->objID > 0 && eList->EnemyWeapon->WeaponFOF == EnemyWeapon)
+		if(eList->objID > 0 && eList->EnemyType != Dummy && eList->EnemyWeapon->WeaponFOF == EnemyWeapon)
 		{
 			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &eList->EnemyWeapon->WeaponAttack);
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, eList->EnemyWeapon->WeaponAttack.collisionID);
