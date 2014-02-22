@@ -355,7 +355,8 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 			nextLetter->letter = *newString;
 			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio());
 			nextLetter->NextLetter = NULL;
-			nextLetter->Glyph->ZIndex = FirstLetter->Glyph->ZIndex;
+			if(nextLetter->Glyph)
+				nextLetter->Glyph->ZIndex = FirstLetter->Glyph->ZIndex;
 		}
 		if(nextLetter->Glyph)
 		{
