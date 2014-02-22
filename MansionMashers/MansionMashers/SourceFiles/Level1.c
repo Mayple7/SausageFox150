@@ -44,9 +44,10 @@ TextGlyphs* LevelName;
 
 Sprite* Level1Panel1;
 Sprite* Level1Door1;
+
 Platform* Table1;
 
-FoxSound *testing;
+
 
 
 /*************************************************************************/
@@ -84,20 +85,20 @@ void InitializeLevel1(void)
 	ChangeTextVisibility(LevelName);
 
 	//Background: Panel 1
-	Level1Panel1 = (Sprite *) CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
-	Level1Door1 = 	Level1Panel1 = (Sprite *) CreateSprite("TextureFiles/FoxMansion2door.png", 1920, 1080, 200, 1, 1, 0, 0);
+	Level1Panel1 = (Sprite *)CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
+	Level1Door1 = (Sprite *)CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	//Platforms
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 125.0f, 40.0f, newID++, -693, -305);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -785, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 125.0f, 40.0f, newID++, -234, -295);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -425, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 115.0f, 40.0f, newID++, 196, -295);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -75, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 98.0f, 40.0f, newID++, 574, -300);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 98.0f, 40.0f, newID++, 315, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
 }
@@ -112,7 +113,6 @@ void UpdateLevel1(void)
 {
 	EventLevel1();
 
-	PlayAudio(testing);
 
 
 	// This should be the last line in this function
