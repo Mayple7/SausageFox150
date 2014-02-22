@@ -99,6 +99,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 
 		CurrentEnemy->EnemyWeapon = CreateWeapon("Sausage sausage of sausage", "TextureFiles/BattleAxe.png", Sword, Common, WeaponEnemy, 256, 256, objID++);
 		CurrentEnemy->EnemySpriteParts.Weapon = CurrentEnemy->EnemyWeapon->WeaponSprite;
+		CurrentEnemy->EnemyWeapon->WeaponFOF = EnemyWeapon;
 
 		CreateEnemySprites(CurrentEnemy);
 		CurrentEnemy->Speed				= 0;
@@ -154,6 +155,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		EnemyBasicMeleeUpdate(CurrentEnemy);
 		DetectEnemyCollision(CurrentEnemy);
 		EnemyAnimation(CurrentEnemy);
+		UpdateCollisionPosition(&CurrentEnemy->EnemyWeapon->WeaponAttack, &CurrentEnemy->EnemyWeapon->WeaponAttackPosition);
 		break;
 	case BasicRanged:
 		// Call enemy logic here
