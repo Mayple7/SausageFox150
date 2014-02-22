@@ -57,8 +57,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	CurrentPlayer->Princess = Princess;
 
 	//Default position of the player
-	CurrentPlayer->Position.x = xPos * GetLoadRatio();
-	CurrentPlayer->Position.y = yPos * GetLoadRatio();
+	CurrentPlayer->Position.x = xPos;
+	CurrentPlayer->Position.y = yPos;
 	CurrentPlayer->FlipX = FALSE;
 	CurrentPlayer->FlipY = FALSE;
 	CurrentPlayer->FlipXPrev = FALSE;

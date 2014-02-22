@@ -76,7 +76,7 @@ void InitializeCharacterSelect(void)
 	HollyButton->ButtonSprite->Visible = FALSE;
 
 	//Create Mayple
-	InitializePlayer(&CharacterMayple, Mayple, newID++, -1100, -100);
+	InitializePlayer(&CharacterMayple, Mayple, newID++, -712, -80);
 	CharacterMayple.Speed = 0.0f;
 	CharacterMayple.FlipX = TRUE;
 	UpdatePlayerPosition(&CharacterMayple);
@@ -86,7 +86,7 @@ void InitializeCharacterSelect(void)
 		fclose(fp);
 
 	//Create Ginko
-	InitializePlayer(&CharacterGinko, Ginko, newID++, -360, -100);
+	InitializePlayer(&CharacterGinko, Ginko, newID++, -235, -80);
 	CharacterGinko.Speed = 0.0f;
 	CharacterGinko.FlipX = TRUE;
 	UpdatePlayerPosition(&CharacterGinko);
@@ -96,7 +96,7 @@ void InitializeCharacterSelect(void)
 		fclose(fp);
 
 	//Create Kaya
-	InitializePlayer(&CharacterKaya, Kaya, newID++, 360, -100);
+	InitializePlayer(&CharacterKaya, Kaya, newID++, 235, -80);
 	CharacterKaya.Speed = 0.0f;
 	CharacterKaya.FlipX = FALSE;
 	UpdatePlayerPosition(&CharacterKaya);
@@ -106,7 +106,7 @@ void InitializeCharacterSelect(void)
 		fclose(fp);
 
 	//Create Holly
-	InitializePlayer(&CharacterHolly, Holly, newID++, 1100, -100);
+	InitializePlayer(&CharacterHolly, Holly, newID++, 712, -80);
 	CharacterHolly.Speed = 0.0f;
 	CharacterHolly.FlipX = FALSE;
 	UpdatePlayerPosition(&CharacterHolly);
