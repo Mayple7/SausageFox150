@@ -61,7 +61,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyType = Dummy;
 		CurrentEnemy->objID = objID;
 		//Creates the enemy sprite
-		CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
+		CurrentEnemy->EnemySprite = (Sprite *) CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
@@ -81,7 +81,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->objID = objID;
 
 		//Creates the enemy sprite
-		CurrentEnemy->EnemySprite = CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
+		CurrentEnemy->EnemySprite = (Sprite *) CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
 		CurrentEnemy->EnemySprite->Visible = FALSE;
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, 100.0f, 200.0f);
@@ -304,33 +304,33 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 
 void CreateEnemySprites(Enemy *Object)
 {
-	Object->EnemySpriteParts.ArmUpper2 = CreateSprite("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
 
-	Object->EnemySpriteParts.Body = CreateSprite("TextureFiles/BodyDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 4, 1, 0, 0);
+	Object->EnemySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 4, 1, 0, 0);
 
-	Object->EnemySpriteParts.ArmUpper = CreateSprite("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
 
-	Object->EnemySpriteParts.ArmLower2 = CreateSprite("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower2 = (Sprite *) CreateSprite("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
 
-	Object->EnemySpriteParts.LegUpper = CreateSprite("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper = (Sprite *) CreateSprite("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
 
-	Object->EnemySpriteParts.LegLower = CreateSprite("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegLower = (Sprite *) CreateSprite("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
 
-	Object->EnemySpriteParts.LegUpper2 = CreateSprite("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper2 = (Sprite *) CreateSprite("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
 
-	Object->EnemySpriteParts.LegLower2 = CreateSprite("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegLower2 = (Sprite *) CreateSprite("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
 
 	Object->EnemySpriteParts.Body->AnimationSpeed = 3;
 
 	Object->EnemySpriteParts.BlinkTimer = 0;
 
-	Object->EnemySpriteParts.Tail = CreateSprite("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
 
 	Object->EnemySpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
 
-	Object->EnemySpriteParts.ArmLower = CreateSprite("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
 
-	Object->EnemySpriteParts.Skirt = CreateSprite("TextureFiles/SkirtDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex + 1, 4, 1, 0, 0);
+	Object->EnemySpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex + 1, 4, 1, 0, 0);
 
 	Object->EnemySpriteParts.Skirt->AnimationActive = 0;
 }
