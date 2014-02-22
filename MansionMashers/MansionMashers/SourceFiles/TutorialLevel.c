@@ -158,7 +158,7 @@ void InitializeTutorial(void)
 
 	ResetCamera();
 }
-
+ 
 void UpdateTutorial(void)
 {
 	// Handle any events such as collision

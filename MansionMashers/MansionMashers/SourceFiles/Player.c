@@ -57,8 +57,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	CurrentPlayer->Princess = Princess;
 
 	//Default position of the player
-	CurrentPlayer->Position.x = xPos * GetLoadRatio();
-	CurrentPlayer->Position.y = yPos * GetLoadRatio();
+	CurrentPlayer->Position.x = xPos;
+	CurrentPlayer->Position.y = yPos;
 	CurrentPlayer->FlipX = FALSE;
 	CurrentPlayer->FlipY = FALSE;
 	CurrentPlayer->FlipXPrev = FALSE;
@@ -954,7 +954,7 @@ int LoadPlayer(Player *CurrentPlayer)
 			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 
 		fclose(fp);
-		if(num == 10)
+		if(num == 13)
 		{
 			updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
 			updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);

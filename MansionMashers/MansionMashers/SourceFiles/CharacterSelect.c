@@ -46,7 +46,6 @@ void LoadCharacterSelect(void)
 void InitializeCharacterSelect(void)
 {
 	Vec3 Tint;
-	FILE *fp;
 	selected = Mayple;
 	newID = 10;
 	ResetObjectList();
@@ -75,45 +74,53 @@ void InitializeCharacterSelect(void)
 	HollyButton = CreateButton("TextureFiles/BlankPlatform.png", 712, -62, 405.0f, 724.0f, newID++);
 	HollyButton->ButtonSprite->Visible = FALSE;
 
+	if(remove("../GameData.cfg"))
+	{
+		printf("FAILED");
+	}
 	//Create Mayple
-	InitializePlayer(&CharacterMayple, Mayple, newID++, -1100, -100);
+	InitializePlayer(&CharacterMayple, Mayple, newID++, -712, -80);
 	CharacterMayple.Speed = 0.0f;
 	CharacterMayple.FlipX = TRUE;
 	UpdatePlayerPosition(&CharacterMayple);
 	CharacterMayple.PlayerSpriteParts.Tail->CurrentFrame = 3;
-	fp = fopen("GameData.cfg", "wt");
-	if(fp)
-		fclose(fp);
+	if(remove("../GameData.cfg"))
+	{
+		printf("FAILED");
+	}
 
 	//Create Ginko
-	InitializePlayer(&CharacterGinko, Ginko, newID++, -360, -100);
+	InitializePlayer(&CharacterGinko, Ginko, newID++, -235, -80);
 	CharacterGinko.Speed = 0.0f;
 	CharacterGinko.FlipX = TRUE;
 	UpdatePlayerPosition(&CharacterGinko);
 	CharacterGinko.PlayerSpriteParts.Tail->CurrentFrame = 9;
-	fp = fopen("GameData.cfg", "wt");
-	if(fp)
-		fclose(fp);
+	if(remove("../GameData.cfg"))
+	{
+		printf("FAILED");
+	}
 
 	//Create Kaya
-	InitializePlayer(&CharacterKaya, Kaya, newID++, 360, -100);
+	InitializePlayer(&CharacterKaya, Kaya, newID++, 235, -80);
 	CharacterKaya.Speed = 0.0f;
 	CharacterKaya.FlipX = FALSE;
 	UpdatePlayerPosition(&CharacterKaya);
 	CharacterKaya.PlayerSpriteParts.Tail->CurrentFrame = 6;
-	fp = fopen("GameData.cfg", "wt");
-	if(fp)
-		fclose(fp);
+	if(remove("../GameData.cfg"))
+	{
+		printf("FAILED");
+	}
 
 	//Create Holly
-	InitializePlayer(&CharacterHolly, Holly, newID++, 1100, -100);
+	InitializePlayer(&CharacterHolly, Holly, newID++, 712, -80);
 	CharacterHolly.Speed = 0.0f;
 	CharacterHolly.FlipX = FALSE;
 	UpdatePlayerPosition(&CharacterHolly);
 	CharacterHolly.PlayerSpriteParts.Tail->CurrentFrame = 14;
-	fp = fopen("GameData.cfg", "wt");
-	if(fp)
-		fclose(fp);
+	if(remove("../GameData.cfg"))
+	{
+		printf("FAILED");
+	}
 }
 
 void UpdateCharacterSelect(void)
@@ -236,6 +243,11 @@ void EventCharacterSelect(void)
 
 	if(PointRectCollision(&MaypleButton->ButtonCollider, &MouseHover) || FoxInput_KeyTriggered('1'))
 	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SavePlayer(&CharacterMayple);
+			SetNextState(GS_Tutorial);
+		}
 		selected = Mayple;
 		MaypleSelected->Alpha = 1.0f;
 		GinkoSelected->Alpha = 0.0f;
@@ -244,6 +256,11 @@ void EventCharacterSelect(void)
 	}
 	else if(PointRectCollision(&GinkoButton->ButtonCollider, &MouseHover) || FoxInput_KeyTriggered('2'))
 	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SavePlayer(&CharacterGinko);
+			SetNextState(GS_Tutorial);
+		}
 		selected = Ginko;
 		MaypleSelected->Alpha = 0.0f;
 		GinkoSelected->Alpha = 1.0f;
@@ -252,6 +269,11 @@ void EventCharacterSelect(void)
 	}
 	else if(PointRectCollision(&KayaButton->ButtonCollider, &MouseHover) || FoxInput_KeyTriggered('3'))
 	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SavePlayer(&CharacterKaya);
+			SetNextState(GS_Tutorial);
+		}
 		selected = Kaya;
 		MaypleSelected->Alpha = 0.0f;
 		GinkoSelected->Alpha = 0.0f;
@@ -260,6 +282,11 @@ void EventCharacterSelect(void)
 	}
 	else if(PointRectCollision(&HollyButton->ButtonCollider, &MouseHover) || FoxInput_KeyTriggered('4'))
 	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SavePlayer(&CharacterHolly);
+			SetNextState(GS_Tutorial);
+		}
 		selected = Holly;
 		MaypleSelected->Alpha = 0.0f;
 		GinkoSelected->Alpha = 0.0f;
