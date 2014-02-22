@@ -40,6 +40,7 @@
 // globals
 int newID;					// ID number
 TextGlyphs* LevelName;
+Platform* Shelf;
 
 /*************************************************************************/
 /*!
@@ -68,7 +69,7 @@ void InitializeKevin(void)
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, newID++, -400, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
@@ -76,6 +77,11 @@ void InitializeKevin(void)
 	ChangeTextVisibility(LevelName);
 
 	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
+
+	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
+	Shelf->PlatformCollider.Offset.y = 5 * Shelf->PlatformSprite->Height / 16;
+	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.2f); 
+
 }
 
 /*************************************************************************/

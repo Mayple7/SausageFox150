@@ -263,9 +263,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 		
 		Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
-		if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
+		if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
+			if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio())
 				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
@@ -306,6 +306,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 void UpdatePlayerPosition(Player *CurrentPlayer)
 {
 	Vec2 velocityTime;
+
+	if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
+	{
+		CurrentPlayer->Position.y = GROUNDLEVEL * GetLoadRatio();
+	}
 	//Stop velocity and acceleration when the player lands on the floor
 	if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 	{

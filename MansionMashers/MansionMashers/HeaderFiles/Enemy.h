@@ -67,6 +67,7 @@ typedef struct Enemy
 	int isMoveRight;
 	int isMoveLeft;
 	int isJumping;
+	int jumpTimer;
 	int isDropDown;
 	int Attack;
 	int StateTimer;

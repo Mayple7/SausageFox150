@@ -84,11 +84,11 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemySprite = (Sprite *) CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
 		CurrentEnemy->EnemySprite->Visible		= FALSE;
 		
-		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, 100.0f, 200.0f);
+		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, PLAYER_WIDTH, PLAYER_HEIGHT);
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 50, 250, 15, 0, 0, 0, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, 250, 15, 0, 10, 0, 10);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x / GetLoadRatio(), CurrentEnemy->Position.y / GetLoadRatio(), CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -110,6 +110,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->isMoveRight		= FALSE;
 		CurrentEnemy->isMoveLeft		= FALSE;
 		CurrentEnemy->isJumping			= FALSE;
+		CurrentEnemy->jumpTimer			= 0;
 		CurrentEnemy->isDropDown		= FALSE;
 		CurrentEnemy->Attack			= FALSE;
 		CurrentEnemy->StateTimer		= 0;
@@ -182,26 +183,10 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		FreeEnemy(CurrentEnemy);
 	}
 
-	/*
-	//Check if enemy is on the floor
-	if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentEnemy->EnemyRigidBody.onGround)
+	if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio())
 	{
-		ZeroAcceleration(&CurrentEnemy->EnemyRigidBody);
-		ZeroVelocity(&CurrentEnemy->EnemyRigidBody);
-		ZeroGravity(&CurrentEnemy->EnemyRigidBody);
+		CurrentEnemy->Position.y = GROUNDLEVEL * GetLoadRatio();
 	}
-	else
-	{
-		SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, -15.0f * GetLoadRatio());
-	}
-
-	//Updates velocity and position
-	UpdateVelocity(&CurrentEnemy->EnemyRigidBody);
-	Vec2Add(&CurrentEnemy->Position, &CurrentEnemy->Position, &CurrentEnemy->EnemyRigidBody.Velocity);
-	CurrentEnemy->EnemySprite->Position = CurrentEnemy->Position;
-	CurrentEnemy->EnemyCollider.Position = CurrentEnemy->Position;
-	*/
-	
 	//Stop velocity and acceleration when the player lands on the floor
 	if(CurrentEnemy->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentEnemy->EnemyRigidBody.onGround)
 	{
@@ -212,7 +197,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	//Set gravity if not on floor or on a platform
 	else
 	{
-		SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, -600.0f * GetLoadRatio());
+		SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, FOX_GRAVITY_Y * GetDeltaTime());
 	}
 	//Player position updated when dropping down from a platform
 	if(CurrentEnemy->dropDown)
@@ -292,15 +277,16 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 		CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 	}
 	//Jump when space is pushed or drop down if S is pushed as well
-	if(CurrentEnemy->isJumping)
+	if(CurrentEnemy->isJumping && CurrentEnemy->jumpTimer <= 0)
 	{
 		Vec2 velocity;
 		CurrentEnemy->isJumping = FALSE;
+		CurrentEnemy->jumpTimer = (int)(2 / GetDeltaTime());
 		
 		Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
-		if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentEnemy->EnemyRigidBody.onGround)
+		if(CurrentEnemy->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentEnemy->EnemyRigidBody.onGround)
 		{
-			if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio())
+			if(CurrentEnemy->Position.y <= GROUNDLEVEL * GetLoadRatio())
 				Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
 			CurrentEnemy->EnemyRigidBody.onGround = FALSE;
 			ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
@@ -310,7 +296,13 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 	if(CurrentEnemy->isDropDown)
 	{
 		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+		CurrentEnemy->isDropDown = FALSE;
 		CurrentEnemy->dropDown = TRUE;
+	}
+
+	if (CurrentEnemy->jumpTimer > 0)
+	{
+		CurrentEnemy->jumpTimer--;
 	}
 	MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
 }
@@ -320,12 +312,14 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 	switch(CurrentEnemy->EnemyState)
 	{
 		case AIAggressive:
-			if (CurrentEnemy->Position.x < CurrentPlayer.Position.x - 40)
+			CurrentEnemy->isJumping = FALSE;
+
+			if (CurrentEnemy->Position.x < CurrentPlayer.Position.x - 60 * GetLoadRatio())
 			{
 				CurrentEnemy->isMoveRight	= TRUE;
 				CurrentEnemy->isMoveLeft	= FALSE;
 			}
-			else if (CurrentEnemy->Position.x > CurrentPlayer.Position.x + 40)
+			else if (CurrentEnemy->Position.x > CurrentPlayer.Position.x + 60 * GetLoadRatio())
 			{
 				CurrentEnemy->isMoveRight	= FALSE;
 				CurrentEnemy->isMoveLeft	= TRUE;
@@ -336,7 +330,28 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 				CurrentEnemy->isMoveLeft	= FALSE;
 			}
 
-			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 100 && !CurrentEnemy->isAttacking)
+			if (CurrentEnemy->Position.y < CurrentPlayer.Position.y + 60 * GetLoadRatio())
+			{
+				int i;
+				for (i = 0; i < COLLIDEAMOUNT; i++)
+				{
+					if (platformList[i].objID == 0)
+						continue;
+					if (platformList[i].objID == -1)
+						break;
+					if (CurrentEnemy->Position.x > platformList[i].Position.x - 40 && CurrentEnemy->Position.x < platformList[i].Position.x + 60)
+					{
+						CurrentEnemy->isJumping = TRUE;
+						break;
+					}
+				}
+			}
+			else if (CurrentEnemy->Position.y < CurrentPlayer.Position.y - 10 * GetLoadRatio() && CurrentEnemy->EnemyRigidBody.onGround)
+			{
+				CurrentEnemy->dropDown = TRUE;
+			}
+
+			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 150 * GetLoadRatio() && !CurrentEnemy->isAttacking)
 				CurrentEnemy->Attack = TRUE;
 
 			break;
@@ -360,7 +375,7 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			break;
 
 		case AIIdle:
-			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 200)
+			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 500 * GetLoadRatio())
 				CurrentEnemy->EnemyState = AIAggressive;
 
 			CurrentEnemy->isMoveRight	= FALSE;
@@ -388,6 +403,7 @@ void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float 
 void DetectEnemyCollision(Enemy *CurrentEnemy)
 {
 	Weapon* wList = weaponList;
+	Platform* pList = platformList;
 	int hit = 0;
 	int hitPrev = 0;
 	
@@ -440,6 +456,53 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 		}
 		wList++;
 	}
+
+	while(pList->objID != -1)
+	{
+		if(pList->objID > 0)
+		{
+			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &pList->PlatformCollider);
+			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentEnemy->CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					EnemyCollidePlatform(CurrentEnemy, pList);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy->CollisionData[hitPrev]);
+					EnemyCollidePlatform(CurrentEnemy, pList);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+					EnemyCollidePlatform(CurrentEnemy, pList);
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = 0;
+				}
+			}
+		}
+		pList++;
+	}
 }
 
 void CreateEnemySprites(Enemy *Object)
@@ -483,7 +546,7 @@ void CreateEnemySprites(Enemy *Object)
 /*************************************************************************/
 void EnemyAnimation(Enemy *Object)
 {
-	float LegDistance = ((Object->CurrentEnemyStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + 1.5f)-(Object->Speed);
+	float LegDistance = ((Object->CurrentEnemyStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f * ((Object->Speed)/(250.0f * GetDeltaTime() * GetLoadRatio())) ))-(Object->Speed);
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
