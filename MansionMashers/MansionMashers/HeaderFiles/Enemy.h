@@ -57,6 +57,10 @@ typedef struct Enemy
 
 	int dropDown;  //Fake Boolean
 
+	int isMoveRight;
+	int isMoveLeft;
+	int isJumping;
+	int isDropDown;
 	enum Direction EnemyDirection;
 	Sprite *EnemySprite;
 	RigidBody EnemyRigidBody;
@@ -76,6 +80,7 @@ void UpdateEnemy(Enemy *CurrentEnemy);
 void DetectEnemyCollision(Enemy *CurrentEnemy);
 void EnemyAnimation(Enemy *Object);
 void CreateEnemySprites(Enemy *Object);
+void EnemyAIUpdate(Enemy *Object);
 
 float RotateToAngle(float angle, float angleTo, float speed);
 #endif

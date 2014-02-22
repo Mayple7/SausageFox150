@@ -82,11 +82,11 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 
 		//Creates the enemy sprite
 		CurrentEnemy->EnemySprite = (Sprite *) CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
-		CurrentEnemy->EnemySprite->Visible = FALSE;
+		CurrentEnemy->EnemySprite->Visible		= FALSE;
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, 100.0f, 200.0f);
-		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
-		CurrentEnemy->dropDown = FALSE;
+		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
+		CurrentEnemy->dropDown					= FALSE;
 
 		InitializeEnemyStats(CurrentEnemy, 50, 500, 15, 0, 0, 0, 10);
 
@@ -101,10 +101,16 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemySpriteParts.Weapon = CurrentEnemy->EnemyWeapon->WeaponSprite;
 
 		CreateEnemySprites(CurrentEnemy);
-		CurrentEnemy->Speed = 0;
-		CurrentEnemy->LegSinValue = 0;
-		CurrentEnemy->isAttacking = FALSE;
-		CurrentEnemy->EnemyDirection = LEFT;
+		CurrentEnemy->Speed				= 0;
+		CurrentEnemy->LegSinValue		= 0;
+		CurrentEnemy->isAttacking		= FALSE;
+		CurrentEnemy->EnemyDirection	= LEFT;
+
+		CurrentEnemy->isMoveRight		= FALSE;
+		CurrentEnemy->isMoveLeft		= FALSE;
+		CurrentEnemy->isJumping			= FALSE;
+		CurrentEnemy->isDropDown		= FALSE;
+
 
 		break;
 	case BasicRanged:
@@ -139,16 +145,18 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	case BasicMelee:
 		// Call enemy logic here
 
+		EnemyAIUpdate(CurrentEnemy);
+
 		if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentEnemy->isAttacking)
 		{
-			CurrentEnemy->isAttacking = TRUE;
-			CurrentEnemy->EnemySpriteParts.AttackRotation = 0;
-			CurrentEnemy->EnemySpriteParts.AttackRotationArm = 0;
-			CurrentEnemy->EnemySpriteParts.AttackRotationArmLower = 0;
+			CurrentEnemy->isAttacking								= TRUE;
+			CurrentEnemy->EnemySpriteParts.AttackRotation			= 0;
+			CurrentEnemy->EnemySpriteParts.AttackRotationArm		= 0;
+			CurrentEnemy->EnemySpriteParts.AttackRotationArmLower	= 0;
 			UpdateCollider(&CurrentEnemy->EnemyCollider,CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
 		}
 		// not key press for direction then slow down!
-		if(!FoxInput_KeyDown(VK_LEFT) && !FoxInput_KeyDown(VK_RIGHT))
+		if(!CurrentEnemy->isMoveLeft && !CurrentEnemy->isMoveRight)
 		{
 			if (!(CurrentEnemy->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentEnemy->EnemyRigidBody.onGround)
 			{
@@ -158,8 +166,8 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 				}
 				else
 				{
-					CurrentEnemy->Speed = 0.0f;
-					CurrentEnemy->LegSinValue = 0;
+					CurrentEnemy->Speed			= 0.0f;
+					CurrentEnemy->LegSinValue	= 0;
 				}
 			}
 			else
@@ -170,37 +178,31 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 				}
 				else
 				{
-					CurrentEnemy->Speed = 0.0f;
-					CurrentEnemy->LegSinValue = 0;
+					CurrentEnemy->Speed			= 0.0f;
+					CurrentEnemy->LegSinValue	= 0;
 				}
 			}
 		}
 		
 		// Move left if A is pressed
-		if(FoxInput_KeyDown(VK_LEFT))
+		if(CurrentEnemy->isMoveLeft)
 		{
-			CurrentEnemy->EnemySprite->FlipX = FALSE;
-			CurrentEnemy->EnemyDirection = LEFT;
-			CurrentEnemy->Speed = CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+			CurrentEnemy->EnemySprite->FlipX	= FALSE;
+			CurrentEnemy->EnemyDirection		= LEFT;
+			CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 		}
 		// Move right if D is pressed
-		else if(FoxInput_KeyDown(VK_RIGHT))
+		else if(CurrentEnemy->isMoveRight)
 		{
-			CurrentEnemy->EnemySprite->FlipX = TRUE;
-			CurrentEnemy->EnemyDirection = RIGHT;
-			CurrentEnemy->Speed = CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+			CurrentEnemy->EnemySprite->FlipX	= TRUE;
+			CurrentEnemy->EnemyDirection		= RIGHT;
+			CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 		}
 		//Jump when space is pushed or drop down if S is pushed as well
-		if(FoxInput_KeyTriggered(VK_SPACE))
+		if(CurrentEnemy->isJumping)
 		{
 			Vec2 velocity;
-		
-			if(FoxInput_KeyDown('S') && CurrentEnemy->EnemyRigidBody.onGround)
-			{
-				CurrentEnemy->EnemyRigidBody.onGround = FALSE;
-				CurrentEnemy->dropDown = TRUE;
-			}
-
+			CurrentEnemy->isJumping = FALSE;
 		
 			Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
 			if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentEnemy->EnemyRigidBody.onGround)
@@ -210,6 +212,12 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 				CurrentEnemy->EnemyRigidBody.onGround = FALSE;
 				ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
 			}
+		}
+		//Drop down when told to
+		if(CurrentEnemy->isDropDown)
+		{
+			CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+			CurrentEnemy->dropDown = TRUE;
 		}
 		MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
 
@@ -295,6 +303,13 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	CurrentEnemy->EnemyRigidBody.onGround = FALSE;
 	
 }
+
+
+void EnemyAIUpdate(Enemy *Object)
+{
+	return;
+}
+
 
 void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp)
 {
