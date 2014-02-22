@@ -88,7 +88,7 @@ void LoadMainMenu(void)
 /*************************************************************************/
 void InitializeMainMenu(void)
 {
-	newID = 1;
+	newID = 10;
 	// Reset the object list
 	ResetObjectList();
 

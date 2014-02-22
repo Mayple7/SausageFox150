@@ -141,7 +141,6 @@ FoxSound *CreateSound(char *Filename, int type)
 {
 	FMOD_RESULT result;
 	FoxSound *snd = AddSound();
-	printf("snd : %i\n", snd);
 
 	InitSoundStruct(snd, type);
 	

@@ -18,5 +18,6 @@
 #include "../HeaderFiles/YeahGuy.h"
 #include "../HeaderFiles/Level4.h"
 #include "../HeaderFiles/Kevin.h"
+#include "../HeaderFiles/CharacterSelect.h"
 
 #endif
