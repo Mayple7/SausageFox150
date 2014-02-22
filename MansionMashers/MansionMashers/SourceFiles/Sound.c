@@ -697,12 +697,12 @@ void FreeSoundList(void)
 		if(soundList[i].sndID)
 			freeSound(&soundList[i]);
 	}
-
+	/*
 	for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
 	{
 		if(channelGroupList[i].sndID)
 			freeChannelGroups(&channelGroupList[i]);
-	}
+	}*/
 	
 	FreeMyAlloc(soundList);
 }

@@ -236,6 +236,11 @@ void EventCharacterSelect(void)
 
 	if(PointRectCollision(&MaypleButton->ButtonCollider, &MouseHover) || FoxInput_KeyTriggered('1'))
 	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SavePlayer(&CharacterMayple);
+			SetNextState(GS_Tutorial);
+		}
 		selected = Mayple;
 		MaypleSelected->Alpha = 1.0f;
 		GinkoSelected->Alpha = 0.0f;
@@ -244,6 +249,11 @@ void EventCharacterSelect(void)
 	}
 	else if(PointRectCollision(&GinkoButton->ButtonCollider, &MouseHover) || FoxInput_KeyTriggered('2'))
 	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SavePlayer(&CharacterGinko);
+			SetNextState(GS_Tutorial);
+		}
 		selected = Ginko;
 		MaypleSelected->Alpha = 0.0f;
 		GinkoSelected->Alpha = 1.0f;
@@ -252,6 +262,11 @@ void EventCharacterSelect(void)
 	}
 	else if(PointRectCollision(&KayaButton->ButtonCollider, &MouseHover) || FoxInput_KeyTriggered('3'))
 	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SavePlayer(&CharacterKaya);
+			SetNextState(GS_Tutorial);
+		}
 		selected = Kaya;
 		MaypleSelected->Alpha = 0.0f;
 		GinkoSelected->Alpha = 0.0f;
@@ -260,6 +275,11 @@ void EventCharacterSelect(void)
 	}
 	else if(PointRectCollision(&HollyButton->ButtonCollider, &MouseHover) || FoxInput_KeyTriggered('4'))
 	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SavePlayer(&CharacterHolly);
+			SetNextState(GS_Tutorial);
+		}
 		selected = Holly;
 		MaypleSelected->Alpha = 0.0f;
 		GinkoSelected->Alpha = 0.0f;
