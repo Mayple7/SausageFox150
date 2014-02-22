@@ -135,7 +135,7 @@ void InitializeTutorial(void)
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 475, 0);
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
 
-	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750, -250);
+	StrawDummy = CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
 
 	BlackOverlay = CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Alpha = 0;

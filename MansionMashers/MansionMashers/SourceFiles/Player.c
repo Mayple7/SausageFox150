@@ -117,6 +117,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
+		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 	}
 
 	// not key press for direction then slow down!
