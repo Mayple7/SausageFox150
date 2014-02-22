@@ -88,7 +88,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 50, 500, 15, 0, 0, 0, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, 250, 15, 0, 0, 0, 10);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x / GetLoadRatio(), CurrentEnemy->Position.y / GetLoadRatio(), CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -110,6 +110,11 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->isMoveLeft		= FALSE;
 		CurrentEnemy->isJumping			= FALSE;
 		CurrentEnemy->isDropDown		= FALSE;
+		CurrentEnemy->Attack			= FALSE;
+		CurrentEnemy->StateTimer		= 0;
+		CurrentEnemy->EnemyState		= AIIdle;
+
+		CurrentEnemy->CurrentEnemySounds.YEAH = CreateSound("Sounds/Scream.wav", SmallSnd);
 
 
 		break;
@@ -146,81 +151,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		// Call enemy logic here
 
 		EnemyAIUpdate(CurrentEnemy);
-
-		if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentEnemy->isAttacking)
-		{
-			CurrentEnemy->isAttacking								= TRUE;
-			CurrentEnemy->EnemySpriteParts.AttackRotation			= 0;
-			CurrentEnemy->EnemySpriteParts.AttackRotationArm		= 0;
-			CurrentEnemy->EnemySpriteParts.AttackRotationArmLower	= 0;
-			UpdateCollider(&CurrentEnemy->EnemyCollider,CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
-		}
-		// not key press for direction then slow down!
-		if(!CurrentEnemy->isMoveLeft && !CurrentEnemy->isMoveRight)
-		{
-			if (!(CurrentEnemy->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentEnemy->EnemyRigidBody.onGround)
-			{
-				if (CurrentEnemy->Speed - 48.0f * GetDeltaTime() >= 0.0f)
-				{
-					CurrentEnemy->Speed -= 48.0f * GetDeltaTime();
-				}
-				else
-				{
-					CurrentEnemy->Speed			= 0.0f;
-					CurrentEnemy->LegSinValue	= 0;
-				}
-			}
-			else
-			{
-				if (CurrentEnemy->Speed - 48.0f * GetDeltaTime() >= 0.0f)
-				{
-					CurrentEnemy->Speed -= 48.0f * GetDeltaTime();
-				}
-				else
-				{
-					CurrentEnemy->Speed			= 0.0f;
-					CurrentEnemy->LegSinValue	= 0;
-				}
-			}
-		}
-		
-		// Move left if A is pressed
-		if(CurrentEnemy->isMoveLeft)
-		{
-			CurrentEnemy->EnemySprite->FlipX	= FALSE;
-			CurrentEnemy->EnemyDirection		= LEFT;
-			CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
-		}
-		// Move right if D is pressed
-		else if(CurrentEnemy->isMoveRight)
-		{
-			CurrentEnemy->EnemySprite->FlipX	= TRUE;
-			CurrentEnemy->EnemyDirection		= RIGHT;
-			CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
-		}
-		//Jump when space is pushed or drop down if S is pushed as well
-		if(CurrentEnemy->isJumping)
-		{
-			Vec2 velocity;
-			CurrentEnemy->isJumping = FALSE;
-		
-			Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
-			if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentEnemy->EnemyRigidBody.onGround)
-			{
-				if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio())
-					Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
-				CurrentEnemy->EnemyRigidBody.onGround = FALSE;
-				ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
-			}
-		}
-		//Drop down when told to
-		if(CurrentEnemy->isDropDown)
-		{
-			CurrentEnemy->EnemyRigidBody.onGround = FALSE;
-			CurrentEnemy->dropDown = TRUE;
-		}
-		MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
-
+		EnemyBasicMeleeUpdate(CurrentEnemy);
 		DetectEnemyCollision(CurrentEnemy);
 		EnemyAnimation(CurrentEnemy);
 		break;
@@ -245,7 +176,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		strcpy(CurrentEnemy->EnemyParticleSystem->ParticleSprite, "TextureFiles/Particle.png");
 		CurrentEnemy->EnemyParticleSystem->emitScale = 2.0f;
 		CurrentEnemy->EnemyParticleSystem->emitLife = 1.0f;
-
+		PlayAudio(CurrentEnemy->CurrentEnemySounds.YEAH);
 		FreeEnemy(CurrentEnemy);
 	}
 
@@ -304,10 +235,136 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	
 }
 
-
-void EnemyAIUpdate(Enemy *Object)
+void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 {
-	return;
+	if (CurrentEnemy->Attack && !CurrentEnemy->isAttacking)
+	{
+		CurrentEnemy->isAttacking								= TRUE;
+		CurrentEnemy->Attack									= FALSE;
+		CurrentEnemy->EnemySpriteParts.AttackRotation			= 0;
+		CurrentEnemy->EnemySpriteParts.AttackRotationArm		= 0;
+		CurrentEnemy->EnemySpriteParts.AttackRotationArmLower	= 0;
+		UpdateCollider(&CurrentEnemy->EnemyCollider,CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
+	}
+	// not key press for direction then slow down!
+	if(!CurrentEnemy->isMoveLeft && !CurrentEnemy->isMoveRight)
+	{
+		if (!(CurrentEnemy->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentEnemy->EnemyRigidBody.onGround)
+		{
+			if (CurrentEnemy->Speed - 48.0f * GetDeltaTime() >= 0.0f)
+			{
+				CurrentEnemy->Speed -= 48.0f * GetDeltaTime();
+			}
+			else
+			{
+				CurrentEnemy->Speed			= 0.0f;
+				CurrentEnemy->LegSinValue	= 0;
+			}
+		}
+		else
+		{
+			if (CurrentEnemy->Speed - 48.0f * GetDeltaTime() >= 0.0f)
+			{
+				CurrentEnemy->Speed -= 48.0f * GetDeltaTime();
+			}
+			else
+			{
+				CurrentEnemy->Speed			= 0.0f;
+				CurrentEnemy->LegSinValue	= 0;
+			}
+		}
+	}
+		
+	// Move left if A is pressed
+	if(CurrentEnemy->isMoveLeft)
+	{
+		CurrentEnemy->EnemySprite->FlipX	= FALSE;
+		CurrentEnemy->EnemyDirection		= LEFT;
+		CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+	}
+	// Move right if D is pressed
+	else if(CurrentEnemy->isMoveRight)
+	{
+		CurrentEnemy->EnemySprite->FlipX	= TRUE;
+		CurrentEnemy->EnemyDirection		= RIGHT;
+		CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+	}
+	//Jump when space is pushed or drop down if S is pushed as well
+	if(CurrentEnemy->isJumping)
+	{
+		Vec2 velocity;
+		CurrentEnemy->isJumping = FALSE;
+		
+		Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
+		if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentEnemy->EnemyRigidBody.onGround)
+		{
+			if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio())
+				Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
+			CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+			ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
+		}
+	}
+	//Drop down when told to
+	if(CurrentEnemy->isDropDown)
+	{
+		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+		CurrentEnemy->dropDown = TRUE;
+	}
+	MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
+}
+
+void EnemyAIUpdate(Enemy *CurrentEnemy)
+{
+	switch(CurrentEnemy->EnemyState)
+	{
+		case AIAggressive:
+			if (CurrentEnemy->Position.x < CurrentPlayer.Position.x - 40)
+			{
+				CurrentEnemy->isMoveRight	= TRUE;
+				CurrentEnemy->isMoveLeft	= FALSE;
+			}
+			else if (CurrentEnemy->Position.x > CurrentPlayer.Position.x + 40)
+			{
+				CurrentEnemy->isMoveRight	= FALSE;
+				CurrentEnemy->isMoveLeft	= TRUE;
+			}
+			else
+			{
+				CurrentEnemy->isMoveRight	= FALSE;
+				CurrentEnemy->isMoveLeft	= FALSE;
+			}
+
+			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 100 && !CurrentEnemy->isAttacking)
+				CurrentEnemy->Attack = TRUE;
+
+			break;
+		case AIPassive:
+
+			if (CurrentEnemy->Position.x < CurrentPlayer.Position.x)
+			{
+				CurrentEnemy->isMoveRight	= FALSE;
+				CurrentEnemy->isMoveLeft	= TRUE;
+			}
+			else if (CurrentEnemy->Position.x > CurrentPlayer.Position.x)
+			{
+				CurrentEnemy->isMoveRight	= TRUE;
+				CurrentEnemy->isMoveLeft	= FALSE;
+			}
+
+			CurrentEnemy->StateTimer--;
+
+			if (CurrentEnemy->StateTimer <= 0)
+				CurrentEnemy->EnemyState = AIIdle;
+			break;
+
+		case AIIdle:
+			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 200)
+				CurrentEnemy->EnemyState = AIAggressive;
+
+			CurrentEnemy->isMoveRight	= FALSE;
+			CurrentEnemy->isMoveLeft	= FALSE;
+			break;
+	}
 }
 
 
@@ -558,7 +615,11 @@ void EnemyAnimation(Enemy *Object)
 			ArmUpr2->Rotation = (float)FOX_PI * 1.5f + 30.0f * GetDeltaTime() - Object->EnemySpriteParts.AttackRotationArm;
 			ArmLwr2->Rotation = ArmUpr2->Rotation - (float)FOX_PI/2 + Object->EnemySpriteParts.AttackRotationArmLower;
 			if (Object->EnemySpriteParts.AttackRotationArm == (float)FOX_PI)
+			{
 				Object->isAttacking = FALSE;
+				Object->EnemyState = AIPassive;
+				Object->StateTimer = (int)(1.0f / GetDeltaTime());
+			}
 		}
 		else
 		{
@@ -623,7 +684,11 @@ void EnemyAnimation(Enemy *Object)
 			ArmUpr->Rotation = (float)FOX_PI / 2 - 30.0f * GetDeltaTime() + Object->EnemySpriteParts.AttackRotationArm;
 			ArmLwr->Rotation = ArmUpr->Rotation + (float)FOX_PI/2 - Object->EnemySpriteParts.AttackRotationArmLower;
 			if (Object->EnemySpriteParts.AttackRotationArm == (float)FOX_PI)
+			{
 				Object->isAttacking = FALSE;
+				Object->EnemyState = AIPassive;
+				Object->StateTimer = (int)(1.0f / GetDeltaTime());
+			}
 		}
 		else
 		{
