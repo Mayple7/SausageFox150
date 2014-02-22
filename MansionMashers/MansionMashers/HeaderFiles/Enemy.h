@@ -57,6 +57,7 @@ typedef struct Enemy
 
 	int dropDown;  //Fake Boolean
 
+	enum Direction EnemyDirection;
 	Sprite *EnemySprite;
 	RigidBody EnemyRigidBody;
 	EnemyStats CurrentEnemyStats;

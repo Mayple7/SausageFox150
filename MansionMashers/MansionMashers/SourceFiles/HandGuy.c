@@ -63,6 +63,7 @@ void LoadHandGuy(void)
 void InitializeHandGuy(void)
 {
 	Vec3 TextTint;
+	int i;
 
 	newID = 1;
 	ResetObjectList();
@@ -72,8 +73,23 @@ void InitializeHandGuy(void)
 	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
-	HandGauy = (Sprite *) CreateSprite("TextureFiles/HandGauy.png", 400, 400, 0, 1, 1, -500, -250);
-	CreateSprite("TextureFiles/HandGauy.png", 200, 200, 0, 1, 1, 500, -250);
+	HandGauy = (Sprite *) CreateSprite("TextureFiles/HandGauy.png", 400, 400, 10, 1, 1, -700, -250);
+
+	for (i = -50; i < 50; i++)
+	{
+		CreateSprite("TextureFiles/HandGauy.png", (float)(i + 60) * 4, (float)(i + 60) * 4, (i + 60) / 10, 1, 1, (float)i * 10, (float)-230);
+	}
+	for (i = -25; i < 25; i++)
+	{
+		CreateSprite("TextureFiles/HandGauy.png", (float)(i + 60) * 4, (float)(i + 60) * 4, (i + 60) / 10, 1, 1, (float)i * -20 - 100, (float)i * 20 - 50);
+	}
+	for (i = -50; i < 50; i++)
+	{
+		CreateSprite("TextureFiles/HandGauy.png", (float)(i + 60) * 4, (float)(i + 60) * 4, (i + 60) / 10, 1, 1, (float)i * 10, (float)sin((float)i) * 200 + i * 10);
+	}
+
+	CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 0, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center);

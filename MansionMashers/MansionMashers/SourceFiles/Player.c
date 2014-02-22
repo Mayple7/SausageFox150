@@ -57,8 +57,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	CurrentPlayer->Princess = Princess;
 
 	//Default position of the player
-	CurrentPlayer->Position.x = xPos * GetLoadRatio();
-	CurrentPlayer->Position.y = yPos * GetLoadRatio();
+	CurrentPlayer->Position.x = xPos;
+	CurrentPlayer->Position.y = yPos;
 	CurrentPlayer->FlipX = FALSE;
 	CurrentPlayer->FlipY = FALSE;
 	CurrentPlayer->FlipXPrev = FALSE;
@@ -92,7 +92,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	//Load player stats
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
-		LoadNewPlayer(CurrentPlayer);
+		LoadNewPlayer(CurrentPlayer, Princess);
 		AE_ASSERT_MESG("SOMETHING BE BROKED");
 	}
 
@@ -199,7 +199,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 				updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
 				break;
 			case DmgBuff:
-				updateDamage(&CurrentPlayer->CurrentPlayerStats);
+				updateDamage(CurrentPlayer);
 				break;
 			}
 
@@ -397,10 +397,10 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 	A pointer to the player's stats to update
 */
 /*************************************************************************/
-void updateDamage(PlayerStats *CurrentPlayerStats)
+void updateDamage(Player *CurrentPlayer)
 {
 	//Placeholder damage reduction formula
-	CurrentPlayerStats->Damage = 10 + (CurrentPlayerStats->Strength + CurrentPlayer.PlayerWeapon->BonusStrength) * 5;
+	CurrentPlayer->CurrentPlayerStats.Damage = 10 + (CurrentPlayer->CurrentPlayerStats.Strength + CurrentPlayer->PlayerWeapon->BonusStrength) * 5;
 }
 
 /*************************************************************************/
@@ -527,14 +527,14 @@ void DetectPlayerCollision(void)
 					CurrentPlayer.CollisionData[-hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
 					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
-					updateDamage(&CurrentPlayer.CurrentPlayerStats);
+					updateDamage(&CurrentPlayer);
 				}
 				// Found target, hit previous frame, on persistant
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
 				{
 					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
-					updateDamage(&CurrentPlayer.CurrentPlayerStats);
+					updateDamage(&CurrentPlayer);
 				}
 				// Found target, did not hit previous frame, on start collision
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
@@ -542,7 +542,7 @@ void DetectPlayerCollision(void)
 					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
 					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
-					updateDamage(&CurrentPlayer.CurrentPlayerStats);
+					updateDamage(&CurrentPlayer);
 				}
 			}
 			else
@@ -582,7 +582,7 @@ void DetectPlayerCollision(void)
 /*************************************************************************/
 void Animation(Player *Object)
 {
-	float LegDistance = ((CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + 1.5f)-(Object->Speed);
+	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + 1.5f)-(Object->Speed);
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
@@ -711,8 +711,8 @@ void Animation(Player *Object)
 		if (Object->isAttacking)
 		{
 			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, 0, 0.2f);
-			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
-			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			ArmUpr2->Rotation = (float)FOX_PI * 1.5f + 30.0f * GetDeltaTime() - Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr2->Rotation = ArmUpr2->Rotation - (float)FOX_PI/2 + Object->PlayerSpriteParts.AttackRotationArmLower;
 			//Weap->Rotation = ArmLwr2->Rotation + Object->PlayerSpriteParts.AttackRotation;
@@ -774,9 +774,9 @@ void Animation(Player *Object)
 		// Attacking!
 		if (Object->isAttacking)
 		{
-			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, (float)FOX_PI/6, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
-			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
-			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, CurrentPlayer.CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, (float)FOX_PI/6, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			ArmUpr->Rotation = (float)FOX_PI / 2 - 30.0f * GetDeltaTime() + Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr->Rotation = ArmUpr->Rotation + (float)FOX_PI/2 - Object->PlayerSpriteParts.AttackRotationArmLower;
 			//Weap->Rotation = ArmLwr->Rotation - Object->PlayerSpriteParts.AttackRotation;
@@ -958,7 +958,7 @@ int LoadPlayer(Player *CurrentPlayer)
 		{
 			updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
 			updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
-			updateDamage(&CurrentPlayer->CurrentPlayerStats);
+			updateDamage(CurrentPlayer);
 			updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 			updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 			return 1;
@@ -981,9 +981,9 @@ int LoadPlayer(Player *CurrentPlayer)
 	A pointer to the player to be loaded
 */
 /*************************************************************************/
-void LoadNewPlayer(Player *CurrentPlayer)
+void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 {
-	CurrentPlayer->Princess = Mayple;
+	CurrentPlayer->Princess = Princess;
 	CurrentPlayer->BuffHeld = None;
 
 	CurrentPlayer->CurrentPlayerStats.Agility = 0;
@@ -992,7 +992,7 @@ void LoadNewPlayer(Player *CurrentPlayer)
 	
 	updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
 	updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
-	updateDamage(&CurrentPlayer->CurrentPlayerStats);
+	updateDamage(CurrentPlayer);
 	updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 

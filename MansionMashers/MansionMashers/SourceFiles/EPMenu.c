@@ -154,6 +154,12 @@ void EPMenuInput(void)
 		break;
 	}
 
+	if(FoxInput_KeyTriggered('C'))
+	{
+		SetNextState(GS_CharacterSelect);
+	}
+
+
 	if(FoxInput_KeyTriggered(VK_SHIFT))
 	{
 		SetNextState(GS_MainMenu);

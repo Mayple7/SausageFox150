@@ -188,22 +188,6 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawMainMenu;
 			GSMPointers.pUnload = UnloadMainMenu;
 			break;
-		case GS_TestLevel:
-			GSMPointers.pLoad = LoadTestLevel;
-			GSMPointers.pInit = InitializeTestLevel;
-			GSMPointers.pUpdate = UpdateTestLevel;
-			GSMPointers.pFree = FreeTestLevel;
-			GSMPointers.pDraw = DrawTestLevel;
-			GSMPointers.pUnload = UnloadTestLevel;
-			break;
-		case GS_ShowcaseLevel:
-			GSMPointers.pLoad = LoadShowcase;
-			GSMPointers.pInit = InitializeShowcase;
-			GSMPointers.pUpdate = UpdateShowcase;
-			GSMPointers.pFree = FreeShowcase;
-			GSMPointers.pDraw = DrawShowcase;
-			GSMPointers.pUnload = UnloadShowcase;
-			break;
 		case GS_Tutorial:
 			GSMPointers.pLoad = LoadTutorial;
 			GSMPointers.pInit = InitializeTutorial;
@@ -211,6 +195,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pFree = FreeTutorial;
 			GSMPointers.pDraw = DrawTutorial;
 			GSMPointers.pUnload = UnloadTutorial;
+			break;
+		case GS_CharacterSelect:
+			GSMPointers.pLoad = LoadCharacterSelect;
+			GSMPointers.pInit = InitializeCharacterSelect;
+			GSMPointers.pUpdate = UpdateCharacterSelect;
+			GSMPointers.pFree = FreeCharacterSelect;
+			GSMPointers.pDraw = DrawCharacterSelect;
+			GSMPointers.pUnload = UnloadCharacterSelect;
 			break;
 		case GS_MapLevel:
 			GSMPointers.pLoad = LoadMapLevel;

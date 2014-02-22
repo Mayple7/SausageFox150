@@ -103,14 +103,14 @@ void Animation(Player *Object);
 void CreatePlayerSprites(Player *Player);
 void SavePlayer(Player *CurrentPlayer);
 int LoadPlayer(Player *CurrentPlayer);
-void LoadNewPlayer(Player *CurrentPlayer);
+void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess);
 
 //Updating non-modifiable player stats
 void updateMaxHealth(PlayerStats *CurrentPlayerStats);
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats);
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats);
 void updateDamageReduction(PlayerStats *CurrentPlayerStats);
-void updateDamage(PlayerStats *CurrentPlayerStats);
+void updateDamage(Player *CurrentPlayer);
 
 float RotateToAngle(float angle, float angleTo, float speed);
 

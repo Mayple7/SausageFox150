@@ -92,9 +92,6 @@
     <ClInclude Include="Vector4.h">
       <Filter>AE Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\TestLevel.h">
-      <Filter>Fox Header Files\Fox Level Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\StartSlides.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
@@ -145,9 +142,6 @@
     </ClInclude>
     <ClInclude Include="HeaderFiles\GameStateManager.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\LevelShowcase.h">
-      <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\PhysicsConstants.h">
       <Filter>Fox Header Files\Fox Math Headers</Filter>
@@ -260,6 +254,9 @@
     <ClInclude Include="HeaderFiles\UIButton.h">
       <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\CharacterSelect.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -272,9 +269,6 @@
       <Filter>Fox Source Files\Fox Math Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\MainMenu.c">
-      <Filter>Fox Source Files\Fox Level Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\TestLevel.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\StartSlides.c">
@@ -300,9 +294,6 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\GameStateManager.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\ShowcaseLevel.c">
-      <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Player.c">
       <Filter>Fox Source Files\Fox Object Sources</Filter>
@@ -411,6 +402,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\ObjectManagerMake.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\CharacterSelect.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

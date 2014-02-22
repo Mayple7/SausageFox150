@@ -91,6 +91,7 @@
     <ClInclude Include="AEVec2.h" />
     <ClInclude Include="HeaderFiles\ArmGuy.h" />
     <ClInclude Include="HeaderFiles\Camera.h" />
+    <ClInclude Include="HeaderFiles\CharacterSelect.h" />
     <ClInclude Include="HeaderFiles\CollisionBox.h" />
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
     <ClInclude Include="HeaderFiles\Enemy.h" />
@@ -113,7 +114,6 @@
     <ClInclude Include="HeaderFiles\Level2.h" />
     <ClInclude Include="HeaderFiles\Level3.h" />
     <ClInclude Include="HeaderFiles\Level4.h" />
-    <ClInclude Include="HeaderFiles\LevelShowcase.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\MapLevel.h" />
     <ClInclude Include="HeaderFiles\Matrix3.h" />
@@ -134,7 +134,6 @@
     <ClInclude Include="HeaderFiles\StartSlides.h" />
     <ClInclude Include="HeaderFiles\System.h" />
     <ClInclude Include="HeaderFiles\TemplateLevel.h" />
-    <ClInclude Include="HeaderFiles\TestLevel.h" />
     <ClInclude Include="HeaderFiles\TextCreation.h" />
     <ClInclude Include="HeaderFiles\TextureManager.h" />
     <ClInclude Include="HeaderFiles\TutorialLevel.h" />
@@ -152,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="SourceFiles\ArmGuy.c" />
     <ClCompile Include="SourceFiles\Camera.c" />
+    <ClCompile Include="SourceFiles\CharacterSelect.c" />
     <ClCompile Include="SourceFiles\CollisionBox.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
     <ClCompile Include="SourceFiles\Enemy.c" />
@@ -184,13 +184,11 @@
     <ClCompile Include="SourceFiles\PlayerCollision.c" />
     <ClCompile Include="SourceFiles\RigidBody.c" />
     <ClCompile Include="SourceFiles\SearchIntArray.c" />
-    <ClCompile Include="SourceFiles\ShowcaseLevel.c" />
     <ClCompile Include="SourceFiles\Sound.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />
     <ClCompile Include="SourceFiles\System.c" />
     <ClCompile Include="SourceFiles\TemplateLevel.c" />
-    <ClCompile Include="SourceFiles\TestLevel.c" />
     <ClCompile Include="SourceFiles\TextCreation.c" />
     <ClCompile Include="SourceFiles\TextureManager.c" />
     <ClCompile Include="SourceFiles\TutorialLevel.c" />
