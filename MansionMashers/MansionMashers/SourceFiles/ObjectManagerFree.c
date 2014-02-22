@@ -136,7 +136,22 @@ void FreeEnemy(Enemy *CurrentEnemy)
 		AEGfxMeshFree(CurrentEnemy->EnemyCollider.DebugMesh);
 
 		if (CurrentEnemy->EnemySprite->Created)
+		{
 			freeObject(CurrentEnemy->EnemySprite);
+			freeObject(CurrentEnemy->EnemySpriteParts.ArmLower);
+			freeObject(CurrentEnemy->EnemySpriteParts.ArmLower2);
+			freeObject(CurrentEnemy->EnemySpriteParts.ArmUpper);
+			freeObject(CurrentEnemy->EnemySpriteParts.ArmUpper2);
+			freeObject(CurrentEnemy->EnemySpriteParts.LegLower);
+			freeObject(CurrentEnemy->EnemySpriteParts.LegLower2);
+			freeObject(CurrentEnemy->EnemySpriteParts.LegUpper);
+			freeObject(CurrentEnemy->EnemySpriteParts.LegUpper2);
+			freeObject(CurrentEnemy->EnemySpriteParts.Body);
+			freeObject(CurrentEnemy->EnemySpriteParts.Tail);
+			freeObject(CurrentEnemy->EnemySpriteParts.Skirt);
+			freeObject(CurrentEnemy->EnemySpriteParts.Weapon);
+
+		}
 	}
 }
 

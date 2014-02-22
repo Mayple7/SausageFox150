@@ -148,7 +148,7 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 	}
 	if(frame >= 0)
 	{
-		temp = CreateSprite("TextureFiles/Rumple_TextSheet_White.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 11, 11, 4, xPos, yPos);
+		temp = (Sprite *) CreateSprite("TextureFiles/Rumple_TextSheet_White.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 11, 11, 4, xPos, yPos);
 		temp->Visible = FALSE;
 		temp->AnimationActive = FALSE;
 		temp->CurrentFrame = frame;

@@ -97,22 +97,22 @@ void InitializeShowcase(void)
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
 
-	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
+	OverlayGrid = (Sprite *) CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
 
 	// Create single player HUD sprite
-	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
+	HUD = (Sprite *) CreateSprite("TextureFiles/MaypleHUD.png", 320.0f, 137.0f, 200, 1, 1, 0, 0);
 	HUD->isHUD = TRUE;
 
 	// Create single player HUD item sprite
-	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
+	HUDitem = (Sprite *) CreateSprite("TextureFiles/HealthPotionHUD.png", 44.0f, 44.0f, 200, 1, 1, 0, 0);
 	HUDitem->ItemType = 0;
 	HUDitem->isHUD = TRUE;
 
 	// Create the background sprite
-	Background = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1, 0, 0);
+	Background = (Sprite *) CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1, 0, 0);
 	
 	// Create the offset background sprite
-	Background2 = CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1, 5760, 0);
+	Background2 = (Sprite *) CreateSprite("TextureFiles/LevelBackground.png", 5760, 1080, 0, 1, 1, 5760, 0);
 	Background2->FlipX = TRUE;
 
 	// Create the shelf sprite and initialize to be collidable
@@ -139,10 +139,10 @@ void InitializeShowcase(void)
 	BouncePad->PlatformCollider.Position = BouncePad->Position;
 	BouncePad->PlatformRigidBody.Restitution = 1.8f;
 
-	FoxBig = CreateSprite("Textures/GinkoArt.png", 148.5, 270, 20, 1, 1, -300, 0);
-	FoxSmall = CreateSprite("Textures/GinkoSmall.png", 148.5, 270, 20, 1, 1, -800, 0);
+	FoxBig = (Sprite *) CreateSprite("Textures/GinkoArt.png", 148.5, 270, 20, 1, 1, -300, 0);
+	FoxSmall = (Sprite *) CreateSprite("Textures/GinkoSmall.png", 148.5, 270, 20, 1, 1, -800, 0);
 
-	Letters = CreateSprite("TextureFiles/Rumple_TextSheet.png", 92, 100, 20, 11, 4, -1200, 100);
+	Letters = (Sprite *) CreateSprite("TextureFiles/Rumple_TextSheet.png", 92, 100, 20, 11, 4, -1200, 100);
 	Letters->AnimationSpeed = 60;
 
 	Vec3Set(&textTint, 0.6f, 0.169f, 0.8f);

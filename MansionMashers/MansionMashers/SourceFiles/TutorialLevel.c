@@ -90,11 +90,11 @@ void InitializeTutorial(void)
 		HUDList.HudItem[hudLoop] = 0;
 
 	// Create single player HUD sprite
-	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 448.0f, 192.0f, 200, 1, 1, 0, 0);
+	HUD = (Sprite *) CreateSprite("TextureFiles/MaypleHUD.png", 448.0f, 192.0f, 200, 1, 1, 0, 0);
 	HUD->isHUD = TRUE;
 
 	// Create single player HUD item sprite
-	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 66.0f, 66.0f, 200, 1, 1, 0, 0);
+	HUDitem = (Sprite *) CreateSprite("TextureFiles/HealthPotionHUD.png", 66.0f, 66.0f, 200, 1, 1, 0, 0);
 	HUDitem->ItemType = 0;
 	HUDitem->isHUD = TRUE;
 
@@ -102,14 +102,14 @@ void InitializeTutorial(void)
 	HUDList.HudItem[0] = HUD;
 	HUDList.HudItem[1] = HUDitem;
 
-	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
-	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
+	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
+	OverlayGrid = (Sprite *) CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
 
 	//Bounding Boxes
-	BoundTop = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
-	BoundBottom = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, -1080);
-	BoundLeft = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, -1920, 0);
-	BoundRight = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 1920, 0);
+	BoundTop = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
+	BoundBottom = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, -1080);
+	BoundLeft = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, -1920, 0);
+	BoundRight = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 1920, 0);
 
 	BoundTop->Tint = BoundingTint;
 	BoundBottom->Tint = BoundingTint;
@@ -135,16 +135,16 @@ void InitializeTutorial(void)
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 475, 0);
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
 
-	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750, -250);
+	StrawDummy = CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
 
-	BlackOverlay = CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Alpha = 0;
 	Vec3Set(&BlackOverlay->Tint, 0, 0, 0);
 
-	GameLogo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920, 1080, 4001, 1, 1, 0, 0);
+	GameLogo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920, 1080, 4001, 1, 1, 0, 0);
 	GameLogo->Alpha = 0;
 
-	DoorOverlay = CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
+	DoorOverlay = (Sprite *) CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 745, -85, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
