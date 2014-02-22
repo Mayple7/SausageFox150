@@ -88,22 +88,23 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
 		CurrentEnemy->dropDown = FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 50, 0, 5, 0, 0, 0, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, 500, 15, 0, 0, 0, 10);
 
-		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x / GetLoadRatio(), CurrentEnemy->Position.y / GetLoadRatio(), CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
+		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x / GetLoadRatio(), CurrentEnemy->Position.y / GetLoadRatio(), CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
 
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 100, 200, objID);
 		CurrentEnemy->EnemyCollider.Offset.y = 20 * GetLoadRatio();
 		CurrentEnemy->EnemyCollider.width = CurrentEnemy->EnemyCollider.width - 20 * GetLoadRatio();
 		UpdateCollider(&CurrentEnemy->EnemyCollider, CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
 
-		CurrentEnemy->EnemyWeapon = CreateWeapon("Sausage sausage of sausage", "TextureFiles/stick.png", Sword, Common, WeaponEnemy, 256, 256, objID++);
+		CurrentEnemy->EnemyWeapon = CreateWeapon("Sausage sausage of sausage", "TextureFiles/BattleAxe.png", Sword, Common, WeaponEnemy, 256, 256, objID++);
 		CurrentEnemy->EnemySpriteParts.Weapon = CurrentEnemy->EnemyWeapon->WeaponSprite;
 
 		CreateEnemySprites(CurrentEnemy);
 		CurrentEnemy->Speed = 0;
 		CurrentEnemy->LegSinValue = 0;
 		CurrentEnemy->isAttacking = FALSE;
+		CurrentEnemy->EnemyDirection = LEFT;
 
 		break;
 	case BasicRanged:
@@ -146,6 +147,71 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 			CurrentEnemy->EnemySpriteParts.AttackRotationArmLower = 0;
 			UpdateCollider(&CurrentEnemy->EnemyCollider,CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
 		}
+		// not key press for direction then slow down!
+		if(!FoxInput_KeyDown(VK_LEFT) && !FoxInput_KeyDown(VK_RIGHT))
+		{
+			if (!(CurrentEnemy->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentEnemy->EnemyRigidBody.onGround)
+			{
+				if (CurrentEnemy->Speed - 48.0f * GetDeltaTime() >= 0.0f)
+				{
+					CurrentEnemy->Speed -= 48.0f * GetDeltaTime();
+				}
+				else
+				{
+					CurrentEnemy->Speed = 0.0f;
+					CurrentEnemy->LegSinValue = 0;
+				}
+			}
+			else
+			{
+				if (CurrentEnemy->Speed - 48.0f * GetDeltaTime() >= 0.0f)
+				{
+					CurrentEnemy->Speed -= 48.0f * GetDeltaTime();
+				}
+				else
+				{
+					CurrentEnemy->Speed = 0.0f;
+					CurrentEnemy->LegSinValue = 0;
+				}
+			}
+		}
+		
+		// Move left if A is pressed
+		if(FoxInput_KeyDown(VK_LEFT))
+		{
+			CurrentEnemy->EnemySprite->FlipX = FALSE;
+			CurrentEnemy->EnemyDirection = LEFT;
+			CurrentEnemy->Speed = CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		}
+		// Move right if D is pressed
+		else if(FoxInput_KeyDown(VK_RIGHT))
+		{
+			CurrentEnemy->EnemySprite->FlipX = TRUE;
+			CurrentEnemy->EnemyDirection = RIGHT;
+			CurrentEnemy->Speed = CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		}
+		//Jump when space is pushed or drop down if S is pushed as well
+		if(FoxInput_KeyTriggered(VK_SPACE))
+		{
+			Vec2 velocity;
+		
+			if(FoxInput_KeyDown('S') && CurrentEnemy->EnemyRigidBody.onGround)
+			{
+				CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+				CurrentEnemy->dropDown = TRUE;
+			}
+
+		
+			Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
+			if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentEnemy->EnemyRigidBody.onGround)
+			{
+				if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio())
+					Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
+				CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+				ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
+			}
+		}
+		MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
 
 		DetectEnemyCollision(CurrentEnemy);
 		EnemyAnimation(CurrentEnemy);
@@ -205,7 +271,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	//Set gravity if not on floor or on a platform
 	else
 	{
-		SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, -1000.0f * GetLoadRatio() / 2);
+		SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, -600.0f * GetLoadRatio());
 	}
 	//Player position updated when dropping down from a platform
 	if(CurrentEnemy->dropDown)
@@ -491,16 +557,15 @@ void EnemyAnimation(Enemy *Object)
 		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		ArmLwr2->Position.y = ArmUpr2->Position.y - (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		
-		/* uncomment when we add movement
 		if ((Object->Speed * GetLoadRatio()) < 0.6f * GetDeltaTime() * GetLoadRatio())
 		{
 			if (!Object->isAttacking)
 			{
 				ArmLwr->Rotation = ArmUpr->Rotation - 0.2f;
 				ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f;
-				//Weap->Rotation = ArmLwr2->Rotation;
+				Weap->Rotation = ArmLwr2->Rotation;
 			}
-		}*/
+		}
 		
 		Weap->Position.x = ArmLwr2->Position.x - (float)cos(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
 		Weap->Position.y = ArmLwr2->Position.y - (float)sin(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
@@ -564,16 +629,15 @@ void EnemyAnimation(Enemy *Object)
 		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 		ArmLwr2->Position.y = ArmUpr2->Position.y + (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
-		/* uncomment when we add movement
 		if ((Object->Speed * GetLoadRatio()) < 0.6f * GetDeltaTime() * GetLoadRatio())
 		{
 			if (!Object->isAttacking)
 			{
 				ArmLwr->Rotation = ArmUpr->Rotation + 0.5f;
 				ArmLwr2->Rotation = ArmUpr2->Rotation + 0.2f;
-				//Weap->Rotation = ArmLwr->Rotation;
+				Weap->Rotation = ArmLwr->Rotation;
 			}
-		}*/
+		}
 		
 		
 		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);

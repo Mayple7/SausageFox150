@@ -74,6 +74,8 @@ void InitializeKevin(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("That Bitch Level", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
+
+	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
 }
 
 /*************************************************************************/
@@ -136,10 +138,30 @@ void UnloadKevin(void)
 /*************************************************************************/
 void EventKevin(void)
 {
+	int i;
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
+
+	//Update the enemies
+	for(i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if (enemyList[i].objID == -1)
+			break;
+		if (enemyList[i].objID == 0)
+			continue;
+
+		UpdateEnemy(&enemyList[i]);
+	}
+
+	i = 0;
+	while(i < COLLIDEAMOUNT)
+	{
+		if(floatTextList[i] > 0)
+			UpdateFloatingText(floatTextList[i]);
+		i++;
+	}
 
 	if(FoxInput_KeyTriggered('U'))
 	{
