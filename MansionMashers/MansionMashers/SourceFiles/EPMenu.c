@@ -16,8 +16,15 @@ Sprite* QuitButton;
 
 Sprite* Selector;
 
+//Delete save file objects
+Sprite* DeleteText;
+Button* YesButton;
+Button* NoButton;
+
 enum Buttons { EP1But, EP2But, TutBut, QuitBut};
 int selectedEPButton;								//0: EP1, 1: EP2, 2: tutorial, 3: quit
+static int deleteSave; // If true, dialogue box to delete save is up
+static int newID;
 
 /*************************************************************************/
 /*!
@@ -33,6 +40,7 @@ void LoadEPMenu(void)
 
 void InitializeEPMenu(void)
 {
+	newID = 10;
 	// Reset the object list
 	ResetObjectList();
 
@@ -55,6 +63,14 @@ void InitializeEPMenu(void)
 	// Creates the selector button - set to default position of the start button
 	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 2, 1, 1, 100, 0);
 	
+	DeleteText = (Sprite *) CreateSprite("TextureFiles/DeleteText.png", 651, 334, 500, 1, 1, 0, 0);
+	YesButton = CreateButton("TextureFiles/DeleteButton.png", -300, -200, 400, 150, newID++);
+	NoButton = CreateButton("TextureFiles/BackButton.png", 300, -200, 400, 150, newID++);
+
+	DeleteText->Visible = FALSE;
+	YesButton->ButtonSprite->Visible = FALSE;
+	NoButton->ButtonSprite->Visible = FALSE;
+
 	// Set camera to (0,0)
 	ResetCamera();
 	UpdateEPSelector(Selector);
@@ -156,7 +172,45 @@ void EPMenuInput(void)
 
 	if(FoxInput_KeyTriggered('C'))
 	{
-		SetNextState(GS_CharacterSelect);
+		FILE *fp = fopen("../GameData.cfg", "r");
+		if(!fp)
+		{
+			SetNextState(GS_CharacterSelect);
+		}
+		else
+		{
+			deleteSave = TRUE;
+			DeleteText->Visible = TRUE;
+			YesButton->ButtonSprite->Visible = TRUE;
+			NoButton->ButtonSprite->Visible = TRUE;
+		}
+		fclose(fp);
+	}
+
+	if(deleteSave)
+	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			int worldX, worldY;
+			Vec2 MouseClick;
+
+			FoxInput_GetWorldPosition(&worldX, &worldY);
+			Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
+			if(PointRectCollision(&YesButton->ButtonCollider, &MouseClick))
+			{
+				remove("../GameData.cfg");
+				SetNextState(GS_CharacterSelect);
+			}
+			else if(PointRectCollision(&NoButton->ButtonCollider, &MouseClick))
+			{
+				deleteSave = FALSE;
+				DeleteText->Visible = FALSE;
+				YesButton->ButtonSprite->Visible = FALSE;
+				NoButton->ButtonSprite->Visible = FALSE;
+			}
+		}
+
 	}
 
 
