@@ -117,7 +117,7 @@ AEGfxVertexList* createMesh(float width, float height, float offsetX, float offs
 	A pointer to the sprite object
 */
 /*************************************************************************/
-Sprite* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, float xPos, float yPos)
+void* CreateSprite(char texture[], float width, float height, unsigned short ZIndex, int xFrames, int yFrames, float xPos, float yPos)
 {	
 	//Adds the sprite to the object manager list
 	Sprite *CurrentSprite = AddObject();
