@@ -52,17 +52,17 @@ void InitializeCharacterSelect(void)
 	ResetSoundList();
 	Vec3Set(&Tint, 0.475f, 0.463f, 0.311f);
 
-	BackgroundColor = CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 1, 1, 1, 0, 0);
+	BackgroundColor = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 1, 1, 1, 0, 0);
 	BackgroundColor->Tint = Tint;
 
-	BackgroundText = CreateSprite("TextureFiles/CharacterSelectText.png", 1920, 1080, 2, 1, 1, 0, 0);
+	BackgroundText = (Sprite *) CreateSprite("TextureFiles/CharacterSelectText.png", 1920, 1080, 2, 1, 1, 0, 0);
 	
-	MaypleSelected = CreateSprite("TextureFiles/MaypleSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
-	GinkoSelected = CreateSprite("TextureFiles/GinkoSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
+	MaypleSelected = ("TextureFiles/MaypleSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
+	GinkoSelected = (Sprite *) CreateSprite("TextureFiles/GinkoSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
 	GinkoSelected->Alpha = 0.0f;
-	KayaSelected = CreateSprite("TextureFiles/KayaSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
+	KayaSelected = (Sprite *) CreateSprite("TextureFiles/KayaSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
 	KayaSelected->Alpha = 0.0f;
-	HollySelected = CreateSprite("TextureFiles/HollySelect.png", 1920, 1080, 2, 1, 1, 0, 0);
+	HollySelected = (Sprite *) CreateSprite("TextureFiles/HollySelect.png", 1920, 1080, 2, 1, 1, 0, 0);
 	HollySelected->Alpha = 0.0f;
 
 	MaypleButton = CreateButton("TextureFiles/BlankPlatform.png", -712, -62, 405.0f, 724.0f, newID++);

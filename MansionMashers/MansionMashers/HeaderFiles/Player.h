@@ -10,6 +10,7 @@
 #include "Sprite.h"
 #include "CollisionBox.h"
 #include "FoxObjects.h"
+#include "Sound.h"
 
 enum BuffType { None, AtkSpeed, MovSpeed, DmgBuff };
 enum Character { Mayple, Ginko, Holly, Kaya};
@@ -33,6 +34,12 @@ typedef struct PlayerParts
 	float AttackRotationArmLower;
 	int BlinkTimer;
 }PlayerParts;
+
+typedef struct PlayerSounds
+{
+	FoxSound *Swing1;
+	FoxSound *Swing2;
+}PlayerSounds;
 
 typedef struct PlayerStats
 {
@@ -68,6 +75,7 @@ typedef struct Player
 
 	PlayerParts PlayerSpriteParts;
 	PlayerStats CurrentPlayerStats;
+	PlayerSounds CurrentPlayerSounds;
 
 	enum BuffType BuffHeld;
 
