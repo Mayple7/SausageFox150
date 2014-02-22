@@ -143,6 +143,8 @@ void EventKevin(void)
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
+	
+	ParticleSystemUpdate();
 
 	//Update the enemies
 	for(i = 0; i < COLLIDEAMOUNT; i++)

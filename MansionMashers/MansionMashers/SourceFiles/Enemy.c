@@ -90,7 +90,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 
 		InitializeEnemyStats(CurrentEnemy, 50, 500, 15, 0, 0, 0, 10);
 
-		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x / GetLoadRatio(), CurrentEnemy->Position.y / GetLoadRatio(), CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
+		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x / GetLoadRatio(), CurrentEnemy->Position.y / GetLoadRatio(), CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 100, 200, objID);
 		CurrentEnemy->EnemyCollider.Offset.y = 20 * GetLoadRatio();
