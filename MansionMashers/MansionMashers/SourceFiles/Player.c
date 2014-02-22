@@ -96,6 +96,10 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 		AE_ASSERT_MESG("SOMETHING BE BROKED");
 	}
 
+	//Load player sounds
+	CurrentPlayer->CurrentPlayerSounds.Swing1 = CreateSound("Sounds/ToolSwing1.mp3", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.Swing2 = CreateSound("Sounds/ToolSwing2.mp3", SmallSnd);
+
 	//Creates the sprite for the player
 	CreatePlayerSprites(CurrentPlayer);
 	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
@@ -117,6 +121,13 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 	if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer->isAttacking)
 	{
+		//Pick a random swing sound to play
+		if (rand() % 2)
+			PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
+		else
+			PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
+
+		//Set the attacking necessaries
 		CurrentPlayer->isAttacking = TRUE;
 		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;

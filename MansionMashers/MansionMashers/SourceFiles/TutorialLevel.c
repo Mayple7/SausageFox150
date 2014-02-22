@@ -79,7 +79,6 @@ void InitializeTutorial(void)
 
 	newID = 1;
 	ResetObjectList();
-	ResetSoundList();
 
 	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
