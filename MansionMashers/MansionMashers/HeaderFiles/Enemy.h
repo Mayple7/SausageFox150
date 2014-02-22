@@ -7,6 +7,7 @@
 #include "CollisionBox.h"
 
 enum EnemyType { Dummy, BasicMelee, BasicRanged, AdvancedMelee, AdvancedRanged, ExpertMelee, ExpertRanged};
+enum AIState { AIPassive, AIAggressive, AIIdle};
 
 typedef struct EnemyParts
 {
@@ -42,6 +43,12 @@ typedef struct EnemyStats
 	int Experience;
 }EnemyStats;
 
+typedef struct EnemySounds
+{
+	//Weapon sounds
+	FoxSound *YEAH;
+}EnemySounds;
+
 typedef struct Enemy
 {
 	int EnemyType;
@@ -57,6 +64,14 @@ typedef struct Enemy
 
 	int dropDown;  //Fake Boolean
 
+	int isMoveRight;
+	int isMoveLeft;
+	int isJumping;
+	int isDropDown;
+	int Attack;
+	int StateTimer;
+	enum AIState EnemyState;
+
 	enum Direction EnemyDirection;
 	Sprite *EnemySprite;
 	RigidBody EnemyRigidBody;
@@ -65,7 +80,7 @@ typedef struct Enemy
 	EnemyParts EnemySpriteParts;
 	struct ParticleSystem* EnemyParticleSystem;
 	struct Weapon* EnemyWeapon;
-
+	struct EnemySounds CurrentEnemySounds;
 	Vec2 Position;
 
 }Enemy;
@@ -76,6 +91,8 @@ void UpdateEnemy(Enemy *CurrentEnemy);
 void DetectEnemyCollision(Enemy *CurrentEnemy);
 void EnemyAnimation(Enemy *Object);
 void CreateEnemySprites(Enemy *Object);
+void EnemyAIUpdate(Enemy *Object);
+void EnemyBasicMeleeUpdate(Enemy *Object);
 
 float RotateToAngle(float angle, float angleTo, float speed);
 #endif
