@@ -954,7 +954,7 @@ int LoadPlayer(Player *CurrentPlayer)
 			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 
 		fclose(fp);
-		if(num == 10)
+		if(num == 13)
 		{
 			updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
 			updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
