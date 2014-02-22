@@ -37,8 +37,16 @@ typedef struct PlayerParts
 
 typedef struct PlayerSounds
 {
+	//Weapon sounds
 	FoxSound *Swing1;
 	FoxSound *Swing2;
+	FoxSound *Hit1;
+	FoxSound *Hit2;
+
+	//Character sounds
+	FoxSound *Hurt1;
+	FoxSound *Hurt2;
+	FoxSound *YeahBebeGurrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrl;
 }PlayerSounds;
 
 typedef struct PlayerStats
