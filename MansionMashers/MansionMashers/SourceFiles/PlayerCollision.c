@@ -119,3 +119,21 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	}
 }
 // height +/- (fontsize/2)
+void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
+{
+	int damageDealt;
+	char num[10];
+	Vec3 textColor;
+	TextGlyphs *FirstLetter;
+	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
+	
+	// Calculate damage
+	damageDealt = CurrentEnemy->CurrentEnemyStats.Damage;
+	
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
+	sprintf(num, "%d", damageDealt);
+	// Create Floating Combat Text
+	FirstLetter = CreateText(num, CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+	AddFloatingText(FirstLetter);
+	ChangeTextVisibility(FirstLetter);
+}

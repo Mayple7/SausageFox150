@@ -17,6 +17,7 @@ Sprite* QuitButton;
 Sprite* Selector;
 
 //Delete save file objects
+Sprite* BlackBackground;
 Sprite* DeleteText;
 Button* YesButton;
 Button* NoButton;
@@ -40,6 +41,7 @@ void LoadEPMenu(void)
 
 void InitializeEPMenu(void)
 {
+	Vec3 Tint;
 	newID = 10;
 	// Reset the object list
 	ResetObjectList();
@@ -63,10 +65,17 @@ void InitializeEPMenu(void)
 	// Creates the selector button - set to default position of the start button
 	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 2, 1, 1, 100, 0);
 	
-	DeleteText = (Sprite *) CreateSprite("TextureFiles/DeleteText.png", 651, 334, 500, 1, 1, 0, 0);
+	Vec3Set(&Tint, 0, 0, 0);
+	BlackBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
+	BlackBackground->Tint = Tint;
+	BlackBackground->Alpha = 0.5f;
+	DeleteText = (Sprite *) CreateSprite("TextureFiles/DeleteText.png", 651, 334, 500, 1, 1, 0, 100);
 	YesButton = CreateButton("TextureFiles/DeleteButton.png", -300, -200, 400, 150, newID++);
+	YesButton->ButtonSprite->ZIndex = 500;
 	NoButton = CreateButton("TextureFiles/BackButton.png", 300, -200, 400, 150, newID++);
+	NoButton->ButtonSprite->ZIndex = 500;
 
+	BlackBackground->Visible = FALSE;
 	DeleteText->Visible = FALSE;
 	YesButton->ButtonSprite->Visible = FALSE;
 	NoButton->ButtonSprite->Visible = FALSE;
@@ -180,6 +189,7 @@ void EPMenuInput(void)
 		else
 		{
 			deleteSave = TRUE;
+			BlackBackground->Visible = TRUE;
 			DeleteText->Visible = TRUE;
 			YesButton->ButtonSprite->Visible = TRUE;
 			NoButton->ButtonSprite->Visible = TRUE;
@@ -205,6 +215,7 @@ void EPMenuInput(void)
 			else if(PointRectCollision(&NoButton->ButtonCollider, &MouseClick))
 			{
 				deleteSave = FALSE;
+				BlackBackground->Visible = FALSE;
 				DeleteText->Visible = FALSE;
 				YesButton->ButtonSprite->Visible = FALSE;
 				NoButton->ButtonSprite->Visible = FALSE;

@@ -442,6 +442,7 @@ void DetectPlayerCollision(void)
 	Platform* pList = platformList;
 	Food* fList = foodList;
 	Weapon* wList = weaponList;
+	Enemy* eList = enemyList;
 	int hit = 0;
 	int hitPrev = 0;
 
@@ -596,6 +597,53 @@ void DetectPlayerCollision(void)
 		}
 		wList++;
 	}
+	while(eList->objID != -1)
+	{
+		// If the weapon is the enemy's
+		if(eList->objID > 0 && eList->EnemyType != Dummy && eList->EnemyWeapon->WeaponFOF == EnemyWeapon)
+		{
+			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &eList->EnemyWeapon->WeaponAttack);
+			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, eList->EnemyWeapon->WeaponAttack.collisionID);
+			if(hit && eList->isAttacking)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentPlayer.CollisionData[-hitPrev] = eList->EnemyWeapon->WeaponPickup.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					PlayerCollideEnemyWeapon(&CurrentPlayer, eList);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = eList->EnemyWeapon->WeaponAttack.collisionID * 10 + 1;
+					PlayerCollideEnemyWeapon(&CurrentPlayer, eList);
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = 0;
+				}
+			}
+		}
+		eList++;
+	}
+
 
 	// Check projectile collisions
 	//	-> Handle collision if true
