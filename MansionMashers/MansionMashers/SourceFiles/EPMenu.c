@@ -183,8 +183,8 @@ void EPMenuInput(void)
 			DeleteText->Visible = TRUE;
 			YesButton->ButtonSprite->Visible = TRUE;
 			NoButton->ButtonSprite->Visible = TRUE;
+			fclose(fp);
 		}
-		fclose(fp);
 	}
 
 	if(deleteSave)

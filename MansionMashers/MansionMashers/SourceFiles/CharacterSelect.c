@@ -57,7 +57,7 @@ void InitializeCharacterSelect(void)
 
 	BackgroundText = (Sprite *) CreateSprite("TextureFiles/CharacterSelectText.png", 1920, 1080, 2, 1, 1, 0, 0);
 	
-	MaypleSelected = ("TextureFiles/MaypleSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
+	MaypleSelected = (Sprite *) CreateSprite("TextureFiles/MaypleSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
 	GinkoSelected = (Sprite *) CreateSprite("TextureFiles/GinkoSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
 	GinkoSelected->Alpha = 0.0f;
 	KayaSelected = (Sprite *) CreateSprite("TextureFiles/KayaSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
