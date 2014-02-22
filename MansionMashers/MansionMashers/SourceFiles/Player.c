@@ -56,7 +56,9 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 
 	CurrentPlayer->Princess = Princess;
 
-	//Default position of the player
+	/*////////////////////////////////
+	//       PLAYER BASICS          //
+	////////////////////////////////*/
 	CurrentPlayer->Position.x = xPos;
 	CurrentPlayer->Position.y = yPos;
 	CurrentPlayer->FlipX = FALSE;
@@ -64,13 +66,17 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	CurrentPlayer->FlipXPrev = FALSE;
 	CurrentPlayer->FlipYPrev = FALSE;
 
+	//Moving and bufftacular
 	CurrentPlayer->CurrentPlayerStats.MoveSpeed = 600.0f;
 	CurrentPlayer->CurrentPlayerStats.AttackSpeed = 12.0f;
 	CurrentPlayer->CurrentPlayerStats.CurrentBuff = None;
 	CurrentPlayer->CurrentPlayerStats.BuffTimer = 0;
 	CurrentPlayer->BuffHeld = None;
 
-	//Collision properties
+
+	/*////////////////////////////////
+	//      PLAYER COLLISION        //
+	////////////////////////////////*/
 	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, newID);
 	CurrentPlayer->PlayerCollider.Offset.y = 20 * GetLoadRatio();
 	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20 * GetLoadRatio();
@@ -79,24 +85,39 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	//Collider Debug
 	CurrentPlayer->PlayerCollider.collisionDebug = TRUE;
 
-	//Initialize rigidbody
+
+	/*////////////////////////////////
+	//       PLAYER SO RIGID        //
+	////////////////////////////////*/
 	InitializeRigidBody(&CurrentPlayer->PlayerRigidBody, FALSE, PLAYER_WIDTH, PLAYER_HEIGHT);
 	CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 	CurrentPlayer->dropDown = FALSE;
 
-	//Weapon
+
+	/*////////////////////////////////
+	//    PLAYER WEAPON & STATS     //
+	////////////////////////////////*/
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
 
-	//Load player stats
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
 		LoadNewPlayer(CurrentPlayer, Princess);
 		AE_ASSERT_MESG("SOMETHING BE BROKED");
 	}
 
-	//Creates the sprite for the player
+
+	/*////////////////////////////////
+	//       PLAYER SOUNDS          //
+	////////////////////////////////*/
+	CurrentPlayer->CurrentPlayerSounds.Swing1 = CreateSound("Sounds/ToolSwing1.mp3", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.Swing2 = CreateSound("Sounds/ToolSwing2.mp3", SmallSnd);
+
+
+	/*////////////////////////////////
+	//       PLAYER SPRITE          //
+	////////////////////////////////*/
 	CreatePlayerSprites(CurrentPlayer);
 	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
 }
@@ -117,6 +138,13 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 	if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer->isAttacking)
 	{
+		//Pick a random swing sound to play
+		if (rand() % 2)
+			PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
+		else
+			PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
+
+		//Set the attacking necessaries
 		CurrentPlayer->isAttacking = TRUE;
 		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;

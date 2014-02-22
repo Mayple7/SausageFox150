@@ -72,6 +72,7 @@ void InitializeHandGuy(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+	CurrentPlayer.PlayerCollider.collisionDebug = FALSE;
 
 	HandGauy = (Sprite *) CreateSprite("TextureFiles/HandGauy.png", 400, 400, 10, 1, 1, -700, -250);
 
