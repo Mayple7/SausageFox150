@@ -85,9 +85,9 @@ void InitializeEP1Screen(void)
 
 
 	// Create the slide sprites
-	IntroSlide = CreateSprite("TextureFiles/Slide1.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	Title = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	HighConcept = CreateSprite("TextureFiles/Slide3.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	IntroSlide = (Sprite *) CreateSprite("TextureFiles/Slide1.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	Title = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	HighConcept = (Sprite *) CreateSprite("TextureFiles/Slide3.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 }
 
 /*************************************************************************/

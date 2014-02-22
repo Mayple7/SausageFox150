@@ -39,7 +39,8 @@
 // ---------------------------------------------------------------------------
 // globals
 int newID;					// ID number
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
+Sprite *HandGauy;
 
 /*************************************************************************/
 /*!
@@ -71,8 +72,11 @@ void InitializeHandGuy(void)
 	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
+	HandGauy = (Sprite *) CreateSprite("TextureFiles/HandGauy.png", 400, 400, 0, 1, 1, -500, -250);
+	CreateSprite("TextureFiles/HandGauy.png", 200, 200, 0, 1, 1, 500, -250);
+
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("HandGuy Level", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 }
 

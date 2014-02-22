@@ -46,6 +46,8 @@ Sprite* Level1Panel1;
 Sprite* Level1Door1;
 Platform* Table1;
 
+FoxSound *testing;
+
 
 /*************************************************************************/
 /*!
@@ -70,6 +72,7 @@ void InitializeLevel1(void)
 	Vec3 TextTint;
 	newID = 1;
 	ResetObjectList();
+	ResetSoundList();
 	ResetCamera();
 
 	// Initialize the player
@@ -81,8 +84,8 @@ void InitializeLevel1(void)
 	ChangeTextVisibility(LevelName);
 
 	//Background: Panel 1
-	Level1Panel1 = CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
-	Level1Door1 = 	Level1Panel1 = CreateSprite("TextureFiles/FoxMansion2door.png", 1920, 1080, 200, 1, 1, 0, 0);
+	Level1Panel1 = (Sprite *) CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
+	Level1Door1 = 	Level1Panel1 = (Sprite *) CreateSprite("TextureFiles/FoxMansion2door.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	//Platforms
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 125.0f, 40.0f, newID++, -693, -305);
@@ -109,7 +112,7 @@ void UpdateLevel1(void)
 {
 	EventLevel1();
 
-	
+	PlayAudio(testing);
 
 
 	// This should be the last line in this function
@@ -153,6 +156,7 @@ void DrawLevel1(void)
 void FreeLevel1(void)
 {
 	FreeObjectList();
+	FreeSoundList();
 }
 
 /*************************************************************************/

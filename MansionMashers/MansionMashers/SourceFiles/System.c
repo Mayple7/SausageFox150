@@ -54,12 +54,17 @@ void FoxSystemInitialize(void)
 	BGMVolume /= 100.0f;
 
 	FMODInit();
+	ResetChannelGroupList();
+	ChannelController = CreateChannelGroups();
+	SetChannelGroupVolume(EffectType, SFXVolume);
+	SetChannelGroupVolume(MusicType, BGMVolume);
+
 	InitWindow();
 }
 
 void FoxSystemExit(void)
 {
-	
+	FreeChannelGroupList();
 	FMODQuit();
 
 }

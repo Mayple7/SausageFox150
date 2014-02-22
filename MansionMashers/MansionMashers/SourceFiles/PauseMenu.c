@@ -39,6 +39,8 @@ Button* BGMSlider;
 TextGlyphs* SFXText;
 TextGlyphs* BGMText;
 
+FoxSound BackgroundSnd;
+
 void (*LevelToDraw)();
 
 float SFXSliderPos, BGMSliderPos;
@@ -52,6 +54,8 @@ void InitializePause(void (*DrawLevel)())
 	float camX, camY;
 	Vec3 TextColor;
 
+	CreatePauseSound(&BackgroundSnd, "Sounds/awesome.mp3", LargeSnd);
+
 	volumestring = (char *)MallocMyAlloc(5, sizeof(char));
 
 	volumestring[0] = '1';
@@ -64,16 +68,16 @@ void InitializePause(void (*DrawLevel)())
 
 	AEGfxGetCamPosition(&camX, &camY);
 	pause = TRUE;
-	PauseText = CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, camX, 350);
+	PauseText = (Sprite *) CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, camX, 350);
 
-	SFXSliderGuide = CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, 100);
-	BGMSliderGuide = CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, -100);
+	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, 100);
+	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, -100);
 
-	SFXSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, 100);
-	BGMSliderBack = CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, -100);
+	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, 100);
+	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, -100);
 
 	Vec3Set(&TextColor, 0, 0, 0);
-	PauseBackground = CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, camX, 0);
+	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, camX, 0);
 	PauseBackground->Alpha = 0.5;
 	PauseBackground->Tint = TextColor;
 
@@ -124,6 +128,7 @@ void UpdatePause(void)
 	{
 		AESysFrameStart();
 		StartFoxFrame();
+		PlayAudio(&BackgroundSnd);
 
 		if(FoxInput_KeyTriggered(VK_ESCAPE))
 		{
@@ -140,11 +145,19 @@ void UpdatePause(void)
 		}
 
 		DrawPause();
+
 		FoxInput_Update();
 		EventPause();
+
+		SaveVolume();
+		SetChannelGroupVolume(EffectType, SFXVolume);
+		SetChannelGroupVolume(MusicType, BGMVolume);
+		UpdateSoundSystem();
+
 		EndFoxFrame();
 		AESysFrameEnd();
 	}
+	TogglePauseSound(&BackgroundSnd);
 	SaveVolume();
 	FreePause();
 }
@@ -158,6 +171,7 @@ void DrawPause(void)
 
 void FreePause(void)
 {
+	
 	freeObject(PauseText);
 	freeObject(SFXSliderGuide);
 	freeObject(BGMSliderGuide);
@@ -169,6 +183,7 @@ void FreePause(void)
 	FreeText(SFXText);
 	FreeText(BGMText);
 	FreeMyAlloc(volumestring);
+	//ReleaseSound(BackgroundSnd.Sound);
 }
 
 void EventPause(void)

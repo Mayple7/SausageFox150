@@ -59,9 +59,9 @@ Sprite* GameLogo;
 Weapon* StarterAxe;
 Weapon* StarterSword;
 
-FoxSound BackgroundSnd;
-FoxSound GongSnd;
-FoxChannels ChannelController;
+FoxSound *BackSnd;
+FoxSound *GongSnd;
+
 int newID;
 
 void LoadTutorial(void)
@@ -79,10 +79,10 @@ void InitializeTutorial(void)
 
 	newID = 1;
 	ResetObjectList();
-	CreateChannelGroups(&ChannelController);
+	ResetSoundList();
 
-	CreateSound("Sounds/wave.mp3", &BackgroundSnd, SmallSnd);
-	CreateSound("Sounds/GongHit.wav", &GongSnd, SmallSnd);
+	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
+	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
 	InitializePlayer(&CurrentPlayer, Ginko, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
@@ -90,11 +90,11 @@ void InitializeTutorial(void)
 		HUDList.HudItem[hudLoop] = 0;
 
 	// Create single player HUD sprite
-	HUD = CreateSprite("TextureFiles/MaypleHUD.png", 448.0f, 192.0f, 200, 1, 1, 0, 0);
+	HUD = (Sprite *) CreateSprite("TextureFiles/MaypleHUD.png", 448.0f, 192.0f, 200, 1, 1, 0, 0);
 	HUD->isHUD = TRUE;
 
 	// Create single player HUD item sprite
-	HUDitem = CreateSprite("TextureFiles/HealthPotionHUD.png", 66.0f, 66.0f, 200, 1, 1, 0, 0);
+	HUDitem = (Sprite *) CreateSprite("TextureFiles/HealthPotionHUD.png", 66.0f, 66.0f, 200, 1, 1, 0, 0);
 	HUDitem->ItemType = 0;
 	HUDitem->isHUD = TRUE;
 
@@ -102,14 +102,14 @@ void InitializeTutorial(void)
 	HUDList.HudItem[0] = HUD;
 	HUDList.HudItem[1] = HUDitem;
 
-	TutorialBackground = CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
-	OverlayGrid = CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
+	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
+	OverlayGrid = (Sprite *) CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
 
 	//Bounding Boxes
-	BoundTop = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
-	BoundBottom = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, -1080);
-	BoundLeft = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, -1920, 0);
-	BoundRight = CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 1920, 0);
+	BoundTop = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
+	BoundBottom = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, -1080);
+	BoundLeft = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, -1920, 0);
+	BoundRight = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 1920, 0);
 
 	BoundTop->Tint = BoundingTint;
 	BoundBottom->Tint = BoundingTint;
@@ -137,21 +137,21 @@ void InitializeTutorial(void)
 
 	StrawDummy = CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
 
-	BlackOverlay = CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Alpha = 0;
 	Vec3Set(&BlackOverlay->Tint, 0, 0, 0);
 
-	GameLogo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920, 1080, 4001, 1, 1, 0, 0);
+	GameLogo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920, 1080, 4001, 1, 1, 0, 0);
 	GameLogo->Alpha = 0;
 
-	DoorOverlay = CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
+	DoorOverlay = (Sprite *) CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 745, -85, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 900, -205, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
-	SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
+	SetChannelGroupVolume(EffectType, SFXVolume);
+	SetChannelGroupVolume(MusicType, BGMVolume);
 
 	RemoveDebugMode();
 	OverlayGrid->Visible = FALSE;
@@ -223,7 +223,7 @@ void UpdateTutorial(void)
 		RemoveDebugMode();
 		OverlayGrid->Visible = FALSE;
 	}
-	PlayAudio(&BackgroundSnd, &ChannelController);
+	PlayAudio(BackSnd);
 
 	// Return to main menu with RSHIFT
 	// Pause with ESCAPE
@@ -231,10 +231,12 @@ void UpdateTutorial(void)
 	{
 		if(BlackOverlay->Alpha < 0.1)
 		{
+			TogglePauseSound(BackSnd);
 			InitializePause(&DrawTutorial);
 			UpdatePause();
-			SetChannelGroupVolume(&ChannelController, EffectType, SFXVolume);
-			SetChannelGroupVolume(&ChannelController, MusicType, BGMVolume);
+			SetChannelGroupVolume(EffectType, SFXVolume);
+			SetChannelGroupVolume(MusicType, BGMVolume);
+			TogglePauseSound(BackSnd);
 		}
 		else if(GameLogo->Alpha > 0.8)
 		{
@@ -263,9 +265,8 @@ void FreeTutorial(void)
 {
 	SavePlayer(&CurrentPlayer);
 	FreeObjectList();
-	ReleaseChannelGroups(&ChannelController);
-	ReleaseSound(BackgroundSnd.Sound);
-	ReleaseSound(GongSnd.Sound);
+	FreeSoundList();
+	
 }
 
 void UnloadTutorial(void)
@@ -312,12 +313,12 @@ void fadeToEnd(void)
 		else
 		{
 			GameLogo->Alpha += GetDeltaTime();
-			if (!BackgroundSnd.Paused)
+			if (!BackSnd->Paused)
 			{
-			TogglePauseSound(&BackgroundSnd);
+			TogglePauseSound(BackSnd);
 			//SetChannelGroupVolume(&ChannelController, EffectType, 50);
 			}
-			PlayAudio(&GongSnd, &ChannelController);
+			PlayAudio(GongSnd);
 		}
 
 	}

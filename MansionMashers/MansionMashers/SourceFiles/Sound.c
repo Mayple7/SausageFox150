@@ -98,7 +98,6 @@ void FMODInit(void)
 		printf("FMOD CREATED AND INITIALIZED\n");
 		success = FALSE;
 	}
-
 }
 
 /*************************************************************************/
@@ -138,9 +137,12 @@ void FMODQuit(void)
 	Used to tell if object should be stored in memory or streamed
 */
 /*************************************************************************/
-void CreateSound(char *Filename, FoxSound *snd, int type)
+FoxSound *CreateSound(char *Filename, int type)
 {
 	FMOD_RESULT result;
+	FoxSound *snd = AddSound();
+	printf("snd : %i\n", snd);
+
 	InitSoundStruct(snd, type);
 	
 	if(type == SmallSnd)
@@ -149,6 +151,8 @@ void CreateSound(char *Filename, FoxSound *snd, int type)
 		result = FMOD_System_CreateStream(FMsystem, Filename, FMOD_DEFAULT, NULL, &snd->Sound);
 	FMODErrCheck(result);
 	success = FALSE;
+
+	return snd;
 }
 
 /*************************************************************************/
@@ -161,7 +165,7 @@ void CreateSound(char *Filename, FoxSound *snd, int type)
 
 */
 /*************************************************************************/
-void PlayAudio(FoxSound *snd, FoxChannels *channels)
+void PlayAudio(FoxSound *snd)
 {
 	FMOD_RESULT result;
 	
@@ -181,12 +185,12 @@ void PlayAudio(FoxSound *snd, FoxChannels *channels)
 	
 		if(snd->Type == SmallSnd)
 		{
-			result = FMOD_Channel_SetChannelGroup(snd->Channel, channels->Effects);
+			result = FMOD_Channel_SetChannelGroup(snd->Channel, ChannelController->Effects);
 			FMODErrCheck(result);
 		}
 		else if(snd->Type == LargeSnd)
 		{
-			result = FMOD_Channel_SetChannelGroup(snd->Channel, channels->Music);
+			result = FMOD_Channel_SetChannelGroup(snd->Channel, ChannelController->Music);
 			FMODErrCheck(result);
 		}
 
@@ -237,7 +241,7 @@ void InitSoundStruct(FoxSound *snd, int type)
 	snd->Playing = FALSE;
 	snd->Paused = FALSE;
 	snd->Type = type;
-	snd->sndId = 1;
+	snd->sndID = 1;
 }
 
 /*************************************************************************/
@@ -250,7 +254,7 @@ void InitSoundStruct(FoxSound *snd, int type)
 */
 /*************************************************************************/
 
-void TogglePauseSound(FoxSound * snd)
+void TogglePauseSound(FoxSound *snd)
 {
 	FMOD_RESULT result;
 
@@ -280,38 +284,38 @@ void TogglePauseSound(FoxSound * snd)
 */
 /*************************************************************************/
 
-void TogglePauseChannel(FoxChannels * chnls, int ChnlType)
+void TogglePauseChannel(int ChnlType)
 {
 	FMOD_RESULT result;
 
 	if(ChnlType == EffectType)
 	{
-		if(chnls->EffectsPaused == FALSE)
+		if(ChannelController->EffectsPaused == FALSE)
 		{
-			result = FMOD_ChannelGroup_SetPaused(chnls->Effects, TRUE);
+			result = FMOD_ChannelGroup_SetPaused(ChannelController->Effects, TRUE);
 			FMODErrCheck(result);
-			chnls->EffectsPaused = TRUE;
+			ChannelController->EffectsPaused = TRUE;
 		}
-		else if(chnls->EffectsPaused == TRUE)
+		else if(ChannelController->EffectsPaused == TRUE)
 		{
-			result = FMOD_ChannelGroup_SetPaused(chnls->Effects, FALSE);
+			result = FMOD_ChannelGroup_SetPaused(ChannelController->Effects, FALSE);
 			FMODErrCheck(result);
-			chnls->EffectsPaused = FALSE;
+			ChannelController->EffectsPaused = FALSE;
 		}
 	}
 	else if(ChnlType == MusicType)
 	{
-		if(chnls->MusicPaused == FALSE)
+		if(ChannelController->MusicPaused == FALSE)
 		{
-			result = FMOD_ChannelGroup_SetPaused(chnls->Music, TRUE);
+			result = FMOD_ChannelGroup_SetPaused(ChannelController->Music, TRUE);
 			FMODErrCheck(result);
-			chnls->MusicPaused = TRUE;
+			ChannelController->MusicPaused = TRUE;
 		}
-		else if(chnls->MusicPaused == TRUE)
+		else if(ChannelController->MusicPaused == TRUE)
 		{
-			result = FMOD_ChannelGroup_SetPaused(chnls->Music, FALSE);
+			result = FMOD_ChannelGroup_SetPaused(ChannelController->Music, FALSE);
 			FMODErrCheck(result);
-			chnls->MusicPaused = FALSE;
+			ChannelController->MusicPaused = FALSE;
 		}
 	}
 	
@@ -328,9 +332,11 @@ void TogglePauseChannel(FoxChannels * chnls, int ChnlType)
 */
 /*************************************************************************/
 
-void CreateChannelGroups(FoxChannels *chnl)
+FoxChannels* CreateChannelGroups(void)
 {
 	FMOD_RESULT result;
+	FoxChannels * chnl = AddChannelGroups();
+
 	chnl->sndID = 1;
 	chnl->EffectsPaused = FALSE;
 	chnl->MusicPaused = FALSE;
@@ -343,6 +349,7 @@ void CreateChannelGroups(FoxChannels *chnl)
 
 	success = FALSE;
 
+	return chnl;
 }
 
 /*************************************************************************/
@@ -361,6 +368,7 @@ void ReleaseChannelGroups(FoxChannels *chnl)
 	result = FMOD_ChannelGroup_Release(chnl->Effects);
 	FMODErrCheck(result);
 	result = FMOD_ChannelGroup_Release(chnl->Music);
+	FMODErrCheck(result);
 
 	success = FALSE;
 }
@@ -380,21 +388,21 @@ void ReleaseChannelGroups(FoxChannels *chnl)
 	Value to set channel group to
 */
 /*************************************************************************/
-void SetChannelGroupVolume(FoxChannels *chnl, int type, float volume)
+void SetChannelGroupVolume(int type, float volume)
 {
 	FMOD_RESULT result;
 
 	switch (type)
 	{
 		case AllTypes:
-			result = FMOD_ChannelGroup_SetVolume(chnl->Music, volume);
+			result = FMOD_ChannelGroup_SetVolume(ChannelController->Music, volume);
 			FMODErrCheck(result);
 		case EffectType:
-			result = FMOD_ChannelGroup_SetVolume(chnl->Effects, volume);
+			result = FMOD_ChannelGroup_SetVolume(ChannelController->Effects, volume);
 			FMODErrCheck(result);
 			break;
 		case MusicType:
-			result = FMOD_ChannelGroup_SetVolume(chnl->Music, volume);
+			result = FMOD_ChannelGroup_SetVolume(ChannelController->Music, volume);
 			FMODErrCheck(result);
 			break;
 	}
@@ -464,7 +472,7 @@ float GetSoundVolume(FoxSound *snd)
 	Returns the current volume of specified channel group
 */
 /*************************************************************************/
-float GetChannelGroupVolume(FoxChannels * chnl, int type)
+float GetChannelGroupVolume(int type)
 {
 	FMOD_RESULT result;
 	float volume;
@@ -472,11 +480,11 @@ float GetChannelGroupVolume(FoxChannels * chnl, int type)
 	switch (type)
 	{
 		case EffectType:
-			result = FMOD_ChannelGroup_GetVolume(chnl->Effects, &volume);
+			result = FMOD_ChannelGroup_GetVolume(ChannelController->Effects, &volume);
 			FMODErrCheck(result);
 			break;
 		case MusicType:
-			result = FMOD_ChannelGroup_GetVolume(chnl->Music, &volume);
+			result = FMOD_ChannelGroup_GetVolume(ChannelController->Music, &volume);
 			FMODErrCheck(result);
 			break;
 	}
@@ -557,14 +565,38 @@ char * VolumetoString(char *string, float volume)
 	Returns a pointer to a FoxSound struct
 */
 /*************************************************************************/
-FoxSound * AddSound(void)
+FoxSound *AddSound(void)
 {
 	int i;
 
 	for(i = 0; i < MAX_SOUND_CHANNELS; i++)
 	{
-		if(soundList[i].sndId == 0 || soundList[i].sndId == -1)
+		if(soundList[i].sndID == 0 || soundList[i].sndID == -1)
+		{
+			printf("sl : %i\n", &soundList[i]);
 			return &soundList[i];
+		}
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Adds a channel group to the channelGroupList
+
+	\return
+	Returns a pointer to a FoxChannels struct
+*/
+/*************************************************************************/
+FoxChannels * AddChannelGroups(void)
+{
+	int i;
+
+	for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
+	{
+		if(channelGroupList[i].sndID == 0 || channelGroupList[i].sndID == -1)
+			return &channelGroupList[i];
 	}
 	return NULL;
 }
@@ -577,7 +609,7 @@ FoxSound * AddSound(void)
 */
 /*************************************************************************/
 
-void resetSoundList(void)
+void ResetSoundList(void)
 {
 	int i;
 
@@ -587,18 +619,24 @@ void resetSoundList(void)
 	{
 		for(i = 0; i < MAX_SOUND_CHANNELS; i++)
 		{
-			soundList[i].sndId = -1;
+			soundList[i].sndID = -1;
 		}
 		printf("Sound List Setup Successful\n");
 	}
 	else
 		printf("Sound List Setup Failed\n");
 
+}
+
+void ResetChannelGroupList(void)
+{
+	int i;
+
 	channelGroupList = (FoxChannels *) CallocMyAlloc(MAX_CHANNEL_GROUPS, sizeof(FoxChannels));
 
 	if(channelGroupList)
 	{
-		for(i = 0; i < MAX_CHANNEL_GROUPS; i ++)
+		for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
 		{
 			channelGroupList[i].sndID = -1;
 		}
@@ -620,9 +658,9 @@ void resetSoundList(void)
 /*************************************************************************/
 void freeSound(FoxSound * soundObj)
 {
-	if(soundObj && soundObj->sndId)
+	if(soundObj && soundObj->sndID)
 	{
-		soundObj->sndId = 0;
+		soundObj->sndID = 0;
 		ReleaseSound(soundObj->Sound);
 	}
 }
@@ -651,13 +689,13 @@ void freeChannelGroups(FoxChannels * chanGrpObj)
 	Frees sounds and channel groups from lists and release memory
 */
 /*************************************************************************/
-void freeSoundList(void)
+void FreeSoundList(void)
 {
 	int i;
 
 	for(i = 0; i < MAX_SOUND_CHANNELS; i++)
 	{
-		if(soundList[i].sndId)
+		if(soundList[i].sndID)
 			freeSound(&soundList[i]);
 	}
 
@@ -668,5 +706,32 @@ void freeSoundList(void)
 	}
 	
 	FreeMyAlloc(soundList);
+}
+
+void FreeChannelGroupList(void)
+{
+	int i;
+
+	for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
+	{
+		if(channelGroupList[i].sndID)
+			freeChannelGroups(&channelGroupList[i]);
+	}
+	
 	FreeMyAlloc(channelGroupList);
+}
+
+void CreatePauseSound(FoxSound * snd, char *Filename, int type)
+{
+	FMOD_RESULT result;
+
+	InitSoundStruct(snd, type);
+	
+	if(type == SmallSnd)
+		result = FMOD_System_CreateSound(FMsystem, Filename, FMOD_DEFAULT, NULL, &snd->Sound);
+	else if(type == LargeSnd)
+		result = FMOD_System_CreateStream(FMsystem, Filename, FMOD_DEFAULT, NULL, &snd->Sound);
+	FMODErrCheck(result);
+	
+	success = FALSE;
 }
