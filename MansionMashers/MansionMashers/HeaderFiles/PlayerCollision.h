@@ -8,5 +8,6 @@
 void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform);
 void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood);
 void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList);
+void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy);
 
 #endif

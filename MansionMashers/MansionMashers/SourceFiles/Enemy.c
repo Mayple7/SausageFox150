@@ -88,7 +88,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
 		CurrentEnemy->dropDown = FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 50, 500, 15, 0, 0, 0, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, 500, 15, 0, 10, 10, 10);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x / GetLoadRatio(), CurrentEnemy->Position.y / GetLoadRatio(), CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
 
@@ -99,6 +99,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 
 		CurrentEnemy->EnemyWeapon = CreateWeapon("Sausage sausage of sausage", "TextureFiles/BattleAxe.png", Sword, Common, WeaponEnemy, 256, 256, objID++);
 		CurrentEnemy->EnemySpriteParts.Weapon = CurrentEnemy->EnemyWeapon->WeaponSprite;
+		CurrentEnemy->EnemyWeapon->WeaponFOF = EnemyWeapon;
 
 		CreateEnemySprites(CurrentEnemy);
 		CurrentEnemy->Speed = 0;
@@ -128,7 +129,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 {
 
 	Vec2 velocityTime;
-
+	printf("%f : %f\n", CurrentEnemy->EnemyWeapon->WeaponAttack.Position.x, CurrentEnemy->EnemyWeapon->WeaponAttack.Position.y);
 	switch(CurrentEnemy->EnemyType)
 	{
 	case Dummy:
@@ -215,6 +216,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 
 		DetectEnemyCollision(CurrentEnemy);
 		EnemyAnimation(CurrentEnemy);
+		UpdateCollisionPosition(&CurrentEnemy->EnemyWeapon->WeaponAttack, &CurrentEnemy->EnemyWeapon->WeaponAttackPosition);
 		break;
 	case BasicRanged:
 		// Call enemy logic here
