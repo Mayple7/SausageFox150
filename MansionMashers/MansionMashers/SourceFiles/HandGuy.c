@@ -40,8 +40,11 @@
 // globals
 int newID;					// ID number
 TextGlyphs *LevelName;
+TextGlyphs *ShopText1;
+TextGlyphs *ShopText2;
 Sprite *HandGauy;
 Platform *Pedestal;
+Weapon* StarterSword;
 
 /*************************************************************************/
 /*!
@@ -69,20 +72,34 @@ void InitializeHandGuy(void)
 	ResetObjectList();
 	ResetCamera();
 
-	// Initialize the player
+	//Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 	CurrentPlayer.PlayerCollider.collisionDebug = FALSE;
 
-	HandGauy = (Sprite *) CreateSprite("TextureFiles/HandGauy.png", 400, 400, 10, 1, 1, -700, -250);
+	HandGauy = (Sprite *) CreateSprite("TextureFiles/HandGauy.png", 400, 400, 10, 1, 1, -800, -250);
 
+	//Background
 	CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 0, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
 
+	//Weapon/Shop
+	CreateSprite("TextureFiles/WoodSign.png", 512, 512, 5, 1, 1, -400, -140);
+	Vec3Set(&TextTint, 0, 0, 0);
+	ShopText1 = CreateText("SWORD", -380, -20, 80, TextTint, Center);
+	ChangeTextVisibility(ShopText1);
+	Vec3Set(&TextTint, 0.2f, 0.2f, 0.2f);
+	ShopText2 = CreateText("5 coin", -390, -80, 60, TextTint, Center);
+	ChangeTextVisibility(ShopText2);
+	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, -350, -140);
+	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /2;
+
+	//Platform
 	Pedestal = CreatePlatform("TextureFiles/MarblePedestal.png", PlatformType, 1920, 1080, newID++, 0, 0);
 	Pedestal->PlatformCollider.Offset.y = -3.6 * Pedestal->PlatformSprite->Height / 16;
 	UpdateCollider(&Pedestal->PlatformCollider, Pedestal->PlatformCollider.width * 0.19f, Pedestal->PlatformCollider.height * 0.05f); 
 
+	//Title text
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
