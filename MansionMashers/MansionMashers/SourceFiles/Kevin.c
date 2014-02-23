@@ -66,6 +66,7 @@ void LoadKevin(void)
 void InitializeKevin(void)
 {
 	Vec3 TextTint;
+	int i;
 
 	newID = 1;
 	ResetObjectList();
@@ -79,7 +80,10 @@ void InitializeKevin(void)
 	LevelName = CreateText("That Bitch Level", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 
-	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
+	for (i = 0; i < 9; i++)
+	{
+		CreateEnemy(BasicMelee, EnemyType, newID++, rand() % 1500 - 750, rand() % 500 - 250);
+	}
 
 	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
 	Shelf->PlatformCollider.Offset.y = 5 * Shelf->PlatformSprite->Height / 16;
