@@ -283,7 +283,7 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 	{
 		Vec2 velocity;
 		CurrentEnemy->isJumping = FALSE;
-		CurrentEnemy->jumpTimer = (int)(2 / GetDeltaTime());
+		CurrentEnemy->jumpTimer = (int)(0.5f / GetDeltaTime());
 		
 		Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
 		if(CurrentEnemy->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentEnemy->EnemyRigidBody.onGround)
@@ -332,7 +332,7 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 				CurrentEnemy->isMoveLeft	= FALSE;
 			}
 
-			if (CurrentEnemy->Position.y < CurrentPlayer.Position.y + 60 * GetLoadRatio())
+			if (CurrentEnemy->Position.y < CurrentPlayer.Position.y - 60 * GetLoadRatio())
 			{
 				int i;
 				for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -341,7 +341,8 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 						continue;
 					if (platformList[i].objID == -1)
 						break;
-					if (CurrentEnemy->Position.x > platformList[i].Position.x - 80 * GetLoadRatio() && CurrentEnemy->Position.x < platformList[i].Position.x + 80 * GetLoadRatio() &&
+					if (CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed / GetDeltaTime()) - 60.0f * GetLoadRatio() && 
+						CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed / GetDeltaTime()) + 60.0f * GetLoadRatio() &&
 						CurrentEnemy->Position.y < platformList[i].Position.y + 40 * GetLoadRatio())
 					{
 						CurrentEnemy->isJumping			= TRUE;
@@ -355,6 +356,8 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 				CurrentEnemy->isDropDown		= TRUE;
 			}
 			
+			printf("%i\n",CurrentEnemy->isJumping);
+
 			if (CurrentEnemy->canDropDownTimer > 0)
 				CurrentEnemy->canDropDownTimer--;
 
