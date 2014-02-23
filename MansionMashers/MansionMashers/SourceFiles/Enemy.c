@@ -579,7 +579,7 @@ void CreateEnemySprites(Enemy *Object)
 /*************************************************************************/
 void EnemyAnimation(Enemy *Object)
 {
-	float LegDistance = ((Object->CurrentEnemyStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f * ((Object->Speed)/(250.0f * GetDeltaTime() * GetLoadRatio())) ))-(Object->Speed);
+	float LegDistance = ((Object->CurrentEnemyStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f / ((Object->Speed * 0.075f + 0.5f)) ))-(Object->Speed);
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
@@ -598,7 +598,7 @@ void EnemyAnimation(Enemy *Object)
 	Sprite *Tail = Object->EnemySpriteParts.Tail;
 	Sprite *Skrt = Object->EnemySpriteParts.Skirt;
 
-	Object->LegSinValue += 10.0f * GetDeltaTime(); 
+	Object->LegSinValue += 10.0f * GetDeltaTime() * (Object->Speed * 0.25f); 
 
 	Object->EnemySpriteParts.BlinkTimer += 1;
 
