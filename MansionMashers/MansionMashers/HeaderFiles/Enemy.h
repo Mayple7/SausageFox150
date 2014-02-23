@@ -69,6 +69,7 @@ typedef struct Enemy
 	int isJumping;
 	int jumpTimer;
 	int isDropDown;
+	int canDropDownTimer;
 	int Attack;
 	int StateTimer;
 	enum AIState EnemyState;
