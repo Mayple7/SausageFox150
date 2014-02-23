@@ -22,7 +22,6 @@
  written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
 /*****************************************************************************/
-
 // ---------------------------------------------------------------------------
 // includes
 
@@ -32,46 +31,30 @@
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 
-// ---------------------------------------------------------------------------
-// Libraries
-#pragma comment (lib, "Alpha_Engine.lib")
+Sprite* GameLogo;
 
-// ---------------------------------------------------------------------------
-// globals
-
-Button* Level1;
-Button* Level2;
-Button* Level3;
-Button* Level4;
-
-Button* ArmGuy;
-Button* HandGuy;
-Button* YeahGuy;
-Button* Kevin;
+Sprite* EP1Button;
+Sprite* EP2Button;
+Sprite* TutorialButton;
+Sprite* QuitButton;
 
 Sprite* Selector;
-Sprite* Logo;
 
-Sprite* HUD2;
-Sprite* HUD;
+//Delete save file objects
+Sprite* BlackBackground;
+Sprite* DeleteText;
+Button* YesButton;
+Button* NoButton;
 
-HUDLayer HUDList;
-
-AEGfxTexture *StartButtonTexture;
-AEGfxTexture *ShowcaseTexture;
-AEGfxTexture *ExitButtonTexture;
-
-int numMenuButtons = 8;
-int selectedButton = 0;								//0: start, 1: showcase 2: exit
-int newID;
-
-// ---------------------------------------------------------------------------
-// Static function protoypes
+enum Buttons { EP1But, EP2But, TutBut, QuitBut};
+static int selectedButton;								//0: EP1, 1: EP2, 2: tutorial, 3: quit
+static int deleteSave; // If true, dialogue box to delete save is up
+static int newID;
 
 /*************************************************************************/
 /*!
 	\brief
-	Loads the assets needed for the main menu
+	Loads the assets needed for the EP menu
 */
 /*************************************************************************/
 void LoadMainMenu(void)
@@ -80,234 +63,202 @@ void LoadMainMenu(void)
 	CreateTextureList();
 }
 
-/*************************************************************************/
-/*!
-	\brief
-	Initializes all the objects needed for the main menu
-*/
-/*************************************************************************/
 void InitializeMainMenu(void)
 {
+	Vec3 Tint;
 	newID = 10;
 	// Reset the object list
 	ResetObjectList();
 
-	// Create the start button
-	Logo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
+	selectedButton = EP1But;
+
+	GameLogo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
 
 	// Create the start button
-	Level1 = CreateButton("TextureFiles/Level1.png", -300, 300, 400.0f, 100.0f, newID++);
-	Level2 = CreateButton("TextureFiles/Level2.png", -300, 100, 400.0f, 100.0f, newID++);
-	Level3 = CreateButton("TextureFiles/Level3.png", -300, -100, 400.0f, 100.0f, newID++);
-	Level4 = CreateButton("TextureFiles/Level4.png", -300, -300, 400.0f, 100.0f, newID++);
+	EP1Button = (Sprite *) CreateSprite("TextureFiles/EP1_button.png", 300.0f, 100.0f, 3, 1, 1, -500, 300);
 
-	ArmGuy = CreateButton("TextureFiles/ArmGuy.png", 300, 300, 400.0f, 100.0f, newID++);
-	HandGuy = CreateButton("TextureFiles/HandGuy.png", 300, 100, 400.0f, 100.0f, newID++);
-	YeahGuy = CreateButton("TextureFiles/YeahGuy.png", 300, -100, 400.0f, 100.0f, newID++);
-	Kevin = CreateButton("TextureFiles/Kevin.png", 300, -300, 400.0f, 100.0f, newID++);
+	// Create the start button
+	EP2Button = (Sprite *) CreateSprite("TextureFiles/EP2_button.png", 300.0f, 100.0f, 3, 1, 1, 500, 300);
+
+	// Creates the showcase button
+	TutorialButton = (Sprite *) CreateSprite("TextureFiles/tutorial_button.png", 300.0f, 100.0f, 3, 1, 1, -500, -300);
+	
+	// Creates the exit button
+	QuitButton = (Sprite *) CreateSprite("TextureFiles/quit_button.png", 300.0f, 100.0f, 3, 1, 1, 500, -300);
 
 	// Creates the selector button - set to default position of the start button
-	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", 420.0f, 120.0f, 2, 1, 1, 100, 0);
+	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 2, 1, 1, 100, 0);
 	
+	Vec3Set(&Tint, 0, 0, 0);
+	BlackBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
+	BlackBackground->Tint = Tint;
+	BlackBackground->Alpha = 0.5f;
+	DeleteText = (Sprite *) CreateSprite("TextureFiles/DeleteText.png", 651, 334, 500, 1, 1, 0, 100);
+	YesButton = CreateButton("TextureFiles/DeleteButton.png", -300, -200, 400, 150, newID++);
+	YesButton->ButtonSprite->ZIndex = 500;
+	NoButton = CreateButton("TextureFiles/BackButton.png", 300, -200, 400, 150, newID++);
+	NoButton->ButtonSprite->ZIndex = 500;
+
+	BlackBackground->Visible = FALSE;
+	DeleteText->Visible = FALSE;
+	YesButton->ButtonSprite->Visible = FALSE;
+	NoButton->ButtonSprite->Visible = FALSE;
+
 	// Set camera to (0,0)
 	ResetCamera();
 	UpdateSelector(Selector);
 }
 
-/*************************************************************************/
-/*!
-	\brief
-	The code to update the main menu
-*/
-/*************************************************************************/
 void UpdateMainMenu(void)
 {
 	InputHandling();
 }
 
-/*************************************************************************/
-/*!
-	\brief
-	Draws all the objects for the main menu
-*/
-/*************************************************************************/
 void DrawMainMenu(void)
 {
 	DrawObjectList();
-	DrawCollisionList();
 }
 
-/*************************************************************************/
-/*!
-	\brief
-	Frees all the allocated memory in the main menu
-*/
-/*************************************************************************/
 void FreeMainMenu(void)
 {
 	// Freeing the objects and textures
 	FreeObjectList();
 }
 
-/*************************************************************************/
-/*!
-	\brief
-	Unloads all the assets used in the main menu
-*/
-/*************************************************************************/
 void UnloadMainMenu(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
 }
 
-/*************************************************************************/
-/*!
-	\brief
-	Handles the input for the main menu
-*/
-/*************************************************************************/
 void InputHandling(void)
 {
 	// check if forcing the application to quit
-	if (FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
+	switch(selectedButton)
 	{
-		if(selectedButton == 0)
-			selectedButton = numMenuButtons - 1;
-		else
-			selectedButton--;
-
-		UpdateSelector(Selector);
-	}
-	else if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
-	{
-		if(selectedButton == numMenuButtons - 1)
-			selectedButton = 0;
-		else
-			selectedButton++;
-
-		UpdateSelector(Selector);
-	}
-	else if(FoxInput_KeyTriggered(VK_LEFT) || FoxInput_KeyTriggered('A'))
-	{
-		if(selectedButton > 3)
+	// EP 1 button
+	case EP1But:
+		if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
 		{
-			selectedButton -= 4;
+			selectedButton = TutBut;
 			UpdateSelector(Selector);
 		}
-	}
-	else if(FoxInput_KeyTriggered(VK_RIGHT) || FoxInput_KeyTriggered('D'))
-	{
-		if(selectedButton < 4)
+		else if(FoxInput_KeyTriggered(VK_RIGHT) || FoxInput_KeyTriggered('D'))
 		{
-			selectedButton += 4;
+			selectedButton = EP2But;
 			UpdateSelector(Selector);
 		}
+		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
+		{
+			SetNextState(GS_EP1Slides);
+		}
+		break;
+	case EP2But:
+		if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
+		{
+			selectedButton = QuitBut;
+			UpdateSelector(Selector);
+		}
+		else if(FoxInput_KeyTriggered(VK_LEFT) || FoxInput_KeyTriggered('A'))
+		{
+			selectedButton = EP1But;
+			UpdateSelector(Selector);
+		}
+		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
+		{
+			SetNextState(GS_EP2Slides);
+		}
+		break;
+	case TutBut:
+		if(FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
+		{
+			selectedButton = EP1But;
+			UpdateSelector(Selector);
+		}
+		else if(FoxInput_KeyTriggered(VK_RIGHT) || FoxInput_KeyTriggered('D'))
+		{
+			selectedButton = QuitBut;
+			UpdateSelector(Selector);
+		}
+		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
+		{
+			SetNextState(GS_Tutorial);
+		}
+		break;
+	case QuitBut:
+		if(FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
+		{
+			selectedButton = EP2But;
+			UpdateSelector(Selector);
+		}
+		else if(FoxInput_KeyTriggered(VK_LEFT) || FoxInput_KeyTriggered('A'))
+		{
+			selectedButton = TutBut;
+			UpdateSelector(Selector);
+		}
+		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
+		{
+			SetNextState(GS_Quit);
+		}
+		break;
 	}
-	else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
+
+	if(FoxInput_KeyTriggered('C'))
 	{
-		if(selectedButton == 0)
-			SetNextState(GS_Level1);
-		else if(selectedButton == 1)
-			SetNextState(GS_Level2);
-		else if(selectedButton == 2)
-			SetNextState(GS_Level3);
-		else if(selectedButton == 3)
-			SetNextState(GS_Level4);
-		else if(selectedButton == 4)
-			SetNextState(GS_ArmGuy);
-		else if(selectedButton == 5)
-			SetNextState(GS_HandGuy);
-		else if(selectedButton == 6)
-			SetNextState(GS_YeahGuy);
-		else if(selectedButton == 7)
-			SetNextState(GS_Kevin);
+		FILE *fp = fopen("../GameData.cfg", "r");
+		if(!fp)
+		{
+			SetNextState(GS_CharacterSelect);
+		}
+		else
+		{
+			deleteSave = TRUE;
+			BlackBackground->Visible = TRUE;
+			DeleteText->Visible = TRUE;
+			YesButton->ButtonSprite->Visible = TRUE;
+			NoButton->ButtonSprite->Visible = TRUE;
+			fclose(fp);
+		}
 	}
-	if(FoxInput_KeyTriggered('U'))
+
+	if(deleteSave)
 	{
-		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			int worldX, worldY;
+			Vec2 MouseClick;
+
+			FoxInput_GetWorldPosition(&worldX, &worldY);
+			Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
+			if(PointRectCollision(&YesButton->ButtonCollider, &MouseClick))
+			{
+				remove("../GameData.cfg");
+				SetNextState(GS_CharacterSelect);
+			}
+			else if(PointRectCollision(&NoButton->ButtonCollider, &MouseClick))
+			{
+				deleteSave = FALSE;
+				BlackBackground->Visible = FALSE;
+				DeleteText->Visible = FALSE;
+				YesButton->ButtonSprite->Visible = FALSE;
+				NoButton->ButtonSprite->Visible = FALSE;
+			}
+		}
+
 	}
-	if(FoxInput_KeyTriggered('I'))
+
+
+	if(FoxInput_KeyTriggered(VK_SHIFT) || FoxInput_KeyTriggered(VK_RSHIFT))
 	{
-		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
+		SetNextState(GS_DevMenu);
 	}
+
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
 		SetNextState(GS_Quit);
-
-	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
-	{
-		int i, worldX, worldY;
-		Vec2 MouseClick;
-
-		FoxInput_GetWorldPosition(&worldX, &worldY);
-		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
-
-		for(i = 0; i < BUTTONAMOUNT; i++)
-		{
-			if(!buttonList[i].ButtonCollider.collisionID)
-				continue;
-			else if(buttonList[i].ButtonCollider.collisionID == Level1->ButtonCollider.collisionID)
-			{
-				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-				{
-					SetNextState(GS_Level1);
-				}
-			}
-			else if(buttonList[i].ButtonCollider.collisionID == Level2->ButtonCollider.collisionID)
-			{
-				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-				{
-					SetNextState(GS_Level2);
-				}
-			}
-			else if(buttonList[i].ButtonCollider.collisionID == Level3->ButtonCollider.collisionID)
-			{
-				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-				{
-					SetNextState(GS_Level3);
-				}
-			}
-			else if(buttonList[i].ButtonCollider.collisionID == Level4->ButtonCollider.collisionID)
-			{
-				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-				{
-					SetNextState(GS_Level4);
-				}
-			}
-			else if(buttonList[i].ButtonCollider.collisionID == ArmGuy->ButtonCollider.collisionID)
-			{
-				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-				{
-					SetNextState(GS_ArmGuy);
-				}
-			}
-			else if(buttonList[i].ButtonCollider.collisionID == HandGuy->ButtonCollider.collisionID)
-			{
-				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-				{
-					SetNextState(GS_HandGuy);
-				}
-			}
-			else if(buttonList[i].ButtonCollider.collisionID == YeahGuy->ButtonCollider.collisionID)
-			{
-				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-				{
-					SetNextState(GS_YeahGuy);
-				}
-			}
-			else if(buttonList[i].ButtonCollider.collisionID == Kevin->ButtonCollider.collisionID)
-			{
-				if(PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-				{
-					SetNextState(GS_Kevin);
-				}
-			}
-		}
-	}
 }
+
 
 /*************************************************************************/
 /*!
@@ -322,36 +273,33 @@ void UpdateSelector(struct Sprite *Selector)
 {
 	switch(selectedButton)
 	{
-		case 0:
-			Selector->Position = Level1->Position;
+		case EP1But:
+			Selector->Position = EP1Button->Position;
+			Selector->Width = EP1Button->Width * (float)1.1;
+			Selector->Height = EP1Button->Height * (float)1.2;
 			UpdateMesh(Selector);
 			break;
-		case 1:
-			Selector->Position = Level2->Position;
+		case EP2But:
+			Selector->Position = EP2Button->Position;
+			Selector->Width = EP2Button->Width * (float)1.1;
+			Selector->Height = EP1Button->Height * (float)1.2;
 			UpdateMesh(Selector);
 			break;
-		case 2:
-			Selector->Position = Level3->Position;
+		case TutBut:
+			Selector->Position = TutorialButton->Position;
+			Selector->Width = TutorialButton->Width * (float)1.1;
+			Selector->Height = EP1Button->Height * (float)1.2;
 			UpdateMesh(Selector);
 			break;
-		case 3:
-			Selector->Position = Level4->Position;
+		case QuitBut:
+			Selector->Position = QuitButton->Position;
+			Selector->Width = QuitButton->Width * (float)1.1;
+			Selector->Height = EP1Button->Height * (float)1.2;
 			UpdateMesh(Selector);
 			break;
-		case 4:
-			Selector->Position = ArmGuy->Position;
-			UpdateMesh(Selector);
-			break;
-		case 5:
-			Selector->Position = HandGuy->Position;
-			UpdateMesh(Selector);
-			break;
-		case 6:
-			Selector->Position = YeahGuy->Position;
-			UpdateMesh(Selector);
-			break;
-		case 7:
-			Selector->Position = Kevin->Position;
+		default:
+			Selector->Position = EP1Button->Position;
+			Selector->Width = EP1Button->Width * (float)1.1;
 			UpdateMesh(Selector);
 			break;
 	}

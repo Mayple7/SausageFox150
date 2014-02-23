@@ -94,6 +94,7 @@
     <ClInclude Include="HeaderFiles\CharacterSelect.h" />
     <ClInclude Include="HeaderFiles\CollisionBox.h" />
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
+    <ClInclude Include="HeaderFiles\DevMenu.h" />
     <ClInclude Include="HeaderFiles\Enemy.h" />
     <ClInclude Include="HeaderFiles\EnemyCollision.h" />
     <ClInclude Include="HeaderFiles\EP1Slides.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="SourceFiles\CharacterSelect.c" />
     <ClCompile Include="SourceFiles\CollisionBox.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
+    <ClCompile Include="SourceFiles\DevMenu.c" />
     <ClCompile Include="SourceFiles\Enemy.c" />
     <ClCompile Include="SourceFiles\EnemyCollision.c" />
     <ClCompile Include="SourceFiles\EP1Slides.c" />

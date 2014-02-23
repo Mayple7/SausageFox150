@@ -225,9 +225,9 @@ void EPMenuInput(void)
 	}
 
 
-	if(FoxInput_KeyTriggered(VK_SHIFT))
+	if(FoxInput_KeyTriggered(VK_SHIFT) || FoxInput_KeyTriggered(VK_RSHIFT))
 	{
-		SetNextState(GS_MainMenu);
+		SetNextState(GS_DevMenu);
 	}
 
 	// check if forcing the application to quit

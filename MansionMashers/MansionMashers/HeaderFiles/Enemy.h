@@ -64,6 +64,8 @@ typedef struct Enemy
 
 	int dropDown;  //Fake Boolean
 
+	int idleMove;
+	int idleTimer;
 	int isMoveRight;
 	int isMoveLeft;
 	int isJumping;

@@ -39,7 +39,7 @@ Platform* CreatePlatform(char* textureName, int collisionGroup, float width, flo
 	ColliderPos.x = xPos;
 	ColliderPos.y = yPos;
 	Vec2Set(&CurrentPlatform->Position, xPos * GetLoadRatio(), yPos * GetLoadRatio());
-	CurrentPlatform->PlatformSprite = CreateSprite(textureName, width, height, 4, 1, 1, xPos, yPos);
+	CurrentPlatform->PlatformSprite = (Sprite *) CreateSprite(textureName, width, height, 4, 1, 1, xPos, yPos);
 
 	CreateCollisionBox(&CurrentPlatform->PlatformCollider, &ColliderPos, collisionGroup, width, height, newID);
 	CurrentPlatform->objID = newID;

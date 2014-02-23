@@ -131,7 +131,7 @@ void FreeEnemy(Enemy *CurrentEnemy)
 	if(CurrentEnemy->objID > -1)
 	{
 		//I'm sure someone will miss you enemy
-		CurrentEnemy->objID = -1;
+		CurrentEnemy->objID = 0;
 		CurrentEnemy->EnemyCollider.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentEnemy->EnemyCollider.DebugMesh);
 
@@ -150,8 +150,6 @@ void FreeEnemy(Enemy *CurrentEnemy)
 			freeObject(CurrentEnemy->EnemySpriteParts.Tail);
 			freeObject(CurrentEnemy->EnemySpriteParts.Skirt);
 			freeObject(CurrentEnemy->EnemySpriteParts.Weapon);
-			if (CurrentEnemy->CurrentEnemySounds.YEAH->sndID)
-				freeSound(CurrentEnemy->CurrentEnemySounds.YEAH);
 
 		}
 	}
