@@ -1036,14 +1036,16 @@ int LoadPlayer(Player *CurrentPlayer)
 		fclose(fp);
 		if(num == 13)
 		{
+			int nameLen, statsLen;
 			updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
 			updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
 			updateDamage(CurrentPlayer);
 			updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 			updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
-			printf("%d\n", CurrentPlayer->PlayerWeapon->WeaponType);
+			
 			ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponName);
 			CreateStatsString(CurrentPlayer->PlayerWeapon->WeaponStatsString, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusDefense);
+			ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs, CurrentPlayer->PlayerWeapon->WeaponStatsString);
 			switch(CurrentPlayer->PlayerWeapon->WeaponType)
 			{
 			case Sword:
@@ -1067,6 +1069,17 @@ int LoadPlayer(Player *CurrentPlayer)
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			}
+			nameLen = strlen(CurrentPlayer->PlayerWeapon->WeaponName);
+			statsLen = strlen(CurrentPlayer->PlayerWeapon->WeaponStatsString);
+			if(nameLen >= statsLen)
+			{
+				CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 10, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+			}
+			else
+			{
+				CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+			}
+			CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 
 			return 1;
 		}
