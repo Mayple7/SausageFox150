@@ -31,14 +31,13 @@
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 
-Sprite* GameLogo;
+Sprite* Background;
 
-Sprite* EP1Button;
-Sprite* EP2Button;
-Sprite* TutorialButton;
-Sprite* QuitButton;
-
-Sprite* Selector;
+Button* NewGameButton;
+Button* LoadGameButton;
+Button* OptionsButton;
+Button* CreditsButton;
+Button* QuitGameButton;
 
 //Delete save file objects
 Sprite* BlackBackground;
@@ -65,29 +64,25 @@ void LoadMainMenu(void)
 
 void InitializeMainMenu(void)
 {
+	FILE *fp;
 	Vec3 Tint;
 	newID = 10;
 	// Reset the object list
 	ResetObjectList();
 
-	selectedButton = EP1But;
+	Background = (Sprite *) CreateSprite("TextureFiles/MainMenuBack.png", 1920, 1080, 1, 1, 1, 0, 0);
 
-	GameLogo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
+	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -170, 394, 394, newID++);
+	LoadGameButton = CreateButton("TextureFiles/LoadGameButton.png", -290, -48, 439, 170, newID++);
+	OptionsButton = CreateButton("TextureFiles/OptionsButton.png", 290, -48, 439, 170, newID++);
+	CreditsButton = CreateButton("TextureFiles/CreditsButton.png", -290, -320, 439, 170, newID++);
+	QuitGameButton = CreateButton("TextureFiles/QuitGameButton.png", 290, -320, 439, 170, newID++);
 
-	// Create the start button
-	EP1Button = (Sprite *) CreateSprite("TextureFiles/EP1_button.png", 300.0f, 100.0f, 3, 1, 1, -500, 300);
-
-	// Create the start button
-	EP2Button = (Sprite *) CreateSprite("TextureFiles/EP2_button.png", 300.0f, 100.0f, 3, 1, 1, 500, 300);
-
-	// Creates the showcase button
-	TutorialButton = (Sprite *) CreateSprite("TextureFiles/tutorial_button.png", 300.0f, 100.0f, 3, 1, 1, -500, -300);
-	
-	// Creates the exit button
-	QuitButton = (Sprite *) CreateSprite("TextureFiles/quit_button.png", 300.0f, 100.0f, 3, 1, 1, 500, -300);
-
-	// Creates the selector button - set to default position of the start button
-	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 2, 1, 1, 100, 0);
+	NewGameButton->ButtonSprite->ZIndex = 5;
+	LoadGameButton->ButtonSprite->ZIndex = 3;
+	OptionsButton->ButtonSprite->ZIndex = 3;
+	CreditsButton->ButtonSprite->ZIndex = 3;
+	QuitGameButton->ButtonSprite->ZIndex = 3;
 	
 	Vec3Set(&Tint, 0, 0, 0);
 	BlackBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
@@ -106,7 +101,6 @@ void InitializeMainMenu(void)
 
 	// Set camera to (0,0)
 	ResetCamera();
-	UpdateSelector(Selector);
 }
 
 void UpdateMainMenu(void)
@@ -133,76 +127,6 @@ void UnloadMainMenu(void)
 
 void InputHandling(void)
 {
-	// check if forcing the application to quit
-	switch(selectedButton)
-	{
-	// EP 1 button
-	case EP1But:
-		if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
-		{
-			selectedButton = TutBut;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RIGHT) || FoxInput_KeyTriggered('D'))
-		{
-			selectedButton = EP2But;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
-		{
-			SetNextState(GS_EP1Slides);
-		}
-		break;
-	case EP2But:
-		if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
-		{
-			selectedButton = QuitBut;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_LEFT) || FoxInput_KeyTriggered('A'))
-		{
-			selectedButton = EP1But;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
-		{
-			SetNextState(GS_EP2Slides);
-		}
-		break;
-	case TutBut:
-		if(FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
-		{
-			selectedButton = EP1But;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RIGHT) || FoxInput_KeyTriggered('D'))
-		{
-			selectedButton = QuitBut;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
-		{
-			SetNextState(GS_Tutorial);
-		}
-		break;
-	case QuitBut:
-		if(FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
-		{
-			selectedButton = EP2But;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_LEFT) || FoxInput_KeyTriggered('A'))
-		{
-			selectedButton = TutBut;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
-		{
-			SetNextState(GS_Quit);
-		}
-		break;
-	}
-
 	if(FoxInput_KeyTriggered('C'))
 	{
 		FILE *fp = fopen("../GameData.cfg", "r");
@@ -257,50 +181,4 @@ void InputHandling(void)
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
 		SetNextState(GS_Quit);
-}
-
-
-/*************************************************************************/
-/*!
-	\brief
-	Updates the selector sprite to move to the correct position
-	
-	\param Selector
-	Selector sprite to update
-*/
-/*************************************************************************/
-void UpdateSelector(struct Sprite *Selector)
-{
-	switch(selectedButton)
-	{
-		case EP1But:
-			Selector->Position = EP1Button->Position;
-			Selector->Width = EP1Button->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
-			UpdateMesh(Selector);
-			break;
-		case EP2But:
-			Selector->Position = EP2Button->Position;
-			Selector->Width = EP2Button->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
-			UpdateMesh(Selector);
-			break;
-		case TutBut:
-			Selector->Position = TutorialButton->Position;
-			Selector->Width = TutorialButton->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
-			UpdateMesh(Selector);
-			break;
-		case QuitBut:
-			Selector->Position = QuitButton->Position;
-			Selector->Width = QuitButton->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
-			UpdateMesh(Selector);
-			break;
-		default:
-			Selector->Position = EP1Button->Position;
-			Selector->Width = EP1Button->Width * (float)1.1;
-			UpdateMesh(Selector);
-			break;
-	}
 }
