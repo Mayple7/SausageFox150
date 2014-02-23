@@ -44,6 +44,8 @@ TextGlyphs* LevelName;
 
 Sprite* Level1Panel1;
 Sprite* Level1Door1;
+Sprite* Level1Panel2;
+Sprite* Level1Panel3;
 
 Platform* Table1;
 
@@ -87,18 +89,21 @@ void InitializeLevel1(void)
 	//Background: Panel 1
 	Level1Panel1 = (Sprite *)CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
 	Level1Door1 = (Sprite *)CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
+	Level1Panel2 = (Sprite *)CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1, 1920, 0);
+	Level1Door1 = (Sprite *)CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 300, 1, 1, 1920, 0);
+	Level1Panel3 = (Sprite *)CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, (1920 * 2), 0);
 
 	//Platforms
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -785, -285);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -628, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -425, -285);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -288, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -75, -285);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 68, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 98.0f, 40.0f, newID++, 315, -285);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 450, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
 }
@@ -143,7 +148,7 @@ void DrawLevel1(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
-	//SetCamera(&CurrentPlayer.Position, 250);
+	SetCamera(&CurrentPlayer.Position, 250);
 
 }
 
