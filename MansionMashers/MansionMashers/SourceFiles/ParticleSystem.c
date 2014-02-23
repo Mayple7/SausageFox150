@@ -136,43 +136,48 @@ void ParticleSystemUpdate(void)
 			{
 				if (particleSystemList[i].amountTotal > 0 || particleSystemList[i].amountTotal == -1)
 				{
-					Vec2 vel;
 
+					float camX, camY;	
+					//Get camera position
+					AEGfxGetCamPosition(&camX, &camY);
+					if (particleSystemList[i].Position.x < camX + 1000 && particleSystemList[i].Position.x > camX - 1000)
+					{
+						Vec2 vel;
 
-					float diff;
+						float diff;
 
-					diff = (float)((int)lastRandomNumber % 100) / 100.0f + 0.5f;
+						diff = (float)((int)lastRandomNumber % 100) / 100.0f + 0.5f;
 
-					vel.x = particleSystemList[i].emitVelocity * diff;
-					vel.y = 0;
+						vel.x = particleSystemList[i].emitVelocity * diff;
+						vel.y = 0;
 
-					if (particleSystemList[i].emitAngleRandom == 0)
-						particleSystemList[i].emitAngleRandom++;
-					if (particleSystemList[i].emitDisplacementX == 0)
-						particleSystemList[i].emitDisplacementX++;
-					if (particleSystemList[i].emitDisplacementY == 0)
-						particleSystemList[i].emitDisplacementY++;
+						if (particleSystemList[i].emitAngleRandom == 0)
+							particleSystemList[i].emitAngleRandom++;
+						if (particleSystemList[i].emitDisplacementX == 0)
+							particleSystemList[i].emitDisplacementX++;
+						if (particleSystemList[i].emitDisplacementY == 0)
+							particleSystemList[i].emitDisplacementY++;
 
-					srand( lastRandomNumber );
-					lastRandomNumber = rand();
-					Vec2RotateDegrees(&vel, particleSystemList[i].emitAngle + ((float)((int)lastRandomNumber % particleSystemList[i].emitAngleRandom - (particleSystemList[i].emitAngleRandom/2))));
+						srand( lastRandomNumber );
+						lastRandomNumber = rand();
+						Vec2RotateDegrees(&vel, particleSystemList[i].emitAngle + ((float)((int)lastRandomNumber % particleSystemList[i].emitAngleRandom - (particleSystemList[i].emitAngleRandom/2))));
 
-					CreateFoxParticle(	particleSystemList[i].ParticleSprite, 
-										particleSystemList[i].emitMesh,
-										particleSystemList[i].Position.x + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementX - (particleSystemList[i].emitDisplacementX/2))),
-										particleSystemList[i].Position.y + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementY - (particleSystemList[i].emitDisplacementY/2))), 
-										particleSystemList[i].ZIndex,
-										vel.x,
-										vel.y, 
-										particleSystemList[i].emitLife, 
-										particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f),
-										particleSystemList[i].emitScaleSpeed,
-										particleSystemList[i].ParticleStartAlpha);
-
-					if (particleSystemList[i].amountTotal > 0)
-						particleSystemList[i].amountTotal--;
-					srand( rand() % (rand() + 1) );
-					lastRandomNumber = rand();
+						CreateFoxParticle(	particleSystemList[i].ParticleSprite, 
+											particleSystemList[i].emitMesh,
+											particleSystemList[i].Position.x + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementX - (particleSystemList[i].emitDisplacementX/2))),
+											particleSystemList[i].Position.y + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementY - (particleSystemList[i].emitDisplacementY/2))), 
+											particleSystemList[i].ZIndex,
+											vel.x,
+											vel.y, 
+											particleSystemList[i].emitLife, 
+											particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f),
+											particleSystemList[i].emitScaleSpeed,
+											particleSystemList[i].ParticleStartAlpha);
+						}
+						if (particleSystemList[i].amountTotal > 0)
+							particleSystemList[i].amountTotal--;
+						srand( rand() % (rand() + 1) );
+						lastRandomNumber = rand();
 				}
 			}
 			particleSystemList[i].emitSpeedTimer = particleSystemList[i].emitSpeed;
