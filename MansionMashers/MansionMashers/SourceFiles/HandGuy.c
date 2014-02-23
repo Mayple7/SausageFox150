@@ -80,7 +80,7 @@ void InitializeHandGuy(void)
 	CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	Pedestal = CreatePlatform("TextureFiles/MarblePedestal.png", PlatformType, 1920, 1080, newID++, 0, 0);
-	Pedestal->PlatformCollider.Offset.y = -3.6 * Pedestal->PlatformSprite->Height / 16;
+	Pedestal->PlatformCollider.Offset.y = -3.6f * Pedestal->PlatformSprite->Height / 16;
 	UpdateCollider(&Pedestal->PlatformCollider, Pedestal->PlatformCollider.width * 0.19f, Pedestal->PlatformCollider.height * 0.05f); 
 
 	Vec3Set(&TextTint, 1, 1, 1);

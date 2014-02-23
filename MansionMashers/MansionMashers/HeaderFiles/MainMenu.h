@@ -4,8 +4,8 @@
 void InitializeMainMenu(void);
 void FreeMainMenu(void);
 void DrawMainMenu(void);
-void InputHandling(void);
-void UpdateSelector(struct Sprite* Selector);
+static void InputHandling(void);
+static void UpdateSelector(struct Sprite* Selector);
 void UnloadMainMenu(void);
 void LoadMainMenu(void);
 void UpdateMainMenu(void);

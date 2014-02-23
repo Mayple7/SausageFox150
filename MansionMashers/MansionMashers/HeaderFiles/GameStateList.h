@@ -19,6 +19,7 @@ enum GSL
 	GS_YeahGuy,
 	GS_Level4,
 	GS_Kevin,
+	GS_DevMenu,
 	GS_LevelNUM,
 	GS_Restart,
 	GS_Quit,
