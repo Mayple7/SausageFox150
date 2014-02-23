@@ -112,7 +112,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->isJumping			= FALSE;
 		CurrentEnemy->jumpTimer			= 0;
 		CurrentEnemy->isDropDown		= FALSE;
-		CurrentEnemy->canDropDownTimer	= 0;
+		CurrentEnemy->canDropDownTimer	= 300;
 		CurrentEnemy->Attack			= FALSE;
 		CurrentEnemy->StateTimer		= 0;
 		CurrentEnemy->EnemyState		= AIIdle;
@@ -356,7 +356,6 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 
 			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 150 * GetLoadRatio() && !CurrentEnemy->isAttacking)
 				CurrentEnemy->Attack			= TRUE;
-			printf("%f\n",CurrentEnemy->canDropDownTimer);
 			break;
 		case AIPassive:
 
