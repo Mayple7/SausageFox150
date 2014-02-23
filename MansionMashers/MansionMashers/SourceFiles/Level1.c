@@ -46,6 +46,7 @@ Sprite* Level1Panel1;
 Sprite* Level1Door1;
 Sprite* Level1Panel2;
 Sprite* Level1Panel3;
+Sprite* Various;
 
 Platform* Table1;
 
@@ -83,7 +84,7 @@ void InitializeLevel1(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 1", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 
 	//Background: Panel 1
@@ -92,6 +93,7 @@ void InitializeLevel1(void)
 	Level1Panel2 = (Sprite *)CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1, 1920, 0);
 	Level1Door1 = (Sprite *)CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 300, 1, 1, 1920, 0);
 	Level1Panel3 = (Sprite *)CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, (1920 * 2), 0);
+
 
 	//Platforms
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -628, -285);
