@@ -112,6 +112,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->isJumping			= FALSE;
 		CurrentEnemy->jumpTimer			= 0;
 		CurrentEnemy->isDropDown		= FALSE;
+		CurrentEnemy->canDropDownTimer	= 300;
 		CurrentEnemy->Attack			= FALSE;
 		CurrentEnemy->StateTimer		= 0;
 		CurrentEnemy->EnemyState		= AIIdle;
@@ -151,10 +152,9 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		break;
 	case BasicMelee:
 		// Call enemy logic here
-
+		DetectEnemyCollision(CurrentEnemy);
 		EnemyAIUpdate(CurrentEnemy);
 		EnemyBasicMeleeUpdate(CurrentEnemy);
-		DetectEnemyCollision(CurrentEnemy);
 		EnemyAnimation(CurrentEnemy);
 		UpdateCollisionPosition(&CurrentEnemy->EnemyWeapon->WeaponAttack, &CurrentEnemy->EnemyWeapon->WeaponAttackPosition);
 		break;
@@ -202,7 +202,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	//Player position updated when dropping down from a platform
 	if(CurrentEnemy->dropDown)
 	{
-		CurrentEnemy->Position.y -= 300.0f * GetDeltaTime() * GetLoadRatio();
+		CurrentEnemy->Position.y -= 1200.0f * GetDeltaTime() * GetLoadRatio();
 		if(CurrentEnemy->EnemyRigidBody.Velocity.y < 0)
 		{
 			CurrentEnemy->EnemyRigidBody.Velocity.y = -1800.0f * GetDeltaTime() * GetLoadRatio();
@@ -311,7 +311,7 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 	switch(CurrentEnemy->EnemyState)
 	{
 		case AIAggressive:
-			CurrentEnemy->isJumping = FALSE;
+			CurrentEnemy->isJumping			= FALSE;
 
 			if (CurrentEnemy->Position.x < CurrentPlayer.Position.x - 60 * GetLoadRatio())
 			{
@@ -340,19 +340,22 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 						break;
 					if (CurrentEnemy->Position.x > platformList[i].Position.x - 40 && CurrentEnemy->Position.x < platformList[i].Position.x + 60)
 					{
-						CurrentEnemy->isJumping = TRUE;
+						CurrentEnemy->isJumping			= TRUE;
+						CurrentEnemy->canDropDownTimer	= (int)(2 / GetDeltaTime());
 						break;
 					}
 				}
 			}
-			else if (CurrentEnemy->Position.y < CurrentPlayer.Position.y - 10 * GetLoadRatio() && CurrentEnemy->EnemyRigidBody.onGround)
+			else if (CurrentEnemy->EnemyRigidBody.onGround && CurrentEnemy->canDropDownTimer <= 0 && CurrentEnemy->Position.y > CurrentPlayer.Position.y + 10 * GetLoadRatio())
 			{
-				CurrentEnemy->dropDown = TRUE;
+				CurrentEnemy->isDropDown		= TRUE;
 			}
+			
+			if (CurrentEnemy->canDropDownTimer > 0)
+				CurrentEnemy->canDropDownTimer--;
 
 			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 150 * GetLoadRatio() && !CurrentEnemy->isAttacking)
-				CurrentEnemy->Attack = TRUE;
-
+				CurrentEnemy->Attack			= TRUE;
 			break;
 		case AIPassive:
 
@@ -377,8 +380,8 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 500 * GetLoadRatio())
 				CurrentEnemy->EnemyState = AIAggressive;
 
-			CurrentEnemy->isMoveRight	= FALSE;
-			CurrentEnemy->isMoveLeft	= FALSE;
+			CurrentEnemy->isMoveRight		= FALSE;
+			CurrentEnemy->isMoveLeft		= FALSE;
 			break;
 	}
 }
