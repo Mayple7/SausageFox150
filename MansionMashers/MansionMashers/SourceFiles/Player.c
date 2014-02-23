@@ -641,9 +641,14 @@ void DetectPlayerCollision(void)
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
 				{
 					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-					CurrentPlayer.CollisionData[hitPrev] = 0;
+					//CurrentPlayer.CollisionData[hitPrev] = 0;
 				}
 			}
+			if(!(eList->isAttacking) && hitPrev > 0 && eList->EnemyWeapon->WeaponFOF == EnemyWeapon)
+			{
+				CurrentPlayer.CollisionData[hitPrev] = 0;
+			}
+
 		}
 		eList++;
 	}
