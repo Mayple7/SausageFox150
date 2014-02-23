@@ -197,7 +197,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	//Set gravity if not on floor or on a platform
 	else
 	{
-		SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, FOX_GRAVITY_Y * GetDeltaTime());
+		SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, FOX_GRAVITY_Y * GetLoadRatio());
 	}
 	//Player position updated when dropping down from a platform
 	if(CurrentEnemy->dropDown)
@@ -209,7 +209,6 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 			CurrentEnemy->dropDown = FALSE;
 		}
 	}
-
 	//Update velocity and acceleration
 	UpdateVelocity(&CurrentEnemy->EnemyRigidBody);
 	Vec2Scale(&velocityTime, &CurrentEnemy->EnemyRigidBody.Velocity, GetDeltaTime());
@@ -219,7 +218,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	//Updates the collision box
 	UpdateCollisionPosition(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position);
 	CurrentEnemy->EnemyRigidBody.onGround = FALSE;
-	
+	ZeroAcceleration(&CurrentEnemy->EnemyRigidBody);
 }
 
 void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)

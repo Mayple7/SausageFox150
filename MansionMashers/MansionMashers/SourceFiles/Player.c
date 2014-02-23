@@ -333,7 +333,6 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 			CurrentPlayer->dropDown = FALSE;
 		}
 	}
-
 	//Update velocity and acceleration
 	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
 	Vec2Scale(&velocityTime, &CurrentPlayer->PlayerRigidBody.Velocity, GetDeltaTime());
