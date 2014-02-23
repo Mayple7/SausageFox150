@@ -341,7 +341,8 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 						continue;
 					if (platformList[i].objID == -1)
 						break;
-					if (CurrentEnemy->Position.x > platformList[i].Position.x - 40 && CurrentEnemy->Position.x < platformList[i].Position.x + 60)
+					if (CurrentEnemy->Position.x > platformList[i].Position.x - 80 * GetLoadRatio() && CurrentEnemy->Position.x < platformList[i].Position.x + 80 * GetLoadRatio() &&
+						CurrentEnemy->Position.y < platformList[i].Position.y + 40 * GetLoadRatio())
 					{
 						CurrentEnemy->isJumping			= TRUE;
 						CurrentEnemy->canDropDownTimer	= (int)(2 / GetDeltaTime());
