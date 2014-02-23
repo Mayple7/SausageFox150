@@ -150,7 +150,8 @@ void FreeEnemy(Enemy *CurrentEnemy)
 			freeObject(CurrentEnemy->EnemySpriteParts.Tail);
 			freeObject(CurrentEnemy->EnemySpriteParts.Skirt);
 			freeObject(CurrentEnemy->EnemySpriteParts.Weapon);
-			freeSound(CurrentEnemy->CurrentEnemySounds.YEAH);
+			if (CurrentEnemy->CurrentEnemySounds.YEAH->sndID)
+				freeSound(CurrentEnemy->CurrentEnemySounds.YEAH);
 
 		}
 	}

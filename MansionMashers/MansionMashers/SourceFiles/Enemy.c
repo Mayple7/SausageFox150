@@ -71,6 +71,9 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, height / 2, objID);
 		CurrentEnemy->EnemyCollider.Offset.y = -CurrentEnemy->EnemyCollider.height / 6;
+
+		CurrentEnemy->CurrentEnemySounds.YEAH = CreateSound("Sounds/Scream.wav", SmallSnd);
+
 		break;
 	case BasicMelee:
 		width = 261.0f;
