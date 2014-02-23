@@ -41,6 +41,7 @@
 int newID;					// ID number
 TextGlyphs *LevelName;
 Sprite *HandGauy;
+Platform *Pedestal;
 
 /*************************************************************************/
 /*!
@@ -63,7 +64,6 @@ void LoadHandGuy(void)
 void InitializeHandGuy(void)
 {
 	Vec3 TextTint;
-	int i;
 
 	newID = 1;
 	ResetObjectList();
@@ -76,21 +76,12 @@ void InitializeHandGuy(void)
 
 	HandGauy = (Sprite *) CreateSprite("TextureFiles/HandGauy.png", 400, 400, 10, 1, 1, -700, -250);
 
-	for (i = -50; i < 50; i++)
-	{
-		CreateSprite("TextureFiles/HandGauy.png", (float)(i + 60) * 4, (float)(i + 60) * 4, (i + 60) / 10, 1, 1, (float)i * 10, (float)-230);
-	}
-	for (i = -25; i < 25; i++)
-	{
-		CreateSprite("TextureFiles/HandGauy.png", (float)(i + 60) * 4, (float)(i + 60) * 4, (i + 60) / 10, 1, 1, (float)i * -20 - 100, (float)i * 20 - 50);
-	}
-	for (i = -50; i < 50; i++)
-	{
-		CreateSprite("TextureFiles/HandGauy.png", (float)(i + 60) * 4, (float)(i + 60) * 4, (i + 60) / 10, 1, 1, (float)i * 10, (float)sin((float)i) * 200 + i * 10);
-	}
-
 	CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 0, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
+
+	Pedestal = CreatePlatform("TextureFiles/MarblePedestal.png", PlatformType, 1920, 1080, newID++, 0, 0);
+	Pedestal->PlatformCollider.Offset.y = -3.6 * Pedestal->PlatformSprite->Height / 16;
+	UpdateCollider(&Pedestal->PlatformCollider, Pedestal->PlatformCollider.width * 0.19f, Pedestal->PlatformCollider.height * 0.05f); 
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center);
