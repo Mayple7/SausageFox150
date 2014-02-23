@@ -49,6 +49,7 @@ enum Buttons { EP1But, EP2But, TutBut, QuitBut};
 static int selectedButton;								//0: EP1, 1: EP2, 2: tutorial, 3: quit
 static int deleteSave; // If true, dialogue box to delete save is up
 static int newID;
+static int canLoad;
 
 /*************************************************************************/
 /*!
@@ -69,6 +70,17 @@ void InitializeMainMenu(void)
 	newID = 10;
 	// Reset the object list
 	ResetObjectList();
+
+	fp = fopen("../GameData.cfg", "r");
+	if(fp)
+	{
+		canLoad = TRUE;
+		fclose(fp);
+	}
+	else
+	{
+		canLoad = FALSE;
+	}
 
 	Background = (Sprite *) CreateSprite("TextureFiles/MainMenuBack.png", 1920, 1080, 1, 1, 1, 0, 0);
 
@@ -127,23 +139,6 @@ void UnloadMainMenu(void)
 
 void InputHandling(void)
 {
-	if(FoxInput_KeyTriggered('C'))
-	{
-		FILE *fp = fopen("../GameData.cfg", "r");
-		if(!fp)
-		{
-			SetNextState(GS_CharacterSelect);
-		}
-		else
-		{
-			deleteSave = TRUE;
-			BlackBackground->Visible = TRUE;
-			DeleteText->Visible = TRUE;
-			YesButton->ButtonSprite->Visible = TRUE;
-			NoButton->ButtonSprite->Visible = TRUE;
-			fclose(fp);
-		}
-	}
 
 	if(deleteSave)
 	{
@@ -169,7 +164,119 @@ void InputHandling(void)
 				NoButton->ButtonSprite->Visible = FALSE;
 			}
 		}
+	}
+	else if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+	{
+		int worldX, worldY;
+		Vec2 MouseClick;
 
+		FoxInput_GetWorldPosition(&worldX, &worldY);
+		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+		if(PointRectCollision(&NewGameButton->ButtonCollider, &MouseClick))
+		{
+			if(!canLoad)
+			{
+				SetNextState(GS_CharacterSelect);
+			}
+			else
+			{
+				deleteSave = TRUE;
+				BlackBackground->Visible = TRUE;
+				DeleteText->Visible = TRUE;
+				YesButton->ButtonSprite->Visible = TRUE;
+				NoButton->ButtonSprite->Visible = TRUE;
+			}
+		}
+		else if(canLoad && PointRectCollision(&LoadGameButton->ButtonCollider, &MouseClick))
+		{
+			// Load Game Function hurrr
+			SetNextState(GS_Tutorial);
+		}
+		else if(PointRectCollision(&OptionsButton->ButtonCollider, &MouseClick))
+		{
+			// Load Game Function hurrr
+			//SetNextState(GS_Options);
+		}
+		else if(PointRectCollision(&CreditsButton->ButtonCollider, &MouseClick))
+		{
+			// Load Game Function hurrr
+			//SetNextState(GS_Credits);
+		}
+		else if(PointRectCollision(&QuitGameButton->ButtonCollider, &MouseClick))
+		{
+			//Quit game :(
+			SetNextState(GS_Quit);
+		}
+	}
+	else 
+	{
+		int worldX, worldY;
+		Vec2 MouseHover;
+
+		FoxInput_GetWorldPosition(&worldX, &worldY);
+		Vec2Set(&MouseHover, (float)worldX, (float)worldY);
+		if(PointRectCollision(&NewGameButton->ButtonCollider, &MouseHover))
+		{
+			NewGameButton->ButtonSprite->ScaleX = 1.1f;
+			NewGameButton->ButtonSprite->ScaleY = 1.1f;
+		}
+		else
+		{
+			NewGameButton->ButtonSprite->ScaleX = 1.0f;
+			NewGameButton->ButtonSprite->ScaleY = 1.0f;
+		}
+
+		if(canLoad && PointRectCollision(&LoadGameButton->ButtonCollider, &MouseHover))
+		{
+			LoadGameButton->ButtonSprite->ScaleX = 1.2f;
+			LoadGameButton->ButtonSprite->ScaleY = 1.2f;
+			LoadGameButton->ButtonSprite->Position.x = -319 * GetLoadRatio();
+		}
+		else
+		{
+			LoadGameButton->ButtonSprite->ScaleX = 1.0f;
+			LoadGameButton->ButtonSprite->ScaleY = 1.0f;
+			LoadGameButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
+		}
+
+		if(PointRectCollision(&OptionsButton->ButtonCollider, &MouseHover))
+		{
+			OptionsButton->ButtonSprite->ScaleX = 1.2f;
+			OptionsButton->ButtonSprite->ScaleY = 1.2f;
+			OptionsButton->ButtonSprite->Position.x = 319 * GetLoadRatio();
+		}
+		else
+		{
+			OptionsButton->ButtonSprite->ScaleX = 1.0f;
+			OptionsButton->ButtonSprite->ScaleY = 1.0f;
+			OptionsButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
+		}
+
+		if(PointRectCollision(&CreditsButton->ButtonCollider, &MouseHover))
+		{
+			CreditsButton->ButtonSprite->ScaleX = 1.2f;
+			CreditsButton->ButtonSprite->ScaleY = 1.2f;
+			CreditsButton->ButtonSprite->Position.x = -319 * GetLoadRatio();
+		}
+		else
+		{
+			CreditsButton->ButtonSprite->ScaleX = 1.0f;
+			CreditsButton->ButtonSprite->ScaleY = 1.0f;
+			CreditsButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
+		}
+
+		if(PointRectCollision(&QuitGameButton->ButtonCollider, &MouseHover))
+		{
+			QuitGameButton->ButtonSprite->ScaleX = 1.2f;
+			QuitGameButton->ButtonSprite->ScaleY = 1.2f;
+			QuitGameButton->ButtonSprite->Position.x = 319 * GetLoadRatio();
+		}
+		else
+		{
+			QuitGameButton->ButtonSprite->ScaleX = 1.0f;
+			QuitGameButton->ButtonSprite->ScaleY = 1.0f;
+			QuitGameButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
+		}
 	}
 
 
