@@ -106,6 +106,8 @@ void InitializeLevel1(void)
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 450, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
+	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
+
 }
 
 /*************************************************************************/
@@ -185,10 +187,30 @@ void UnloadLevel1(void)
 /*************************************************************************/
 void EventLevel1(void)
 {
+	int i;
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
+
+	//Update the enemies
+	for(i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if (enemyList[i].objID == -1)
+			break;
+		if (enemyList[i].objID == 0)
+			continue;
+
+		UpdateEnemy(&enemyList[i]);
+	}
+
+	i = 0;
+	while(i < COLLIDEAMOUNT)
+	{
+		if(floatTextList[i] > 0)
+			UpdateFloatingText(floatTextList[i]);
+		i++;
+	}
 
 	if(FoxInput_KeyTriggered('U'))
 	{
