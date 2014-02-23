@@ -98,8 +98,6 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	//    PLAYER WEAPON & STATS     //
 	////////////////////////////////*/
 	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
-	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
-	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
 
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
@@ -107,6 +105,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 		AE_ASSERT_MESG("SOMETHING BE BROKED");
 	}
 
+	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
+	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
 
 	/*////////////////////////////////
 	//       PLAYER SOUNDS          //
@@ -263,9 +263,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 		
 		Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
-		if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
+		if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
+			if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio())
 				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
@@ -306,6 +306,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 void UpdatePlayerPosition(Player *CurrentPlayer)
 {
 	Vec2 velocityTime;
+
+	if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
+	{
+		CurrentPlayer->Position.y = GROUNDLEVEL * GetLoadRatio();
+	}
 	//Stop velocity and acceleration when the player lands on the floor
 	if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 	{
@@ -328,7 +333,6 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 			CurrentPlayer->dropDown = FALSE;
 		}
 	}
-
 	//Update velocity and acceleration
 	UpdateVelocity(&CurrentPlayer->PlayerRigidBody);
 	Vec2Scale(&velocityTime, &CurrentPlayer->PlayerRigidBody.Velocity, GetDeltaTime());
@@ -1037,6 +1041,33 @@ int LoadPlayer(Player *CurrentPlayer)
 			updateDamage(CurrentPlayer);
 			updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 			updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+			printf("%d\n", CurrentPlayer->PlayerWeapon->WeaponType);
+			ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponName);
+			CreateStatsString(CurrentPlayer->PlayerWeapon->WeaponStatsString, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusDefense);
+			switch(CurrentPlayer->PlayerWeapon->WeaponType)
+			{
+			case Sword:
+				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
+				break;
+			case Axe:
+				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, 0, 0);
+				break;
+			case Hammer:
+				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, 0, 0);
+				break;
+			case Spear:
+				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, 0, 0);
+				break;
+			default:
+				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
+				break;
+			}
+
 			return 1;
 		}
 		else
@@ -1059,6 +1090,7 @@ int LoadPlayer(Player *CurrentPlayer)
 /*************************************************************************/
 void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 {
+	int nameLen, statsLen;
 	CurrentPlayer->Princess = Princess;
 	CurrentPlayer->BuffHeld = None;
 
@@ -1074,4 +1106,51 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 
 	CurrentPlayer->CurrentPlayerStats.Money = 0;
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+
+	switch(Princess)
+	{
+	case Mayple:
+		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
+		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Mayples Toy Sword");
+		CurrentPlayer->PlayerWeapon->WeaponType = Sword;
+		break;
+	case Ginko:
+		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, 0, 0);
+		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Ginkos Toy Axe");
+		CurrentPlayer->PlayerWeapon->WeaponType = Axe;
+		break;
+	case Kaya:
+		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, 0, 0);
+		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Kayas Toy Hammer");
+		CurrentPlayer->PlayerWeapon->WeaponType = Hammer;
+		break;
+	case Holly:
+		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, 0, 0);
+		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Hollys Toy Spear");
+		CurrentPlayer->PlayerWeapon->WeaponType = Spear;
+		break;
+	default:
+		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Stick.png", 256, 256, 5, 1, 1, 0, 0);
+		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Fragile Stick");
+		break;
+	}
+	ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponName);
+	CreateStatsString(CurrentPlayer->PlayerWeapon->WeaponStatsString, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusDefense);
+	
+	nameLen = strlen(CurrentPlayer->PlayerWeapon->WeaponName);
+	statsLen = strlen(CurrentPlayer->PlayerWeapon->WeaponStatsString);
+	if(nameLen >= statsLen)
+	{
+		CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 10, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+	}
+	else
+	{
+		CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+	}
+	CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 }

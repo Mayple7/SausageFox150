@@ -93,7 +93,7 @@ void InitializeMainMenu(void)
 	ResetObjectList();
 
 	// Create the start button
-	Logo = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
+	Logo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
 
 	// Create the start button
 	Level1 = CreateButton("TextureFiles/Level1.png", -300, 300, 400.0f, 100.0f, newID++);
@@ -107,7 +107,7 @@ void InitializeMainMenu(void)
 	Kevin = CreateButton("TextureFiles/Kevin.png", 300, -300, 400.0f, 100.0f, newID++);
 
 	// Creates the selector button - set to default position of the start button
-	Selector = CreateSprite("TextureFiles/Selector.png", 420.0f, 120.0f, 2, 1, 1, 100, 0);
+	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", 420.0f, 120.0f, 2, 1, 1, 100, 0);
 	
 	// Set camera to (0,0)
 	ResetCamera();

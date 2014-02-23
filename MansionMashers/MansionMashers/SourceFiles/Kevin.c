@@ -40,6 +40,10 @@
 // globals
 int newID;					// ID number
 TextGlyphs* LevelName;
+Platform* Shelf;
+Platform* Shelf2;
+Platform* Shelf3;
+Platform* Shelf4;
 
 /*************************************************************************/
 /*!
@@ -68,7 +72,7 @@ void InitializeKevin(void)
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, newID++, -400, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
@@ -76,6 +80,23 @@ void InitializeKevin(void)
 	ChangeTextVisibility(LevelName);
 
 	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
+
+	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
+	Shelf->PlatformCollider.Offset.y = 5 * Shelf->PlatformSprite->Height / 16;
+	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.2f); 
+
+	Shelf2 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 100, -280);
+	Shelf2->PlatformCollider.Offset.y = 5 * Shelf2->PlatformSprite->Height / 16;
+	UpdateCollider(&Shelf2->PlatformCollider, Shelf2->PlatformCollider.width, Shelf2->PlatformCollider.height * 0.2f); 
+
+	Shelf3 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, -80, -280);
+	Shelf3->PlatformCollider.Offset.y = 5 * Shelf3->PlatformSprite->Height / 16;
+	UpdateCollider(&Shelf3->PlatformCollider, Shelf3->PlatformCollider.width, Shelf3->PlatformCollider.height * 0.2f); 
+
+	Shelf4 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, -260, -280);
+	Shelf4->PlatformCollider.Offset.y = 5 * Shelf4->PlatformSprite->Height / 16;
+	UpdateCollider(&Shelf4->PlatformCollider, Shelf4->PlatformCollider.width, Shelf4->PlatformCollider.height * 0.2f); 
+
 }
 
 /*************************************************************************/
@@ -143,6 +164,8 @@ void EventKevin(void)
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
+	
+	ParticleSystemUpdate();
 
 	//Update the enemies
 	for(i = 0; i < COLLIDEAMOUNT; i++)
