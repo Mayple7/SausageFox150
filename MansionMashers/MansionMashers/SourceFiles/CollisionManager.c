@@ -119,3 +119,28 @@ int PointRectCollision(CollisionBox* objA, Vec2* objB)
 	else
 		return FALSE;
 }
+
+/*************************************************************************/
+/*!
+	\brief
+	Determines if there is a collision between a point and a circle
+	  
+	\param APos
+	Position of the circle
+	  
+	\param radius
+	Radius of the circle
+
+	\param objB
+	Location of the point
+*/
+/*************************************************************************/
+int PointCircleCollision(Vec2* APos, float radius, Vec2* objB)
+{
+	float distance = Vec2SquareDistance(APos, objB);
+
+	if(radius * radius > distance)
+		return TRUE;
+	else
+		return FALSE;
+}
