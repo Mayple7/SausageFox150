@@ -66,6 +66,7 @@ void LoadKevin(void)
 void InitializeKevin(void)
 {
 	Vec3 TextTint;
+	int i;
 
 	newID = 1;
 	ResetObjectList();
@@ -79,17 +80,20 @@ void InitializeKevin(void)
 	LevelName = CreateText("That Bitch Level", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 
-	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
+	for (i = 0; i < 9; i++)
+	{
+		CreateEnemy(BasicMelee, EnemyType, newID++, rand() % 1500 - 750, rand() % 500 - 250);
+	}
 
 	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
 	Shelf->PlatformCollider.Offset.y = 5 * Shelf->PlatformSprite->Height / 16;
 	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.2f); 
 
-	Shelf2 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 100, -280);
+	Shelf2 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 100, -100);
 	Shelf2->PlatformCollider.Offset.y = 5 * Shelf2->PlatformSprite->Height / 16;
 	UpdateCollider(&Shelf2->PlatformCollider, Shelf2->PlatformCollider.width, Shelf2->PlatformCollider.height * 0.2f); 
 
-	Shelf3 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, -80, -280);
+	Shelf3 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, -80, -100);
 	Shelf3->PlatformCollider.Offset.y = 5 * Shelf3->PlatformSprite->Height / 16;
 	UpdateCollider(&Shelf3->PlatformCollider, Shelf3->PlatformCollider.width, Shelf3->PlatformCollider.height * 0.2f); 
 

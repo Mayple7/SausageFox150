@@ -38,7 +38,6 @@ typedef struct FoxSound
 
 typedef struct FoxChannels
 {
-
 	FMOD_CHANNELGROUP *Effects;
 	FMOD_BOOL EffectsPaused;
 	FMOD_CHANNELGROUP *Music;
@@ -52,52 +51,39 @@ FoxChannels *channelGroupList;
 FoxChannels *ChannelController;
 
 //Functions
-FMOD_SYSTEM * GetSoundSystem(void);
 void FMODErrCheck(FMOD_RESULT result);
 void FMODInit(void);
+FMOD_SYSTEM * GetSoundSystem(void);
+void UpdateSoundSystem(void);
 void FMODQuit(void);
 
+void ResetSoundList(void);
+FoxSound * AddSound(void);
+void FreeSoundList(void);
+void freeSound(FoxSound * soundObj);
+
+void ResetChannelGroupList(void);
+FoxChannels * AddChannelGroups(void);
+void FreeChannelGroupList(void);
+void freeChannelGroups(FoxChannels * chanGrpObj);
+
 FoxSound *CreateSound(char *Filename, int type);
-//void CreateSound(char *Filename, FoxSound *SoundStruct, int Soundtype);
+void CreatePauseSound(FoxSound * snd, char *Filename, int type);
+void InitSoundStruct(FoxSound *SoundStruct, int Soundtype); 
+void ReleaseSound(FMOD_SOUND *Sound);
 
 void PlayAudio(FoxSound *snd);
-//void PlayAudio(FoxSound *SoundStruct, FoxChannels *ChannelGroups);
 
-void ReleaseSound(FMOD_SOUND *Sound);
-void InitSoundStruct(FoxSound *SoundStruct, int Soundtype); 
-void TogglePauseSound(FoxSound * SoundStruct);
-
-void TogglePauseChannel(int ChnlType);
-//void TogglePauseChannel(FoxChannels * ChannelGroups, int ChannelType);
-
-//void CreateChannelGroups(FoxChannels *chnl);
 FoxChannels* CreateChannelGroups(void);
-
 void ReleaseChannelGroups(FoxChannels *chnl);
-
-void SetChannelGroupVolume(int type, float volume);
-//void SetChannelGroupVolume(FoxChannels *chnl, int type, float volume);
 
 void SetSoundVolume(FoxSound *snd, float volume);
 float GetSoundVolume(FoxSound *snd);
-
+void SetChannelGroupVolume(int type, float volume);
 float GetChannelGroupVolume(int type);
-//float GetChannelGroupVolume(FoxChannels * chnl, int type);
-
-void UpdateSoundSystem(void);
 char * VolumetoString(char *string, float volume);
 
-FoxSound * AddSound(void);
-FoxChannels * AddChannelGroups(void);
-
-void ResetSoundList(void);
-void freeSound(FoxSound * soundObj);
-void freeChannelGroups(FoxChannels * chanGrpObj);
-void FreeSoundList(void);
-
-void ResetChannelGroupList(void);
-void FreeChannelGroupList(void);
-
-void CreatePauseSound(FoxSound * snd, char *Filename, int type);
+void TogglePauseSound(FoxSound * SoundStruct);
+void TogglePauseChannel(int ChnlType);
 
 #endif
