@@ -70,6 +70,7 @@ void InitializeMainMenu(void)
 	newID = 10;
 	// Reset the object list
 	ResetObjectList();
+	deleteSave = FALSE;
 
 	fp = fopen("../GameData.cfg", "r");
 	if(fp)
