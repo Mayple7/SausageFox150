@@ -9,5 +9,6 @@ enum SensorType{ RectangleCollider, CircleCollider };
 void DetectCollision(void);
 int CollisionRectangles(CollisionBox* objA, CollisionBox* objB);
 int PointRectCollision(CollisionBox* objA, Vec2* objB);
+int PointCircleCollision(Vec2* APos, float radius, Vec2* objB);
 
 #endif

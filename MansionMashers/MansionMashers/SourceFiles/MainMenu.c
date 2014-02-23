@@ -31,14 +31,13 @@
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 
-Sprite* GameLogo;
+Sprite* Background;
 
-Sprite* EP1Button;
-Sprite* EP2Button;
-Sprite* TutorialButton;
-Sprite* QuitButton;
-
-Sprite* Selector;
+Button* NewGameButton;
+Button* LoadGameButton;
+Button* OptionsButton;
+Button* CreditsButton;
+Button* QuitGameButton;
 
 //Delete save file objects
 Sprite* BlackBackground;
@@ -50,6 +49,7 @@ enum Buttons { EP1But, EP2But, TutBut, QuitBut};
 static int selectedButton;								//0: EP1, 1: EP2, 2: tutorial, 3: quit
 static int deleteSave; // If true, dialogue box to delete save is up
 static int newID;
+static int canLoad;
 
 /*************************************************************************/
 /*!
@@ -65,29 +65,37 @@ void LoadMainMenu(void)
 
 void InitializeMainMenu(void)
 {
+	FILE *fp;
 	Vec3 Tint;
 	newID = 10;
 	// Reset the object list
 	ResetObjectList();
+	deleteSave = FALSE;
 
-	selectedButton = EP1But;
+	fp = fopen("../GameData.cfg", "r");
+	if(fp)
+	{
+		canLoad = TRUE;
+		fclose(fp);
+	}
+	else
+	{
+		canLoad = FALSE;
+	}
 
-	GameLogo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
+	Background = (Sprite *) CreateSprite("TextureFiles/MainMenuBack.png", 1920, 1080, 1, 1, 1, 0, 0);
 
-	// Create the start button
-	EP1Button = (Sprite *) CreateSprite("TextureFiles/EP1_button.png", 300.0f, 100.0f, 3, 1, 1, -500, 300);
+	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -170, 394, 394, newID++);
+	LoadGameButton = CreateButton("TextureFiles/LoadGameButton.png", -290, -48, 439, 170, newID++);
+	OptionsButton = CreateButton("TextureFiles/OptionsButton.png", 290, -48, 439, 170, newID++);
+	CreditsButton = CreateButton("TextureFiles/CreditsButton.png", -290, -320, 439, 170, newID++);
+	QuitGameButton = CreateButton("TextureFiles/QuitGameButton.png", 290, -320, 439, 170, newID++);
 
-	// Create the start button
-	EP2Button = (Sprite *) CreateSprite("TextureFiles/EP2_button.png", 300.0f, 100.0f, 3, 1, 1, 500, 300);
-
-	// Creates the showcase button
-	TutorialButton = (Sprite *) CreateSprite("TextureFiles/tutorial_button.png", 300.0f, 100.0f, 3, 1, 1, -500, -300);
-	
-	// Creates the exit button
-	QuitButton = (Sprite *) CreateSprite("TextureFiles/quit_button.png", 300.0f, 100.0f, 3, 1, 1, 500, -300);
-
-	// Creates the selector button - set to default position of the start button
-	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 2, 1, 1, 100, 0);
+	NewGameButton->ButtonSprite->ZIndex = 5;
+	LoadGameButton->ButtonSprite->ZIndex = 3;
+	OptionsButton->ButtonSprite->ZIndex = 3;
+	CreditsButton->ButtonSprite->ZIndex = 3;
+	QuitGameButton->ButtonSprite->ZIndex = 3;
 	
 	Vec3Set(&Tint, 0, 0, 0);
 	BlackBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
@@ -106,7 +114,6 @@ void InitializeMainMenu(void)
 
 	// Set camera to (0,0)
 	ResetCamera();
-	UpdateSelector(Selector);
 }
 
 void UpdateMainMenu(void)
@@ -133,93 +140,6 @@ void UnloadMainMenu(void)
 
 void InputHandling(void)
 {
-	// check if forcing the application to quit
-	switch(selectedButton)
-	{
-	// EP 1 button
-	case EP1But:
-		if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
-		{
-			selectedButton = TutBut;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RIGHT) || FoxInput_KeyTriggered('D'))
-		{
-			selectedButton = EP2But;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
-		{
-			SetNextState(GS_EP1Slides);
-		}
-		break;
-	case EP2But:
-		if(FoxInput_KeyTriggered(VK_DOWN) || FoxInput_KeyTriggered('S'))
-		{
-			selectedButton = QuitBut;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_LEFT) || FoxInput_KeyTriggered('A'))
-		{
-			selectedButton = EP1But;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
-		{
-			SetNextState(GS_EP2Slides);
-		}
-		break;
-	case TutBut:
-		if(FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
-		{
-			selectedButton = EP1But;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RIGHT) || FoxInput_KeyTriggered('D'))
-		{
-			selectedButton = QuitBut;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
-		{
-			SetNextState(GS_Tutorial);
-		}
-		break;
-	case QuitBut:
-		if(FoxInput_KeyTriggered(VK_UP) || FoxInput_KeyTriggered('W'))
-		{
-			selectedButton = EP2But;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_LEFT) || FoxInput_KeyTriggered('A'))
-		{
-			selectedButton = TutBut;
-			UpdateSelector(Selector);
-		}
-		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
-		{
-			SetNextState(GS_Quit);
-		}
-		break;
-	}
-
-	if(FoxInput_KeyTriggered('C'))
-	{
-		FILE *fp = fopen("../GameData.cfg", "r");
-		if(!fp)
-		{
-			SetNextState(GS_CharacterSelect);
-		}
-		else
-		{
-			deleteSave = TRUE;
-			BlackBackground->Visible = TRUE;
-			DeleteText->Visible = TRUE;
-			YesButton->ButtonSprite->Visible = TRUE;
-			NoButton->ButtonSprite->Visible = TRUE;
-			fclose(fp);
-		}
-	}
 
 	if(deleteSave)
 	{
@@ -245,7 +165,135 @@ void InputHandling(void)
 				NoButton->ButtonSprite->Visible = FALSE;
 			}
 		}
+	}
+	else if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+	{
+		int worldX, worldY;
+		Vec2 MouseClick;
 
+		FoxInput_GetWorldPosition(&worldX, &worldY);
+		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+		if(PointRectCollision(&NewGameButton->ButtonCollider, &MouseClick))
+		{
+			if(!canLoad)
+			{
+				SetNextState(GS_CharacterSelect);
+			}
+			else
+			{
+				deleteSave = TRUE;
+				BlackBackground->Visible = TRUE;
+				DeleteText->Visible = TRUE;
+				YesButton->ButtonSprite->Visible = TRUE;
+				NoButton->ButtonSprite->Visible = TRUE;
+			}
+		}
+		else if(canLoad && PointRectCollision(&LoadGameButton->ButtonCollider, &MouseClick))
+		{
+			// Load Game Function hurrr
+			SetNextState(GS_Tutorial);
+		}
+		else if(PointRectCollision(&OptionsButton->ButtonCollider, &MouseClick))
+		{
+			// Load Game Function hurrr
+			//SetNextState(GS_Options);
+		}
+		else if(PointRectCollision(&CreditsButton->ButtonCollider, &MouseClick))
+		{
+			// Load Game Function hurrr
+			//SetNextState(GS_Credits);
+		}
+		else if(PointRectCollision(&QuitGameButton->ButtonCollider, &MouseClick))
+		{
+			//Quit game :(
+			SetNextState(GS_Quit);
+		}
+	}
+	else 
+	{
+		int worldX, worldY;
+		Vec2 MouseHover;
+
+		FoxInput_GetWorldPosition(&worldX, &worldY);
+		Vec2Set(&MouseHover, (float)worldX, (float)worldY);
+		if(PointCircleCollision(&NewGameButton->ButtonCollider.Position, NewGameButton->ButtonSprite->Width / 2.0f, &MouseHover))
+		{
+			NewGameButton->ButtonSprite->ScaleX = 1.1f;
+			NewGameButton->ButtonSprite->ScaleY = 1.1f;
+
+			LoadGameButton->ButtonSprite->ScaleX = 1.0f;
+			LoadGameButton->ButtonSprite->ScaleY = 1.0f;
+			LoadGameButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
+
+			OptionsButton->ButtonSprite->ScaleX = 1.0f;
+			OptionsButton->ButtonSprite->ScaleY = 1.0f;
+			OptionsButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
+
+			CreditsButton->ButtonSprite->ScaleX = 1.0f;
+			CreditsButton->ButtonSprite->ScaleY = 1.0f;
+			CreditsButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
+
+			QuitGameButton->ButtonSprite->ScaleX = 1.0f;
+			QuitGameButton->ButtonSprite->ScaleY = 1.0f;
+			QuitGameButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
+		}
+		else
+		{
+			NewGameButton->ButtonSprite->ScaleX = 1.0f;
+			NewGameButton->ButtonSprite->ScaleY = 1.0f;
+
+			if(canLoad && PointRectCollision(&LoadGameButton->ButtonCollider, &MouseHover))
+			{
+				LoadGameButton->ButtonSprite->ScaleX = 1.2f;
+				LoadGameButton->ButtonSprite->ScaleY = 1.2f;
+				LoadGameButton->ButtonSprite->Position.x = -319 * GetLoadRatio();
+			}
+			else
+			{
+				LoadGameButton->ButtonSprite->ScaleX = 1.0f;
+				LoadGameButton->ButtonSprite->ScaleY = 1.0f;
+				LoadGameButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
+			}
+
+			if(PointRectCollision(&OptionsButton->ButtonCollider, &MouseHover))
+			{
+				OptionsButton->ButtonSprite->ScaleX = 1.2f;
+				OptionsButton->ButtonSprite->ScaleY = 1.2f;
+				OptionsButton->ButtonSprite->Position.x = 319 * GetLoadRatio();
+			}
+			else
+			{
+				OptionsButton->ButtonSprite->ScaleX = 1.0f;
+				OptionsButton->ButtonSprite->ScaleY = 1.0f;
+				OptionsButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
+			}
+
+			if(PointRectCollision(&CreditsButton->ButtonCollider, &MouseHover))
+			{
+				CreditsButton->ButtonSprite->ScaleX = 1.2f;
+				CreditsButton->ButtonSprite->ScaleY = 1.2f;
+				CreditsButton->ButtonSprite->Position.x = -319 * GetLoadRatio();
+			}
+			else
+			{
+				CreditsButton->ButtonSprite->ScaleX = 1.0f;
+				CreditsButton->ButtonSprite->ScaleY = 1.0f;
+				CreditsButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
+			}
+
+			if(PointRectCollision(&QuitGameButton->ButtonCollider, &MouseHover))
+			{
+				QuitGameButton->ButtonSprite->ScaleX = 1.2f;
+				QuitGameButton->ButtonSprite->ScaleY = 1.2f;
+				QuitGameButton->ButtonSprite->Position.x = 319 * GetLoadRatio();
+			}
+			else
+			{
+				QuitGameButton->ButtonSprite->ScaleX = 1.0f;
+				QuitGameButton->ButtonSprite->ScaleY = 1.0f;
+				QuitGameButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
+			}
+		}
 	}
 
 
@@ -257,50 +305,4 @@ void InputHandling(void)
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
 		SetNextState(GS_Quit);
-}
-
-
-/*************************************************************************/
-/*!
-	\brief
-	Updates the selector sprite to move to the correct position
-	
-	\param Selector
-	Selector sprite to update
-*/
-/*************************************************************************/
-void UpdateSelector(struct Sprite *Selector)
-{
-	switch(selectedButton)
-	{
-		case EP1But:
-			Selector->Position = EP1Button->Position;
-			Selector->Width = EP1Button->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
-			UpdateMesh(Selector);
-			break;
-		case EP2But:
-			Selector->Position = EP2Button->Position;
-			Selector->Width = EP2Button->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
-			UpdateMesh(Selector);
-			break;
-		case TutBut:
-			Selector->Position = TutorialButton->Position;
-			Selector->Width = TutorialButton->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
-			UpdateMesh(Selector);
-			break;
-		case QuitBut:
-			Selector->Position = QuitButton->Position;
-			Selector->Width = QuitButton->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
-			UpdateMesh(Selector);
-			break;
-		default:
-			Selector->Position = EP1Button->Position;
-			Selector->Width = EP1Button->Width * (float)1.1;
-			UpdateMesh(Selector);
-			break;
-	}
 }
