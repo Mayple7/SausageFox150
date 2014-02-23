@@ -119,7 +119,8 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->Attack			= FALSE;
 		CurrentEnemy->StateTimer		= 0;
 		CurrentEnemy->EnemyState		= AIIdle;
-
+		CurrentEnemy->idleMove			= 0;
+		CurrentEnemy->idleTimer			= rand() % 60;
 		CurrentEnemy->CurrentEnemySounds.YEAH = CreateSound("Sounds/Scream.wav", SmallSnd);
 
 
@@ -387,8 +388,31 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 500 * GetLoadRatio())
 				CurrentEnemy->EnemyState = AIAggressive;
 
-			CurrentEnemy->isMoveRight		= FALSE;
-			CurrentEnemy->isMoveLeft		= FALSE;
+			if (CurrentEnemy->idleMove == 1)
+			{
+				CurrentEnemy->isMoveRight	= TRUE;
+				CurrentEnemy->isMoveLeft	= FALSE;
+			}
+			else if (CurrentEnemy->idleMove == -1)
+			{
+				CurrentEnemy->isMoveRight	= FALSE;
+				CurrentEnemy->isMoveLeft	= TRUE;
+			}
+			else
+			{
+				CurrentEnemy->isMoveRight	= FALSE;
+				CurrentEnemy->isMoveLeft	= FALSE;
+			}
+
+			if (CurrentEnemy->idleTimer > 0)
+				CurrentEnemy->idleTimer--;
+			else
+			{
+				CurrentEnemy->idleTimer = rand() % 60 + 10;
+				CurrentEnemy->idleMove	= rand() % 3 - 1;
+			}
+
+
 			break;
 	}
 }
