@@ -141,7 +141,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 	if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer->isAttacking)
 	{
 		//Pick a random swing sound to play
-		printf("1 Playing: %i, 2 Playing: %i\n", FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1), FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2));
 		if (rand() % 2)
 		{
 			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
