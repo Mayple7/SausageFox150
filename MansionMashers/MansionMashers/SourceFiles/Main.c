@@ -190,6 +190,13 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			GSMPointers.pDraw();
 			Next = GetNextState();
 
+			if(FoxInput_KeyTriggered('R'))
+			{
+				int worldX, worldY;
+				FoxInput_GetWorldPosition(&worldX, &worldY);
+				printf("%f, %f\n", worldX / GetLoadRatio(), worldY / GetLoadRatio());
+			}
+
 			FoxInput_Update();
 
 			EndFoxFrame();
