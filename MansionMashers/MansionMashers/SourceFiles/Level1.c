@@ -33,6 +33,9 @@
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/BoundingBox.h"
 
+// ---------------------------------------------------------------------------
+// defines
+#define PANELSIZE 1920.0f
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -94,11 +97,11 @@ void InitializeLevel1(void)
 	CreateBoundingBoxes();
 
 	//Background: Panel 1
-	Level1Panel1 = (Sprite *)CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
-	Level1Door1 = (Sprite *)CreateSprite("TextureFiles/OverlayDoorTorch.png", 1920, 1080, 200, 1, 1, 0, 0);
-	Level1Panel2 = (Sprite *)CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1, 1920, 0);
-	Level1Door1 = (Sprite *)CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 300, 1, 1, 1920, 0);
-	Level1Panel3 = (Sprite *)CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, (1920 * 2), 0);
+	CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/OverlayDoorTorch.png", 1920, 1080, 200, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1, 1920, 0);
+	CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 300, 1, 1, 1920, 0);
+	CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, (1920 * 2), 0);
 
 
 	//Platforms
@@ -113,16 +116,22 @@ void InitializeLevel1(void)
 
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 450, -285);
 	Table1->PlatformSprite->Visible = FALSE;
+
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 290.0f, 40.0f, newID++, 1774, -255);
+	Table1->PlatformSprite->Visible = FALSE;
 	
-	//Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", WallType, 200.0f, 250.0f, newID++, 450, -100);
-	//Table1->PlatformSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 250.0f, newID++, 450, -100);
+	//Walls
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 865, 130);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -900, 0);
+	Wall1->WallSprite->Visible = FALSE;
 
-	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
+	//Enemy
+	//CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
 
+	//Particles fo Torches
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 806, -235, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
-
 
 }
 
@@ -142,17 +151,8 @@ void UpdateLevel1(void)
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
-	if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * Level1Panel1->Width / 16)
-			CurrentPlayer.Position.x = (-7 * Level1Panel1->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
-	else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * Level1Panel1->Width / 16 && CurrentPlayer.Position.y + CurrentPlayer.PlayerCollider.height / 2 > -Level1Panel1->Height / 8)
-	{
-		CurrentPlayer.Position.x = (7 * Level1Panel1->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
-	}
-	else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > 7 * Level1Panel1->Width / 16)
-	{
-		if(CurrentPlayer.PlayerRigidBody.Velocity.y > 0 && CurrentPlayer.Position.y + CurrentPlayer.PlayerCollider.height / 2 > -Level1Panel1->Height / 7)
-			ZeroVelocity(&CurrentPlayer.PlayerRigidBody);
-	}
+	printf("PlayPos : %f \n",  CurrentPlayer.Position.x);
+
 }
 
 /*************************************************************************/
@@ -167,7 +167,15 @@ void DrawLevel1(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
-	SetCamera(&CurrentPlayer.Position, 250);
+
+	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
+		SetCameraPan(0.0f, PANELSIZE);
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
+		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
+	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
+		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
+	else
+		SetCamera(&CurrentPlayer.Position, 250);
 
 }
 

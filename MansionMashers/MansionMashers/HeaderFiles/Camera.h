@@ -12,6 +12,9 @@ typedef struct HUDLayer
 
 void SetCamera(Vec2 *playerX, int offset); 
 void ResetCamera(void);
+float GetCameraXPosition();
+void SetCameraXPosition(float newX);
+void SetCameraPan(float newX, float PanelSize);
 void DrawHUD(struct HUDLayer *hud);
 
 #endif
