@@ -40,7 +40,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
-int newID;					// ID number
+static int newID;					// ID number
 TextGlyphs* LevelName;
 
 Sprite* Level1Panel1;
@@ -51,10 +51,7 @@ Sprite* Various;
 
 Platform* Table1;
 
-
-
-
-
+Wall* NewWall;
 
 /*************************************************************************/
 /*!
@@ -78,7 +75,7 @@ void InitializeLevel1(void)
 {
 	Vec3 TextTint;
 
-	newID = 1;
+	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
@@ -114,15 +111,12 @@ void InitializeLevel1(void)
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 450, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	//Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", WallType, 200.0f, 250.0f, newID++, 450, -100);
-	//Table1->PlatformSprite->Visible = FALSE;
-
 	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
 
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 806, -235, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-
+	NewWall = CreateWall("TextureFiles/BlankPlatform.png", 500, 100, newID++, 400, -100);
 }
 
 /*************************************************************************/

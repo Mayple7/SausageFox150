@@ -504,6 +504,7 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 {
 	Weapon* wList = weaponList;
 	Platform* pList = platformList;
+	Wall* walls = wallList;
 	int hit = 0;
 	int hitPrev = 0;
 	
@@ -602,6 +603,53 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 			}
 		}
 		pList++;
+	}
+
+	while(walls->objID != -1)
+	{
+		if(walls->objID > 0)
+		{
+			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &walls->WallCollider);
+			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, walls->WallCollider.collisionID);
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentEnemy->CollisionData[-hitPrev] = walls->WallCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					EnemyCollideWall(CurrentEnemy, walls);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					EnemyCollideWall(CurrentEnemy, walls);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = walls->WallCollider.collisionID * 10 + 1;
+					EnemyCollideWall(CurrentEnemy, walls);
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = 0;
+				}
+			}
+		}
+		walls++;
 	}
 }
 
