@@ -31,7 +31,6 @@ void CreateBoundingBoxes(void)
 
 void BoundingBoxUpdate(void)
 {
-	int i;
 	float camX, camY;	
 
 	//Get camera position
