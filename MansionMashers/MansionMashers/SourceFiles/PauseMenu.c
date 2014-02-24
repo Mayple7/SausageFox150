@@ -61,7 +61,7 @@ void InitializePause(void (*DrawLevel)())
 	volumestring[0] = '1';
 	volumestring[1] = '0';
 	volumestring[2] = '0';
-	volumestring[3] = '%%';
+	volumestring[3] = (char)'%%';
 	volumestring[4] = '\0';
 
 	newID = 1;

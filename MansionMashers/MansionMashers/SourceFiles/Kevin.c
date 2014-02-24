@@ -38,7 +38,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
-int newID;					// ID number
+static int newID;					// ID number
 TextGlyphs* LevelName;
 Platform* Shelf;
 Platform* Shelf2;
@@ -68,7 +68,7 @@ void InitializeKevin(void)
 	Vec3 TextTint;
 	int i;
 
-	newID = 1;
+	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
@@ -139,7 +139,7 @@ void DrawKevin(void)
 /*************************************************************************/
 void FreeKevin(void)
 {
-	FreeObjectList();
+	FreeAllLists();
 }
 
 /*************************************************************************/

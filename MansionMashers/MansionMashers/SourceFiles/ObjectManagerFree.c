@@ -245,9 +245,9 @@ void FreeButton(Button* CurrentButton)
 	Cycles through the object list freeing all objects in the list
 */
 /*************************************************************************/
-void FreeObjectList(void)
+void freeDrawList(void)
 {
-	////////--Freeing the drawn objects and textures
+	////////Freeing the drawn objects and textures
 	int i;
 	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
@@ -259,7 +259,21 @@ void FreeObjectList(void)
 		}
 	}
 
-	////////--Freeing the collision objects and textures
+	//Free the object list data allocation
+	FreeMyAlloc(drawList);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Cycles through the object list freeing all objects in the list
+*/
+/*************************************************************************/
+void freeObjectList(void)
+{
+	int i;
+
+	////////Freeing the collision objects and textures
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
@@ -319,11 +333,6 @@ void FreeObjectList(void)
 		}
 	}
 
-	//Free the object list data allocation
-	FreeMyAlloc(drawList);
-	FreeMyAlloc(particleList);
-	FreeMyAlloc(particleSystemList);
-
 	//Free collision lists data allocation
 	FreeMyAlloc(platformList);
 	FreeMyAlloc(foodList);
@@ -332,4 +341,22 @@ void FreeObjectList(void)
 	FreeMyAlloc(floatTextList);
 	FreeMyAlloc(staticTextList);
 	FreeMyAlloc(buttonList);
+	FreeMyAlloc(particleList);
+	FreeMyAlloc(particleSystemList);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees all allocated lists
+*/
+/*************************************************************************/
+void FreeAllLists(void)
+{
+	//Free object list
+	freeObjectList();
+	//Free draw list
+	freeDrawList();
+	//Free sound list
+	FreeSoundList();
 }

@@ -22,5 +22,7 @@ void ChangeTextVisibility(TextGlyphs* FirstLetter);
 void ChangeTextString(TextGlyphs* FirstLetter, char* newString);
 void UpdateFloatingText(TextGlyphs *FirstLetter);
 void ChangeTextZIndex(TextGlyphs* FirstLetter, int newIndex);
+void TextAllVisible(TextGlyphs* FirstLetter);
+void TextAllNotVisible(TextGlyphs* FirstLetter);
 
 #endif

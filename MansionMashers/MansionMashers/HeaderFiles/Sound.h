@@ -73,6 +73,7 @@ void InitSoundStruct(FoxSound *SoundStruct, int Soundtype);
 void ReleaseSound(FMOD_SOUND *Sound);
 
 void PlayAudio(FoxSound *snd);
+int FoxSoundCheckIsPlaying(FoxSound *snd);
 
 FoxChannels* CreateChannelGroups(void);
 void ReleaseChannelGroups(FoxChannels *chnl);

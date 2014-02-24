@@ -129,7 +129,7 @@ void DrawMainMenu(void)
 void FreeMainMenu(void)
 {
 	// Freeing the objects and textures
-	FreeObjectList();
+	FreeAllLists();
 }
 
 void UnloadMainMenu(void)
