@@ -79,7 +79,7 @@ void InitializeCharacterSelect(void)
 		printf("FAILED");
 	}
 	//Create Mayple
-	InitializePlayer(&CharacterMayple, Mayple, newID++, -712, -80);
+	InitializePlayer(&CharacterMayple, Mayple, -712, -80);
 	CharacterMayple.Speed = 0.0f;
 	CharacterMayple.FlipX = TRUE;
 	UpdatePlayerPosition(&CharacterMayple);
@@ -90,7 +90,7 @@ void InitializeCharacterSelect(void)
 	}
 
 	//Create Ginko
-	InitializePlayer(&CharacterGinko, Ginko, newID++, -235, -80);
+	InitializePlayer(&CharacterGinko, Ginko, -235, -80);
 	CharacterGinko.Speed = 0.0f;
 	CharacterGinko.FlipX = TRUE;
 	UpdatePlayerPosition(&CharacterGinko);
@@ -101,7 +101,7 @@ void InitializeCharacterSelect(void)
 	}
 
 	//Create Kaya
-	InitializePlayer(&CharacterKaya, Kaya, newID++, 235, -80);
+	InitializePlayer(&CharacterKaya, Kaya, 235, -80);
 	CharacterKaya.Speed = 0.0f;
 	CharacterKaya.FlipX = FALSE;
 	UpdatePlayerPosition(&CharacterKaya);
@@ -112,7 +112,7 @@ void InitializeCharacterSelect(void)
 	}
 
 	//Create Holly
-	InitializePlayer(&CharacterHolly, Holly, newID++, 712, -80);
+	InitializePlayer(&CharacterHolly, Holly, 712, -80);
 	CharacterHolly.Speed = 0.0f;
 	CharacterHolly.FlipX = FALSE;
 	UpdatePlayerPosition(&CharacterHolly);

@@ -45,7 +45,7 @@ Player CurrentPlayer;
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int newID, float xPos, float yPos)
+void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, float xPos, float yPos)
 {
 	int i;
 
@@ -77,7 +77,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	/*////////////////////////////////
 	//      PLAYER COLLISION        //
 	////////////////////////////////*/
-	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, newID);
+	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, 1);
 	CurrentPlayer->PlayerCollider.Offset.y = 20 * GetLoadRatio();
 	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20 * GetLoadRatio();
 	UpdateCollider(&CurrentPlayer->PlayerCollider, CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
@@ -97,7 +97,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int
 	/*////////////////////////////////
 	//    PLAYER WEAPON & STATS     //
 	////////////////////////////////*/
-	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, newID++);
+	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, 2);
 
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{

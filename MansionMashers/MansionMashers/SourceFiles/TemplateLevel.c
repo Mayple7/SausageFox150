@@ -38,7 +38,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
-int newID;					// ID number
+static int newID;					// ID number
 
 /*************************************************************************/
 /*!
@@ -60,12 +60,12 @@ void LoadLevel(void)
 /*************************************************************************/
 void InitializeLevel(void)
 {
-	newID = 1;
+	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 }
 

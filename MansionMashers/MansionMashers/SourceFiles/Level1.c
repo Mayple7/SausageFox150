@@ -43,7 +43,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
-int newID;					// ID number
+static int newID;					// ID number
 TextGlyphs* LevelName;
 
 Sprite* Level1Panel1;
@@ -81,12 +81,12 @@ void InitializeLevel1(void)
 {
 	Vec3 TextTint;
 
-	newID = 1;
+	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);

@@ -110,7 +110,7 @@ typedef struct Player
 Player CurrentPlayer;
 
 //Functions
-void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, int newID, float xPos, float yPos);
+void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, float xPos, float yPos);
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void DestroyPlayer(Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);

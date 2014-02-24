@@ -5,5 +5,6 @@
 
 void EnemyCollidePlatform(Enemy *CurrentEnemy, Platform *CurrentPlatform);
 void EnemyCollideWeapon(Enemy *CurrentEnemy);
+void EnemyCollideWall(Enemy *CurrentEnemy, Wall *CurrentWall);
 
 #endif

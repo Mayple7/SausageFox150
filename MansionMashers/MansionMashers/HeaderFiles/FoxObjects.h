@@ -19,12 +19,12 @@ enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 
 #include "Player.h"
 #include "Platform.h"
+#include "Wall.h"
 #include "Enemy.h"
 #include "EnemyCollision.h"
 #include "PlayerCollision.h"
 #include "Food.h"
 #include "Weapon.h"
 #include "ParticleSystem.h"
-#include "Wall.h"
 
 #endif

@@ -62,7 +62,7 @@ Weapon* StarterSword;
 FoxSound *BackSnd;
 FoxSound *GongSnd;
 
-int newID;
+static int newID;
 
 void LoadTutorial(void)
 {
@@ -77,13 +77,13 @@ void InitializeTutorial(void)
 	FoxInput_Update();
 	Vec3Set(&BoundingTint, 0.0f, 0.0f, 0.0f);
 
-	newID = 1;
+	newID = 10;
 	ResetObjectList();
 
 	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
-	InitializePlayer(&CurrentPlayer, Ginko, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
+	InitializePlayer(&CurrentPlayer, Ginko, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
