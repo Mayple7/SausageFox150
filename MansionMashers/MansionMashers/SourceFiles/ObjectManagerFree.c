@@ -247,8 +247,11 @@ void FreeButton(Button* CurrentButton)
 /*************************************************************************/
 void freeDrawList(void)
 {
-	////////Freeing the drawn objects and textures
 	int i;
+
+	/*////////////////////////////////
+	//      FREE DRAWN SPRITES      //
+	////////////////////////////////*/
 	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
 		//Make sure the sprite exists
@@ -273,7 +276,9 @@ void freeObjectList(void)
 {
 	int i;
 
-	////////Freeing the collision objects and textures
+	/*////////////////////////////////
+	//    FREE COLLISION OBJECTS    //
+	////////////////////////////////*/
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists

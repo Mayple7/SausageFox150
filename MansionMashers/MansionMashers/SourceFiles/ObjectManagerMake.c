@@ -410,9 +410,6 @@ void SetDebugMode(void)
 			//Free the mesh and texture data
 			platformList[i].PlatformCollider.collisionDebug = TRUE;
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (weaponList[i].objID)
 		{
@@ -420,18 +417,12 @@ void SetDebugMode(void)
 			weaponList[i].WeaponPickup.collisionDebug = TRUE;
 			weaponList[i].WeaponAttack.collisionDebug = TRUE;
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (foodList[i].objID)
 		{
 			//Free the mesh and texture data
 			foodList[i].FoodCollider.collisionDebug = TRUE;
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (enemyList[i].objID)
 		{
@@ -439,6 +430,7 @@ void SetDebugMode(void)
 			enemyList[i].EnemyCollider.collisionDebug = TRUE;
 		}
 	}
+
 	for (i = 0; i < BUTTONAMOUNT; i++)
 	{
 		//Make sure the sprite exists
@@ -464,9 +456,6 @@ void RemoveDebugMode(void)
 			//Free the mesh and texture data
 			platformList[i].PlatformCollider.collisionDebug = FALSE;
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (weaponList[i].objID)
 		{
@@ -474,18 +463,12 @@ void RemoveDebugMode(void)
 			weaponList[i].WeaponPickup.collisionDebug = FALSE;
 			weaponList[i].WeaponAttack.collisionDebug = FALSE;
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (foodList[i].objID)
 		{
 			//Free the mesh and texture data
 			foodList[i].FoodCollider.collisionDebug = FALSE;
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (enemyList[i].objID)
 		{
@@ -493,5 +476,16 @@ void RemoveDebugMode(void)
 			enemyList[i].EnemyCollider.collisionDebug = FALSE;
 		}
 	}
+
+	for (i = 0; i < BUTTONAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (&buttonList[i])
+		{
+			//Free the mesh and texture data
+			buttonList[i].ButtonCollider.collisionDebug = FALSE;
+		}
+	}
+
 	CurrentPlayer.PlayerCollider.collisionDebug = FALSE;
 }

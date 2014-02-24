@@ -53,11 +53,11 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	statsLen = strlen(CurrentWeapon->WeaponStatsString);
 	if(nameLen >= statsLen)
 	{
-		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 50, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f));
+		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 48, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f));
 	}
 	else
 	{
-		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 50, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f));
+		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 48, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f));
 	}
 	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
 
@@ -96,19 +96,19 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f + 25), 50, TextTint, Center);
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f + 25, 50, TextTint, Center);
 	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);
 	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f - 25), 50, TextTint, Center);
-
+	
 	nameLen = strlen(CurrentWeapon->WeaponName);
 	statsLen = strlen(CurrentWeapon->WeaponStatsString);
 	if(nameLen >= statsLen)
 	{
-		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 50, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
 	}
 	else
 	{
-		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 50, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
 	}
 	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
 	
