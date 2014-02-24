@@ -5,6 +5,7 @@ enum GSL
 {
 	GS_SplashScreen,
 	GS_MainMenu,
+	GS_Options,
 	GS_EPMenu,
 	GS_EP1Slides,
 	GS_EP2Slides,

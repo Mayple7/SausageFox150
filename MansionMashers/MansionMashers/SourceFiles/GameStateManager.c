@@ -212,6 +212,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawMapLevel;
 			GSMPointers.pUnload = UnloadMapLevel;
 			break;
+		case GS_Options:
+			GSMPointers.pLoad = LoadOptions;
+			GSMPointers.pInit = InitializeOptions;
+			GSMPointers.pUpdate = UpdateOptions;
+			GSMPointers.pFree = FreeOptions;
+			GSMPointers.pDraw = DrawOptions;
+			GSMPointers.pUnload = UnloadOptions;
+			break;
 		case GS_EPMenu:
 			GSMPointers.pLoad = LoadEPMenu;
 			GSMPointers.pInit = InitializeEPMenu;

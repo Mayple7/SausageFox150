@@ -7,10 +7,10 @@
 #include "../HeaderFiles/GameStateList.h"
 
 //Bounding Boxes
-static Sprite *BoundTop;
-static Sprite *BoundBottom;
-static Sprite *BoundLeft;
-static Sprite *BoundRight;
+Sprite *BoundTop;
+Sprite *BoundBottom;
+Sprite *BoundLeft;
+Sprite *BoundRight;
 
 void CreateBoundingBoxes(void)
 {

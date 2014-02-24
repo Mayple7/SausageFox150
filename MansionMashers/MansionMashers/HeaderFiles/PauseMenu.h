@@ -8,6 +8,5 @@ void DrawPause(void);
 void FreePause(void);
 void UnloadPause(void);
 void EventPause(void);
-void SaveVolume(void);
 
 #endif

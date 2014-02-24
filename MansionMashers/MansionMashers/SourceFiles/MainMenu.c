@@ -30,8 +30,12 @@
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
+#include "../HeaderFiles/BoundingBox.h"
 
-Sprite* Background;
+Sprite* FirstBackground;
+Sprite* SecondBackground;
+
+Sprite* Logo;
 
 Button* NewGameButton;
 Button* LoadGameButton;
@@ -51,6 +55,15 @@ static int deleteSave; // If true, dialogue box to delete save is up
 static int newID;
 static int canLoad;
 
+static int backgroundNum;
+static int firstStartLocation;
+static int secondStartLocation;
+static int firstAnimated;
+static int secondAnimated;
+static float firstMoveTimer;
+static float secondMoveTimer;
+static int fadeOut;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -67,6 +80,17 @@ void InitializeMainMenu(void)
 {
 	FILE *fp;
 	Vec3 Tint;
+	float xPos, yPos;
+	
+	firstAnimated = TRUE;
+	secondAnimated = FALSE;
+	fadeOut = FALSE;
+	firstMoveTimer = 0;
+	secondMoveTimer = 0;
+	backgroundNum = rand() % 2;
+	firstStartLocation = rand() % 4;
+	secondStartLocation = rand() % 4;
+
 	newID = 10;
 	// Reset the object list
 	ResetObjectList();
@@ -83,7 +107,23 @@ void InitializeMainMenu(void)
 		canLoad = FALSE;
 	}
 
-	Background = (Sprite *) CreateSprite("TextureFiles/MainMenuBack.png", 1920, 1080, 1, 1, 1, 0, 0);
+	SetStartLocation(&xPos, &yPos, firstStartLocation);
+
+	switch(backgroundNum)
+	{
+	case 0:
+		FirstBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxHall.png", 2560, 1440, 1, 1, 1, xPos, yPos);
+		SecondBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxMansion.png", 2560, 1440, 1, 1, 1, xPos, yPos);
+		break;
+	case 1:
+		FirstBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxMansion.png", 2560, 1440, 1, 1, 1, xPos, yPos);
+		SecondBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxHall.png", 2560, 1440, 1, 1, 1, xPos, yPos);
+		break;
+	}
+
+	SecondBackground->Alpha = 0.0f;
+
+	Logo = (Sprite *) CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 960, 540, 2, 1, 1, 0, 270);
 
 	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -170, 394, 394, newID++);
 	LoadGameButton = CreateButton("TextureFiles/LoadGameButton.png", -290, -48, 439, 170, newID++);
@@ -112,6 +152,8 @@ void InitializeMainMenu(void)
 	YesButton->ButtonSprite->Visible = FALSE;
 	NoButton->ButtonSprite->Visible = FALSE;
 
+	CreateBoundingBoxes();
+
 	// Set camera to (0,0)
 	ResetCamera();
 }
@@ -119,11 +161,14 @@ void InitializeMainMenu(void)
 void UpdateMainMenu(void)
 {
 	InputHandling();
+
+	BackgroundAnimation();
 }
 
 void DrawMainMenu(void)
 {
 	DrawObjectList();
+	DrawCollisionList();
 }
 
 void FreeMainMenu(void)
@@ -196,7 +241,7 @@ void InputHandling(void)
 		else if(PointRectCollision(&OptionsButton->ButtonCollider, &MouseClick))
 		{
 			// Load Game Function hurrr
-			//SetNextState(GS_Options);
+			SetNextState(GS_Options);
 		}
 		else if(PointRectCollision(&CreditsButton->ButtonCollider, &MouseClick))
 		{
@@ -305,4 +350,236 @@ void InputHandling(void)
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
 		SetNextState(GS_Quit);
+}
+
+void BackgroundAnimation(void)
+{
+	if(firstAnimated)
+	{
+		firstMoveTimer += GetDeltaTime();
+		switch(firstStartLocation)
+		{
+		// Top right
+		case 0:
+			FirstBackground->Position.x -= 640 * GetLoadRatio() / (10 / GetDeltaTime());
+			FirstBackground->Position.y -= 360 * GetLoadRatio() / (10 / GetDeltaTime());
+			if(firstMoveTimer >= 10)
+			{
+				firstAnimated = FALSE;
+				FirstBackground->Alpha = 0.0f;
+				SecondBackground->Alpha = 1.0f;
+			}
+			else if(firstMoveTimer > 8)
+			{
+				FirstBackground->Alpha -= GetDeltaTime() / 2.0f;
+				SecondBackground->Alpha += GetDeltaTime() / 2.0f;
+				if(!secondAnimated)
+				{
+					secondMoveTimer = 0;
+					secondStartLocation = rand() % 4;
+					SetStartLocation(&SecondBackground->Position.x, &SecondBackground->Position.y, secondStartLocation);
+					secondAnimated = TRUE;
+				}
+			}
+			break;
+		// Bottom right
+		case 1:
+			FirstBackground->Position.x -= 640 * GetLoadRatio() / (10 / GetDeltaTime());
+			FirstBackground->Position.y -= -360 * GetLoadRatio() / (10 / GetDeltaTime());
+			if(firstMoveTimer >= 10)
+			{
+				firstAnimated = FALSE;
+				FirstBackground->Alpha = 0.0f;
+				SecondBackground->Alpha = 1.0f;
+			}
+			else if(firstMoveTimer > 8)
+			{
+				FirstBackground->Alpha -= GetDeltaTime() / 2.0f;
+				SecondBackground->Alpha += GetDeltaTime() / 2.0f;
+				if(!secondAnimated)
+				{
+					secondMoveTimer = 0;
+					secondStartLocation = rand() % 4;
+					SetStartLocation(&SecondBackground->Position.x, &SecondBackground->Position.y, secondStartLocation);
+					secondAnimated = TRUE;
+				}
+			}
+			break;
+		// Top left
+		case 2:
+			FirstBackground->Position.x -= -640 * GetLoadRatio() / (10 / GetDeltaTime());
+			FirstBackground->Position.y -= 360 * GetLoadRatio() / (10 / GetDeltaTime());
+			if(firstMoveTimer >= 10)
+			{
+				firstAnimated = FALSE;
+				FirstBackground->Alpha = 0.0f;
+				SecondBackground->Alpha = 1.0f;
+			}
+			else if(firstMoveTimer > 8)
+			{
+				FirstBackground->Alpha -= GetDeltaTime() / 2.0f;
+				SecondBackground->Alpha += GetDeltaTime() / 2.0f;
+				if(!secondAnimated)
+				{
+					secondMoveTimer = 0;
+					secondStartLocation = rand() % 4;
+					SetStartLocation(&SecondBackground->Position.x, &SecondBackground->Position.y, secondStartLocation);
+					secondAnimated = TRUE;
+				}
+			}
+			break;
+		// Bottom left
+		case 3:
+			FirstBackground->Position.x -= -640 * GetLoadRatio() / (10 / GetDeltaTime());
+			FirstBackground->Position.y -= -360 * GetLoadRatio() / (10 / GetDeltaTime());
+			if(firstMoveTimer >= 10)
+			{
+				firstAnimated = FALSE;
+				FirstBackground->Alpha = 0.0f;
+				SecondBackground->Alpha = 1.0f;
+			}
+			else if(firstMoveTimer > 8)
+			{
+				FirstBackground->Alpha -= GetDeltaTime() / 2.0f;
+				SecondBackground->Alpha += GetDeltaTime() / 2.0f;
+				if(!secondAnimated)
+				{
+					secondMoveTimer = 0;
+					secondStartLocation = rand() % 4;
+					SetStartLocation(&SecondBackground->Position.x, &SecondBackground->Position.y, secondStartLocation);
+					secondAnimated = TRUE;
+				}
+			}
+			break;
+		}
+	}
+
+	if(secondAnimated)
+	{
+		secondMoveTimer += GetDeltaTime();
+		switch(secondStartLocation)
+		{
+		// Top right
+		case 0:
+			SecondBackground->Position.x -= 640 * GetLoadRatio() / (10 / GetDeltaTime());
+			SecondBackground->Position.y -= 360 * GetLoadRatio() / (10 / GetDeltaTime());
+			if(secondMoveTimer >= 10)
+			{
+				secondAnimated = FALSE;
+				SecondBackground->Alpha = 0.0f;
+				FirstBackground->Alpha = 1.0f;
+			}
+			else if(secondMoveTimer > 8)
+			{
+				SecondBackground->Alpha -= GetDeltaTime() / 2.0f;
+				FirstBackground->Alpha += GetDeltaTime() / 2.0f;
+				if(!firstAnimated)
+				{
+					firstMoveTimer = 0;
+					firstStartLocation = rand() % 4;
+					SetStartLocation(&FirstBackground->Position.x, &FirstBackground->Position.y, firstStartLocation);
+					firstAnimated = TRUE;
+				}
+			}
+			break;
+		// Bottom right
+		case 1:
+			SecondBackground->Position.x -= 640 * GetLoadRatio() / (10 / GetDeltaTime());
+			SecondBackground->Position.y -= -360 * GetLoadRatio() / (10 / GetDeltaTime());
+			if(secondMoveTimer >= 10)
+			{
+				secondAnimated = FALSE;
+				SecondBackground->Alpha = 0.0f;
+				FirstBackground->Alpha = 1.0f;
+			}
+			else if(secondMoveTimer > 8)
+			{
+				SecondBackground->Alpha -= GetDeltaTime() / 2.0f;
+				FirstBackground->Alpha += GetDeltaTime() / 2.0f;
+				if(!firstAnimated)
+				{
+					firstMoveTimer = 0;
+					firstStartLocation = rand() % 4;
+					SetStartLocation(&FirstBackground->Position.x, &FirstBackground->Position.y, firstStartLocation);
+					firstAnimated = TRUE;
+				}
+			}
+			break;
+		// Top left
+		case 2:
+			SecondBackground->Position.x -= -640 * GetLoadRatio() / (10 / GetDeltaTime());
+			SecondBackground->Position.y -= 360 * GetLoadRatio() / (10 / GetDeltaTime());
+			if(secondMoveTimer >= 10)
+			{
+				secondAnimated = FALSE;
+				SecondBackground->Alpha = 0.0f;
+				FirstBackground->Alpha = 1.0f;
+			}
+			else if(secondMoveTimer > 8)
+			{
+				SecondBackground->Alpha -= GetDeltaTime() / 2.0f;
+				FirstBackground->Alpha += GetDeltaTime() / 2.0f;
+				if(!firstAnimated)
+				{
+					firstMoveTimer = 0;
+					firstStartLocation = rand() % 4;
+					SetStartLocation(&FirstBackground->Position.x, &FirstBackground->Position.y, firstStartLocation);
+					firstAnimated = TRUE;
+				}
+			}
+			break;
+		// Bottom left
+		case 3:
+			SecondBackground->Position.x -= -640 * GetLoadRatio() / (10 / GetDeltaTime());
+			SecondBackground->Position.y -= -360 * GetLoadRatio() / (10 / GetDeltaTime());
+			if(secondMoveTimer >= 10)
+			{
+				secondAnimated = FALSE;
+				SecondBackground->Alpha = 0.0f;
+				FirstBackground->Alpha = 1.0f;
+			}
+			else if(secondMoveTimer > 8)
+			{
+				SecondBackground->Alpha -= GetDeltaTime() / 2.0f;
+				FirstBackground->Alpha += GetDeltaTime() / 2.0f;
+				if(!firstAnimated)
+				{
+					firstMoveTimer = 0;
+					firstStartLocation = rand() % 4;
+					SetStartLocation(&FirstBackground->Position.x, &FirstBackground->Position.y, firstStartLocation);
+					firstAnimated = TRUE;
+				}
+			}
+			break;
+		}
+	}
+
+
+}
+
+void SetStartLocation(float *xPos, float *yPos, int startNum)
+{
+	switch(startNum)
+	{
+	// Top right
+	case 0:
+		*xPos = 320.0f * GetLoadRatio();
+		*yPos = 180.0f * GetLoadRatio();
+		break;
+	// Bottom right
+	case 1:
+		*xPos = 320.0f * GetLoadRatio();
+		*yPos = -180.0f * GetLoadRatio();
+		break;
+	// Top left
+	case 2:
+		*xPos = -320.0f * GetLoadRatio();
+		*yPos = 180.0f * GetLoadRatio();
+		break;
+	// Bottom left
+	case 3:
+		*xPos = -320.0f * GetLoadRatio();
+		*yPos = -180.0f * GetLoadRatio();
+		break;
+	}
 }
