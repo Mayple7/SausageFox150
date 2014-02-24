@@ -73,7 +73,7 @@ void InitializeKevin(void)
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, newID++, -400, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -400, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);

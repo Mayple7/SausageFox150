@@ -73,7 +73,7 @@ void InitializeHandGuy(void)
 	ResetCamera();
 
 	//Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, newID++, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 	CurrentPlayer.PlayerCollider.collisionDebug = FALSE;
 

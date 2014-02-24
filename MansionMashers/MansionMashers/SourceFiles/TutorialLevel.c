@@ -83,7 +83,7 @@ void InitializeTutorial(void)
 	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
-	InitializePlayer(&CurrentPlayer, Ginko, newID++, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
+	InitializePlayer(&CurrentPlayer, Ginko, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
 	for (hudLoop = 0; hudLoop < 20; hudLoop++)
 		HUDList.HudItem[hudLoop] = 0;
