@@ -16,6 +16,7 @@ Enemy *enemyList;
 Weapon *weaponList;
 Button *buttonList;
 Wall *wallList;
+struct WeaponShop *weaponShopList;
 struct TextGlyphs **floatTextList;
 struct TextGlyphs **staticTextList;
 struct ParticleSystem *particleSystemList;
@@ -33,6 +34,7 @@ void AddFloatingText(struct TextGlyphs* FirstLetter);
 void AddStaticText(struct TextGlyphs* FirstLetter);
 struct ParticleSystem *AddParticleSystem(void);
 struct Particle *AddParticle(void);
+struct WeaponShop* AddWeaponShop(void);
 
 
 void ResetObjectList(void);
@@ -50,8 +52,8 @@ void FreeButton(Button *CurrentButton);
 void FreeWeapon(Weapon *CurrentWeapon);
 void FreeWall(Wall *CurrentWall);
 void FreeFloatingText(struct TextGlyphs *FirstLetter);
-void FreeParticleSystem(ParticleSystem *CurrentSystem);
-void FreeParticle(Particle *CurrentParticle);
+void FreeParticleSystem(struct ParticleSystem *CurrentSystem);
+void FreeParticle(struct Particle *CurrentParticle);
 
 void SetDebugMode(void);
 void RemoveDebugMode(void);

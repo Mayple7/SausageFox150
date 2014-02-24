@@ -256,6 +256,7 @@ Button *AddButton(void)
 /*!
 	\brief
 	Adds a wall to the wall list
+
 	\return
 	The wall added to the list
 */
@@ -268,6 +269,28 @@ Wall* AddWall(void)
 		if(wallList[i].objID == 0 || wallList[i].objID == -1 )
 		{
 			return &wallList[i];
+		}
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Adds a WeaponShop to the WeaponShop list
+
+	\return
+	The WeaponShop added to the list
+*/
+/*************************************************************************/
+WeaponShop* AddWeaponShop(void)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if(weaponShopList[i].Created != 1)
+		{
+			return &weaponShopList[i];
 		}
 	}
 	return NULL;
@@ -304,6 +327,7 @@ void ResetObjectList(void)
 		particleSystemList  = (ParticleSystem *) CallocMyAlloc(PARTICLESYSTEMAMOUNT, sizeof(ParticleSystem));
 		buttonList			= (Button *) CallocMyAlloc(BUTTONAMOUNT, sizeof(Button));
 		wallList			= (Wall *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Wall));
+		weaponShopList		= (WeaponShop *) CallocMyAlloc(SHOPAMOUNT, sizeof(WeaponShop));
 
 		for(i = 0; i < COLLIDEAMOUNT; i++)
 		{
