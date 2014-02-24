@@ -108,6 +108,9 @@ void InitializeLevel1(void)
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 450, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
+	//Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", WallType, 200.0f, 250.0f, newID++, 450, -100);
+	//Table1->PlatformSprite->Visible = FALSE;
+
 	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
 
 }

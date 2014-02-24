@@ -14,7 +14,8 @@ enum collisionGroup{DefaultType,
 					ButtonType, 
 					WeaponDrop, 
 					WeaponFriendly, 
-					WeaponEnemy};
+					WeaponEnemy,
+					WallType};
 
 typedef struct CollisionBox
 {
