@@ -186,7 +186,7 @@ void DrawEP2Screen(void)
 void FreeEP2Screen(void)
 {
 	// Freeing the objects and textures
-	FreeObjectList();
+	FreeAllLists();
 }
 
 /*************************************************************************/

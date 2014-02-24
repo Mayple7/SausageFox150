@@ -217,7 +217,6 @@ FoxSound *AddSound(void)
 	{
 		if(soundList[i].sndID == 0 || soundList[i].sndID == -1)
 		{
-			printf("sl : %i\n", &soundList[i]);
 			return &soundList[i];
 		}
 	}
@@ -370,7 +369,6 @@ FoxSound *CreateSound(char *Filename, int type)
 {
 	FMOD_RESULT result;
 	FoxSound *snd = AddSound();
-	printf("snd : %i\n", snd);
 
 	InitSoundStruct(snd, type);
 	
@@ -504,6 +502,29 @@ void PlayAudio(FoxSound *snd)
 	}
 
 	success = FALSE;
+}
+
+int FoxSoundCheckIsPlaying(FoxSound *snd)
+{
+	FMOD_RESULT result;
+	
+	if(snd->Channel)
+	{
+		result = FMOD_Channel_IsPlaying(snd->Channel, &snd->Playing);
+		if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN))
+		    FMODErrCheck(result);
+	}
+	
+	if(snd->Playing)
+	{
+		snd->Playing = TRUE;
+		return TRUE;
+	}
+	else
+	{
+		snd->Playing = FALSE;
+		return FALSE;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

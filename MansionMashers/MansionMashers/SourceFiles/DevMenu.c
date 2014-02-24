@@ -146,7 +146,7 @@ void DrawDevMenu(void)
 void FreeDevMenu(void)
 {
 	// Freeing the objects and textures
-	FreeObjectList();
+	FreeAllLists();
 }
 
 /*************************************************************************/

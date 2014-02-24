@@ -36,7 +36,7 @@
 	Returns a sprite pointer of the object added
 */
 /*************************************************************************/
-Sprite* AddObject(void)
+Sprite *AddObject(void)
 {
 	int i;
 	for (i = 0; i < OBJECTAMOUNT; i++)
@@ -58,7 +58,7 @@ Sprite* AddObject(void)
 	The platform added to the list
 */
 /*************************************************************************/
-Platform* AddPlatform(void)
+Platform *AddPlatform(void)
 {
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -80,7 +80,7 @@ Platform* AddPlatform(void)
 	The food added to the list
 */
 /*************************************************************************/
-Food* AddFood(void)
+Food *AddFood(void)
 {
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -103,7 +103,7 @@ Food* AddFood(void)
 	The enemy added to the list
 */
 /*************************************************************************/
-Weapon* AddWeapon(void)
+Weapon *AddWeapon(void)
 {
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -125,7 +125,7 @@ Weapon* AddWeapon(void)
 	The enemy added to the list
 */
 /*************************************************************************/
-Enemy* AddEnemy(void)
+Enemy *AddEnemy(void)
 {
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -148,7 +148,7 @@ Enemy* AddEnemy(void)
 	The enemy added to the list
 */
 /*************************************************************************/
-void AddFloatingText(TextGlyphs* FirstLetter)
+void AddFloatingText(TextGlyphs *FirstLetter)
 {
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -171,7 +171,7 @@ void AddFloatingText(TextGlyphs* FirstLetter)
 	The enemy added to the list
 */
 /*************************************************************************/
-void AddStaticText(TextGlyphs* FirstLetter)
+void AddStaticText(TextGlyphs *FirstLetter)
 {
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -194,7 +194,7 @@ void AddStaticText(TextGlyphs* FirstLetter)
 	The particle system added to the list
 */
 /*************************************************************************/
-ParticleSystem* AddParticleSystem(void)
+ParticleSystem *AddParticleSystem(void)
 {
 	int i;
 	for (i = 0; i < PARTICLESYSTEMAMOUNT; i++)
@@ -217,7 +217,7 @@ ParticleSystem* AddParticleSystem(void)
 	The particle system added to the list
 */
 /*************************************************************************/
-Particle* AddParticle(void)
+Particle *AddParticle(void)
 {
 	int i;
 	for (i = 0; i < PARTICLEAMOUNT; i++)
@@ -239,7 +239,7 @@ Particle* AddParticle(void)
 	The particle system added to the list
 */
 /*************************************************************************/
-Button* AddButton(void)
+Button *AddButton(void)
 {
 	int i;
 	for (i = 0; i < BUTTONAMOUNT; i++)
@@ -284,6 +284,8 @@ void ResetObjectList(void)
 	int i;
 	//Set up the memory to fit the desired amount of objects
 	drawList  = (Sprite *) CallocMyAlloc(OBJECTAMOUNT, sizeof(Sprite));
+
+	//Reset the sound list here (Also frees in object list free)
 	ResetSoundList();
 
 	//Make sure the allocation is not NULL

@@ -158,7 +158,7 @@ void DrawEP1Screen(void)
 void FreeEP1Screen(void)
 {
 	// Freeing the objects and textures
-	FreeObjectList();
+	FreeAllLists();
 }
 
 /*************************************************************************/

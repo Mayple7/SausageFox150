@@ -148,7 +148,7 @@ void DrawStartScreen(void)
 void FreeStartScreen(void)
 {
 	// Freeing the objects and textures
-	FreeObjectList();
+	FreeAllLists();
 }
 
 /*************************************************************************/

@@ -242,35 +242,12 @@ void FreeButton(Button* CurrentButton)
 /*************************************************************************/
 /*!
 	\brief
-	Frees the object being passed
-	
-	\param objectNext
-	The pointer to a object whose memory is to be deallocated
-*/
-/*************************************************************************/
-void FreeWall(Wall *CurrentWall)
-{
-	if(CurrentWall->objID > -1)
-	{
-		//Free that platform
-		CurrentWall->objID = -1;
-		CurrentWall->WallCollider.collisionDebug = FALSE;
-		AEGfxMeshFree(CurrentWall->WallCollider.DebugMesh);
-
-		if (CurrentWall->WallSprite->Created)
-			freeObject(CurrentWall->WallSprite);
-	}
-}
-
-/*************************************************************************/
-/*!
-	\brief
 	Cycles through the object list freeing all objects in the list
 */
 /*************************************************************************/
-void FreeObjectList(void)
+void freeDrawList(void)
 {
-	////////--Freeing the drawn objects and textures
+	////////Freeing the drawn objects and textures
 	int i;
 	for (i = 0; i < OBJECTAMOUNT; i++)
 	{
@@ -282,7 +259,21 @@ void FreeObjectList(void)
 		}
 	}
 
-	////////--Freeing the collision objects and textures
+	//Free the object list data allocation
+	FreeMyAlloc(drawList);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Cycles through the object list freeing all objects in the list
+*/
+/*************************************************************************/
+void freeObjectList(void)
+{
+	int i;
+
+	////////Freeing the collision objects and textures
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
@@ -318,11 +309,6 @@ void FreeObjectList(void)
 		{
 			FreeText(staticTextList[i]);
 		}
-		if (wallList[i].objID)
-		{
-			//Free the mesh and texture data
-			FreeWall(&wallList[i]);
-		}
 	}
 
 	for (i = 0; i < PARTICLEAMOUNT; i++)
@@ -347,11 +333,6 @@ void FreeObjectList(void)
 		}
 	}
 
-	//Free the object list data allocation
-	FreeMyAlloc(drawList);
-	FreeMyAlloc(particleList);
-	FreeMyAlloc(particleSystemList);
-
 	//Free collision lists data allocation
 	FreeMyAlloc(platformList);
 	FreeMyAlloc(foodList);
@@ -360,5 +341,22 @@ void FreeObjectList(void)
 	FreeMyAlloc(floatTextList);
 	FreeMyAlloc(staticTextList);
 	FreeMyAlloc(buttonList);
-	FreeMyAlloc(wallList);
+	FreeMyAlloc(particleList);
+	FreeMyAlloc(particleSystemList);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees all allocated lists
+*/
+/*************************************************************************/
+void FreeAllLists(void)
+{
+	//Free object list
+	freeObjectList();
+	//Free draw list
+	freeDrawList();
+	//Free sound list
+	FreeSoundList();
 }

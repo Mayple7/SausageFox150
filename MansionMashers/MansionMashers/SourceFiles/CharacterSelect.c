@@ -208,8 +208,6 @@ void UpdateCharacterSelect(void)
 	Animation(&CharacterGinko);
 	Animation(&CharacterKaya);
 	Animation(&CharacterHolly);
-
-	
 }
 
 void DrawCharacterSelect(void)
@@ -220,8 +218,7 @@ void DrawCharacterSelect(void)
 
 void FreeCharacterSelect(void)
 {
-	FreeObjectList();
-	FreeSoundList();
+	FreeAllLists();
 }
 
 void UnloadCharacterSelect(void)

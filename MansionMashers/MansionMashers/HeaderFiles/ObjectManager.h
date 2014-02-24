@@ -37,7 +37,9 @@ struct Particle *AddParticle(void);
 
 void ResetObjectList(void);
 void DrawObjectList(void);
-void FreeObjectList(void);
+void freeObjectList(void);
+void freeDrawList(void);
+void FreeAllLists(void);
 void freeObject(Sprite* objectNext);
 void DrawCollisionList(void);
 
