@@ -514,16 +514,16 @@ int FoxSoundCheckIsPlaying(FoxSound *snd)
 		if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN))
 		    FMODErrCheck(result);
 	}
-	else
-	{
-		snd->Playing = FALSE;
-		return FALSE;
-	}
-
+	
 	if(snd->Playing)
 	{
 		snd->Playing = TRUE;
 		return TRUE;
+	}
+	else
+	{
+		snd->Playing = FALSE;
+		return FALSE;
 	}
 }
 
