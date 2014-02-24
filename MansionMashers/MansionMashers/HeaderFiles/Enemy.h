@@ -73,7 +73,11 @@ typedef struct Enemy
 	int isDropDown;
 	int canDropDownTimer;
 	int Attack;
+	int canAttackTimer;
+	int canAttack;
 	int StateTimer;
+	int findHome;
+	Vec2 HomePos;
 	enum AIState EnemyState;
 
 	enum Direction EnemyDirection;

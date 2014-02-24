@@ -141,10 +141,17 @@ void InputPlayer(struct Player *CurrentPlayer)
 	if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer->isAttacking)
 	{
 		//Pick a random swing sound to play
+		printf("1 Playing: %i, 2 Playing: %i\n", FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1), FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2));
 		if (rand() % 2)
-			PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
+		{
+			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
+				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
+		}
 		else
-			PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
+		{
+			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
+				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
+		}
 
 		//Set the attacking necessaries
 		CurrentPlayer->isAttacking = TRUE;
@@ -267,8 +274,8 @@ void InputPlayer(struct Player *CurrentPlayer)
 		Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
 		if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 		{
-			if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio())
-				Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
+			//if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio())
+			Vec2Set(&CurrentPlayer->Position, CurrentPlayer->Position.x, CurrentPlayer->Position.y + 300.0f * GetDeltaTime() * GetLoadRatio());
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
 		}
@@ -449,6 +456,7 @@ void DetectPlayerCollision(void)
 	Food* fList = foodList;
 	Weapon* wList = weaponList;
 	Enemy* eList = enemyList;
+	Wall* walls = wallList;
 	int hit = 0;
 	int hitPrev = 0;
 
@@ -654,7 +662,52 @@ void DetectPlayerCollision(void)
 		}
 		eList++;
 	}
-
+	while(walls->objID != -1)
+	{
+		if(walls->objID > 0)
+		{
+			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &walls->WallCollider);
+			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, walls->WallCollider.collisionID);
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentPlayer.CollisionData[-hitPrev] = walls->WallCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					PlayerCollideWall(&CurrentPlayer, walls);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					PlayerCollideWall(&CurrentPlayer, walls);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = walls->WallCollider.collisionID * 10 + 1;
+					PlayerCollideWall(&CurrentPlayer, walls);
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = 0;
+				}
+			}
+		}
+		walls++;
+	}
 
 	// Check projectile collisions
 	//	-> Handle collision if true

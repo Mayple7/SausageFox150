@@ -36,85 +36,33 @@
 /*************************************************************************/
 void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform)
 {
-	if(CurrentPlatform->PlatformCollider.collisionGroup != WallType)
+	if(CurrentPlayer->PlayerRigidBody.Velocity.y <= 0)
 	{
-		if(CurrentPlayer->PlayerRigidBody.Velocity.y <= 0)
+		if(CurrentPlayer->PlayerCollider.Position.y + CurrentPlayer->PlayerCollider.Offset.y - CurrentPlayer->PlayerCollider.height / 2.0f > CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y)
 		{
-			if(CurrentPlayer->PlayerCollider.Position.y + CurrentPlayer->PlayerCollider.Offset.y - CurrentPlayer->PlayerCollider.height / 2.0f > CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y)
+			if(CurrentPlayer->PlayerRigidBody.Velocity.y != 0 && CurrentPlatform->PlatformCollider.collisionGroup == PlatformType)
 			{
-				if(CurrentPlayer->PlayerRigidBody.Velocity.y != 0 && CurrentPlatform->PlatformCollider.collisionGroup == PlatformType)
+				CurrentPlayer->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2 - 0.01f;
+				CurrentPlayer->PlayerRigidBody.onGround = TRUE;
+			}
+			else if(CurrentPlayer->PlayerRigidBody.Velocity.y != 0 && CurrentPlatform->PlatformCollider.collisionGroup == BounceType)
+			{
+				if(CurrentPlayer->PlayerRigidBody.Velocity.y > -(CurrentPlatform->PlatformRigidBody.Restitution + CurrentPlayer->PlayerRigidBody.Restitution))
 				{
 					CurrentPlayer->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2 - 0.01f;
 					CurrentPlayer->PlayerRigidBody.onGround = TRUE;
 				}
-				else if(CurrentPlayer->PlayerRigidBody.Velocity.y != 0 && CurrentPlatform->PlatformCollider.collisionGroup == BounceType)
-				{
-					if(CurrentPlayer->PlayerRigidBody.Velocity.y > -(CurrentPlatform->PlatformRigidBody.Restitution + CurrentPlayer->PlayerRigidBody.Restitution))
-					{
-						CurrentPlayer->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2 - 0.01f;
-						CurrentPlayer->PlayerRigidBody.onGround = TRUE;
-					}
-					else
-					{
-						CurrentPlayer->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2 + 0.5f;
-						BounceObject(&CurrentPlayer->PlayerRigidBody, &CurrentPlatform->PlatformRigidBody);
-					
-					}
-				}
 				else
-					CurrentPlayer->PlayerRigidBody.onGround = TRUE;
+				{
+					CurrentPlayer->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2 + 0.5f;
+					BounceObject(&CurrentPlayer->PlayerRigidBody, &CurrentPlatform->PlatformRigidBody);
+					
+				}
 			}
+			else
+				CurrentPlayer->PlayerRigidBody.onGround = TRUE;
 		}
 	}
-	else if(CurrentPlatform->PlatformCollider.collisionGroup == WallType)
-	{
-		float PlayerLeft = CurrentPlayer->PlayerCollider.Position.x + CurrentPlayer->PlayerCollider.Offset.x - CurrentPlayer->PlayerCollider.width / 2;
-		float PlayerRight = CurrentPlayer->PlayerCollider.Position.x + CurrentPlayer->PlayerCollider.Offset.x + CurrentPlayer->PlayerCollider.width / 2;
-		float PlayerTop = CurrentPlayer->PlayerCollider.Position.y + CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2;
-		float PlayerBottom = CurrentPlayer->PlayerCollider.Position.y + CurrentPlayer->PlayerCollider.Offset.y - CurrentPlayer->PlayerCollider.height / 2;
-		float PlatLeft = CurrentPlatform->PlatformCollider.Position.x + CurrentPlatform->PlatformCollider.Offset.x - CurrentPlatform->PlatformCollider.width / 2;
-		float PlatRight = CurrentPlatform->PlatformCollider.Position.x + CurrentPlatform->PlatformCollider.Offset.x + CurrentPlatform->PlatformCollider.width / 2;
-		float PlatTop = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2;
-		float PlatBottom = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y - CurrentPlatform->PlatformCollider.height / 2;
-
-		if((PlayerRight > PlatLeft || PlayerLeft < PlatRight) && PlayerTop > PlatBottom && CurrentPlayer->PlayerRigidBody.Velocity.y > 0)
-		{
-			CurrentPlayer->Position.y -= 2;
-			ZeroVelocity(&CurrentPlayer->PlayerRigidBody);
-		}
-		if((PlayerRight > PlatLeft || PlayerLeft < PlatRight) && PlayerBottom < PlatTop && CurrentPlayer->PlayerRigidBody.Velocity.y <= 0)
-		{
-			ZeroVelocity(&CurrentPlayer->PlayerRigidBody);
-			CurrentPlayer->PlayerRigidBody.onGround = TRUE;
-		}
-  		if(PlayerRight > PlatLeft && PlayerLeft < PlatLeft && CurrentPlayer->PlayerDirection == RIGHT)
-		{
-			CurrentPlayer->Speed = 0;
-			CurrentPlayer->Position.x = PlatLeft - CurrentPlayer->PlayerCollider.width / 2 - .01f;
-		}
-		if(PlayerLeft <= PlatRight && PlayerRight >= PlatRight && CurrentPlayer->PlayerDirection == LEFT)
-		{
-			CurrentPlayer->Speed = 0;
-			CurrentPlayer->Position.x = PlatRight + CurrentPlayer->PlayerCollider.width / 2 + .01f;
-		}
-
-		//if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * Level1Panel1->Width / 1)
-			//CurrentPlayer.Position.x = (-7 * Level1Panel1->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
-		/*if(PlayerRight > PlatLeft && PlayerTop > PlatBottom && PlayerRight < PlatRight)
-		{
-			CurrentPlayer->Position.x = PlatLeft - (CurrentPlayer->PlayerCollider.width / 2) - 1;
-		}
-		else if(PlayerRight > PlatRight && PlayerTop > PlatBottom)
-		{
-			CurrentPlayer->Position.x = PlatRight + (CurrentPlayer->PlayerCollider.width / 2) - 1;
-		}
-		else if(PlayerRight > PlatLeft && PlayerRight < PlatRight)
-		{
-			if(CurrentPlayer->PlayerRigidBody.Velocity.y > 0 && PlayerTop > PlatBottom - (10.0f * GetLoadRatio()))
-				ZeroVelocity(&CurrentPlayer->PlayerRigidBody);
-		}*/
-	}
-	
 }
 
 
@@ -141,7 +89,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	if(AEInputCheckTriggered('E'))
 	{
 		SwapWeapons(CurrentPlayer->PlayerWeapon, wList);
-		CurrentPlayer->PlayerWeapon->WeaponSprite->ZIndex = (unsigned short)22;
+		CurrentPlayer->PlayerWeapon->WeaponSprite->ZIndex = (unsigned short)50;
 		CurrentPlayer->PlayerWeapon->WeaponFOF = PlayerWeapon;
 		CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 		if(CurrentPlayer->PlayerWeapon->WeaponGlyphs->Glyph->Visible)
@@ -157,7 +105,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		
 		wList->Position.x = CurrentPlayer->PlayerWeapon->Position.x;
 		wList->Position.y = CurrentPlayer->PlayerWeapon->Position.y;
-		wList->WeaponSprite->ZIndex = (unsigned short)5;
+		wList->WeaponSprite->ZIndex = (unsigned short)50;
 		wList->WeaponFOF = DroppedWeapon;
 		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
 		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
@@ -188,4 +136,57 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 	FirstLetter = CreateText(num, CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Handles the collision between a player and platform
+	
+	\param CurrentPlayer
+	Pointer to the player object
+
+	\param CurrentPlatform
+	Pointer to the platform object
+*/
+/*************************************************************************/
+void PlayerCollideWall(Player *CurrentPlayer, Wall *CurrentWall)
+{
+	// Grab the edges of each collider box
+	float PlayerLeft = CurrentPlayer->PlayerCollider.Position.x + CurrentPlayer->PlayerCollider.Offset.x - CurrentPlayer->PlayerCollider.width / 2;
+	float PlayerRight = CurrentPlayer->PlayerCollider.Position.x + CurrentPlayer->PlayerCollider.Offset.x + CurrentPlayer->PlayerCollider.width / 2;
+	float PlayerTop = CurrentPlayer->PlayerCollider.Position.y + CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2;
+	float PlayerBottom = CurrentPlayer->PlayerCollider.Position.y + CurrentPlayer->PlayerCollider.Offset.y - CurrentPlayer->PlayerCollider.height / 2;
+	
+	float WallLeft = CurrentWall->WallCollider.Position.x + CurrentWall->WallCollider.Offset.x - CurrentWall->WallCollider.width / 2;
+	float WallRight = CurrentWall->WallCollider.Position.x + CurrentWall->WallCollider.Offset.x + CurrentWall->WallCollider.width / 2;
+	float WallTop = CurrentWall->WallCollider.Position.y + CurrentWall->WallCollider.Offset.y + CurrentWall->WallCollider.height / 2;
+	float WallBottom = CurrentWall->WallCollider.Position.y + CurrentWall->WallCollider.Offset.y - CurrentWall->WallCollider.height / 2;
+
+	//Logic for being on top of the wall
+	if(CurrentPlayer->PlayerRigidBody.Velocity.y <= 0 && PlayerBottom > WallTop - CurrentWall->WallCollider.height / 8)
+	{
+		CurrentPlayer->Position.y = WallTop - CurrentPlayer->PlayerCollider.Offset.y + CurrentPlayer->PlayerCollider.height / 2 - 0.01f;
+		CurrentPlayer->PlayerRigidBody.Velocity.y = 0;
+		CurrentPlayer->PlayerRigidBody.onGround = TRUE;
+	}
+	//Logic for being on the left side of the wall
+	else if(CurrentPlayer->Speed > 0 && CurrentPlayer->PlayerDirection == RIGHT && PlayerRight < WallLeft + CurrentWall->WallCollider.width / 8)
+	{
+		CurrentPlayer->Speed = 0.0f;
+		CurrentPlayer->Position.x = WallLeft - CurrentPlayer->PlayerCollider.Offset.x - CurrentPlayer->PlayerCollider.width / 2 + 0.01f;
+	}
+	//Logic for being on the right side of the wall
+	else if(CurrentPlayer->Speed > 0 && CurrentPlayer->PlayerDirection == LEFT && PlayerLeft > WallRight - CurrentWall->WallCollider.width / 8)
+	{
+		CurrentPlayer->Speed = 0.0f;
+		CurrentPlayer->Position.x = WallRight - CurrentPlayer->PlayerCollider.Offset.x + CurrentPlayer->PlayerCollider.width / 2 - 0.01f;
+	}
+	//Logic for being under a wall
+	else if(CurrentPlayer->PlayerRigidBody.Velocity.y > 0 && PlayerTop < WallBottom + CurrentWall->WallCollider.height / 8)
+	{
+		CurrentPlayer->Position.y = WallBottom - CurrentPlayer->PlayerCollider.Offset.y - CurrentPlayer->PlayerCollider.height / 2 + 0.01f;
+		CurrentPlayer->PlayerRigidBody.Velocity.y = 0;
+		CurrentPlayer->PlayerRigidBody.onGround = TRUE;
+	}
 }

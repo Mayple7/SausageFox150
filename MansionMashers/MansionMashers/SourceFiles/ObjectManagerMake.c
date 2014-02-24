@@ -255,6 +255,27 @@ Button *AddButton(void)
 /*************************************************************************/
 /*!
 	\brief
+	Adds a wall to the wall list
+	\return
+	The wall added to the list
+*/
+/*************************************************************************/
+Wall* AddWall(void)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if(wallList[i].objID == 0 || wallList[i].objID == -1 )
+		{
+			return &wallList[i];
+		}
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Resets all the objects in the list and callocs a new array of sprites
 */
 /*************************************************************************/
@@ -282,6 +303,7 @@ void ResetObjectList(void)
 		particleList		= (Particle *) CallocMyAlloc(PARTICLEAMOUNT, sizeof(Particle));
 		particleSystemList  = (ParticleSystem *) CallocMyAlloc(PARTICLESYSTEMAMOUNT, sizeof(ParticleSystem));
 		buttonList			= (Button *) CallocMyAlloc(BUTTONAMOUNT, sizeof(Button));
+		wallList			= (Wall *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Wall));
 
 		for(i = 0; i < COLLIDEAMOUNT; i++)
 		{
@@ -289,6 +311,7 @@ void ResetObjectList(void)
 			foodList[i].objID = -1;
 			enemyList[i].objID = -1;
 			weaponList[i].objID = -1;
+			wallList[i].objID = -1;
 		}
 				
 		for(i = 0; i < PARTICLEAMOUNT; i++)
@@ -381,6 +404,11 @@ void DrawCollisionList(void)
 			displayCollisionDebug(&weaponList[i].WeaponPickup);
 			displayCollisionDebug(&weaponList[i].WeaponAttack);
 		}
+		if (wallList[i].objID && wallList[i].WallCollider.collisionDebug)
+		{
+			//Free the mesh and texture data
+			displayCollisionDebug(&wallList[i].WallCollider);
+		}
 	}
 	for(i = 0; i < BUTTONAMOUNT; i++)
 	{
@@ -448,7 +476,15 @@ void SetDebugMode(void)
 			buttonList[i].ButtonCollider.collisionDebug = TRUE;
 		}
 	}
-
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (wallList[i].objID)
+		{
+			//Free the mesh and texture data
+			wallList[i].WallCollider.collisionDebug = TRUE;
+		}
+	}
 	CurrentPlayer.PlayerCollider.collisionDebug = TRUE;
 }
 
@@ -491,6 +527,15 @@ void RemoveDebugMode(void)
 		{
 			//Free the mesh and texture data
 			enemyList[i].EnemyCollider.collisionDebug = FALSE;
+		}
+	}
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (wallList[i].objID)
+		{
+			//Free the mesh and texture data
+			wallList[i].WallCollider.collisionDebug = FALSE;
 		}
 	}
 	CurrentPlayer.PlayerCollider.collisionDebug = FALSE;

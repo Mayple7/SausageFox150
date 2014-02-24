@@ -274,7 +274,7 @@ void ResetChannelGroupList(void)
 	int i;
 
 	channelGroupList = (FoxChannels *) CallocMyAlloc(MAX_CHANNEL_GROUPS, sizeof(FoxChannels));
-
+	--TotalMemoryAllocs;
 	if(channelGroupList)
 	{
 		for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
@@ -514,16 +514,16 @@ int FoxSoundCheckIsPlaying(FoxSound *snd)
 		if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN))
 		    FMODErrCheck(result);
 	}
-	else
-	{
-		snd->Playing = FALSE;
-		return FALSE;
-	}
-
+	
 	if(snd->Playing)
 	{
 		snd->Playing = TRUE;
 		return TRUE;
+	}
+	else
+	{
+		snd->Playing = FALSE;
+		return FALSE;
 	}
 }
 
