@@ -38,7 +38,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
-int newID;					// ID number
+static int newID;					// ID number
 TextGlyphs* LevelName;
 
 /*************************************************************************/
@@ -63,7 +63,7 @@ void InitializeYeahGuy(void)
 {
 	Vec3 TextTint;
 
-	newID = 1;
+	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 

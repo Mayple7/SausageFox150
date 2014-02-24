@@ -62,7 +62,7 @@ Weapon* StarterSword;
 FoxSound *BackSnd;
 FoxSound *GongSnd;
 
-int newID;
+static int newID;
 
 void LoadTutorial(void)
 {
@@ -77,7 +77,7 @@ void InitializeTutorial(void)
 	FoxInput_Update();
 	Vec3Set(&BoundingTint, 0.0f, 0.0f, 0.0f);
 
-	newID = 1;
+	newID = 10;
 	ResetObjectList();
 
 	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
