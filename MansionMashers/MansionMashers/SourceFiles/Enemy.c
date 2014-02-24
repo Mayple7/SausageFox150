@@ -121,6 +121,10 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyState		= AIIdle;
 		CurrentEnemy->idleMove			= 0;
 		CurrentEnemy->idleTimer			= rand() % 60;
+		CurrentEnemy->canAttack			= FALSE;
+		CurrentEnemy->canAttackTimer	= 150;
+		CurrentEnemy->findHome			= FALSE;
+		CurrentEnemy->HomePos			= CurrentEnemy->Position;
 		CurrentEnemy->CurrentEnemySounds.YEAH = CreateSound("Sounds/Scream.wav", SmallSnd);
 
 
@@ -227,7 +231,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 
 void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 {
-	if (CurrentEnemy->Attack && !CurrentEnemy->isAttacking)
+	if (CurrentEnemy->Attack && !CurrentEnemy->isAttacking && CurrentEnemy->canAttack)
 	{
 		CurrentEnemy->isAttacking								= TRUE;
 		CurrentEnemy->Attack									= FALSE;
@@ -304,9 +308,8 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 	}
 
 	if (CurrentEnemy->jumpTimer > 0)
-	{
 		CurrentEnemy->jumpTimer--;
-	}
+
 	MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
 }
 
@@ -317,12 +320,12 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 		case AIAggressive:
 			CurrentEnemy->isJumping			= FALSE;
 
-			if (CurrentEnemy->Position.x < CurrentPlayer.Position.x - 60 * GetLoadRatio())
+			if (CurrentEnemy->Position.x < CurrentPlayer.Position.x - 100 * GetLoadRatio())
 			{
 				CurrentEnemy->isMoveRight	= TRUE;
 				CurrentEnemy->isMoveLeft	= FALSE;
 			}
-			else if (CurrentEnemy->Position.x > CurrentPlayer.Position.x + 60 * GetLoadRatio())
+			else if (CurrentEnemy->Position.x > CurrentPlayer.Position.x + 100 * GetLoadRatio())
 			{
 				CurrentEnemy->isMoveRight	= FALSE;
 				CurrentEnemy->isMoveLeft	= TRUE;
@@ -331,6 +334,18 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			{
 				CurrentEnemy->isMoveRight	= FALSE;
 				CurrentEnemy->isMoveLeft	= FALSE;
+				
+			}
+
+			if (fabs(CurrentEnemy->Position.x - CurrentPlayer.Position.x) < 200 * GetLoadRatio())
+			{
+				if (CurrentEnemy->canAttackTimer > 0)
+				{
+					CurrentEnemy->canAttack = FALSE;
+					CurrentEnemy->canAttackTimer--;
+				}
+				else
+					CurrentEnemy->canAttack = TRUE;
 			}
 
 			if (CurrentEnemy->Position.y < CurrentPlayer.Position.y - 60 * GetLoadRatio())
@@ -357,13 +372,14 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 				CurrentEnemy->isDropDown		= TRUE;
 			}
 			
-			printf("%i\n",CurrentEnemy->isJumping);
-
 			if (CurrentEnemy->canDropDownTimer > 0)
 				CurrentEnemy->canDropDownTimer--;
 
-			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 150 * GetLoadRatio() && !CurrentEnemy->isAttacking)
+			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 150 * GetLoadRatio() && !CurrentEnemy->isAttacking && !CurrentEnemy->Attack)
+			{
+				CurrentEnemy->canAttackTimer	= (int)(1.5f / GetDeltaTime());
 				CurrentEnemy->Attack			= TRUE;
+			}
 			break;
 		case AIPassive:
 
@@ -383,35 +399,86 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			if (CurrentEnemy->StateTimer <= 0)
 				CurrentEnemy->EnemyState = AIIdle;
 			break;
-
+			
 		case AIIdle:
-			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 500 * GetLoadRatio())
+			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 500.0f * GetLoadRatio())
 				CurrentEnemy->EnemyState = AIAggressive;
+			if ((float)fabs((float)(CurrentEnemy->Position.x - CurrentEnemy->HomePos.x)) > 500.0f * GetLoadRatio())
+				CurrentEnemy->findHome = TRUE;
+			switch(CurrentEnemy->findHome)
+			{
+				case FALSE:
+					if (CurrentEnemy->idleMove == 1)
+					{
+						CurrentEnemy->isMoveRight	= TRUE;
+						CurrentEnemy->isMoveLeft	= FALSE;
+					}
+					else if (CurrentEnemy->idleMove == -1)
+					{
+						CurrentEnemy->isMoveRight	= FALSE;
+						CurrentEnemy->isMoveLeft	= TRUE;
+					}
+					else
+					{
+						CurrentEnemy->isMoveRight	= FALSE;
+						CurrentEnemy->isMoveLeft	= FALSE;
+					}
 
-			if (CurrentEnemy->idleMove == 1)
-			{
-				CurrentEnemy->isMoveRight	= TRUE;
-				CurrentEnemy->isMoveLeft	= FALSE;
-			}
-			else if (CurrentEnemy->idleMove == -1)
-			{
-				CurrentEnemy->isMoveRight	= FALSE;
-				CurrentEnemy->isMoveLeft	= TRUE;
-			}
-			else
-			{
-				CurrentEnemy->isMoveRight	= FALSE;
-				CurrentEnemy->isMoveLeft	= FALSE;
-			}
+					if (CurrentEnemy->idleTimer > 0)
+						CurrentEnemy->idleTimer--;
+					else
+					{
+						CurrentEnemy->idleTimer = rand() % 60 + 10;
+						CurrentEnemy->idleMove	= rand() % 3 - 1;
+					}
+					break;
+				case TRUE:
+					CurrentEnemy->isJumping			= FALSE;
+					if (CurrentEnemy->Position.x < CurrentEnemy->HomePos.x - 60 * GetLoadRatio())
+					{
+						CurrentEnemy->isMoveRight	= TRUE;
+						CurrentEnemy->isMoveLeft	= FALSE;
+					}
+					else if (CurrentEnemy->Position.x > CurrentEnemy->HomePos.x + 60 * GetLoadRatio())
+					{
+						CurrentEnemy->isMoveRight	= FALSE;
+						CurrentEnemy->isMoveLeft	= TRUE;
+					}
+					else
+					{
+						CurrentEnemy->findHome = FALSE;
+						CurrentEnemy->idleTimer = (int)(0.5f / GetDeltaTime());
+						CurrentEnemy->idleMove	= 0;
+					}
 
-			if (CurrentEnemy->idleTimer > 0)
-				CurrentEnemy->idleTimer--;
-			else
-			{
-				CurrentEnemy->idleTimer = rand() % 60 + 10;
-				CurrentEnemy->idleMove	= rand() % 3 - 1;
+					if (CurrentEnemy->Position.y < CurrentEnemy->HomePos.y - 60 * GetLoadRatio())
+					{
+						int i;
+						for (i = 0; i < COLLIDEAMOUNT; i++)
+						{
+							if (platformList[i].objID == 0)
+								continue;
+							if (platformList[i].objID == -1)
+								break;
+							if (CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed / GetDeltaTime()) - 60.0f * GetLoadRatio() && 
+								CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed / GetDeltaTime()) + 60.0f * GetLoadRatio() &&
+								CurrentEnemy->Position.y < platformList[i].Position.y + 40 * GetLoadRatio())
+							{
+								CurrentEnemy->isJumping			= TRUE;
+								CurrentEnemy->canDropDownTimer	= (int)(2.0f / GetDeltaTime());
+								break;
+							}
+						}
+					}
+					else if (CurrentEnemy->EnemyRigidBody.onGround && CurrentEnemy->canDropDownTimer <= 0 && CurrentEnemy->Position.y > CurrentEnemy->HomePos.y + 10 * GetLoadRatio())
+					{
+						CurrentEnemy->isDropDown		= TRUE;
+					}
+			
+					if (CurrentEnemy->canDropDownTimer > 0)
+						CurrentEnemy->canDropDownTimer--;
+					break;
 			}
-
 
 			break;
 	}
@@ -704,7 +771,7 @@ void EnemyAnimation(Enemy *Object)
 		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 		ArmLwr->Position.y = ArmUpr->Position.y - (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 		
-		// Attacking!
+		// Attacking! -----------------------------------------------------------------------------------------
 		if (Object->isAttacking)
 		{
 			Object->EnemySpriteParts.AttackRotation = RotateToAngle(Object->EnemySpriteParts.AttackRotation, 0, 0.2f);
@@ -714,9 +781,14 @@ void EnemyAnimation(Enemy *Object)
 			ArmLwr2->Rotation = ArmUpr2->Rotation - (float)FOX_PI/2 + Object->EnemySpriteParts.AttackRotationArmLower;
 			if (Object->EnemySpriteParts.AttackRotationArm == (float)FOX_PI)
 			{
-				Object->isAttacking = FALSE;
-				Object->EnemyState = AIPassive;
-				Object->StateTimer = (int)(1.0f / GetDeltaTime());
+				Object->isAttacking		= FALSE;
+				Object->canAttack		= FALSE;
+				Object->canAttackTimer	= (int)(1.5f / GetDeltaTime());
+				if (rand() % 2)
+				{
+					Object->EnemyState = AIPassive;
+					Object->StateTimer = (int)(1.0f / GetDeltaTime());
+				}
 			}
 		}
 		else
@@ -725,7 +797,8 @@ void EnemyAnimation(Enemy *Object)
 			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
 		}
 		Weap->Rotation = ArmLwr2->Rotation;
-		
+		// -----------------------------------------------------------------------------------------
+
 		ArmUpr2->Position.x = Bdy->Position.x;
 		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
@@ -773,7 +846,7 @@ void EnemyAnimation(Enemy *Object)
 		LegLwr2->Rotation = LegLowerDirection2;
 		
 		
-		// Attacking!
+		// Attacking! -----------------------------------------------------------------------------------------
 		if (Object->isAttacking)
 		{
 			Object->EnemySpriteParts.AttackRotation = RotateToAngle(Object->EnemySpriteParts.AttackRotation, (float)FOX_PI/6, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
@@ -783,9 +856,14 @@ void EnemyAnimation(Enemy *Object)
 			ArmLwr->Rotation = ArmUpr->Rotation + (float)FOX_PI/2 - Object->EnemySpriteParts.AttackRotationArmLower;
 			if (Object->EnemySpriteParts.AttackRotationArm == (float)FOX_PI)
 			{
-				Object->isAttacking = FALSE;
-				Object->EnemyState = AIPassive;
-				Object->StateTimer = (int)(1.0f / GetDeltaTime());
+				Object->isAttacking		= FALSE;
+				Object->canAttack		= FALSE;
+				Object->canAttackTimer	= (int)(1.5f / GetDeltaTime());
+				if (rand() % 2)
+				{
+					Object->EnemyState = AIPassive;
+					Object->StateTimer = (int)(1.0f / GetDeltaTime());
+				}
 			}
 		}
 		else
@@ -794,7 +872,8 @@ void EnemyAnimation(Enemy *Object)
 			ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
 		}
 		Weap->Rotation = ArmLwr->Rotation;
-		
+		// -----------------------------------------------------------------------------------------
+
 		ArmUpr->Position.x = Bdy->Position.x;
 		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
