@@ -141,6 +141,7 @@
     <ClInclude Include="HeaderFiles\UIButton.h" />
     <ClInclude Include="HeaderFiles\Vector2.h" />
     <ClInclude Include="HeaderFiles\Vector3.h" />
+    <ClInclude Include="HeaderFiles\Wall.h" />
     <ClInclude Include="HeaderFiles\Weapon.h" />
     <ClInclude Include="HeaderFiles\WeaponNames.h" />
     <ClInclude Include="HeaderFiles\YeahGuy.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="SourceFiles\UIButton.c" />
     <ClCompile Include="SourceFiles\Vector2.c" />
     <ClCompile Include="SourceFiles\Vector3.c" />
+    <ClCompile Include="SourceFiles\Wall.c" />
     <ClCompile Include="SourceFiles\Weapon.c" />
     <ClCompile Include="SourceFiles\WeaponNames.c" />
     <ClCompile Include="SourceFiles\YeahGuy.c" />

@@ -356,8 +356,6 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			{
 				CurrentEnemy->isDropDown		= TRUE;
 			}
-			
-			printf("%i\n",CurrentEnemy->isJumping);
 
 			if (CurrentEnemy->canDropDownTimer > 0)
 				CurrentEnemy->canDropDownTimer--;

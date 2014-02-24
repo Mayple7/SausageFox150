@@ -242,6 +242,29 @@ void FreeButton(Button* CurrentButton)
 /*************************************************************************/
 /*!
 	\brief
+	Frees the object being passed
+	
+	\param objectNext
+	The pointer to a object whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreeWall(Wall *CurrentWall)
+{
+	if(CurrentWall->objID > -1)
+	{
+		//Free that platform
+		CurrentWall->objID = -1;
+		CurrentWall->WallCollider.collisionDebug = FALSE;
+		AEGfxMeshFree(CurrentWall->WallCollider.DebugMesh);
+
+		if (CurrentWall->WallSprite->Created)
+			freeObject(CurrentWall->WallSprite);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Cycles through the object list freeing all objects in the list
 */
 /*************************************************************************/
@@ -295,6 +318,11 @@ void FreeObjectList(void)
 		{
 			FreeText(staticTextList[i]);
 		}
+		if (wallList[i].objID)
+		{
+			//Free the mesh and texture data
+			FreeWall(&wallList[i]);
+		}
 	}
 
 	for (i = 0; i < PARTICLEAMOUNT; i++)
@@ -332,4 +360,5 @@ void FreeObjectList(void)
 	FreeMyAlloc(floatTextList);
 	FreeMyAlloc(staticTextList);
 	FreeMyAlloc(buttonList);
+	FreeMyAlloc(wallList);
 }
