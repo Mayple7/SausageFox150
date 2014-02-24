@@ -512,15 +512,7 @@ void RemoveDebugMode(void)
 			enemyList[i].EnemyCollider.collisionDebug = FALSE;
 		}
 	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Make sure the sprite exists
-		if (wallList[i].objID)
-		{
-			//Free the mesh and texture data
-			wallList[i].WallCollider.collisionDebug = FALSE;
-		}
-	}
+<<<<<<< HEAD
 
 	for (i = 0; i < BUTTONAMOUNT; i++)
 	{
@@ -532,5 +524,16 @@ void RemoveDebugMode(void)
 		}
 	}
 
+=======
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Make sure the sprite exists
+		if (wallList[i].objID)
+		{
+			//Free the mesh and texture data
+			wallList[i].WallCollider.collisionDebug = FALSE;
+		}
+	}
+>>>>>>> f2c9b48e2e5c9085c33efecbca4e7980a267d8a4
 	CurrentPlayer.PlayerCollider.collisionDebug = FALSE;
 }
