@@ -377,6 +377,15 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates the floating text
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
 void UpdateFloatingText(TextGlyphs *FirstLetter)
 {
 	TextGlyphs *nextLetter;
@@ -407,5 +416,46 @@ void UpdateFloatingText(TextGlyphs *FirstLetter)
 		}
 		nextLetter = nextLetter->NextLetter;
 	}
+}
 
+/*************************************************************************/
+/*!
+	\brief
+	Makes all the text visible
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
+void TextAllVisible(TextGlyphs* FirstLetter)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+			nextLetter->Glyph->Visible = TRUE;
+		nextLetter = nextLetter->NextLetter;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Makes all the text invisible
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
+void TextAllNotVisible(TextGlyphs* FirstLetter)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+			nextLetter->Glyph->Visible = FALSE;
+		nextLetter = nextLetter->NextLetter;
+	}
 }

@@ -263,9 +263,7 @@ void DrawTutorial(void)
 void FreeTutorial(void)
 {
 	SavePlayer(&CurrentPlayer);
-	FreeObjectList();
-	FreeSoundList();
-	
+	FreeAllLists();
 }
 
 void UnloadTutorial(void)
