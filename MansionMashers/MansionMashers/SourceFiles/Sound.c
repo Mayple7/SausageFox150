@@ -217,7 +217,6 @@ FoxSound *AddSound(void)
 	{
 		if(soundList[i].sndID == 0 || soundList[i].sndID == -1)
 		{
-			printf("sl : %i\n", &soundList[i]);
 			return &soundList[i];
 		}
 	}
@@ -370,7 +369,6 @@ FoxSound *CreateSound(char *Filename, int type)
 {
 	FMOD_RESULT result;
 	FoxSound *snd = AddSound();
-	printf("snd : %i\n", snd);
 
 	InitSoundStruct(snd, type);
 	

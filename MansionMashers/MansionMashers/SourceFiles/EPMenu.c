@@ -98,7 +98,7 @@ void DrawEPMenu(void)
 void FreeEPMenu(void)
 {
 	// Freeing the objects and textures
-	FreeObjectList();
+	FreeAllLists();
 }
 
 void UnloadEPMenu(void)
