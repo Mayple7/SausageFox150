@@ -504,6 +504,29 @@ void PlayAudio(FoxSound *snd)
 	success = FALSE;
 }
 
+int FoxSoundCheckIsPlaying(FoxSound *snd)
+{
+	FMOD_RESULT result;
+	
+	if(snd->Channel)
+	{
+		result = FMOD_Channel_IsPlaying(snd->Channel, &snd->Playing);
+		if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN))
+		    FMODErrCheck(result);
+	}
+	else
+	{
+		snd->Playing = FALSE;
+		return FALSE;
+	}
+
+	if(snd->Playing)
+	{
+		snd->Playing = TRUE;
+		return TRUE;
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Creating/Releasing Channel Group Functions
 
