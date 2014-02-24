@@ -43,6 +43,45 @@ void ResetCamera(void)
 	AEGfxSetCamPosition(0.0, 0.0);
 }
 
+float GetCameraXPosition()
+{
+	float camX, camY;
+	AEGfxGetCamPosition(&camX, &camY);
+	return camX;
+}
+
+void SetCameraXPosition(float newX)
+{
+	float camX, camY;
+	AEGfxGetCamPosition(&camX, &camY);
+	AEGfxSetCamPosition(newX, camY);
+}
+
+
+void SetCameraPan(float newX, float PanelSize)
+{
+	float camX, camY;	
+
+	//Get camera position
+	AEGfxGetCamPosition(&camX, &camY);
+
+	//Pans camera Right
+	if(camX < newX - ((PanelSize / 128) * GetLoadRatio()))
+	{
+		camX += ((PanelSize / 3) * GetLoadRatio()) * GetDeltaTime();
+		AEGfxSetCamPosition(camX, camY);
+	}
+	//Pans Camera Left
+	else if (camX > newX + ((PanelSize / 128) * GetLoadRatio()))
+	{
+		camX -= ((PanelSize / 3) * GetLoadRatio()) * GetDeltaTime();
+		AEGfxSetCamPosition(camX, camY);
+	}
+	else
+		//Keep Camera Where it is
+		AEGfxSetCamPosition(newX, camY);
+}
+
 void DrawHUD(struct HUDLayer *hud)
 {
 	int i;
