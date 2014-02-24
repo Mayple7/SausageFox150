@@ -31,6 +31,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+#include "../HeaderFiles/BoundingBox.h"
 
 
 // ---------------------------------------------------------------------------
@@ -49,6 +50,8 @@ Sprite* Level1Panel3;
 Sprite* Various;
 
 Platform* Table1;
+
+
 
 
 
@@ -74,6 +77,7 @@ void LoadLevel1(void)
 void InitializeLevel1(void)
 {
 	Vec3 TextTint;
+
 	newID = 1;
 	ResetObjectList();
 	ResetCamera();
@@ -85,6 +89,9 @@ void InitializeLevel1(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
+
+	//Bounding Boxes
+	CreateBoundingBoxes();
 
 	//Background: Panel 1
 	Level1Panel1 = (Sprite *)CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
@@ -112,6 +119,10 @@ void InitializeLevel1(void)
 
 	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
 
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 806, -235, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+
+
 }
 
 /*************************************************************************/
@@ -124,7 +135,8 @@ void UpdateLevel1(void)
 {
 	EventLevel1();
 
-
+	ParticleSystemUpdate();
+	BoundingBoxUpdate();
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
