@@ -1,16 +1,18 @@
 /*****************************************************************************/
 /*!
-\file				PauseMenu.c
+\file				OptionsMenu.c
 \author				Dan Muller (d.muller)
-\date				Feb 2, 2014
+\date				Feb 23, 2014
 
-\brief				Pause menu functions
+\brief				Options menu functions
 
 \par				Functions:
-\li					InitializePause
-\li					UpdatePause
-\li					DrawPause
-\li					FreePause
+\li					LoadOptions
+\li					InitializeOptions
+\li					UpdateOptions
+\li					DrawOptions
+\li					FreeOptions
+\li					UnloadOptions
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -19,8 +21,9 @@
 */ 
 /*****************************************************************************/
 
-#include "../HeaderFiles/UIButton.h"
-#include "../HeaderFiles/PauseMenu.h"
+//#include "../HeaderFiles/Sound.h"
+#include "../HeaderFiles/FoxObjects.h"
+#include "../HeaderFiles/OptionsMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
 
 Sprite* PauseText;
@@ -39,22 +42,28 @@ Button* BGMSlider;
 TextGlyphs* SFXText;
 TextGlyphs* BGMText;
 
-FoxSound BackgroundSnd;
-
-void (*LevelToDraw)();
-
 float SFXSliderPos, BGMSliderPos;
 static char* volumestring;
 
-static int pause;
 static int newID;
 
-void InitializePause(void (*DrawLevel)())
+/*************************************************************************/
+/*!
+	\brief
+	Loads the assets needed for the options menu
+*/
+/*************************************************************************/
+void LoadOptions(void)
 {
-	float camX, camY;
+	//Allocate space for a large texture
+	CreateTextureList();
+}
+
+void InitializeOptions(void)
+{
 	Vec3 TextColor;
 
-	CreatePauseSound(&BackgroundSnd, "Sounds/awesome.mp3", LargeSnd);
+	ResetObjectList();
 
 	volumestring = (char *)MallocMyAlloc(5, sizeof(char));
 
@@ -64,20 +73,18 @@ void InitializePause(void (*DrawLevel)())
 	volumestring[3] = (char)'%%';
 	volumestring[4] = '\0';
 
-	newID = 1;
+	newID = 10;
 
-	AEGfxGetCamPosition(&camX, &camY);
-	pause = TRUE;
-	PauseText = (Sprite *) CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, camX, 350);
+	PauseText = (Sprite *) CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, 0, 350);
 
-	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, 100);
-	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, -100);
+	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, 0, 100);
+	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, 0, -100);
 
-	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, 100);
-	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, -100);
+	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, 0, 100);
+	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, 0, -100);
 
 	Vec3Set(&TextColor, 0, 0, 0);
-	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, camX, 0);
+	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
 	PauseBackground->Alpha = 0.5;
 	PauseBackground->Tint = TextColor;
 
@@ -111,82 +118,39 @@ void InitializePause(void (*DrawLevel)())
 	ChangeTextString(BGMText, volumestring);
 	ChangeTextZIndex(BGMText, 510);
 
-	ChangeTextVisibility(SFXText);
-	ChangeTextVisibility(BGMText);
-
-	LevelToDraw = DrawLevel;
-	CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
-	CurrentPlayer.PlayerSpriteParts.Body->CurrentFrame = 0;
-	CurrentPlayer.PlayerSpriteParts.BlinkTimer = 0;
-
-	FoxInput_Update();
+	TextAllVisible(SFXText);
+	TextAllVisible(BGMText);
 }
 
-void UpdatePause(void)
+void UpdateOptions(void)
 {
-	while(pause)
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		AESysFrameStart();
-		StartFoxFrame();
-		PlayAudio(&BackgroundSnd);
-
-		if(FoxInput_KeyTriggered(VK_ESCAPE))
-		{
-			pause = FALSE;
-		}
-		if(FoxInput_KeyTriggered(VK_SHIFT))
-		{
-			pause = FALSE;
-			SetNextState(GS_MainMenu);
-		}
-		if(GetNextState() == GS_Quit)
-		{
-			pause = FALSE;
-		}
-
-		DrawPause();
-
-		FoxInput_Update();
-		EventPause();
-
-		SaveVolume();
-		SetChannelGroupVolume(EffectType, SFXVolume);
-		SetChannelGroupVolume(MusicType, BGMVolume);
-		UpdateSoundSystem();
-
-		EndFoxFrame();
-		AESysFrameEnd();
+		SetNextState(GS_MainMenu);
 	}
-	TogglePauseSound(&BackgroundSnd);
-	SaveVolume();
-	FreePause();
+
+	EventOptions();
 }
 
-void DrawPause(void)
+void DrawOptions(void)
 {
-	LevelToDraw();
-	DrawSprite(PauseText);
+	DrawObjectList();
 	DrawCollisionList();
 }
 
-void FreePause(void)
+void FreeOptions(void)
 {
-	
-	freeObject(PauseText);
-	freeObject(SFXSliderGuide);
-	freeObject(BGMSliderGuide);
-	freeObject(SFXSliderBack);
-	freeObject(BGMSliderBack);
-	freeObject(PauseBackground);
-	FreeButton(SFXSlider);
-	FreeButton(BGMSlider);
-	FreeText(SFXText);
-	FreeText(BGMText);
-	FreeMyAlloc(volumestring);
-	//ReleaseSound(BackgroundSnd.Sound);
+	SaveVolume();
+	FreeAllLists();
 }
 
-void EventPause(void)
+void UnloadOptions(void)
+{
+	//Destroy the textures
+	DestroyTextureList();
+}
+
+void EventOptions(void)
 {
 	if(FoxInput_MouseDown(MOUSE_BUTTON_LEFT))
 	{
@@ -233,4 +197,10 @@ void EventPause(void)
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(BGMText, volumestring);
 	}
+	if(FoxInput_MouseUp(MOUSE_BUTTON_LEFT))
+	{
+		SetChannelGroupVolume(EffectType, SFXVolume);
+		SetChannelGroupVolume(MusicType, BGMVolume);
+	}
+
 }

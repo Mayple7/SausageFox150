@@ -101,9 +101,6 @@
     <ClInclude Include="HeaderFiles\Vector2.h">
       <Filter>Fox Header Files\Fox Math Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\Options.h">
-      <Filter>Fox Header Files\Fox Level Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\Matrix3.h">
       <Filter>Fox Header Files\Fox Math Headers</Filter>
     </ClInclude>
@@ -266,6 +263,9 @@
     <ClInclude Include="HeaderFiles\Wall.h">
       <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\OptionsMenu.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -423,6 +423,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\Wall.c">
       <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\OptionsMenu.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

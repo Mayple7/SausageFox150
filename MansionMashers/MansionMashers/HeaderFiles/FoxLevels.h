@@ -20,5 +20,6 @@
 #include "../HeaderFiles/Kevin.h"
 #include "../HeaderFiles/CharacterSelect.h"
 #include "../HeaderFiles/DevMenu.h"
+#include "../HeaderFiles//OptionsMenu.h"
 
 #endif
