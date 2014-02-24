@@ -36,6 +36,7 @@ Sprite* FirstBackground;
 Sprite* SecondBackground;
 
 Sprite* Logo;
+Sprite* Overlay;
 
 Button* NewGameButton;
 Button* LoadGameButton;
@@ -123,7 +124,9 @@ void InitializeMainMenu(void)
 
 	SecondBackground->Alpha = 0.0f;
 
-	Logo = (Sprite *) CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 960, 540, 2, 1, 1, 0, 270);
+	Overlay = (Sprite *) CreateSprite("TextureFiles/MenuOverlay.png", 1920, 1080, 2, 1, 1, 0, 0);
+
+	Logo = (Sprite *) CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 960, 540, 3, 1, 1, 0, 270);
 
 	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -170, 394, 394, newID++);
 	LoadGameButton = CreateButton("TextureFiles/LoadGameButton.png", -290, -48, 439, 170, newID++);
