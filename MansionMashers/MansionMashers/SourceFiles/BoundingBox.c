@@ -44,3 +44,4 @@ void BoundingBoxUpdate(void)
 	BoundLeft->Position.x = camX - 1920 * GetLoadRatio();
 
 }
+
