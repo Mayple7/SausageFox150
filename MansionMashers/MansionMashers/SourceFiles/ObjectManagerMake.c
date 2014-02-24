@@ -410,6 +410,7 @@ void DrawCollisionList(void)
 			displayCollisionDebug(&wallList[i].WallCollider);
 		}
 	}
+
 	for(i = 0; i < BUTTONAMOUNT; i++)
 	{
 		if (buttonList[i].objID && buttonList[i].ButtonCollider.collisionDebug)
@@ -457,6 +458,12 @@ void SetDebugMode(void)
 			//Free the mesh and texture data
 			enemyList[i].EnemyCollider.collisionDebug = TRUE;
 		}
+		//Make sure the sprite exists
+		if (wallList[i].objID)
+		{
+			//Free the mesh and texture data
+			wallList[i].WallCollider.collisionDebug = TRUE;
+		}
 	}
 
 	for (i = 0; i < BUTTONAMOUNT; i++)
@@ -468,15 +475,7 @@ void SetDebugMode(void)
 			buttonList[i].ButtonCollider.collisionDebug = TRUE;
 		}
 	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Make sure the sprite exists
-		if (wallList[i].objID)
-		{
-			//Free the mesh and texture data
-			wallList[i].WallCollider.collisionDebug = TRUE;
-		}
-	}
+
 	CurrentPlayer.PlayerCollider.collisionDebug = TRUE;
 }
 
@@ -511,9 +510,6 @@ void RemoveDebugMode(void)
 			//Free the mesh and texture data
 			enemyList[i].EnemyCollider.collisionDebug = FALSE;
 		}
-	}
-	for (i = 0; i < COLLIDEAMOUNT; i++)
-	{
 		//Make sure the sprite exists
 		if (wallList[i].objID)
 		{

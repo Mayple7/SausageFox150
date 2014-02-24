@@ -64,7 +64,6 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	return CurrentWeapon;
 }
 
-
 Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float height, int objID, float xPos, float yPos)
 {
 	Weapon *CurrentWeapon = AddWeapon();
