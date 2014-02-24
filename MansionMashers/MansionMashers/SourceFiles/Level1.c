@@ -50,7 +50,7 @@ Sprite* Various;
 
 Platform* Table1;
 
-
+Wall* Wall1;
 
 
 /*************************************************************************/
@@ -107,7 +107,7 @@ void InitializeLevel1(void)
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 450, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	//Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", WallType, 200.0f, 250.0f, newID++, 450, -100);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 250.0f, newID++, 450, -100);
 	//Table1->PlatformSprite->Visible = FALSE;
 
 	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
@@ -123,8 +123,6 @@ void InitializeLevel1(void)
 void UpdateLevel1(void)
 {
 	EventLevel1();
-
-
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);

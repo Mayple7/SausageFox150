@@ -274,7 +274,7 @@ void ResetChannelGroupList(void)
 	int i;
 
 	channelGroupList = (FoxChannels *) CallocMyAlloc(MAX_CHANNEL_GROUPS, sizeof(FoxChannels));
-
+	--TotalMemoryAllocs;
 	if(channelGroupList)
 	{
 		for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
