@@ -40,11 +40,9 @@
 // globals
 static int newID;					// ID number
 TextGlyphs *LevelName;
-TextGlyphs *ShopText1;
-TextGlyphs *ShopText2;
 Sprite *HandGauy;
 Platform *Pedestal;
-Weapon* StarterSword;
+Weapon *StarterSword;
 
 /*************************************************************************/
 /*!
@@ -84,15 +82,7 @@ void InitializeHandGuy(void)
 	CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	//Weapon/Shop
-	CreateSprite("TextureFiles/WoodSign.png", 512, 512, 5, 1, 1, -400, -140);
-	Vec3Set(&TextTint, 0, 0, 0);
-	ShopText1 = CreateText("SWORD", -380, -20, 80, TextTint, Center);
-	ChangeTextVisibility(ShopText1);
-	Vec3Set(&TextTint, 0.2f, 0.2f, 0.2f);
-	ShopText2 = CreateText("5 coin", -390, -80, 60, TextTint, Center);
-	ChangeTextVisibility(ShopText2);
-	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, -350, -140);
-	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /2;
+	CreateWeaponShop(-400, -140, StarterSword, &newID, Sword, Common);
 
 	//Platform
 	Pedestal = CreatePlatform("TextureFiles/MarblePedestal.png", PlatformType, 1920, 1080, newID++, 0, 0);

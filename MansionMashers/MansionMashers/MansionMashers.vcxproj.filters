@@ -266,6 +266,9 @@
     <ClInclude Include="HeaderFiles\Wall.h">
       <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -422,6 +425,9 @@
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Wall.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop.c">
       <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
   </ItemGroup>

@@ -366,6 +366,15 @@ void freeObjectList(void)
 		}
 	}
 
+	for (i = 0; i < SHOPAMOUNT; i++)
+	{
+		//Free the mesh and texture data
+		if(weaponShopList[i].Created)
+		{
+			//Free stuff here later if needed
+		}
+	}
+
 	//Free collision lists data allocation
 	FreeMyAlloc(platformList);
 	FreeMyAlloc(foodList);
@@ -377,6 +386,7 @@ void freeObjectList(void)
 	FreeMyAlloc(particleList);
 	FreeMyAlloc(particleSystemList);
 	FreeMyAlloc(wallList);
+	FreeMyAlloc(weaponShopList);
 }
 
 /*************************************************************************/
