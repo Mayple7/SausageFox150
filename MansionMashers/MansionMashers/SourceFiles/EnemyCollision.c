@@ -84,7 +84,10 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
 
 	// Calculate damage including enemy's damage reduction
-	damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
+	if(Cheats)
+		damageDealt = 9999;
+	else
+		damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
 	CurrentEnemy->CurrentEnemyStats.CurrentHealth -= damageDealt;
 	CurrentEnemy->EnemyParticleSystem->amountTotal += 5;

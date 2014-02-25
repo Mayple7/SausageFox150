@@ -189,7 +189,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			UpdateSoundSystem();
 			GSMPointers.pDraw();
 			Next = GetNextState();
-
+#ifdef _DEBUG
 			if(FoxInput_KeyTriggered('R'))
 			{
 				int worldX, worldY;
@@ -198,6 +198,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 				AEGfxGetCamPosition(&camX, &camY);
 				printf("%f, %f\n", (worldX + camX) / GetLoadRatio(), (worldY + camY) / GetLoadRatio());
 			}
+#endif
 
 			FoxInput_Update();
 

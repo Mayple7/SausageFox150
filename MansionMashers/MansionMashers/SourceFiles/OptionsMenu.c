@@ -37,7 +37,7 @@ Sprite* BGMSliderGuide;
 Sprite* SFXSliderBack;
 Sprite* BGMSliderBack;
 
-Sprite* PauseBackground;
+Sprite* OptionsBackground;
 
 Button* SFXSlider;
 Button* BGMSlider;
@@ -68,42 +68,51 @@ void LoadOptions(void)
 	CreateTextureList();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Initializes everything for the options screen
+*/
+/*************************************************************************/
 void InitializeOptions(void)
 {
 	Vec3 TextColor;
+	newID = 10;
 
 	ResetObjectList();
 
+	//Initializes the initial volume string
 	volumestring = (char *)MallocMyAlloc(5, sizeof(char));
-
 	volumestring[0] = '1';
 	volumestring[1] = '0';
 	volumestring[2] = '0';
 	volumestring[3] = (char)'%%';
 	volumestring[4] = '\0';
 
-	newID = 10;
-
+	//Fake text initializations
 	OptionsTitle = (Sprite *) CreateSprite("TextureFiles/OptionsTitle.png", 423, 179, 10, 1, 1, 0, 380);
 	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 10, 1, 1, -380, -200);
 
+	//Create the volume bars
 	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -480, 200);
 	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -480, 0);
 
 	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -480, 200);
 	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -480, 0);
 
+	//Background for the options
 	Vec3Set(&TextColor, 0.3f, 0.3f, 0.3f);
-	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 1, 1, 1, 0, 0);
-	PauseBackground->Alpha = 0.5;
-	PauseBackground->Tint = TextColor;
+	OptionsBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 1, 1, 1, 0, 0);
+	OptionsBackground->Alpha = 0.5;
+	OptionsBackground->Tint = TextColor;
 
+	// Find default slider position based on sound volumes
 	SFXSliderPos = SFXSliderGuide->Position.x - SFXSliderGuide->Width / 2 + SFXSliderGuide->Width * SFXVolume;
 	BGMSliderPos = BGMSliderGuide->Position.x - BGMSliderGuide->Width / 2 + BGMSliderGuide->Width * BGMVolume;
-
 	SFXSliderPos /= GetLoadRatio();
 	BGMSliderPos /= GetLoadRatio();
 
+	//Create the slider buttons
 	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 200, 80, 80, newID++);
 	SFXSlider->ButtonSprite->ZIndex = 502;
 	SFXSlider->ButtonCollider.width *= 3;
@@ -114,6 +123,7 @@ void InitializeOptions(void)
 	BGMSlider->ButtonCollider.width *= 3;
 	BGMSlider->ButtonCollider.height = BGMSliderBack->Height;
 
+	//Create the volume text
 	Vec3Set(&TextColor, 1, 1, 1);
 	
 	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 200, 100, TextColor, Left);
@@ -130,12 +140,14 @@ void InitializeOptions(void)
 	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - SFXSliderBack->Width - 140 * GetLoadRatio(), 200, 100, TextColor, Right);
 	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - BGMSliderBack->Width - 140 * GetLoadRatio(), 0, 100, TextColor, Right);
 
+	//Set all text to be visible
 	TextAllVisible(SFXText);
 	TextAllVisible(BGMText);
 	
 	TextAllVisible(SFXLabel);
 	TextAllVisible(BGMLabel);
 
+	// Create the back button and cheats objects
 	BackButton = CreateButton("TextureFiles/BackButton.png", 0, -400, 400, 150, newID++);
 	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -800, -200, 100, 100, newID++);
 	CheckMark = (Sprite *) CreateSprite("TextureFiles/CheckMark.png", 200, 200, 11, 1, 1, -800, -200);
@@ -146,6 +158,12 @@ void InitializeOptions(void)
 	CreateBoundingBoxes();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates all objects in the options screen
+*/
+/*************************************************************************/
 void UpdateOptions(void)
 {
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
@@ -156,65 +174,88 @@ void UpdateOptions(void)
 	EventOptions();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Draws the options screen
+*/
+/*************************************************************************/
 void DrawOptions(void)
 {
 	DrawObjectList();
 	DrawCollisionList();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Saves the settings then frees all the memory
+*/
+/*************************************************************************/
 void FreeOptions(void)
 {
 	SaveSettings();
 	FreeAllLists();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Unloads the assets needed for the options menu
+*/
+/*************************************************************************/
 void UnloadOptions(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Handles events sent to the game
+*/
+/*************************************************************************/
 void EventOptions(void)
 {
-	int i, worldX, worldY;
+	int worldX, worldY;
 	Vec2 MouseClick;
 
+	//Grab the mouse position and store in a vector
 	FoxInput_GetWorldPosition(&worldX, &worldY);
 	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
 
+	//On mouse down for the sliders
 	if(FoxInput_MouseDown(MOUSE_BUTTON_LEFT))
 	{
-		for(i = 0; i < BUTTONAMOUNT; i++)
+		if(PointRectCollision(&SFXSlider->ButtonCollider, &MouseClick))
 		{
-			if(!buttonList[i].objID)
-				continue;
-			else if(buttonList[i].objID == SFXSlider->objID && PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-			{
-				if(worldX > SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
-					SFXSlider->Position.x = SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
-				else if(worldX < -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
-					SFXSlider->Position.x = -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
-				else
-					SFXSlider->Position.x = (float)worldX;
-				SFXSlider->ButtonSprite->Position.x = SFXSlider->Position.x;
-				SFXSlider->ButtonCollider.Position.x = SFXSlider->Position.x;
-			}
-			else if(buttonList[i].objID == BGMSlider->objID && PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-			{
-				if(worldX > SFXSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
-					BGMSlider->Position.x = BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
-				else if(worldX < -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
-					BGMSlider->Position.x = -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
-				else
-					BGMSlider->Position.x = (float)worldX;
-				BGMSlider->ButtonSprite->Position.x = BGMSlider->Position.x;
-				BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
-			}
-			else if(buttonList[i].objID == BackButton->objID && PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-			{
-				SetNextState(GS_MainMenu);
-			}
+			//Sets bounds for the slider
+			if(worldX > SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
+				SFXSlider->Position.x = SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
+			else if(worldX < -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
+				SFXSlider->Position.x = -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
+			else
+				SFXSlider->Position.x = (float)worldX;
+			//Sets positions after checking bounds
+			SFXSlider->ButtonSprite->Position.x = SFXSlider->Position.x;
+			SFXSlider->ButtonCollider.Position.x = SFXSlider->Position.x;
 		}
+		else if(PointRectCollision(&BGMSlider->ButtonCollider, &MouseClick))
+		{
+			//Sets bounds for the slider
+			if(worldX > SFXSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
+				BGMSlider->Position.x = BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
+			else if(worldX < -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
+				BGMSlider->Position.x = -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
+			else
+				BGMSlider->Position.x = (float)worldX;
+			//Sets positions after checking bounds
+			BGMSlider->ButtonSprite->Position.x = BGMSlider->Position.x;
+			BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
+		}
+		
+		//Adjust the sounds based on the slider position
 		SFXVolume = (SFXSlider->Position.x + 480 * GetLoadRatio() + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
 		volumestring = VolumetoString(volumestring, SFXVolume * 100);
 		volumestring = strcat(volumestring, "%");
@@ -226,6 +267,7 @@ void EventOptions(void)
 		ChangeTextString(BGMText, volumestring);
 	}
 
+	//Hover effects for the back button
 	if(PointRectCollision(&BackButton->ButtonCollider, &MouseClick))
 	{
 		BackButton->ButtonSprite->ScaleX = 1.2f;
@@ -237,15 +279,22 @@ void EventOptions(void)
 		BackButton->ButtonSprite->ScaleY = 1.0f;
 	}
 
+	// On a single mouse click
 	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 	{
+		//Check the cheats check box and the back button
 		if(PointRectCollision(&CheatsButton->ButtonCollider, &MouseClick))
 		{
 			Cheats = !Cheats;
 			CheckMark->Visible = !(CheckMark->Visible);
 		}
+		else if(PointRectCollision(&BackButton->ButtonCollider, &MouseClick))
+		{
+			SetNextState(GS_MainMenu);
+		}
 	}
 
+	//Sets the group volumes on mouse up
 	if(FoxInput_MouseUp(MOUSE_BUTTON_LEFT))
 	{
 		SetChannelGroupVolume(EffectType, SFXVolume);
