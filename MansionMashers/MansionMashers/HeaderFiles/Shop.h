@@ -14,9 +14,11 @@ typedef struct WeaponShop
 
 	struct TextGlyphs *ItemName;
 	struct TextGlyphs *ItemCoin;
+
+	Weapon *Weapon;
 }WeaponShop;
 
 void GetWeaponCoin(WeaponShop *newShop, int weaponRarity);
-void CreateWeaponShop(float shopPosX, float shopPosY, Weapon *Weapon, int *newID, int collisionGroup, int weaponRarity);
+void CreateWeaponShop(float shopPosX, float shopPosY, int *newID, int collisionGroup, int weaponRarity);
 
 #endif
