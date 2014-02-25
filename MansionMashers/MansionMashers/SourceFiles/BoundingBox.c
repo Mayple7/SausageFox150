@@ -20,8 +20,8 @@ void CreateBoundingBoxes(void)
 
 	BoundTop = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
 	BoundBottom = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, -1080);
-	BoundLeft = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, -1920, 0);
-	BoundRight = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 1920, 0);
+	BoundLeft = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 2080, 5000, 1, 1, -1920, 0);
+	BoundRight = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 2080, 5000, 1, 1, 1920, 0);
 
 	BoundTop->Tint = BoundingTint;
 	BoundBottom->Tint = BoundingTint;

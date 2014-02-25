@@ -36,6 +36,9 @@ typedef struct Weapon
 
 	CollisionBox WeaponPickup;
 	CollisionBox WeaponAttack;
+
+	//Will be 0 if not in a shop
+	struct WeaponShop *CurrentShop;
 }Weapon;
 
 Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int weaponRarity, int collisionGroup, float width, float height, int objID);

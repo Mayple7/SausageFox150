@@ -86,9 +86,40 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	{
 		ChangeTextVisibility(wList->WeaponStatsGlyphs);
 	}
+	//Switch weapons
 	if(AEInputCheckTriggered('E'))
 	{
+		int Shopping = FALSE;
+
+		//Check if the weapon is in a shop
+		if (wList->CurrentShop)
+		{
+			if (wList->CurrentShop->Coin > CurrentPlayer->CurrentPlayerStats.Money)
+			{
+				//Not enough money
+				Vec3 textColor;
+				TextGlyphs *FirstLetter;
+	
+				// Create Floating Error Text
+				Vec3Set(&textColor, 0.0f, 0.0f, 0.0f);
+				FirstLetter = CreateText("Not Enough Coin!", (CurrentPlayer->Position.x - 4) / GetLoadRatio(), (CurrentPlayer->Position.y - 4 + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+				AddFloatingText(FirstLetter);
+				ChangeTextVisibility(FirstLetter);
+
+				Vec3Set(&textColor, 1.0f, 0.1f, 0.1f);
+				FirstLetter = CreateText("Not Enough Coin!", CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+				AddFloatingText(FirstLetter);
+				ChangeTextVisibility(FirstLetter);
+				return;
+			}
+			
+			CurrentPlayer->CurrentPlayerStats.Money -= wList->CurrentShop->Coin;
+			Shopping = TRUE;
+		}
+
 		SwapWeapons(CurrentPlayer->PlayerWeapon, wList);
+
+		//Set up the new player weapon sprite
 		CurrentPlayer->PlayerWeapon->WeaponSprite->ZIndex = (unsigned short)50;
 		CurrentPlayer->PlayerWeapon->WeaponFOF = PlayerWeapon;
 		CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
@@ -102,12 +133,18 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		}
 		CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 		
-		
+		//Put the new dropped weapon down
 		wList->Position.x = CurrentPlayer->PlayerWeapon->Position.x;
 		wList->Position.y = CurrentPlayer->PlayerWeapon->Position.y;
 		wList->WeaponSprite->ZIndex = (unsigned short)50;
 		wList->WeaponFOF = DroppedWeapon;
-		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
+
+		//If it is a shop we like it straight, oh ja
+		if (Shopping)
+			wList->WeaponSprite->Rotation = (float)FOX_PI / 2;
+		else
+			wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
+
 		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
 		wList->WeaponHoverBackground->Position.x = wList->WeaponPickup.Position.x;
 		wList->WeaponHoverBackground->Position.y = wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f;

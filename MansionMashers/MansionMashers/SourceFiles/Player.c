@@ -778,7 +778,10 @@ void Animation(Player *Object)
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailIdle.png");
 		Object->TailSinValue = 0;
-		Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
+		if(Object->Princess == Mayple)
+			Object->PlayerSpriteParts.Tail->AnimationSpeed = 2 * FRAMERATE / 60;
+		else
+			Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
 	}
 
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
@@ -1176,7 +1179,7 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 
-	CurrentPlayer->CurrentPlayerStats.Money = 0;
+	CurrentPlayer->CurrentPlayerStats.Money = 15;
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
 
 	switch(Princess)
