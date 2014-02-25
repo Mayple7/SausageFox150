@@ -31,6 +31,10 @@ Sprite* BGMSliderGuide;
 Sprite* SFXSliderBack;
 Sprite* BGMSliderBack;
 
+Sprite* EnableCheats;
+Sprite* CheckMark;
+Button* CheatsButton;
+
 Sprite* PauseBackground;
 
 Button* SFXSlider;
@@ -114,6 +118,14 @@ void InitializePause(void (*DrawLevel)())
 	ChangeTextVisibility(SFXText);
 	ChangeTextVisibility(BGMText);
 
+	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 500, 1, 1, 180, -250);
+	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -250, -250, 100, 100, newID++);
+	CheatsButton->ButtonSprite->ZIndex = 500;
+	CheckMark = (Sprite *) CreateSprite("TextureFiles/CheckMark.png", 200, 200, 501, 1, 1, -250, -250);
+
+	if(!Cheats)
+		CheckMark->Visible = FALSE;
+
 	LevelToDraw = DrawLevel;
 	CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
 	CurrentPlayer.PlayerSpriteParts.Body->CurrentFrame = 0;
@@ -149,7 +161,7 @@ void UpdatePause(void)
 		FoxInput_Update();
 		EventPause();
 
-		SaveVolume();
+		SaveSettings();
 		SetChannelGroupVolume(EffectType, SFXVolume);
 		SetChannelGroupVolume(MusicType, BGMVolume);
 		UpdateSoundSystem();
@@ -158,7 +170,7 @@ void UpdatePause(void)
 		AESysFrameEnd();
 	}
 	TogglePauseSound(&BackgroundSnd);
-	SaveVolume();
+	SaveSettings();
 	FreePause();
 }
 
@@ -178,6 +190,9 @@ void FreePause(void)
 	freeObject(SFXSliderBack);
 	freeObject(BGMSliderBack);
 	freeObject(PauseBackground);
+	freeObject(EnableCheats);
+	freeObject(CheckMark);
+	FreeButton(CheatsButton);
 	FreeButton(SFXSlider);
 	FreeButton(BGMSlider);
 	FreeText(SFXText);
@@ -188,41 +203,37 @@ void FreePause(void)
 
 void EventPause(void)
 {
+	int worldX, worldY;
+	Vec2 MouseClick;
+
+	FoxInput_GetWorldPosition(&worldX, &worldY);
+	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
 	if(FoxInput_MouseDown(MOUSE_BUTTON_LEFT))
 	{
-		int i, worldX, worldY;
-		Vec2 MouseClick;
-
-		FoxInput_GetWorldPosition(&worldX, &worldY);
-		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
-
-		for(i = 0; i < BUTTONAMOUNT; i++)
+		if(PointRectCollision(&SFXSlider->ButtonCollider, &MouseClick))
 		{
-			if(!buttonList[i].objID)
-				continue;
-			else if(buttonList[i].objID == SFXSlider->objID && PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-			{
-				if(worldX > SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
-					SFXSlider->Position.x = SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
-				else if(worldX < -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
-					SFXSlider->Position.x = -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
-				else
-					SFXSlider->Position.x = (float)worldX;
-				SFXSlider->ButtonSprite->Position.x = SFXSlider->Position.x;
-				SFXSlider->ButtonCollider.Position.x = SFXSlider->Position.x;
-			}
-			else if(buttonList[i].objID == BGMSlider->objID && PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
-			{
-				if(worldX > SFXSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
-					BGMSlider->Position.x = BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
-				else if(worldX < -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
-					BGMSlider->Position.x = -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
-				else
-					BGMSlider->Position.x = (float)worldX;
-				BGMSlider->ButtonSprite->Position.x = BGMSlider->Position.x;
-				BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
-			}
+			if(worldX > SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
+				SFXSlider->Position.x = SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
+			else if(worldX < -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
+				SFXSlider->Position.x = -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
+			else
+				SFXSlider->Position.x = (float)worldX;
+			SFXSlider->ButtonSprite->Position.x = SFXSlider->Position.x;
+			SFXSlider->ButtonCollider.Position.x = SFXSlider->Position.x;
 		}
+		else if(PointRectCollision(&BGMSlider->ButtonCollider, &MouseClick))
+		{
+			if(worldX > SFXSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
+				BGMSlider->Position.x = BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
+			else if(worldX < -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
+				BGMSlider->Position.x = -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
+			else
+				BGMSlider->Position.x = (float)worldX;
+			BGMSlider->ButtonSprite->Position.x = BGMSlider->Position.x;
+			BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
+		}
+		
 		SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
 		volumestring = VolumetoString(volumestring, SFXVolume * 100);
 		volumestring = strcat(volumestring, "%");
@@ -232,5 +243,18 @@ void EventPause(void)
 		volumestring = VolumetoString(volumestring, BGMVolume * 100);
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(BGMText, volumestring);
+	}
+
+	// On a single mouse click
+	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+	{
+		printf("WEOFIJEOFIJ");
+		//Check the cheats check box and the back button
+		if(PointRectCollision(&CheatsButton->ButtonCollider, &MouseClick))
+		{
+			printf("WEOFIJEOFIJ");
+			Cheats = !Cheats;
+			CheckMark->Visible = !(CheckMark->Visible);
+		}
 	}
 }
