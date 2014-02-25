@@ -349,10 +349,10 @@ void DrawSprite(Sprite *CurrentSprite)
 	updateSpriteAnimation(CurrentSprite, &offset);
 
 	//Draw it like you wanna draw it gurl
-	if (GetLoadRatio() < 0.75f)
+	/*if (GetLoadRatio() < 0.75f)
 		AEGfxSetTextureMode(AE_GFX_TM_AVERAGE);
-	else
-		AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
+	else*/
+	AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
 
 	//Draws the texture on the mesh
 	AEGfxTextureSet(CurrentSprite->SpriteTexture, offset.x, offset.y);
