@@ -16,6 +16,7 @@
 /*************************************************************************/
 void GetWeaponCoin(WeaponShop *newShop, int weaponRarity)
 {
+	//For now just manually pick the coin value.
 	switch(weaponRarity)
 	{
 	case Common:
@@ -58,7 +59,7 @@ void GetWeaponCoin(WeaponShop *newShop, int weaponRarity)
 	Creates a Weapon Shop from given variables
 */
 /*************************************************************************/
-void CreateWeaponShop(float shopPosX, float shopPosY, Weapon *Weapon, int *newID, int collisionGroup, int weaponRarity)
+void CreateWeaponShop(float shopPosX, float shopPosY, int *newID, int collisionGroup, int weaponRarity)
 {
 	Vec3 TextTint;
 	WeaponShop *newShop = AddWeaponShop();
@@ -76,8 +77,9 @@ void CreateWeaponShop(float shopPosX, float shopPosY, Weapon *Weapon, int *newID
 	ChangeTextVisibility((TextGlyphs *) newShop->ItemCoin);
 
 	//Weapon
-	Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, *newID++, -350, -140);
-	Weapon->WeaponSprite->Rotation = (float)FOX_PI / 2;
+	newShop->Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, *newID++, -350, -140);
+	newShop->Weapon->WeaponSprite->Rotation = (float)FOX_PI / 2;
+	newShop->Weapon->CurrentShop = newShop;
 
 	//Gongratz
 	newShop->Created = TRUE;

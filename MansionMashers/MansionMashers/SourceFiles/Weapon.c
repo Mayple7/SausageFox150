@@ -61,6 +61,9 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	}
 	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
 
+	//Start off shopless
+	CurrentWeapon->CurrentShop = NULL;
+
 	return CurrentWeapon;
 }
 
@@ -110,6 +113,9 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
 	}
 	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
+
+	//Start off shopless
+	CurrentWeapon->CurrentShop = NULL;
 	
 	return CurrentWeapon;
 }
