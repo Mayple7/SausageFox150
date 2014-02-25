@@ -29,5 +29,6 @@ enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 #include "Weapon.h"
 #include "ParticleSystem.h"
 #include "Shop.h"
+#include "PaperScroll.h"
 
 #endif

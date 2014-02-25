@@ -32,6 +32,7 @@
 #include "../HeaderFiles/GameStateList.h"
 
 
+
 // ---------------------------------------------------------------------------
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
@@ -40,6 +41,9 @@
 // globals
 static int newID;					// ID number
 TextGlyphs* LevelName;
+Sprite *TxtScrollRight;
+Sprite *TxtScrollMiddle;
+
 
 /*************************************************************************/
 /*!
@@ -74,6 +78,10 @@ void InitializeLevel2(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
+
+	CreateSprite("TextureFiles/testbackground.png", 1920, 1080, 1, 1, 1, 0, 0);
+
+	CreatePaperScroll(200);
 }
 
 /*************************************************************************/
@@ -85,6 +93,8 @@ void InitializeLevel2(void)
 void UpdateLevel2(void)
 {
 	EventLevel2();
+
+	ScrollPaperScroll();
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
