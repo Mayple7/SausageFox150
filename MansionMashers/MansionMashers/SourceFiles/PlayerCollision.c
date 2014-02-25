@@ -93,7 +93,13 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 
 		//Check if the weapon is in a shop
 		if (wList->CurrentShop)
+		{
+			if (wList->CurrentShop->Coin > CurrentPlayer->CurrentPlayerStats.Money)
+				return;
+			
+			CurrentPlayer->CurrentPlayerStats.Money -= wList->CurrentShop->Coin;
 			Shopping = TRUE;
+		}
 
 		SwapWeapons(CurrentPlayer->PlayerWeapon, wList);
 
