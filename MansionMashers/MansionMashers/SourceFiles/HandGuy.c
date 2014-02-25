@@ -104,6 +104,8 @@ void UpdateHandGuy(void)
 {
 	EventHandGuy();
 
+	UpdateFloatingText();
+
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 }

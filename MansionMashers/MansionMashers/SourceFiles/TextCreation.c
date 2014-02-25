@@ -415,8 +415,15 @@ void AnimateFloatingText(TextGlyphs *FirstLetter)
 		return;
 	}
 
-	while(nextLetter && nextLetter->Glyph)
+	while(nextLetter)
 	{
+		if(nextLetter->letter == ' ')
+		{
+			nextLetter = nextLetter->NextLetter;
+			continue;
+		}
+		if(!(nextLetter->Glyph))
+			break;
 		if(nextLetter->Glyph->Alpha > 0.9f)
 		{
 			nextLetter->Glyph->Alpha -= 0.06f * GetDeltaTime();
