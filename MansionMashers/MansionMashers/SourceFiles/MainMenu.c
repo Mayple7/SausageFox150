@@ -126,7 +126,7 @@ void InitializeMainMenu(void)
 
 	Overlay = (Sprite *) CreateSprite("TextureFiles/MenuOverlay.png", 1920, 1080, 2, 1, 1, 0, 0);
 
-	Logo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogoNoBack.png", 960, 540, 3, 1, 1, 0, 270);
+	Logo = (Sprite *) CreateSprite("TextureFiles/MansionMashersMainMenu.png", 1200, 675, 3, 1, 1, 0, 200);
 
 	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -170, 394, 394, newID++);
 	LoadGameButton = CreateButton("TextureFiles/LoadGameButton.png", -290, -48, 439, 170, newID++);

@@ -254,7 +254,7 @@ void FreeSoundList(void)
 /*************************************************************************/
 void freeSound(FoxSound * soundObj)
 {
-	if(soundObj && soundObj->sndID)
+	if(soundObj && soundObj->sndID && soundObj->Sound)
 	{
 		soundObj->sndID = 0;
 		ReleaseSound(soundObj->Sound);

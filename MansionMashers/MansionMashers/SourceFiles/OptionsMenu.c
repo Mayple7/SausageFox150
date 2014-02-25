@@ -25,6 +25,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/OptionsMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
+#include "../HeaderFiles/BoundingBox.h"
 
 Sprite* PauseText;
 
@@ -41,6 +42,9 @@ Button* BGMSlider;
 
 TextGlyphs* SFXText;
 TextGlyphs* BGMText;
+
+TextGlyphs* SFXLabel;
+TextGlyphs* BGMLabel;
 
 float SFXSliderPos, BGMSliderPos;
 static char* volumestring;
@@ -77,11 +81,11 @@ void InitializeOptions(void)
 
 	PauseText = (Sprite *) CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, 0, 350);
 
-	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -400, 100);
-	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -400, -100);
+	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -500, 100);
+	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -500, -100);
 
-	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -400, 100);
-	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -400, -100);
+	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -500, 100);
+	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -500, -100);
 
 	Vec3Set(&TextColor, 0.3f, 0.3f, 0.3f);
 	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
@@ -106,20 +110,30 @@ void InitializeOptions(void)
 
 	Vec3Set(&TextColor, 1, 1, 1);
 	
-	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) / GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
+	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
 	volumestring = VolumetoString(volumestring, SFXVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(SFXText, volumestring);
 	ChangeTextZIndex(SFXText, 510);
 
-	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) / GetLoadRatio() + 50 * GetLoadRatio(), -100, 100, TextColor, Left);
+	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), -100, 100, TextColor, Left);
 	volumestring = VolumetoString(volumestring, BGMVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(BGMText, volumestring);
 	ChangeTextZIndex(BGMText, 510);
 
+	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - (SFXSliderBack->Width * 1.28f), 100, 100, TextColor, Right);
+	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - (BGMSliderBack->Width * 1.28f), -100, 100, TextColor, Right);
+
 	TextAllVisible(SFXText);
 	TextAllVisible(BGMText);
+	
+	TextAllVisible(SFXLabel);
+	TextAllVisible(BGMLabel);
+	ChangeTextZIndex(SFXLabel, 5000);
+	
+
+	CreateBoundingBoxes();
 }
 
 void UpdateOptions(void)
@@ -187,12 +201,12 @@ void EventOptions(void)
 				BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
 			}
 		}
-		SFXVolume = (SFXSlider->Position.x + 400 * GetLoadRatio() + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
+		SFXVolume = (SFXSlider->Position.x + 500 * GetLoadRatio() + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
 		volumestring = VolumetoString(volumestring, SFXVolume * 100);
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(SFXText, volumestring);
 
-		BGMVolume = (BGMSlider->Position.x + 400 * GetLoadRatio() + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
+		BGMVolume = (BGMSlider->Position.x + 500 * GetLoadRatio() + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
 		volumestring = VolumetoString(volumestring, BGMVolume * 100);
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(BGMText, volumestring);

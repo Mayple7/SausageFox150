@@ -34,7 +34,8 @@
 void *__cdecl CallocMyAlloc(int count, int size)
 {
 	//Print it out for all those viewers at home
-	//printf("CALLOC:  Bytes: %i  Total Allocs: %i\n", count * size, ++TotalMemoryAllocs);
+	++TotalMemoryAllocs;
+	//printf("CALLOC:  Bytes: %i  Total Allocs: %i\n", count * size, TotalMemoryAllocs);
 
 	//Give them what they really came for
 	return calloc(count, count * size);
@@ -49,7 +50,8 @@ void *__cdecl CallocMyAlloc(int count, int size)
 void *__cdecl MallocMyAlloc(int count, int size)
 {
 	//Print it out for all those viewers at home
-	//printf("MALLOC:  Bytes: %i  Total Allocs: %i\n", count * size, ++TotalMemoryAllocs);
+	++TotalMemoryAllocs;
+	//printf("MALLOC:  Bytes: %i  Total Allocs: %i\n", count * size, TotalMemoryAllocs);
 
 	//Give them what they really came for
 	return malloc(count * size);
@@ -81,7 +83,8 @@ void *__cdecl MemsetMyAlloc(int count, int size, int value, void *list)
 void __cdecl FreeMyAlloc(void *memory)
 {
 	//Print it out for all those viewers at home
-	//printf("FREEING DATA:  Total Frees: %i\n", ++TotalMemoryFrees);
+	++TotalMemoryFrees;
+	//printf("FREEING DATA:  Total Frees: %i\n", TotalMemoryFrees);
 
 	//Let my people go!
 	free(memory);

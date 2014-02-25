@@ -170,7 +170,7 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 void FreeText(TextGlyphs *FirstLetter)
 {
 	int i;
-	TextGlyphs *NextLetter;
+	TextGlyphs *NextLetter = FirstLetter;
 
 	//Find the pointer in the list that is the first letter
 	for(i = 0; i < COLLIDEAMOUNT; i++)
@@ -178,7 +178,7 @@ void FreeText(TextGlyphs *FirstLetter)
 			break;
 
 	//Go through all the letters and free my people
-	while(FirstLetter)
+	while(NextLetter)
 	{
 		NextLetter = FirstLetter->NextLetter;
 		if(FirstLetter->Glyph)

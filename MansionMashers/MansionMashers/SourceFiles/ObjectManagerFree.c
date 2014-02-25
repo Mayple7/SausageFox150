@@ -111,6 +111,7 @@ void FreeWeapon(Weapon *CurrentWeapon)
 		FreeMyAlloc(CurrentWeapon->WeaponStatsString);
 		CurrentWeapon->WeaponPickup.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentWeapon->WeaponPickup.DebugMesh);
+		AEGfxMeshFree(CurrentWeapon->WeaponAttack.DebugMesh);
 
 		if(CurrentWeapon->WeaponSprite->Created)
 			freeObject(CurrentWeapon->WeaponSprite);
@@ -134,7 +135,8 @@ void FreeEnemy(Enemy *CurrentEnemy)
 		CurrentEnemy->objID = 0;
 		CurrentEnemy->EnemyCollider.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentEnemy->EnemyCollider.DebugMesh);
-
+		if(CurrentEnemy->EnemyWeapon)
+			FreeWeapon(CurrentEnemy->EnemyWeapon);
 		if (CurrentEnemy->EnemySprite->Created)
 		{
 			freeObject(CurrentEnemy->EnemySprite);
@@ -150,7 +152,6 @@ void FreeEnemy(Enemy *CurrentEnemy)
 			freeObject(CurrentEnemy->EnemySpriteParts.Tail);
 			freeObject(CurrentEnemy->EnemySpriteParts.Skirt);
 			freeObject(CurrentEnemy->EnemySpriteParts.Weapon);
-
 		}
 	}
 }
@@ -367,14 +368,6 @@ void freeObjectList(void)
 		if(weaponShopList[i].Created)
 		{
 			//Free stuff here later if needed
-		}
-	}
-	for (i = 0; i < FLOATINGTEXTAMOUNT; i++)
-	{
-		//For floating damage text only!
-		if (floatTextList[i])
-		{
-			FreeText(floatTextList[i]);
 		}
 	}
 
