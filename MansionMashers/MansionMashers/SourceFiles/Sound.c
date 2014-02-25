@@ -758,24 +758,6 @@ char * VolumetoString(char *string, float volume)
 	return string;
 }
 
-/*************************************************************************/
-/*!
-	\brief
-	Saves the volume to a file
-*/
-/*************************************************************************/
-void SaveVolume(void)
-{
-	FILE *fp;
-	
-	fp = fopen("../VolumeSettings.cfg", "wt");
-	if(fp)
-	{
-		fprintf(fp, "SFX: %d\nBGM: %d", (int)(SFXVolume * 100), (int)(BGMVolume * 100));
-		fclose(fp);
-	}
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Pausing Audio Functions
 

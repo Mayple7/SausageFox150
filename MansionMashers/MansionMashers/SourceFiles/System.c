@@ -24,19 +24,19 @@ int maxWidth, maxHeight;
 void FoxSystemInitialize(void)
 {
 	FILE *fp;
-	fp = fopen("../VolumeSettings.cfg", "rt");
+	fp = fopen("../Settings.cfg", "rt");
 	if(!fp)
 	{
-		fp = fopen("../VolumeSettings.cfg", "wt");
-		fprintf(fp, "SFX: 100\nBGM: 100");
+		fp = fopen("../Settings.cfg", "wt");
+		fprintf(fp, "SFX: 100\nBGM: 100\nCheats: 0");
 		fclose(fp);
-		fp = fopen("../VolumeSettings.cfg", "rt");
+		fp = fopen("../Settings.cfg", "rt");
 	}
 
 	if(fp)
 	{
 		int num = 0;
-		num = fscanf(fp, "%*s %f %*s %f", &SFXVolume, &BGMVolume);
+		num = fscanf(fp, "%*s %f %*s %f %*s %d", &SFXVolume, &BGMVolume, &Cheats);
 		fclose(fp);
 	}
 	if(SFXVolume > 100)
@@ -90,5 +90,23 @@ void InitWindow(void)
 			ratio = winWidth / 1920.0;
 			SetLoadRatio(ratio);
 		}
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Saves the settings to a file
+*/
+/*************************************************************************/
+void SaveSettings(void)
+{
+	FILE *fp;
+	
+	fp = fopen("../Settings.cfg", "wt");
+	if(fp)
+	{
+		fprintf(fp, "SFX: %d\nBGM: %d\nCheats: %d", (int)(SFXVolume * 100), (int)(BGMVolume * 100), Cheats);
+		fclose(fp);
 	}
 }

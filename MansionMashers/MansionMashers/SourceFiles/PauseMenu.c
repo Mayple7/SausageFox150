@@ -149,7 +149,7 @@ void UpdatePause(void)
 		FoxInput_Update();
 		EventPause();
 
-		SaveVolume();
+		SaveSettings();
 		SetChannelGroupVolume(EffectType, SFXVolume);
 		SetChannelGroupVolume(MusicType, BGMVolume);
 		UpdateSoundSystem();
@@ -158,7 +158,7 @@ void UpdatePause(void)
 		AESysFrameEnd();
 	}
 	TogglePauseSound(&BackgroundSnd);
-	SaveVolume();
+	SaveSettings();
 	FreePause();
 }
 

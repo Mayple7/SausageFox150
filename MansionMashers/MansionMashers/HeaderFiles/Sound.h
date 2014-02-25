@@ -83,7 +83,6 @@ float GetSoundVolume(FoxSound *snd);
 void SetChannelGroupVolume(int type, float volume);
 float GetChannelGroupVolume(int type);
 char * VolumetoString(char *string, float volume);
-void SaveVolume(void);
 
 void TogglePauseSound(FoxSound * SoundStruct);
 void TogglePauseChannel(int ChnlType);

@@ -27,7 +27,9 @@
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/BoundingBox.h"
 
-Sprite* PauseText;
+Sprite* OptionsTitle;
+Sprite* EnableCheats;
+Sprite* CheckMark;
 
 Sprite* SFXSliderGuide;
 Sprite* BGMSliderGuide;
@@ -39,6 +41,9 @@ Sprite* PauseBackground;
 
 Button* SFXSlider;
 Button* BGMSlider;
+
+Button* BackButton;
+Button* CheatsButton;
 
 TextGlyphs* SFXText;
 TextGlyphs* BGMText;
@@ -79,16 +84,17 @@ void InitializeOptions(void)
 
 	newID = 10;
 
-	PauseText = (Sprite *) CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, 0, 350);
+	OptionsTitle = (Sprite *) CreateSprite("TextureFiles/OptionsTitle.png", 423, 179, 10, 1, 1, 0, 380);
+	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 10, 1, 1, -380, -200);
 
-	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -500, 100);
-	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -500, -100);
+	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -480, 200);
+	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -480, 0);
 
-	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -500, 100);
-	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -500, -100);
+	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -480, 200);
+	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -480, 0);
 
 	Vec3Set(&TextColor, 0.3f, 0.3f, 0.3f);
-	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
+	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 1, 1, 1, 0, 0);
 	PauseBackground->Alpha = 0.5;
 	PauseBackground->Tint = TextColor;
 
@@ -98,40 +104,44 @@ void InitializeOptions(void)
 	SFXSliderPos /= GetLoadRatio();
 	BGMSliderPos /= GetLoadRatio();
 
-	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 100, 80, 80, newID++);
+	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 200, 80, 80, newID++);
 	SFXSlider->ButtonSprite->ZIndex = 502;
 	SFXSlider->ButtonCollider.width *= 3;
 	SFXSlider->ButtonCollider.height = SFXSliderBack->Height;
 
-	BGMSlider = CreateButton("TextureFiles/fox_head.png", BGMSliderPos, -100, 80, 80, newID++);
+	BGMSlider = CreateButton("TextureFiles/fox_head.png", BGMSliderPos, 0, 80, 80, newID++);
 	BGMSlider->ButtonSprite->ZIndex = 502;
 	BGMSlider->ButtonCollider.width *= 3;
 	BGMSlider->ButtonCollider.height = BGMSliderBack->Height;
 
 	Vec3Set(&TextColor, 1, 1, 1);
 	
-	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
+	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 200, 100, TextColor, Left);
 	volumestring = VolumetoString(volumestring, SFXVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(SFXText, volumestring);
 	ChangeTextZIndex(SFXText, 510);
 
-	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), -100, 100, TextColor, Left);
+	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 0, 100, TextColor, Left);
 	volumestring = VolumetoString(volumestring, BGMVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(BGMText, volumestring);
-	ChangeTextZIndex(BGMText, 510);
 
-	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - (SFXSliderBack->Width * 1.28f), 100, 100, TextColor, Right);
-	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - (BGMSliderBack->Width * 1.28f), -100, 100, TextColor, Right);
+	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - SFXSliderBack->Width - 140 * GetLoadRatio(), 200, 100, TextColor, Right);
+	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - BGMSliderBack->Width - 140 * GetLoadRatio(), 0, 100, TextColor, Right);
 
 	TextAllVisible(SFXText);
 	TextAllVisible(BGMText);
 	
 	TextAllVisible(SFXLabel);
 	TextAllVisible(BGMLabel);
-	ChangeTextZIndex(SFXLabel, 5000);
-	
+
+	BackButton = CreateButton("TextureFiles/BackButton.png", 0, -400, 400, 150, newID++);
+	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -800, -200, 100, 100, newID++);
+	CheckMark = (Sprite *) CreateSprite("TextureFiles/CheckMark.png", 200, 200, 11, 1, 1, -800, -200);
+
+	if(!Cheats)
+		CheckMark->Visible = FALSE;
 
 	CreateBoundingBoxes();
 }
@@ -154,7 +164,7 @@ void DrawOptions(void)
 
 void FreeOptions(void)
 {
-	SaveVolume();
+	SaveSettings();
 	FreeAllLists();
 }
 
@@ -166,14 +176,14 @@ void UnloadOptions(void)
 
 void EventOptions(void)
 {
+	int i, worldX, worldY;
+	Vec2 MouseClick;
+
+	FoxInput_GetWorldPosition(&worldX, &worldY);
+	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
 	if(FoxInput_MouseDown(MOUSE_BUTTON_LEFT))
 	{
-		int i, worldX, worldY;
-		Vec2 MouseClick;
-
-		FoxInput_GetWorldPosition(&worldX, &worldY);
-		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
-
 		for(i = 0; i < BUTTONAMOUNT; i++)
 		{
 			if(!buttonList[i].objID)
@@ -200,17 +210,42 @@ void EventOptions(void)
 				BGMSlider->ButtonSprite->Position.x = BGMSlider->Position.x;
 				BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
 			}
+			else if(buttonList[i].objID == BackButton->objID && PointRectCollision(&buttonList[i].ButtonCollider, &MouseClick))
+			{
+				SetNextState(GS_MainMenu);
+			}
 		}
-		SFXVolume = (SFXSlider->Position.x + 500 * GetLoadRatio() + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
+		SFXVolume = (SFXSlider->Position.x + 480 * GetLoadRatio() + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
 		volumestring = VolumetoString(volumestring, SFXVolume * 100);
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(SFXText, volumestring);
 
-		BGMVolume = (BGMSlider->Position.x + 500 * GetLoadRatio() + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
+		BGMVolume = (BGMSlider->Position.x + 480 * GetLoadRatio() + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
 		volumestring = VolumetoString(volumestring, BGMVolume * 100);
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(BGMText, volumestring);
 	}
+
+	if(PointRectCollision(&BackButton->ButtonCollider, &MouseClick))
+	{
+		BackButton->ButtonSprite->ScaleX = 1.2f;
+		BackButton->ButtonSprite->ScaleY = 1.2f;
+	}
+	else
+	{
+		BackButton->ButtonSprite->ScaleX = 1.0f;
+		BackButton->ButtonSprite->ScaleY = 1.0f;
+	}
+
+	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+	{
+		if(PointRectCollision(&CheatsButton->ButtonCollider, &MouseClick))
+		{
+			Cheats = !Cheats;
+			CheckMark->Visible = !(CheckMark->Visible);
+		}
+	}
+
 	if(FoxInput_MouseUp(MOUSE_BUTTON_LEFT))
 	{
 		SetChannelGroupVolume(EffectType, SFXVolume);
