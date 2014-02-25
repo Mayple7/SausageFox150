@@ -31,7 +31,6 @@
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 
-
 // ---------------------------------------------------------------------------
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")

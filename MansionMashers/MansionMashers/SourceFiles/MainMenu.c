@@ -347,6 +347,11 @@ void InputHandling(void)
 	{
 		SetNextState(GS_DevMenu);
 	}
+	if(FoxInput_KeyTriggered('M'))
+	{
+		SetNextState(GS_MapLevel);
+	}
+
 
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
