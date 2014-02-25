@@ -95,7 +95,23 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		if (wList->CurrentShop)
 		{
 			if (wList->CurrentShop->Coin > CurrentPlayer->CurrentPlayerStats.Money)
+			{
+				//Not enough money
+				Vec3 textColor;
+				TextGlyphs *FirstLetter;
+	
+				// Create Floating Error Text
+				Vec3Set(&textColor, 0.0f, 0.0f, 0.0f);
+				FirstLetter = CreateText("Not Enough Coin!", (CurrentPlayer->Position.x - 4) / GetLoadRatio(), (CurrentPlayer->Position.y - 4 + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+				AddFloatingText(FirstLetter);
+				ChangeTextVisibility(FirstLetter);
+
+				Vec3Set(&textColor, 1.0f, 0.1f, 0.1f);
+				FirstLetter = CreateText("Not Enough Coin!", CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+				AddFloatingText(FirstLetter);
+				ChangeTextVisibility(FirstLetter);
 				return;
+			}
 			
 			CurrentPlayer->CurrentPlayerStats.Money -= wList->CurrentShop->Coin;
 			Shopping = TRUE;

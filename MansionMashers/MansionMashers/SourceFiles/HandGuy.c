@@ -130,6 +130,7 @@ void DrawHandGuy(void)
 /*************************************************************************/
 void FreeHandGuy(void)
 {
+	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
 
