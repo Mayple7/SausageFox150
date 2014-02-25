@@ -127,7 +127,7 @@ void InitializeLevel1(void)
 	Wall1->WallSprite->Visible = FALSE;
 
 	//Enemy
-	//CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
+	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
 
 	//Particles fo Torches
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
@@ -151,7 +151,7 @@ void UpdateLevel1(void)
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
-	printf("PlayPos : %f \n",  CurrentPlayer.Position.x);
+	
 
 }
 
@@ -228,13 +228,7 @@ void EventLevel1(void)
 		UpdateEnemy(&enemyList[i]);
 	}
 
-	i = 0;
-	while(i < COLLIDEAMOUNT)
-	{
-		if(floatTextList[i] > 0)
-			UpdateFloatingText(floatTextList[i]);
-		i++;
-	}
+	UpdateFloatingText();
 
 	if(FoxInput_KeyTriggered('U'))
 	{

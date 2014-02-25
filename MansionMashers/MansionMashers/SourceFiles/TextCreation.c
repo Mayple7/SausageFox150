@@ -170,7 +170,7 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 void FreeText(TextGlyphs *FirstLetter)
 {
 	int i;
-	TextGlyphs *NextLetter;
+	TextGlyphs *NextLetter = FirstLetter;
 
 	//Find the pointer in the list that is the first letter
 	for(i = 0; i < COLLIDEAMOUNT; i++)
@@ -178,7 +178,7 @@ void FreeText(TextGlyphs *FirstLetter)
 			break;
 
 	//Go through all the letters and free my people
-	while(FirstLetter)
+	while(NextLetter)
 	{
 		NextLetter = FirstLetter->NextLetter;
 		if(FirstLetter->Glyph)
@@ -381,12 +381,30 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 /*!
 	\brief
 	Updates the floating text
+*/
+/*************************************************************************/
+void UpdateFloatingText(void)
+{
+	int i = 0;
+
+	while(i < FLOATINGTEXTAMOUNT)
+	{
+		if(floatTextList[i] > 0)
+			AnimateFloatingText(floatTextList[i]);
+		i++;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Animates the floating text
 	
 	\param FirstLetter
 	A pointer to the first letter in the text.
 */
 /*************************************************************************/
-void UpdateFloatingText(TextGlyphs *FirstLetter)
+void AnimateFloatingText(TextGlyphs *FirstLetter)
 {
 	TextGlyphs *nextLetter;
 	nextLetter = FirstLetter;
@@ -397,22 +415,29 @@ void UpdateFloatingText(TextGlyphs *FirstLetter)
 		return;
 	}
 
-	while(nextLetter && nextLetter->Glyph)
+	while(nextLetter)
 	{
+		if(nextLetter->letter == ' ')
+		{
+			nextLetter = nextLetter->NextLetter;
+			continue;
+		}
+		if(!(nextLetter->Glyph))
+			break;
 		if(nextLetter->Glyph->Alpha > 0.9f)
 		{
-			nextLetter->Glyph->Alpha -= 0.001f;
-			nextLetter->Glyph->Position.y += 1.5f;
+			nextLetter->Glyph->Alpha -= 0.06f * GetDeltaTime();
+			nextLetter->Glyph->Position.y += 90.0f * GetDeltaTime();
 		}
 		else if(nextLetter->Glyph->Alpha > 0.3f)
 		{
-			nextLetter->Glyph->Alpha -= 0.02f;
-			nextLetter->Glyph->Position.y += 1.5f;
+			nextLetter->Glyph->Alpha -= 1.2f * GetDeltaTime();
+			nextLetter->Glyph->Position.y += 90.0f * GetDeltaTime();
 		}
 		else
 		{
-			nextLetter->Glyph->Alpha -= 0.04f;
-			nextLetter->Glyph->Position.y += 1.5f;
+			nextLetter->Glyph->Alpha -= 2.4f * GetDeltaTime();
+			nextLetter->Glyph->Position.y += 90.0f * GetDeltaTime();
 		}
 		nextLetter = nextLetter->NextLetter;
 	}

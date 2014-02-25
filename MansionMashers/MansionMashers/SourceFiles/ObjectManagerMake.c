@@ -151,7 +151,7 @@ Enemy *AddEnemy(void)
 void AddFloatingText(TextGlyphs *FirstLetter)
 {
 	int i;
-	for (i = 0; i < COLLIDEAMOUNT; i++)
+	for (i = 0; i < FLOATINGTEXTAMOUNT; i++)
 	{
 		if(!floatTextList[i])
 		{
@@ -321,7 +321,7 @@ void ResetObjectList(void)
 		foodList			= (Food *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Food));
 		enemyList			= (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
 		weaponList			= (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
-		floatTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs *));
+		floatTextList		= (TextGlyphs **) CallocMyAlloc(FLOATINGTEXTAMOUNT, sizeof(TextGlyphs *));
 		staticTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs *));
 		particleList		= (Particle *) CallocMyAlloc(PARTICLEAMOUNT, sizeof(Particle));
 		particleSystemList  = (ParticleSystem *) CallocMyAlloc(PARTICLESYSTEMAMOUNT, sizeof(ParticleSystem));
