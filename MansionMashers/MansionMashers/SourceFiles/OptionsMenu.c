@@ -77,13 +77,13 @@ void InitializeOptions(void)
 
 	PauseText = (Sprite *) CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, 0, 350);
 
-	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, 0, 100);
-	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, 0, -100);
+	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -400, 100);
+	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, -400, -100);
 
-	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, 0, 100);
-	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, 0, -100);
+	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -400, 100);
+	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, -400, -100);
 
-	Vec3Set(&TextColor, 0, 0, 0);
+	Vec3Set(&TextColor, 0.3f, 0.3f, 0.3f);
 	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
 	PauseBackground->Alpha = 0.5;
 	PauseBackground->Tint = TextColor;
@@ -187,12 +187,12 @@ void EventOptions(void)
 				BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
 			}
 		}
-		SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
+		SFXVolume = (SFXSlider->Position.x + 400 * GetLoadRatio() + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
 		volumestring = VolumetoString(volumestring, SFXVolume * 100);
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(SFXText, volumestring);
 
-		BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
+		BGMVolume = (BGMSlider->Position.x + 400 * GetLoadRatio() + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
 		volumestring = VolumetoString(volumestring, BGMVolume * 100);
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(BGMText, volumestring);

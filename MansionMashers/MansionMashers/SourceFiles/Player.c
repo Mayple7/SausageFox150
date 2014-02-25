@@ -1179,7 +1179,7 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 
-	CurrentPlayer->CurrentPlayerStats.Money = 0;
+	CurrentPlayer->CurrentPlayerStats.Money = 15;
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
 
 	switch(Princess)
