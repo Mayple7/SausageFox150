@@ -32,6 +32,8 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/BoundingBox.h"
 
+#define MAX_TEXTURES 4
+
 Sprite* FirstBackground;
 Sprite* SecondBackground;
 
@@ -56,7 +58,8 @@ static int deleteSave; // If true, dialogue box to delete save is up
 static int newID;
 static int canLoad;
 
-static int backgroundNum;
+static int firstTextureNum;
+static int secondTextureNum;
 static int firstStartLocation;
 static int secondStartLocation;
 static int firstAnimated;
@@ -88,9 +91,10 @@ void InitializeMainMenu(void)
 	fadeOut = FALSE;
 	firstMoveTimer = 0;
 	secondMoveTimer = 0;
-	backgroundNum = rand() % 2;
 	firstStartLocation = rand() % 4;
 	secondStartLocation = rand() % 4;
+	firstTextureNum = MAX_TEXTURES + 1;
+	secondTextureNum = MAX_TEXTURES + 1;
 
 	newID = 10;
 	// Reset the object list
@@ -110,17 +114,11 @@ void InitializeMainMenu(void)
 
 	SetStartLocation(&xPos, &yPos, firstStartLocation);
 
-	switch(backgroundNum)
-	{
-	case 0:
-		FirstBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxHall.png", 2560, 1440, 1, 1, 1, xPos, yPos);
-		SecondBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxMansion.png", 2560, 1440, 1, 1, 1, xPos, yPos);
-		break;
-	case 1:
-		FirstBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxMansion.png", 2560, 1440, 1, 1, 1, xPos, yPos);
-		SecondBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxHall.png", 2560, 1440, 1, 1, 1, xPos, yPos);
-		break;
-	}
+	FirstBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxHall.png", 2560, 1440, 1, 1, 1, xPos, yPos);
+	SecondBackground = (Sprite *) CreateSprite("TextureFiles/BlurFoxMansion.png", 2560, 1440, 1, 1, 1, xPos, yPos);
+
+	firstTextureNum = RandomNewTexture(FirstBackground, secondTextureNum);
+	secondTextureNum = RandomNewTexture(SecondBackground, firstTextureNum);
 
 	SecondBackground->Alpha = 0.0f;
 
@@ -371,6 +369,7 @@ void BackgroundAnimation(void)
 				firstAnimated = FALSE;
 				FirstBackground->Alpha = 0.0f;
 				SecondBackground->Alpha = 1.0f;
+				firstTextureNum = RandomNewTexture(FirstBackground, secondTextureNum);
 			}
 			else if(firstMoveTimer > 8)
 			{
@@ -394,6 +393,7 @@ void BackgroundAnimation(void)
 				firstAnimated = FALSE;
 				FirstBackground->Alpha = 0.0f;
 				SecondBackground->Alpha = 1.0f;
+				firstTextureNum = RandomNewTexture(FirstBackground, secondTextureNum);
 			}
 			else if(firstMoveTimer > 8)
 			{
@@ -417,6 +417,7 @@ void BackgroundAnimation(void)
 				firstAnimated = FALSE;
 				FirstBackground->Alpha = 0.0f;
 				SecondBackground->Alpha = 1.0f;
+				firstTextureNum = RandomNewTexture(FirstBackground, secondTextureNum);
 			}
 			else if(firstMoveTimer > 8)
 			{
@@ -440,6 +441,7 @@ void BackgroundAnimation(void)
 				firstAnimated = FALSE;
 				FirstBackground->Alpha = 0.0f;
 				SecondBackground->Alpha = 1.0f;
+				firstTextureNum = RandomNewTexture(FirstBackground, secondTextureNum);
 			}
 			else if(firstMoveTimer > 8)
 			{
@@ -471,6 +473,7 @@ void BackgroundAnimation(void)
 				secondAnimated = FALSE;
 				SecondBackground->Alpha = 0.0f;
 				FirstBackground->Alpha = 1.0f;
+				secondTextureNum = RandomNewTexture(SecondBackground, firstTextureNum);
 			}
 			else if(secondMoveTimer > 8)
 			{
@@ -494,6 +497,7 @@ void BackgroundAnimation(void)
 				secondAnimated = FALSE;
 				SecondBackground->Alpha = 0.0f;
 				FirstBackground->Alpha = 1.0f;
+				secondTextureNum = RandomNewTexture(SecondBackground, firstTextureNum);
 			}
 			else if(secondMoveTimer > 8)
 			{
@@ -517,6 +521,7 @@ void BackgroundAnimation(void)
 				secondAnimated = FALSE;
 				SecondBackground->Alpha = 0.0f;
 				FirstBackground->Alpha = 1.0f;
+				secondTextureNum = RandomNewTexture(SecondBackground, firstTextureNum);
 			}
 			else if(secondMoveTimer > 8)
 			{
@@ -540,6 +545,7 @@ void BackgroundAnimation(void)
 				secondAnimated = FALSE;
 				SecondBackground->Alpha = 0.0f;
 				FirstBackground->Alpha = 1.0f;
+				secondTextureNum = RandomNewTexture(SecondBackground, firstTextureNum);
 			}
 			else if(secondMoveTimer > 8)
 			{
@@ -556,8 +562,6 @@ void BackgroundAnimation(void)
 			break;
 		}
 	}
-
-
 }
 
 void SetStartLocation(float *xPos, float *yPos, int startNum)
@@ -585,4 +589,29 @@ void SetStartLocation(float *xPos, float *yPos, int startNum)
 		*yPos = -180.0f * GetLoadRatio();
 		break;
 	}
+}
+
+int RandomNewTexture(Sprite* CurrentSprite, int prevTexture)
+{
+	int newTextureNum = rand() % MAX_TEXTURES;
+
+	while((newTextureNum = rand() % MAX_TEXTURES) == prevTexture)
+		continue;
+
+	switch(newTextureNum)
+	{
+	case 0:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurFoxHall.png");
+		break;
+	case 1:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurFoxMansion.png");
+		break;
+	case 2:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurFoxCafe.png");
+		break;
+	case 3:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurFoxHandGuy.png");
+		break;
+	}
+	return newTextureNum;
 }
