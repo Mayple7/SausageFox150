@@ -274,20 +274,12 @@ void UnloadTutorial(void)
 
 void EventTutorial(void)
 {
-	int i = 0;
-
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	if(StrawDummy->objID > 0)
 		UpdateEnemy(StrawDummy);
 
-	while(i < COLLIDEAMOUNT)
-	{
-		if(floatTextList[i] > 0)
-			UpdateFloatingText(floatTextList[i]);
-		i++;
-	}
-
+	UpdateFloatingText();
 
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);

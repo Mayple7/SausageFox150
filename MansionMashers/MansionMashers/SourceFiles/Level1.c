@@ -228,13 +228,7 @@ void EventLevel1(void)
 		UpdateEnemy(&enemyList[i]);
 	}
 
-	i = 0;
-	while(i < COLLIDEAMOUNT)
-	{
-		if(floatTextList[i] > 0)
-			UpdateFloatingText(floatTextList[i]);
-		i++;
-	}
+	UpdateFloatingText();
 
 	if(FoxInput_KeyTriggered('U'))
 	{

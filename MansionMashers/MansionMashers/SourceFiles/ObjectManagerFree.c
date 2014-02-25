@@ -327,11 +327,6 @@ void freeObjectList(void)
 			//Free the mesh and texture data
 			FreeEnemy(&enemyList[i]);
 		}
-		//For floating damage text only!
-		if (floatTextList[i])
-		{
-			FreeText(floatTextList[i]);
-		}
 		//For static normal text only!
 		if (staticTextList[i])
 		{
@@ -372,6 +367,14 @@ void freeObjectList(void)
 		if(weaponShopList[i].Created)
 		{
 			//Free stuff here later if needed
+		}
+	}
+	for (i = 0; i < FLOATINGTEXTAMOUNT; i++)
+	{
+		//For floating damage text only!
+		if (floatTextList[i])
+		{
+			FreeText(floatTextList[i]);
 		}
 	}
 
