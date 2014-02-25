@@ -36,4 +36,8 @@ void SetLoadRatio(double ratio);
 int GetWindowWidth(void);
 int GetWindowHeight(void);
 
+void SaveSettings(void);
+
+int Cheats;
+
 #endif

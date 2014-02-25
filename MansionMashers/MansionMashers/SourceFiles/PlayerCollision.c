@@ -165,7 +165,10 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
 	
 	// Calculate damage
-	damageDealt = CurrentEnemy->CurrentEnemyStats.Damage;
+	if(Cheats)
+		damageDealt = 0;
+	else
+		damageDealt = CurrentEnemy->CurrentEnemyStats.Damage;
 	
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
 	sprintf(num, "%d", damageDealt);
