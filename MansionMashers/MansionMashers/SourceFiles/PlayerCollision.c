@@ -94,7 +94,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		//Check if the weapon is in a shop
 		if (wList->CurrentShop)
 		{
-			if (wList->CurrentShop->Coin > CurrentPlayer->CurrentPlayerStats.Money || Cheats)
+			if (wList->CurrentShop->Coin > CurrentPlayer->CurrentPlayerStats.Money && !Cheats)
 			{
 				//Not enough money
 				Vec3 textColor;
@@ -164,7 +164,6 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		ChangeTextPosition(wList->WeaponGlyphs, glyphPos, Center);
 		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f - wList->WeaponGlyphs->Glyph->Height / 2));
 		ChangeTextPosition(wList->WeaponStatsGlyphs, glyphPos, Center);
-		//wList->WeaponHoverBackground->Position = CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Position;
 	}
 }
 // height +/- (fontsize/2)
