@@ -462,6 +462,7 @@ void DetectPlayerCollision(void)
 	Weapon* wList = weaponList;
 	Enemy* eList = enemyList;
 	Wall* walls = wallList;
+	EnemySpawner* spawner = spawnerList;
 
 	//Fake booleans for hit and hit previous frame
 	int hit = 0;
@@ -727,6 +728,58 @@ void DetectPlayerCollision(void)
 			}
 		}
 		walls++;
+	}
+	//Enemy Spawners
+	while(spawner->objID != -1)
+	{
+		//If platform exists
+		if(spawner->objID > 0)
+		{
+			//Checks if there is collision this frame
+			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &spawner->SpawnerCollider);
+			//Searches the hit array on the player if it collided last frame
+			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, spawner->SpawnerCollider.collisionID);
+			
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentPlayer.CollisionData[-hitPrev] = spawner->SpawnerCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					SpawnEnemies(spawner);
+					
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = spawner->SpawnerCollider.collisionID * 10 + 1;
+					
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
+					CurrentPlayer.CollisionData[hitPrev] = 0;
+				}
+			}
+		}
+		spawner++;
 	}
 }
 

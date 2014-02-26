@@ -47,6 +47,7 @@ static int newID;					// ID number
 static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 
+EnemySpawner* FirstSpawner;
 
 Platform* Table1;
 
@@ -76,13 +77,14 @@ void LoadLevel1(void)
 void InitializeLevel1(void)
 {
 	Vec3 TextTint;
+	Vec2 SpawnLocation, SpawnerLocation;
 
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -500, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
@@ -123,7 +125,10 @@ void InitializeLevel1(void)
 	Wall1->WallSprite->Visible = FALSE;
 
 	//Enemy
-	CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
+	//CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
+	Vec2Set(&SpawnLocation, 750, 250);
+	Vec2Set(&SpawnerLocation, 0, 0);
+	FirstSpawner = CreateEnemySpawner(3, BasicMelee, SpawnLocation, 200, 1080, SpawnerLocation, &newID);
 
 	//Particles fo Torches
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);

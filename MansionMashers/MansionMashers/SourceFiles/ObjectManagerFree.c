@@ -266,6 +266,26 @@ void FreeWall(Wall *CurrentWall)
 /*************************************************************************/
 /*!
 	\brief
+	Frees the object being passed
+	
+	\param objectNext
+	The pointer to a object whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreeSpawner(EnemySpawner *CurrentSpawner)
+{
+	if(CurrentSpawner->objID > 0)
+	{
+		//Free that platform
+		CurrentSpawner->objID = 0;
+		CurrentSpawner->SpawnerCollider.collisionDebug = FALSE;
+		AEGfxMeshFree(CurrentSpawner->SpawnerCollider.DebugMesh);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Cycles through the object list freeing all objects in the list
 */
 /*************************************************************************/
@@ -371,6 +391,15 @@ void freeObjectList(void)
 		}
 	}
 
+	for(i = 0; i < SPAWNERAMOUNT; i++)
+	{
+		if(spawnerList[i].objID > 0)
+		{
+			FreeSpawner(&spawnerList[i]);
+		}
+	}
+
+
 	//Free collision lists data allocation
 	FreeMyAlloc(platformList);
 	FreeMyAlloc(foodList);
@@ -383,6 +412,7 @@ void freeObjectList(void)
 	FreeMyAlloc(particleSystemList);
 	FreeMyAlloc(wallList);
 	FreeMyAlloc(weaponShopList);
+	FreeMyAlloc(spawnerList);
 }
 
 /*************************************************************************/

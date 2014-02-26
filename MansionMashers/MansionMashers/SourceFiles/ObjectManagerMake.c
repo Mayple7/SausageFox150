@@ -299,6 +299,27 @@ WeaponShop* AddWeaponShop(void)
 /*************************************************************************/
 /*!
 	\brief
+	Adds a spawner to the spawner lists
+	\return
+	The spawner added
+*/
+/*************************************************************************/
+EnemySpawner *AddSpawner(void)
+{
+	int i;
+	for (i = 0; i < SPAWNERAMOUNT; i++)
+	{
+		if(spawnerList[i].objID == 0 || spawnerList[i].objID == -1 )
+		{
+			return &spawnerList[i];
+		}
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Resets all the objects in the list and callocs a new array of sprites
 */
 /*************************************************************************/
@@ -328,6 +349,7 @@ void ResetObjectList(void)
 		buttonList			= (Button *) CallocMyAlloc(BUTTONAMOUNT, sizeof(Button));
 		wallList			= (Wall *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Wall));
 		weaponShopList		= (WeaponShop *) CallocMyAlloc(SHOPAMOUNT, sizeof(WeaponShop));
+		spawnerList			= (EnemySpawner *) CallocMyAlloc(SPAWNERAMOUNT, sizeof(EnemySpawner));
 
 		for(i = 0; i < COLLIDEAMOUNT; i++)
 		{
@@ -347,6 +369,12 @@ void ResetObjectList(void)
 		{
 			particleSystemList[i].objID = -1;
 		}
+
+		for(i = 0; i < SPAWNERAMOUNT; i++)
+		{
+			spawnerList[i].objID = -1;
+		}
+
 	}
 	else
 	{
@@ -444,6 +472,16 @@ void DrawCollisionList(void)
 		}
 	}
 
+	for(i = 0; i < SPAWNERAMOUNT; i++)
+	{
+		if(spawnerList[i].objID > 0 && spawnerList[i].SpawnerCollider.collisionDebug)
+		{
+			displayCollisionDebug(&spawnerList[i].SpawnerCollider);
+		}
+
+	}
+
+
 	//Players are special
 	if(CurrentPlayer.PlayerCollider.collisionDebug)
 	{
@@ -500,6 +538,16 @@ void SetDebugMode(void)
 		}
 	}
 
+	//Spawner Debug stuff
+	for(i = 0; i < SPAWNERAMOUNT; i++)
+	{
+		if(spawnerList[i].objID > 0)
+		{
+			spawnerList[i].SpawnerCollider.collisionDebug = TRUE;
+		}
+	}
+
+
 	CurrentPlayer.PlayerCollider.collisionDebug = TRUE;
 }
 
@@ -549,6 +597,15 @@ void RemoveDebugMode(void)
 		{
 			//Free the mesh and texture data
 			buttonList[i].ButtonCollider.collisionDebug = FALSE;
+		}
+	}
+	
+	//Spawner Debug stuff
+	for(i = 0; i < SPAWNERAMOUNT; i++)
+	{
+		if(spawnerList[i].objID > 0)
+		{
+			spawnerList[i].SpawnerCollider.collisionDebug = FALSE;
 		}
 	}
 

@@ -13,6 +13,8 @@
 #define BUTTONAMOUNT 20
 //Number of floating text
 #define FLOATINGTEXTAMOUNT 30
+//Number of spawners
+#define SPAWNERAMOUNT 20
 
 enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 
@@ -30,5 +32,6 @@ enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 #include "ParticleSystem.h"
 #include "Shop.h"
 #include "PaperScroll.h"
+#include "EnemySpawner.h"
 
 #endif

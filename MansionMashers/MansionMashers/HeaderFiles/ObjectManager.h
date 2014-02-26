@@ -6,6 +6,7 @@
 #include "FoxObjects.h"
 #include "TextCreation.h"
 #include "UIButton.h"
+#include "EnemySpawner.h"
 
 //Objects that are in the workspace
 Sprite *drawList;
@@ -16,6 +17,7 @@ Enemy *enemyList;
 Weapon *weaponList;
 Button *buttonList;
 Wall *wallList;
+EnemySpawner *spawnerList;
 struct WeaponShop *weaponShopList;
 struct TextGlyphs **floatTextList;
 struct TextGlyphs **staticTextList;
@@ -30,6 +32,7 @@ Weapon* AddWeapon(void);
 Enemy* AddEnemy(void);
 Button* AddButton(void);
 Wall* AddWall(void);
+EnemySpawner* AddSpawner(void);
 void AddFloatingText(struct TextGlyphs* FirstLetter);
 void AddStaticText(struct TextGlyphs* FirstLetter);
 struct ParticleSystem *AddParticleSystem(void);
@@ -51,6 +54,7 @@ void FreeEnemy(Enemy *CurrentEnemy);
 void FreeButton(Button *CurrentButton);
 void FreeWeapon(Weapon *CurrentWeapon);
 void FreeWall(Wall *CurrentWall);
+void FreeSpawner(EnemySpawner *CurrentSpawner);
 void FreeFloatingText(struct TextGlyphs *FirstLetter);
 void FreeParticleSystem(struct ParticleSystem *CurrentSystem);
 void FreeParticle(struct Particle *CurrentParticle);
