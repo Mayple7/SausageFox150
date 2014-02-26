@@ -83,13 +83,14 @@ void InitializeMapLevel(void)
 	{
 	case GS_Tutorial:
 	case GS_Level1:
-	case GS_Level2:
 		FadeOverlay->Position.x = 0.0f;
+		SetCameraXPosition(-300.0f);
+		break;
+	case GS_Level2:
+		FadeOverlay->Position.x = 300.0f;
 		break;
 	case GS_ArmGuy:
 	case GS_HandGuy:
-		FadeOverlay->Position.x = 300.0f;
-		break;
 	case GS_Level3:
 		FadeOverlay->Position.x = 650.0f;
 		break;

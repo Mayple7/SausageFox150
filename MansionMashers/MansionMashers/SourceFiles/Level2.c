@@ -122,6 +122,7 @@ void DrawLevel2(void)
 /*************************************************************************/
 void FreeLevel2(void)
 {
+	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
 

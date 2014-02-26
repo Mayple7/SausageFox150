@@ -112,6 +112,7 @@ void DrawArmGuy(void)
 /*************************************************************************/
 void FreeArmGuy(void)
 {
+	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
 
