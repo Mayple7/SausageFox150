@@ -30,4 +30,23 @@ void ScrollPaperScroll(void)
 		TxtScrollMiddle->Position.x += 10 * GetLoadRatio();
 		TxtScrollRight->Position.x += 20 * GetLoadRatio();
 	}
+
+}
+
+void ReScrollPaperScroll(void)
+{
+	if(TxtScrollMiddle->ScaleX > 1)
+	{
+		TxtScrollMiddle->ScaleX -= .40f;
+		TxtScrollMiddle->Position.x -= 10 * GetLoadRatio();
+		TxtScrollRight->Position.x -= 20 * GetLoadRatio();
+	}
+
+	if(TxtScrollMiddle->ScaleX <= 1)
+	{
+		TxtScrollMiddle->Visible = FALSE;
+		TxtScrollRight->Visible = FALSE;
+		TxtScrollLeft->Visible = FALSE;
+		ReScroll = FALSE;
+	}
 }

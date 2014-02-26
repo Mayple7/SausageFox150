@@ -131,6 +131,7 @@ void InitializeLevel1(void)
 
 	CreatePaperScroll(200);
 	Scroll = FALSE;
+	ReScroll = FALSE;
 }
 
 /*************************************************************************/
@@ -148,8 +149,15 @@ void UpdateLevel1(void)
 
 	if(FoxInput_KeyTriggered('R'))
 		Scroll = TRUE;
+	if(FoxInput_KeyTriggered('T'))
+		ReScroll = TRUE;
 	if(Scroll == TRUE)
 		ScrollPaperScroll();
+	if(ReScroll == TRUE)
+	{
+		Scroll = FALSE;
+		ReScrollPaperScroll();
+	}
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);

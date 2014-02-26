@@ -3,6 +3,9 @@
 
 void CreatePaperScroll(float height);
 void ScrollPaperScroll(void);
+void ReScrollPaperScroll(void);
+
+int ReScroll;
 
 
 #endif
