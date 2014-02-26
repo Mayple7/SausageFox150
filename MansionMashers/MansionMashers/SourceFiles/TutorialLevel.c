@@ -291,7 +291,7 @@ void fadeToEnd(void)
 	if(BlackOverlay->Alpha >= 1.0f)
 	{
 		BlackOverlay->Alpha = 1.0f;
-		SetNextState(GS_MainMenu);
+		SetNextState(GS_MapLevel);
 	}
 	else
 	{

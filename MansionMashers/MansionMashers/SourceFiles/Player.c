@@ -85,7 +85,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	UpdateCollider(&CurrentPlayer->PlayerCollider, CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 
 	//Collider Debug
-	CurrentPlayer->PlayerCollider.collisionDebug = TRUE;
+	CurrentPlayer->PlayerCollider.collisionDebug = FALSE;
 
 
 	/*////////////////////////////////

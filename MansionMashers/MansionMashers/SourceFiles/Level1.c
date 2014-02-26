@@ -54,7 +54,7 @@ Platform* Table1;
 
 Wall* Wall1;
 
-
+Sprite* BlackOverlay;
 
 
 /*************************************************************************/
@@ -101,7 +101,9 @@ void InitializeLevel1(void)
 	CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 300, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, (1920 * 2), 0);
-
+	Vec3Set(&TextTint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 400, 1, 1, 0, 0);
+	BlackOverlay->Tint = TextTint;
 
 	//Platforms
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -628, -285);
@@ -243,16 +245,24 @@ void EventLevel1(void)
 	}
 	else
 	{
-		CurrentPlayer.FlipX = 1;
-		CurrentPlayer.PlayerDirection = RIGHT;
-		CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		else
+		{
+			CurrentPlayer.FlipX = 1;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+			
+			if(CurrentPlayer.Position.x > -500)
+			{
+				beginningAnimiation = FALSE;
+			}
+		}
 		Animation(&CurrentPlayer);
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
-		if(CurrentPlayer.Position.x > -500)
-		{
-			beginningAnimiation = FALSE;
-		}
 	}
 
 

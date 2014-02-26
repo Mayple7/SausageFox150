@@ -3,7 +3,6 @@
 
 enum GSL
 {
-	GS_Tutorial,
 	GS_Level1,
 	GS_Shop1,
 	GS_Level2,
@@ -16,6 +15,7 @@ enum GSL
 	GS_Level4,
 	GS_Kevin,
 	GS_LevelNUM,
+	GS_Tutorial,
 	GS_SplashScreen,
 	GS_MainMenu,
 	GS_Options,
