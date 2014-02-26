@@ -131,8 +131,8 @@ void DrawLevel2(void)
 /*************************************************************************/
 void FreeLevel2(void)
 {
-	if(levelComplete && CurrentPlayer.CurrentLevel < GS_ArmGuy)
-		CurrentPlayer.CurrentLevel = GS_ArmGuy;
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_HandGuy)
+		CurrentPlayer.CurrentLevel = GS_HandGuy;
 	else if(CurrentPlayer.CurrentLevel < GS_Level2)
 		CurrentPlayer.CurrentLevel = GS_Level2;
 	SavePlayer(&CurrentPlayer);

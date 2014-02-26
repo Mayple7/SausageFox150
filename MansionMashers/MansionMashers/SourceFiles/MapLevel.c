@@ -62,6 +62,8 @@ void InitializeMapLevel(void)
 	Vec3Set(&Tint, 0.0f, 0.5f, 0.0f);
 	newID = 10;
 	iconPosition = GetPreviousState();
+	if(iconPosition > GS_LevelNUM)
+		iconPosition = GS_Level1;
 	ResetObjectList();
 	ResetCamera();
 
@@ -209,7 +211,99 @@ void EventLevel(void)
 	}
 	if(FoxInput_KeyTriggered('A'))
 	{
-		PlayerIcon->Position.x -= 600 * GetDeltaTime() * GetLoadRatio();
+		int nextPosition = -1;
+
+		switch(iconPosition)
+		{
+		case GS_Shop1:
+			nextPosition = GS_Level1;
+			break;
+		case GS_Level2:
+			nextPosition = GS_Shop1;
+			break;
+		case GS_ArmGuy:
+			nextPosition = GS_Level2;
+			break;
+		case GS_HandGuy:
+			nextPosition = GS_Level2;
+			break;
+		case GS_Level3:
+			nextPosition = GS_Shop2;
+			break;
+		case GS_YeahGuy:
+			nextPosition = GS_Level3;
+			break;
+		case GS_Shop3:
+			nextPosition = GS_YeahGuy;
+			break;
+		case GS_Level4:
+			nextPosition = GS_YeahGuy;
+			break;
+		case GS_Kevin:
+			nextPosition = GS_Level4;
+			break;
+		default:
+			nextPosition = iconPosition;
+		}
+
+		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
+		{
+			iconPosition = nextPosition;
+			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
+		}
+	}
+	if(FoxInput_KeyTriggered('W'))
+	{
+		int nextPosition = -1;
+
+		switch(iconPosition)
+		{
+		case GS_Level2:
+			nextPosition = GS_HandGuy;
+			break;
+		case GS_Shop2:
+			nextPosition = GS_HandGuy;
+			break;
+		case GS_YeahGuy:
+			nextPosition = GS_Shop3;
+			break;
+		case GS_Level4:
+			nextPosition = GS_Shop3;
+			break;
+		default:
+			nextPosition = iconPosition;
+		}
+
+		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
+		{
+			iconPosition = nextPosition;
+			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
+		}
+	}
+	if(FoxInput_KeyTriggered('S'))
+	{
+		int nextPosition = -1;
+
+		switch(iconPosition)
+		{
+		case GS_Level2:
+			nextPosition = GS_ArmGuy;
+			break;
+		case GS_Shop2:
+			nextPosition = GS_ArmGuy;
+			break;
+		case GS_Shop3:
+			nextPosition = GS_YeahGuy;
+			break;
+		default:
+			nextPosition = iconPosition;
+		}
+
+		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
+		{
+			iconPosition = nextPosition;
+			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
+		}
 	}
 }
 

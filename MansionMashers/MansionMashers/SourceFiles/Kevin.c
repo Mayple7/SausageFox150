@@ -140,6 +140,8 @@ void DrawKevin(void)
 /*************************************************************************/
 void FreeKevin(void)
 {
+	if(CurrentPlayer.CurrentLevel < GS_Kevin)
+		CurrentPlayer.CurrentLevel = GS_Kevin;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
