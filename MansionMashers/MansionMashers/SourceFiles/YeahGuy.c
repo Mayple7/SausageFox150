@@ -112,6 +112,7 @@ void DrawYeahGuy(void)
 /*************************************************************************/
 void FreeYeahGuy(void)
 {
+	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
 

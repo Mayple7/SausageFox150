@@ -139,6 +139,7 @@ void DrawKevin(void)
 /*************************************************************************/
 void FreeKevin(void)
 {
+	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
 
