@@ -162,6 +162,14 @@ void UpdateMapLevel(void)
 {
 	EventLevel();
 	BoundingBoxUpdate();
+	if(PlayerIcon->Position.x > GetCameraXPosition() + 300 * GetLoadRatio() )
+	{
+		SetCameraXPosition(PlayerIcon->Position.x - 300 * GetLoadRatio());
+	}
+	else if(PlayerIcon->Position.x < GetCameraXPosition() - 300 * GetLoadRatio())
+	{
+		SetCameraXPosition(PlayerIcon->Position.x + 300 * GetLoadRatio());
+	}
 }
 
 void DrawMapLevel(void)
@@ -211,10 +219,10 @@ void EventLevel(void)
 	}
 	if(FoxInput_KeyDown('D'))
 	{
-		SetCameraXPosition(GetCameraXPosition() + 400 * GetDeltaTime() * GetLoadRatio());
+		PlayerIcon->Position.x += 600 * GetDeltaTime() * GetLoadRatio();
 	}
 	if(FoxInput_KeyDown('A'))
 	{
-		SetCameraXPosition(GetCameraXPosition() - 400 * GetDeltaTime() * GetLoadRatio());
+		PlayerIcon->Position.x -= 600 * GetDeltaTime() * GetLoadRatio();
 	}
 }
