@@ -136,7 +136,7 @@ void InitializePause(void (*DrawLevel)())
 	MainMenuButton->ButtonSprite->ZIndex = 502;
 
 	LevelToDraw = DrawLevel;
-	if(CurrentPlayer.PlayerSpriteParts.Body)
+	if(CurrentPlayer.PlayerActive)
 	{
 		CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
 		CurrentPlayer.PlayerSpriteParts.Body->CurrentFrame = 0;
