@@ -123,6 +123,7 @@
     <ClInclude Include="HeaderFiles\Movement.h" />
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
     <ClInclude Include="HeaderFiles\OptionsMenu.h" />
+    <ClInclude Include="HeaderFiles\PaperScroll.h" />
     <ClInclude Include="HeaderFiles\ParticleSystem.h" />
     <ClInclude Include="HeaderFiles\PauseMenu.h" />
     <ClInclude Include="HeaderFiles\PhysicsConstants.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="SourceFiles\ObjectManagerFree.c" />
     <ClCompile Include="SourceFiles\ObjectManagerMake.c" />
     <ClCompile Include="SourceFiles\OptionsMenu.c" />
+    <ClCompile Include="SourceFiles\PaperScroll.c" />
     <ClCompile Include="SourceFiles\ParticleSystem.c" />
     <ClCompile Include="SourceFiles\PauseMenu.c" />
     <ClCompile Include="SourceFiles\Platform.c" />
