@@ -8,4 +8,5 @@ void DrawMapLevel(void);
 void FreeMapLevel(void);
 void UnloadMapLevel(void);
 
+static void EventLevel(void);
 #endif
