@@ -45,7 +45,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-static int beginningAnimiation = TRUE;
+static int beginningAnimiation;
 TextGlyphs* LevelName;
 
 EnemySpawner* FirstSpawner;
@@ -80,6 +80,7 @@ void InitializeLevel1(void)
 	Vec3 TextTint;
 	Vec2 SpawnLocation, SpawnerLocation;
 
+	beginningAnimiation = TRUE;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -236,6 +237,7 @@ void EventLevel1(void)
 {
 	int i;
 
+	// Runs if the beginning animation is finished
 	if(!beginningAnimiation)
 	{
 		// Check for any collision and handle the results
@@ -245,21 +247,25 @@ void EventLevel1(void)
 	}
 	else
 	{
+		// Fade in the level
 		if(BlackOverlay->Alpha > 0)
 		{
 			BlackOverlay->Alpha -= 1 * GetDeltaTime();
 		}
+		// Makes the player walk into view
 		else
 		{
 			CurrentPlayer.FlipX = 1;
 			CurrentPlayer.PlayerDirection = RIGHT;
 			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 			
+			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -500)
 			{
 				beginningAnimiation = FALSE;
 			}
 		}
+		//Always animate the player otherwise the sprites get stuck in the middle
 		Animation(&CurrentPlayer);
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
