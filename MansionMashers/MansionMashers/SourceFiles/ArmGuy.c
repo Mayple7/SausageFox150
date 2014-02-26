@@ -40,6 +40,7 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
+static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 
 /*************************************************************************/
@@ -112,6 +113,10 @@ void DrawArmGuy(void)
 /*************************************************************************/
 void FreeArmGuy(void)
 {
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level3)
+		CurrentPlayer.CurrentLevel = GS_Level3;
+	else if(CurrentPlayer.CurrentLevel < GS_ArmGuy)
+		CurrentPlayer.CurrentLevel = GS_ArmGuy;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
