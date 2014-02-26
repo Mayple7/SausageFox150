@@ -13,6 +13,7 @@
 \li					DrawMapLevel
 \li					FreeMapLevel
 \li					UnloadMapLevel
+\li					EventLevel
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -49,24 +50,41 @@ Sprite* MapBackground;
 Sprite* FadeOverlay;
 Sprite* PlayerIcon;
 
+/*************************************************************************/
+/*!
+	\brief
+	Loads the map level textures
+*/
+/*************************************************************************/
 void LoadMapLevel(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Initializes the map level
+*/
+/*************************************************************************/
 void InitializeMapLevel(void)
 {
 	Vec3 Tint;
 	FILE *fp;
+
+	//Set the grass color for the background
 	Vec3Set(&Tint, 0.0f, 0.5f, 0.0f);
 	newID = 10;
+
+	//Icon position is what level we just came from
 	iconPosition = GetPreviousState();
-	if(iconPosition > GS_LevelNUM)
-		iconPosition = GS_Level1;
+
+	//Reset me captain
 	ResetObjectList();
 	ResetCamera();
 
+	//Reads the level from a file if it exits, otherwise set to tutorial level
 	fp = fopen("../GameData.cfg", "rt");
 	if(fp)
 	{
@@ -78,13 +96,20 @@ void InitializeMapLevel(void)
 	else
 		CurrentPlayer.CurrentLevel = GS_Tutorial;
 
+	//If not coming from a level set to the player's latest level
+	if(iconPosition > GS_LevelNUM)
+		iconPosition = CurrentPlayer.CurrentLevel;
+
+	//Create the large sprites
 	GrassBackground = (Sprite *)CreateSprite("TextureFiles/BlankPlatform.png", 4000, 1080, 1, 1, 1, 480, 0);
 	GrassBackground->Tint = Tint;
 	MapBackground = (Sprite *)CreateSprite("TextureFiles/Map.png", 2880, 1080, 2, 1, 1, 480, 0);
 	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 3, 1, 1, 0, 0);
 
+	// Foxy icon ^_^
 	PlayerIcon = (Sprite *)CreateSprite("TextureFiles/fox_head.png", 76, 74, 5, 1, 1, 0, 0);
 
+	// Adjusts the fade overlay based on the farthest progressed level
 	switch(CurrentPlayer.CurrentLevel)
 	{
 	case GS_Tutorial:
@@ -110,18 +135,28 @@ void InitializeMapLevel(void)
 	default:
 		FadeOverlay->Position.x = 0.0f;
 	}
+	// CHEATER!!!!
 	if(Cheats)
 		FadeOverlay->Visible = FALSE;
 
 	CreateBoundingBoxes();
 
-	GetNewIconPosition(&PlayerIcon->Position, GetPreviousState());
+	//Sets icon to the correct position
+	GetNewIconPosition(&PlayerIcon->Position, iconPosition);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Runs the update for the map level
+*/
+/*************************************************************************/
 void UpdateMapLevel(void)
 {
 	EventLevel();
 	BoundingBoxUpdate();
+
+	//Camera movement based on icon movement
 	if(PlayerIcon->Position.x > GetCameraXPosition() + 300 * GetLoadRatio() )
 	{
 		SetCameraXPosition(PlayerIcon->Position.x - 300 * GetLoadRatio());
@@ -132,6 +167,12 @@ void UpdateMapLevel(void)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Draws the map level
+*/
+/*************************************************************************/
 void DrawMapLevel(void)
 {
 	// Draws the object list and sets the camera to the correct location
@@ -140,11 +181,24 @@ void DrawMapLevel(void)
 	DrawCollisionList();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Frees all allocated memory from the map level
+*/
+/*************************************************************************/
 void FreeMapLevel(void)
 {
+	// Memory Moses returns!
 	FreeAllLists();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Unloads the textures from the map level
+*/
+/*************************************************************************/
 void UnloadMapLevel(void)
 {
 	//Destroy the textures
@@ -159,6 +213,7 @@ void UnloadMapLevel(void)
 /*************************************************************************/
 void EventLevel(void)
 {
+	//Execute the pause menu
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawMapLevel);
@@ -167,15 +222,18 @@ void EventLevel(void)
 		//TogglePauseSound(&BackgroundSnd);
 	}
 
+	// Go into the level the icon is on
 	if(FoxInput_KeyTriggered(VK_SPACE) || FoxInput_KeyTriggered('E'))
 	{
 		SetNextState(iconPosition);
 	}
 
+	//Movement for the icon
 	if(FoxInput_KeyTriggered('D'))
 	{
 		int nextPosition = -1;
 
+		//Hard coded oh noes! Checks if able to move a certain direction based on location
 		switch(iconPosition)
 		{
 		case GS_Level1:
@@ -209,16 +267,20 @@ void EventLevel(void)
 			nextPosition = iconPosition;
 		}
 
+		//If it is a valid location and the player can access the level OR IF YOU ARE A CHEATER
 		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
 		{
+			//Moves the icon
 			iconPosition = nextPosition;
 			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
 		}
 	}
+	//Movement for the icon
 	if(FoxInput_KeyTriggered('A'))
 	{
 		int nextPosition = -1;
 
+		//Hard coded oh noes! Checks if able to move a certain direction based on location
 		switch(iconPosition)
 		{
 		case GS_Shop1:
@@ -252,16 +314,20 @@ void EventLevel(void)
 			nextPosition = iconPosition;
 		}
 
+		//If it is a valid location and the player can access the level OR IF YOU ARE A CHEATER
 		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
 		{
+			//Moves the icon
 			iconPosition = nextPosition;
 			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
 		}
 	}
+	//Movement for the icon
 	if(FoxInput_KeyTriggered('W'))
 	{
 		int nextPosition = -1;
 
+		//Hard coded oh noes! Checks if able to move a certain direction based on location
 		switch(iconPosition)
 		{
 		case GS_Level2:
@@ -280,16 +346,20 @@ void EventLevel(void)
 			nextPosition = iconPosition;
 		}
 
+		//If it is a valid location and the player can access the level OR IF YOU ARE A CHEATER
 		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
 		{
+			//Moves the icon
 			iconPosition = nextPosition;
 			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
 		}
 	}
+	//Movement for the icon
 	if(FoxInput_KeyTriggered('S'))
 	{
 		int nextPosition = -1;
 
+		//Hard coded oh noes! Checks if able to move a certain direction based on location
 		switch(iconPosition)
 		{
 		case GS_Level2:
@@ -305,17 +375,32 @@ void EventLevel(void)
 			nextPosition = iconPosition;
 		}
 
+		//If it is a valid location and the player can access the level OR IF YOU ARE A CHEATER
 		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
 		{
+			//Moves the icon
 			iconPosition = nextPosition;
 			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
 		}
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Sets the vector to the new position for the icon
+
+	\param NewPosition
+	The new icon position
+
+	\param newLocation
+	The level to set the icon to
+*/
+/*************************************************************************/
 void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 {
 	//Sets the position of the icon based on the previous level
+	// OSHI HARD CODED!!!
 	switch(newLocation)
 	{
 	case GS_Tutorial:
@@ -357,5 +442,6 @@ void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 		break;
 	}
 
+	//Account for a scaled window
 	Vec2Scale(NewPosition, NewPosition, GetLoadRatio());
 }

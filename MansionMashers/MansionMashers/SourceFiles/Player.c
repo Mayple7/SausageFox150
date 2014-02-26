@@ -316,11 +316,12 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 {
 	Vec2 velocityTime;
 
+	//Brings the player back to the surface if something bad happens
 	if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
 	{
 		CurrentPlayer->Position.y = GROUNDLEVEL * GetLoadRatio();
 	}
-	//Stop velocity and acceleration when the player lands on the floor
+	//Stop vertical velocity and acceleration when the player lands on the floor
 	if(CurrentPlayer->Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer->PlayerRigidBody.onGround)
 	{
 		Vec2Zero(&CurrentPlayer->PlayerRigidBody.Acceleration);
@@ -335,10 +336,12 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Player position updated when dropping down from a platform
 	if(CurrentPlayer->dropDown)
 	{
+		//Constant drop down speed
 		CurrentPlayer->Position.y -= 300.0f * GetDeltaTime() * GetLoadRatio();
+		//Once gravity takes control stop the drop down stuffs
 		if(CurrentPlayer->PlayerRigidBody.Velocity.y < 0)
 		{
-			CurrentPlayer->PlayerRigidBody.Velocity.y = -1800.0f * GetDeltaTime() * GetLoadRatio();
+			CurrentPlayer->PlayerRigidBody.Velocity.y += -1800.0f * GetDeltaTime() * GetLoadRatio();
 			CurrentPlayer->dropDown = FALSE;
 		}
 	}
@@ -453,20 +456,28 @@ void updateDamage(Player *CurrentPlayer)
 /*************************************************************************/
 void DetectPlayerCollision(void)
 {
+	//Make local pointers to all the lists
 	Platform* pList = platformList;
 	Food* fList = foodList;
 	Weapon* wList = weaponList;
 	Enemy* eList = enemyList;
 	Wall* walls = wallList;
+
+	//Fake booleans for hit and hit previous frame
 	int hit = 0;
 	int hitPrev = 0;
 
+	//Cycle through the platform list
 	while(pList->objID != -1)
 	{
+		//If platform exists
 		if(pList->objID > 0)
 		{
+			//Checks if there is collision this frame
 			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &pList->PlatformCollider);
+			//Searches the hit array on the player if it collided last frame
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
+			
 			if(hit)
 			{
 				// New target, on start collision
@@ -507,6 +518,7 @@ void DetectPlayerCollision(void)
 		}
 		pList++;
 	}
+	//Same thing with fud
 	while(fList->objID != -1)
 	{
 		if(fList->objID > 0)
@@ -557,6 +569,7 @@ void DetectPlayerCollision(void)
 		}
 		fList++;
 	}
+	//Now with weapons
 	while(wList->objID != -1)
 	{
 		if(wList->objID > 0 && wList->WeaponFOF == DroppedWeapon)
@@ -616,6 +629,7 @@ void DetectPlayerCollision(void)
 		}
 		wList++;
 	}
+	//Enemy list for their pointy sticks
 	while(eList->objID != -1)
 	{
 		// If the weapon is the enemy's
@@ -667,6 +681,7 @@ void DetectPlayerCollision(void)
 		}
 		eList++;
 	}
+	//Don't wall me in plz
 	while(walls->objID != -1)
 	{
 		if(walls->objID > 0)
@@ -713,16 +728,15 @@ void DetectPlayerCollision(void)
 		}
 		walls++;
 	}
-
-	// Check projectile collisions
-	//	-> Handle collision if true
-	// other collisions!
 }
 
 /*************************************************************************/
 /*!
 	\brief
 	Animates the players legs.
+
+	\param Object
+	The player to animate
 */
 /*************************************************************************/
 void Animation(Player *Object)
@@ -970,8 +984,18 @@ void Animation(Player *Object)
 	//*************************************************************************************************
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Creates the player's sprites
+
+	\param Object
+	The player to create
+*/
+/*************************************************************************/
 void CreatePlayerSprites(Player *Object)
 {
+	//Different sprites for different princesses
 	switch(Object->Princess)
 	{
 	case Mayple:
@@ -1025,7 +1049,24 @@ void CreatePlayerSprites(Player *Object)
 	Object->PlayerSpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 3, 1, 1, 0, 0);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Rotates something to a certain angle
 
+	\param angle
+	Current angle
+
+	\param angleTo
+	Angle to rotate to
+
+	\param speed
+	Speed of the rotation
+
+	\return
+	The new resulting angle
+*/
+/*************************************************************************/
 float RotateToAngle(float angle, float angleTo, float speed)
 {
 	int diff;
@@ -1052,7 +1093,7 @@ float RotateToAngle(float angle, float angleTo, float speed)
 /*************************************************************************/
 /*!
 	\brief
-	Saves the player
+	Saves the player from peril
 	
 	\param CurrentPlayer
 	A pointer to the player to be saved
@@ -1061,21 +1102,26 @@ float RotateToAngle(float angle, float angleTo, float speed)
 void SavePlayer(Player *CurrentPlayer)
 {
 	FILE *fp;
+	// Malloc me a long string
 	char* string = (char *)MallocMyAlloc(500, 1);
 
+	// Ugly code that puts all needed info into one string
 	sprintf(string, "Level: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
 		CurrentPlayer->CurrentLevel, CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
+	//Opens the file for writing
 	fp = fopen("../GameData.cfg", "wt");
 	if(fp)
 	{
+		//Writes the ugly string to the file
 		int num = 0;
 		num = fprintf(fp, "%s", string);
 		fclose(fp);
 	}
 
+	// Memory angel save me!
 	FreeMyAlloc(string);
 }
 
@@ -1086,24 +1132,31 @@ void SavePlayer(Player *CurrentPlayer)
 	
 	\param CurrentPlayer
 	A pointer to the player to be loaded
+
+	\return
+	An int to indicate success or other errors
 */
 /*************************************************************************/
 int LoadPlayer(Player *CurrentPlayer)
 {
 	FILE *fp;
 
+	// Opens a file
 	fp = fopen("../GameData.cfg", "rt");
 	if(fp)
 	{
+		//Ugly code which should read the file if its in the correct format
 		int num = 0;
 		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
 			&CurrentPlayer->CurrentLevel, &CurrentPlayer->Princess, &CurrentPlayer->BuffHeld, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
 			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
 			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
-
 		fclose(fp);
+
+		//If all the data was read successfully
 		if(num == 14)
 		{
+			//Update all the other required player data
 			int nameLen, statsLen;
 			updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
 			updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
@@ -1111,9 +1164,11 @@ int LoadPlayer(Player *CurrentPlayer)
 			updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 			updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 			
+			//Update those text strings
 			ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponName);
 			CreateStatsString(CurrentPlayer->PlayerWeapon->WeaponStatsString, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusDefense);
 			ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs, CurrentPlayer->PlayerWeapon->WeaponStatsString);
+			//Updates the weapon sprite for the correct weapon
 			switch(CurrentPlayer->PlayerWeapon->WeaponType)
 			{
 			case Sword:
@@ -1137,6 +1192,7 @@ int LoadPlayer(Player *CurrentPlayer)
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			}
+			//Updates weapon hover text
 			nameLen = strlen(CurrentPlayer->PlayerWeapon->WeaponName);
 			statsLen = strlen(CurrentPlayer->PlayerWeapon->WeaponStatsString);
 			if(nameLen >= statsLen)
@@ -1149,11 +1205,13 @@ int LoadPlayer(Player *CurrentPlayer)
 			}
 			CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 
+			//Success!
 			return 1;
 		}
 		else
-			return -1;
+			return -1;	// You done goofed
 	}
+	// New player ^_^
 	else
 	{
 		return 0;
@@ -1167,10 +1225,14 @@ int LoadPlayer(Player *CurrentPlayer)
 	
 	\param CurrentPlayer
 	A pointer to the player to be loaded
+
+	\param Princess
+	Enum of the princess to create
 */
 /*************************************************************************/
 void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 {
+	//Sets all required player stats and data
 	int nameLen, statsLen;
 	CurrentPlayer->Princess = Princess;
 	CurrentPlayer->BuffHeld = None;
@@ -1189,6 +1251,7 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
 	CurrentPlayer->CurrentLevel = GS_Tutorial;
 
+	//Princess specific data to set
 	switch(Princess)
 	{
 	case Mayple:
@@ -1221,6 +1284,8 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Fragile Stick");
 		break;
 	}
+
+	//Update those strings
 	ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponName);
 	CreateStatsString(CurrentPlayer->PlayerWeapon->WeaponStatsString, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusDefense);
 	
