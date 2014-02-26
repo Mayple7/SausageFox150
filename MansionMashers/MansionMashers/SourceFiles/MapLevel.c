@@ -39,6 +39,9 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
+
+// FoxMansion, Shop1, Lvl2, Arm, Hand, Shop2, Lvl3, Yeah, Shop3, Lvl4, Kevin
+// 0 through 10
 static int iconPosition;
 
 Sprite* GrassBackground;
@@ -55,6 +58,7 @@ void LoadMapLevel(void)
 void InitializeMapLevel(void)
 {
 	Vec3 Tint;
+	Vec2 PlayerIconPosition;
 	FILE *fp;
 	Vec3Set(&Tint, 0.0f, 0.5f, 0.0f);
 	newID = 10;
@@ -104,9 +108,54 @@ void InitializeMapLevel(void)
 	default:
 		FadeOverlay->Position.x = 0.0f;
 	}
-
+	if(Cheats)
+		FadeOverlay->Visible = FALSE;
 
 	CreateBoundingBoxes();
+
+	//Sets the position of the icon based on the previous level
+	switch(GetPreviousState())
+	{
+	case GS_Tutorial:
+	case GS_Level1:
+		Vec2Set(&PlayerIconPosition, -596.5f, -41.5f);
+		break;
+	case GS_Shop1:
+		Vec2Set(&PlayerIconPosition, -280.8f, -12.25f);
+		break;
+	case GS_Level2:
+		Vec2Set(&PlayerIconPosition, -41.8f, -10.7f);
+		break;
+	case GS_ArmGuy:
+		Vec2Set(&PlayerIconPosition, 169.6f, -242.0f);
+		break;
+	case GS_HandGuy:
+		Vec2Set(&PlayerIconPosition, 172.6f, 274.2f);
+		break;
+	case GS_Shop2:
+		Vec2Set(&PlayerIconPosition, 393.2f, 13.8f);
+		break;
+	case GS_Level3:
+		Vec2Set(&PlayerIconPosition, 682.6f, -1.5f);
+		break;
+	case GS_YeahGuy:
+		Vec2Set(&PlayerIconPosition, 1113.1f, -9.2f);
+		break;
+	case GS_Shop3:
+		Vec2Set(&PlayerIconPosition, 1256.5f, 252.8f);
+		break;
+	case GS_Level4:
+		Vec2Set(&PlayerIconPosition, 1356.0f, -12.25f);
+		break;
+	case GS_Kevin:
+		Vec2Set(&PlayerIconPosition, 1630.3f, -13.8f);
+		break;
+	default:
+		Vec2Set(&PlayerIconPosition, -596.4f, -41.4f);
+		break;
+	}
+	Vec2Scale(&PlayerIconPosition, &PlayerIconPosition, GetLoadRatio());
+	PlayerIcon->Position = PlayerIconPosition;
 }
 
 void UpdateMapLevel(void)
