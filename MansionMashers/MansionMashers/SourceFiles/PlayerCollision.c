@@ -94,7 +94,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		//Check if the weapon is in a shop
 		if (wList->CurrentShop)
 		{
-			if (wList->CurrentShop->Coin > CurrentPlayer->CurrentPlayerStats.Money)
+			if (wList->CurrentShop->Coin > CurrentPlayer->CurrentPlayerStats.Money || Cheats)
 			{
 				//Not enough money
 				Vec3 textColor;
@@ -113,7 +113,8 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 				return;
 			}
 			
-			CurrentPlayer->CurrentPlayerStats.Money -= wList->CurrentShop->Coin;
+			if (!Cheats)
+				CurrentPlayer->CurrentPlayerStats.Money -= wList->CurrentShop->Coin;
 			Shopping = TRUE;
 		}
 
@@ -144,18 +145,18 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		//If it is a shop we like it straight, oh ja
 		if (Shopping)
 		{
-			//Put the weapon on the ground
-			wList->WeaponSprite->Position.x = wList->WeaponPickup.Position.x;
-			wList->WeaponSprite->Position.y = wList->WeaponPickup.Position.y - wList->CurrentShop->ShopSprite->Height / 1.8f;
-			wList->WeaponPickup.Position = wList->WeaponSprite->Position;
 			//Nothing is for sale, no need to keep the text
 			FreeText(wList->CurrentShop->ItemTextCoin);
 			FreeText(wList->CurrentShop->ItemTextName);
 			//No longer in the shop
 			wList->CurrentShop = NULL;
 		}
-		else
-			wList->WeaponSprite->Position = wList->WeaponPickup.Position;
+
+		//Put the weapon on the ground
+		wList->WeaponSprite->Position.x = wList->WeaponPickup.Position.x;
+		wList->WeaponSprite->Position.y = CurrentPlayer->PlayerCollider.Position.y;
+		wList->WeaponPickup.Position = wList->WeaponSprite->Position;
+		wList->WeaponFalling = TRUE;
 
 		wList->WeaponHoverBackground->Position.x = wList->WeaponPickup.Position.x;
 		wList->WeaponHoverBackground->Position.y = wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f;

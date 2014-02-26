@@ -559,6 +559,10 @@ void DetectPlayerCollision(void)
 	{
 		if(wList->objID > 0 && wList->WeaponFOF == DroppedWeapon)
 		{
+			//Make the weapon fall here since we are already looking through the list, might as well
+			WeaponOnTheRun(wList);
+
+			//Continue with your collision venture
 			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &wList->WeaponPickup);
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, wList->WeaponPickup.collisionID);
 			if(hit)
