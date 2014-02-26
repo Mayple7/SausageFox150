@@ -231,6 +231,7 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	temp.WeaponStatsString = firstWeapon->WeaponStatsString;
 	temp.WeaponType = firstWeapon->WeaponType;
 	temp.WeaponHoverBackground = firstWeapon->WeaponHoverBackground;
+	temp.CurrentShop = firstWeapon->CurrentShop;
 	SetWeaponStats(&temp, firstWeapon->BonusStrength, firstWeapon->BonusAgility, firstWeapon->BonusDefense);
 
 	firstWeapon->WeaponPickup = secondWeapon->WeaponPickup;
@@ -246,6 +247,7 @@ void SwapWeapons(Weapon* firstWeapon, Weapon* secondWeapon)
 	firstWeapon->WeaponStatsString = secondWeapon->WeaponStatsString;
 	firstWeapon->WeaponType = secondWeapon->WeaponType;
 	firstWeapon->WeaponHoverBackground = secondWeapon->WeaponHoverBackground;
+	firstWeapon->CurrentShop = secondWeapon->CurrentShop;
 	SetWeaponStats(firstWeapon, secondWeapon->BonusStrength, secondWeapon->BonusAgility, secondWeapon->BonusDefense);
 
 	secondWeapon->WeaponPickup = temp.WeaponPickup;

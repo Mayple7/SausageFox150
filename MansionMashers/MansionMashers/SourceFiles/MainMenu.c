@@ -126,17 +126,20 @@ void InitializeMainMenu(void)
 
 	Logo = (Sprite *) CreateSprite("TextureFiles/MansionMashersMainMenu.png", 1200, 675, 3, 1, 1, 0, 200);
 
-	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -170, 394, 394, newID++);
-	LoadGameButton = CreateButton("TextureFiles/LoadGameButton.png", -290, -48, 439, 170, newID++);
-	OptionsButton = CreateButton("TextureFiles/OptionsButton.png", 290, -48, 439, 170, newID++);
-	CreditsButton = CreateButton("TextureFiles/CreditsButton.png", -290, -320, 439, 170, newID++);
-	QuitGameButton = CreateButton("TextureFiles/QuitGameButton.png", 290, -320, 439, 170, newID++);
+	CreateSprite("TextureFiles/MenuBackFox.png", 447, 500, 4, 1, 1, -300, -130);
+	CreateSprite("TextureFiles/MenuBackDog.png", 447, 500, 4, 1, 1,  300, -130);
 
-	NewGameButton->ButtonSprite->ZIndex = 5;
-	LoadGameButton->ButtonSprite->ZIndex = 3;
-	OptionsButton->ButtonSprite->ZIndex = 3;
-	CreditsButton->ButtonSprite->ZIndex = 3;
-	QuitGameButton->ButtonSprite->ZIndex = 3;
+	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -130, 394, 394, newID++);
+	LoadGameButton = CreateButton("TextureFiles/LoadGameButton.png", -290, -8, 439, 170, newID++);
+	OptionsButton = CreateButton("TextureFiles/OptionsButton.png", 290, -8, 439, 170, newID++);
+	CreditsButton = CreateButton("TextureFiles/CreditsButton.png", -290, -270, 439, 170, newID++);
+	QuitGameButton = CreateButton("TextureFiles/QuitGameButton.png", 290, -270, 439, 170, newID++);
+
+	NewGameButton->ButtonSprite->ZIndex = 10;
+	LoadGameButton->ButtonSprite->ZIndex = 9;
+	OptionsButton->ButtonSprite->ZIndex = 9;
+	CreditsButton->ButtonSprite->ZIndex = 9;
+	QuitGameButton->ButtonSprite->ZIndex = 9;
 	
 	Vec3Set(&Tint, 0, 0, 0);
 	BlackBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
@@ -269,19 +272,15 @@ void InputHandling(void)
 
 			LoadGameButton->ButtonSprite->ScaleX = 1.0f;
 			LoadGameButton->ButtonSprite->ScaleY = 1.0f;
-			LoadGameButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
 
 			OptionsButton->ButtonSprite->ScaleX = 1.0f;
 			OptionsButton->ButtonSprite->ScaleY = 1.0f;
-			OptionsButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
 
 			CreditsButton->ButtonSprite->ScaleX = 1.0f;
 			CreditsButton->ButtonSprite->ScaleY = 1.0f;
-			CreditsButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
 
 			QuitGameButton->ButtonSprite->ScaleX = 1.0f;
 			QuitGameButton->ButtonSprite->ScaleY = 1.0f;
-			QuitGameButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
 		}
 		else
 		{
@@ -292,52 +291,44 @@ void InputHandling(void)
 			{
 				LoadGameButton->ButtonSprite->ScaleX = 1.2f;
 				LoadGameButton->ButtonSprite->ScaleY = 1.2f;
-				LoadGameButton->ButtonSprite->Position.x = -319 * GetLoadRatio();
 			}
 			else
 			{
 				LoadGameButton->ButtonSprite->ScaleX = 1.0f;
 				LoadGameButton->ButtonSprite->ScaleY = 1.0f;
-				LoadGameButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
 			}
 
 			if(PointRectCollision(&OptionsButton->ButtonCollider, &MouseHover))
 			{
 				OptionsButton->ButtonSprite->ScaleX = 1.2f;
 				OptionsButton->ButtonSprite->ScaleY = 1.2f;
-				OptionsButton->ButtonSprite->Position.x = 319 * GetLoadRatio();
 			}
 			else
 			{
 				OptionsButton->ButtonSprite->ScaleX = 1.0f;
 				OptionsButton->ButtonSprite->ScaleY = 1.0f;
-				OptionsButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
 			}
 
 			if(PointRectCollision(&CreditsButton->ButtonCollider, &MouseHover))
 			{
 				CreditsButton->ButtonSprite->ScaleX = 1.2f;
 				CreditsButton->ButtonSprite->ScaleY = 1.2f;
-				CreditsButton->ButtonSprite->Position.x = -319 * GetLoadRatio();
 			}
 			else
 			{
 				CreditsButton->ButtonSprite->ScaleX = 1.0f;
 				CreditsButton->ButtonSprite->ScaleY = 1.0f;
-				CreditsButton->ButtonSprite->Position.x = -290 * GetLoadRatio();
 			}
 
 			if(PointRectCollision(&QuitGameButton->ButtonCollider, &MouseHover))
 			{
 				QuitGameButton->ButtonSprite->ScaleX = 1.2f;
 				QuitGameButton->ButtonSprite->ScaleY = 1.2f;
-				QuitGameButton->ButtonSprite->Position.x = 319 * GetLoadRatio();
 			}
 			else
 			{
 				QuitGameButton->ButtonSprite->ScaleX = 1.0f;
 				QuitGameButton->ButtonSprite->ScaleY = 1.0f;
-				QuitGameButton->ButtonSprite->Position.x = 290 * GetLoadRatio();
 			}
 		}
 	}
