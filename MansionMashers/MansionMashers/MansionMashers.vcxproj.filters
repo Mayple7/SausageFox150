@@ -437,7 +437,7 @@
       <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\PaperScroll.c">
-      <Filter>Fox Header Files\Fox Object Headers</Filter>
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

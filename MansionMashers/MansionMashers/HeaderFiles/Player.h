@@ -74,6 +74,7 @@ typedef struct PlayerStats
 typedef struct Player
 {
 	enum Character Princess;
+	int CurrentLevel;
 
 	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;
