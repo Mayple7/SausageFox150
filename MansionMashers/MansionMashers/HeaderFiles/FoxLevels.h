@@ -20,6 +20,9 @@
 #include "../HeaderFiles/Kevin.h"
 #include "../HeaderFiles/CharacterSelect.h"
 #include "../HeaderFiles/DevMenu.h"
-#include "../HeaderFiles//OptionsMenu.h"
+#include "../HeaderFiles/OptionsMenu.h"
+#include "../HeaderFiles/Shop1.h"
+#include "../HeaderFiles/Shop2.h"
+#include "../HeaderFiles/Shop3.h"
 
 #endif
