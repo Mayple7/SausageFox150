@@ -55,6 +55,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	}
 
 	CurrentPlayer->Princess = Princess;
+	CurrentPlayer->CurrentLevel = GS_Tutorial;
 
 	/*////////////////////////////////
 	//       PLAYER BASICS          //
@@ -102,7 +103,6 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
 		LoadNewPlayer(CurrentPlayer, Princess);
-		AE_ASSERT_MESG("SOMETHING BE BROKED");
 	}
 
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
@@ -1057,8 +1057,8 @@ void SavePlayer(Player *CurrentPlayer)
 	FILE *fp;
 	char* string = (char *)MallocMyAlloc(500, 1);
 
-	sprintf(string, "Princess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
-		CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+	sprintf(string, "Level: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
+		GetCurrentState(), CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
@@ -1090,13 +1090,13 @@ int LoadPlayer(Player *CurrentPlayer)
 	if(fp)
 	{
 		int num = 0;
-		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
-			&CurrentPlayer->Princess, &CurrentPlayer->BuffHeld, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
+		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
+			&CurrentPlayer->CurrentLevel, &CurrentPlayer->Princess, &CurrentPlayer->BuffHeld, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
 			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
 			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 
 		fclose(fp);
-		if(num == 13)
+		if(num == 14)
 		{
 			int nameLen, statsLen;
 			updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
@@ -1181,6 +1181,7 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 
 	CurrentPlayer->CurrentPlayerStats.Money = 15;
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+	CurrentPlayer->CurrentLevel = GS_Tutorial;
 
 	switch(Princess)
 	{

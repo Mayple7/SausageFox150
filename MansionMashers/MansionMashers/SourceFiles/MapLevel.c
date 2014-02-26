@@ -39,9 +39,12 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
+static int iconPosition;
 
 Sprite* GrassBackground;
 Sprite* MapBackground;
+Sprite* FadeOverlay;
+Sprite* PlayerIcon;
 
 void LoadMapLevel(void)
 {
@@ -52,14 +55,56 @@ void LoadMapLevel(void)
 void InitializeMapLevel(void)
 {
 	Vec3 Tint;
+	FILE *fp;
 	Vec3Set(&Tint, 0.0f, 0.5f, 0.0f);
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
+	fp = fopen("../GameData.cfg", "rt");
+	if(fp)
+	{
+		int num = 0;
+		num = fscanf(fp, "%*s %d", &(CurrentPlayer.CurrentLevel));
+
+		fclose(fp);
+	}
+	else
+		CurrentPlayer.CurrentLevel = GS_Tutorial;
+
 	GrassBackground = (Sprite *)CreateSprite("TextureFiles/BlankPlatform.png", 4000, 1080, 1, 1, 1, 480, 0);
 	GrassBackground->Tint = Tint;
 	MapBackground = (Sprite *)CreateSprite("TextureFiles/Map.png", 2880, 1080, 2, 1, 1, 480, 0);
+	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 3, 1, 1, 0, 0);
+
+	PlayerIcon = (Sprite *)CreateSprite("TextureFiles/fox_head.png", 76, 74, 5, 1, 1, 0, 0);
+
+	switch(CurrentPlayer.CurrentLevel)
+	{
+	case GS_Tutorial:
+	case GS_Level1:
+		FadeOverlay->Position.x = 0.0f;
+		SetCameraXPosition(-300.0f);
+		break;
+	case GS_Level2:
+		FadeOverlay->Position.x = 300.0f;
+		break;
+	case GS_ArmGuy:
+	case GS_HandGuy:
+	case GS_Level3:
+		FadeOverlay->Position.x = 650.0f;
+		break;
+	case GS_YeahGuy:
+		FadeOverlay->Position.x = 950.0f;
+		break;
+	case GS_Level4:
+	case GS_Kevin:
+		FadeOverlay->Visible = FALSE;
+		break;
+	default:
+		FadeOverlay->Position.x = 0.0f;
+	}
+
 
 	CreateBoundingBoxes();
 }

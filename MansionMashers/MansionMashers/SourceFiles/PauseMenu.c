@@ -40,6 +40,9 @@ Sprite* PauseBackground;
 Button* SFXSlider;
 Button* BGMSlider;
 
+Button* ResumeButton;
+Button* MainMenuButton;
+
 TextGlyphs* SFXText;
 TextGlyphs* BGMText;
 
@@ -126,6 +129,11 @@ void InitializePause(void (*DrawLevel)())
 	if(!Cheats)
 		CheckMark->Visible = FALSE;
 
+	ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -250, -400, 300, 112.5f, newID++);
+	MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250, -400, 300, 112.5f, newID++);
+	ResumeButton->ButtonSprite->ZIndex = 502;
+	MainMenuButton->ButtonSprite->ZIndex = 502;
+
 	LevelToDraw = DrawLevel;
 	CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
 	CurrentPlayer.PlayerSpriteParts.Body->CurrentFrame = 0;
@@ -158,9 +166,9 @@ void UpdatePause(void)
 
 		DrawPause();
 
-		FoxInput_Update();
 		EventPause();
-
+		
+		FoxInput_Update();
 		SaveSettings();
 		SetChannelGroupVolume(EffectType, SFXVolume);
 		SetChannelGroupVolume(MusicType, BGMVolume);
@@ -195,6 +203,8 @@ void FreePause(void)
 	FreeButton(CheatsButton);
 	FreeButton(SFXSlider);
 	FreeButton(BGMSlider);
+	FreeButton(ResumeButton);
+	FreeButton(MainMenuButton);
 	FreeText(SFXText);
 	FreeText(BGMText);
 	FreeMyAlloc(volumestring);
@@ -248,13 +258,41 @@ void EventPause(void)
 	// On a single mouse click
 	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 	{
-		printf("WEOFIJEOFIJ");
 		//Check the cheats check box and the back button
 		if(PointRectCollision(&CheatsButton->ButtonCollider, &MouseClick))
 		{
-			printf("WEOFIJEOFIJ");
 			Cheats = !Cheats;
 			CheckMark->Visible = !(CheckMark->Visible);
 		}
+	}
+
+	if(PointRectCollision(&MainMenuButton->ButtonCollider, &MouseClick))
+	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			pause = FALSE;
+			SetNextState(GS_MainMenu);
+		}
+		MainMenuButton->ButtonSprite->ScaleX = 1.2f;
+		MainMenuButton->ButtonSprite->ScaleY = 1.2f;
+	}
+	else
+	{
+		MainMenuButton->ButtonSprite->ScaleX = 1.0f;
+		MainMenuButton->ButtonSprite->ScaleY = 1.0f;
+	}
+
+	if(PointRectCollision(&ResumeButton->ButtonCollider, &MouseClick))
+	{
+		ResumeButton->ButtonSprite->ScaleX = 1.2f;
+		ResumeButton->ButtonSprite->ScaleY = 1.2f;
+
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+			pause = FALSE;
+	}
+	else
+	{
+		ResumeButton->ButtonSprite->ScaleX = 1.0f;
+		ResumeButton->ButtonSprite->ScaleY = 1.0f;
 	}
 }
