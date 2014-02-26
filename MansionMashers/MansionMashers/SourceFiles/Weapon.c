@@ -63,6 +63,7 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 
 	//Start off shopless
 	CurrentWeapon->CurrentShop = NULL;
+	CurrentWeapon->WeaponFalling = FALSE;
 
 	return CurrentWeapon;
 }
@@ -116,6 +117,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 
 	//Start off shopless
 	CurrentWeapon->CurrentShop = NULL;
+	CurrentWeapon->WeaponFalling = FALSE;
 	
 	return CurrentWeapon;
 }
@@ -141,6 +143,55 @@ void CreateWeaponName(char** Name, int WType, int WRarity)
 			break;
 		}
 		strcat(*Name, GetCommonEnd());
+	}
+}
+
+void WeaponOnTheRun(Weapon* CurrentWeapon)
+{
+	//Check if the weapon is falling
+	if (CurrentWeapon->WeaponFalling)
+	{
+		//If collision, stop the falling
+		Platform *pList = platformList;
+		Wall *walls = wallList;
+		int hit = 0;
+
+		if (CurrentWeapon->WeaponPickup.Position.y <= GROUNDLEVEL)
+		{
+			CurrentWeapon->WeaponFalling = FALSE;
+			return;
+		}
+
+		while(pList->objID != -1)
+		{
+			if(pList->objID > 0)
+			{
+				hit = PointRectCollision(&pList->PlatformCollider, &CurrentWeapon->WeaponPickup.Position);
+				if(hit)
+				{
+					CurrentWeapon->WeaponFalling = FALSE;
+					return;
+				}
+			}
+			pList++;
+		}
+		while(walls->objID != -1)
+		{
+			if(walls->objID > 0)
+			{
+				hit = PointRectCollision(&walls->WallCollider, &CurrentWeapon->WeaponPickup.Position);
+				if(hit)
+				{
+					CurrentWeapon->WeaponFalling = FALSE;
+					return;
+				}
+			}
+			walls++;
+		}
+
+		//If not collision, MAKE IT FALL
+		CurrentWeapon->WeaponSprite->Position.y -= 4;
+		CurrentWeapon->WeaponPickup.Position = CurrentWeapon->WeaponSprite->Position;
 	}
 }
 

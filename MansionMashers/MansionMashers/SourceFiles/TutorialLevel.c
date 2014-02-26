@@ -291,30 +291,10 @@ void fadeToEnd(void)
 	if(BlackOverlay->Alpha >= 1.0f)
 	{
 		BlackOverlay->Alpha = 1.0f;
-		if(GameLogo->Alpha >= 1.0f)
-		{
-			GameLogo->Alpha = 1.0f;
-			if(FoxInput_KeyTriggered(VK_SPACE))
-			{
-				SetNextState(GS_EPMenu);
-			}
-		}
-		else
-		{
-			GameLogo->Alpha += GetDeltaTime();
-			if (!BackSnd->Paused)
-			{
-			TogglePauseSound(BackSnd);
-			//SetChannelGroupVolume(&ChannelController, EffectType, 50);
-			}
-			PlayAudio(GongSnd);
-		}
-
+		SetNextState(GS_MainMenu);
 	}
 	else
 	{
 		BlackOverlay->Alpha += GetDeltaTime();
 	}
-
-
 }

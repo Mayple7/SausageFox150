@@ -19,6 +19,7 @@ typedef struct Weapon
 	int objID;
 	int WeaponRarity;
 	int WeaponType;
+	int WeaponFalling;
 
 	int BonusStrength;
 	int BonusAgility;
@@ -43,6 +44,7 @@ typedef struct Weapon
 
 Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int weaponRarity, int collisionGroup, float width, float height, int objID);
 Weapon* CreateDroppedWeapon(int collisionGroup, int weaponRarity, float width, float height, int objID, float xPos, float yPos);
+void WeaponOnTheRun(Weapon* CurrentWeapon);
 void CreateWeaponName(char** Name, int Type, int Rarity);
 void SetWeaponStats(Weapon* CurrentWeapon, int BonusStrength, int BonusAgility, int BonusDefense);
 void CreateWeaponStats(int WeaponType, int WeaponRarity, int* BonusStrength, int* BonusAgility, int* BonusDefense);

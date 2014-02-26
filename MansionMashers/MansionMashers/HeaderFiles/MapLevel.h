@@ -1,6 +1,8 @@
 #ifndef FOX_MAPLEVEL
 #define FOX_MAPLEVEL
 
+#include "FoxMath.h"
+
 void LoadMapLevel(void);
 void InitializeMapLevel(void);
 void UpdateMapLevel(void);
@@ -9,4 +11,5 @@ void FreeMapLevel(void);
 void UnloadMapLevel(void);
 
 static void EventLevel(void);
+void GetNewIconPosition(Vec2 *NewPosition, int newLocation);
 #endif

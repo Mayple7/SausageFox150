@@ -58,9 +58,9 @@ static int newID;
 
 void InitializePause(void (*DrawLevel)())
 {
-	float camX, camY;
+	float camX;
 	Vec3 TextColor;
-
+	
 	CreatePauseSound(&BackgroundSnd, "Sounds/awesome.mp3", LargeSnd);
 
 	volumestring = (char *)MallocMyAlloc(5, sizeof(char));
@@ -71,9 +71,10 @@ void InitializePause(void (*DrawLevel)())
 	volumestring[3] = (char)'%%';
 	volumestring[4] = '\0';
 
-	newID = 1;
+	newID = 10;
 
-	AEGfxGetCamPosition(&camX, &camY);
+	camX = GetCameraXPosition() / GetLoadRatio();
+	printf("%f\n", camX);
 	pause = TRUE;
 	PauseText = (Sprite *) CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, camX, 350);
 
@@ -106,13 +107,13 @@ void InitializePause(void (*DrawLevel)())
 
 	Vec3Set(&TextColor, 1, 1, 1);
 	
-	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) / GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
+	SFXText = CreateText(volumestring, (SFXSliderBack->Position.x + (SFXSliderBack->Width / 2)) / GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
 	volumestring = VolumetoString(volumestring, SFXVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(SFXText, volumestring);
 	ChangeTextZIndex(SFXText, 510);
 
-	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) / GetLoadRatio() + 50 * GetLoadRatio(), -100, 100, TextColor, Left);
+	BGMText = CreateText(volumestring, (BGMSliderBack->Position.x + (BGMSliderBack->Width / 2)) / GetLoadRatio() + 50 * GetLoadRatio(), -100, 100, TextColor, Left);
 	volumestring = VolumetoString(volumestring, BGMVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(BGMText, volumestring);
@@ -121,23 +122,26 @@ void InitializePause(void (*DrawLevel)())
 	ChangeTextVisibility(SFXText);
 	ChangeTextVisibility(BGMText);
 
-	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 500, 1, 1, 180, -250);
-	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -250, -250, 100, 100, newID++);
+	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 500, 1, 1, 180 + camX, -250);
+	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -250 + camX, -250, 100, 100, newID++);
 	CheatsButton->ButtonSprite->ZIndex = 500;
-	CheckMark = (Sprite *) CreateSprite("TextureFiles/CheckMark.png", 200, 200, 501, 1, 1, -250, -250);
+	CheckMark = (Sprite *) CreateSprite("TextureFiles/CheckMark.png", 200, 200, 501, 1, 1, -250 + camX, -250);
 
 	if(!Cheats)
 		CheckMark->Visible = FALSE;
 
-	ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -250, -400, 300, 112.5f, newID++);
-	MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250, -400, 300, 112.5f, newID++);
+	ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -250 + camX, -400, 300, 112.5f, newID++);
+	MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250 + camX, -400, 300, 112.5f, newID++);
 	ResumeButton->ButtonSprite->ZIndex = 502;
 	MainMenuButton->ButtonSprite->ZIndex = 502;
 
 	LevelToDraw = DrawLevel;
-	CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
-	CurrentPlayer.PlayerSpriteParts.Body->CurrentFrame = 0;
-	CurrentPlayer.PlayerSpriteParts.BlinkTimer = 0;
+	if(CurrentPlayer.PlayerActive)
+	{
+		CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
+		CurrentPlayer.PlayerSpriteParts.Body->CurrentFrame = 0;
+		CurrentPlayer.PlayerSpriteParts.BlinkTimer = 0;
+	}
 
 	FoxInput_Update();
 }
@@ -217,39 +221,47 @@ void EventPause(void)
 	Vec2 MouseClick;
 
 	FoxInput_GetWorldPosition(&worldX, &worldY);
-	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+	Vec2Set(&MouseClick, (float)worldX + GetCameraXPosition(), (float)worldY);
 
 	if(FoxInput_MouseDown(MOUSE_BUTTON_LEFT))
 	{
 		if(PointRectCollision(&SFXSlider->ButtonCollider, &MouseClick))
 		{
-			if(worldX > SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
+			if(worldX + GetCameraXPosition() > SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
 				SFXSlider->Position.x = SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
-			else if(worldX < -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
+			else if(worldX + GetCameraXPosition() < -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
 				SFXSlider->Position.x = -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
 			else
-				SFXSlider->Position.x = (float)worldX;
+				SFXSlider->Position.x = (float)worldX + GetCameraXPosition();
 			SFXSlider->ButtonSprite->Position.x = SFXSlider->Position.x;
 			SFXSlider->ButtonCollider.Position.x = SFXSlider->Position.x;
 		}
 		else if(PointRectCollision(&BGMSlider->ButtonCollider, &MouseClick))
 		{
-			if(worldX > SFXSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
+			if(worldX + GetCameraXPosition() > SFXSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
 				BGMSlider->Position.x = BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
-			else if(worldX < -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
+			else if(worldX + GetCameraXPosition() < -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
 				BGMSlider->Position.x = -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
 			else
-				BGMSlider->Position.x = (float)worldX;
+				BGMSlider->Position.x = (float)worldX + GetCameraXPosition();
 			BGMSlider->ButtonSprite->Position.x = BGMSlider->Position.x;
 			BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
 		}
 		
-		SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
+		SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2 - GetCameraXPosition()) / SFXSliderGuide->Width;
+		if(SFXVolume < 0)
+			SFXVolume = 0.0f;
+		else if(SFXVolume > 1.0f)
+			SFXVolume = 1.0f;
 		volumestring = VolumetoString(volumestring, SFXVolume * 100);
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(SFXText, volumestring);
 
-		BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
+		BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2 - GetCameraXPosition()) / BGMSliderGuide->Width;
+		if(BGMVolume < 0)
+			BGMVolume = 0.0f;
+		else if(BGMVolume > 1.0f)
+			BGMVolume = 1.0f;
 		volumestring = VolumetoString(volumestring, BGMVolume * 100);
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(BGMText, volumestring);
