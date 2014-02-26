@@ -39,6 +39,7 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
+static int levelComplete = FALSE;
 TextGlyphs *LevelName;
 Sprite *HandGauy;
 Platform *Pedestal;
@@ -132,6 +133,10 @@ void DrawHandGuy(void)
 /*************************************************************************/
 void FreeHandGuy(void)
 {
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level3)
+		CurrentPlayer.CurrentLevel = GS_Level3;
+	else if(CurrentPlayer.CurrentLevel < GS_HandGuy)
+		CurrentPlayer.CurrentLevel = GS_HandGuy;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }

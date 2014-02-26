@@ -1062,7 +1062,7 @@ void SavePlayer(Player *CurrentPlayer)
 	char* string = (char *)MallocMyAlloc(500, 1);
 
 	sprintf(string, "Level: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
-		GetCurrentState(), CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+		CurrentPlayer->CurrentLevel, CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	

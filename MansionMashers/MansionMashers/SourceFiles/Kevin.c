@@ -39,6 +39,7 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
+static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 Platform* Shelf;
 Platform* Shelf2;
