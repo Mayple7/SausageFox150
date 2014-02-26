@@ -199,22 +199,11 @@ void UnloadMapLevel(void)
 /*************************************************************************/
 void EventLevel(void)
 {
-	if(FoxInput_KeyTriggered('U'))
-	{
-		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
-	}
-	if(FoxInput_KeyTriggered('I'))
-	{
-		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
-	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawLevel);
+		InitializePause(&DrawMapLevel);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 	if(FoxInput_KeyDown('D'))
