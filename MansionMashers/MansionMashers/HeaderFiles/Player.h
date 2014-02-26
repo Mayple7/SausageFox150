@@ -75,6 +75,7 @@ typedef struct Player
 {
 	enum Character Princess;
 	int CurrentLevel;
+	int PlayerActive;
 
 	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;

@@ -134,6 +134,9 @@
     <ClInclude Include="HeaderFiles\RigidBody.h" />
     <ClInclude Include="HeaderFiles\SearchIntArray.h" />
     <ClInclude Include="HeaderFiles\Shop.h" />
+    <ClInclude Include="HeaderFiles\Shop1.h" />
+    <ClInclude Include="HeaderFiles\Shop2.h" />
+    <ClInclude Include="HeaderFiles\Shop3.h" />
     <ClInclude Include="HeaderFiles\Sound.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
     <ClInclude Include="HeaderFiles\StartSlides.h" />
@@ -196,6 +199,9 @@
     <ClCompile Include="SourceFiles\RigidBody.c" />
     <ClCompile Include="SourceFiles\SearchIntArray.c" />
     <ClCompile Include="SourceFiles\Shop.c" />
+    <ClCompile Include="SourceFiles\Shop1.c" />
+    <ClCompile Include="SourceFiles\Shop2.c" />
+    <ClCompile Include="SourceFiles\Shop3.c" />
     <ClCompile Include="SourceFiles\Sound.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />

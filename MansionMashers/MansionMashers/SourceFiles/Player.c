@@ -56,6 +56,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 
 	CurrentPlayer->Princess = Princess;
 	CurrentPlayer->CurrentLevel = GS_Tutorial;
+	CurrentPlayer->PlayerActive = TRUE;
 
 	/*////////////////////////////////
 	//       PLAYER BASICS          //
@@ -363,6 +364,7 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 /*************************************************************************/
 void DestroyPlayer(Player *CurrentPlayer)
 {
+	CurrentPlayer->PlayerActive = FALSE;
 	//Free the debug box since it isn't getting released in the object manager
 	CurrentPlayer->PlayerCollider.collisionDebug = FALSE;
 	AEGfxMeshFree(CurrentPlayer->PlayerCollider.DebugMesh);
@@ -559,6 +561,10 @@ void DetectPlayerCollision(void)
 	{
 		if(wList->objID > 0 && wList->WeaponFOF == DroppedWeapon)
 		{
+			//Make the weapon fall here since we are already looking through the list, might as well
+			WeaponOnTheRun(wList);
+
+			//Continue with your collision venture
 			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &wList->WeaponPickup);
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, wList->WeaponPickup.collisionID);
 			if(hit)
@@ -1058,7 +1064,7 @@ void SavePlayer(Player *CurrentPlayer)
 	char* string = (char *)MallocMyAlloc(500, 1);
 
 	sprintf(string, "Level: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
-		GetCurrentState(), CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+		CurrentPlayer->CurrentLevel, CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	

@@ -275,6 +275,15 @@
     <ClInclude Include="HeaderFiles\EasyEdit.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop1.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop2.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop3.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -444,6 +453,15 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\EasyEdit.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop1.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop2.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop3.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

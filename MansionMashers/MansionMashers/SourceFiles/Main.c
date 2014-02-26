@@ -198,6 +198,11 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 				AEGfxGetCamPosition(&camX, &camY);
 				printf("%f, %f\n", (worldX + camX) / GetLoadRatio(), (worldY + camY) / GetLoadRatio());
 			}
+			if(FoxInput_KeyTriggered('M'))
+			{
+				SetNextState(GS_MapLevel);
+			}
+
 #endif
 
 			FoxInput_Update();

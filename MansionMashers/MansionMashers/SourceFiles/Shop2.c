@@ -1,18 +1,18 @@
 /*****************************************************************************/
 /*!
-\file				Kevin.c
+\file				Level.c
 \author				Dan Muller (d.muller)
 \date				Feb 15, 2014
 
 \brief				Functions for the showcase level
 
 \par				Functions:
-\li					LoadKevin
-\li					InitializeKevin
-\li					UpdateKevin
-\li					DrawKevin
-\li					FreeKevin
-\li					UnloadKevin
+\li					LoadLevel
+\li					InitializeLevel
+\li					UpdateLevel
+\li					DrawLevel
+\li					FreeLevel
+\li					UnloadLevel
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -24,13 +24,12 @@
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/Kevin.h"
+#include "../HeaderFiles/Shop2.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -39,12 +38,6 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
-TextGlyphs* LevelName;
-Platform* Shelf;
-Platform* Shelf2;
-Platform* Shelf3;
-Platform* Shelf4;
 
 /*************************************************************************/
 /*!
@@ -52,7 +45,7 @@ Platform* Shelf4;
 	Loads assets for the showcase level
 */
 /*************************************************************************/
-void LoadKevin(void)
+void LoadShop2(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
@@ -64,44 +57,15 @@ void LoadKevin(void)
 	Initializes the objects for the level
 */
 /*************************************************************************/
-void InitializeKevin(void)
+void InitializeShop2(void)
 {
-	Vec3 TextTint;
-	int i;
-
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, -400, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("That Bitch Level", 0, 300, 100, TextTint, Center);
-	ChangeTextVisibility(LevelName);
-
-	for (i = 0; i < 9; i++)
-	{
-		CreateEnemy(BasicMelee, EnemyType, newID++, rand() % 1500 - 750, rand() % 500 - 250);
-	}
-
-	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
-	Shelf->PlatformCollider.Offset.y = 5 * Shelf->PlatformSprite->Height / 16;
-	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.2f); 
-
-	Shelf2 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 100, -100);
-	Shelf2->PlatformCollider.Offset.y = 5 * Shelf2->PlatformSprite->Height / 16;
-	UpdateCollider(&Shelf2->PlatformCollider, Shelf2->PlatformCollider.width, Shelf2->PlatformCollider.height * 0.2f); 
-
-	Shelf3 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, -80, -100);
-	Shelf3->PlatformCollider.Offset.y = 5 * Shelf3->PlatformSprite->Height / 16;
-	UpdateCollider(&Shelf3->PlatformCollider, Shelf3->PlatformCollider.width, Shelf3->PlatformCollider.height * 0.2f); 
-
-	Shelf4 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, -260, -280);
-	Shelf4->PlatformCollider.Offset.y = 5 * Shelf4->PlatformSprite->Height / 16;
-	UpdateCollider(&Shelf4->PlatformCollider, Shelf4->PlatformCollider.width, Shelf4->PlatformCollider.height * 0.2f); 
-
 }
 
 /*************************************************************************/
@@ -110,9 +74,9 @@ void InitializeKevin(void)
 	Updates the level
 */
 /*************************************************************************/
-void UpdateKevin(void)
+void UpdateShop2(void)
 {
-	EventKevin();
+	EventLevel();
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -124,7 +88,7 @@ void UpdateKevin(void)
 	Draws the level
 */
 /*************************************************************************/
-void DrawKevin(void)
+void DrawShop2(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
@@ -138,11 +102,8 @@ void DrawKevin(void)
 	Frees all the objects in the level
 */
 /*************************************************************************/
-void FreeKevin(void)
+void FreeShop2(void)
 {
-	if(CurrentPlayer.CurrentLevel < GS_Kevin)
-		CurrentPlayer.CurrentLevel = GS_Kevin;
-	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
 
@@ -152,7 +113,7 @@ void FreeKevin(void)
 	Unloads all the assets in the level
 */
 /*************************************************************************/
-void UnloadKevin(void)
+void UnloadShop2(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
@@ -165,28 +126,12 @@ void UnloadKevin(void)
 	Handles all events in the level
 */
 /*************************************************************************/
-void EventKevin(void)
+void EventLevel(void)
 {
-	int i;
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
-	
-	ParticleSystemUpdate();
-
-	//Update the enemies
-	for(i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		if (enemyList[i].objID == -1)
-			break;
-		if (enemyList[i].objID == 0)
-			continue;
-
-		UpdateEnemy(&enemyList[i]);
-	}
-
-	UpdateFloatingText();
 
 	if(FoxInput_KeyTriggered('U'))
 	{
@@ -200,7 +145,7 @@ void EventKevin(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawKevin);
+		//InitializePause(&DrawLevel);
 		//TogglePauseSound(&BackgroundSnd);
 		SetNextState(GS_MainMenu);
 		//UpdatePause();

@@ -39,6 +39,7 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
+static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 
 /*************************************************************************/
@@ -111,6 +112,10 @@ void DrawLevel3(void)
 /*************************************************************************/
 void FreeLevel3(void)
 {
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_YeahGuy)
+		CurrentPlayer.CurrentLevel = GS_YeahGuy;
+	else if(CurrentPlayer.CurrentLevel < GS_Level3)
+		CurrentPlayer.CurrentLevel = GS_Level3;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
