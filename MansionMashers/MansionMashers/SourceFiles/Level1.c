@@ -46,7 +46,6 @@
 static int newID;					// ID number
 TextGlyphs* LevelName;
 
-int Scroll;
 
 Platform* Table1;
 
@@ -130,8 +129,6 @@ void InitializeLevel1(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 806, -235, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	CreatePaperScroll(200);
-	Scroll = FALSE;
-	ReScroll = FALSE;
 }
 
 /*************************************************************************/
@@ -152,11 +149,11 @@ void UpdateLevel1(void)
 	if(FoxInput_KeyTriggered('T'))
 		ReScroll = TRUE;
 	if(Scroll == TRUE)
-		ScrollPaperScroll();
+		ScrollPaperScroll(2);
 	if(ReScroll == TRUE)
 	{
 		Scroll = FALSE;
-		ReScrollPaperScroll();
+		ReScrollPaperScroll(2);
 	}
 
 	// This should be the last line in this function
