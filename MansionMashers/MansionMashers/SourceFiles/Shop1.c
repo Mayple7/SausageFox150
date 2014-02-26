@@ -117,6 +117,7 @@ void UnloadShop1(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
+	DestroyPlayer(&CurrentPlayer);
 }
 
 /*************************************************************************/

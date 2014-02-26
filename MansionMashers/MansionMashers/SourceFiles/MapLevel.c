@@ -166,6 +166,12 @@ void EventLevel(void)
 		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
+
+	if(FoxInput_KeyTriggered(VK_SPACE) || FoxInput_KeyTriggered('E'))
+	{
+		SetNextState(iconPosition);
+	}
+
 	if(FoxInput_KeyTriggered('D'))
 	{
 		int nextPosition = -1;
