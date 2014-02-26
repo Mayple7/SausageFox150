@@ -46,11 +46,7 @@
 static int newID;					// ID number
 TextGlyphs* LevelName;
 
-Sprite* Level1Panel1;
-Sprite* Level1Door1;
-Sprite* Level1Panel2;
-Sprite* Level1Panel3;
-Sprite* Various;
+int Scroll;
 
 Platform* Table1;
 
@@ -133,6 +129,9 @@ void InitializeLevel1(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 806, -235, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
+	CreatePaperScroll(200);
+	Scroll = FALSE;
+	ReScroll = FALSE;
 }
 
 /*************************************************************************/
@@ -147,6 +146,18 @@ void UpdateLevel1(void)
 
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
+
+	if(FoxInput_KeyTriggered('R'))
+		Scroll = TRUE;
+	if(FoxInput_KeyTriggered('T'))
+		ReScroll = TRUE;
+	if(Scroll == TRUE)
+		ScrollPaperScroll();
+	if(ReScroll == TRUE)
+	{
+		Scroll = FALSE;
+		ReScrollPaperScroll();
+	}
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);

@@ -138,21 +138,32 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		wList->Position.y = CurrentPlayer->PlayerWeapon->Position.y;
 		wList->WeaponSprite->ZIndex = (unsigned short)50;
 		wList->WeaponFOF = DroppedWeapon;
-
+			
+		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
+		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
 		//If it is a shop we like it straight, oh ja
 		if (Shopping)
-			wList->WeaponSprite->Rotation = (float)FOX_PI / 2;
+		{
+			//Put the weapon on the ground
+			wList->WeaponSprite->Position.x = wList->WeaponPickup.Position.x;
+			wList->WeaponSprite->Position.y = wList->WeaponPickup.Position.y - wList->CurrentShop->ShopSprite->Height / 1.8f;
+			wList->WeaponPickup.Position = wList->WeaponSprite->Position;
+			//Nothing is for sale, no need to keep the text
+			FreeText(wList->CurrentShop->ItemTextCoin);
+			FreeText(wList->CurrentShop->ItemTextName);
+			//No longer in the shop
+			wList->CurrentShop = NULL;
+		}
 		else
-			wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
+			wList->WeaponSprite->Position = wList->WeaponPickup.Position;
 
-		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
 		wList->WeaponHoverBackground->Position.x = wList->WeaponPickup.Position.x;
 		wList->WeaponHoverBackground->Position.y = wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f;
 		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f + wList->WeaponGlyphs->Glyph->Height / 2));
 		ChangeTextPosition(wList->WeaponGlyphs, glyphPos, Center);
 		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f - wList->WeaponGlyphs->Glyph->Height / 2));
 		ChangeTextPosition(wList->WeaponStatsGlyphs, glyphPos, Center);
-		wList->WeaponHoverBackground->Position = CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Position;
+		//wList->WeaponHoverBackground->Position = CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Position;
 	}
 }
 // height +/- (fontsize/2)
