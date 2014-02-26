@@ -83,12 +83,12 @@ void InitializeLevel2(void)
 	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 
-	CreateSprite("TextureFiles/testbackground.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 1, 1, 1, 0, 0);
 
-	Test = CreateWall("TextureFiles/BlankPlatform.png", 500, 500, newID++, 0, 0);
-	Test->WallSprite->Visible = FALSE;
+	//Test = CreateWall("TextureFiles/BlankPlatform.png", 500, 500, newID++, 0, 0);
+	//Test->WallSprite->Visible = FALSE;
 
-	CreatePaperScroll(200);
+	//CreatePaperScroll(200);
 }
 
 /*************************************************************************/
@@ -101,9 +101,9 @@ void UpdateLevel2(void)
 {
 	EventLevel2();
 
-	ScrollPaperScroll(1);
+	//ScrollPaperScroll(1);
 
-	EasyEditWall(Test, 10);
+	//EasyEditWall(Test, 10);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
