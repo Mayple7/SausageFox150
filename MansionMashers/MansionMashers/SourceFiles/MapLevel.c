@@ -50,6 +50,8 @@ Sprite* MapBackground;
 Sprite* FadeOverlay;
 Sprite* PlayerIcon;
 
+ParticleSystem* SystemOne;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -101,13 +103,15 @@ void InitializeMapLevel(void)
 		iconPosition = CurrentPlayer.CurrentLevel;
 
 	//Create the large sprites
-	GrassBackground = (Sprite *)CreateSprite("TextureFiles/BlankPlatform.png", 4000, 1080, 1, 1, 1, 480, 0);
-	GrassBackground->Tint = Tint;
-	MapBackground = (Sprite *)CreateSprite("TextureFiles/MapTemp.png", 2880, 1080, 2, 1, 1, 480, 0);
-	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 3, 1, 1, 0, 0);
+	GrassBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
+	MapBackground = (Sprite *)CreateSprite("TextureFiles/Map.png", 2880, 1080, 20, 1, 1, 480, 0);
+	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 30, 1, 1, 0, 0);
 
 	// Foxy icon ^_^
-	PlayerIcon = (Sprite *)CreateSprite("TextureFiles/fox_head.png", 76, 74, 5, 1, 1, 0, 0);
+	PlayerIcon = (Sprite *)CreateSprite("TextureFiles/fox_head.png", 76, 74, 50, 1, 1, 0, 0);
+
+	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
+	SystemOne->FadeIn = TRUE;
 
 	// Adjusts the fade overlay based on the farthest progressed level
 	switch(CurrentPlayer.CurrentLevel)
@@ -213,6 +217,8 @@ void UnloadMapLevel(void)
 /*************************************************************************/
 void EventLevel(void)
 {
+	//Update the particles
+	ParticleSystemUpdate();
 	//Execute the pause menu
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
