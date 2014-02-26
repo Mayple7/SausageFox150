@@ -45,6 +45,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
+static int beginningAnimiation = TRUE;
 TextGlyphs* LevelName;
 
 EnemySpawner* FirstSpawner;
@@ -84,7 +85,7 @@ void InitializeLevel1(void)
 	ResetCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, -500, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1200, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
@@ -188,8 +189,8 @@ void DrawLevel1(void)
 		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
 	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
 		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
-	else
-		SetCamera(&CurrentPlayer.Position, 250);
+	//else
+		//SetCamera(&CurrentPlayer.Position, 250);
 
 }
 
@@ -232,10 +233,28 @@ void UnloadLevel1(void)
 void EventLevel1(void)
 {
 	int i;
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
+
+	if(!beginningAnimiation)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+	}
+	else
+	{
+		CurrentPlayer.FlipX = 1;
+		CurrentPlayer.PlayerDirection = RIGHT;
+		CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+		if(CurrentPlayer.Position.x > -500)
+		{
+			beginningAnimiation = FALSE;
+		}
+	}
+
 
 	//Update the enemies
 	for(i = 0; i < COLLIDEAMOUNT; i++)
