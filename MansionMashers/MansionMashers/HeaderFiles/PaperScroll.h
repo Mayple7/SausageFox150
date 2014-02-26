@@ -2,10 +2,11 @@
 #define FOX_PAPERSCROLL
 
 void CreatePaperScroll(float height);
-void ScrollPaperScroll(void);
-void ReScrollPaperScroll(void);
+void ScrollPaperScroll(float Speed);
+void ReScrollPaperScroll(float Speed);
 
+//Bool Vaulues
+int Scroll;
 int ReScroll;
-
 
 #endif
