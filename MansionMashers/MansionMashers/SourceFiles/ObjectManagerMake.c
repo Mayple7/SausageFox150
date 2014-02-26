@@ -405,30 +405,30 @@ void DrawCollisionList(void)
 	for (i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		//Make sure the sprite exists
-		if (platformList[i].objID && platformList[i].PlatformCollider.collisionDebug)
+		if (platformList[i].objID > 0 && platformList[i].PlatformCollider.collisionDebug)
 		{
 			//Free the mesh and texture data
 			displayCollisionDebug(&platformList[i].PlatformCollider);
 		}
 		//Make sure the sprite exists
-		if (foodList[i].objID && foodList[i].FoodCollider.collisionDebug)
+		if (foodList[i].objID > 0 && foodList[i].FoodCollider.collisionDebug)
 		{
 			//Free the mesh and texture data
 			displayCollisionDebug(&foodList[i].FoodCollider);
 		}
 		//Make sure the sprite exists
-		if (enemyList[i].objID && enemyList[i].EnemyCollider.collisionDebug)
+		if (enemyList[i].objID > 0 && enemyList[i].EnemyCollider.collisionDebug)
 		{
 			//Free the mesh and texture data
 			displayCollisionDebug(&enemyList[i].EnemyCollider);
 		}
-		if (weaponList[i].objID && weaponList[i].WeaponPickup.collisionDebug)
+		if (weaponList[i].objID > 0 && weaponList[i].WeaponPickup.collisionDebug)
 		{
 			//Free the mesh and texture data
 			displayCollisionDebug(&weaponList[i].WeaponPickup);
 			displayCollisionDebug(&weaponList[i].WeaponAttack);
 		}
-		if (wallList[i].objID && wallList[i].WallCollider.collisionDebug)
+		if (wallList[i].objID > 0 && wallList[i].WallCollider.collisionDebug)
 		{
 			//Free the mesh and texture data
 			displayCollisionDebug(&wallList[i].WallCollider);

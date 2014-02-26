@@ -104,7 +104,7 @@ void InitializeMapLevel(void)
 
 	//Create the large sprites
 	GrassBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
-	MapBackground = (Sprite *)CreateSprite("TextureFiles/Map.png", 2880, 1080, 20, 1, 1, 480, 0);
+	MapBackground = (Sprite *)CreateSprite("TextureFiles/MapTemp.png", 2880, 1080, 20, 1, 1, 480, 0);
 	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 30, 1, 1, 0, 0);
 
 	// Foxy icon ^_^
