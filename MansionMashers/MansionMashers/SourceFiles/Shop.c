@@ -66,15 +66,15 @@ void CreateWeaponShop(float shopPosX, float shopPosY, int *newID, int collisionG
 	GetWeaponCoin(newShop, weaponRarity);
 
 	//Sign
-	CreateSprite("TextureFiles/WoodSign.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
+	newShop->ShopSprite = (Sprite *) CreateSprite("TextureFiles/WoodSign.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
 
 	//Text
-	Vec3Set(&TextTint, 0, 0, 0);
-	newShop->ItemName = CreateText("SWORD", shopPosX + 20, shopPosY + 120, 80, TextTint, Center);
-	ChangeTextVisibility((TextGlyphs *) newShop->ItemName);
 	Vec3Set(&TextTint, 0.2f, 0.2f, 0.2f);
-	newShop->ItemCoin = CreateText(strcat(newShop->CoinChar, " coin"), shopPosX + 10, shopPosY + 60, 60, TextTint, Center);
-	ChangeTextVisibility((TextGlyphs *) newShop->ItemCoin);
+	newShop->ItemTextCoin = CreateText(strcat(newShop->CoinChar, " coin"), shopPosX + 10, shopPosY + 60, 60, TextTint, Center);
+	ChangeTextVisibility((TextGlyphs *) newShop->ItemTextCoin);
+	Vec3Set(&TextTint, 0, 0, 0);
+	newShop->ItemTextName = CreateText("SWORD", shopPosX + 20, shopPosY + 120, 80, TextTint, Center);
+	ChangeTextVisibility((TextGlyphs *) newShop->ItemTextName);
 
 	//Weapon
 	newShop->Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, *newID++, -350, -140);

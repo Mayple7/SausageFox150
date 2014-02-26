@@ -12,9 +12,10 @@ typedef struct WeaponShop
 	int Coin;
 	char CoinChar[4];
 
-	struct TextGlyphs *ItemName;
-	struct TextGlyphs *ItemCoin;
+	struct TextGlyphs *ItemTextName;
+	struct TextGlyphs *ItemTextCoin;
 
+	Sprite *ShopSprite;
 	Weapon *Weapon;
 }WeaponShop;
 
