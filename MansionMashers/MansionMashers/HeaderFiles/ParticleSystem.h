@@ -43,6 +43,8 @@ typedef struct ParticleSystem
 
 	int ZIndex;
 
+	int FadeIn;
+
 }ParticleSystem;
 
 typedef struct Particle
@@ -65,11 +67,13 @@ typedef struct Particle
 
 	float StartAlpha;
 
+	int FadeIn;
+
 }Particle;
 
 ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float posY, int ZIndex, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, float emitScaleSpeed, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife, float StartAlpha);
 
-void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX, float posY, int ZIndex, float VelX, float VelY, float Life, float Scale, float ScaleSpeed, float StartAlpha);
+void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX, float posY, int ZIndex, float VelX, float VelY, float Life, float Scale, float ScaleSpeed, float StartAlpha, int FadeIn);
 
 void ParticleSystemUpdate(void);
 void ParticleUpdate(void);

@@ -47,15 +47,17 @@ ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float
 	CurrentSystem->emitLife = emitLife;
 	CurrentSystem->ZIndex = ZIndex;
 	CurrentSystem->ParticleStartAlpha = StartAlpha;
+	CurrentSystem->FadeIn = FALSE;
 	return CurrentSystem;
 }
 
-void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX, float posY, int ZIndex, float VelX, float VelY, float Life, float Scale, float ScaleSpeed, float StartAlpha)
+void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX, float posY, int ZIndex, float VelX, float VelY, float Life, float Scale, float ScaleSpeed, float StartAlpha, int FadeIn)
 {
 	Particle *CurrentParticle = AddParticle();
 
 	CurrentParticle->ParticleSprite = CreateSpriteNoMesh(particleTexture, 64.0f, 64.0f, ZIndex, 1, 1, posX, posY);
 	CurrentParticle->ParticleSprite->SpriteMesh = mesh;
+	CurrentParticle->ParticleSprite->Alpha = 0;
 	CurrentParticle->Position.x = posX * GetLoadRatio();
 	CurrentParticle->Position.y = posY * GetLoadRatio();
 	CurrentParticle->Velocity.x = VelX;
@@ -69,12 +71,13 @@ void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX,
 	CurrentParticle->StartAlpha = StartAlpha;
 	srand( lastRandomNumber );
 	lastRandomNumber = rand();
-	CurrentParticle->RotationSpeed = (float)(((int)lastRandomNumber % 100 - 50) / 400.0f);
+	CurrentParticle->RotationSpeed = (float)(((int)lastRandomNumber % 100 - 50) / 1000.0f);
 
 	srand( lastRandomNumber );
 	lastRandomNumber = rand();
 	CurrentParticle->ParticleSprite->Rotation = (float)((int)lastRandomNumber % 360) / 180.0f * (float)FOX_PI;
 
+	CurrentParticle->FadeIn = FadeIn;
 }
 
 void ParticleUpdate(void)
@@ -101,8 +104,20 @@ void ParticleUpdate(void)
 		particleList[i].Lifetime -= GetDeltaTime();
 
 		if (particleList[i].LifetimeMax != 0)
-			particleList[i].ParticleSprite->Alpha = particleList[i].StartAlpha * (particleList[i].Lifetime / particleList[i].LifetimeMax);
-
+		{
+			if (particleList[i].FadeIn)
+			{
+				if (particleList[i].ParticleSprite->Alpha < particleList[i].StartAlpha * (particleList[i].Lifetime / particleList[i].LifetimeMax) - 0.01f)
+					particleList[i].ParticleSprite->Alpha += 0.01f;
+				else
+				{
+					particleList[i].ParticleSprite->Alpha = particleList[i].StartAlpha * (particleList[i].Lifetime / particleList[i].LifetimeMax);
+					particleList[i].FadeIn = FALSE;
+				}
+			}
+			else 
+				particleList[i].ParticleSprite->Alpha = particleList[i].StartAlpha * (particleList[i].Lifetime / particleList[i].LifetimeMax);
+		}
 		particleList[i].ParticleSprite->ScaleX *= (1 + (particleList[i].ScaleSpeed / 1000.0f));
 		particleList[i].ParticleSprite->ScaleY *= (1 + (particleList[i].ScaleSpeed / 1000.0f));
 
@@ -174,7 +189,9 @@ void ParticleSystemUpdate(void)
 											particleSystemList[i].emitLife, 
 											particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f),
 											particleSystemList[i].emitScaleSpeed,
-											particleSystemList[i].ParticleStartAlpha);
+											particleSystemList[i].ParticleStartAlpha,
+											particleSystemList[i].FadeIn);
+
 						}
 						if (particleSystemList[i].amountTotal > 0)
 							particleSystemList[i].amountTotal--;
