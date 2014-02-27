@@ -199,7 +199,20 @@ void InputPlayer(struct Player *CurrentPlayer)
 	}
 	if(FoxInput_KeyTriggered('Q'))
 	{
-		
+		int startingBuff = CurrentPlayer->BuffSelected++;
+
+		if(CurrentPlayer->BuffSelected > 3)
+			CurrentPlayer->BuffSelected = 0;
+
+		while(!CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] && startingBuff != CurrentPlayer->BuffSelected)
+		{
+			CurrentPlayer->BuffSelected++;
+			if(CurrentPlayer->BuffSelected > 3)
+			{
+				CurrentPlayer->BuffSelected = 0;
+			}
+		}
+		//UpdateHUDItems(
 	}
 
 	// Move left if A is pressed

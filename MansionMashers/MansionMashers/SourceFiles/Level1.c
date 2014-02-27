@@ -44,7 +44,7 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
+static int levelComplete;
 static int beginningAnimiation;
 TextGlyphs* LevelName;
 
@@ -81,6 +81,7 @@ void InitializeLevel1(void)
 	Vec2 SpawnLocation, SpawnerLocation;
 
 	beginningAnimiation = TRUE;
+	levelComplete = FALSE;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();

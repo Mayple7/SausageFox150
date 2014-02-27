@@ -33,7 +33,13 @@
 /*************************************************************************/
 /*!
 	\brief
-	Loads assets for the showcase level
+	Creates the HUD for the level
+
+	\param CurrentPlayer
+	The current player to customize the HUD for
+
+	\return
+	Returns a pointer to the HUD created
 */
 /*************************************************************************/
 HUD* CreateHUD(Player* CurrentPlayer)
@@ -78,6 +84,15 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	return CurrentHUD;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates the HUD position based on the camera
+
+	\param CurrentHUD
+	The pointer to the HUD to be updated
+*/
+/*************************************************************************/
 void UpdateHUDPosition(HUD* CurrentHUD)
 {
 	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 450);
@@ -88,21 +103,39 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 548);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Update the visible HUD item
+
+	\param CurrentHUD
+	HUD to be updated
+
+	\param CurrentPlayer
+	The player to check the HUD item with
+*/
+/*************************************************************************/
 void UpdateHUDItems(HUD* CurrentHUD, Player* CurrentPlayer)
 {
-	if(CurrentPlayer->BuffHeld[0])
+	if(!CurrentPlayer->BuffSelected && CurrentPlayer->BuffHeld[0])
 		CurrentHUD->HUDItem[0]->Visible = TRUE;
-
-	if(CurrentPlayer->BuffHeld[1])
+	else if(CurrentPlayer->BuffSelected == 1 && CurrentPlayer->BuffHeld[1])
 		CurrentHUD->HUDItem[1]->Visible = TRUE;
-
-	if(CurrentPlayer->BuffHeld[2])
+	else if(CurrentPlayer->BuffSelected == 2 && CurrentPlayer->BuffHeld[2])
 		CurrentHUD->HUDItem[2]->Visible = TRUE;
-
-	if(CurrentPlayer->BuffHeld[3])
+	else if(CurrentPlayer->BuffSelected == 3 && CurrentPlayer->BuffHeld[3])
 		CurrentHUD->HUDItem[3]->Visible = TRUE;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Memory angels hath cometh
+
+	\param CurrentHUD
+	The HUD to be freed
+*/
+/*************************************************************************/
 void FreeHUD(HUD* CurrentHUD)
 {
 	FreeMyAlloc(CurrentHUD);
