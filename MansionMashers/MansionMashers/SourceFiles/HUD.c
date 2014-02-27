@@ -69,17 +69,19 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	CurrentHUD->HUDItem[2] = (Sprite *)CreateSprite("TextureFiles/Pizza.png", 50, 50, 401, 1, 1, GetCameraXPosition() - 548, 345);
 	CurrentHUD->HUDItem[3] = (Sprite *)CreateSprite("TextureFiles/Cake.png", 50, 50, 401, 1, 1, GetCameraXPosition() - 548, 345);
 
-	if(!CurrentPlayer->BuffHeld[0])
-		CurrentHUD->HUDItem[0]->Visible = FALSE;
+	CurrentHUD->HUDItem[0]->Visible = FALSE;
+	CurrentHUD->HUDItem[1]->Visible = FALSE;
+	CurrentHUD->HUDItem[2]->Visible = FALSE;
+	CurrentHUD->HUDItem[3]->Visible = FALSE;
 
-	if(!CurrentPlayer->BuffHeld[1])
-		CurrentHUD->HUDItem[1]->Visible = FALSE;
-
-	if(!CurrentPlayer->BuffHeld[2])
-		CurrentHUD->HUDItem[2]->Visible = FALSE;
-
-	if(!CurrentPlayer->BuffHeld[3])
-		CurrentHUD->HUDItem[3]->Visible = FALSE;
+	if(!CurrentPlayer->BuffSelected && CurrentPlayer->BuffHeld[0])
+		CurrentHUD->HUDItem[0]->Visible = TRUE;
+	else if(CurrentPlayer->BuffSelected == 1 && CurrentPlayer->BuffHeld[1])
+		CurrentHUD->HUDItem[1]->Visible = TRUE;
+	else if(CurrentPlayer->BuffSelected == 2 && CurrentPlayer->BuffHeld[2])
+		CurrentHUD->HUDItem[2]->Visible = TRUE;
+	else if(CurrentPlayer->BuffSelected == 3 && CurrentPlayer->BuffHeld[3])
+		CurrentHUD->HUDItem[3]->Visible = TRUE;
 
 	return CurrentHUD;
 }
@@ -97,10 +99,10 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 {
 	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 450);
 
-	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 548);
-	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 548);
-	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 548);
-	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 548);
+	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 515);
+	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 515);
+	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 515);
+	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 515);
 }
 
 /*************************************************************************/
@@ -117,6 +119,11 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 /*************************************************************************/
 void UpdateHUDItems(HUD* CurrentHUD, Player* CurrentPlayer)
 {
+	CurrentHUD->HUDItem[0]->Visible = FALSE;
+	CurrentHUD->HUDItem[1]->Visible = FALSE;
+	CurrentHUD->HUDItem[2]->Visible = FALSE;
+	CurrentHUD->HUDItem[3]->Visible = FALSE;
+
 	if(!CurrentPlayer->BuffSelected && CurrentPlayer->BuffHeld[0])
 		CurrentHUD->HUDItem[0]->Visible = TRUE;
 	else if(CurrentPlayer->BuffSelected == 1 && CurrentPlayer->BuffHeld[1])

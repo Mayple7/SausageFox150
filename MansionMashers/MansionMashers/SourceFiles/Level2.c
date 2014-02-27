@@ -53,6 +53,7 @@ Food* Cake;
 
 Wall *Test;
 
+HUD* CurrentHUD;
 
 /*************************************************************************/
 /*!
@@ -83,6 +84,8 @@ void InitializeLevel2(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
@@ -117,6 +120,8 @@ void UpdateLevel2(void)
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -147,6 +152,7 @@ void FreeLevel2(void)
 		CurrentPlayer.CurrentLevel = GS_Level2;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -174,6 +180,7 @@ void EventLevel2(void)
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 
 	if(FoxInput_KeyTriggered('U'))
 	{

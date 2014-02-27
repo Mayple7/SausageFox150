@@ -68,6 +68,27 @@ void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform)
 
 void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 {
+	if(!CurrentPlayer->BuffHeld[0] && !CurrentPlayer->BuffHeld[1] && !CurrentPlayer->BuffHeld[2] && !CurrentPlayer->BuffHeld[3])
+	{
+		CurrentPlayer->BuffSelected = CurrentFood->FoodType;
+	}
+
+	switch(CurrentFood->FoodType)
+	{
+	case Agility:
+		CurrentPlayer->BuffHeld[0] = TRUE;
+		break;
+	case Strength:
+		CurrentPlayer->BuffHeld[1] = TRUE;
+		break;
+	case Defense:
+		CurrentPlayer->BuffHeld[2] = TRUE;
+		break;
+	case Haste:
+		CurrentPlayer->BuffHeld[3] = TRUE;
+		break;
+	}
+
 	printf("YUM YUM YUM YUM  DELICIOUSO\n");
 	FreeFood(CurrentFood);
 }

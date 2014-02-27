@@ -47,7 +47,7 @@ Player CurrentPlayer;
 /*************************************************************************/
 void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, float xPos, float yPos)
 {
-	int i;
+	int i, startingBuff;
 
 	for(i = 0; i < COLLIDEAMOUNT; i++)
 	{
@@ -114,8 +114,18 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 		LoadNewPlayer(CurrentPlayer, Princess);
 	}
 
+	startingBuff = 3;
+
+	while(!CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] && startingBuff != CurrentPlayer->BuffSelected)
+	{
+		CurrentPlayer->BuffSelected++;
+		if(CurrentPlayer->BuffSelected > 3)
+		{
+			CurrentPlayer->BuffSelected = 0;
+		}
+	}
+
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
-	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
 
 	/*////////////////////////////////
 	//       PLAYER SOUNDS          //
@@ -127,10 +137,10 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//       PLAYER SPRITE          //
 	////////////////////////////////*/
-	CurrentPlayer->PlayerSprite = (Sprite *) CreateSprite("TextureFiles/Sausage.png", 100, 100, 100, 1, 1, 0, 0);
-	CurrentPlayer->PlayerSprite->Visible = FALSE;
+	CurrentPlayer->Zindex = 100;
 	CreatePlayerSprites(CurrentPlayer);
-	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = CurrentPlayer->PlayerSprite->ZIndex + 2;
+	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = CurrentPlayer->Zindex + 2;
+	Animation(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -144,6 +154,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
+	printf("%f\n", GetDeltaTime());
 	Animation(CurrentPlayer);
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
@@ -169,8 +180,21 @@ void InputPlayer(struct Player *CurrentPlayer)
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 	}
 
-	// not key press for direction then slow down!
-	if(!FoxInput_KeyDown('D') && !FoxInput_KeyDown('A'))
+	// Move left if A is pressed
+	if(FoxInput_KeyDown('A'))
+	{
+		CurrentPlayer->FlipX = 0;
+		CurrentPlayer->PlayerDirection = LEFT;
+		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+	}
+	// Move right if D is pressed
+	else if(FoxInput_KeyDown('D'))
+	{
+		CurrentPlayer->FlipX = 1;
+		CurrentPlayer->PlayerDirection = RIGHT;
+		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+	}
+	else
 	{
 		if (!(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
@@ -197,13 +221,18 @@ void InputPlayer(struct Player *CurrentPlayer)
 			}
 		}
 	}
+
+	//Cycle through the buffs
 	if(FoxInput_KeyTriggered('Q'))
 	{
+		//The starting buff so we don't infini-loop
 		int startingBuff = CurrentPlayer->BuffSelected++;
 
+		//Loop back around
 		if(CurrentPlayer->BuffSelected > 3)
 			CurrentPlayer->BuffSelected = 0;
 
+		//Go to the next acquired buff, or stop looping
 		while(!CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] && startingBuff != CurrentPlayer->BuffSelected)
 		{
 			CurrentPlayer->BuffSelected++;
@@ -212,23 +241,59 @@ void InputPlayer(struct Player *CurrentPlayer)
 				CurrentPlayer->BuffSelected = 0;
 			}
 		}
-		//UpdateHUDItems(
 	}
 
-	// Move left if A is pressed
-	if(FoxInput_KeyDown('A'))
+	//Use the buff
+	if(FoxInput_KeyTriggered('F'))
 	{
-		CurrentPlayer->FlipX = 0;
-		CurrentPlayer->PlayerDirection = LEFT;
-		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		if(CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected])
+		{
+			int startingBuff;
+			// Currently going with a 20% increase
+			// Sets the timer for 10 seconds
+			switch(CurrentPlayer->BuffSelected)
+			{
+			// Buffs the player's attack speed
+			case Agility:
+				CurrentPlayer->CurrentPlayerStats.AttackSpeed *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.AgilityTimer = 10;
+				break;
+			// Buffs the player's damage
+			case Strength:
+				CurrentPlayer->CurrentPlayerStats.Damage = (int)(CurrentPlayer->CurrentPlayerStats.Damage * 1.2f);
+				CurrentPlayer->CurrentPlayerStats.StrengthTimer = 10;
+				break;
+			// Buffs the player's damage reduction
+			case Defense:
+				CurrentPlayer->CurrentPlayerStats.DamageReduction *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.DefenseTimer = 10;
+				break;
+			// Buffs the player's move speed
+			case Haste:
+				CurrentPlayer->CurrentPlayerStats.MoveSpeed *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.HasteTimer = 10;
+				break;
+			}
+			CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] = FALSE;
+			//Cycles automatically to the next available buff
+			//The starting buff so we don't infini-loop
+			startingBuff = CurrentPlayer->BuffSelected++;
+			//Loop back around
+			if(CurrentPlayer->BuffSelected > 3)
+				CurrentPlayer->BuffSelected = 0;
+
+			//Go to the next acquired buff, or stop looping
+			while(!CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] && startingBuff != CurrentPlayer->BuffSelected)
+			{
+				CurrentPlayer->BuffSelected++;
+				if(CurrentPlayer->BuffSelected > 3)
+				{
+					CurrentPlayer->BuffSelected = 0;
+				}
+			}
+		}
 	}
-	// Move right if D is pressed
-	else if(FoxInput_KeyDown('D'))
-	{
-		CurrentPlayer->FlipX = 1;
-		CurrentPlayer->PlayerDirection = RIGHT;
-		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
-	}
+
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(FoxInput_KeyTriggered(VK_SPACE))
 	{
@@ -285,6 +350,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 void UpdatePlayerPosition(Player *CurrentPlayer)
 {
 	Vec2 velocityTime;
+
+	//Update the buff timers
+	UpdateBuffTimers(CurrentPlayer);
 
 	//Brings the player back to the surface if something bad happens
 	if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
@@ -764,10 +832,12 @@ void DetectPlayerCollision(void)
 /*************************************************************************/
 void Animation(Player *Object)
 {
+	float sinOfLegValue = (float)sin(Object->LegSinValue);
+	float sinOfTwoLegValue = (float)sin(Object->LegSinValue*2);
 	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f / ((Object->Speed * 0.15f + 0.1f)) ))-(Object->Speed);
-	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
+	float LegUpperDirection = sinOfLegValue/(LegDistance);
 	float LegLowerDirection;
-	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
+	float LegUpperDirection2 = sinOfLegValue/(LegDistance);
 	float LegLowerDirection2;
 	
 	Sprite *LegUpr = Object->PlayerSpriteParts.LegUpper;
@@ -830,19 +900,20 @@ void Animation(Player *Object)
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 	{
 		if (LegUpperDirection < 0)
-			LegLowerDirection = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
+			LegLowerDirection = (sinOfLegValue/1.25f + sinOfLegValue * -0.1f)/(LegDistance);
 		else
-			LegLowerDirection = (LegUpperDirection + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
+			LegLowerDirection = (LegUpperDirection + sinOfLegValue + sinOfLegValue * 0.4f)/(LegDistance);
 
 		if (LegUpperDirection2 > 0)
-			LegLowerDirection2 = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
+			LegLowerDirection2 = (sinOfLegValue/1.25f + sinOfLegValue * -0.1f)/(LegDistance);
 		else
-			LegLowerDirection2 = (LegUpperDirection2 + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
+			LegLowerDirection2 = (LegUpperDirection2 + sinOfLegValue + sinOfLegValue * 0.4f)/(LegDistance);
 	}
 	else
 	{
-		LegUpperDirection = (float)sin(LegDistance/10) - 1.0f;
-		LegUpperDirection2 = (float)sin(LegDistance/10) - 1.0f;//60.0f * GetDeltaTime();
+		float sinLegOverTen = (float)sin(LegDistance/10);
+		LegUpperDirection = sinLegOverTen - 1.0f;
+		LegUpperDirection2 = sinLegOverTen - 1.0f;//60.0f * GetDeltaTime();
 		LegLowerDirection = LegUpperDirection + 0.5f;//30.0f * GetDeltaTime();
 		LegLowerDirection2 = LegUpperDirection2 - 0.5f;//30.0f * GetDeltaTime();
 	}
@@ -867,9 +938,9 @@ void Animation(Player *Object)
 		LegUpr->Position.x = Object->Position.x;
 		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
-			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance) * GetLoadRatio();
+			LegUpr2->Position.x += sinOfLegValue*-8/(LegDistance) * GetLoadRatio();
 		}
-		LegUpr->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance)) * GetLoadRatio();
+		LegUpr->Position.y = Object->Position.y + (sinOfTwoLegValue*5/(LegDistance)) * GetLoadRatio();
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
@@ -878,9 +949,9 @@ void Animation(Player *Object)
 		LegUpr2->Position.x = Object->Position.x;
 		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
-			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance) * GetLoadRatio();
+			LegUpr2->Position.x += sinOfLegValue*8/(LegDistance) * GetLoadRatio();
 		}
-		LegUpr2->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance)) * GetLoadRatio();
+		LegUpr2->Position.y = Object->Position.y + (sinOfTwoLegValue*5/(LegDistance)) * GetLoadRatio();
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
@@ -928,7 +999,7 @@ void Animation(Player *Object)
 
 		Weap->Position.x = ArmLwr2->Position.x - (float)cos(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
 		Weap->Position.y = ArmLwr2->Position.y - (float)sin(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
-		Weap->ZIndex = Object->PlayerSprite->ZIndex - 1;
+		Weap->ZIndex = Object->Zindex - 1;
 	}
 	else
 	{
@@ -938,9 +1009,9 @@ void Animation(Player *Object)
 		LegUpr->Position.x = Object->Position.x;
 		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
-			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance) * GetLoadRatio();
+			LegUpr2->Position.x += sinOfLegValue*-8/(LegDistance) * GetLoadRatio();
 		}
-		LegUpr->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance)) * GetLoadRatio();
+		LegUpr->Position.y = Object->Position.y + (sinOfTwoLegValue*5/(LegDistance)) * GetLoadRatio();
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
@@ -949,9 +1020,9 @@ void Animation(Player *Object)
 		LegUpr2->Position.x = Object->Position.x;
 		if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 		{
-			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance) * GetLoadRatio();
+			LegUpr2->Position.x += sinOfLegValue*8/(LegDistance) * GetLoadRatio();
 		}
-		LegUpr2->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance)) * GetLoadRatio();
+		LegUpr2->Position.y = Object->Position.y + (sinOfTwoLegValue*5/(LegDistance)) * GetLoadRatio();
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
@@ -998,7 +1069,7 @@ void Animation(Player *Object)
 
 		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
 		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
-		Weap->ZIndex = Object->PlayerSprite->ZIndex + 2;
+		Weap->ZIndex = Object->Zindex + 2;
 	}
 
 	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
@@ -1022,40 +1093,40 @@ void CreatePlayerSprites(Player *Object)
 	switch(Object->Princess)
 	{
 	case Mayple:
-		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
-		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtMayple.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex + 1, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyMayple.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtMayple.png", 300.0f, 300.0f, Object->Zindex + 1, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyMayple.png", 300.0f, 300.0f, Object->Zindex, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, Object->Zindex + 2, 1, 1, 0, 0);
 		break;
 	case Ginko:
-		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
-		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtGinko.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex + 1, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyGinko.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtGinko.png", 300.0f, 300.0f, Object->Zindex + 1, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyGinko.png", 300.0f, 300.0f, Object->Zindex, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, Object->Zindex + 2, 1, 1, 0, 0);
 		break;
 	case Holly:
-		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
-		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtHolly.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex + 1, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyHolly.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtHolly.png", 300.0f, 300.0f, Object->Zindex + 1, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyHolly.png", 300.0f, 300.0f, Object->Zindex, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, Object->Zindex + 2, 1, 1, 0, 0);
 		break;
 	case Kaya:
-		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
-		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtKaya.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex + 1, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyKaya.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtKaya.png", 300.0f, 300.0f, Object->Zindex + 1, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyKaya.png", 300.0f, 300.0f, Object->Zindex, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, Object->Zindex + 2, 1, 1, 0, 0);
 		break;
 	}
 
-	Object->PlayerSpriteParts.ArmLower2 = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.ArmLower2 = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.LegUpper = (Sprite *) CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.LegUpper = (Sprite *) CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, Object->Zindex, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.LegLower = (Sprite *) CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.LegLower = (Sprite *) CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, Object->Zindex, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.LegUpper2 = (Sprite *) CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.LegUpper2 = (Sprite *) CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, Object->Zindex, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.LegLower2 = (Sprite *) CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.LegLower2 = (Sprite *) CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, Object->Zindex, 1, 1, 0, 0);
 
 	Object->PlayerSpriteParts.Skirt->AnimationActive = 0;
 
@@ -1063,13 +1134,13 @@ void CreatePlayerSprites(Player *Object)
 
 	Object->PlayerSpriteParts.BlinkTimer = 0;
 
-	Object->PlayerSpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 7, 2, 0, 0);
+	Object->PlayerSpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, Object->Zindex, 7, 2, 0, 0);
 
 	Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
 
 	Object->TailSinValue = 0;
 
-	Object->PlayerSpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 3, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->Zindex + 3, 1, 1, 0, 0);
 }
 
 /*************************************************************************/
@@ -1127,7 +1198,16 @@ void SavePlayer(Player *CurrentPlayer)
 	FILE *fp;
 	// Malloc me a long string
 	char* string = (char *)MallocMyAlloc(500, 1);
-	int BuffValue = (CurrentPlayer->BuffHeld[0] & 1) | (CurrentPlayer->BuffHeld[1] & 2) | (CurrentPlayer->BuffHeld[2] & 4) | (CurrentPlayer->BuffHeld[3] & 8);
+
+	int BuffValue = 0;
+	if(CurrentPlayer->BuffHeld[0])
+		BuffValue = BuffValue | 0x1;
+	if(CurrentPlayer->BuffHeld[1])
+		BuffValue = BuffValue | 0x2;
+	if(CurrentPlayer->BuffHeld[2])
+		BuffValue = BuffValue | 0x4;
+	if(CurrentPlayer->BuffHeld[3])
+		BuffValue = BuffValue | 0x8;
 
 	// Ugly code that puts all needed info into one string
 	sprintf(string, "Level: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
@@ -1188,13 +1268,13 @@ int LoadPlayer(Player *CurrentPlayer)
 			updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 			updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 			
-			if(BuffValue & 1)
+			if(BuffValue & 0x1)
 				CurrentPlayer->BuffHeld[0] = TRUE;
-			if(BuffValue & 2)
+			if(BuffValue & 0x2)
 				CurrentPlayer->BuffHeld[1] = TRUE;
-			if(BuffValue & 4)
+			if(BuffValue & 0x4)
 				CurrentPlayer->BuffHeld[2] = TRUE;
-			if(BuffValue & 8)
+			if(BuffValue & 0x8)
 				CurrentPlayer->BuffHeld[3] = TRUE;
 
 			//Update those text strings
@@ -1336,4 +1416,44 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 		CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
 	}
 	CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
+}
+
+void UpdateBuffTimers(Player* CurrentPlayer)
+{
+	//Update buff timers
+	if(CurrentPlayer->CurrentPlayerStats.AgilityTimer > 0)
+	{
+		CurrentPlayer->CurrentPlayerStats.AgilityTimer -= GetDeltaTime();
+	}
+	else
+	{
+		updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
+	}
+	//Update buff timers
+	if(CurrentPlayer->CurrentPlayerStats.StrengthTimer > 0)
+	{
+		CurrentPlayer->CurrentPlayerStats.StrengthTimer -= GetDeltaTime();
+	}
+	else
+	{
+		updateDamage(CurrentPlayer);
+	}
+	//Update buff timers
+	if(CurrentPlayer->CurrentPlayerStats.DefenseTimer > 0)
+	{
+		CurrentPlayer->CurrentPlayerStats.DefenseTimer -= GetDeltaTime();
+	}
+	else
+	{
+		updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
+	}
+	//Update buff timers
+	if(CurrentPlayer->CurrentPlayerStats.HasteTimer > 0)
+	{
+		CurrentPlayer->CurrentPlayerStats.HasteTimer -= GetDeltaTime();
+	}
+	else
+	{
+		updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
+	}
 }
