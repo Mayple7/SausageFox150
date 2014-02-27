@@ -180,8 +180,21 @@ void InputPlayer(struct Player *CurrentPlayer)
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 	}
 
-	// not key press for direction then slow down!
-	if(!FoxInput_KeyDown('D') && !FoxInput_KeyDown('A'))
+	// Move left if A is pressed
+	if(FoxInput_KeyDown('A'))
+	{
+		CurrentPlayer->FlipX = 0;
+		CurrentPlayer->PlayerDirection = LEFT;
+		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+	}
+	// Move right if D is pressed
+	else if(FoxInput_KeyDown('D'))
+	{
+		CurrentPlayer->FlipX = 1;
+		CurrentPlayer->PlayerDirection = RIGHT;
+		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+	}
+	else
 	{
 		if (!(CurrentPlayer->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentPlayer->PlayerRigidBody.onGround)
 		{
@@ -281,20 +294,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 	}
 
-	// Move left if A is pressed
-	if(FoxInput_KeyDown('A'))
-	{
-		CurrentPlayer->FlipX = 0;
-		CurrentPlayer->PlayerDirection = LEFT;
-		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
-	}
-	// Move right if D is pressed
-	else if(FoxInput_KeyDown('D'))
-	{
-		CurrentPlayer->FlipX = 1;
-		CurrentPlayer->PlayerDirection = RIGHT;
-		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
-	}
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(FoxInput_KeyTriggered(VK_SPACE))
 	{
