@@ -253,6 +253,7 @@ void EventLevel1(void)
 		DetectPlayerCollision();
 		// Handle any input for the current player
 		InputPlayer(&CurrentPlayer);
+		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 	}
 	else if(!levelComplete)
 	{

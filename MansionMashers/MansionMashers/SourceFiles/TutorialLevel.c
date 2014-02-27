@@ -265,7 +265,7 @@ void EventTutorial(void)
 
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
-
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 void fadeToEnd(void)

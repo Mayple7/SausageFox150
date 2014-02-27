@@ -64,10 +64,10 @@ typedef struct PlayerStats
 	float DamageReduction;
 	int Damage;
 
-	int AgilityTimer;
-	int StrengthTimer;
-	int DefenseTimer;
-	int HasteTimer;
+	float AgilityTimer;
+	float StrengthTimer;
+	float DefenseTimer;
+	float HasteTimer;
 
 	int Money;
 }PlayerStats;
@@ -131,6 +131,7 @@ void updateMoveSpeed(PlayerStats *CurrentPlayerStats);
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats);
 void updateDamageReduction(PlayerStats *CurrentPlayerStats);
 void updateDamage(Player *CurrentPlayer);
+void UpdateBuffTimers(Player* CurrentPlayer);
 
 float RotateToAngle(float angle, float angleTo, float speed);
 
