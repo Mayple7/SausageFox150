@@ -57,7 +57,6 @@ void SetCameraXPosition(float newX)
 	AEGfxSetCamPosition(newX, camY);
 }
 
-
 void SetCameraPan(float newX, float PanelSize)
 {
 	float camX, camY;	
@@ -82,27 +81,3 @@ void SetCameraPan(float newX, float PanelSize)
 		AEGfxSetCamPosition(newX, camY);
 }
 
-void DrawHUD(struct HUDLayer *hud)
-{
-	int i;
-	float camX, camY;	
-
-	//Get camera position
-	AEGfxGetCamPosition(&camX, &camY);
-
-	for (i = 0; hud->HudItem[i]; i++)
-	{
-		if (i % 2 == 0)
-		{
-			hud->HudItem[i]->Position.x = camX - (725 - ((i/2)*480)) * GetLoadRatio();
-			hud->HudItem[i]->Position.y = camY + (350 * GetLoadRatio());
-			DrawSprite(hud->HudItem[i]);
-		}
-		else
-		{
-			hud->HudItem[i]->Position.x = camX - (725 - (((i-1)/2)*480)) * GetLoadRatio() - (98 * GetLoadRatio());
-			hud->HudItem[i]->Position.y = camY + (350 - 34) * GetLoadRatio();
-			DrawSprite(hud->HudItem[i]);
-		}
-	}
-}

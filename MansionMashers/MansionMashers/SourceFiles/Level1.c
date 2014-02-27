@@ -55,7 +55,7 @@ Platform* Table1;
 Wall* Wall1;
 
 Sprite* BlackOverlay;
-
+HUD* CurrentHUD;
 
 /*************************************************************************/
 /*!
@@ -88,6 +88,8 @@ void InitializeLevel1(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1200, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center);
@@ -169,7 +171,7 @@ void UpdateLevel1(void)
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
-	
+	UpdateHUDPosition(CurrentHUD);
 
 }
 
@@ -217,6 +219,7 @@ void FreeLevel1(void)
 
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/

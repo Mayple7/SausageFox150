@@ -12,7 +12,6 @@
 #include "FoxObjects.h"
 #include "Sound.h"
 
-enum BuffType { None, AtkSpeed, MovSpeed, DmgBuff };
 enum Character { Mayple, Ginko, Holly, Kaya};
 
 typedef struct PlayerParts
@@ -65,8 +64,10 @@ typedef struct PlayerStats
 	float DamageReduction;
 	int Damage;
 
-	enum BuffType CurrentBuff;
-	int BuffTimer;
+	int AgilityTimer;
+	int StrengthTimer;
+	int DefenseTimer;
+	int HasteTimer;
 
 	int Money;
 }PlayerStats;
@@ -87,7 +88,8 @@ typedef struct Player
 	PlayerStats CurrentPlayerStats;
 	PlayerSounds CurrentPlayerSounds;
 
-	enum BuffType BuffHeld;
+	int BuffHeld[4];
+	int BuffSelected;
 
 	float Speed;
 

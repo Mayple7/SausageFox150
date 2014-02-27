@@ -35,9 +35,7 @@
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
 
-Sprite *HUD;
-Sprite *HUDitem;
-HUDLayer HUDList;
+HUD* CurrentHUD;
 
 //Bounding Boxes
 Sprite *BoundTop;
@@ -73,7 +71,7 @@ void LoadTutorial(void)
 void InitializeTutorial(void)
 {
 	Vec3 BoundingTint;
-	int hudLoop;
+
 	levelComplete = FALSE;
 	FoxInput_Update();
 	Vec3Set(&BoundingTint, 0.0f, 0.0f, 0.0f);
@@ -86,21 +84,7 @@ void InitializeTutorial(void)
 
 	InitializePlayer(&CurrentPlayer, Ginko, 50.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
-	for (hudLoop = 0; hudLoop < 20; hudLoop++)
-		HUDList.HudItem[hudLoop] = 0;
-
-	// Create single player HUD sprite
-	HUD = (Sprite *) CreateSprite("TextureFiles/MaypleHUD.png", 448.0f, 192.0f, 200, 1, 1, 0, 0);
-	HUD->isHUD = TRUE;
-
-	// Create single player HUD item sprite
-	HUDitem = (Sprite *) CreateSprite("TextureFiles/HealthPotionHUD.png", 66.0f, 66.0f, 200, 1, 1, 0, 0);
-	HUDitem->ItemType = 0;
-	HUDitem->isHUD = TRUE;
-
-	// Add the HUD sprites to the HUDlist
-	HUDList.HudItem[0] = HUD;
-	HUDList.HudItem[1] = HUDitem;
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
 	OverlayGrid = (Sprite *) CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
@@ -200,13 +184,6 @@ void UpdateTutorial(void)
 				CurrentPlayer.Position.x = 50000;
 				RemoveDebugMode();
 				OverlayGrid->Visible = FALSE;
-				
-				HUD->Tint.x -= GetDeltaTime();
-				HUD->Tint.y -= GetDeltaTime();
-				HUD->Tint.z -= GetDeltaTime();
-				HUDitem->Tint.x -= GetDeltaTime();
-				HUDitem->Tint.y -= GetDeltaTime();
-				HUDitem->Tint.z -= GetDeltaTime();
 
 				fadeToEnd();
 			}
@@ -258,7 +235,6 @@ void DrawTutorial(void)
 {
 	DrawObjectList();
 	DrawCollisionList();
-	DrawHUD(&HUDList);
 }
 
 void FreeTutorial(void)
@@ -269,6 +245,7 @@ void FreeTutorial(void)
 		CurrentPlayer.CurrentLevel = GS_Tutorial;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 void UnloadTutorial(void)

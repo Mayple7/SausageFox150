@@ -26,6 +26,7 @@
 #include "System.h"
 #include "FrameRate.h"
 #include "Input.h"
+#include "HUD.h"
 
 //Special level include
 #include "PauseMenu.h"

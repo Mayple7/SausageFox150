@@ -52,11 +52,6 @@ Button* Kevin;
 Sprite* Selector;
 Sprite* Logo;
 
-Sprite* HUD2;
-Sprite* HUD;
-
-HUDLayer HUDList;
-
 AEGfxTexture *StartButtonTexture;
 AEGfxTexture *ShowcaseTexture;
 AEGfxTexture *ExitButtonTexture;

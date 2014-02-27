@@ -83,7 +83,7 @@ void InitializeKevin(void)
 
 	for (i = 0; i < 9; i++)
 	{
-		CreateEnemy(BasicMelee, EnemyType, newID++, rand() % 1500 - 750, rand() % 500 - 250);
+		CreateEnemy(BasicMelee, EnemyType, newID++, (float)(rand() % 1500 - 750), (float)(rand() % 500 - 250));
 	}
 
 	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);

@@ -71,10 +71,18 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	//Moving and bufftacular
 	CurrentPlayer->CurrentPlayerStats.MoveSpeed = 600.0f;
 	CurrentPlayer->CurrentPlayerStats.AttackSpeed = 12.0f;
-	CurrentPlayer->CurrentPlayerStats.CurrentBuff = None;
-	CurrentPlayer->CurrentPlayerStats.BuffTimer = 0;
-	CurrentPlayer->BuffHeld = None;
 
+	CurrentPlayer->CurrentPlayerStats.AgilityTimer = 0;
+	CurrentPlayer->CurrentPlayerStats.StrengthTimer = 0;
+	CurrentPlayer->CurrentPlayerStats.DefenseTimer = 0;
+	CurrentPlayer->CurrentPlayerStats.HasteTimer = 0;
+
+	CurrentPlayer->BuffHeld[0] = FALSE;
+	CurrentPlayer->BuffHeld[1] = FALSE;
+	CurrentPlayer->BuffHeld[2] = FALSE;
+	CurrentPlayer->BuffHeld[3] = FALSE;
+
+	CurrentPlayer->BuffSelected = 0;
 
 	/*////////////////////////////////
 	//      PLAYER COLLISION        //
@@ -189,60 +197,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 			}
 		}
 	}
-	if(FoxInput_KeyTriggered('Q') && CurrentPlayer->CurrentPlayerStats.CurrentBuff == None)
+	if(FoxInput_KeyTriggered('Q'))
 	{
-		if(CurrentPlayer->BuffHeld != None)
-		{
-			CurrentPlayer->CurrentPlayerStats.CurrentBuff = CurrentPlayer->BuffHeld;
-			CurrentPlayer->BuffHeld = None;
-			switch(CurrentPlayer->CurrentPlayerStats.CurrentBuff)
-			{
-			case AtkSpeed:
-				CurrentPlayer->CurrentPlayerStats.AttackSpeed = 24.0f;
-				break;
-			case MovSpeed:
-				CurrentPlayer->CurrentPlayerStats.MoveSpeed += 300.0f;
-				break;
-			case DmgBuff:
-				CurrentPlayer->CurrentPlayerStats.Damage += 20;
-				break;
-			}
-		}
-	}
-	if(FoxInput_KeyTriggered('1'))
-	{
-		CurrentPlayer->BuffHeld = AtkSpeed;
-	}
-	else if(FoxInput_KeyTriggered('2'))
-	{
-		CurrentPlayer->BuffHeld = MovSpeed;
-	}
-	else if(FoxInput_KeyTriggered('3'))
-	{
-		CurrentPlayer->BuffHeld = DmgBuff;
-	}
-
-	if(CurrentPlayer->CurrentPlayerStats.CurrentBuff != None)
-	{
-		++CurrentPlayer->CurrentPlayerStats.BuffTimer;
-		if(CurrentPlayer->CurrentPlayerStats.BuffTimer > 5 * FRAMERATE)
-		{
-			switch(CurrentPlayer->CurrentPlayerStats.CurrentBuff)
-			{
-			case AtkSpeed:
-				updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
-				break;
-			case MovSpeed:
-				updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
-				break;
-			case DmgBuff:
-				updateDamage(CurrentPlayer);
-				break;
-			}
-
-			CurrentPlayer->CurrentPlayerStats.BuffTimer = 0;
-			CurrentPlayer->CurrentPlayerStats.CurrentBuff = None;
-		}
+		
 	}
 
 	// Move left if A is pressed
@@ -1157,10 +1114,11 @@ void SavePlayer(Player *CurrentPlayer)
 	FILE *fp;
 	// Malloc me a long string
 	char* string = (char *)MallocMyAlloc(500, 1);
+	int BuffValue = (CurrentPlayer->BuffHeld[0] & 1) | (CurrentPlayer->BuffHeld[1] & 2) | (CurrentPlayer->BuffHeld[2] & 4) | (CurrentPlayer->BuffHeld[3] & 8);
 
 	// Ugly code that puts all needed info into one string
 	sprintf(string, "Level: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
-		CurrentPlayer->CurrentLevel, CurrentPlayer->Princess, CurrentPlayer->BuffHeld, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+		CurrentPlayer->CurrentLevel, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
@@ -1193,7 +1151,7 @@ void SavePlayer(Player *CurrentPlayer)
 int LoadPlayer(Player *CurrentPlayer)
 {
 	FILE *fp;
-
+	int BuffValue;
 	// Opens a file
 	fp = fopen("../GameData.cfg", "rt");
 	if(fp)
@@ -1201,7 +1159,7 @@ int LoadPlayer(Player *CurrentPlayer)
 		//Ugly code which should read the file if its in the correct format
 		int num = 0;
 		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
-			&CurrentPlayer->CurrentLevel, &CurrentPlayer->Princess, &CurrentPlayer->BuffHeld, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
+			&CurrentPlayer->CurrentLevel, &CurrentPlayer->Princess, &BuffValue, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
 			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
 			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 		fclose(fp);
@@ -1217,6 +1175,15 @@ int LoadPlayer(Player *CurrentPlayer)
 			updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 			updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 			
+			if(BuffValue & 1)
+				CurrentPlayer->BuffHeld[0] = TRUE;
+			if(BuffValue & 2)
+				CurrentPlayer->BuffHeld[1] = TRUE;
+			if(BuffValue & 4)
+				CurrentPlayer->BuffHeld[2] = TRUE;
+			if(BuffValue & 8)
+				CurrentPlayer->BuffHeld[3] = TRUE;
+
 			//Update those text strings
 			ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponName);
 			CreateStatsString(CurrentPlayer->PlayerWeapon->WeaponStatsString, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusDefense);
@@ -1288,7 +1255,10 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	//Sets all required player stats and data
 	int nameLen, statsLen;
 	CurrentPlayer->Princess = Princess;
-	CurrentPlayer->BuffHeld = None;
+	CurrentPlayer->BuffHeld[0] = FALSE;
+	CurrentPlayer->BuffHeld[1] = FALSE;
+	CurrentPlayer->BuffHeld[2] = FALSE;
+	CurrentPlayer->BuffHeld[3] = FALSE;
 
 	CurrentPlayer->CurrentPlayerStats.Agility = 0;
 	CurrentPlayer->CurrentPlayerStats.Strength = 0;
