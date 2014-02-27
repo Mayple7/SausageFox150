@@ -126,7 +126,6 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	}
 
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
-	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = 24;
 
 	/*////////////////////////////////
 	//       PLAYER SOUNDS          //
@@ -138,10 +137,9 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//       PLAYER SPRITE          //
 	////////////////////////////////*/
-	CurrentPlayer->PlayerSprite = (Sprite *) CreateSprite("TextureFiles/Sausage.png", 100, 100, 100, 1, 1, 0, 0);
-	CurrentPlayer->PlayerSprite->Visible = FALSE;
+	CurrentPlayer->Zindex = 100;
 	CreatePlayerSprites(CurrentPlayer);
-	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = CurrentPlayer->PlayerSprite->ZIndex + 2;
+	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = CurrentPlayer->Zindex + 2;
 	Animation(CurrentPlayer);
 }
 
@@ -998,7 +996,7 @@ void Animation(Player *Object)
 
 		Weap->Position.x = ArmLwr2->Position.x - (float)cos(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
 		Weap->Position.y = ArmLwr2->Position.y - (float)sin(ArmLwr2->Rotation) * (ArmLwr2->Width/3.5f);
-		Weap->ZIndex = Object->PlayerSprite->ZIndex - 1;
+		Weap->ZIndex = Object->Zindex - 1;
 	}
 	else
 	{
@@ -1068,7 +1066,7 @@ void Animation(Player *Object)
 
 		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
 		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
-		Weap->ZIndex = Object->PlayerSprite->ZIndex + 2;
+		Weap->ZIndex = Object->Zindex + 2;
 	}
 
 	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
@@ -1092,40 +1090,40 @@ void CreatePlayerSprites(Player *Object)
 	switch(Object->Princess)
 	{
 	case Mayple:
-		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
-		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtMayple.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex + 1, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyMayple.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtMayple.png", 300.0f, 300.0f, Object->Zindex + 1, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyMayple.png", 300.0f, 300.0f, Object->Zindex, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperMayple.png", 128.0f, 128.0f, Object->Zindex + 2, 1, 1, 0, 0);
 		break;
 	case Ginko:
-		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
-		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtGinko.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex + 1, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyGinko.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtGinko.png", 300.0f, 300.0f, Object->Zindex + 1, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyGinko.png", 300.0f, 300.0f, Object->Zindex, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperGinko.png", 128.0f, 128.0f, Object->Zindex + 2, 1, 1, 0, 0);
 		break;
 	case Holly:
-		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
-		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtHolly.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex + 1, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyHolly.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtHolly.png", 300.0f, 300.0f, Object->Zindex + 1, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyHolly.png", 300.0f, 300.0f, Object->Zindex, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperHolly.png", 128.0f, 128.0f, Object->Zindex + 2, 1, 1, 0, 0);
 		break;
 	case Kaya:
-		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
-		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtKaya.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex + 1, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyKaya.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 4, 1, 0, 0);
-		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
+		Object->PlayerSpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtKaya.png", 300.0f, 300.0f, Object->Zindex + 1, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyKaya.png", 300.0f, 300.0f, Object->Zindex, 4, 1, 0, 0);
+		Object->PlayerSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperKaya.png", 128.0f, 128.0f, Object->Zindex + 2, 1, 1, 0, 0);
 		break;
 	}
 
-	Object->PlayerSpriteParts.ArmLower2 = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.ArmLower2 = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->Zindex - 2, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.LegUpper = (Sprite *) CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.LegUpper = (Sprite *) CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, Object->Zindex, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.LegLower = (Sprite *) CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.LegLower = (Sprite *) CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, Object->Zindex, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.LegUpper2 = (Sprite *) CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.LegUpper2 = (Sprite *) CreateSprite("TextureFiles/LegUpper.png", 128.0f, 128.0f, Object->Zindex, 1, 1, 0, 0);
 
-	Object->PlayerSpriteParts.LegLower2 = (Sprite *) CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.LegLower2 = (Sprite *) CreateSprite("TextureFiles/LegLower.png", 128.0f, 128.0f, Object->Zindex, 1, 1, 0, 0);
 
 	Object->PlayerSpriteParts.Skirt->AnimationActive = 0;
 
@@ -1133,13 +1131,13 @@ void CreatePlayerSprites(Player *Object)
 
 	Object->PlayerSpriteParts.BlinkTimer = 0;
 
-	Object->PlayerSpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, Object->PlayerSprite->ZIndex, 7, 2, 0, 0);
+	Object->PlayerSpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, Object->Zindex, 7, 2, 0, 0);
 
 	Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
 
 	Object->TailSinValue = 0;
 
-	Object->PlayerSpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->PlayerSprite->ZIndex + 3, 1, 1, 0, 0);
+	Object->PlayerSpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->Zindex + 3, 1, 1, 0, 0);
 }
 
 /*************************************************************************/

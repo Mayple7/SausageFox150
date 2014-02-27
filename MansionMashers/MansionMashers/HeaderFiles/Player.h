@@ -78,7 +78,6 @@ typedef struct Player
 	int CurrentLevel;
 	int PlayerActive;
 
-	Sprite *PlayerSprite;
 	RigidBody PlayerRigidBody;
 	CollisionBox PlayerCollider;
 	struct Weapon* PlayerWeapon;
@@ -88,6 +87,7 @@ typedef struct Player
 	PlayerStats CurrentPlayerStats;
 	PlayerSounds CurrentPlayerSounds;
 
+	int Zindex;
 	int BuffHeld[4];
 	int BuffSelected;
 
