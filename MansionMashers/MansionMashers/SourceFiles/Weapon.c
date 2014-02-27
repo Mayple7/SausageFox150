@@ -156,7 +156,7 @@ void WeaponOnTheRun(Weapon* CurrentWeapon)
 		Wall *walls = wallList;
 		int hit = 0;
 
-		if (CurrentWeapon->WeaponPickup.Position.y <= GROUNDLEVEL)
+		if (CurrentWeapon->WeaponPickup.Position.y <= (GROUNDLEVEL - 100) * GetLoadRatio())
 		{
 			CurrentWeapon->WeaponFalling = FALSE;
 			return;
