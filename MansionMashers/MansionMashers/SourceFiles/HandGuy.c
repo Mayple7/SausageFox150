@@ -82,7 +82,7 @@ void InitializeHandGuy(void)
 	CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	//Weapon/Shop
-	CreateWeaponShop(-400, -140, &newID, Sword, Common);
+	CreateWeaponShop(-400, -140, newID++, Sword, Common);
 
 	//Platform
 	Pedestal = CreatePlatform("TextureFiles/MarblePedestal.png", PlatformType, 1920, 1080, newID++, 0, 0);

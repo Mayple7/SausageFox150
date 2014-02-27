@@ -63,6 +63,10 @@ void InitializeShop1(void)
 	ResetObjectList();
 	ResetCamera();
 
+	//Weapon/Shop
+	CreateWeaponShop(-400, -140, newID++, Sword, Common);
+	CreateWeaponShop(600, -140, newID++, Axe, Common);
+
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
