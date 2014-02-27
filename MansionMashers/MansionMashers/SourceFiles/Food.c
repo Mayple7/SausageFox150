@@ -32,25 +32,34 @@
 	A pointer to the platform to be initialized
 */
 /*************************************************************************/
-Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int newID, float xPos, float yPos)
+Food* CreateFood(int buffType, float width, float height, float xPos, float yPos, int objID)
 {
 	Food *CurrentFood = AddFood();
-	Vec2 newPos;
-	newPos.x = xPos * GetLoadRatio();
-	newPos.y = yPos * GetLoadRatio();
-	CurrentFood->FoodSprite = CreateSprite(textureName, width, height, 10, 1, 1, xPos, yPos);
 
-	CreateCollisionBox(&CurrentFood->FoodCollider, &newPos, collisionGroup, width, height, newID);
-	CurrentFood->objID = newID;
-	CurrentFood->FoodCollider.collisionDebug = TRUE;
+	Vec2Set(&CurrentFood->Position, xPos, yPos);
+	
+	CurrentFood->FoodType = buffType;
+
+	switch(buffType)
+	{
+	case Agility:
+		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/Taco.png", width, height, 10, 1, 1, xPos, yPos);
+		break;
+	case Strength:
+		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/Ham.png", width, height, 10, 1, 1, xPos, yPos);
+		break;
+	case Defense:
+		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/Pizza.png", width, height, 10, 1, 1, xPos, yPos);
+		break;
+	case Haste:
+		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/Cake.png", width, height, 10, 1, 1, xPos, yPos);
+		break;
+	}
+
+	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, FoodType, width, height, objID);
+	CurrentFood->objID = objID;
+	Vec2Scale(&CurrentFood->Position, &CurrentFood->Position, GetLoadRatio());
 
 	return CurrentFood;
-}
-
-void UpdateFoodPosition(Food *CurrentFood, float x, float y)
-{
-	Vec2Set(&CurrentFood->Position, x, y);
-	CurrentFood->FoodCollider.Position = CurrentFood->Position;
-	CurrentFood->FoodSprite->Position = CurrentFood->Position;
 }
 

@@ -5,15 +5,18 @@
 #include "Sprite.h"
 #include "CollisionBox.h"
 
+enum StatsGained {Agility, Strength, Defense, Haste};
+
 typedef struct Food
 {
 	Sprite *FoodSprite;
 	CollisionBox FoodCollider;
 	Vec2 Position;
 	int objID;
+	int FoodType;
 }Food;
 
-Food* CreateFood(char* textureName, int collisionGroup, float width, float height, int objID, float xPos, float yPos);
+Food* CreateFood(int foodType, float width, float height, float xPos, float yPos, int objID);
 void UpdateFoodPosition(Food *CurrentFood, float x, float y);
 
 #endif
