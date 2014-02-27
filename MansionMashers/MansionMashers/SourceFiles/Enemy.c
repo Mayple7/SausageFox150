@@ -126,7 +126,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->findHome			= FALSE;
 		CurrentEnemy->HomePos			= CurrentEnemy->Position;
 		CurrentEnemy->CurrentEnemySounds.YEAH = CreateSound("Sounds/Scream.wav", SmallSnd);
-
+		EnemyAnimation(CurrentEnemy);
 
 		break;
 	case BasicRanged:
