@@ -142,6 +142,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	CurrentPlayer->PlayerSprite->Visible = FALSE;
 	CreatePlayerSprites(CurrentPlayer);
 	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = CurrentPlayer->PlayerSprite->ZIndex + 2;
+	Animation(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -155,6 +156,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
+	printf("%f\n", GetDeltaTime());
 	Animation(CurrentPlayer);
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
