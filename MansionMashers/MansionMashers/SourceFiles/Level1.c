@@ -192,6 +192,11 @@ void DrawLevel1(void)
 		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
 	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
 		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
+	{
+		levelComplete = TRUE;
+	}
+
 	//else
 		//SetCamera(&CurrentPlayer.Position, 250);
 
@@ -238,14 +243,14 @@ void EventLevel1(void)
 	int i;
 
 	// Runs if the beginning animation is finished
-	if(!beginningAnimiation)
+	if(!beginningAnimiation && !levelComplete)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
 		// Handle any input for the current player
 		InputPlayer(&CurrentPlayer);
 	}
-	else
+	else if(!levelComplete)
 	{
 		// Fade in the level
 		if(BlackOverlay->Alpha > 0)
@@ -255,6 +260,7 @@ void EventLevel1(void)
 		// Makes the player walk into view
 		else
 		{
+			BlackOverlay->Alpha = 0.0f;
 			CurrentPlayer.FlipX = 1;
 			CurrentPlayer.PlayerDirection = RIGHT;
 			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
@@ -270,7 +276,15 @@ void EventLevel1(void)
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
+	else
+	{
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+		{
+			SetNextState(GS_MapLevel);
+		}
 
+	}
 
 	//Update the enemies
 	for(i = 0; i < COLLIDEAMOUNT; i++)

@@ -63,6 +63,7 @@ FoxSound *BackSnd;
 FoxSound *GongSnd;
 
 static int newID;
+static int levelComplete;
 
 void LoadTutorial(void)
 {
@@ -73,7 +74,7 @@ void InitializeTutorial(void)
 {
 	Vec3 BoundingTint;
 	int hudLoop;
-	
+	levelComplete = FALSE;
 	FoxInput_Update();
 	Vec3Set(&BoundingTint, 0.0f, 0.0f, 0.0f);
 
@@ -262,6 +263,10 @@ void DrawTutorial(void)
 
 void FreeTutorial(void)
 {
+	if(levelComplete)
+		CurrentPlayer.CurrentLevel = GS_Level1;
+	else
+		CurrentPlayer.CurrentLevel = GS_Tutorial;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
@@ -291,6 +296,7 @@ void fadeToEnd(void)
 	if(BlackOverlay->Alpha >= 1.0f)
 	{
 		BlackOverlay->Alpha = 1.0f;
+		levelComplete = TRUE;
 		SetNextState(GS_MapLevel);
 	}
 	else

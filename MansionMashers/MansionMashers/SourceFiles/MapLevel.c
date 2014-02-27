@@ -96,7 +96,7 @@ void InitializeMapLevel(void)
 		fclose(fp);
 	}
 	else
-		CurrentPlayer.CurrentLevel = GS_Tutorial;
+		CurrentPlayer.CurrentLevel = GS_Level1;
 
 	//If not coming from a level set to the player's latest level
 	if(iconPosition > GS_LevelNUM)
@@ -231,6 +231,8 @@ void EventLevel(void)
 	// Go into the level the icon is on
 	if(FoxInput_KeyTriggered(VK_SPACE) || FoxInput_KeyTriggered('E'))
 	{
+		//if(iconPosition == GS_Tutorial)
+			//iconPosition = GS_Level1;
 		SetNextState(iconPosition);
 	}
 
