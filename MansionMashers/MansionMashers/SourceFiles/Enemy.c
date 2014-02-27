@@ -655,33 +655,42 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 
 void CreateEnemySprites(Enemy *Object)
 {
-	Object->EnemySpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
-
 	Object->EnemySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 4, 1, 0, 0);
 
 	Object->EnemySpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
 
-	Object->EnemySpriteParts.ArmLower2 = (Sprite *) CreateSprite("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmUpper2->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.LegUpper = (Sprite *) CreateSprite("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower2->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.LegLower = (Sprite *) CreateSprite("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.LegUpper2 = (Sprite *) CreateSprite("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegLower->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.LegLower2 = (Sprite *) CreateSprite("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper2->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->EnemySpriteParts.LegLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegLower2->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
 	Object->EnemySpriteParts.Body->AnimationSpeed = 3;
 
 	Object->EnemySpriteParts.BlinkTimer = 0;
 
-	Object->EnemySpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.Tail = (Sprite *) CreateSpriteNoMesh("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.Tail->SpriteMesh = Object->EnemySpriteParts.Body->SpriteMesh;
 
 	Object->EnemySpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
 
-	Object->EnemySpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex + 1, 4, 1, 0, 0);
+	Object->EnemySpriteParts.Skirt = (Sprite *) CreateSpriteNoMesh("TextureFiles/SkirtDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex + 1, 4, 1, 0, 0);
+	Object->EnemySpriteParts.Skirt->SpriteMesh = Object->EnemySpriteParts.Body->SpriteMesh;
 
 	Object->EnemySpriteParts.Skirt->AnimationActive = 0;
 }
