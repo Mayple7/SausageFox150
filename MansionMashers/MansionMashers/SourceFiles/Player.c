@@ -47,7 +47,7 @@ Player CurrentPlayer;
 /*************************************************************************/
 void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, float xPos, float yPos)
 {
-	int i;
+	int i, startingBuff;
 
 	for(i = 0; i < COLLIDEAMOUNT; i++)
 	{
@@ -112,6 +112,17 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
 		LoadNewPlayer(CurrentPlayer, Princess);
+	}
+
+	startingBuff = 3;
+
+	while(!CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] && startingBuff != CurrentPlayer->BuffSelected)
+	{
+		CurrentPlayer->BuffSelected++;
+		if(CurrentPlayer->BuffSelected > 3)
+		{
+			CurrentPlayer->BuffSelected = 0;
+		}
 	}
 
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
@@ -197,13 +208,18 @@ void InputPlayer(struct Player *CurrentPlayer)
 			}
 		}
 	}
+
+	//Cycle through the buffs
 	if(FoxInput_KeyTriggered('Q'))
 	{
+		//The starting buff so we don't infini-loop
 		int startingBuff = CurrentPlayer->BuffSelected++;
 
+		//Loop back around
 		if(CurrentPlayer->BuffSelected > 3)
 			CurrentPlayer->BuffSelected = 0;
 
+		//Go to the next acquired buff, or stop looping
 		while(!CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] && startingBuff != CurrentPlayer->BuffSelected)
 		{
 			CurrentPlayer->BuffSelected++;
@@ -212,7 +228,57 @@ void InputPlayer(struct Player *CurrentPlayer)
 				CurrentPlayer->BuffSelected = 0;
 			}
 		}
-		//UpdateHUDItems(
+	}
+
+	//Use the buff
+	if(FoxInput_KeyTriggered('F'))
+	{
+		if(CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected])
+		{
+			int startingBuff;
+			// Currently going with a 20% increase
+			// Sets the timer for 10 seconds
+			switch(CurrentPlayer->BuffSelected)
+			{
+			// Buffs the player's attack speed
+			case Agility:
+				CurrentPlayer->CurrentPlayerStats.AttackSpeed *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.AgilityTimer = 10;
+				break;
+			// Buffs the player's damage
+			case Strength:
+				CurrentPlayer->CurrentPlayerStats.Damage = (int)(CurrentPlayer->CurrentPlayerStats.Damage * 1.2f);
+				CurrentPlayer->CurrentPlayerStats.StrengthTimer = 10;
+				break;
+			// Buffs the player's damage reduction
+			case Defense:
+				CurrentPlayer->CurrentPlayerStats.DamageReduction *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.DefenseTimer = 10;
+				break;
+			// Buffs the player's move speed
+			case Haste:
+				CurrentPlayer->CurrentPlayerStats.MoveSpeed *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.HasteTimer = 10;
+				break;
+			}
+			CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] = FALSE;
+			//Cycles automatically to the next available buff
+			//The starting buff so we don't infini-loop
+			startingBuff = CurrentPlayer->BuffSelected++;
+			//Loop back around
+			if(CurrentPlayer->BuffSelected > 3)
+				CurrentPlayer->BuffSelected = 0;
+
+			//Go to the next acquired buff, or stop looping
+			while(!CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] && startingBuff != CurrentPlayer->BuffSelected)
+			{
+				CurrentPlayer->BuffSelected++;
+				if(CurrentPlayer->BuffSelected > 3)
+				{
+					CurrentPlayer->BuffSelected = 0;
+				}
+			}
+		}
 	}
 
 	// Move left if A is pressed
@@ -285,6 +351,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 void UpdatePlayerPosition(Player *CurrentPlayer)
 {
 	Vec2 velocityTime;
+
+	//Update the buff timers
+	UpdateBuffTimers(CurrentPlayer);
 
 	//Brings the player back to the surface if something bad happens
 	if(CurrentPlayer->Position.y < GROUNDLEVEL * GetLoadRatio())
@@ -1127,7 +1196,16 @@ void SavePlayer(Player *CurrentPlayer)
 	FILE *fp;
 	// Malloc me a long string
 	char* string = (char *)MallocMyAlloc(500, 1);
-	int BuffValue = (CurrentPlayer->BuffHeld[0] & 1) | (CurrentPlayer->BuffHeld[1] & 2) | (CurrentPlayer->BuffHeld[2] & 4) | (CurrentPlayer->BuffHeld[3] & 8);
+
+	int BuffValue = 0;
+	if(CurrentPlayer->BuffHeld[0])
+		BuffValue = BuffValue | 0x1;
+	if(CurrentPlayer->BuffHeld[1])
+		BuffValue = BuffValue | 0x2;
+	if(CurrentPlayer->BuffHeld[2])
+		BuffValue = BuffValue | 0x4;
+	if(CurrentPlayer->BuffHeld[3])
+		BuffValue = BuffValue | 0x8;
 
 	// Ugly code that puts all needed info into one string
 	sprintf(string, "Level: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
@@ -1188,13 +1266,13 @@ int LoadPlayer(Player *CurrentPlayer)
 			updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 			updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 			
-			if(BuffValue & 1)
+			if(BuffValue & 0x1)
 				CurrentPlayer->BuffHeld[0] = TRUE;
-			if(BuffValue & 2)
+			if(BuffValue & 0x2)
 				CurrentPlayer->BuffHeld[1] = TRUE;
-			if(BuffValue & 4)
+			if(BuffValue & 0x4)
 				CurrentPlayer->BuffHeld[2] = TRUE;
-			if(BuffValue & 8)
+			if(BuffValue & 0x8)
 				CurrentPlayer->BuffHeld[3] = TRUE;
 
 			//Update those text strings
@@ -1336,4 +1414,44 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 		CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
 	}
 	CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
+}
+
+void UpdateBuffTimers(Player* CurrentPlayer)
+{
+	//Update buff timers
+	if(CurrentPlayer->CurrentPlayerStats.AgilityTimer > 0)
+	{
+		CurrentPlayer->CurrentPlayerStats.AgilityTimer -= GetDeltaTime();
+	}
+	else
+	{
+		updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
+	}
+	//Update buff timers
+	if(CurrentPlayer->CurrentPlayerStats.StrengthTimer > 0)
+	{
+		CurrentPlayer->CurrentPlayerStats.StrengthTimer -= GetDeltaTime();
+	}
+	else
+	{
+		updateDamage(CurrentPlayer);
+	}
+	//Update buff timers
+	if(CurrentPlayer->CurrentPlayerStats.DefenseTimer > 0)
+	{
+		CurrentPlayer->CurrentPlayerStats.DefenseTimer -= GetDeltaTime();
+	}
+	else
+	{
+		updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
+	}
+	//Update buff timers
+	if(CurrentPlayer->CurrentPlayerStats.HasteTimer > 0)
+	{
+		CurrentPlayer->CurrentPlayerStats.HasteTimer -= GetDeltaTime();
+	}
+	else
+	{
+		updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
+	}
 }
