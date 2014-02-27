@@ -158,7 +158,6 @@ void InitializeMapLevel(void)
 void UpdateMapLevel(void)
 {
 	EventLevel();
-	BoundingBoxUpdate();
 
 	//Camera movement based on icon movement
 	if(PlayerIcon->Position.x > GetCameraXPosition() + 300 * GetLoadRatio() )
@@ -169,6 +168,8 @@ void UpdateMapLevel(void)
 	{
 		SetCameraXPosition(PlayerIcon->Position.x + 300 * GetLoadRatio());
 	}
+
+	BoundingBoxUpdate();
 }
 
 /*************************************************************************/

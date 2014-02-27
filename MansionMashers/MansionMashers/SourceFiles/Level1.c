@@ -278,6 +278,7 @@ void EventLevel1(void)
 	}
 	else
 	{
+		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
 		{
