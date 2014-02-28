@@ -122,7 +122,7 @@ void InitializeMainMenu(void)
 	deleteSave = FALSE;
 
 	//Check if it is possible to load a game
-	fp = fopen("../GameData.cfg", "r");
+	fp = fopen(GameData, "r");
 	if(fp)
 	{
 		canLoad = TRUE;
@@ -314,7 +314,7 @@ void InputHandling(void)
 			//We want a new game right meow!
 			if(PointRectCollision(&YesButton->ButtonCollider, &MouseClick))
 			{
-				remove("../GameData.cfg");
+				remove(GameData);
 				SetNextState(GS_CharacterSelect);
 			}
 			//I'm so close, lets just continue!

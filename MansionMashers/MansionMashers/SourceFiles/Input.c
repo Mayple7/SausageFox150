@@ -43,7 +43,7 @@ void FoxInput_PassEvent(unsigned int messageType, int param)
     break;
   case WM_KEYDOWN:
     if (param >= 0 && param < 0xff)
-      keyStates[param] = DOWN; 
+      keyStates[param] = DOWN;
     break;
   case WM_KEYUP:
     if (param >= 0 && param < 0xff)

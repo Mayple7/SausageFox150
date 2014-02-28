@@ -1221,7 +1221,7 @@ void SavePlayer(Player *CurrentPlayer)
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
 	//Opens the file for writing
-	fp = fopen("../GameData.cfg", "wt");
+	fp = fopen(GameData, "wt");
 	if(fp)
 	{
 		//Writes the ugly string to the file
@@ -1251,7 +1251,7 @@ int LoadPlayer(Player *CurrentPlayer)
 	FILE *fp;
 	int BuffValue;
 	// Opens a file
-	fp = fopen("../GameData.cfg", "rt");
+	fp = fopen(GameData, "rt");
 	if(fp)
 	{
 		//Ugly code which should read the file if its in the correct format

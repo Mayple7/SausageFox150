@@ -87,7 +87,7 @@ void InitializeMapLevel(void)
 	ResetCamera();
 
 	//Reads the level from a file if it exits, otherwise set to tutorial level
-	fp = fopen("../GameData.cfg", "rt");
+	fp = fopen(GameData, "rt");
 	if(fp)
 	{
 		int num = 0;

@@ -44,7 +44,6 @@ Sprite *BoundLeft;
 Sprite *BoundRight;
 
 Sprite* TutorialBackground;
-Sprite* OverlayGrid;
 Platform* Shelf;
 Platform* ShortShelf;
 Platform* BouncyBed;
@@ -87,7 +86,6 @@ void InitializeTutorial(void)
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
-	OverlayGrid = (Sprite *) CreateSprite("TextureFiles/OverlayGrid.png", 2000, 1080, 100, 1, 1, 0, 0);
 
 	//Bounding Boxes
 	BoundTop = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
@@ -138,7 +136,6 @@ void InitializeTutorial(void)
 	SetChannelGroupVolume(MusicType, BGMVolume);
 
 	RemoveDebugMode();
-	OverlayGrid->Visible = FALSE;
 
 	ResetCamera();
 }
@@ -183,7 +180,6 @@ void UpdateTutorial(void)
 			{
 				CurrentPlayer.Position.x = 50000;
 				RemoveDebugMode();
-				OverlayGrid->Visible = FALSE;
 
 				fadeToEnd();
 			}
@@ -193,12 +189,10 @@ void UpdateTutorial(void)
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
-		OverlayGrid->Visible = TRUE;
 	}
 	if(FoxInput_KeyTriggered('I'))
 	{
 		RemoveDebugMode();
-		OverlayGrid->Visible = FALSE;
 	}
 	PlayAudio(BackSnd);
 

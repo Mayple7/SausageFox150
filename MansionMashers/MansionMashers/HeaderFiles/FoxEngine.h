@@ -40,5 +40,7 @@ int GetWindowHeight(void);
 void SaveSettings(void);
 
 int Cheats;
+char Settings[200];
+char GameData[200];
 
 #endif
