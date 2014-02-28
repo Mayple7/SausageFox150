@@ -10,7 +10,7 @@ typedef struct WeaponShop
 	int Created;
 
 	int Coin;
-	char CoinChar[4];
+	char CoinChar[32];
 
 	struct TextGlyphs *ItemTextName;
 	struct TextGlyphs *ItemTextCoin;
