@@ -16,41 +16,31 @@
 /*************************************************************************/
 void getWeaponCoin(WeaponShop *newShop, int weaponRarity)
 {
-	//For now just manually pick the coin value.
+	//Manually pick the coin value and then sprintf it into the coinchar value for use
 	switch(weaponRarity)
 	{
 	case Common:
 		newShop->Coin = 5;
-		newShop->CoinChar[0] = '5';
 		break;
 	case Uncommon:
 		newShop->Coin = 20;
-		newShop->CoinChar[0] = '2';
-		newShop->CoinChar[1] = '0';
 		break;
 	case Rare:
 		newShop->Coin = 80;
-		newShop->CoinChar[0] = '8';
-		newShop->CoinChar[1] = '0';
 		break;
 	case Epic:
 		newShop->Coin = 200;
-		newShop->CoinChar[0] = '2';
-		newShop->CoinChar[1] = '0';
-		newShop->CoinChar[2] = '0';
 		break;
 	case Sausage:
 		newShop->Coin = 500;
-		newShop->CoinChar[0] = '5';
-		newShop->CoinChar[1] = '0';
-		newShop->CoinChar[2] = '0';
 		break;
 	default:
 		newShop->Coin = 50;
-		newShop->CoinChar[0] = '5';
-		newShop->CoinChar[1] = '0';
 		break;
 	}
+
+	//Sprint a lot to get coins
+	sprintf(newShop->CoinChar, "%i", newShop->Coin);
 }
 
 /*************************************************************************/
