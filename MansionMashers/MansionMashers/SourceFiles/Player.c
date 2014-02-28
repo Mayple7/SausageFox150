@@ -314,6 +314,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
 		}
 	}
+#if defined _DEBUG
 	//Throw an upward force on the fox when backspace is pushed
 	if(FoxInput_KeyDown(VK_BACK))
 	{
@@ -333,6 +334,10 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 	}
+#else
+	CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
+	CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
+#endif
 	// Move the direction based on the speed
 	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);
 }
@@ -1216,7 +1221,7 @@ void SavePlayer(Player *CurrentPlayer)
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
 	//Opens the file for writing
-	fp = fopen("../GameData.cfg", "wt");
+	fp = fopen(GameData, "wt");
 	if(fp)
 	{
 		//Writes the ugly string to the file
@@ -1246,7 +1251,7 @@ int LoadPlayer(Player *CurrentPlayer)
 	FILE *fp;
 	int BuffValue;
 	// Opens a file
-	fp = fopen("../GameData.cfg", "rt");
+	fp = fopen(GameData, "rt");
 	if(fp)
 	{
 		//Ugly code which should read the file if its in the correct format

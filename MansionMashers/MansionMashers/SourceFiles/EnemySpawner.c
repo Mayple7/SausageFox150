@@ -61,7 +61,7 @@ EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, f
 	}
 
 	//Increment the objID by the number of enemies
-	*objID += numEnemies;
+	*objID += numEnemies + 1;
 
 	return CurrentSpawner;
 }

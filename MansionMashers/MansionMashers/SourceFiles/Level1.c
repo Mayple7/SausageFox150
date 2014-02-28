@@ -100,9 +100,6 @@ void InitializeLevel1(void)
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
-	//Shop for testing coin change, right there for ya baby girl
-	CreateWeaponShop(3600, -140, newID++, Axe, Common);
-
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
@@ -140,6 +137,8 @@ void InitializeLevel1(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 865, 130);
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -900, 0);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 2785, 130);
 	Wall1->WallSprite->Visible = FALSE;
 
 	//Enemy spawners
@@ -182,8 +181,11 @@ void UpdateLevel1(void)
 
 	if(CurrentPlayer.Position.x > (1.5f * PANELSIZE) * GetLoadRatio())
 	{
-		SetEnemy1->EnemyState = AIIdle;
-		SetEnemy2->EnemyState = AIIdle;
+		if(SetEnemy1->EnemyState == AINone)
+		{
+			SetEnemy1->EnemyState = AIIdle;
+			SetEnemy2->EnemyState = AIIdle;
+		}
 	}
 	else
 	{
@@ -344,19 +346,17 @@ void EventLevel1(void)
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
 	}
 	if(FoxInput_KeyTriggered('I'))
 	{
 		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawLevel1);
+		InitializePause(&DrawLevel1);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
+		//SetNextState(GS_MainMenu);
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 }

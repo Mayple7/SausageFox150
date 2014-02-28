@@ -98,7 +98,6 @@ AEGfxTexture *LoadTexture(char *texture)
 		//No spot currently has the texture
 		else
 		{
-			printf("%s\n", texture);
 			//Create a new texture
 			textureList[i].Created = 1;
 			textureList[i].TextureObject = AEGfxTextureLoad(texture);

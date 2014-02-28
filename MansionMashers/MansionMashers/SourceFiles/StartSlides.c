@@ -78,9 +78,9 @@ void InitializeStartScreen(void)
 	fade = 1;								//0: no fade, 1: fade in, 2: fade out
 	slideTimer = 0;
 	// Create the slide sprites
-	Title = CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	Digipen = CreateSprite("TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1, 0, 0);
-	SausageFox = CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	Title = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	Digipen = (Sprite *) CreateSprite("TextureFiles/DigipenLogo.png", 1024.0f, 248.0f, 0, 1, 1, 0, 0);
+	SausageFox = (Sprite *) CreateSprite("TextureFiles/SausageFoxLogoNoBack.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 }
 
 /*************************************************************************/
@@ -97,7 +97,7 @@ void UpdateStartScreen(void)
 	changeLevel = fadeLogic();
 
 	if(changeLevel == 1)
-		SetNextState(GS_Tutorial);
+		SetNextState(GS_MainMenu);
 	else if(changeLevel == -1)
 		SetNextState(GS_Quit);
 }

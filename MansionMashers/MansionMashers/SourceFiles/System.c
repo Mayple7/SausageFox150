@@ -23,14 +23,20 @@ int maxWidth, maxHeight;
 
 void FoxSystemInitialize(void)
 {
+	char Buffer[100];
 	FILE *fp;
-	fp = fopen("../Settings.cfg", "rt");
+	GetCurrentDirectory(sizeof(Buffer), Buffer);
+	strcpy(GameData, Buffer);
+	strcat(GameData, "/GameData.cfg");
+	strcpy(Settings, Buffer);
+	strcat(Settings, "/Settings.cfg");
+	fp = fopen(Settings, "rt");
 	if(!fp)
 	{
-		fp = fopen("../Settings.cfg", "wt");
+		fp = fopen(Settings, "wt");
 		fprintf(fp, "SFX: 100\nBGM: 100\nCheats: 0");
 		fclose(fp);
-		fp = fopen("../Settings.cfg", "rt");
+		fp = fopen(Settings, "rt");
 	}
 
 	if(fp)
@@ -103,7 +109,7 @@ void SaveSettings(void)
 {
 	FILE *fp;
 	
-	fp = fopen("../Settings.cfg", "wt");
+	fp = fopen(Settings, "wt");
 	if(fp)
 	{
 		fprintf(fp, "SFX: %d\nBGM: %d\nCheats: %d", (int)(SFXVolume * 100), (int)(BGMVolume * 100), Cheats);

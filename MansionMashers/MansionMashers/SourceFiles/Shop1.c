@@ -30,6 +30,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+#include "../HeaderFiles/BoundingBox.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -38,6 +39,10 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
+static int levelComplete;
+static int beginningAnimiation;
+HUD* CurrentHUD;
+Sprite* BlackOverlay;
 
 /*************************************************************************/
 /*!
@@ -59,6 +64,10 @@ void LoadShop1(void)
 /*************************************************************************/
 void InitializeShop1(void)
 {
+	Vec3 Tint;
+
+	levelComplete = FALSE;
+	beginningAnimiation = TRUE;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -67,9 +76,19 @@ void InitializeShop1(void)
 	CreateWeaponShop(-400, -140, newID++, Sword, Common);
 	CreateWeaponShop(600, -140, newID++, Axe, Common);
 
+	CreateSprite("TextureFiles/LevelGrassGround.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);
+	Vec3Set(&Tint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 400, 1, 1, 0, 0);
+	BlackOverlay->Tint = Tint;
+
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1200, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -81,6 +100,18 @@ void InitializeShop1(void)
 void UpdateShop1(void)
 {
 	EventLevel();
+
+	UpdateHUDPosition(CurrentHUD);
+
+	if(levelComplete)
+	{
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+		{
+			SetNextState(GS_MapLevel);
+		}
+	}
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -108,7 +139,9 @@ void DrawShop1(void)
 /*************************************************************************/
 void FreeShop1(void)
 {
+	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -132,15 +165,60 @@ void UnloadShop1(void)
 /*************************************************************************/
 void EventLevel(void)
 {
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
+	if(!beginningAnimiation && !levelComplete)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+
+		if(CurrentPlayer.Position.x > (1920.0f / 2) * GetLoadRatio() + CurrentPlayer.PlayerCollider.width || CurrentPlayer.Position.x < -(1920.0f / 2) * GetLoadRatio() - CurrentPlayer.PlayerCollider.width)
+		{
+			levelComplete = TRUE;
+		}
+
+	}
+	else if(!levelComplete)
+	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = 1;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -500)
+			{
+				beginningAnimiation = FALSE;
+			}
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+	else
+	{
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+		{
+			SetNextState(GS_MapLevel);
+		}
+
+	}
 
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
 	}
 	if(FoxInput_KeyTriggered('I'))
 	{
@@ -149,10 +227,10 @@ void EventLevel(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawLevel);
+		InitializePause(&DrawShop1);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
+		//SetNextState(GS_MainMenu);
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 }
