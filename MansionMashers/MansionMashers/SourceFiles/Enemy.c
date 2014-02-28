@@ -57,21 +57,6 @@ void LoadEnemy(int enemyType)
 	case BasicRanged:
 		break;
 	}
-
-/*
-ParticleSystem at 2 Created
-Static Text at 3 Created
-Static Text at 4 Created
-Enemy at 1 Created
-ParticleSystem at 3 Created
-Static Text at 5 Created
-Static Text at 6 Created
-Enemy at 2 Created
-ParticleSystem at 4 Created
-Static Text at 7 Created
-Static Text at 8 Created
-Static Text at 9 Created
-*/
 }
 
 
@@ -136,7 +121,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 50, 250 + 10 * (rand() % 10), 15, 0, 10, 0, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, 250 + 10 * (rand() % 10), 15, 0, 10, 10, 10);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x / GetLoadRatio(), CurrentEnemy->Position.y / GetLoadRatio(), CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -223,6 +208,8 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 
 	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
+		//Give the player thier loot!
+		CurrentPlayer.CurrentPlayerStats.Money += CurrentEnemy->CurrentEnemyStats.Money;
 		// Run on death stuff here
 		CurrentEnemy->EnemyParticleSystem->emitAngleRandom = 360;
 		CurrentEnemy->EnemyParticleSystem->amountTotal = 20;
@@ -448,8 +435,11 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			break;
 			
 		case AIIdle:
+			//printf("%f\n", Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position));
 			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 500.0f * GetLoadRatio())
+			{
 				CurrentEnemy->EnemyState = AIAggressive;
+			}
 			if ((float)fabs((float)(CurrentEnemy->Position.x - CurrentEnemy->HomePos.x)) > 500.0f * GetLoadRatio())
 				CurrentEnemy->findHome = TRUE;
 			switch(CurrentEnemy->findHome)

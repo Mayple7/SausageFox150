@@ -141,6 +141,8 @@ void InitializeLevel1(void)
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -900, 0);
 	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 2785, 130);
+	Wall1->WallSprite->Visible = FALSE;
 
 	//Enemy spawners
 	Vec2Set(&SpawnerLocation, -200, 0);
@@ -182,8 +184,11 @@ void UpdateLevel1(void)
 
 	if(CurrentPlayer.Position.x > (1.5f * PANELSIZE) * GetLoadRatio())
 	{
-		SetEnemy1->EnemyState = AIIdle;
-		SetEnemy2->EnemyState = AIIdle;
+		if(SetEnemy1->EnemyState == AINone)
+		{
+			SetEnemy1->EnemyState = AIIdle;
+			SetEnemy2->EnemyState = AIIdle;
+		}
 	}
 	else
 	{
@@ -353,10 +358,10 @@ void EventLevel1(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawLevel1);
+		InitializePause(&DrawLevel1);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
+		//SetNextState(GS_MainMenu);
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 }
