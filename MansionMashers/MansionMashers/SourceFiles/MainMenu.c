@@ -43,6 +43,12 @@ Sprite* SecondBackground;
 Sprite* Logo;
 Sprite* Overlay;
 
+Sprite* FoxScroll;
+Sprite* DogScroll;
+
+Sprite* DogScrollBottom;
+Sprite* FoxScrollBottom;
+
 //Dem buttons
 Button* NewGameButton;
 Button* LoadGameButton;
@@ -143,8 +149,12 @@ void InitializeMainMenu(void)
 	Logo = (Sprite *) CreateSprite("TextureFiles/MansionMashersMainMenu.png", 1200, 675, 3, 1, 1, 0, 200);
 
 	//Button backgrounds
-	CreateSprite("TextureFiles/MenuBackFox.png", 447, 500, 4, 1, 1, -300, -130);
-	CreateSprite("TextureFiles/MenuBackDog.png", 447, 500, 4, 1, 1,  300, -130);
+	FoxScroll = (Sprite *) CreateSprite("TextureFiles/MenuBackFoxAnimation.png", 447, 500, 4, 18, 1, -300, -130);
+	FoxScroll->AnimationSpeed = 3.0f;
+	DogScroll = (Sprite *) CreateSprite("TextureFiles/MenuBackDogAnimation.png", 447, 500, 4, 18, 1, 300, -130);
+	DogScroll->AnimationSpeed = 3.0f;
+	DogScrollBottom = (Sprite *) CreateSprite("TextureFiles/ScrollBottom.png", 447, 44, 9, 1, 1,  -300, 100);
+	FoxScrollBottom = (Sprite *) CreateSprite("TextureFiles/ScrollBottom.png", 447, 44, 9, 1, 1,  300, 100);
 
 	//Menu buttons
 	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -130, 394, 394, newID++);
@@ -155,10 +165,15 @@ void InitializeMainMenu(void)
 
 	//Update button Z index
 	NewGameButton->ButtonSprite->ZIndex = 10;
-	LoadGameButton->ButtonSprite->ZIndex = 9;
-	OptionsButton->ButtonSprite->ZIndex = 9;
-	CreditsButton->ButtonSprite->ZIndex = 9;
-	QuitGameButton->ButtonSprite->ZIndex = 9;
+	LoadGameButton->ButtonSprite->ZIndex = 8;
+	OptionsButton->ButtonSprite->ZIndex = 8;
+	CreditsButton->ButtonSprite->ZIndex = 8;
+	QuitGameButton->ButtonSprite->ZIndex = 8;
+
+	OptionsButton->ButtonSprite->Visible = FALSE;
+	QuitGameButton->ButtonSprite->Visible = FALSE;
+	CreditsButton->ButtonSprite->Visible = FALSE;
+	LoadGameButton->ButtonSprite->Visible = FALSE;
 	
 	//Delete save game objects
 	Vec3Set(&Tint, 0, 0, 0);
@@ -191,6 +206,40 @@ void InitializeMainMenu(void)
 void UpdateMainMenu(void)
 {
 	//Handle input and run background animation
+	if (DogScroll->CurrentFrame == 17)
+		DogScroll->AnimationActive = FALSE;
+	if (DogScrollBottom->Position.y -  5.5f > DogScroll->Position.y - DogScroll->Height/2 + DogScrollBottom->Height/2)
+		DogScrollBottom->Position.y -= 5.5f;
+	else
+		DogScrollBottom->Position.y = DogScroll->Position.y - DogScroll->Height/2 + DogScrollBottom->Height/2;
+	
+	if (DogScrollBottom->Position.y < OptionsButton->ButtonSprite->Position.y)
+	{
+		OptionsButton->ButtonSprite->Visible = TRUE;
+	}
+
+	if (DogScrollBottom->Position.y < QuitGameButton->ButtonSprite->Position.y)
+	{
+		QuitGameButton->ButtonSprite->Visible = TRUE;
+	}
+
+	if (FoxScroll->CurrentFrame == 17)
+		FoxScroll->AnimationActive = FALSE;
+	if (FoxScrollBottom->Position.y -  5.5f > FoxScroll->Position.y - FoxScroll->Height/2 + FoxScrollBottom->Height/2)
+		FoxScrollBottom->Position.y -= 5.5f;
+	else
+		FoxScrollBottom->Position.y = FoxScroll->Position.y - FoxScroll->Height/2 + FoxScrollBottom->Height/2;
+	
+	if (FoxScrollBottom->Position.y < LoadGameButton->ButtonSprite->Position.y)
+	{
+		LoadGameButton->ButtonSprite->Visible = TRUE;
+	}
+
+	if (FoxScrollBottom->Position.y < CreditsButton->ButtonSprite->Position.y)
+	{
+		CreditsButton->ButtonSprite->Visible = TRUE;
+	}
+
 	InputHandling();
 	BackgroundAnimation();
 }

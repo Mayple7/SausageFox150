@@ -7,7 +7,7 @@
 #include "CollisionBox.h"
 
 enum EnemyType { Dummy, BasicMelee, BasicRanged, AdvancedMelee, AdvancedRanged, ExpertMelee, ExpertRanged};
-enum AIState { AIPassive, AIAggressive, AIIdle};
+enum AIState { AINone, AIPassive, AIAggressive, AIIdle};
 
 typedef struct EnemyParts
 {
@@ -93,6 +93,7 @@ typedef struct Enemy
 
 }Enemy;
 
+void LoadEnemy(int enemyType);
 Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos);
 void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp);
 void UpdateEnemy(Enemy *CurrentEnemy);

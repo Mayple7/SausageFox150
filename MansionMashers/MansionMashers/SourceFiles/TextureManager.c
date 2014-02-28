@@ -82,6 +82,7 @@ void DestroyTextureList(void)
 AEGfxTexture *LoadTexture(char *texture)
 {
 	int i;
+
 	//Search to see if  that texture has already been created
 	for (i = 0; i < TEXTUREAMOUNT; i++)
 	{
@@ -97,6 +98,7 @@ AEGfxTexture *LoadTexture(char *texture)
 		//No spot currently has the texture
 		else
 		{
+			printf("%s\n", texture);
 			//Create a new texture
 			textureList[i].Created = 1;
 			textureList[i].TextureObject = AEGfxTextureLoad(texture);

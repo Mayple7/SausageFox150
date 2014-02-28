@@ -30,6 +30,51 @@
 // globals
 static int LogicTimer = 0;
 
+void LoadEnemy(int enemyType)
+{
+	switch(enemyType)
+	{
+	case Dummy:
+		LoadTexture("TextureFiles/StrawDummy.png");
+		break;
+	case BasicMelee:
+		LoadTexture("TextureFiles/StrawDummy.png");
+		LoadTexture("TextureFiles/BodyDog.png");
+		LoadTexture("TextureFiles/ArmUpperDog.png");
+		LoadTexture("TextureFiles/ArmUpperDog.png");
+		LoadTexture("TextureFiles/ArmLowerDog.png");
+		LoadTexture("TextureFiles/LegUpperDog.png");
+		LoadTexture("TextureFiles/LegLowerDog.png");
+		LoadTexture("TextureFiles/LegUpperDog.png");
+		LoadTexture("TextureFiles/LegLowerDog.png");
+		LoadTexture("TextureFiles/TailDog.png");
+		LoadTexture("TextureFiles/ArmLowerDog.png");
+		LoadTexture("TextureFiles/SkirtDog.png");
+
+		//Weapon, may change
+		LoadTexture("TextureFiles/BattleAxe.png");
+		break;
+	case BasicRanged:
+		break;
+	}
+
+/*
+ParticleSystem at 2 Created
+Static Text at 3 Created
+Static Text at 4 Created
+Enemy at 1 Created
+ParticleSystem at 3 Created
+Static Text at 5 Created
+Static Text at 6 Created
+Enemy at 2 Created
+ParticleSystem at 4 Created
+Static Text at 7 Created
+Static Text at 8 Created
+Static Text at 9 Created
+*/
+}
+
+
 /*************************************************************************/
 /*!
 	\brief
@@ -191,7 +236,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		FreeEnemy(CurrentEnemy);
 	}
 
-	if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio())
+	if(CurrentEnemy->Position.y < GROUNDLEVEL * GetLoadRatio() && CurrentEnemy->EnemyState != AINone)
 	{
 		CurrentEnemy->Position.y = GROUNDLEVEL * GetLoadRatio();
 	}
@@ -240,8 +285,22 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 		CurrentEnemy->EnemySpriteParts.AttackRotationArmLower	= 0;
 		UpdateCollider(&CurrentEnemy->EnemyCollider,CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
 	}
+	// Move left if A is pressed
+	if(CurrentEnemy->isMoveLeft)
+	{
+		CurrentEnemy->EnemySprite->FlipX	= FALSE;
+		CurrentEnemy->EnemyDirection		= LEFT;
+		CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+	}
+	// Move right if D is pressed
+	else if(CurrentEnemy->isMoveRight)
+	{
+		CurrentEnemy->EnemySprite->FlipX	= TRUE;
+		CurrentEnemy->EnemyDirection		= RIGHT;
+		CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+	}
 	// not key press for direction then slow down!
-	if(!CurrentEnemy->isMoveLeft && !CurrentEnemy->isMoveRight)
+	else
 	{
 		if (!(CurrentEnemy->Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentEnemy->EnemyRigidBody.onGround)
 		{
@@ -269,20 +328,6 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 		}
 	}
 		
-	// Move left if A is pressed
-	if(CurrentEnemy->isMoveLeft)
-	{
-		CurrentEnemy->EnemySprite->FlipX	= FALSE;
-		CurrentEnemy->EnemyDirection		= LEFT;
-		CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
-	}
-	// Move right if D is pressed
-	else if(CurrentEnemy->isMoveRight)
-	{
-		CurrentEnemy->EnemySprite->FlipX	= TRUE;
-		CurrentEnemy->EnemyDirection		= RIGHT;
-		CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
-	}
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(CurrentEnemy->isJumping && CurrentEnemy->jumpTimer <= 0)
 	{
@@ -317,6 +362,8 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 {
 	switch(CurrentEnemy->EnemyState)
 	{
+		case AINone:
+			break;
 		case AIAggressive:
 			CurrentEnemy->isJumping			= FALSE;
 
@@ -508,180 +555,192 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 	int hit = 0;
 	int hitPrev = 0;
 	
-	while(wList->objID != -1)
+	if(CurrentEnemy->EnemyState != AINone)
 	{
-		if(wList->objID > 0 && wList->WeaponFOF == PlayerWeapon)
+		while(wList->objID != -1)
 		{
-			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &wList->WeaponAttack);
-			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, wList->WeaponAttack.collisionID);
-			if(hit && CurrentPlayer.isAttacking)
+			if(wList->objID > 0 && wList->WeaponFOF == PlayerWeapon)
 			{
-				// New target, on start collision
-				if(hitPrev < 0)
+				hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &wList->WeaponAttack);
+				hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, wList->WeaponAttack.collisionID);
+				if(hit && CurrentPlayer.isAttacking)
 				{
-					CurrentEnemy->CollisionData[-hitPrev] = wList->WeaponAttack.collisionID * 10 + 1;
-					//printf("NOT FOUND: %i\n", -hitPrev);
-					EnemyCollideWeapon(CurrentEnemy);
+					// New target, on start collision
+					if(hitPrev < 0)
+					{
+						CurrentEnemy->CollisionData[-hitPrev] = wList->WeaponAttack.collisionID * 10 + 1;
+						//printf("NOT FOUND: %i\n", -hitPrev);
+						EnemyCollideWeapon(CurrentEnemy);
+					}
+					// Found target, hit previous frame, on persistant
+					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+					{
+						//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					}
+					// Found target, did not hit previous frame, on start collision
+					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+					{
+						//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+						CurrentEnemy->CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
+						EnemyCollideWeapon(CurrentEnemy);
+					}
 				}
-				// Found target, hit previous frame, on persistant
-				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				else if(hitPrev > 0 && !CurrentPlayer.isAttacking)
 				{
-					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-				}
-				// Found target, did not hit previous frame, on start collision
-				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-				{
-					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-					CurrentEnemy->CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
-					EnemyCollideWeapon(CurrentEnemy);
-				}
-			}
-			else if(hitPrev > 0 && !CurrentPlayer.isAttacking)
-			{
-				CurrentEnemy->CollisionData[hitPrev] = 0;
-			}
-			else
-			{
-				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-				{
-					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
-				}
-				// Found target, collision ended
-				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-				{
-					//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-					//CurrentEnemy->CollisionData[hitPrev] = 0;
-				}
-			}
-		}
-		wList++;
-	}
-
-	while(pList->objID != -1)
-	{
-		if(pList->objID > 0)
-		{
-			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &pList->PlatformCollider);
-			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
-			if(hit)
-			{
-				// New target, on start collision
-				if(hitPrev < 0)
-				{
-					CurrentEnemy->CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
-					//printf("NOT FOUND: %i\n", -hitPrev);
-					EnemyCollidePlatform(CurrentEnemy, pList);
-				}
-				// Found target, hit previous frame, on persistant
-				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-				{
-					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy->CollisionData[hitPrev]);
-					EnemyCollidePlatform(CurrentEnemy, pList);
-				}
-				// Found target, did not hit previous frame, on start collision
-				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-				{
-					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
-					CurrentEnemy->CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
-					EnemyCollidePlatform(CurrentEnemy, pList);
-				}
-			}
-			else
-			{
-				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-				{
-					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
-				}
-				// Found target, collision ended
-				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-				{
-					//printf("END COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
 					CurrentEnemy->CollisionData[hitPrev] = 0;
 				}
+				else
+				{
+					if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+					{
+						// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+						AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+					}
+					// Found target, collision ended
+					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+					{
+						//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+						//CurrentEnemy->CollisionData[hitPrev] = 0;
+					}
+				}
 			}
+			wList++;
 		}
-		pList++;
-	}
 
-	while(walls->objID != -1)
-	{
-		if(walls->objID > 0)
+		while(pList->objID != -1)
 		{
-			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &walls->WallCollider);
-			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, walls->WallCollider.collisionID);
-			if(hit)
+			if(pList->objID > 0)
 			{
-				// New target, on start collision
-				if(hitPrev < 0)
+				hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &pList->PlatformCollider);
+				hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
+				if(hit)
 				{
-					CurrentEnemy->CollisionData[-hitPrev] = walls->WallCollider.collisionID * 10 + 1;
-					//printf("NOT FOUND: %i\n", -hitPrev);
-					EnemyCollideWall(CurrentEnemy, walls);
+					// New target, on start collision
+					if(hitPrev < 0)
+					{
+						CurrentEnemy->CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+						//printf("NOT FOUND: %i\n", -hitPrev);
+						EnemyCollidePlatform(CurrentEnemy, pList);
+					}
+					// Found target, hit previous frame, on persistant
+					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+					{
+						//printf("FOUND PERSISTANT: %i\n", CurrentEnemy->CollisionData[hitPrev]);
+						EnemyCollidePlatform(CurrentEnemy, pList);
+					}
+					// Found target, did not hit previous frame, on start collision
+					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+					{
+						//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
+						CurrentEnemy->CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+						EnemyCollidePlatform(CurrentEnemy, pList);
+					}
 				}
-				// Found target, hit previous frame, on persistant
-				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				else
 				{
-					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-					EnemyCollideWall(CurrentEnemy, walls);
-				}
-				// Found target, did not hit previous frame, on start collision
-				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-				{
-					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-					CurrentEnemy->CollisionData[hitPrev] = walls->WallCollider.collisionID * 10 + 1;
-					EnemyCollideWall(CurrentEnemy, walls);
+					if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+					{
+						// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+						AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+					}
+					// Found target, collision ended
+					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+					{
+						//printf("END COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
+						CurrentEnemy->CollisionData[hitPrev] = 0;
+					}
 				}
 			}
-			else
-			{
-				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-				{
-					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
-				}
-				// Found target, collision ended
-				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-				{
-					//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-					CurrentEnemy->CollisionData[hitPrev] = 0;
-				}
-			}
+			pList++;
 		}
-		walls++;
+
+		while(walls->objID != -1)
+		{
+			if(walls->objID > 0)
+			{
+				hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &walls->WallCollider);
+				hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, walls->WallCollider.collisionID);
+				if(hit)
+				{
+					// New target, on start collision
+					if(hitPrev < 0)
+					{
+						CurrentEnemy->CollisionData[-hitPrev] = walls->WallCollider.collisionID * 10 + 1;
+						//printf("NOT FOUND: %i\n", -hitPrev);
+						EnemyCollideWall(CurrentEnemy, walls);
+					}
+					// Found target, hit previous frame, on persistant
+					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+					{
+						//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+						EnemyCollideWall(CurrentEnemy, walls);
+					}
+					// Found target, did not hit previous frame, on start collision
+					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+					{
+						//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+						CurrentEnemy->CollisionData[hitPrev] = walls->WallCollider.collisionID * 10 + 1;
+						EnemyCollideWall(CurrentEnemy, walls);
+					}
+				}
+				else
+				{
+					if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+					{
+						// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+						AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+					}
+					// Found target, collision ended
+					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+					{
+						//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+						CurrentEnemy->CollisionData[hitPrev] = 0;
+					}
+				}
+			}
+			walls++;
+		}
 	}
 }
 
 void CreateEnemySprites(Enemy *Object)
 {
-	Object->EnemySpriteParts.ArmUpper2 = (Sprite *) CreateSprite("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
-
 	Object->EnemySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/BodyDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 4, 1, 0, 0);
 
 	Object->EnemySpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
 
-	Object->EnemySpriteParts.ArmLower2 = (Sprite *) CreateSprite("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/ArmUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmUpper2->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.LegUpper = (Sprite *) CreateSprite("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower2->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.LegLower = (Sprite *) CreateSprite("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.LegUpper2 = (Sprite *) CreateSprite("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegLower->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.LegLower2 = (Sprite *) CreateSprite("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegUpper2->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->EnemySpriteParts.LegLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.LegLower2->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
 	Object->EnemySpriteParts.Body->AnimationSpeed = 3;
 
 	Object->EnemySpriteParts.BlinkTimer = 0;
 
-	Object->EnemySpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.Tail = (Sprite *) CreateSpriteNoMesh("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+	Object->EnemySpriteParts.Tail->SpriteMesh = Object->EnemySpriteParts.Body->SpriteMesh;
 
 	Object->EnemySpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
 
-	Object->EnemySpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->EnemySpriteParts.ArmLower->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->EnemySpriteParts.Skirt = (Sprite *) CreateSprite("TextureFiles/SkirtDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex + 1, 4, 1, 0, 0);
+	Object->EnemySpriteParts.Skirt = (Sprite *) CreateSpriteNoMesh("TextureFiles/SkirtDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex + 1, 4, 1, 0, 0);
+	Object->EnemySpriteParts.Skirt->SpriteMesh = Object->EnemySpriteParts.Body->SpriteMesh;
 
 	Object->EnemySpriteParts.Skirt->AnimationActive = 0;
 }

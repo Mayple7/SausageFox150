@@ -36,19 +36,29 @@
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, Vec2 spawnPosition, float width, float height, Vec2 spawnerPosition, int* objID)
+EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int* objID)
 {
 	//Adds spawner to object manager
 	EnemySpawner* CurrentSpawner = AddSpawner();
+	int i;
 
 	//Initialize spawner variables
+	CurrentSpawner->EnemyArray = (Enemy **)CallocMyAlloc(numEnemies, sizeof(Enemy*));
 	CurrentSpawner->enemyType = enemyType;
 	CurrentSpawner->numEnemies = numEnemies;
 	CurrentSpawner->objID = *objID;
-	CurrentSpawner->spawnPosition = spawnPosition;
+	CurrentSpawner->spawnSide = spawnSide;
 
 	//Create the spawner collision box
 	CreateCollisionBox(&CurrentSpawner->SpawnerCollider, &spawnerPosition, SpawnerType, width, height, *objID);
+
+	//Create the enemies and set them offscreen and AINone
+	for(i = 0; i < numEnemies; ++i)
+	{
+		CurrentSpawner->EnemyArray[i] = CreateEnemy(CurrentSpawner->enemyType, EnemyType, CurrentSpawner->objID + i + 1, CurrentSpawner->SpawnerCollider.Position.x + i * 200 * GetLoadRatio(), -10000);
+		CurrentSpawner->EnemyArray[i]->HomePos = CurrentSpawner->SpawnerCollider.Position;
+		CurrentSpawner->EnemyArray[i]->EnemyState = AINone;
+	}
 
 	//Increment the objID by the number of enemies
 	*objID += numEnemies;
@@ -75,10 +85,17 @@ int SpawnEnemies(EnemySpawner* CurrentSpawner)
 	//Spawn all the enemies at the indicated position
 	for(i = 0; i < CurrentSpawner->numEnemies; ++i)
 	{
-		CreateEnemy(CurrentSpawner->enemyType, EnemyType, CurrentSpawner->objID + i + 1, CurrentSpawner->spawnPosition.x + i * 150 * GetLoadRatio(), CurrentSpawner->spawnPosition.y);
+		if(CurrentSpawner->spawnSide)
+			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() + (1920.0f / 2) * GetLoadRatio() + 100 * i * GetLoadRatio();
+		else
+			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() - (1920.0f / 2) * GetLoadRatio() - 100 * i * GetLoadRatio();
+		CurrentSpawner->EnemyArray[i]->Position.y = GROUNDLEVEL * GetLoadRatio();
+		CurrentSpawner->EnemyArray[i]->HomePos = CurrentSpawner->SpawnerCollider.Position;
+		CurrentSpawner->EnemyArray[i]->EnemyState = AIIdle;
 	}
 
 	//Free the spawner since it is not used anymore
+	FreeMyAlloc(CurrentSpawner->EnemyArray);
 	FreeSpawner(CurrentSpawner);
 
 	// Returns the number of enemies spawned

@@ -46,6 +46,8 @@ HUD* CreateHUD(Player* CurrentPlayer)
 {
 	//Allocate memory for the HUD
 	HUD *CurrentHUD = (HUD *)CallocMyAlloc(1, sizeof(HUD));
+	char CoinChar[32];
+	Vec3 TextTint;
 
 	switch(CurrentPlayer->Princess)
 	{
@@ -62,6 +64,14 @@ HUD* CreateHUD(Player* CurrentPlayer)
 		CurrentHUD->HUDBackground = (Sprite *)CreateSprite("TextureFiles/HollyHUD.png", 448, 192, 400, 1, 1, GetCameraXPosition() - 450, 375);
 		break;
 	}
+
+	//Text for coin amount
+	Vec3Set(&TextTint, 1.0f, 1.0f, 0.0f);
+	CurrentHUD->currentHUDCoinValue = CurrentPlayer->CurrentPlayerStats.Money;
+	sprintf(CoinChar, "%i", CurrentHUD->currentHUDCoinValue);
+	CurrentHUD->CoinText = CreateText(strcat(CoinChar, " Coins"), 448, 192, 60, TextTint, Center);
+	ChangeTextZIndex(CurrentHUD->CoinText, 100);
+	ChangeTextVisibility(CurrentHUD->CoinText);
 
 	//Create the HUD sprites for the items
 	CurrentHUD->HUDItem[0] = (Sprite *)CreateSprite("TextureFiles/Taco.png", 50, 50, 401, 1, 1, GetCameraXPosition() - 548, 345);
@@ -97,12 +107,37 @@ HUD* CreateHUD(Player* CurrentPlayer)
 /*************************************************************************/
 void UpdateHUDPosition(HUD* CurrentHUD)
 {
-	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 450);
+	Vec2 newPosition;
+	Vec2Set(&newPosition, (GetCameraXPosition() - 400 * GetLoadRatio()), 300 * GetLoadRatio());
 
-	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 515);
-	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 515);
-	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 515);
-	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 515);
+	//HUD items update position
+	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 450 * GetLoadRatio());
+
+	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 515 * GetLoadRatio());
+	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 515 * GetLoadRatio());
+	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 515 * GetLoadRatio());
+	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 515 * GetLoadRatio());
+
+	//Coin text update position
+	ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);
+
+	//See if coin amount has changed
+	if (CurrentHUD->currentHUDCoinValue != CurrentPlayer.CurrentPlayerStats.Money)
+	{
+		char CoinChar[32];
+		Vec3 TextTint;
+		
+		//Remove the old coin text
+		FreeText(CurrentHUD->CoinText);
+
+		//Make a new text
+		Vec3Set(&TextTint, 1.0f, 1.0f, 0.0f);
+		CurrentHUD->currentHUDCoinValue = CurrentPlayer.CurrentPlayerStats.Money;
+		sprintf(CoinChar, "%i", CurrentHUD->currentHUDCoinValue);
+		CurrentHUD->CoinText = CreateText(strcat(CoinChar, " Coins"), 448, 192, 60, TextTint, Center);
+		ChangeTextZIndex(CurrentHUD->CoinText, 2500);
+		ChangeTextVisibility(CurrentHUD->CoinText);
+	}
 }
 
 /*************************************************************************/
