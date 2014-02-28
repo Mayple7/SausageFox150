@@ -70,7 +70,7 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	CurrentHUD->currentHUDCoinValue = CurrentPlayer->CurrentPlayerStats.Money;
 	sprintf(CoinChar, "%i", CurrentHUD->currentHUDCoinValue);
 	CurrentHUD->CoinText = CreateText(strcat(CoinChar, " Coins"), 448, 192, 60, TextTint, Center);
-	ChangeTextZIndex(CurrentHUD->CoinText, 100);
+	ChangeTextZIndex(CurrentHUD->CoinText, 400);
 	ChangeTextVisibility(CurrentHUD->CoinText);
 
 	//Create the HUD sprites for the items
@@ -108,15 +108,15 @@ HUD* CreateHUD(Player* CurrentPlayer)
 void UpdateHUDPosition(HUD* CurrentHUD)
 {
 	Vec2 newPosition;
-	Vec2Set(&newPosition, (GetCameraXPosition() - 400 * GetLoadRatio()), 300 * GetLoadRatio());
+	Vec2Set(&newPosition, (GetCameraXPosition() - 400), 300 * GetLoadRatio());
 
 	//HUD items update position
-	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 450 * GetLoadRatio());
+	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 450);
 
-	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 515 * GetLoadRatio());
-	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 515 * GetLoadRatio());
-	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 515 * GetLoadRatio());
-	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 515 * GetLoadRatio());
+	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 515);
+	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 515);
+	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 515);
+	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 515);
 
 	//Coin text update position
 	ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);
@@ -135,7 +135,7 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 		CurrentHUD->currentHUDCoinValue = CurrentPlayer.CurrentPlayerStats.Money;
 		sprintf(CoinChar, "%i", CurrentHUD->currentHUDCoinValue);
 		CurrentHUD->CoinText = CreateText(strcat(CoinChar, " Coins"), 448, 192, 60, TextTint, Center);
-		ChangeTextZIndex(CurrentHUD->CoinText, 2500);
+		ChangeTextZIndex(CurrentHUD->CoinText, 400);
 		ChangeTextVisibility(CurrentHUD->CoinText);
 	}
 }
