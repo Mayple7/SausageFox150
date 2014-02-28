@@ -154,7 +154,6 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
-	printf("%f\n", GetDeltaTime());
 	Animation(CurrentPlayer);
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
@@ -897,6 +896,11 @@ void Animation(Player *Object)
 			Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
 	}
 
+	if(FoxInput_KeyDown('A'))
+	{
+		printf("%f\n", testFrameTime());
+	}
+
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 	{
 		if (LegUpperDirection < 0)
@@ -1133,8 +1137,9 @@ void CreatePlayerSprites(Player *Object)
 	Object->PlayerSpriteParts.Body->AnimationSpeed = 3;
 
 	Object->PlayerSpriteParts.BlinkTimer = 0;
-
-	Object->PlayerSpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailIdle.png", 300.0f, 300.0f, Object->Zindex, 7, 2, 0, 0);
+	
+	Object->PlayerSpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailRun.png", 300.0f, 300.0f, Object->Zindex, 7, 2, 0, 0);
+	Object->PlayerSpriteParts.Tail->SpriteTexture = LoadTexture("TextureFiles/TailIdle.png");
 
 	Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed * GetLoadRatio())/2 + 3;
 
