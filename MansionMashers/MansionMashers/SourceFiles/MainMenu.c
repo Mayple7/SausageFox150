@@ -79,6 +79,8 @@ static float firstMoveTimer;
 static float secondMoveTimer;
 static int fadeOut;
 
+static int prevFrame;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -149,12 +151,14 @@ void InitializeMainMenu(void)
 	Logo = (Sprite *) CreateSprite("TextureFiles/MansionMashersMainMenu.png", 1200, 675, 3, 1, 1, 0, 200);
 
 	//Button backgrounds
-	FoxScroll = (Sprite *) CreateSprite("TextureFiles/MenuBackFoxAnimation.png", 447, 500, 4, 18, 1, -300, -130);
-	FoxScroll->AnimationSpeed = 3.0f;
-	DogScroll = (Sprite *) CreateSprite("TextureFiles/MenuBackDogAnimation.png", 447, 500, 4, 18, 1, 300, -130);
-	DogScroll->AnimationSpeed = 3.0f;
-	DogScrollBottom = (Sprite *) CreateSprite("TextureFiles/ScrollBottom.png", 447, 44, 9, 1, 1,  -300, 100);
-	FoxScrollBottom = (Sprite *) CreateSprite("TextureFiles/ScrollBottom.png", 447, 44, 9, 1, 1,  300, 100);
+	FoxScroll = (Sprite *) CreateSprite("TextureFiles/MenuBackFoxAnimationFix.png", 447, 500, 4, 18, 1, -300, -130);
+	FoxScroll->AnimationSpeed = 2.0f;
+	DogScroll = (Sprite *) CreateSprite("TextureFiles/MenuBackDogAnimationFix.png", 447, 500, 4, 18, 1, 300, -130);
+	DogScroll->AnimationSpeed = 2.0f;
+	//Sets the frame that the scrolls are on.
+	prevFrame = FoxScroll->CurrentFrame;
+	FoxScrollBottom = (Sprite *) CreateSprite("TextureFiles/ScrollBottom.png", 447, 44, 9, 1, 1,  -300, 60);
+	DogScrollBottom = (Sprite *) CreateSprite("TextureFiles/ScrollBottom.png", 447, 44, 9, 1, 1,  300, 60);
 
 	//Menu buttons
 	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -130, 394, 394, newID++);
@@ -207,11 +211,16 @@ void UpdateMainMenu(void)
 {
 	//Handle input and run background animation
 	if (DogScroll->CurrentFrame == 17)
+	{
 		DogScroll->AnimationActive = FALSE;
-	if (DogScrollBottom->Position.y -  5.5f > DogScroll->Position.y - DogScroll->Height/2 + DogScrollBottom->Height/2)
-		DogScrollBottom->Position.y -= 5.5f;
-	else
-		DogScrollBottom->Position.y = DogScroll->Position.y - DogScroll->Height/2 + DogScrollBottom->Height/2;
+	}
+	
+	//If the position is greater than the final position
+	if(DogScrollBottom->Position.y >= -345 * GetLoadRatio())
+	{
+		//Blaze the bottom down based on the total distance traveled divided by the number of frames and frames per change
+		DogScrollBottom->Position.y -= (420 * GetLoadRatio()) / 18 / DogScroll->AnimationSpeed;
+	}
 	
 	if (DogScrollBottom->Position.y < OptionsButton->ButtonSprite->Position.y)
 	{
@@ -225,11 +234,13 @@ void UpdateMainMenu(void)
 
 	if (FoxScroll->CurrentFrame == 17)
 		FoxScroll->AnimationActive = FALSE;
-	if (FoxScrollBottom->Position.y -  5.5f > FoxScroll->Position.y - FoxScroll->Height/2 + FoxScrollBottom->Height/2)
-		FoxScrollBottom->Position.y -= 5.5f;
-	else
-		FoxScrollBottom->Position.y = FoxScroll->Position.y - FoxScroll->Height/2 + FoxScrollBottom->Height/2;
 	
+	if(FoxScrollBottom->Position.y >= -345 * GetLoadRatio())
+	{
+		//Blaze the bottom down based on the total distance traveled divided by the number of frames and frames per change
+		FoxScrollBottom->Position.y -= (420 * GetLoadRatio()) / 18 / FoxScroll->AnimationSpeed;
+	}
+
 	if (FoxScrollBottom->Position.y < LoadGameButton->ButtonSprite->Position.y)
 	{
 		LoadGameButton->ButtonSprite->Visible = TRUE;

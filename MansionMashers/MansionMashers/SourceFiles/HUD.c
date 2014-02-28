@@ -125,18 +125,11 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	if (CurrentHUD->currentHUDCoinValue != CurrentPlayer.CurrentPlayerStats.Money)
 	{
 		char CoinChar[32];
-		Vec3 TextTint;
-		
-		//Remove the old coin text
-		FreeText(CurrentHUD->CoinText);
 
 		//Make a new text
-		Vec3Set(&TextTint, 1.0f, 1.0f, 0.0f);
 		CurrentHUD->currentHUDCoinValue = CurrentPlayer.CurrentPlayerStats.Money;
 		sprintf(CoinChar, "%i", CurrentHUD->currentHUDCoinValue);
-		CurrentHUD->CoinText = CreateText(strcat(CoinChar, " Coins"), 448, 192, 60, TextTint, Center);
-		ChangeTextZIndex(CurrentHUD->CoinText, 400);
-		ChangeTextVisibility(CurrentHUD->CoinText);
+		ChangeTextString(CurrentHUD->CoinText, strcat(CoinChar, " Coins"));
 	}
 }
 

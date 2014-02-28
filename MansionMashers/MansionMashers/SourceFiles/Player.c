@@ -314,6 +314,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 			ApplyVelocity(&CurrentPlayer->PlayerRigidBody, &velocity);
 		}
 	}
+#if defined _DEBUG
 	//Throw an upward force on the fox when backspace is pushed
 	if(FoxInput_KeyDown(VK_BACK))
 	{
@@ -333,6 +334,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 	}
+#endif
 	// Move the direction based on the speed
 	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);
 }
