@@ -91,12 +91,12 @@ void InitializeLevel2(void)
 	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 
-	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 1, 1, 1, 0, 0);
 
-	Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
-	Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
-	Pizza = CreateFood(Defense, 150, 150, 0, 0, newID++);
-	Cake = CreateFood(Haste, 150, 150, 400, 0, newID++);
+	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
+	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
+	//Pizza = CreateFood(Defense, 150, 150, 0, 0, newID++);
+	//Cake = CreateFood(Haste, 150, 150, 400, 0, newID++);
 
 	//Test = CreateWall("TextureFiles/BlankPlatform.png", 500, 500, newID++, 0, 0);
 	//Test->WallSprite->Visible = FALSE;
