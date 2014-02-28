@@ -147,7 +147,7 @@ void UpdateTutorial(void)
 {
 	// Handle any events such as collision
 	EventTutorial();
-
+	UpdateHUDPosition(CurrentHUD);
 	// Update the player position
 	UpdatePlayerPosition(&CurrentPlayer);
 

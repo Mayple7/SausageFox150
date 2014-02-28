@@ -108,7 +108,23 @@ void InitializeMapLevel(void)
 	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 30, 1, 1, 0, 0);
 
 	// Foxy icon ^_^
-	PlayerIcon = (Sprite *)CreateSprite("TextureFiles/fox_head.png", 76, 74, 50, 1, 1, 0, 0);
+	switch(CurrentPlayer.Princess)
+	{
+	case Mayple:
+		PlayerIcon = (Sprite *)CreateSprite("TextureFiles/MaypleHead.png", 102.75f, 119.25f, 50, 1, 1, 0, 0);
+		break;
+	case Ginko:
+		PlayerIcon = (Sprite *)CreateSprite("TextureFiles/GinkoHead.png", 129.75f, 101.25f, 50, 1, 1, 0, 0);
+		break;
+	case Kaya:
+		PlayerIcon = (Sprite *)CreateSprite("TextureFiles/KayaHead.png", 104.8f, 108, 50, 1, 1, 0, 0);
+		break;
+	case Holly:
+		PlayerIcon = (Sprite *)CreateSprite("TextureFiles/HollyHead.png", 140.25f, 108.75f, 50, 1, 1, 0, 0);
+		break;
+	}
+
+	
 
 	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
 	SystemOne->FadeIn = TRUE;
@@ -414,13 +430,13 @@ void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 	{
 	case GS_Tutorial:
 	case GS_Level1:
-		Vec2Set(NewPosition, -596.5f, -41.5f);
+		Vec2Set(NewPosition, -598.16f, -73.53f);
 		break;
 	case GS_Shop1:
-		Vec2Set(NewPosition, -280.8f, -12.25f);
+		Vec2Set(NewPosition, -290.37f, 176.17f);
 		break;
 	case GS_Level2:
-		Vec2Set(NewPosition, -41.8f, -10.7f);
+		Vec2Set(NewPosition, -59.05f, 1.53f);
 		break;
 	case GS_ArmGuy:
 		Vec2Set(NewPosition, 169.6f, -242.0f);
