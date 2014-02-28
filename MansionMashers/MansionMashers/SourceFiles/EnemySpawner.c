@@ -86,9 +86,9 @@ int SpawnEnemies(EnemySpawner* CurrentSpawner)
 	for(i = 0; i < CurrentSpawner->numEnemies; ++i)
 	{
 		if(CurrentSpawner->spawnSide)
-			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() + (1920.0f / 2) * GetLoadRatio() + 100 * i * GetLoadRatio();
+			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() + (1920.0f / 2) * GetLoadRatio() + 100 * i * GetLoadRatio() + 10 * (rand() % 10);
 		else
-			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() - (1920.0f / 2) * GetLoadRatio() - 100 * i * GetLoadRatio();
+			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() - (1920.0f / 2) * GetLoadRatio() - 100 * i * GetLoadRatio() - 10 * (rand() % 10);
 		CurrentSpawner->EnemyArray[i]->Position.y = GROUNDLEVEL * GetLoadRatio();
 		CurrentSpawner->EnemyArray[i]->HomePos = CurrentSpawner->SpawnerCollider.Position;
 		CurrentSpawner->EnemyArray[i]->EnemyState = AIIdle;
