@@ -67,13 +67,13 @@ void SetCameraPan(float newX, float PanelSize)
 	//Pans camera Right
 	if(camX < newX - ((PanelSize / 128) * GetLoadRatio()))
 	{
-		camX += ((PanelSize / 3) * GetLoadRatio()) * GetDeltaTime();
+		camX += ((PanelSize / 1.25f) * GetLoadRatio()) * GetDeltaTime();
 		AEGfxSetCamPosition(camX, camY);
 	}
 	//Pans Camera Left
 	else if (camX > newX + ((PanelSize / 128) * GetLoadRatio()))
 	{
-		camX -= ((PanelSize / 3) * GetLoadRatio()) * GetDeltaTime();
+		camX -= ((PanelSize / 1.25f) * GetLoadRatio()) * GetDeltaTime();
 		AEGfxSetCamPosition(camX, camY);
 	}
 	else

@@ -896,11 +896,6 @@ void Animation(Player *Object)
 			Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
 	}
 
-	if(FoxInput_KeyDown('A'))
-	{
-		printf("%f\n", testFrameTime());
-	}
-
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL * GetLoadRatio())
 	{
 		if (LegUpperDirection < 0)

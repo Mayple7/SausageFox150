@@ -67,6 +67,7 @@ void LoadLevel1(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
+	LoadEnemy(BasicMelee);
 }
 
 /*************************************************************************/
@@ -78,7 +79,7 @@ void LoadLevel1(void)
 void InitializeLevel1(void)
 {
 	Vec3 TextTint;
-	Vec2 SpawnLocation, SpawnerLocation;
+	Vec2 SpawnerLocation;
 
 	beginningAnimiation = TRUE;
 	levelComplete = FALSE;
@@ -134,11 +135,9 @@ void InitializeLevel1(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -900, 0);
 	Wall1->WallSprite->Visible = FALSE;
 
-	//Enemy
-	//CreateEnemy(BasicMelee, EnemyType, newID++, 750, 250);
-	Vec2Set(&SpawnLocation, 750, 250);
+	//Enemy spawners
 	Vec2Set(&SpawnerLocation, 0, 0);
-	FirstSpawner = CreateEnemySpawner(3, BasicMelee, SpawnLocation, 200, 1080, SpawnerLocation, &newID);
+	FirstSpawner = CreateEnemySpawner(3, BasicMelee, TRUE, 200, 1080, SpawnerLocation, &newID);
 
 	//Particles fo Torches
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
@@ -160,6 +159,7 @@ void UpdateLevel1(void)
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 
+	/*
 	if(FoxInput_KeyTriggered('R'))
 		Scroll = TRUE;
 	if(FoxInput_KeyTriggered('T'))
@@ -171,7 +171,7 @@ void UpdateLevel1(void)
 		Scroll = FALSE;
 		ReScrollPaperScroll(2);
 	}
-
+	*/
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
