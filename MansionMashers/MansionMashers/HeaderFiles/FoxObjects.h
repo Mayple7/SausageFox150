@@ -6,7 +6,7 @@
 //Create collide list
 #define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
 //Create particle system
-#define PARTICLESYSTEMAMOUNT 10
+#define PARTICLESYSTEMAMOUNT 50
 //Create particle list
 #define PARTICLEAMOUNT 500
 //Number of buttons

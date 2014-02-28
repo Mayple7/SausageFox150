@@ -49,6 +49,13 @@ static int beginningAnimiation;
 TextGlyphs* LevelName;
 
 EnemySpawner* FirstSpawner;
+EnemySpawner* SecondSpawnerRight;
+EnemySpawner* SecondSpawnerLeft;
+EnemySpawner* ThirdSpawnerRight;
+EnemySpawner* ThirdSpawnerLeft;
+
+Enemy* SetEnemy1;
+Enemy* SetEnemy2;
 
 Platform* Table1;
 
@@ -136,8 +143,21 @@ void InitializeLevel1(void)
 	Wall1->WallSprite->Visible = FALSE;
 
 	//Enemy spawners
-	Vec2Set(&SpawnerLocation, 0, 0);
-	FirstSpawner = CreateEnemySpawner(3, BasicMelee, TRUE, 200, 1080, SpawnerLocation, &newID);
+	Vec2Set(&SpawnerLocation, -200, 0);
+	FirstSpawner = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
+
+	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
+	SecondSpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
+	SecondSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID);
+
+	Vec2Set(&SpawnerLocation, 1.90f * PANELSIZE, 0);
+	ThirdSpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
+	ThirdSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID);
+
+	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL);
+	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL);
+	SetEnemy1->HomePos.x = 2 * PANELSIZE * GetLoadRatio();
+	SetEnemy2->HomePos.x = 2 * PANELSIZE * GetLoadRatio();
 
 	//Particles fo Torches
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
@@ -158,6 +178,19 @@ void UpdateLevel1(void)
 
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
+
+
+	if(CurrentPlayer.Position.x > (1.5f * PANELSIZE) * GetLoadRatio())
+	{
+		SetEnemy1->EnemyState = AIIdle;
+		SetEnemy2->EnemyState = AIIdle;
+	}
+	else
+	{
+		SetEnemy1->EnemyState = AINone;
+		SetEnemy2->EnemyState = AINone;
+	}
+
 
 	/*
 	if(FoxInput_KeyTriggered('R'))
