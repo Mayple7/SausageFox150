@@ -158,11 +158,15 @@ void UpdatePause(void)
 		{
 			pause = FALSE;
 		}
+
+#if defined _DEBUG
 		if(FoxInput_KeyTriggered(VK_SHIFT))
 		{
 			pause = FALSE;
 			SetNextState(GS_MainMenu);
 		}
+#endif
+
 		if(GetNextState() == GS_Quit)
 		{
 			pause = FALSE;

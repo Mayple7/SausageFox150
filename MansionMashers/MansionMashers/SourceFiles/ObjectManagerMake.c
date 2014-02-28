@@ -491,6 +491,7 @@ void DrawCollisionList(void)
 
 void SetDebugMode(void)
 {
+#if defined _DEBUG
 	int i;
 
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -549,6 +550,8 @@ void SetDebugMode(void)
 
 
 	CurrentPlayer.PlayerCollider.collisionDebug = TRUE;
+
+#endif
 }
 
 void RemoveDebugMode(void)

@@ -100,9 +100,6 @@ void InitializeLevel1(void)
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
-	//Shop for testing coin change, right there for ya baby girl
-	CreateWeaponShop(3600, -140, newID++, Axe, Common);
-
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);

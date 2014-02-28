@@ -334,6 +334,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 		CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 	}
+#else
+	CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
+	CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 #endif
 	// Move the direction based on the speed
 	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);

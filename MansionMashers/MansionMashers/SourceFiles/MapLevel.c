@@ -242,6 +242,10 @@ void EventLevel(void)
 		InitializePause(&DrawMapLevel);
 		//TogglePauseSound(&BackgroundSnd);
 		UpdatePause();
+		if(Cheats)
+			FadeOverlay->Visible = FALSE;
+		else
+			FadeOverlay->Visible = TRUE;
 		//TogglePauseSound(&BackgroundSnd);
 	}
 

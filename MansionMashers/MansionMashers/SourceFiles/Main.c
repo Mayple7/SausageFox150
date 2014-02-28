@@ -138,7 +138,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	//GSM Start
 	FoxSystemInitialize();
 #ifndef _DEBUG
-	GSMInitialize(GS_MainMenu);
+	GSMInitialize(GS_SplashScreen);
 #else
 	GSMInitialize(GS_DevMenu);
 #endif
@@ -176,6 +176,10 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		}
 
 		GSMPointers.pInit();
+
+#ifndef _DEBUG
+		RemoveDebugMode();
+#endif
 		
 		while(Current == Next)
 		{

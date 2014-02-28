@@ -464,11 +464,13 @@ void InputHandling(void)
 		}
 	}
 
+#if defined _DEBUG
 	//Sneaky keys to get to the dev menu
 	if(FoxInput_KeyTriggered(VK_SHIFT) || FoxInput_KeyTriggered(VK_RSHIFT))
 	{
 		SetNextState(GS_DevMenu);
 	}
+#endif
 
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
