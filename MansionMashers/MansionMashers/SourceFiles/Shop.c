@@ -83,7 +83,7 @@ void getItemTextName(WeaponShop *newShop, int collisionGroup, Vec3 TextTint, flo
 		break;
 	}
 
-	ChangeTextVisibility((TextGlyphs *) newShop->ItemTextName);
+	ChangeTextVisibility(newShop->ItemTextName);
 }
 
 /*************************************************************************/
@@ -104,7 +104,7 @@ void CreateWeaponShop(float shopPosX, float shopPosY, int newID, int collisionGr
 	//Text
 	Vec3Set(&TextTint, 0.2f, 0.2f, 0.2f);
 	newShop->ItemTextCoin = CreateText(strcat(newShop->CoinChar, " coin"), shopPosX + 10, shopPosY + 60, 60, TextTint, Center);
-	ChangeTextVisibility((TextGlyphs *) newShop->ItemTextCoin);
+	ChangeTextVisibility(newShop->ItemTextCoin);
 	getItemTextName(newShop, collisionGroup, TextTint, shopPosX, shopPosY);
 
 	//Weapon
