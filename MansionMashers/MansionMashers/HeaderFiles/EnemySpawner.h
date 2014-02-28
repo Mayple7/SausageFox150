@@ -10,14 +10,16 @@ typedef struct EnemySpawner
 	CollisionBox SpawnerCollider;
 
 	int objID;
-
-	Vec2 spawnPosition;
+	struct Enemy** EnemyArray;
 	int numEnemies;
 	int enemyType;
 
+	//Fake bool TRUE is for the right side
+	int spawnSide;
+
 }EnemySpawner;
 
-EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, Vec2 spawnPosition, float width, float height, Vec2 spawnerPosition, int *objID);
+EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int* objID);
 int SpawnEnemies(EnemySpawner* CurrentSpawner);
 
 #endif
