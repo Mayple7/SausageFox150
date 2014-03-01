@@ -85,7 +85,7 @@ void InitializeTutorial(void)
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
-	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/TutorialBackground.png", 1920, 1080, 0, 1, 1, 0, 0);
+	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/MansionBedRoom.png", 1920, 1080, 0, 1, 1, 0, 0);
 
 	//Bounding Boxes
 	BoundTop = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
@@ -99,19 +99,19 @@ void InitializeTutorial(void)
 	BoundRight->Tint = BoundingTint;
 
 	// Create the shelf sprite and initialize to be collidable
-	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 475, -170);
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 475, -160);
 	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f); 
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height * 3 / 8;
 
-	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
+	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -240);
 	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
 
-	BouncyBed = CreatePlatform("TextureFiles/BlankPlatform.png", BounceType, 375.0f, 100.0f, newID++, -225, -350);
+	BouncyBed = CreatePlatform("TextureFiles/BlankPlatform.png", BounceType, 375.0f, 100.0f, newID++, -580, -280);
 	BouncyBed->PlatformSprite->Visible = FALSE;
 	BouncyBed->PlatformRigidBody.Restitution = 2.2f;
 
-	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -200, -300);
+	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -550, -220);
 	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;
 
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 475, 0);
@@ -126,11 +126,11 @@ void InitializeTutorial(void)
 	GameLogo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920, 1080, 4001, 1, 1, 0, 0);
 	GameLogo->Alpha = 0;
 
-	DoorOverlay = (Sprite *) CreateSprite("TextureFiles/DoorOverlay.png", 1920, 1080, 200, 1, 1, 0, 0);
+	DoorOverlay = (Sprite *) CreateSprite("TextureFiles/MansionBedRoomDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
 
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 745, -85, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 690, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 900, -205, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810, -280, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	SetChannelGroupVolume(EffectType, SFXVolume);
 	SetChannelGroupVolume(MusicType, BGMVolume);
