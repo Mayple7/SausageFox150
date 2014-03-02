@@ -1,0 +1,29 @@
+Main Menu
+-Load Character
+-New Game
+-Options
+
+Tutorial Level
+-No major changes
+-Attacking Instructions
+-HUD (numbers)
+-Buffs
+
+=>
+transition to first level
+=>
+
+Level1
+-All 3 Panels
+-Enemy Spawning
+-Easy AI
+-Player Death Event
+-Wall
+-Camera Logic
+
+=>
+Gong Mansion Mashers
+~End~
+
+Other
+-ZIndex Standards
