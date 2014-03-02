@@ -44,6 +44,8 @@ TextGlyphs *LevelName;
 Sprite *HandGauy;
 Platform *Pedestal;
 
+Enemy* SetEnemy1;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -93,6 +95,9 @@ void InitializeHandGuy(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
+
+	//Boss dog
+	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 800.0f * GetLoadRatio(), GROUNDLEVEL);
 }
 
 /*************************************************************************/
