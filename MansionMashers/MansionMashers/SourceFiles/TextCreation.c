@@ -182,7 +182,7 @@ void FreeText(TextGlyphs *FirstLetter)
 	{
 		NextLetter = FirstLetter->NextLetter;
 		if(FirstLetter->Glyph)
-			freeObject(FirstLetter->Glyph);
+			FreeSprite(FirstLetter->Glyph);
 		FreeMyAlloc(FirstLetter);
 		FirstLetter = NextLetter;
 	}
@@ -336,7 +336,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 						nextLetter->Glyph->CurrentFrame = 43;
 						break;
 					default:
-						freeObject(nextLetter->Glyph);
+						FreeSprite(nextLetter->Glyph);
 						nextLetter->Glyph = NULL;
 						break;
 				}

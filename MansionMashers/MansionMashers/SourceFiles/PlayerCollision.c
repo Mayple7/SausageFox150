@@ -160,15 +160,17 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		wList->Position.y = CurrentPlayer->PlayerWeapon->Position.y;
 		wList->WeaponSprite->ZIndex = (unsigned short)50;
 		wList->WeaponFOF = DroppedWeapon;
-			
+		
 		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
 		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
+
 		//If it is a shop we like it straight, oh ja
 		if (Shopping)
 		{
 			//Nothing is for sale, no need to keep the text
 			FreeText(wList->CurrentShop->ItemTextCoin);
 			FreeText(wList->CurrentShop->ItemTextName);
+			FreeSprite(wList->CurrentShop->ShopTextSprite);
 			//No longer in the shop
 			wList->CurrentShop = NULL;
 		}

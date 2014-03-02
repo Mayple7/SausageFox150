@@ -16,6 +16,7 @@ typedef struct WeaponShop
 	struct TextGlyphs *ItemTextCoin;
 
 	Sprite *ShopSprite;
+	Sprite *ShopTextSprite; //Confusing, but this is for text with symbols not in the text system, make them as a texture
 	Weapon *Weapon;
 }WeaponShop;
 

@@ -1290,23 +1290,23 @@ int LoadPlayer(Player *CurrentPlayer)
 			switch(CurrentPlayer->PlayerWeapon->WeaponType)
 			{
 			case Sword:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			case Axe:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			case Hammer:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			case Spear:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			default:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			}
@@ -1376,31 +1376,31 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	switch(Princess)
 	{
 	case Mayple:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Mayples Toy Sword");
 		CurrentPlayer->PlayerWeapon->WeaponType = Sword;
 		break;
 	case Ginko:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Ginkos Toy Axe");
 		CurrentPlayer->PlayerWeapon->WeaponType = Axe;
 		break;
 	case Kaya:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Kayas Toy Hammer");
 		CurrentPlayer->PlayerWeapon->WeaponType = Hammer;
 		break;
 	case Holly:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Hollys Toy Spear");
 		CurrentPlayer->PlayerWeapon->WeaponType = Spear;
 		break;
 	default:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Stick.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Fragile Stick");
 		break;

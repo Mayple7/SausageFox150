@@ -154,6 +154,7 @@ void WeaponOnTheRun(Weapon* CurrentWeapon)
 		//If collision, stop the falling
 		Platform *pList = platformList;
 		Wall *walls = wallList;
+		Vec2 glyphPos;
 		int hit = 0;
 
 		if (CurrentWeapon->WeaponPickup.Position.y <= (GROUNDLEVEL - 100) * GetLoadRatio())
@@ -192,6 +193,12 @@ void WeaponOnTheRun(Weapon* CurrentWeapon)
 		//If not collision, MAKE IT FALL
 		CurrentWeapon->WeaponSprite->Position.y -= 4;
 		CurrentWeapon->WeaponPickup.Position = CurrentWeapon->WeaponSprite->Position;
+		CurrentWeapon->WeaponHoverBackground->Position.x = CurrentWeapon->WeaponPickup.Position.x;
+		CurrentWeapon->WeaponHoverBackground->Position.y = CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f;
+		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f + CurrentWeapon->WeaponGlyphs->Glyph->Height / 2));
+		ChangeTextPosition(CurrentWeapon->WeaponGlyphs, glyphPos, Center);
+		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f - CurrentWeapon->WeaponGlyphs->Glyph->Height / 2));
+		ChangeTextPosition(CurrentWeapon->WeaponStatsGlyphs, glyphPos, Center);
 	}
 }
 

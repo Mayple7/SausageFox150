@@ -36,14 +36,14 @@
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int* objID)
+EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int *objID)
 {
 	//Adds spawner to object manager
-	EnemySpawner* CurrentSpawner = AddSpawner();
+	EnemySpawner *CurrentSpawner = AddSpawner();
 	int i;
 
 	//Initialize spawner variables
-	CurrentSpawner->EnemyArray = (Enemy **)CallocMyAlloc(numEnemies, sizeof(Enemy*));
+	CurrentSpawner->EnemyArray = (Enemy **) CallocMyAlloc(numEnemies, sizeof(Enemy *));
 	CurrentSpawner->enemyType = enemyType;
 	CurrentSpawner->numEnemies = numEnemies;
 	CurrentSpawner->objID = *objID;
@@ -78,7 +78,7 @@ EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, f
 	The number of enemies spawned
 */
 /*************************************************************************/
-int SpawnEnemies(EnemySpawner* CurrentSpawner)
+int SpawnEnemies(EnemySpawner *CurrentSpawner)
 {
 	int i;
 
@@ -95,7 +95,7 @@ int SpawnEnemies(EnemySpawner* CurrentSpawner)
 	}
 
 	//Free the spawner since it is not used anymore
-	FreeMyAlloc(CurrentSpawner->EnemyArray);
+	//FreeMyAlloc(CurrentSpawner->EnemyArray);
 	FreeSpawner(CurrentSpawner);
 
 	// Returns the number of enemies spawned
