@@ -143,7 +143,7 @@ void InitializeLevel1(void)
 
 	//Enemy spawners
 	Vec2Set(&SpawnerLocation, -200, 0);
-	FirstSpawner = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
+	FirstSpawner = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
 
 	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
 	SecondSpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);

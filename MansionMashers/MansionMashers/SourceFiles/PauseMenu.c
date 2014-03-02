@@ -200,14 +200,14 @@ void DrawPause(void)
 void FreePause(void)
 {
 	
-	freeObject(PauseText);
-	freeObject(SFXSliderGuide);
-	freeObject(BGMSliderGuide);
-	freeObject(SFXSliderBack);
-	freeObject(BGMSliderBack);
-	freeObject(PauseBackground);
-	freeObject(EnableCheats);
-	freeObject(CheckMark);
+	FreeSprite(PauseText);
+	FreeSprite(SFXSliderGuide);
+	FreeSprite(BGMSliderGuide);
+	FreeSprite(SFXSliderBack);
+	FreeSprite(BGMSliderBack);
+	FreeSprite(PauseBackground);
+	FreeSprite(EnableCheats);
+	FreeSprite(CheckMark);
 	FreeButton(CheatsButton);
 	FreeButton(SFXSlider);
 	FreeButton(BGMSlider);

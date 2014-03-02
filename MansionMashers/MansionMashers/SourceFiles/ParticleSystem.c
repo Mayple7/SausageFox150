@@ -124,7 +124,7 @@ void ParticleUpdate(void)
 		if (particleList[i].Lifetime <= 0)
 		{
 			particleList[i].objID = 0;
-			freeObject(particleList[i].ParticleSprite);
+			FreeSprite(particleList[i].ParticleSprite);
 		}
 	}
 }
