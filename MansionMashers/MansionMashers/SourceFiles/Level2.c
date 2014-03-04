@@ -45,6 +45,7 @@ static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
+Sprite *Back;
 
 Food* Ham;
 Food* Taco;
@@ -52,6 +53,7 @@ Food* Pizza;
 Food* Cake;
 
 Wall *Test;
+Wall* Wall1;
 
 HUD* CurrentHUD;
 
@@ -91,7 +93,7 @@ void InitializeLevel2(void)
 	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 
-	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 1, 1, 1, 0, 0);
+	Back = CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 1, 1, 1, 0, 0);
 
 	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
 	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
@@ -102,6 +104,30 @@ void InitializeLevel2(void)
 	//Test->WallSprite->Visible = FALSE;
 
 	//CreatePaperScroll(200);
+
+	//Walls
+	//Stairs
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, -819, -232);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -618, -281);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -675, -266);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -559, -336);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -604, -321);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -488, -370);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -538, -355);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -408, -420);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -473, -404);
+	Wall1->WallSprite->Visible = FALSE;
+	//Left Bounding Wall
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
+	Wall1->WallSprite->Visible = FALSE;
 }
 
 /*************************************************************************/
@@ -115,8 +141,7 @@ void UpdateLevel2(void)
 	EventLevel2();
 
 	//ScrollPaperScroll(1);
-
-	//EasyEditWall(Test, 10);
+	EasyEditWall(Wall1, 5);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
