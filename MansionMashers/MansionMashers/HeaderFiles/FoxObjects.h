@@ -33,5 +33,6 @@ enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
 #include "Shop.h"
 #include "PaperScroll.h"
 #include "EnemySpawner.h"
+#include "ArmGuyBoss.h"
 
 #endif

@@ -152,6 +152,8 @@ void InitializeTutorial(void)
 	//Other resets
 	RemoveDebugMode();
 
+	CreateBoundingBoxes();
+
 	ResetCamera();
 }
  
@@ -241,6 +243,8 @@ void UpdateTutorial(void)
 	{
 		SetNextState(GS_MainMenu);
 	}
+
+	BoundingBoxUpdate();
 }
 
 void DrawTutorial(void)

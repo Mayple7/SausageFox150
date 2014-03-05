@@ -90,6 +90,7 @@
     <ClInclude Include="AEUtil.h" />
     <ClInclude Include="AEVec2.h" />
     <ClInclude Include="HeaderFiles\ArmGuy.h" />
+    <ClInclude Include="HeaderFiles\ArmGuyBoss.h" />
     <ClInclude Include="HeaderFiles\BoundingBox.h" />
     <ClInclude Include="HeaderFiles\Camera.h" />
     <ClInclude Include="HeaderFiles\CharacterSelect.h" />
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\ArmGuy.c" />
+    <ClCompile Include="SourceFiles\ArmGuyBoss.c" />
     <ClCompile Include="SourceFiles\BoundingBox.c" />
     <ClCompile Include="SourceFiles\Camera.c" />
     <ClCompile Include="SourceFiles\CharacterSelect.c" />

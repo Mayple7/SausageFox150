@@ -31,6 +31,7 @@
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/UIButton.h"
+#include "../HeaderFiles/BoundingBox.h"
 
 
 // ---------------------------------------------------------------------------
@@ -41,7 +42,10 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
+static Sprite* BossBody;
 TextGlyphs* LevelName;
+
+ArmGuyBoss *Boss;
 
 /*************************************************************************/
 /*!
@@ -53,6 +57,7 @@ void LoadArmGuy(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
+
 }
 
 /*************************************************************************/
@@ -72,9 +77,26 @@ void InitializeArmGuy(void)
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
+	//Create background
+	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
+
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -400, -170);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 400, -170);
+
+	//Create bounding walls
+	CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -1010, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, 1010, 0);
+
+	Boss = CreateArmGuyBoss(0, 0, &newID);
+	Boss->BossCollider.collisionDebug = TRUE;
+	Boss->SpinAttack.collisionDebug = TRUE;
+	Boss->ArmAttack.collisionDebug = TRUE;
+
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
+
+	CreateBoundingBoxes();
 }
 
 /*************************************************************************/
@@ -89,6 +111,9 @@ void UpdateArmGuy(void)
 	// This should be the last line in this function
 
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateFloatingText();
+	BoundingBoxUpdate();
 }
 
 /*************************************************************************/
@@ -103,6 +128,9 @@ void DrawArmGuy(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
+	displayCollisionDebug(&Boss->BossCollider);
+	displayCollisionDebug(&Boss->ArmAttack);
+	displayCollisionDebug(&Boss->SpinAttack);
 }
 
 /*************************************************************************/
@@ -144,6 +172,7 @@ void EventArmGuy(void)
 {
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
+	DetectBossCollision(Boss);
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
