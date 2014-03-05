@@ -35,7 +35,7 @@ void EasyEditPlatform(Platform *obj, int mult)
 	if(FoxInput_KeyTriggered('P'))
 	{
 		printf("OBJ X : %f\n", obj->PlatformCollider.Position.x / GetLoadRatio());
-		printf("OBJ Y : %f\n", obj->PlatformCollider.Position.y) / GetLoadRatio();
+		printf("OBJ Y : %f\n", obj->PlatformCollider.Position.y / GetLoadRatio());
 	}
 }
 

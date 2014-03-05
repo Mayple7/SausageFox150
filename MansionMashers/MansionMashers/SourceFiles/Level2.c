@@ -45,7 +45,6 @@ static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
-Sprite *Back;
 
 Food* Ham;
 Food* Taco;
@@ -92,8 +91,9 @@ void InitializeLevel2(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
-
-	Back = CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 1, 1, 1, 0, 0);
+	
+	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 1, 1, 1, 1920, 0);
 
 	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
 	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
@@ -128,6 +128,8 @@ void InitializeLevel2(void)
 	//Left Bounding Wall
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
 	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 540.0f, newID++, 810, 140);
+	Wall1->WallSprite->Visible = FALSE;
 }
 
 /*************************************************************************/
@@ -141,7 +143,7 @@ void UpdateLevel2(void)
 	EventLevel2();
 
 	//ScrollPaperScroll(1);
-	EasyEditWall(Wall1, 5);
+	EasyEditWall(Wall1, 10);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -159,6 +161,8 @@ void DrawLevel2(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
+
+	SetCamera(&CurrentPlayer.Position, 250);
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
 }

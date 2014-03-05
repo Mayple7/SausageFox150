@@ -33,6 +33,7 @@
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/BoundingBox.h"
 
+
 // ---------------------------------------------------------------------------
 // defines
 #define PANELSIZE 1920.0f
@@ -140,6 +141,7 @@ void InitializeLevel1(void)
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 2785, 130);
 	Wall1->WallSprite->Visible = FALSE;
+
 
 	//Enemy spawners
 	Vec2Set(&SpawnerLocation, -200, 0);
