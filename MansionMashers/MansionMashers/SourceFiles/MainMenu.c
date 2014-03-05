@@ -314,7 +314,8 @@ void InputHandling(void)
 			//We want a new game right meow!
 			if(PointRectCollision(&YesButton->ButtonCollider, &MouseClick))
 			{
-				remove(GameData);
+				if(remove(GameData))
+					printf("SOMETHING WENT WRONG\n");
 				SetNextState(GS_CharacterSelect);
 			}
 			//I'm so close, lets just continue!
