@@ -74,9 +74,9 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->CurrentState = Cooldown;
 
 	// Armguy colliders
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 135, 530, *objID++);
-	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 300, 200, *objID++); 
-	CreateCollisionBox(&CurrentBoss->ArmAttack, &CurrentBoss->Position, WeaponEnemy, 500, 200, *objID++); 
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 135, 530, (*objID)++);
+	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 300, 200, (*objID)++); 
+	CreateCollisionBox(&CurrentBoss->ArmAttack, &CurrentBoss->Position, WeaponEnemy, 500, 200, (*objID)++); 
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->SpinDamage = 10;
@@ -199,7 +199,7 @@ void BossCollideWeapon(ArmGuyBoss *CurrentBoss)
 	CurrentBoss->CurrentHealth -= damageDealt;
 	sprintf(num, "%d", damageDealt);
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentBoss->Position.x / GetLoadRatio(), (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+	FirstLetter = CreateText(num, CurrentBoss->Position.x, (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2), 100, textColor, Center);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 }

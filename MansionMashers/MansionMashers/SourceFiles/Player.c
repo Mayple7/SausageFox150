@@ -61,8 +61,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//       PLAYER BASICS          //
 	////////////////////////////////*/
-	CurrentPlayer->Position.x = xPos;
-	CurrentPlayer->Position.y = yPos;
+	CurrentPlayer->Position.x = xPos * GetLoadRatio();
+	CurrentPlayer->Position.y = yPos * GetLoadRatio();
 	CurrentPlayer->FlipX = FALSE;
 	CurrentPlayer->FlipY = FALSE;
 	CurrentPlayer->FlipXPrev = FALSE;
