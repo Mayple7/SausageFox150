@@ -38,29 +38,25 @@
 
 #define PANELSIZE 1920.0f
 
-HUD* CurrentHUD;
+HUD *CurrentHUD;
 
-//Bounding Boxes
-Sprite *BoundTop;
-Sprite *BoundBottom;
-Sprite *BoundLeft;
-Sprite *BoundRight;
+Sprite *TutorialBackground;
+Platform *Shelf;
+Platform *ShortShelf;
+Platform *BouncyBed;
+Enemy *StrawDummy;
 
-Sprite* TutorialBackground;
-Platform* Shelf;
-Platform* ShortShelf;
-Platform* BouncyBed;
-Enemy* StrawDummy;
+Sprite *DoorOverlay;
+Sprite *BlackOverlay;
+Sprite *GameLogo;
 
-Sprite* DoorOverlay;
-Sprite* BlackOverlay;
-Sprite* GameLogo;
-
-Weapon* StarterAxe;
-Weapon* StarterSword;
+Weapon *StarterAxe;
+Weapon *StarterSword;
 
 FoxSound *BackSnd;
 FoxSound *GongSnd;
+
+Wall *WallTemp;
 
 static int newID;
 static int levelComplete;
@@ -72,14 +68,10 @@ void LoadTutorial(void)
 
 void InitializeTutorial(void)
 {
-	Vec3 BoundingTint;
-
 	levelComplete = FALSE;
-	FoxInput_Update();
-	Vec3Set(&BoundingTint, 0.0f, 0.0f, 0.0f);
-
 	newID = 10;
 	ResetObjectList();
+	ResetCamera();
 
 	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
@@ -89,15 +81,7 @@ void InitializeTutorial(void)
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	//Bounding Boxes
-	BoundTop = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, 1080);
-	BoundBottom = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 0, -1080);
-	BoundLeft = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, -1920, 0);
-	BoundRight = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 1080, 5000, 1, 1, 1920 * 2, 0);
-
-	BoundTop->Tint = BoundingTint;
-	BoundBottom->Tint = BoundingTint;
-	BoundLeft->Tint = BoundingTint;
-	BoundRight->Tint = BoundingTint;
+	CreateBoundingBoxes();
 
 	//Black fade part
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 1920, 0);
@@ -107,6 +91,18 @@ void InitializeTutorial(void)
 	//Mansion mashers' logo
 	GameLogo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920, 1080, 4001, 1, 1, 1920, 0);
 	GameLogo->Alpha = 0;
+
+	//Invisible walls
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 865, 130);
+	WallTemp->WallSprite->Visible = FALSE;
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -900, 0);
+	WallTemp->WallSprite->Visible = FALSE;
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 2785, 130);
+	WallTemp->WallSprite->Visible = FALSE;
+
+	//Sound volume
+	SetChannelGroupVolume(EffectType, SFXVolume);
+	SetChannelGroupVolume(MusicType, BGMVolume);
 
 	/*////////////////////////////////
 	//          PANEL ONE           //
@@ -145,28 +141,27 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f, -280, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750 + 1920.0f, -250);
-
-	SetChannelGroupVolume(EffectType, SFXVolume);
-	SetChannelGroupVolume(MusicType, BGMVolume);
-
-	//Other resets
-	RemoveDebugMode();
-
-	CreateBoundingBoxes();
-
-	ResetCamera();
 }
  
 void UpdateTutorial(void)
 {
 	// Handle any events such as collision
 	EventTutorial();
-	UpdateHUDPosition(CurrentHUD);
-	// Update the player position
-	UpdatePlayerPosition(&CurrentPlayer);
 
 	ParticleSystemUpdate();
+	BoundingBoxUpdate();
 	
+	PlayAudio(BackSnd);
+
+	if(FoxInput_KeyTriggered('J'))
+	{
+		FreeEnemy(StrawDummy);
+	}
+
+	// This should be the last line in this function
+	UpdatePlayerPosition(&CurrentPlayer);
+
+	//If the dummy exists, prevent the player from moving past
 	if(StrawDummy->objID > 0)
 	{
 		if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2)
@@ -178,73 +173,8 @@ void UpdateTutorial(void)
 			CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
 		}
 	}
-	else
-	{
-		//Left side "Wall"
-		if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
-		{
-			CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
-		}
-		//Right side "Wall" stops at the doorway
-		else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > TutorialBackground->Width + 7 * TutorialBackground->Width / 16 && CurrentPlayer.Position.y + CurrentPlayer.PlayerCollider.height / 2 > -TutorialBackground->Height / 8)
-		{
-			CurrentPlayer.Position.x = (7 * TutorialBackground->Width / 16) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
-		}
-		//Right side "Wall" through door
-		else if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > TutorialBackground->Width + 7 * TutorialBackground->Width / 16)
-		{
-			if(CurrentPlayer.PlayerRigidBody.Velocity.y > 0 && CurrentPlayer.Position.y + CurrentPlayer.PlayerCollider.height / 2 > -TutorialBackground->Height / 7)
-				ZeroVelocity(&CurrentPlayer.PlayerRigidBody);
-			
-			if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width > TutorialBackground->Width + TutorialBackground->Width / 2)
-			{
-				CurrentPlayer.Position.x = 50000;
-				RemoveDebugMode();
 
-				fadeToEnd();
-			}
-		}
-	}
-	
-	if(FoxInput_KeyTriggered('U'))
-	{
-		SetDebugMode();
-	}
-	if(FoxInput_KeyTriggered('I'))
-	{
-		RemoveDebugMode();
-	}
-	PlayAudio(BackSnd);
-
-	// Return to main menu with RSHIFT
-	// Pause with ESCAPE
-	if(FoxInput_KeyTriggered(VK_ESCAPE))
-	{
-		if(BlackOverlay->Alpha < 0.1)
-		{
-			TogglePauseSound(BackSnd);
-			InitializePause(&DrawTutorial);
-			UpdatePause();
-			SetChannelGroupVolume(EffectType, SFXVolume);
-			SetChannelGroupVolume(MusicType, BGMVolume);
-			TogglePauseSound(BackSnd);
-		}
-		else if(GameLogo->Alpha > 0.8)
-		{
-			SetNextState(GS_EPMenu);
-		}
-	}
-
-	if(FoxInput_KeyTriggered('J'))
-	{
-		FreeEnemy(StrawDummy);
-	}
-	if(FoxInput_KeyTriggered(VK_RSHIFT))
-	{
-		SetNextState(GS_MainMenu);
-	}
-
-	BoundingBoxUpdate();
+	UpdateHUDPosition(CurrentHUD);
 }
 
 void DrawTutorial(void)
@@ -257,7 +187,7 @@ void DrawTutorial(void)
 		SetCameraPan(0.0f, PANELSIZE);
 	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
 		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 2 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
 	{
 		levelComplete = TRUE;
 	}
@@ -269,6 +199,7 @@ void FreeTutorial(void)
 		CurrentPlayer.CurrentLevel = GS_Level1;
 	else
 		CurrentPlayer.CurrentLevel = GS_Tutorial;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
@@ -282,16 +213,38 @@ void UnloadTutorial(void)
 
 void EventTutorial(void)
 {
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
+	if(!levelComplete)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+	}
+	else
+		fadeToEnd();
+
 	if(StrawDummy->objID > 0)
 		UpdateEnemy(StrawDummy);
 
 	UpdateFloatingText();
 
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
-	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+	if(FoxInput_KeyTriggered('U'))
+	{
+		SetDebugMode();
+	}
+	if(FoxInput_KeyTriggered('I'))
+	{
+		RemoveDebugMode();
+	}
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
+	{
+		InitializePause(&DrawTutorial);
+		//TogglePauseSound(&BackgroundSnd);
+		//SetNextState(GS_MainMenu);
+		UpdatePause();
+		//TogglePauseSound(&BackgroundSnd);
+	}
 }
 
 void fadeToEnd(void)
@@ -299,7 +252,6 @@ void fadeToEnd(void)
 	if(BlackOverlay->Alpha >= 1.0f)
 	{
 		BlackOverlay->Alpha = 1.0f;
-		levelComplete = TRUE;
 		SetNextState(GS_MapLevel);
 	}
 	else
