@@ -17,6 +17,7 @@ typedef struct ArmGuyBoss
 	CollisionBox ArmAttack;
 	CollisionBox BossCollider;
 	int playerHit; // No need for a collision list
+	float cooldownTimer;
 	int SpinDamage;
 	int SmashDamage;
 	int JabDamage;

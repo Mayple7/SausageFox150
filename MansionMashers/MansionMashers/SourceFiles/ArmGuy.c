@@ -109,7 +109,7 @@ void UpdateArmGuy(void)
 {
 	EventArmGuy();
 	// This should be the last line in this function
-
+	UpdateArmGuyBoss(Boss);
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	UpdateFloatingText();

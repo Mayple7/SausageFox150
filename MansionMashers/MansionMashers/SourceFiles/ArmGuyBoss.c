@@ -79,6 +79,7 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 	CreateCollisionBox(&CurrentBoss->ArmAttack, &CurrentBoss->Position, WeaponEnemy, 500, 200, (*objID)++); 
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
+	CurrentBoss->cooldownTimer = 0;
 	CurrentBoss->SpinDamage = 10;
 	CurrentBoss->JabDamage = 10;
 	CurrentBoss->SmashDamage = 20;
@@ -100,12 +101,103 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 	switch(CurrentBoss->CurrentState)
 	{
 	case Jab:
+		printf("JAB TIME\n");
+		CurrentBoss->cooldownTimer += GetDeltaTime();
+		if(CurrentBoss->cooldownTimer > 2)
+		{
+			CurrentBoss->CurrentState = Cooldown;
+			CurrentBoss->cooldownTimer = 0;
+		}
 		break;
 	case Smash:
+		printf("SMASH TIME\n");
+		CurrentBoss->cooldownTimer += GetDeltaTime();
+		if(CurrentBoss->cooldownTimer > 2)
+		{
+			CurrentBoss->CurrentState = Cooldown;
+			CurrentBoss->cooldownTimer = 0;
+		}
 		break;
 	case Spin:
+		printf("SPIN TIME\n");
+		CurrentBoss->cooldownTimer += GetDeltaTime();
+		if(CurrentBoss->cooldownTimer > 2)
+		{
+			CurrentBoss->CurrentState = Cooldown;
+			CurrentBoss->cooldownTimer = 0;
+		}
 		break;
 	case Cooldown:
+		printf("CD TIME\n");
+		CurrentBoss->cooldownTimer += GetDeltaTime();
+		if(CurrentBoss->cooldownTimer > 2 && CurrentBoss->BodySprite->Position.x > 0)
+		{
+			if(CurrentPlayer.Position.x < 0)
+			{
+				CurrentBoss->CurrentState = Spin;
+				CurrentBoss->cooldownTimer = 0;
+			}
+			else if(CurrentPlayer.Position.y > -150 * GetLoadRatio())
+			{
+				if(rand() % 2)
+				{
+					CurrentBoss->CurrentState = Smash;
+					CurrentBoss->cooldownTimer = 0;
+				}
+				else
+				{
+					CurrentBoss->CurrentState = Jab;
+					CurrentBoss->cooldownTimer = 0;
+				}
+			}
+			else
+			{
+				if(rand() % 2)
+				{
+					CurrentBoss->CurrentState = Smash;
+					CurrentBoss->cooldownTimer = 0;
+				}
+				else
+				{
+					CurrentBoss->CurrentState = Spin;
+					CurrentBoss->cooldownTimer = 0;
+				}
+			}
+		}
+		else if(CurrentBoss->cooldownTimer > 2)
+		{
+			if(CurrentPlayer.Position.x > 0)
+			{
+				CurrentBoss->CurrentState = Spin;
+				CurrentBoss->cooldownTimer = 0;
+			}
+			else if(CurrentPlayer.Position.y > -150 * GetLoadRatio())
+			{
+				if(rand() % 2)
+				{
+					CurrentBoss->CurrentState = Smash;
+					CurrentBoss->cooldownTimer = 0;
+				}
+				else
+				{
+					CurrentBoss->CurrentState = Jab;
+					CurrentBoss->cooldownTimer = 0;
+				}
+			}
+			else
+			{
+				if(rand() % 2)
+				{
+					CurrentBoss->CurrentState = Smash;
+					CurrentBoss->cooldownTimer = 0;
+				}
+				else
+				{
+					CurrentBoss->CurrentState = Spin;
+					CurrentBoss->cooldownTimer = 0;
+				}
+			}
+		}
 		break;
 	}
 
