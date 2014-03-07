@@ -51,6 +51,7 @@ Sprite* FadeOverlay;
 Sprite* PlayerIcon;
 
 ParticleSystem* SystemOne;
+ParticleSystem* SystemTwo;
 
 /*************************************************************************/
 /*!
@@ -105,7 +106,7 @@ void InitializeMapLevel(void)
 	//Create the large sprites
 	GrassBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
 	MapBackground = (Sprite *)CreateSprite("TextureFiles/MapTemp.png", 2880, 1080, 20, 1, 1, 480, 0);
-	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 30, 1, 1, 0, 0);
+	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 60, 1, 1, 0, 0);
 
 	// Foxy icon ^_^
 	switch(CurrentPlayer.Princess)
@@ -128,6 +129,9 @@ void InitializeMapLevel(void)
 
 	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
 	SystemOne->FadeIn = TRUE;
+	
+	SystemTwo = CreateFoxParticleSystem("TextureFiles/MapParticle2.png", 0, 0, 100, -1, 25, 0.5f, 0, 100, 20.0f, 5.0f, 960, 1080, 25, 2.0f, 2.0f);
+	SystemTwo->FadeIn = TRUE;
 
 	// Adjusts the fade overlay based on the farthest progressed level
 	switch(CurrentPlayer.CurrentLevel)
@@ -159,6 +163,8 @@ void InitializeMapLevel(void)
 	if(Cheats)
 		FadeOverlay->Visible = FALSE;
 
+	SystemTwo->Position = FadeOverlay->Position;
+	SystemTwo->Position.x += 480;
 	CreateBoundingBoxes();
 
 	//Sets icon to the correct position

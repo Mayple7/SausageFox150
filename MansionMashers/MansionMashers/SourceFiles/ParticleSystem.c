@@ -36,7 +36,7 @@ ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float
 	CurrentSystem->amountTotal = amountTotal;
 	CurrentSystem->emitAmount = emitAmount;
 	CurrentSystem->emitSpeed = emitSpeed;
-	CurrentSystem->emitSpeedTimer = emitSpeed;
+	CurrentSystem->emitSpeedTimer = 0;
 	CurrentSystem->emitAngle = emitAngle;
 	CurrentSystem->emitAngleRandom = emitAngleRandom;
 	CurrentSystem->emitScale = emitScale;
