@@ -33,6 +33,7 @@
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/BoundingBox.h"
 
+
 // ---------------------------------------------------------------------------
 // defines
 #define PANELSIZE 1920.0f
@@ -141,9 +142,10 @@ void InitializeLevel1(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 2785, 130);
 	Wall1->WallSprite->Visible = FALSE;
 
+
 	//Enemy spawners
 	Vec2Set(&SpawnerLocation, -200, 0);
-	FirstSpawner = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
+	FirstSpawner = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
 
 	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
 	SecondSpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
@@ -304,7 +306,7 @@ void EventLevel1(void)
 		else
 		{
 			BlackOverlay->Alpha = 0.0f;
-			CurrentPlayer.FlipX = 1;
+			CurrentPlayer.FlipX = TRUE;
 			CurrentPlayer.PlayerDirection = RIGHT;
 			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 			

@@ -200,14 +200,14 @@ void DrawPause(void)
 void FreePause(void)
 {
 	
-	freeObject(PauseText);
-	freeObject(SFXSliderGuide);
-	freeObject(BGMSliderGuide);
-	freeObject(SFXSliderBack);
-	freeObject(BGMSliderBack);
-	freeObject(PauseBackground);
-	freeObject(EnableCheats);
-	freeObject(CheckMark);
+	FreeSprite(PauseText);
+	FreeSprite(SFXSliderGuide);
+	FreeSprite(BGMSliderGuide);
+	FreeSprite(SFXSliderBack);
+	FreeSprite(BGMSliderBack);
+	FreeSprite(PauseBackground);
+	FreeSprite(EnableCheats);
+	FreeSprite(CheckMark);
 	FreeButton(CheatsButton);
 	FreeButton(SFXSlider);
 	FreeButton(BGMSlider);
@@ -225,34 +225,34 @@ void EventPause(void)
 	Vec2 MouseClick;
 
 	FoxInput_GetWorldPosition(&worldX, &worldY);
-	Vec2Set(&MouseClick, (float)worldX + GetCameraXPosition(), (float)worldY);
+	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
 
 	if(FoxInput_MouseDown(MOUSE_BUTTON_LEFT))
 	{
 		if(PointRectCollision(&SFXSlider->ButtonCollider, &MouseClick))
 		{
-			if(worldX + GetCameraXPosition() > SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
+			if(worldX > SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
 				SFXSlider->Position.x = SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
-			else if(worldX + GetCameraXPosition() < -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
+			else if(worldX < -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x)
 				SFXSlider->Position.x = -SFXSliderGuide->Width / 2 + SFXSliderGuide->Position.x;
 			else
-				SFXSlider->Position.x = (float)worldX + GetCameraXPosition();
+				SFXSlider->Position.x = (float)worldX;
 			SFXSlider->ButtonSprite->Position.x = SFXSlider->Position.x;
 			SFXSlider->ButtonCollider.Position.x = SFXSlider->Position.x;
 		}
 		else if(PointRectCollision(&BGMSlider->ButtonCollider, &MouseClick))
 		{
-			if(worldX + GetCameraXPosition() > SFXSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
+			if(worldX > SFXSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
 				BGMSlider->Position.x = BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
-			else if(worldX + GetCameraXPosition() < -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
+			else if(worldX < -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x)
 				BGMSlider->Position.x = -BGMSliderGuide->Width / 2 + BGMSliderGuide->Position.x;
 			else
-				BGMSlider->Position.x = (float)worldX + GetCameraXPosition();
+				BGMSlider->Position.x = (float)worldX;
 			BGMSlider->ButtonSprite->Position.x = BGMSlider->Position.x;
 			BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
 		}
 		
-		SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2 - GetCameraXPosition()) / SFXSliderGuide->Width;
+		SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
 		if(SFXVolume < 0)
 			SFXVolume = 0.0f;
 		else if(SFXVolume > 1.0f)
@@ -261,7 +261,7 @@ void EventPause(void)
 		volumestring = strcat(volumestring, "%");
 		ChangeTextString(SFXText, volumestring);
 
-		BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2 - GetCameraXPosition()) / BGMSliderGuide->Width;
+		BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
 		if(BGMVolume < 0)
 			BGMVolume = 0.0f;
 		else if(BGMVolume > 1.0f)

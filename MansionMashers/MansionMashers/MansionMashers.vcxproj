@@ -90,6 +90,7 @@
     <ClInclude Include="AEUtil.h" />
     <ClInclude Include="AEVec2.h" />
     <ClInclude Include="HeaderFiles\ArmGuy.h" />
+    <ClInclude Include="HeaderFiles\ArmGuyBoss.h" />
     <ClInclude Include="HeaderFiles\BoundingBox.h" />
     <ClInclude Include="HeaderFiles\Camera.h" />
     <ClInclude Include="HeaderFiles\CharacterSelect.h" />
@@ -119,6 +120,9 @@
     <ClInclude Include="HeaderFiles\Level2.h" />
     <ClInclude Include="HeaderFiles\Level3.h" />
     <ClInclude Include="HeaderFiles\Level4.h" />
+    <ClInclude Include="HeaderFiles\Level5.h" />
+    <ClInclude Include="HeaderFiles\Level6.h" />
+    <ClInclude Include="HeaderFiles\Level7.h" />
     <ClInclude Include="HeaderFiles\MainMenu.h" />
     <ClInclude Include="HeaderFiles\MapLevel.h" />
     <ClInclude Include="HeaderFiles\Matrix3.h" />
@@ -139,6 +143,7 @@
     <ClInclude Include="HeaderFiles\Shop1.h" />
     <ClInclude Include="HeaderFiles\Shop2.h" />
     <ClInclude Include="HeaderFiles\Shop3.h" />
+    <ClInclude Include="HeaderFiles\Shop4.h" />
     <ClInclude Include="HeaderFiles\Sound.h" />
     <ClInclude Include="HeaderFiles\Sprite.h" />
     <ClInclude Include="HeaderFiles\StartSlides.h" />
@@ -161,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\ArmGuy.c" />
+    <ClCompile Include="SourceFiles\ArmGuyBoss.c" />
     <ClCompile Include="SourceFiles\BoundingBox.c" />
     <ClCompile Include="SourceFiles\Camera.c" />
     <ClCompile Include="SourceFiles\CharacterSelect.c" />
@@ -185,6 +191,9 @@
     <ClCompile Include="SourceFiles\Level2.c" />
     <ClCompile Include="SourceFiles\Level3.c" />
     <ClCompile Include="SourceFiles\Level4.c" />
+    <ClCompile Include="SourceFiles\Level5.c" />
+    <ClCompile Include="SourceFiles\Level6.c" />
+    <ClCompile Include="SourceFiles\Level7.c" />
     <ClCompile Include="SourceFiles\Main.c" />
     <ClCompile Include="SourceFiles\MainMenu.c" />
     <ClCompile Include="SourceFiles\MapLevel.c" />
@@ -206,6 +215,7 @@
     <ClCompile Include="SourceFiles\Shop1.c" />
     <ClCompile Include="SourceFiles\Shop2.c" />
     <ClCompile Include="SourceFiles\Shop3.c" />
+    <ClCompile Include="SourceFiles\Shop4.c" />
     <ClCompile Include="SourceFiles\Sound.c" />
     <ClCompile Include="SourceFiles\Sprite.c" />
     <ClCompile Include="SourceFiles\StartSlides.c" />

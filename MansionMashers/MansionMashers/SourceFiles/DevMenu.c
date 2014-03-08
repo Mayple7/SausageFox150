@@ -221,12 +221,10 @@ void InputHandling(void)
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
 	}
 	if(FoxInput_KeyTriggered('I'))
 	{
 		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
 	}
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
@@ -321,35 +319,35 @@ void UpdateSelector(struct Sprite *Selector)
 	switch(selectedButton)
 	{
 		case 0:
-			Selector->Position = Level1->Position;
+			Vec2Scale(&Selector->Position, &Level1->Position, GetLoadRatio());
 			UpdateMesh(Selector);
 			break;
 		case 1:
-			Selector->Position = Level2->Position;
+			Vec2Scale(&Selector->Position, &Level2->Position, GetLoadRatio());
 			UpdateMesh(Selector);
 			break;
 		case 2:
-			Selector->Position = Level3->Position;
+			Vec2Scale(&Selector->Position, &Level3->Position, GetLoadRatio());
 			UpdateMesh(Selector);
 			break;
 		case 3:
-			Selector->Position = Level4->Position;
+			Vec2Scale(&Selector->Position, &Level4->Position, GetLoadRatio());
 			UpdateMesh(Selector);
 			break;
 		case 4:
-			Selector->Position = ArmGuy->Position;
+			Vec2Scale(&Selector->Position, &ArmGuy->Position, GetLoadRatio());
 			UpdateMesh(Selector);
 			break;
 		case 5:
-			Selector->Position = HandGuy->Position;
+			Vec2Scale(&Selector->Position, &HandGuy->Position, GetLoadRatio());
 			UpdateMesh(Selector);
 			break;
 		case 6:
-			Selector->Position = YeahGuy->Position;
+			Vec2Scale(&Selector->Position, &YeahGuy->Position, GetLoadRatio());
 			UpdateMesh(Selector);
 			break;
 		case 7:
-			Selector->Position = Kevin->Position;
+			Vec2Scale(&Selector->Position, &Kevin->Position, GetLoadRatio());
 			UpdateMesh(Selector);
 			break;
 	}

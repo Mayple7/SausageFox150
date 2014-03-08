@@ -35,7 +35,7 @@ void LoadCharacterSelect(void)
 {
 	FILE *fp;
 
-	fp = fopen("GameData.cfg", "wt");
+	fp = fopen(GameData, "wt");
 	if(fp)
 		fclose(fp);
 
@@ -74,7 +74,7 @@ void InitializeCharacterSelect(void)
 	HollyButton = CreateButton("TextureFiles/BlankPlatform.png", 712, -62, 405.0f, 724.0f, newID++);
 	HollyButton->ButtonSprite->Visible = FALSE;
 
-	if(remove("../GameData.cfg"))
+	if(remove(GameData))
 	{
 		printf("FAILED");
 	}
@@ -84,10 +84,6 @@ void InitializeCharacterSelect(void)
 	CharacterMayple.FlipX = TRUE;
 	UpdatePlayerPosition(&CharacterMayple);
 	CharacterMayple.PlayerSpriteParts.Tail->CurrentFrame = 3;
-	if(remove("../GameData.cfg"))
-	{
-		printf("FAILED");
-	}
 
 	//Create Ginko
 	InitializePlayer(&CharacterGinko, Ginko, -235, -80);
@@ -95,10 +91,6 @@ void InitializeCharacterSelect(void)
 	CharacterGinko.FlipX = TRUE;
 	UpdatePlayerPosition(&CharacterGinko);
 	CharacterGinko.PlayerSpriteParts.Tail->CurrentFrame = 9;
-	if(remove("../GameData.cfg"))
-	{
-		printf("FAILED");
-	}
 
 	//Create Kaya
 	InitializePlayer(&CharacterKaya, Kaya, 235, -80);
@@ -106,10 +98,6 @@ void InitializeCharacterSelect(void)
 	CharacterKaya.FlipX = FALSE;
 	UpdatePlayerPosition(&CharacterKaya);
 	CharacterKaya.PlayerSpriteParts.Tail->CurrentFrame = 6;
-	if(remove("../GameData.cfg"))
-	{
-		printf("FAILED");
-	}
 
 	//Create Holly
 	InitializePlayer(&CharacterHolly, Holly, 712, -80);
@@ -117,10 +105,6 @@ void InitializeCharacterSelect(void)
 	CharacterHolly.FlipX = FALSE;
 	UpdatePlayerPosition(&CharacterHolly);
 	CharacterHolly.PlayerSpriteParts.Tail->CurrentFrame = 14;
-	if(remove("../GameData.cfg"))
-	{
-		printf("FAILED");
-	}
 }
 
 void UpdateCharacterSelect(void)

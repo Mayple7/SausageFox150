@@ -61,8 +61,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//       PLAYER BASICS          //
 	////////////////////////////////*/
-	CurrentPlayer->Position.x = xPos;
-	CurrentPlayer->Position.y = yPos;
+	CurrentPlayer->Position.x = xPos * GetLoadRatio();
+	CurrentPlayer->Position.y = yPos * GetLoadRatio();
 	CurrentPlayer->FlipX = FALSE;
 	CurrentPlayer->FlipY = FALSE;
 	CurrentPlayer->FlipXPrev = FALSE;
@@ -302,6 +302,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		{
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			CurrentPlayer->dropDown = TRUE;
+			CurrentPlayer->dropdownTimer = 0.5f;
 		}
 
 		
@@ -378,12 +379,10 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Player position updated when dropping down from a platform
 	if(CurrentPlayer->dropDown)
 	{
-		//Constant drop down speed
-		CurrentPlayer->Position.y -= 300.0f * GetDeltaTime() * GetLoadRatio();
+		CurrentPlayer->dropdownTimer -= GetDeltaTime();
 		//Once gravity takes control stop the drop down stuffs
-		if(CurrentPlayer->PlayerRigidBody.Velocity.y < 0)
+		if(CurrentPlayer->dropdownTimer <= 0.0f)
 		{
-			CurrentPlayer->PlayerRigidBody.Velocity.y += -1800.0f * GetDeltaTime() * GetLoadRatio();
 			CurrentPlayer->dropDown = FALSE;
 		}
 	}
@@ -838,7 +837,7 @@ void Animation(Player *Object)
 {
 	float sinOfLegValue = (float)sin(Object->LegSinValue);
 	float sinOfTwoLegValue = (float)sin(Object->LegSinValue*2);
-	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f / ((Object->Speed * 0.15f + 0.1f)) ))-(Object->Speed);
+	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f / ((Object->Speed * GetLoadRatio() * 0.15f + 0.1f)) ))-(Object->Speed * GetLoadRatio());
 	float LegUpperDirection = sinOfLegValue/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = sinOfLegValue/(LegDistance);
@@ -1290,23 +1289,23 @@ int LoadPlayer(Player *CurrentPlayer)
 			switch(CurrentPlayer->PlayerWeapon->WeaponType)
 			{
 			case Sword:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			case Axe:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			case Hammer:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			case Spear:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			default:
-				freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
 				break;
 			}
@@ -1376,31 +1375,31 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	switch(Princess)
 	{
 	case Mayple:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Mayples Toy Sword");
 		CurrentPlayer->PlayerWeapon->WeaponType = Sword;
 		break;
 	case Ginko:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Ginkos Toy Axe");
 		CurrentPlayer->PlayerWeapon->WeaponType = Axe;
 		break;
 	case Kaya:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Kayas Toy Hammer");
 		CurrentPlayer->PlayerWeapon->WeaponType = Hammer;
 		break;
 	case Holly:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Hollys Toy Spear");
 		CurrentPlayer->PlayerWeapon->WeaponType = Spear;
 		break;
 	default:
-		freeObject(CurrentPlayer->PlayerWeapon->WeaponSprite);
+		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Stick.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Fragile Stick");
 		break;

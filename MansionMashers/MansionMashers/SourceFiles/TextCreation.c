@@ -182,7 +182,7 @@ void FreeText(TextGlyphs *FirstLetter)
 	{
 		NextLetter = FirstLetter->NextLetter;
 		if(FirstLetter->Glyph)
-			freeObject(FirstLetter->Glyph);
+			FreeSprite(FirstLetter->Glyph);
 		FreeMyAlloc(FirstLetter);
 		FirstLetter = NextLetter;
 	}
@@ -336,7 +336,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 						nextLetter->Glyph->CurrentFrame = 43;
 						break;
 					default:
-						freeObject(nextLetter->Glyph);
+						FreeSprite(nextLetter->Glyph);
 						nextLetter->Glyph = NULL;
 						break;
 				}
@@ -483,4 +483,89 @@ void TextAllNotVisible(TextGlyphs* FirstLetter)
 			nextLetter->Glyph->Visible = FALSE;
 		nextLetter = nextLetter->NextLetter;
 	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Initializes text for progressive visibility
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
+void TextProgressiveInit(TextGlyphs* FirstLetter)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+		{
+			nextLetter->Glyph->Visible = TRUE;
+			nextLetter->Glyph->Alpha = 0.0f;
+		}
+		nextLetter = nextLetter->NextLetter;
+	}
+
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Makes all the text invisible
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+
+	\param fadeinSpeed
+	How many frames for a glyph to go from fully invisible to fully visible
+*/
+/*************************************************************************/
+void TextProgressiveVisible(TextGlyphs* FirstLetter, int fadeinSpeed)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph && nextLetter->Glyph->Alpha >= 1.0f)
+		{
+			nextLetter->Glyph->Alpha = 1.0f;
+			nextLetter = nextLetter->NextLetter;
+		}
+		else if(nextLetter->Glyph)
+		{
+			nextLetter->Glyph->Alpha += 1.0f / fadeinSpeed;
+			return;
+		}
+		else
+		{
+			nextLetter = nextLetter->NextLetter;
+		}
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Initializes text for progressive visibility
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
+void TextProgressiveEnd(TextGlyphs* FirstLetter)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+		{
+			nextLetter->Glyph->Visible = TRUE;
+			nextLetter->Glyph->Alpha = 1.0f;
+		}
+		nextLetter = nextLetter->NextLetter;
+	}
+
 }

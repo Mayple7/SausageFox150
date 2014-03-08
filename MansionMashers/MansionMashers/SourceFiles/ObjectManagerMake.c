@@ -156,7 +156,7 @@ void AddFloatingText(TextGlyphs *FirstLetter)
 		if(!floatTextList[i])
 		{
 			floatTextList[i] = FirstLetter;
-			printf("Floating Text at %i Created\n", i);
+			//printf("Floating Text at %i Created\n", i);
 			return;
 		}
 	}
@@ -179,7 +179,7 @@ void AddStaticText(TextGlyphs *FirstLetter)
 		if(!staticTextList[i])
 		{
 			staticTextList[i] = FirstLetter;
-			printf("Static Text at %i Created\n", i);
+			//printf("Static Text at %i Created\n", i);
 			return;
 		}
 	}

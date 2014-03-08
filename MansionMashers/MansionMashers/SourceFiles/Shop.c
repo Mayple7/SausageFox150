@@ -1,3 +1,23 @@
+/*****************************************************************************/
+/*!
+\file				Shop.c
+\author				Kaden Nugent (kaden.n)
+\date				Feb 28, 2014
+
+\brief				Manages Shop creation
+
+\par				Functions:
+\li					getWeaponCoin
+\li					getItemTextName
+\li					CreateWeaponShop
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
+*/ 
+/*****************************************************************************/
+
 // ---------------------------------------------------------------------------
 // includes
 #include "../AEEngine.h"
@@ -53,7 +73,7 @@ void getItemTextName(WeaponShop *newShop, int collisionGroup, Vec3 TextTint, flo
 {
 	Vec3Set(&TextTint, 0, 0, 0);
 
-	//For now just manually pick the coin value.
+	//For now just manually create the generic weapon text
 	switch(collisionGroup)
 	{
 	case Sword:
@@ -89,7 +109,8 @@ void CreateWeaponShop(float shopPosX, float shopPosY, int newID, int collisionGr
 	getWeaponCoin(newShop, weaponRarity);
 
 	//Sign
-	newShop->ShopSprite = (Sprite *) CreateSprite("TextureFiles/WoodSign.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
+	newShop->ShopSprite     = (Sprite *) CreateSprite("TextureFiles/WoodSign.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
+	newShop->ShopTextSprite = (Sprite *) CreateSprite("TextureFiles/WoodSignText.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
 
 	//Text
 	Vec3Set(&TextTint, 0.2f, 0.2f, 0.2f);

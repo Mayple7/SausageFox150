@@ -5,18 +5,18 @@
 void EasyEditSprite(Sprite *obj, int mult)
 {
 	if(FoxInput_KeyTriggered(VK_UP))
-		obj->Position.y += 1 * mult;
+		obj->Position.y += 1 * GetLoadRatio() * mult;
 	if(FoxInput_KeyTriggered(VK_DOWN))
-		obj->Position.y -= 1 * mult;
+		obj->Position.y -= 1 * GetLoadRatio() * mult;
 	if(FoxInput_KeyTriggered(VK_LEFT))
-		obj->Position.x -= 1 * mult;
+		obj->Position.x -= 1 * GetLoadRatio() * mult;
 	if(FoxInput_KeyTriggered(VK_RIGHT))
-		obj->Position.x += 1 * mult;
+		obj->Position.x += 1 * GetLoadRatio() * mult;
 
 	if(FoxInput_KeyTriggered('P'))
 	{
-		printf("OBJ X : %f\n", obj->Position.x);
-		printf("OBJ Y : %f\n", obj->Position.y);
+		printf("OBJ X : %f\n", obj->Position.x / GetLoadRatio());
+		printf("OBJ Y : %f\n", obj->Position.y / GetLoadRatio());
 	}
 
 }
@@ -24,18 +24,18 @@ void EasyEditSprite(Sprite *obj, int mult)
 void EasyEditPlatform(Platform *obj, int mult)
 {
 	if(FoxInput_KeyTriggered(VK_UP))
-		obj->PlatformCollider.Position.y += 1 * mult;
+		obj->PlatformCollider.Position.y += 1 * GetLoadRatio() * mult;
 	if(FoxInput_KeyTriggered(VK_DOWN))
-		obj->PlatformCollider.Position.y -= 1 * mult;
+		obj->PlatformCollider.Position.y -= 1 * GetLoadRatio() * mult;
 	if(FoxInput_KeyTriggered(VK_LEFT))
-		obj->PlatformCollider.Position.x -= 1 * mult;
+		obj->PlatformCollider.Position.x -= 1 * GetLoadRatio() * mult;
 	if(FoxInput_KeyTriggered(VK_RIGHT))
-		obj->PlatformCollider.Position.x += 1 * mult;
+		obj->PlatformCollider.Position.x += 1 * GetLoadRatio() * mult;
 
 	if(FoxInput_KeyTriggered('P'))
 	{
-		printf("OBJ X : %f\n", obj->PlatformCollider.Position.x);
-		printf("OBJ Y : %f\n", obj->PlatformCollider.Position.y);
+		printf("OBJ X : %f\n", obj->PlatformCollider.Position.x / GetLoadRatio());
+		printf("OBJ Y : %f\n", obj->PlatformCollider.Position.y / GetLoadRatio());
 	}
 }
 
@@ -43,17 +43,17 @@ void EasyEditPlatform(Platform *obj, int mult)
 void EasyEditWall(Wall *obj, int mult)
 {
 	if(FoxInput_KeyTriggered(VK_UP))
-		obj->WallCollider.Position.y += 1 * mult;
+		obj->WallCollider.Position.y += 1 * GetLoadRatio() * mult;
 	if(FoxInput_KeyTriggered(VK_DOWN))
-		obj->WallCollider.Position.y -= 1 * mult;
+		obj->WallCollider.Position.y -= 1 * GetLoadRatio() * mult;
 	if(FoxInput_KeyTriggered(VK_LEFT))
-		obj->WallCollider.Position.x -= 1 * mult;
+		obj->WallCollider.Position.x -= 1 * GetLoadRatio() * mult;
 	if(FoxInput_KeyTriggered(VK_RIGHT))
-		obj->WallCollider.Position.x += 1 * mult;
+		obj->WallCollider.Position.x += 1 * GetLoadRatio() * mult;
 
 	if(FoxInput_KeyTriggered('P'))
 	{
-		printf("OBJ X : %f\n", obj->WallCollider.Position.x);
-		printf("OBJ Y : %f\n", obj->WallCollider.Position.y);
+		printf("OBJ X : %f\n", obj->WallCollider.Position.x / GetLoadRatio());
+		printf("OBJ Y : %f\n", obj->WallCollider.Position.y / GetLoadRatio());
 	}
 }

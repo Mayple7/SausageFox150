@@ -8,8 +8,8 @@
 \brief				Manages Freeing Objects
 
 \par				Functions:
-\li					freeObject
-\li					FreeObjectList
+\li					FreeSprite
+\li					freeSpriteList
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -34,7 +34,7 @@
 	The pointer to a sprite whose memory is to be deallocated
 */
 /*************************************************************************/
-void freeObject(Sprite* object)
+void FreeSprite(Sprite* object)
 {
 	//Make sure the sprite exists
 	if (object && (object->Created & CREATED))
@@ -65,7 +65,7 @@ void FreeFood(Food *CurrentFood)
 		AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
 
 		if (CurrentFood->FoodSprite->Created)
-			freeObject(CurrentFood->FoodSprite);
+			FreeSprite(CurrentFood->FoodSprite);
 	}
 }
 
@@ -88,7 +88,7 @@ void FreePlatform(Platform *CurrentPlatform)
 		AEGfxMeshFree(CurrentPlatform->PlatformCollider.DebugMesh);
 
 		if (CurrentPlatform->PlatformSprite->Created)
-			freeObject(CurrentPlatform->PlatformSprite);
+			FreeSprite(CurrentPlatform->PlatformSprite);
 	}
 }
 
@@ -114,7 +114,7 @@ void FreeWeapon(Weapon *CurrentWeapon)
 		AEGfxMeshFree(CurrentWeapon->WeaponAttack.DebugMesh);
 
 		if(CurrentWeapon->WeaponSprite->Created)
-			freeObject(CurrentWeapon->WeaponSprite);
+			FreeSprite(CurrentWeapon->WeaponSprite);
 	}
 }
 
@@ -139,19 +139,19 @@ void FreeEnemy(Enemy *CurrentEnemy)
 			FreeWeapon(CurrentEnemy->EnemyWeapon);
 		if (CurrentEnemy->EnemySprite->Created)
 		{
-			freeObject(CurrentEnemy->EnemySprite);
-			freeObject(CurrentEnemy->EnemySpriteParts.ArmLower);
-			freeObject(CurrentEnemy->EnemySpriteParts.ArmLower2);
-			freeObject(CurrentEnemy->EnemySpriteParts.ArmUpper);
-			freeObject(CurrentEnemy->EnemySpriteParts.ArmUpper2);
-			freeObject(CurrentEnemy->EnemySpriteParts.LegLower);
-			freeObject(CurrentEnemy->EnemySpriteParts.LegLower2);
-			freeObject(CurrentEnemy->EnemySpriteParts.LegUpper);
-			freeObject(CurrentEnemy->EnemySpriteParts.LegUpper2);
-			freeObject(CurrentEnemy->EnemySpriteParts.Body);
-			freeObject(CurrentEnemy->EnemySpriteParts.Tail);
-			freeObject(CurrentEnemy->EnemySpriteParts.Skirt);
-			freeObject(CurrentEnemy->EnemySpriteParts.Weapon);
+			FreeSprite(CurrentEnemy->EnemySprite);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.ArmLower);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.ArmLower2);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.ArmUpper);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.ArmUpper2);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.LegLower);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.LegLower2);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.LegUpper);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.LegUpper2);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.Body);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.Tail);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.Skirt);
+			FreeSprite(CurrentEnemy->EnemySpriteParts.Weapon);
 		}
 	}
 }
@@ -216,7 +216,7 @@ void FreeParticle(Particle *CurrentParticle)
 		CurrentParticle->objID = -1;
 
 		//if (CurrentParticle->ParticleSprite->Created)
-		//	freeObject(CurrentParticle->ParticleSprite);
+		//	FreeSprite(CurrentParticle->ParticleSprite);
 	}
 }
 
@@ -234,7 +234,7 @@ void FreeButton(Button* CurrentButton)
 	//Make sure the sprite exists
 	if (CurrentButton->objID && CurrentButton->ButtonSprite->Created)
 	{
-		freeObject(CurrentButton->ButtonSprite);
+		FreeSprite(CurrentButton->ButtonSprite);
 		//Free the mesh and texture data
 		CurrentButton->objID = 0;
 	}
@@ -259,7 +259,7 @@ void FreeWall(Wall *CurrentWall)
 		AEGfxMeshFree(CurrentWall->WallCollider.DebugMesh);
 
 		if (CurrentWall->WallSprite->Created)
-			freeObject(CurrentWall->WallSprite);
+			FreeSprite(CurrentWall->WallSprite);
 	}
 }
 
@@ -280,6 +280,9 @@ void FreeSpawner(EnemySpawner *CurrentSpawner)
 		CurrentSpawner->objID = 0;
 		CurrentSpawner->SpawnerCollider.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentSpawner->SpawnerCollider.DebugMesh);
+
+		//The enemies must be freed as well
+		FreeMyAlloc(CurrentSpawner->EnemyArray);
 	}
 }
 
@@ -302,7 +305,7 @@ void freeDrawList(void)
 		if (drawList[i].Created)
 		{
 			//Free the mesh and texture data
-			freeObject(&drawList[i]);
+			FreeSprite(&drawList[i]);
 		}
 	}
 
@@ -316,7 +319,7 @@ void freeDrawList(void)
 	Cycles through the object list freeing all objects in the list
 */
 /*************************************************************************/
-void freeObjectList(void)
+void freeSpriteList(void)
 {
 	int i;
 
@@ -399,7 +402,6 @@ void freeObjectList(void)
 		}
 	}
 
-
 	//Free collision lists data allocation
 	FreeMyAlloc(platformList);
 	FreeMyAlloc(foodList);
@@ -424,7 +426,7 @@ void freeObjectList(void)
 void FreeAllLists(void)
 {
 	//Free object list
-	freeObjectList();
+	freeSpriteList();
 	//Free draw list
 	freeDrawList();
 	//Free sound list

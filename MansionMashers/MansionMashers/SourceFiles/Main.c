@@ -197,10 +197,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			if(FoxInput_KeyTriggered('R'))
 			{
 				int worldX, worldY;
-				float camX, camY;
 				FoxInput_GetWorldPosition(&worldX, &worldY);
-				AEGfxGetCamPosition(&camX, &camY);
-				printf("%f, %f\n", (worldX + camX) / GetLoadRatio(), (worldY + camY) / GetLoadRatio());
+				printf("%f, %f\n", (worldX) / GetLoadRatio(), (worldY) / GetLoadRatio());
 			}
 			if(FoxInput_KeyTriggered('M'))
 			{

@@ -45,9 +45,11 @@
 /*************************************************************************/
 void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGroup, float width, float height, int newID)
 {
+	Vec2 updatedPos;
+
 	newBox->canCollide = TRUE;
-	Vec2Scale(newPosition, newPosition, GetLoadRatio());
-	newBox->Position = *newPosition;
+	Vec2Scale(&updatedPos, newPosition, GetLoadRatio());
+	newBox->Position = updatedPos;
 	newBox->collisionGroup = collisionGroup;
 	newBox->collisionID = newID;
 	newBox->width = width * GetLoadRatio();

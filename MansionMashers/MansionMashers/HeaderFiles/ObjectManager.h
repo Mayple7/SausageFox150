@@ -42,10 +42,10 @@ struct WeaponShop* AddWeaponShop(void);
 
 void ResetObjectList(void);
 void DrawObjectList(void);
-void freeObjectList(void);
+void freeSpriteList(void);
 void freeDrawList(void);
 void FreeAllLists(void);
-void freeObject(Sprite* objectNext);
+void FreeSprite(Sprite* objectNext);
 void DrawCollisionList(void);
 
 void FreeFood(Food *CurrentFood);

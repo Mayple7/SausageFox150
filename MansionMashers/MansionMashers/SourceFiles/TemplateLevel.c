@@ -38,6 +38,8 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
+static int levelComplete = FALSE;
+TextGlyphs* LevelName;
 
 /*************************************************************************/
 /*!
@@ -59,6 +61,8 @@ void LoadLevel(void)
 /*************************************************************************/
 void InitializeLevel(void)
 {
+	Vec3 TextTint;
+
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -66,6 +70,10 @@ void InitializeLevel(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	Vec3Set(&TextTint, 1, 1, 1);
+	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center);
+	ChangeTextVisibility(LevelName);
 }
 
 /*************************************************************************/
@@ -136,19 +144,16 @@ void EventLevel(void)
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
 	}
 	if(FoxInput_KeyTriggered('I'))
 	{
 		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawLevel);
+		InitializePause(&DrawLevel);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 }
