@@ -145,27 +145,27 @@ void InitializeMapLevel(void)
 		break;
 	}
 
-	Tutorial = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
-	Level1 = CreateButton("TextureFiles/BlankPlatform.png", -432.86f, -216.43f, 175, 75, newID++);
-	Level2 = CreateButton("TextureFiles/BlankPlatform.png", -113.06f, -115.21f, 175, 75, newID++);
+	Tutorial = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -233.28f, 175, 75, newID++);
+	Level1 = CreateButton("TextureFiles/BlankPlatform.png", -432.86f, -221.43f, 175, 75, newID++);
+	Level2 = CreateButton("TextureFiles/BlankPlatform.png", -113.06f, -120.21f, 175, 75, newID++);
 
-	Shop1 = CreateButton("TextureFiles/BlankPlatform.png", -211.05f, 102.29f, 175, 75, newID++);
-	Level3 = CreateButton("TextureFiles/BlankPlatform.png", 114.14f, -268.12f, 175, 75, newID++);
-	Level4 = CreateButton("TextureFiles/BlankPlatform.png", 122.75f, 241.19f, 175, 75, newID++);
+	Shop1 = CreateButton("TextureFiles/BlankPlatform.png", -211.05f, 97.29f, 175, 75, newID++);
+	Level3 = CreateButton("TextureFiles/BlankPlatform.png", 114.14f, -273.12f, 175, 75, newID++);
+	Level4 = CreateButton("TextureFiles/BlankPlatform.png", 122.75f, 236.19f, 175, 75, newID++);
 
-	ArmGuy = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
-	Shop2 = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
+	ArmGuy = CreateButton("TextureFiles/BlankPlatform.png", 388.71f, -235.43f, 175, 75, newID++);
+	Shop2 = CreateButton("TextureFiles/BlankPlatform.png", 627.76f, -258.04f, 175, 75, newID++);
 
-	HandGuy = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
-	Shop3 = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
+	HandGuy = CreateButton("TextureFiles/BlankPlatform.png", 386.56f, 184.51f, 175, 75, newID++);
+	Shop3 = CreateButton("TextureFiles/BlankPlatform.png", 606.22f, 186.66f, 175, 75, newID++);
 
-	Level5 = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
-	Level6 = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
-	YeahGuy = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
+	Level5 = CreateButton("TextureFiles/BlankPlatform.png", 400.56f, 5.77f, 175, 75, newID++);
+	Level6 = CreateButton("TextureFiles/BlankPlatform.png", 658.98f, -28.69f, 175, 75, newID++);
+	YeahGuy = CreateButton("TextureFiles/BlankPlatform.png", 1064.93f, -86.83f, 175, 75, newID++);
 
-	Shop4 = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
-	Level7 = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
-	Kevin = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -228.28f, 175, 75, newID++);
+	Shop4 = CreateButton("TextureFiles/BlankPlatform.png", 1106.91f, 155.44f, 175, 75, newID++);
+	Level7 = CreateButton("TextureFiles/BlankPlatform.png", 1324.43f, -121.29f, 175, 75, newID++);
+	Kevin = CreateButton("TextureFiles/BlankPlatform.png", 1582.85f, -139.60f, 175, 75, newID++);
 
 	Tutorial->ButtonSprite->Visible = FALSE;
 	Level1->ButtonSprite->Visible = FALSE;
@@ -637,31 +637,31 @@ void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 		Vec2Set(NewPosition, 388.71f, -230.43f);
 		break;
 	case GS_Shop2:
-		Vec2Set(NewPosition, 627.76f, -253.04f);
+		Vec2Set(NewPosition, 627.76f, -258.04f);
 		break;
 	case GS_HandGuy:
 		Vec2Set(NewPosition, 387.63f, 195.97f);
 		break;
 	case GS_Shop3:
-		Vec2Set(NewPosition, 609.45f, 194.90f);
+		Vec2Set(NewPosition, 606.22f, 186.66f);
 		break;
 	case GS_Level5:
-		Vec2Set(NewPosition, 399.06f, 10.77f);
+		Vec2Set(NewPosition, 400.56f, 5.77f);
 		break;
 	case GS_Level6:
-		Vec2Set(NewPosition, 393.2f, 13.8f);
+		Vec2Set(NewPosition, 658.98f, -28.69f);
 		break;
 	case GS_YeahGuy:
 		Vec2Set(NewPosition, 1067.22f, -80.76f);
 		break;
 	case GS_Shop4:
-		Vec2Set(NewPosition, 1256.5f, 252.8f);
+		Vec2Set(NewPosition, 1106.91f, 155.44f);
 		break;
 	case GS_Level7:
-		Vec2Set(NewPosition, 393.2f, 13.8f);
+		Vec2Set(NewPosition, 1324.43f, -121.29f);
 		break;
 	case GS_Kevin:
-		Vec2Set(NewPosition, 1582.46f, -129.29f);
+		Vec2Set(NewPosition, 1582.85f, -139.60f);
 		break;
 	default:
 		Vec2Set(NewPosition, -596.4f, -41.4f);
