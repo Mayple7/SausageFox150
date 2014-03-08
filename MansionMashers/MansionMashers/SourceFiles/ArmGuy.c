@@ -94,7 +94,7 @@ void InitializeArmGuy(void)
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center);
-	ChangeTextVisibility(LevelName);
+	TextProgressiveInit(LevelName);
 
 	CreateBoundingBoxes();
 }
@@ -107,6 +107,7 @@ void InitializeArmGuy(void)
 /*************************************************************************/
 void UpdateArmGuy(void)
 {
+	TextProgressiveVisible(LevelName, 30);
 	EventArmGuy();
 	// This should be the last line in this function
 	UpdateArmGuyBoss(Boss);
@@ -179,12 +180,10 @@ void EventArmGuy(void)
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
 	}
 	if(FoxInput_KeyTriggered('I'))
 	{
 		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
@@ -193,5 +192,9 @@ void EventArmGuy(void)
 		//TogglePauseSound(&BackgroundSnd);
 		SetNextState(GS_MainMenu);
 		//TogglePauseSound(&BackgroundSnd);
+	}
+	if(FoxInput_KeyTriggered('K'))
+	{
+		TextProgressiveEnd(LevelName);
 	}
 }

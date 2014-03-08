@@ -35,11 +35,11 @@ static int vsync;
 /*************************************************************************/
 void StartFoxFrame(void)
 {
-	/*
+	
 	DEVMODE *freq = (DEVMODE *) malloc(sizeof(DEVMODE));
 	freq->dmSize = sizeof(DEVMODE);
-	vsync = EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, freq);
-	*/
+	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, freq);
+	vsync = freq->dmDisplayFrequency;
 	QueryPerformanceCounter(&CycleStart);
 	
 }
@@ -65,6 +65,7 @@ void EndFoxFrame(void)
 	QueryPerformanceCounter(&CycleEnd);
 	QueryPerformanceFrequency(&Freq);
 	DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
+	
 	while(DeltaTime < 1.0f/FRAMERATE)
 	{
 		QueryPerformanceCounter(&CycleEnd);
