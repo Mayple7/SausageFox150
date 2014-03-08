@@ -300,6 +300,30 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawLevel4;
 			GSMPointers.pUnload = UnloadLevel4;
 			break;
+		case GS_Level5:
+			GSMPointers.pLoad = LoadLevel5;
+			GSMPointers.pInit = InitializeLevel5;
+			GSMPointers.pUpdate = UpdateLevel5;
+			GSMPointers.pFree = FreeLevel5;
+			GSMPointers.pDraw = DrawLevel5;
+			GSMPointers.pUnload = UnloadLevel5;
+			break;
+		case GS_Level6:
+			GSMPointers.pLoad = LoadLevel6;
+			GSMPointers.pInit = InitializeLevel6;
+			GSMPointers.pUpdate = UpdateLevel6;
+			GSMPointers.pFree = FreeLevel6;
+			GSMPointers.pDraw = DrawLevel6;
+			GSMPointers.pUnload = UnloadLevel6;
+			break;
+		case GS_Level7:
+			GSMPointers.pLoad = LoadLevel7;
+			GSMPointers.pInit = InitializeLevel7;
+			GSMPointers.pUpdate = UpdateLevel7;
+			GSMPointers.pFree = FreeLevel7;
+			GSMPointers.pDraw = DrawLevel7;
+			GSMPointers.pUnload = UnloadLevel7;
+			break;
 		case GS_Kevin:
 			GSMPointers.pLoad = LoadKevin;
 			GSMPointers.pInit = InitializeKevin;
@@ -339,6 +363,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pFree = FreeShop3;
 			GSMPointers.pDraw = DrawShop3;
 			GSMPointers.pUnload = UnloadShop3;
+			break;
+		case GS_Shop4:
+			GSMPointers.pLoad = LoadShop4;
+			GSMPointers.pInit = InitializeShop4;
+			GSMPointers.pUpdate = UpdateShop4;
+			GSMPointers.pFree = FreeShop4;
+			GSMPointers.pDraw = DrawShop4;
+			GSMPointers.pUnload = UnloadShop4;
 			break;
 	}
 }

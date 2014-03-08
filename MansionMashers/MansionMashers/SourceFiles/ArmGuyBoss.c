@@ -78,6 +78,8 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 300, 200, (*objID)++); 
 	CreateCollisionBox(&CurrentBoss->ArmAttack, &CurrentBoss->Position, WeaponEnemy, 500, 200, (*objID)++); 
 
+
+	CurrentBoss->SpinAttack.Position.y -= CurrentBoss->SpinAttack.height;
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->cooldownTimer = 0;
 	CurrentBoss->SpinDamage = 10;

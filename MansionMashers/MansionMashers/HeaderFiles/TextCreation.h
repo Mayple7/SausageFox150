@@ -25,5 +25,8 @@ void AnimateFloatingText(TextGlyphs *FirstLetter);
 void ChangeTextZIndex(TextGlyphs* FirstLetter, int newIndex);
 void TextAllVisible(TextGlyphs* FirstLetter);
 void TextAllNotVisible(TextGlyphs* FirstLetter);
+void TextProgressiveInit(TextGlyphs* FirstLetter);
+void TextProgressiveVisible(TextGlyphs* FirstLetter, int fadeinSpeed);
+void TextProgressiveEnd(TextGlyphs* FirstLetter);
 
 #endif

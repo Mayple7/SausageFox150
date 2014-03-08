@@ -10,7 +10,7 @@
 //Create particle list
 #define PARTICLEAMOUNT 500
 //Number of buttons
-#define BUTTONAMOUNT 20
+#define BUTTONAMOUNT 50
 //Number of floating text
 #define FLOATINGTEXTAMOUNT 30
 //Number of spawners

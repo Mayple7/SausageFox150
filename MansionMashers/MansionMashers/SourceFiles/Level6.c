@@ -1,18 +1,18 @@
 /*****************************************************************************/
 /*!
-\file				Level.c
+\file				Level6.c
 \author				Dan Muller (d.muller)
-\date				Feb 15, 2014
+\date				Mar 8, 2014
 
-\brief				Functions for the showcase level
+\brief				Functions for Level6
 
 \par				Functions:
-\li					LoadLevel
-\li					InitializeLevel
-\li					UpdateLevel
-\li					DrawLevel
-\li					FreeLevel
-\li					UnloadLevel
+\li					LoadLevel6
+\li					InitializeLevel6
+\li					UpdateLevel6
+\li					DrawLevel6
+\li					FreeLevel6
+\li					UnloadLevel6
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -24,7 +24,7 @@
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/TemplateLevel.h"
+#include "../HeaderFiles/Level6.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
@@ -47,7 +47,7 @@ TextGlyphs* LevelName;
 	Loads assets for the showcase level
 */
 /*************************************************************************/
-void LoadLevel(void)
+void LoadLevel6(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
@@ -59,7 +59,7 @@ void LoadLevel(void)
 	Initializes the objects for the level
 */
 /*************************************************************************/
-void InitializeLevel(void)
+void InitializeLevel6(void)
 {
 	Vec3 TextTint;
 
@@ -72,7 +72,7 @@ void InitializeLevel(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 5", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 }
 
@@ -82,7 +82,7 @@ void InitializeLevel(void)
 	Updates the level
 */
 /*************************************************************************/
-void UpdateLevel(void)
+void UpdateLevel6(void)
 {
 	EventLevel();
 
@@ -96,7 +96,7 @@ void UpdateLevel(void)
 	Draws the level
 */
 /*************************************************************************/
-void DrawLevel(void)
+void DrawLevel6(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
@@ -110,7 +110,7 @@ void DrawLevel(void)
 	Frees all the objects in the level
 */
 /*************************************************************************/
-void FreeLevel(void)
+void FreeLevel6(void)
 {
 	FreeAllLists();
 }
@@ -121,7 +121,7 @@ void FreeLevel(void)
 	Unloads all the assets in the level
 */
 /*************************************************************************/
-void UnloadLevel(void)
+void UnloadLevel6(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
@@ -151,7 +151,7 @@ void EventLevel(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawLevel);
+		InitializePause(&DrawLevel6);
 		//TogglePauseSound(&BackgroundSnd);
 		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);

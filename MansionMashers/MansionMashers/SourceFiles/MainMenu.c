@@ -59,12 +59,15 @@ Button* QuitGameButton;
 //Delete save file objects
 Sprite* BlackBackground;
 Sprite* DeleteText;
+Sprite* ExitConfirm;
 Button* YesButton;
 Button* NoButton;
+Button* ExitButton;
 
 enum Buttons { EP1But, EP2But, TutBut, QuitBut};
 static int selectedButton;								//0: EP1, 1: EP2, 2: tutorial, 3: quit
 static int deleteSave; // If true, dialogue box to delete save is up
+static int exitGame;
 static int newID;
 static int canLoad;
 
@@ -120,6 +123,7 @@ void InitializeMainMenu(void)
 	// Reset the object list
 	ResetObjectList();
 	deleteSave = FALSE;
+	exitGame = FALSE;
 
 	//Check if it is possible to load a game
 	fp = fopen(GameData, "r");
@@ -190,11 +194,19 @@ void InitializeMainMenu(void)
 	NoButton = CreateButton("TextureFiles/BackButton.png", 300, -200, 400, 150, newID++);
 	NoButton->ButtonSprite->ZIndex = 500;
 
+	//Exit Game Confirmation
+	Vec3Set(&Tint, 0, 0, 0);
+	ExitConfirm = (Sprite *) CreateSprite("TextureFiles/ExitConfirm.png", 639, 204, 500, 1, 1, 0, 100);
+	ExitButton = CreateButton("TextureFiles/ExitButton.png", -300, -200, 400, 150, newID++);
+	ExitButton->ButtonSprite->ZIndex = 500;
+
 	//Should not be visible at the start
 	BlackBackground->Visible = FALSE;
 	DeleteText->Visible = FALSE;
+	ExitConfirm->Visible = FALSE;
 	YesButton->ButtonSprite->Visible = FALSE;
 	NoButton->ButtonSprite->Visible = FALSE;
+	ExitButton->ButtonSprite->Visible = FALSE;
 
 	CreateBoundingBoxes();
 
@@ -302,6 +314,43 @@ void InputHandling(void)
 	//If delete save option is up
 	if(deleteSave)
 	{
+		// Mouse location data
+		int worldX, worldY;
+		Vec2 MouseHover;
+
+		FoxInput_GetWorldPosition(&worldX, &worldY);
+		Vec2Set(&MouseHover, (float)worldX, (float)worldY);
+
+		//Adjust scales when mouse is on the delete save button
+		if(PointRectCollision(&YesButton->ButtonCollider, &MouseHover))
+		{
+			YesButton->ButtonSprite->ScaleX = 1.1f;
+			YesButton->ButtonSprite->ScaleY = 1.1f;
+
+			NoButton->ButtonSprite->ScaleX = 1.0f;
+			NoButton->ButtonSprite->ScaleY = 1.0f;
+		}
+		//On the back button
+		else if(PointRectCollision(&NoButton->ButtonCollider, &MouseHover))
+		{
+			YesButton->ButtonSprite->ScaleX = 1.0f;
+			YesButton->ButtonSprite->ScaleY = 1.0f;
+
+			NoButton->ButtonSprite->ScaleX = 1.1f;
+			NoButton->ButtonSprite->ScaleY = 1.1f;
+		}
+		//Back to normal
+		else
+		{
+			YesButton->ButtonSprite->ScaleX = 1.0f;
+			YesButton->ButtonSprite->ScaleY = 1.0f;
+
+			NoButton->ButtonSprite->ScaleX = 1.0f;
+			NoButton->ButtonSprite->ScaleY = 1.0f;
+		}
+
+
+		//On click
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
 			//Get mouse info
@@ -326,6 +375,35 @@ void InputHandling(void)
 				BlackBackground->Visible = FALSE;
 				DeleteText->Visible = FALSE;
 				YesButton->ButtonSprite->Visible = FALSE;
+				NoButton->ButtonSprite->Visible = FALSE;
+			}
+		}
+	}
+	//If exit confirmation is up
+	else if(exitGame)
+	{
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			//Get mouse info
+			int worldX, worldY;
+			Vec2 MouseClick;
+
+			FoxInput_GetWorldPosition(&worldX, &worldY);
+			Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
+			//We want a new game right meow!
+			if(PointRectCollision(&ExitButton->ButtonCollider, &MouseClick))
+			{
+				SetNextState(GS_Quit);
+			}
+			//I'm so close, lets just continue!
+			else if(PointRectCollision(&NoButton->ButtonCollider, &MouseClick))
+			{
+				//Hides all the save deletion sprites
+				exitGame = FALSE;
+				BlackBackground->Visible = FALSE;
+				ExitConfirm->Visible = FALSE;
+				ExitButton->ButtonSprite->Visible = FALSE;
 				NoButton->ButtonSprite->Visible = FALSE;
 			}
 		}
@@ -377,7 +455,11 @@ void InputHandling(void)
 		else if(PointRectCollision(&QuitGameButton->ButtonCollider, &MouseClick))
 		{
 			//Quit game :(
-			SetNextState(GS_Quit);
+			exitGame = TRUE;
+			BlackBackground->Visible = TRUE;
+			ExitConfirm->Visible = TRUE;
+			ExitButton->ButtonSprite->Visible = TRUE;
+			NoButton->ButtonSprite->Visible = TRUE;
 		}
 	}
 	//Mouse hover stuff
@@ -475,7 +557,24 @@ void InputHandling(void)
 
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
-		SetNextState(GS_Quit);
+	{
+		if(!exitGame)
+		{
+			exitGame = TRUE;
+			BlackBackground->Visible = TRUE;
+			ExitConfirm->Visible = TRUE;
+			ExitButton->ButtonSprite->Visible = TRUE;
+			NoButton->ButtonSprite->Visible = TRUE;
+		}
+		else
+		{
+			exitGame = FALSE;
+			BlackBackground->Visible = FALSE;
+			ExitConfirm->Visible = FALSE;
+			ExitButton->ButtonSprite->Visible = FALSE;
+			NoButton->ButtonSprite->Visible = FALSE;
+		}
+	}
 }
 
 /*************************************************************************/

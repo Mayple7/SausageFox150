@@ -207,7 +207,7 @@ static int fadeLogic(void)
 		slideTimer += 1;
 
 	// Start fading out the slide after some time
-	if(slideTimer == 120)
+	if(slideTimer == 60)
 	{
 		fade = 2;
 		slideTimer = 0;

@@ -36,6 +36,8 @@
 /*************************************************************************/
 void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform)
 {
+	if(CurrentPlayer->dropdownTimer > 0.0f)
+		return;
 	if(CurrentPlayer->PlayerRigidBody.Velocity.y <= 0)
 	{
 		if(CurrentPlayer->PlayerCollider.Position.y + CurrentPlayer->PlayerCollider.Offset.y - CurrentPlayer->PlayerCollider.height / 2.0f > CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y)

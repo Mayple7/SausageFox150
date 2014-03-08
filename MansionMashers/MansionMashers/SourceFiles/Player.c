@@ -302,6 +302,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		{
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			CurrentPlayer->dropDown = TRUE;
+			CurrentPlayer->dropdownTimer = 0.5f;
 		}
 
 		
@@ -378,12 +379,10 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Player position updated when dropping down from a platform
 	if(CurrentPlayer->dropDown)
 	{
-		//Constant drop down speed
-		CurrentPlayer->Position.y -= 300.0f * GetDeltaTime() * GetLoadRatio();
+		CurrentPlayer->dropdownTimer -= GetDeltaTime();
 		//Once gravity takes control stop the drop down stuffs
-		if(CurrentPlayer->PlayerRigidBody.Velocity.y < 0)
+		if(CurrentPlayer->dropdownTimer <= 0.0f)
 		{
-			CurrentPlayer->PlayerRigidBody.Velocity.y += -1800.0f * GetDeltaTime() * GetLoadRatio();
 			CurrentPlayer->dropDown = FALSE;
 		}
 	}
@@ -838,7 +837,7 @@ void Animation(Player *Object)
 {
 	float sinOfLegValue = (float)sin(Object->LegSinValue);
 	float sinOfTwoLegValue = (float)sin(Object->LegSinValue*2);
-	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f / ((Object->Speed * 0.15f + 0.1f)) ))-(Object->Speed);
+	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f / ((Object->Speed * GetLoadRatio() * 0.15f + 0.1f)) ))-(Object->Speed * GetLoadRatio());
 	float LegUpperDirection = sinOfLegValue/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = sinOfLegValue/(LegDistance);

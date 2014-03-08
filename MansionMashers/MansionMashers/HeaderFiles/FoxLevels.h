@@ -24,5 +24,9 @@
 #include "../HeaderFiles/Shop1.h"
 #include "../HeaderFiles/Shop2.h"
 #include "../HeaderFiles/Shop3.h"
+#include "../HeaderFiles/Shop4.h"
+#include "../HeaderFiles/Level5.h"
+#include "../HeaderFiles/Level6.h"
+#include "../HeaderFiles/Level7.h"
 
 #endif
