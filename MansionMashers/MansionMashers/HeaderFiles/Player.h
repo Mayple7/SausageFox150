@@ -91,6 +91,8 @@ typedef struct Player
 	int BuffHeld[4];
 	int BuffSelected;
 
+	float dropdownTimer;
+
 	float Speed;
 
 	int isAttacking;

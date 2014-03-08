@@ -306,7 +306,7 @@ void EventLevel1(void)
 		else
 		{
 			BlackOverlay->Alpha = 0.0f;
-			CurrentPlayer.FlipX = 1;
+			CurrentPlayer.FlipX = TRUE;
 			CurrentPlayer.PlayerDirection = RIGHT;
 			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 			

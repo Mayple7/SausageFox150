@@ -25,6 +25,7 @@
 
 static LARGE_INTEGER CycleStart, CycleEnd, Freq; 		//for framerate controller
 static double DeltaTime;
+static int vsync;
 
 /*************************************************************************/
 /*!
@@ -34,7 +35,13 @@ static double DeltaTime;
 /*************************************************************************/
 void StartFoxFrame(void)
 {
+	/*
+	DEVMODE *freq = (DEVMODE *) malloc(sizeof(DEVMODE));
+	freq->dmSize = sizeof(DEVMODE);
+	vsync = EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, freq);
+	*/
 	QueryPerformanceCounter(&CycleStart);
+	
 }
 
 double testFrameTime(void)
