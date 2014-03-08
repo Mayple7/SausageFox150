@@ -221,12 +221,10 @@ void InputHandling(void)
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
 	}
 	if(FoxInput_KeyTriggered('I'))
 	{
 		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
 	}
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
