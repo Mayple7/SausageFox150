@@ -181,6 +181,7 @@ void UpdateLevel2(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -194,7 +195,6 @@ void DrawLevel2(void)
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
 
-	SetCamera(&CurrentPlayer.Position, 250);
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
 }
@@ -237,20 +237,9 @@ void UnloadLevel2(void)
 /*************************************************************************/
 void EventLevel2(void)
 {
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
-	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
-
-	if(FoxInput_KeyTriggered('U'))
-	{
-		SetDebugMode();
-	}
-	if(FoxInput_KeyTriggered('I'))
-	{
-		RemoveDebugMode();
-	}
+	/*////////////////////////////////
+	//     HANDLE INPUT FIRST       //
+	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		//InitializePause(&DrawLevel2);
@@ -259,4 +248,21 @@ void EventLevel2(void)
 		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
+	if(FoxInput_KeyTriggered('U'))
+		SetDebugMode();
+	if(FoxInput_KeyTriggered('I'))
+		RemoveDebugMode();
+
+	InputPlayer(&CurrentPlayer);
+
+	/*////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	////////////////////////////////*/
+	SetCamera(&CurrentPlayer.Position, 250);
+
+	/*////////////////////////////////
+	//       EVERYTHING ELSE        //
+	////////////////////////////////*/
+	// Check for any collision and handle the results
+	DetectPlayerCollision();
 }
