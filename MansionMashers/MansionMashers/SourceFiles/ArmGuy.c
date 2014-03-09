@@ -80,6 +80,10 @@ void InitializeArmGuy(void)
 	//Create background
 	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
 
+	//Background
+	CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 2, 1, 1, 140, 0);
+	CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 140, 0);
+
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -400, -170);
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 400, -170);
 
@@ -90,7 +94,8 @@ void InitializeArmGuy(void)
 	Boss = CreateArmGuyBoss(0, 0, &newID);
 	Boss->BossCollider.collisionDebug = TRUE;
 	Boss->SpinAttack.collisionDebug = TRUE;
-	Boss->ArmAttack.collisionDebug = TRUE;
+	Boss->JabAttack.collisionDebug = TRUE;
+	Boss->SmashAttack.collisionDebug = TRUE;
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center);
@@ -130,8 +135,9 @@ void DrawArmGuy(void)
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
 	displayCollisionDebug(&Boss->BossCollider);
-	displayCollisionDebug(&Boss->ArmAttack);
+	displayCollisionDebug(&Boss->JabAttack);
 	displayCollisionDebug(&Boss->SpinAttack);
+	displayCollisionDebug(&Boss->SmashAttack);
 }
 
 /*************************************************************************/

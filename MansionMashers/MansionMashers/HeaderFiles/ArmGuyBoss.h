@@ -12,9 +12,13 @@ typedef struct ArmGuyBoss
 
 	Sprite *BodySprite;
 	Sprite *ArmSprite; // Arm for armguy, hand for handguy etc
+
 	int CurrentState;
+	int InnerState;
+
 	CollisionBox SpinAttack;
-	CollisionBox ArmAttack;
+	CollisionBox JabAttack;
+	CollisionBox SmashAttack;
 	CollisionBox BossCollider;
 	int playerHit; // No need for a collision list
 	float cooldownTimer;

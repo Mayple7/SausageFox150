@@ -239,6 +239,15 @@ void EventPause(void)
 				SFXSlider->Position.x = (float)worldX;
 			SFXSlider->ButtonSprite->Position.x = SFXSlider->Position.x;
 			SFXSlider->ButtonCollider.Position.x = SFXSlider->Position.x;
+
+			SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2 - GetCameraXPosition()) / SFXSliderGuide->Width;
+			if(SFXVolume < 0)
+				SFXVolume = 0.0f;
+			else if(SFXVolume > 1.0f)
+				SFXVolume = 1.0f;
+			volumestring = VolumetoString(volumestring, SFXVolume * 100);
+			volumestring = strcat(volumestring, "%");
+			ChangeTextString(SFXText, volumestring);
 		}
 		else if(PointRectCollision(&BGMSlider->ButtonCollider, &MouseClick))
 		{
@@ -250,25 +259,16 @@ void EventPause(void)
 				BGMSlider->Position.x = (float)worldX;
 			BGMSlider->ButtonSprite->Position.x = BGMSlider->Position.x;
 			BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
-		}
-		
-		SFXVolume = (SFXSlider->Position.x + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
-		if(SFXVolume < 0)
-			SFXVolume = 0.0f;
-		else if(SFXVolume > 1.0f)
-			SFXVolume = 1.0f;
-		volumestring = VolumetoString(volumestring, SFXVolume * 100);
-		volumestring = strcat(volumestring, "%");
-		ChangeTextString(SFXText, volumestring);
 
-		BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
-		if(BGMVolume < 0)
-			BGMVolume = 0.0f;
-		else if(BGMVolume > 1.0f)
-			BGMVolume = 1.0f;
-		volumestring = VolumetoString(volumestring, BGMVolume * 100);
-		volumestring = strcat(volumestring, "%");
-		ChangeTextString(BGMText, volumestring);
+			BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2 - GetCameraXPosition()) / BGMSliderGuide->Width;
+			if(BGMVolume < 0)
+				BGMVolume = 0.0f;
+			else if(BGMVolume > 1.0f)
+				BGMVolume = 1.0f;
+			volumestring = VolumetoString(volumestring, BGMVolume * 100);
+			volumestring = strcat(volumestring, "%");
+			ChangeTextString(BGMText, volumestring);
+		}
 	}
 
 	// On a single mouse click

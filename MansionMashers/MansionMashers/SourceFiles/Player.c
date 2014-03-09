@@ -302,7 +302,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		{
 			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 			CurrentPlayer->dropDown = TRUE;
-			CurrentPlayer->dropdownTimer = 0.5f;
+			CurrentPlayer->dropdownTimer = 0.25f;
 		}
 
 		
@@ -441,7 +441,7 @@ void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 {
 	//Placeholder move speed formula
-	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility + 600.0f;
+	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility + 900.0f;
 }
 
 /*************************************************************************/
@@ -1214,8 +1214,8 @@ void SavePlayer(Player *CurrentPlayer)
 		BuffValue = BuffValue | 0x8;
 
 	// Ugly code that puts all needed info into one string
-	sprintf(string, "Level: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
-		CurrentPlayer->CurrentLevel, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+	sprintf(string, "Level: %d\nArmUnlock: %d\nHandUnlock: %d\nArmClear: %d\nHandClear: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
+		CurrentPlayer->CurrentLevel, CurrentPlayer->armUnlock, CurrentPlayer->handUnlock, CurrentPlayer->armClear, CurrentPlayer->handClear, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
@@ -1255,14 +1255,14 @@ int LoadPlayer(Player *CurrentPlayer)
 	{
 		//Ugly code which should read the file if its in the correct format
 		int num = 0;
-		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
-			&CurrentPlayer->CurrentLevel, &CurrentPlayer->Princess, &BuffValue, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
+		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
+			&CurrentPlayer->CurrentLevel, &CurrentPlayer->armUnlock, &CurrentPlayer->handUnlock, &CurrentPlayer->armClear, &CurrentPlayer->handClear, &CurrentPlayer->Princess, &BuffValue, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
 			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
 			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 		fclose(fp);
 
 		//If all the data was read successfully
-		if(num == 14)
+		if(num == 18)
 		{
 			//Update all the other required player data
 			int nameLen, statsLen;
@@ -1370,6 +1370,11 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	CurrentPlayer->CurrentPlayerStats.Money = 15;
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
 	CurrentPlayer->CurrentLevel = GS_Tutorial;
+
+	CurrentPlayer->armUnlock = FALSE;
+	CurrentPlayer->handUnlock = FALSE;
+	CurrentPlayer->armClear = FALSE;
+	CurrentPlayer->handClear = FALSE;
 
 	//Princess specific data to set
 	switch(Princess)

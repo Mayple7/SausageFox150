@@ -78,6 +78,11 @@ typedef struct Player
 	int CurrentLevel;
 	int PlayerActive;
 
+	int armUnlock;
+	int handUnlock;
+	int armClear;
+	int handClear;
+
 	RigidBody PlayerRigidBody;
 	CollisionBox PlayerCollider;
 	struct Weapon* PlayerWeapon;

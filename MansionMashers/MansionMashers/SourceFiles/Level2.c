@@ -51,7 +51,7 @@ Food* Taco;
 Food* Pizza;
 Food* Cake;
 
-Wall *Test;
+Platform *Crate;
 Wall* Wall1;
 
 HUD* CurrentHUD;
@@ -93,7 +93,11 @@ void InitializeLevel2(void)
 	ChangeTextVisibility(LevelName);
 	
 	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/OutsideMan0Overlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 1, 1, 1, 1920, 0);
+	CreateSprite("TextureFiles/OutsideMan2.png", 1920, 1080, 1, 1, 1, 1920 * 2, 0);
+	CreateSprite("TextureFiles/OutsideMan2Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 2, 0);
+	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 1, 1, 1, 1920 * 3, 0);
 
 	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
 	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
@@ -104,6 +108,23 @@ void InitializeLevel2(void)
 	//Test->WallSprite->Visible = FALSE;
 
 	//CreatePaperScroll(200);
+
+
+	//Platforms
+	//Panel3
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 3640, -240);
+	Crate->PlatformSprite->Visible = FALSE;
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 3780, -210);
+	Crate->PlatformSprite->Visible = FALSE;
+	//Panel2
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 2050, -340);
+	Crate->PlatformSprite->Visible = FALSE;
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 2170, -350);
+	Crate->PlatformSprite->Visible = FALSE;
+
+	
+
+
 
 	//Walls
 	//Stairs
@@ -130,6 +151,16 @@ void InitializeLevel2(void)
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 540.0f, newID++, 810, 140);
 	Wall1->WallSprite->Visible = FALSE;
+	//Door Hang Over
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -903, 226);
+	Wall1->WallSprite->Visible = FALSE;
+	
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, 4020, 370);
+	Wall1->WallSprite->Visible = FALSE;
+
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 260.0f, 65.0f, newID++, 4025, 22);
+	Wall1->WallSprite->Visible = FALSE;
+	
 }
 
 /*************************************************************************/
@@ -144,11 +175,13 @@ void UpdateLevel2(void)
 
 	//ScrollPaperScroll(1);
 	EasyEditWall(Wall1, 10);
+	//EasyEditPlatform(Crate, 10);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -162,7 +195,6 @@ void DrawLevel2(void)
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
 
-	SetCamera(&CurrentPlayer.Position, 250);
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
 }
@@ -205,20 +237,9 @@ void UnloadLevel2(void)
 /*************************************************************************/
 void EventLevel2(void)
 {
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
-	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
-
-	if(FoxInput_KeyTriggered('U'))
-	{
-		SetDebugMode();
-	}
-	if(FoxInput_KeyTriggered('I'))
-	{
-		RemoveDebugMode();
-	}
+	/*////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		//InitializePause(&DrawLevel2);
@@ -227,4 +248,23 @@ void EventLevel2(void)
 		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
+	if(FoxInput_KeyTriggered('U'))
+		SetDebugMode();
+	if(FoxInput_KeyTriggered('I'))
+		RemoveDebugMode();
+
+	// Check for any collision and handle the results
+	DetectPlayerCollision();
+	// Handle any input for the current player
+	InputPlayer(&CurrentPlayer);
+
+	/*////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	////////////////////////////////*/
+	SetCamera(&CurrentPlayer.Position, 250);
+
+	/*////////////////////////////////
+	//       EVERYTHING ELSE        //
+	////////////////////////////////*/
+	UpdateFloatingText();
 }

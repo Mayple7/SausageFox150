@@ -48,6 +48,7 @@ Sprite* HazeBackground;
 Sprite* MapBackground;
 Sprite* FadeOverlay;
 Sprite* PlayerIcon;
+Sprite* MapInfoText;
 
 ParticleSystem* SystemOne;
 
@@ -111,13 +112,12 @@ void InitializeMapLevel(void)
 	fp = fopen(GameData, "rt");
 	if(fp)
 	{
-		int num = 0;
-		num = fscanf(fp, "%*s %d", &(CurrentPlayer.CurrentLevel));
-
+		// Initialize player to get all of their data loaded into the game.
+		InitializePlayer(&CurrentPlayer, Mayple, 999999, -9999999);
 		fclose(fp);
 	}
 	else
-		CurrentPlayer.CurrentLevel = GS_Level1;
+		CurrentPlayer.CurrentLevel = GS_Tutorial;
 
 	//If not coming from a level set to the player's latest level
 	if(iconPosition > GS_LevelNUM)
@@ -126,7 +126,8 @@ void InitializeMapLevel(void)
 	//Create the large sprites
 	HazeBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
 	MapBackground = (Sprite *)CreateSprite("TextureFiles/Map.png", 2880, 1080, 20, 1, 1, 480, 0);
-	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 30, 1, 1, 0, 0);
+	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 40, 1, 1, 0, 0);
+	MapInfoText = (Sprite *)CreateSprite("TextureFiles/MapInfoText.png", 769, 119, 50, 1, 1, GetCameraXPosition(), 450);
 
 	// Foxy icon ^_^
 	switch(CurrentPlayer.Princess)
@@ -145,53 +146,38 @@ void InitializeMapLevel(void)
 		break;
 	}
 
-	Tutorial = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -233.28f, 175, 75, newID++);
-	Level1 = CreateButton("TextureFiles/BlankPlatform.png", -432.86f, -221.43f, 175, 75, newID++);
-	Level2 = CreateButton("TextureFiles/BlankPlatform.png", -113.06f, -120.21f, 175, 75, newID++);
+	Tutorial = CreateButton("TextureFiles/RedX.png", -652.52f, -233.28f, 175, 75, newID++);
+	Level1 = CreateButton("TextureFiles/RedX.png", -432.86f, -221.43f, 175, 75, newID++);
+	Level2 = CreateButton("TextureFiles/RedX.png", -113.06f, -120.21f, 175, 75, newID++);
 
-	Shop1 = CreateButton("TextureFiles/BlankPlatform.png", -211.05f, 97.29f, 175, 75, newID++);
-	Level3 = CreateButton("TextureFiles/BlankPlatform.png", 114.14f, -273.12f, 175, 75, newID++);
-	Level4 = CreateButton("TextureFiles/BlankPlatform.png", 122.75f, 236.19f, 175, 75, newID++);
+	Shop1 = CreateButton("TextureFiles/RedX.png", -211.05f, 97.29f, 175, 75, newID++);
+	Level3 = CreateButton("TextureFiles/RedX.png", 114.14f, -273.12f, 175, 75, newID++);
+	Level4 = CreateButton("TextureFiles/RedX.png", 122.75f, 236.19f, 175, 75, newID++);
 
-	ArmGuy = CreateButton("TextureFiles/BlankPlatform.png", 388.71f, -235.43f, 175, 75, newID++);
-	Shop2 = CreateButton("TextureFiles/BlankPlatform.png", 627.76f, -258.04f, 175, 75, newID++);
+	ArmGuy = CreateButton("TextureFiles/RedX.png", 388.71f, -235.43f, 175, 75, newID++);
+	Shop2 = CreateButton("TextureFiles/RedX.png", 627.76f, -258.04f, 175, 75, newID++);
 
-	HandGuy = CreateButton("TextureFiles/BlankPlatform.png", 386.56f, 184.51f, 175, 75, newID++);
-	Shop3 = CreateButton("TextureFiles/BlankPlatform.png", 606.22f, 186.66f, 175, 75, newID++);
+	HandGuy = CreateButton("TextureFiles/RedX.png", 386.56f, 184.51f, 175, 75, newID++);
+	Shop3 = CreateButton("TextureFiles/RedX.png", 606.22f, 186.66f, 175, 75, newID++);
 
-	Level5 = CreateButton("TextureFiles/BlankPlatform.png", 400.56f, 5.77f, 175, 75, newID++);
-	Level6 = CreateButton("TextureFiles/BlankPlatform.png", 658.98f, -28.69f, 175, 75, newID++);
-	YeahGuy = CreateButton("TextureFiles/BlankPlatform.png", 1064.93f, -86.83f, 175, 75, newID++);
+	Level5 = CreateButton("TextureFiles/RedX.png", 400.56f, 5.77f, 175, 75, newID++);
+	Level6 = CreateButton("TextureFiles/RedX.png", 658.98f, -28.69f, 175, 75, newID++);
+	YeahGuy = CreateButton("TextureFiles/RedX.png", 1064.93f, -86.83f, 175, 75, newID++);
 
-	Shop4 = CreateButton("TextureFiles/BlankPlatform.png", 1106.91f, 155.44f, 175, 75, newID++);
-	Level7 = CreateButton("TextureFiles/BlankPlatform.png", 1324.43f, -121.29f, 175, 75, newID++);
-	Kevin = CreateButton("TextureFiles/BlankPlatform.png", 1582.85f, -139.60f, 175, 75, newID++);
+	Shop4 = CreateButton("TextureFiles/RedX.png", 1106.91f, 155.44f, 175, 75, newID++);
+	Level7 = CreateButton("TextureFiles/RedX.png", 1324.43f, -121.29f, 175, 75, newID++);
+	Kevin = CreateButton("TextureFiles/RedX.png", 1582.85f, -139.60f, 175, 75, newID++);
 
-	Tutorial->ButtonSprite->Visible = FALSE;
-	Level1->ButtonSprite->Visible = FALSE;
-	Level2->ButtonSprite->Visible = FALSE;
-
-	Shop1->ButtonSprite->Visible = FALSE;
-	Level3->ButtonSprite->Visible = FALSE;
-	Level4->ButtonSprite->Visible = FALSE;
-
-	ArmGuy->ButtonSprite->Visible = FALSE;
-	Shop2->ButtonSprite->Visible = FALSE;
-
-	HandGuy->ButtonSprite->Visible = FALSE;
-	Shop3->ButtonSprite->Visible = FALSE;
-
-	Level5->ButtonSprite->Visible = FALSE;
-	Level6->ButtonSprite->Visible = FALSE;
-	YeahGuy->ButtonSprite->Visible = FALSE;
-
-	Shop4->ButtonSprite->Visible = FALSE;
-	Level7->ButtonSprite->Visible = FALSE;
-	Kevin->ButtonSprite->Visible = FALSE;
+	UpdateProgression(&CurrentPlayer);
 
 	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
 	SystemOne->FadeIn = TRUE;
 
+/*	GS_Level6,
+	GS_YeahGuy,
+	GS_Shop4,
+	GS_Level7,
+	GS_Kevin,*/
 	// Adjusts the fade overlay based on the farthest progressed level
 	switch(CurrentPlayer.CurrentLevel)
 	{
@@ -203,15 +189,31 @@ void InitializeMapLevel(void)
 	case GS_Level2:
 		FadeOverlay->Position.x = 300.0f;
 		break;
+	case GS_Shop1:
+	case GS_Level3:
+	case GS_Level4:
+		FadeOverlay->Position.x = 500.0f;
+		break;
 	case GS_ArmGuy:
 	case GS_HandGuy:
-	case GS_Level3:
-		FadeOverlay->Position.x = 650.0f;
+	case GS_Level5:
+	case GS_Shop2:
+	case GS_Shop3:
+		if(CurrentPlayer.armUnlock || CurrentPlayer.handUnlock)
+			FadeOverlay->Position.x = 900.0f;
+		else
+			FadeOverlay->Position.x = 700.0f;
+		break;
+	case GS_Level6:
+		FadeOverlay->Position.x = 900.0f;
 		break;
 	case GS_YeahGuy:
-		FadeOverlay->Position.x = 950.0f;
+		FadeOverlay->Position.x = 1300.0f;
 		break;
-	case GS_Level4:
+	case GS_Level7:
+	case GS_Shop4:
+		FadeOverlay->Position.x = 1600.0f;
+		break;
 	case GS_Kevin:
 		FadeOverlay->Visible = FALSE;
 		break;
@@ -226,6 +228,7 @@ void InitializeMapLevel(void)
 
 	//Sets icon to the correct position
 	GetNewIconPosition(&PlayerIcon->Position, iconPosition);
+	MapInfoText->Position.x = GetCameraXPosition();
 }
 
 /*************************************************************************/
@@ -247,7 +250,7 @@ void UpdateMapLevel(void)
 	{
 		SetCameraXPosition(PlayerIcon->Position.x + 300 * GetLoadRatio());
 	}
-
+	MapInfoText->Position.x = GetCameraXPosition();
 	BoundingBoxUpdate();
 }
 
@@ -309,6 +312,8 @@ void EventLevel(void)
 			FadeOverlay->Visible = FALSE;
 		else
 			FadeOverlay->Visible = TRUE;
+
+		UpdateProgression(&CurrentPlayer);
 		//TogglePauseSound(&BackgroundSnd);
 	}
 
@@ -345,46 +350,46 @@ void EventLevel(void)
 			iconPosition = GS_Shop1;
 		}
 		//Level3
-		else if(PointRectCollision(&Level3->ButtonCollider, &MouseClick) && (GS_Level3 <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&Level3->ButtonCollider, &MouseClick) && (GS_Shop1 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Level3);
 			iconPosition = GS_Level3;
 		}
 		//Level4
-		else if(PointRectCollision(&Level4->ButtonCollider, &MouseClick) && (GS_Level4 <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&Level4->ButtonCollider, &MouseClick) && (GS_Shop1 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Level4);
 			iconPosition = GS_Level4;
 		}
 		//ArmGuy
-		else if(PointRectCollision(&ArmGuy->ButtonCollider, &MouseClick) && (GS_ArmGuy <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&ArmGuy->ButtonCollider, &MouseClick) && (CurrentPlayer.armUnlock || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_ArmGuy);
 			iconPosition = GS_ArmGuy;
 		}
-		//Shop2
-		else if(PointRectCollision(&Shop2->ButtonCollider, &MouseClick) && (GS_Shop2 <= CurrentPlayer.CurrentLevel || Cheats))
-		{
-			GetNewIconPosition(&PlayerIcon->Position, GS_Shop2);
-			iconPosition = GS_Shop2;
-		}
 		//HandGuy
-		else if(PointRectCollision(&HandGuy->ButtonCollider, &MouseClick) && (GS_HandGuy <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&HandGuy->ButtonCollider, &MouseClick) && (CurrentPlayer.handUnlock || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_HandGuy);
 			iconPosition = GS_HandGuy;
 		}
-		//Shop3
-		else if(PointRectCollision(&Shop3->ButtonCollider, &MouseClick) && (GS_Shop3 <= CurrentPlayer.CurrentLevel || Cheats))
-		{
-			GetNewIconPosition(&PlayerIcon->Position, GS_Shop3);
-			iconPosition = GS_Shop3;
-		}
 		//Level5
-		else if(PointRectCollision(&Level5->ButtonCollider, &MouseClick) && (GS_Level5 <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&Level5->ButtonCollider, &MouseClick) && (GS_ArmGuy <= CurrentPlayer.CurrentLevel || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Level5);
 			iconPosition = GS_Level5;
+		}
+		//Shop2
+		else if(PointRectCollision(&Shop2->ButtonCollider, &MouseClick) && (CurrentPlayer.armClear || Cheats))
+		{
+			GetNewIconPosition(&PlayerIcon->Position, GS_Shop2);
+			iconPosition = GS_Shop2;
+		}
+		//Shop3
+		else if(PointRectCollision(&Shop3->ButtonCollider, &MouseClick) && (CurrentPlayer.handClear || Cheats))
+		{
+			GetNewIconPosition(&PlayerIcon->Position, GS_Shop3);
+			iconPosition = GS_Shop3;
 		}
 		//Level6
 		else if(PointRectCollision(&Level6->ButtonCollider, &MouseClick) && (GS_Level6 <= CurrentPlayer.CurrentLevel || Cheats))
@@ -405,7 +410,7 @@ void EventLevel(void)
 			iconPosition = GS_Shop4;
 		}
 		//Level7
-		else if(PointRectCollision(&Level7->ButtonCollider, &MouseClick) && (GS_Level7 <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&Level7->ButtonCollider, &MouseClick) && (GS_Shop4 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Level7);
 			iconPosition = GS_Level7;
@@ -425,167 +430,7 @@ void EventLevel(void)
 		SetNextState(iconPosition);
 	}
 
-	//Movement for the icon
-	if(FoxInput_KeyTriggered('D'))
-	{
-		int nextPosition = -1;
-
-		//Hard coded oh noes! Checks if able to move a certain direction based on location
-		switch(iconPosition)
-		{
-		case GS_Tutorial:
-			nextPosition = GS_Level1;
-			break;
-		case GS_Level1:
-			nextPosition = GS_Shop1;
-			break;
-		case GS_Shop1:
-			nextPosition = GS_Level2;
-			break;
-		case GS_ArmGuy:
-			nextPosition = GS_Shop2;
-			break;
-		case GS_HandGuy:
-			nextPosition = GS_Shop2;
-			break;
-		case GS_Shop2:
-			nextPosition = GS_Level3;
-			break;
-		case GS_Level3:
-			nextPosition = GS_YeahGuy;
-			break;
-		case GS_YeahGuy:
-			nextPosition = GS_Level4;
-			break;
-		case GS_Shop3:
-			nextPosition = GS_Level4;
-			break;
-		case GS_Level4:
-			nextPosition = GS_Kevin;
-			break;
-		default:
-			nextPosition = iconPosition;
-		}
-
-		//If it is a valid location and the player can access the level OR IF YOU ARE A CHEATER
-		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
-		{
-			//Moves the icon
-			iconPosition = nextPosition;
-			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
-		}
-	}
-	//Movement for the icon
-	if(FoxInput_KeyTriggered('A'))
-	{
-		int nextPosition = -1;
-
-		//Hard coded oh noes! Checks if able to move a certain direction based on location
-		switch(iconPosition)
-		{
-		case GS_Level1:
-			nextPosition = GS_Tutorial;
-			break;
-		case GS_Shop1:
-			nextPosition = GS_Level1;
-			break;
-		case GS_Level2:
-			nextPosition = GS_Shop1;
-			break;
-		case GS_ArmGuy:
-			nextPosition = GS_Level2;
-			break;
-		case GS_HandGuy:
-			nextPosition = GS_Level2;
-			break;
-		case GS_Level3:
-			nextPosition = GS_Shop2;
-			break;
-		case GS_YeahGuy:
-			nextPosition = GS_Level3;
-			break;
-		case GS_Shop3:
-			nextPosition = GS_YeahGuy;
-			break;
-		case GS_Level4:
-			nextPosition = GS_YeahGuy;
-			break;
-		case GS_Kevin:
-			nextPosition = GS_Level4;
-			break;
-		default:
-			nextPosition = iconPosition;
-		}
-
-		//If it is a valid location and the player can access the level OR IF YOU ARE A CHEATER
-		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
-		{
-			//Moves the icon
-			iconPosition = nextPosition;
-			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
-		}
-	}
-	//Movement for the icon
-	if(FoxInput_KeyTriggered('W'))
-	{
-		int nextPosition = -1;
-
-		//Hard coded oh noes! Checks if able to move a certain direction based on location
-		switch(iconPosition)
-		{
-		case GS_Level2:
-			nextPosition = GS_HandGuy;
-			break;
-		case GS_Shop2:
-			nextPosition = GS_HandGuy;
-			break;
-		case GS_YeahGuy:
-			nextPosition = GS_Shop3;
-			break;
-		case GS_Level4:
-			nextPosition = GS_Shop3;
-			break;
-		default:
-			nextPosition = iconPosition;
-		}
-
-		//If it is a valid location and the player can access the level OR IF YOU ARE A CHEATER
-		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
-		{
-			//Moves the icon
-			iconPosition = nextPosition;
-			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
-		}
-	}
-	//Movement for the icon
-	if(FoxInput_KeyTriggered('S'))
-	{
-		int nextPosition = -1;
-
-		//Hard coded oh noes! Checks if able to move a certain direction based on location
-		switch(iconPosition)
-		{
-		case GS_Level2:
-			nextPosition = GS_ArmGuy;
-			break;
-		case GS_Shop2:
-			nextPosition = GS_ArmGuy;
-			break;
-		case GS_Shop3:
-			nextPosition = GS_YeahGuy;
-			break;
-		default:
-			nextPosition = iconPosition;
-		}
-
-		//If it is a valid location and the player can access the level OR IF YOU ARE A CHEATER
-		if((nextPosition != iconPosition && nextPosition <= CurrentPlayer.CurrentLevel) || Cheats)
-		{
-			//Moves the icon
-			iconPosition = nextPosition;
-			GetNewIconPosition(&PlayerIcon->Position, iconPosition);
-		}
-	}
+	//Debug Buttons
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
@@ -671,3 +516,106 @@ void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 	//Account for a scaled window
 	Vec2Scale(NewPosition, NewPosition, GetLoadRatio());
 }
+
+void UpdateProgression(Player *CurrentPlayer)
+{
+	Tutorial->ButtonSprite->Visible = TRUE;
+	Level1->ButtonSprite->Visible = TRUE;
+	Level2->ButtonSprite->Visible = TRUE;
+
+	Shop1->ButtonSprite->Visible = TRUE;
+	Level3->ButtonSprite->Visible = TRUE;
+	Level4->ButtonSprite->Visible = TRUE;
+
+	ArmGuy->ButtonSprite->Visible = TRUE;
+	Shop2->ButtonSprite->Visible = TRUE;
+
+	HandGuy->ButtonSprite->Visible = TRUE;
+	Shop3->ButtonSprite->Visible = TRUE;
+
+	Level5->ButtonSprite->Visible = TRUE;
+	Level6->ButtonSprite->Visible = TRUE;
+	YeahGuy->ButtonSprite->Visible = TRUE;
+
+	Shop4->ButtonSprite->Visible = TRUE;
+	Level7->ButtonSprite->Visible = TRUE;
+	Kevin->ButtonSprite->Visible = TRUE;
+
+	if(!Cheats)
+	{
+		switch(CurrentPlayer->CurrentLevel)
+		{
+		case GS_Kevin:
+			Kevin->ButtonSprite->Visible = FALSE;
+		case GS_Level7:
+		case GS_Shop4:
+			Level7->ButtonSprite->Visible = FALSE;
+			Shop4->ButtonSprite->Visible = FALSE;
+		case GS_YeahGuy:
+			YeahGuy->ButtonSprite->Visible = FALSE;
+		case GS_Level6:
+			Level6->ButtonSprite->Visible = FALSE;
+		case GS_Level5:
+		case GS_ArmGuy:
+		case GS_HandGuy:
+		case GS_Shop2:
+		case GS_Shop3:
+			Level5->ButtonSprite->Visible = FALSE;
+		case GS_Level4:
+		case GS_Level3:
+		case GS_Shop1:
+			Level3->ButtonSprite->Visible = FALSE;
+			Level4->ButtonSprite->Visible = FALSE;
+			Shop1->ButtonSprite->Visible = FALSE;;
+		case GS_Level2:
+			Level2->ButtonSprite->Visible = FALSE;
+		case GS_Level1:
+			Level1->ButtonSprite->Visible = FALSE;
+		case GS_Tutorial:
+			Tutorial->ButtonSprite->Visible = FALSE;
+		}
+		if(CurrentPlayer->armUnlock)
+		{
+			ArmGuy->ButtonSprite->Visible = FALSE;
+			
+			if(CurrentPlayer->armClear)
+			{
+				Shop2->ButtonSprite->Visible = FALSE;
+			}
+		}
+		if(CurrentPlayer->handUnlock)
+		{
+			HandGuy->ButtonSprite->Visible = FALSE;
+			if(CurrentPlayer->handClear)
+			{
+				Shop3->ButtonSprite->Visible = FALSE;
+			}
+		}
+	}
+	else
+	{
+		Tutorial->ButtonSprite->Visible = FALSE;
+		Level1->ButtonSprite->Visible = FALSE;
+		Level2->ButtonSprite->Visible = FALSE;
+
+		Shop1->ButtonSprite->Visible = FALSE;
+		Level3->ButtonSprite->Visible = FALSE;
+		Level4->ButtonSprite->Visible = FALSE;
+
+		ArmGuy->ButtonSprite->Visible = FALSE;
+		Shop2->ButtonSprite->Visible = FALSE;
+
+		HandGuy->ButtonSprite->Visible = FALSE;
+		Shop3->ButtonSprite->Visible = FALSE;
+
+		Level5->ButtonSprite->Visible = FALSE;
+		Level6->ButtonSprite->Visible = FALSE;
+		YeahGuy->ButtonSprite->Visible = FALSE;
+
+		Shop4->ButtonSprite->Visible = FALSE;
+		Level7->ButtonSprite->Visible = FALSE;
+		Kevin->ButtonSprite->Visible = FALSE;
+	}
+
+}
+

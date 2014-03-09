@@ -175,11 +175,11 @@ void InitializeLevel1(void)
 /*************************************************************************/
 void UpdateLevel1(void)
 {
+	//Handle the special events right off the bat yo
 	EventLevel1();
 
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
-
 
 	if(CurrentPlayer.Position.x > (1.5f * PANELSIZE) * GetLoadRatio())
 	{
@@ -194,7 +194,6 @@ void UpdateLevel1(void)
 		SetEnemy1->EnemyState = AINone;
 		SetEnemy2->EnemyState = AINone;
 	}
-
 
 	/*
 	if(FoxInput_KeyTriggered('R'))
@@ -213,7 +212,6 @@ void UpdateLevel1(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	UpdateHUDPosition(CurrentHUD);
-
 }
 
 /*************************************************************************/
@@ -228,21 +226,6 @@ void DrawLevel1(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
-
-	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
-		SetCameraPan(0.0f, PANELSIZE);
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
-		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
-	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
-		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
-	{
-		levelComplete = TRUE;
-	}
-
-	//else
-		//SetCamera(&CurrentPlayer.Position, 250);
-
 }
 
 /*************************************************************************/
@@ -286,6 +269,22 @@ void EventLevel1(void)
 {
 	int i;
 
+	/*////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	////////////////////////////////*/
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
+	{
+		InitializePause(&DrawLevel1);
+		//TogglePauseSound(&BackgroundSnd);
+		//SetNextState(GS_MainMenu);
+		UpdatePause();
+		//TogglePauseSound(&BackgroundSnd);
+	}
+	if(FoxInput_KeyTriggered('U'))
+		SetDebugMode();
+	if(FoxInput_KeyTriggered('I'))
+		RemoveDebugMode();
+
 	// Runs if the beginning animation is finished
 	if(!beginningAnimiation && !levelComplete)
 	{
@@ -312,9 +311,7 @@ void EventLevel1(void)
 			
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -500)
-			{
 				beginningAnimiation = FALSE;
-			}
 		}
 		//Always animate the player otherwise the sprites get stuck in the middle
 		Animation(&CurrentPlayer);
@@ -326,15 +323,29 @@ void EventLevel1(void)
 		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
-		{
 			SetNextState(GS_MapLevel);
-		}
-
 	}
 
-	//Update the enemies
+	/*////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	////////////////////////////////*/
+	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
+		SetCameraPan(0.0f, PANELSIZE);
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
+		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
+	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
+		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
+	{
+		levelComplete = TRUE;
+	}
+
+	/*////////////////////////////////
+	//       EVERYTHING ELSE        //
+	////////////////////////////////*/
 	for(i = 0; i < COLLIDEAMOUNT; i++)
 	{
+		//Update the created enemies
 		if (enemyList[i].objID == -1)
 			break;
 		if (enemyList[i].objID == 0)
@@ -344,21 +355,4 @@ void EventLevel1(void)
 	}
 
 	UpdateFloatingText();
-
-	if(FoxInput_KeyTriggered('U'))
-	{
-		SetDebugMode();
-	}
-	if(FoxInput_KeyTriggered('I'))
-	{
-		RemoveDebugMode();
-	}
-	if(FoxInput_KeyTriggered(VK_ESCAPE))
-	{
-		InitializePause(&DrawLevel1);
-		//TogglePauseSound(&BackgroundSnd);
-		//SetNextState(GS_MainMenu);
-		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
-	}
 }

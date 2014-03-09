@@ -60,7 +60,7 @@ void DestroyTextureList(void)
 	for (i = 0; i < TEXTUREAMOUNT; i++)
 	{
 		//Find a sprite that is empty
-		if (textureList[i].Created & CREATED)
+		if (textureList[i].Created)
 		{
 			textureList[i].Created = 0;
 			AEGfxTextureUnload(textureList[i].TextureObject);
@@ -88,7 +88,7 @@ AEGfxTexture *LoadTexture(char *texture)
 	{
 		/* If an object is already created with that texture, 
 		   share it like a good person should. */
-		if (textureList[i].Created & CREATED)
+		if (textureList[i].Created)
 		{
 			if (!strcmp(textureList[i].TextureObject->mpName, texture))
 			{

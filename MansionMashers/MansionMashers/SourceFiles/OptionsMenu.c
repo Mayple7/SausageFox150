@@ -150,7 +150,7 @@ void InitializeOptions(void)
 	// Create the back button and cheats objects
 	BackButton = CreateButton("TextureFiles/BackButton.png", 0, -400, 400, 150, newID++);
 	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -800, -200, 100, 100, newID++);
-	CheckMark = (Sprite *) CreateSprite("TextureFiles/CheckMark.png", 200, 200, 11, 1, 1, -800, -200);
+	CheckMark = (Sprite *) CreateSprite("TextureFiles/CheckMark.png", 200, 200, 45, 1, 1, -800, -200);
 
 	if(!Cheats)
 		CheckMark->Visible = FALSE;
@@ -240,6 +240,19 @@ void EventOptions(void)
 			//Sets positions after checking bounds
 			SFXSlider->ButtonSprite->Position.x = SFXSlider->Position.x;
 			SFXSlider->ButtonCollider.Position.x = SFXSlider->Position.x;
+
+			//Adjust the sounds based on the slider position
+			SFXVolume = (SFXSlider->Position.x + 480 * GetLoadRatio() + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
+
+			//Bounds checking
+			if(SFXVolume < 0)
+				SFXVolume = 0.0f;
+			else if(SFXVolume > 1.0f)
+				SFXVolume = 1.0f;
+
+			volumestring = VolumetoString(volumestring, SFXVolume * 100);
+			volumestring = strcat(volumestring, "%");
+			ChangeTextString(SFXText, volumestring);
 		}
 		else if(PointRectCollision(&BGMSlider->ButtonCollider, &MouseClick))
 		{
@@ -253,18 +266,20 @@ void EventOptions(void)
 			//Sets positions after checking bounds
 			BGMSlider->ButtonSprite->Position.x = BGMSlider->Position.x;
 			BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
-		}
-		
-		//Adjust the sounds based on the slider position
-		SFXVolume = (SFXSlider->Position.x + 480 * GetLoadRatio() + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
-		volumestring = VolumetoString(volumestring, SFXVolume * 100);
-		volumestring = strcat(volumestring, "%");
-		ChangeTextString(SFXText, volumestring);
 
-		BGMVolume = (BGMSlider->Position.x + 480 * GetLoadRatio() + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
-		volumestring = VolumetoString(volumestring, BGMVolume * 100);
-		volumestring = strcat(volumestring, "%");
-		ChangeTextString(BGMText, volumestring);
+			//Adjust the sounds based on the slider position
+			BGMVolume = (BGMSlider->Position.x + 480 * GetLoadRatio() + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
+
+			//Bounds checking
+			if(BGMVolume < 0)
+				BGMVolume = 0.0f;
+			else if(BGMVolume > 1.0f)
+				BGMVolume = 1.0f;
+
+			volumestring = VolumetoString(volumestring, BGMVolume * 100);
+			volumestring = strcat(volumestring, "%");
+			ChangeTextString(BGMText, volumestring);
+		}
 	}
 
 	//Hover effects for the back button
