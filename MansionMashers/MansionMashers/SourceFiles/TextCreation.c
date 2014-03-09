@@ -188,7 +188,8 @@ void FreeText(TextGlyphs *FirstLetter)
 	}
 
 	//Now remove that pointer.
-	staticTextList[i] = NULL;
+	if(i < COLLIDEAMOUNT)
+		staticTextList[i] = NULL;
 }
 
 /*************************************************************************/
