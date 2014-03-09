@@ -270,7 +270,7 @@ void EventLevel1(void)
 	int i;
 
 	/*////////////////////////////////
-	//     HANDLE INPUT FIRST       //
+	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{

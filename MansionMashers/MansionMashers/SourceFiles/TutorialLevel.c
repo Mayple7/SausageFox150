@@ -107,8 +107,8 @@ void InitializeTutorial(void)
 	/*////////////////////////////////
 	//          PANEL ONE           //
 	////////////////////////////////*/
-	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/MansionBedRoom1.png", 1920, 1080, 0, 1, 1, 0, 0);
-	DoorOverlay = (Sprite *) CreateSprite("TextureFiles/MansionBedRoomDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
+	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/TutorialPanel1.png", 1920, 1080, 0, 1, 1, 0, 0);
+	DoorOverlay = (Sprite *) CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
 
 	//Create the shelf sprite and initialize to be collidable
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 160, -156);
@@ -123,22 +123,22 @@ void InitializeTutorial(void)
 	BouncyBed->PlatformSprite->Visible = FALSE;
 	BouncyBed->PlatformRigidBody.Restitution = 2.2f;
 
-	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -550, -220);
+	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -550, -260);
 	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;
 
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 160, 0);
 	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
 
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 690, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810, -280, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	/*////////////////////////////////
 	//          PANEL TWO           //
 	////////////////////////////////*/
-	CreateSprite("TextureFiles/MansionBedRoom2.png", 1920, 1080, 0, 1, 1, 1920.0f, 0);
-	CreateSprite("TextureFiles/MansionBedRoomDoor.png", 1920, 1080, 200, 1, 1, 1920.0f, 0);
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 690 + 1920.0f, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f, -280, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateSprite("TextureFiles/TutorialPanel2.png", 1920, 1080, 0, 1, 1, 1920.0f, 0);
+	CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, 1920.0f, 0);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + 1920.0f, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750 + 1920.0f, -250);
 }
@@ -204,7 +204,7 @@ void UnloadTutorial(void)
 void EventTutorial(void)
 {
 	/*////////////////////////////////
-	//     HANDLE INPUT FIRST       //
+	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
@@ -216,7 +216,16 @@ void EventTutorial(void)
 	if(FoxInput_KeyTriggered('I'))
 		RemoveDebugMode();
 
-	InputPlayer(&CurrentPlayer);
+	if(!levelComplete)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+	}
+	else
+		fadeToEnd();
 
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -233,15 +242,6 @@ void EventTutorial(void)
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
-	if(!levelComplete)
-	{
-		// Check for any collision and handle the results
-		DetectPlayerCollision();
-		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
-	}
-	else
-		fadeToEnd();
-
 	if(StrawDummy->objID > 0)
 		UpdateEnemy(StrawDummy);
 

@@ -238,7 +238,7 @@ void UnloadLevel2(void)
 void EventLevel2(void)
 {
 	/*////////////////////////////////
-	//     HANDLE INPUT FIRST       //
+	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
@@ -253,6 +253,9 @@ void EventLevel2(void)
 	if(FoxInput_KeyTriggered('I'))
 		RemoveDebugMode();
 
+	// Check for any collision and handle the results
+	DetectPlayerCollision();
+	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
 	/*////////////////////////////////
@@ -263,6 +266,5 @@ void EventLevel2(void)
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
+	UpdateFloatingText();
 }
