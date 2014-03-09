@@ -250,7 +250,7 @@ void UpdateMapLevel(void)
 	{
 		SetCameraXPosition(PlayerIcon->Position.x + 300 * GetLoadRatio());
 	}
-
+	MapInfoText->Position.x = GetCameraXPosition();
 	BoundingBoxUpdate();
 }
 
@@ -421,8 +421,6 @@ void EventLevel(void)
 			GetNewIconPosition(&PlayerIcon->Position, GS_Kevin);
 			iconPosition = GS_Kevin;
 		}
-
-		MapInfoText->Position.x = GetCameraXPosition();
 	}
 
 
@@ -594,5 +592,30 @@ void UpdateProgression(Player *CurrentPlayer)
 			}
 		}
 	}
+	else
+	{
+		Tutorial->ButtonSprite->Visible = FALSE;
+		Level1->ButtonSprite->Visible = FALSE;
+		Level2->ButtonSprite->Visible = FALSE;
+
+		Shop1->ButtonSprite->Visible = FALSE;
+		Level3->ButtonSprite->Visible = FALSE;
+		Level4->ButtonSprite->Visible = FALSE;
+
+		ArmGuy->ButtonSprite->Visible = FALSE;
+		Shop2->ButtonSprite->Visible = FALSE;
+
+		HandGuy->ButtonSprite->Visible = FALSE;
+		Shop3->ButtonSprite->Visible = FALSE;
+
+		Level5->ButtonSprite->Visible = FALSE;
+		Level6->ButtonSprite->Visible = FALSE;
+		YeahGuy->ButtonSprite->Visible = FALSE;
+
+		Shop4->ButtonSprite->Visible = FALSE;
+		Level7->ButtonSprite->Visible = FALSE;
+		Kevin->ButtonSprite->Visible = FALSE;
+	}
+
 }
 
