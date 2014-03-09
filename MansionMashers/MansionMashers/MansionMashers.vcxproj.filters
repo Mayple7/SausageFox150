@@ -293,6 +293,18 @@
     <ClInclude Include="HeaderFiles\ArmGuyBoss.h">
       <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Level5.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level6.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level7.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop4.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -480,6 +492,18 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\ArmGuyBoss.c">
       <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop4.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level7.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level6.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level5.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
