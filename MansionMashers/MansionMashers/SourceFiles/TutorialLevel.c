@@ -240,10 +240,10 @@ void EventTutorial(void)
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawTutorial);
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(BackSnd);
 		//SetNextState(GS_MainMenu);
 		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(BackSnd);
 	}
 }
 

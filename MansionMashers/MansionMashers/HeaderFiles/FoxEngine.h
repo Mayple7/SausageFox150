@@ -6,8 +6,6 @@
 
 #define GROUNDLEVEL -350
 
-#define CREATED 0x00000001
-
 //-------------------------------------------------------------------------
 // Fox engine includes
 

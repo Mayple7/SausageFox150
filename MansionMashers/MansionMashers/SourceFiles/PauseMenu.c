@@ -107,7 +107,7 @@ void InitializePause(void (*DrawLevel)())
 
 	Vec3Set(&TextColor, 1, 1, 1);
 	
-	SFXText = CreateText(volumestring, (SFXSliderBack->Position.x + (SFXSliderBack->Width / 2)) / GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
+	/*SFXText = CreateText(volumestring, (SFXSliderBack->Position.x + (SFXSliderBack->Width / 2)) / GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
 	volumestring = VolumetoString(volumestring, SFXVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(SFXText, volumestring);
@@ -120,7 +120,7 @@ void InitializePause(void (*DrawLevel)())
 	ChangeTextZIndex(BGMText, 510);
 
 	ChangeTextVisibility(SFXText);
-	ChangeTextVisibility(BGMText);
+	ChangeTextVisibility(BGMText);*/
 
 	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 500, 1, 1, 180 + camX, -250);
 	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -250 + camX, -250, 100, 100, newID++);
@@ -213,8 +213,8 @@ void FreePause(void)
 	FreeButton(BGMSlider);
 	FreeButton(ResumeButton);
 	FreeButton(MainMenuButton);
-	FreeText(SFXText);
-	FreeText(BGMText);
+	//FreeText(SFXText);
+	//FreeText(BGMText);
 	FreeMyAlloc(volumestring);
 	//ReleaseSound(BackgroundSnd.Sound);
 }
@@ -259,7 +259,7 @@ void EventPause(void)
 			SFXVolume = 1.0f;
 		volumestring = VolumetoString(volumestring, SFXVolume * 100);
 		volumestring = strcat(volumestring, "%");
-		ChangeTextString(SFXText, volumestring);
+		//ChangeTextString(SFXText, volumestring);
 
 		BGMVolume = (BGMSlider->Position.x + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
 		if(BGMVolume < 0)
@@ -268,7 +268,7 @@ void EventPause(void)
 			BGMVolume = 1.0f;
 		volumestring = VolumetoString(volumestring, BGMVolume * 100);
 		volumestring = strcat(volumestring, "%");
-		ChangeTextString(BGMText, volumestring);
+		//ChangeTextString(BGMText, volumestring);
 	}
 
 	// On a single mouse click
