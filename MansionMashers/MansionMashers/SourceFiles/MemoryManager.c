@@ -38,7 +38,7 @@ void *__cdecl CallocMyAlloc(int count, int size)
 	//printf("CALLOC:  Bytes: %i  Total Allocs: %i\n", count * size, TotalMemoryAllocs);
 
 	//Give them what they really came for
-	return calloc(count, count * size);
+	return calloc(count, size);
 }
 
 /*************************************************************************/

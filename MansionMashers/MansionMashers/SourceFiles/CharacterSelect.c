@@ -49,7 +49,6 @@ void InitializeCharacterSelect(void)
 	selected = Mayple;
 	newID = 10;
 	ResetObjectList();
-	ResetSoundList();
 	Vec3Set(&Tint, 0.475f, 0.463f, 0.311f);
 
 	BackgroundColor = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 1, 1, 1, 0, 0);
