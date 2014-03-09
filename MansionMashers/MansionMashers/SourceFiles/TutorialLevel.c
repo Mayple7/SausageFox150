@@ -145,7 +145,7 @@ void InitializeTutorial(void)
  
 void UpdateTutorial(void)
 {
-	// Handle any events such as collision
+	//Handle the special events right off the bat yo
 	EventTutorial();
 
 	ParticleSystemUpdate();
@@ -158,7 +158,7 @@ void UpdateTutorial(void)
 		FreeEnemy(StrawDummy);
 	}
 
-	// This should be the last line in this function
+	//This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	//If the dummy exists, prevent the player from moving past
@@ -181,16 +181,6 @@ void DrawTutorial(void)
 {
 	DrawObjectList();
 	DrawCollisionList();
-
-	//There are 2 panels for the tutorial now
-	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
-		SetCameraPan(0.0f, PANELSIZE);
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
-		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 2 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
-	{
-		levelComplete = TRUE;
-	}
 }
 
 void FreeTutorial(void)
@@ -213,12 +203,40 @@ void UnloadTutorial(void)
 
 void EventTutorial(void)
 {
+	/*////////////////////////////////
+	//     HANDLE INPUT FIRST       //
+	////////////////////////////////*/
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
+	{
+		InitializePause(&DrawTutorial);
+		UpdatePause();
+	}
+	if(FoxInput_KeyTriggered('U'))
+		SetDebugMode();
+	if(FoxInput_KeyTriggered('I'))
+		RemoveDebugMode();
+
+	InputPlayer(&CurrentPlayer);
+
+	/*////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	////////////////////////////////*/
+	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
+		SetCameraPan(0.0f, PANELSIZE);
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
+		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 2 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
+	{
+		levelComplete = TRUE;
+	}
+
+	/*////////////////////////////////
+	//       EVERYTHING ELSE        //
+	////////////////////////////////*/
 	if(!levelComplete)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
-		// Handle any input for the current player
-		InputPlayer(&CurrentPlayer);
 		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 	}
 	else
@@ -228,23 +246,6 @@ void EventTutorial(void)
 		UpdateEnemy(StrawDummy);
 
 	UpdateFloatingText();
-
-	if(FoxInput_KeyTriggered('U'))
-	{
-		SetDebugMode();
-	}
-	if(FoxInput_KeyTriggered('I'))
-	{
-		RemoveDebugMode();
-	}
-	if(FoxInput_KeyTriggered(VK_ESCAPE))
-	{
-		InitializePause(&DrawTutorial);
-		TogglePauseSound(BackSnd);
-		//SetNextState(GS_MainMenu);
-		UpdatePause();
-		TogglePauseSound(BackSnd);
-	}
 }
 
 void fadeToEnd(void)
