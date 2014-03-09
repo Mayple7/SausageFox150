@@ -33,7 +33,7 @@
 static int LogicTimer = 0;
 
 static enum ArmGuyState { Cooldown, Jab, Smash, Spin };
-static enum InnerState {Start, Attack, End};
+static enum InnerState {Start, Attack, End, SpinR, SpinL };
 
 /*************************************************************************/
 /*!
@@ -229,44 +229,75 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
-			if(CurrentBoss->Position.x > 0)
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+			// Boss is on the right and start up timer is done
+			if(CurrentBoss->cooldownTimer > 0.5f && CurrentBoss->Position.x > 0)
 			{
-				
+				CurrentBoss->InnerState = SpinL;
 			}
-			// Boss is on the left
-			else
+			// Boss is on the left and start up timer is done
+			else if(CurrentBoss->cooldownTimer > 0.5f)
 			{
-				CurrentBoss->JabAttack.Position.x -= 400 * GetLoadRatio() * GetDeltaTime();
+				CurrentBoss->InnerState = SpinR;
 			}
 			break;
-		case Attack:
-			if(CurrentBoss->Position.x > 0)
+		case SpinR:
+			// Spin to the right
+			CurrentBoss->Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->BodySprite->Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->SpinAttack.Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->BossCollider.Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
+
+			if(CurrentBoss->Position.x >= 700 * GetLoadRatio())
 			{
-				
+				CurrentBoss->BodySprite->Position.x = 700 * GetLoadRatio();
+				CurrentBoss->Position.x = 700 * GetLoadRatio();
+				CurrentBoss->SpinAttack.Position.x = 700 * GetLoadRatio();
+				CurrentBoss->BossCollider.Position.x = 700 * GetLoadRatio();
+				CurrentBoss->InnerState = End;
+				CurrentBoss->cooldownTimer = 0;
 			}
-			// Boss is on the left
-			else
+			break;
+		case SpinL:
+			// Spin to the left
+			CurrentBoss->Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->BodySprite->Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->SpinAttack.Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->BossCollider.Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
+
+			if(CurrentBoss->Position.x <= -700 * GetLoadRatio())
 			{
-				CurrentBoss->JabAttack.Position.x -= 400 * GetLoadRatio() * GetDeltaTime();
+				CurrentBoss->BodySprite->Position.x = -700 * GetLoadRatio();
+				CurrentBoss->Position.x = -700 * GetLoadRatio();
+				CurrentBoss->SpinAttack.Position.x = -700 * GetLoadRatio();
+				CurrentBoss->BossCollider.Position.x = -700 * GetLoadRatio();
+				CurrentBoss->InnerState = End;
+				CurrentBoss->cooldownTimer = 0;
 			}
 			break;
 		case End:
-			if(CurrentBoss->Position.x > 0)
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+			if(CurrentBoss->cooldownTimer > 0.5f && CurrentBoss->Position.x > 0)
 			{
-				
+				CurrentBoss->BodySprite->FlipX = TRUE;
+				CurrentBoss->ArmSprite->Position.x = 580 * GetLoadRatio();
+				CurrentBoss->ArmSprite->FlipX = TRUE;
+				CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - 200 * GetLoadRatio();
+				CurrentBoss->SmashAttack.Position.x = 640 * GetLoadRatio();
+				CurrentBoss->CurrentState = Cooldown;
+				CurrentBoss->cooldownTimer = 0;
 			}
-			// Boss is on the left
-			else
+			else if(CurrentBoss->cooldownTimer > 0.5f)
 			{
-				CurrentBoss->JabAttack.Position.x -= 400 * GetLoadRatio() * GetDeltaTime();
+				CurrentBoss->BodySprite->FlipX = FALSE;
+				CurrentBoss->ArmSprite->Position.x = -580 * GetLoadRatio();
+				CurrentBoss->ArmSprite->FlipX = FALSE;
+				CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x + 200 * GetLoadRatio();
+				CurrentBoss->SmashAttack.Position.x = -640 * GetLoadRatio();
+				CurrentBoss->CurrentState = Cooldown;
+				CurrentBoss->cooldownTimer = 0;
 			}
 			break;
-		}
-		CurrentBoss->cooldownTimer += GetDeltaTime();
-		if(CurrentBoss->cooldownTimer > 1)
-		{
-			CurrentBoss->CurrentState = Cooldown;
-			CurrentBoss->cooldownTimer = 0;
 		}
 		break;
 	case Cooldown:
