@@ -97,6 +97,7 @@ void InitializeLevel2(void)
 	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 1, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/OutsideMan2.png", 1920, 1080, 1, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan2Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 2, 0);
+	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 1, 1, 1, 1920 * 3, 0);
 
 	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
 	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
