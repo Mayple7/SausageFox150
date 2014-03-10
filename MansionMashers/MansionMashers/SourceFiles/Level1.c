@@ -47,6 +47,7 @@
 static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimiation;
+
 TextGlyphs* LevelName;
 
 EnemySpawner* FirstSpawner;
@@ -61,6 +62,9 @@ Enemy* SetEnemy2;
 Platform* Table1;
 
 Wall* Wall1;
+
+Wall* BBWallLeft;
+Wall* BBWallRight;
 
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
@@ -94,6 +98,10 @@ void InitializeLevel1(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	ResetEnemyPanelNumber();
+
+	//Set the camera so it currently isn't gated
+	ResetGatedCamera();
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1200, -220);
@@ -143,20 +151,29 @@ void InitializeLevel1(void)
 	Wall1->WallSprite->Visible = FALSE;
 
 
+	// Bounding Box Walls
+	BBWallLeft = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, newID++, 0, 0);
+	BBWallLeft->WallSprite->Visible = FALSE;
+	BBWallLeft->enemyNotCollidable = TRUE;
+	BBWallRight = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, newID++, 0, 0);
+	BBWallRight->WallSprite->Visible = FALSE;
+	BBWallRight->enemyNotCollidable = TRUE;
+
+
 	//Enemy spawners
 	Vec2Set(&SpawnerLocation, -200, 0);
-	FirstSpawner = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
+	FirstSpawner = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
 
 	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
-	SecondSpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
-	SecondSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID);
+	SecondSpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+	SecondSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
 
 	Vec2Set(&SpawnerLocation, 1.90f * PANELSIZE, 0);
-	ThirdSpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
-	ThirdSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID);
+	ThirdSpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	ThirdSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
 
-	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL);
-	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL);
+	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL, 2);
+	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL, 2);
 	SetEnemy1->HomePos.x = 2 * PANELSIZE * GetLoadRatio();
 	SetEnemy2->HomePos.x = 2 * PANELSIZE * GetLoadRatio();
 
@@ -326,20 +343,43 @@ void EventLevel1(void)
 			SetNextState(GS_MapLevel);
 	}
 
-	/*////////////////////////////////
+	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //
-	////////////////////////////////*/
+	//////////////////////////////////
+
+	SetCameraLockState(FALSE);
+	//Panel1
 	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
+	{
+		if(EnemyPanelNumber[0] > 0 && GetCameraMovedState())
+			SetCameraLockState(TRUE);
 		SetCameraPan(0.0f, PANELSIZE);
+	}
+	//Panel2
 	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
+	{
+		if(EnemyPanelNumber[1] > 0 && GetCameraMovedState())
+			SetCameraLockState(TRUE);
 		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
+	}
+	//Panel3
 	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
+	{
+		if(EnemyPanelNumber[2] > 0 && GetCameraMovedState())
+			SetCameraLockState(TRUE);
 		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
+	}
 	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
 	{
-		levelComplete = TRUE;
+			levelComplete = TRUE;
 	}
 
+	BBWallLeft->Position.y = -1080 * GetLoadRatio() + 1080 * GetLoadRatio() * GetCameraLockState();
+	BBWallLeft->Position.x = GetCameraXPosition() - (PANELSIZE / 2 * GetLoadRatio());
+	UpdateCollisionPosition(&BBWallLeft->WallCollider, &BBWallLeft->Position);
+	BBWallRight->Position.y = -1080 * GetLoadRatio() + 1080 * GetLoadRatio() * GetCameraLockState();
+	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2 * GetLoadRatio());
+	UpdateCollisionPosition(&BBWallRight->WallCollider, &BBWallRight->Position);
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/

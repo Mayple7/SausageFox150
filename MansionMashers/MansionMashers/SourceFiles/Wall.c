@@ -38,6 +38,7 @@ Wall* CreateWall(char* textureName, float width, float height, int newID, float 
 	Vec2 ColliderPos;
 	ColliderPos.x = xPos;
 	ColliderPos.y = yPos;
+	CurrentWall->enemyNotCollidable = FALSE;
 	Vec2Set(&CurrentWall->Position, xPos * GetLoadRatio(), yPos * GetLoadRatio());
 	CurrentWall->WallSprite = (Sprite *) CreateSprite(textureName, width, height, 4, 1, 1, xPos, yPos);
 

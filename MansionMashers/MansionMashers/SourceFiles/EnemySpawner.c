@@ -36,7 +36,7 @@
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int *objID)
+EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int *objID, int panelId)
 {
 	//Adds spawner to object manager
 	EnemySpawner *CurrentSpawner = AddSpawner();
@@ -55,7 +55,7 @@ EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, f
 	//Create the enemies and set them offscreen and AINone
 	for(i = 0; i < numEnemies; ++i)
 	{
-		CurrentSpawner->EnemyArray[i] = CreateEnemy(CurrentSpawner->enemyType, EnemyType, CurrentSpawner->objID + i + 1, CurrentSpawner->SpawnerCollider.Position.x + i * 200 * GetLoadRatio(), -10000);
+		CurrentSpawner->EnemyArray[i] = CreateEnemy(CurrentSpawner->enemyType, EnemyType, CurrentSpawner->objID + i + 1, CurrentSpawner->SpawnerCollider.Position.x + i * 200 * GetLoadRatio(), -10000, panelId);
 		CurrentSpawner->EnemyArray[i]->HomePos = CurrentSpawner->SpawnerCollider.Position;
 		CurrentSpawner->EnemyArray[i]->EnemyState = AINone;
 	}

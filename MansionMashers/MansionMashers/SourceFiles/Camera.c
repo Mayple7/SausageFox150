@@ -19,6 +19,8 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/Camera.h"
 #include "../HeaderFiles/Sprite.h"
 
+static int GateCamera;
+static int CameraMoved;
 
 // ---------------------------------------------------------------------------
 
@@ -29,13 +31,18 @@ void SetCamera(Vec2 *playerX, int offset)
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
 
-	//Moves camera Right
-	if(playerX->x > (camX + offset))
-		AEGfxSetCamPosition(playerX->x - offset, camY);
+	if(GateCamera == TRUE)
+		return;
+	else
+	{
+		//Moves camera Right
+		if(playerX->x > (camX + offset))
+			AEGfxSetCamPosition(playerX->x - offset, camY);
 	
-	//Moves camera Left
-	else if(playerX->x < (camX - offset))
-		AEGfxSetCamPosition(playerX->x + offset, camY);
+		//Moves camera Left
+		else if(playerX->x < (camX - offset))
+			AEGfxSetCamPosition(playerX->x + offset, camY);
+	}
 }
 
 void ResetCamera(void)
@@ -64,20 +71,59 @@ void SetCameraPan(float newX, float PanelSize)
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
 
-	//Pans camera Right
-	if(camX < newX - ((PanelSize / 128) * GetLoadRatio()))
-	{
-		camX += ((PanelSize / 1.25f) * GetLoadRatio()) * GetDeltaTime();
-		AEGfxSetCamPosition(camX, camY);
-	}
-	//Pans Camera Left
-	else if (camX > newX + ((PanelSize / 128) * GetLoadRatio()))
-	{
-		camX -= ((PanelSize / 1.25f) * GetLoadRatio()) * GetDeltaTime();
-		AEGfxSetCamPosition(camX, camY);
-	}
+	CameraMoved = FALSE;
+
+	if(camX >= newX - ((PanelSize / 128) * GetLoadRatio()) && camX <= newX + ((PanelSize / 128) * GetLoadRatio()))
+		CameraMoved = TRUE;
+
+	if(GateCamera == TRUE)
+		return;
 	else
-		//Keep Camera Where it is
-		AEGfxSetCamPosition(newX, camY);
+	{
+		//Pans camera Right
+		if(camX < newX - ((PanelSize / 128) * GetLoadRatio()))
+		{
+			camX += ((PanelSize / 1.25f) * GetLoadRatio()) * GetDeltaTime();
+			AEGfxSetCamPosition(camX, camY);
+		}
+		//Pans Camera Left
+		else if (camX > newX + ((PanelSize / 128) * GetLoadRatio()))
+		{
+			camX -= ((PanelSize / 1.25f) * GetLoadRatio()) * GetDeltaTime();
+			AEGfxSetCamPosition(camX, camY);
+		}
+		else
+		{
+			//Keep Camera Where it is
+			AEGfxSetCamPosition(newX, camY);
+		}
+	}
 }
 
+void SetCameraLockState(int GateSet)
+{
+	//True or False
+	GateCamera = GateSet;
+}
+
+void ResetGatedCamera(void)
+{
+	GateCamera = FALSE;
+	CameraMoved = FALSE;
+}
+
+int GetCameraLockState(void)
+{
+	return GateCamera;
+}
+
+void SetCameraMovedState(int GateSet)
+{
+	//True or False
+	CameraMoved = GateSet;
+}
+
+int GetCameraMovedState(void)
+{
+	return CameraMoved;
+}

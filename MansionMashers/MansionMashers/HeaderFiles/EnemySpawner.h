@@ -19,7 +19,7 @@ typedef struct EnemySpawner
 
 }EnemySpawner;
 
-EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int* objID);
+EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int* objID, int panelId);
 int SpawnEnemies(EnemySpawner* CurrentSpawner);
 
 #endif
