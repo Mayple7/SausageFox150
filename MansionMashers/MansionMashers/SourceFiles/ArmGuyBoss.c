@@ -49,6 +49,7 @@ void LoadArmGuyBoss(void)
 {
 	LoadTexture("TextureFiles/TempArmGuy.png");
 	LoadTexture("TextureFiles/TempArmGuyArm.png");
+	LoadTexture("TextureFiles/TempBossSpin.png");
 }
 
 /*************************************************************************/
@@ -66,8 +67,11 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 
 	//Initialize boss struct
 	Vec2Set(&CurrentBoss->Position, 700, -200);
-	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempArmGuy.png", 304, 583, 10, 1, 1, 700, -200);
+	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempArmGuy.png", 319, 612, 10, 1, 1, 700, -200);
 	CurrentBoss->BodySprite->FlipX = TRUE;
+	CurrentBoss->SpinSprite = (Sprite *) CreateSprite("TextureFiles/TempBossSpin.png", 319, 612, 10, 2, 1, 700, -200);
+	CurrentBoss->SpinSprite->Visible = FALSE;
+	CurrentBoss->SpinSprite->AnimationSpeed = 8;
 	CurrentBoss->ArmSprite = (Sprite *) CreateSprite("TextureFiles/TempArmGuyArm.png", 237, 110, 11, 1, 1, 580, -120);
 	CurrentBoss->ArmSprite->FlipX = TRUE;
 	CurrentBoss->playerHit = 0;
@@ -302,6 +306,12 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		{
 		case Start:
 			CurrentBoss->cooldownTimer += GetDeltaTime();
+
+			// Switch to the spinning sprite
+			CurrentBoss->BodySprite->Visible = FALSE;
+			CurrentBoss->ArmSprite->Visible = FALSE;
+			CurrentBoss->SpinSprite->Visible = TRUE;
+			
 			// Boss is on the right and start up timer is done
 			if(CurrentBoss->cooldownTimer > 0.5f && CurrentBoss->Position.x > 0)
 			{
@@ -319,6 +329,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			// Spin to the right
 			CurrentBoss->Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
 			CurrentBoss->BodySprite->Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->SpinSprite->Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
 			CurrentBoss->SpinAttack.Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
 			CurrentBoss->BossCollider.Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
 
@@ -335,6 +346,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			if(CurrentBoss->Position.x >= 700 * GetLoadRatio())
 			{
 				CurrentBoss->BodySprite->Position.x = 700 * GetLoadRatio();
+				CurrentBoss->SpinSprite->Position.x = 700 * GetLoadRatio();
 				CurrentBoss->Position.x = 700 * GetLoadRatio();
 				CurrentBoss->SpinAttack.Position.x = 700 * GetLoadRatio();
 				CurrentBoss->BossCollider.Position.x = 700 * GetLoadRatio();
@@ -346,6 +358,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			// Spin to the left
 			CurrentBoss->Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
 			CurrentBoss->BodySprite->Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->SpinSprite->Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
 			CurrentBoss->SpinAttack.Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
 			CurrentBoss->BossCollider.Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
 
@@ -362,6 +375,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			if(CurrentBoss->Position.x <= -700 * GetLoadRatio())
 			{
 				CurrentBoss->BodySprite->Position.x = -700 * GetLoadRatio();
+				CurrentBoss->SpinSprite->Position.x = -700 * GetLoadRatio();
 				CurrentBoss->Position.x = -700 * GetLoadRatio();
 				CurrentBoss->SpinAttack.Position.x = -700 * GetLoadRatio();
 				CurrentBoss->BossCollider.Position.x = -700 * GetLoadRatio();
@@ -371,8 +385,14 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			break;
 		case End:
 			CurrentBoss->cooldownTimer += GetDeltaTime();
+
 			if(CurrentBoss->cooldownTimer > 0.5f && CurrentBoss->Position.x > 0)
 			{
+				// Switch to the standing sprite
+				CurrentBoss->BodySprite->Visible = TRUE;
+				CurrentBoss->SpinSprite->Visible = FALSE;
+				CurrentBoss->ArmSprite->Visible = TRUE;
+
 				CurrentBoss->BodySprite->FlipX = TRUE;
 				CurrentBoss->ArmSprite->Position.x = 580 * GetLoadRatio();
 				CurrentBoss->ArmSprite->FlipX = TRUE;
@@ -384,6 +404,11 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			}
 			else if(CurrentBoss->cooldownTimer > 0.5f)
 			{
+				// Switch to the standing sprite
+				CurrentBoss->BodySprite->Visible = TRUE;
+				CurrentBoss->SpinSprite->Visible = FALSE;
+				CurrentBoss->ArmSprite->Visible = TRUE;
+
 				CurrentBoss->BodySprite->FlipX = FALSE;
 				CurrentBoss->ArmSprite->Position.x = -580 * GetLoadRatio();
 				CurrentBoss->ArmSprite->FlipX = FALSE;

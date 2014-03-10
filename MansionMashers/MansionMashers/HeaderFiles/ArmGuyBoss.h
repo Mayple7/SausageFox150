@@ -11,6 +11,7 @@ typedef struct ArmGuyBoss
 	int BossType;
 
 	Sprite *BodySprite;
+	Sprite *SpinSprite;
 	Sprite *ArmSprite; // Arm for armguy, hand for handguy etc
 
 	int CurrentState;
