@@ -30,6 +30,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+#include "../HeaderFiles/BoundingBox.h"
 #include "../HeaderFiles/EasyEdit.h"
 
 
@@ -92,12 +93,19 @@ void InitializeLevel2(void)
 	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
 	
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
 	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 1, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan0Overlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 1, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/OutsideMan2.png", 1920, 1080, 1, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan2Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 1, 1, 1, 1920 * 3, 0);
+	CreateSprite("TextureFiles/OutsideMan3Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 3, 0);
 
 	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
 	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
@@ -110,23 +118,24 @@ void InitializeLevel2(void)
 	//CreatePaperScroll(200);
 
 
-	//Platforms
-	//Panel3
-	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 3640, -240);
-	Crate->PlatformSprite->Visible = FALSE;
-	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 3780, -210);
-	Crate->PlatformSprite->Visible = FALSE;
+	/////////////////////////////////
+	//		Platforms			   //
+	/////////////////////////////////
 	//Panel2
 	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 2050, -340);
 	Crate->PlatformSprite->Visible = FALSE;
 	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 2170, -350);
 	Crate->PlatformSprite->Visible = FALSE;
+	//Panel3
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 3640, -240);
+	Crate->PlatformSprite->Visible = FALSE;
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 3780, -210);
+	Crate->PlatformSprite->Visible = FALSE;
 
-	
 
-
-
-	//Walls
+	/////////////////////////////////
+	//			Walls			   //
+	/////////////////////////////////
 	//Stairs
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, -819, -232);
 	Wall1->WallSprite->Visible = FALSE;
@@ -149,18 +158,21 @@ void InitializeLevel2(void)
 	//Left Bounding Wall
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
 	Wall1->WallSprite->Visible = FALSE;
+	//Stone Door
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 540.0f, newID++, 810, 140);
 	Wall1->WallSprite->Visible = FALSE;
 	//Door Hang Over
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -903, 226);
 	Wall1->WallSprite->Visible = FALSE;
-	
+	//Top of Watch Tower
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, 4020, 370);
 	Wall1->WallSprite->Visible = FALSE;
-
+	//Bottom of Watch Tower
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 260.0f, 65.0f, newID++, 4025, 22);
 	Wall1->WallSprite->Visible = FALSE;
-	
+	//Top of Forest Door
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 250.0f, newID++, 6630, 2);
+	Wall1->WallSprite->Visible = FALSE;
 }
 
 /*************************************************************************/
@@ -172,6 +184,8 @@ void InitializeLevel2(void)
 void UpdateLevel2(void)
 {
 	EventLevel2();
+	
+	BoundingBoxUpdate(); 
 
 	//ScrollPaperScroll(1);
 	EasyEditWall(Wall1, 10);
