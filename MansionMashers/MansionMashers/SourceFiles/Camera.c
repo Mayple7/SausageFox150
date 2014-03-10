@@ -20,6 +20,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 #include "../HeaderFiles/Sprite.h"
 
 static int GateCamera;
+static int CameraMoved;
 
 // ---------------------------------------------------------------------------
 
@@ -69,7 +70,12 @@ void SetCameraPan(float newX, float PanelSize)
 
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
-	
+
+	CameraMoved = FALSE;
+
+	if(camX >= newX - ((PanelSize / 128) * GetLoadRatio()) && camX <= newX + ((PanelSize / 128) * GetLoadRatio()))
+		CameraMoved = TRUE;
+
 	if(GateCamera == TRUE)
 		return;
 	else
@@ -87,8 +93,10 @@ void SetCameraPan(float newX, float PanelSize)
 			AEGfxSetCamPosition(camX, camY);
 		}
 		else
+		{
 			//Keep Camera Where it is
 			AEGfxSetCamPosition(newX, camY);
+		}
 	}
 }
 
@@ -101,9 +109,21 @@ void SetCameraLockState(int GateSet)
 void ResetGatedCamera(void)
 {
 	GateCamera = FALSE;
+	CameraMoved = FALSE;
 }
 
-int GetCameraLockSate(void)
+int GetCameraLockState(void)
 {
 	return GateCamera;
+}
+
+void SetCameraMovedState(int GateSet)
+{
+	//True or False
+	CameraMoved = GateSet;
+}
+
+int GetCameraMovedState(void)
+{
+	return CameraMoved;
 }

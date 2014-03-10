@@ -112,41 +112,46 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 /*************************************************************************/
 void EnemyCollideWall(Enemy *CurrentEnemy, Wall *CurrentWall)
 {
-	// Grab the edges of each collider box
-	float EnemyLeft = CurrentEnemy->EnemyCollider.Position.x + CurrentEnemy->EnemyCollider.Offset.x - CurrentEnemy->EnemyCollider.width / 2;
-	float EnemyRight = CurrentEnemy->EnemyCollider.Position.x + CurrentEnemy->EnemyCollider.Offset.x + CurrentEnemy->EnemyCollider.width / 2;
-	float EnemyTop = CurrentEnemy->EnemyCollider.Position.y + CurrentEnemy->EnemyCollider.Offset.y + CurrentEnemy->EnemyCollider.height / 2;
-	float EnemyBottom = CurrentEnemy->EnemyCollider.Position.y + CurrentEnemy->EnemyCollider.Offset.y - CurrentEnemy->EnemyCollider.height / 2;
+	if (CurrentWall->enemyNotCollidable)
+		return;
+	else
+	{
+		// Grab the edges of each collider box
+		float EnemyLeft = CurrentEnemy->EnemyCollider.Position.x + CurrentEnemy->EnemyCollider.Offset.x - CurrentEnemy->EnemyCollider.width / 2;
+		float EnemyRight = CurrentEnemy->EnemyCollider.Position.x + CurrentEnemy->EnemyCollider.Offset.x + CurrentEnemy->EnemyCollider.width / 2;
+		float EnemyTop = CurrentEnemy->EnemyCollider.Position.y + CurrentEnemy->EnemyCollider.Offset.y + CurrentEnemy->EnemyCollider.height / 2;
+		float EnemyBottom = CurrentEnemy->EnemyCollider.Position.y + CurrentEnemy->EnemyCollider.Offset.y - CurrentEnemy->EnemyCollider.height / 2;
 	
-	float WallLeft = CurrentWall->WallCollider.Position.x + CurrentWall->WallCollider.Offset.x - CurrentWall->WallCollider.width / 2;
-	float WallRight = CurrentWall->WallCollider.Position.x + CurrentWall->WallCollider.Offset.x + CurrentWall->WallCollider.width / 2;
-	float WallTop = CurrentWall->WallCollider.Position.y + CurrentWall->WallCollider.Offset.y + CurrentWall->WallCollider.height / 2;
-	float WallBottom = CurrentWall->WallCollider.Position.y + CurrentWall->WallCollider.Offset.y - CurrentWall->WallCollider.height / 2;
+		float WallLeft = CurrentWall->WallCollider.Position.x + CurrentWall->WallCollider.Offset.x - CurrentWall->WallCollider.width / 2;
+		float WallRight = CurrentWall->WallCollider.Position.x + CurrentWall->WallCollider.Offset.x + CurrentWall->WallCollider.width / 2;
+		float WallTop = CurrentWall->WallCollider.Position.y + CurrentWall->WallCollider.Offset.y + CurrentWall->WallCollider.height / 2;
+		float WallBottom = CurrentWall->WallCollider.Position.y + CurrentWall->WallCollider.Offset.y - CurrentWall->WallCollider.height / 2;
 
-	//Logic for being on top of the wall
-	if(CurrentEnemy->EnemyRigidBody.Velocity.y <= 0 && EnemyBottom > WallTop - CurrentWall->WallCollider.height / 8)
-	{
-		CurrentEnemy->Position.y = WallTop - CurrentEnemy->EnemyCollider.Offset.y + CurrentEnemy->EnemyCollider.height / 2 - 0.01f;
-		CurrentEnemy->EnemyRigidBody.Velocity.y = 0;
-		CurrentEnemy->EnemyRigidBody.onGround = TRUE;
-	}
-	//Logic for being on the left side of the wall
-	else if(CurrentEnemy->Speed > 0 && CurrentEnemy->EnemyDirection == RIGHT && EnemyRight < WallLeft + CurrentWall->WallCollider.width / 8)
-	{
-		CurrentEnemy->Speed = 0.0f;
-		CurrentEnemy->Position.x = WallLeft - CurrentEnemy->EnemyCollider.Offset.x - CurrentEnemy->EnemyCollider.width / 2 + 0.01f;
-	}
-	//Logic for being on the right side of the wall
-	else if(CurrentEnemy->Speed > 0 && CurrentEnemy->EnemyDirection == LEFT && EnemyLeft > WallRight - CurrentWall->WallCollider.width / 8)
-	{
-		CurrentEnemy->Speed = 0.0f;
-		CurrentEnemy->Position.x = WallRight - CurrentEnemy->EnemyCollider.Offset.x + CurrentEnemy->EnemyCollider.width / 2 - 0.01f;
-	}
-	//Logic for being under a wall
-	else if(CurrentEnemy->EnemyRigidBody.Velocity.y > 0 && EnemyTop < WallBottom + CurrentWall->WallCollider.height / 8)
-	{
-		CurrentEnemy->Position.y = WallBottom - CurrentEnemy->EnemyCollider.Offset.y - CurrentEnemy->EnemyCollider.height / 2 + 0.01f;
-		CurrentEnemy->EnemyRigidBody.Velocity.y = 0;
-		CurrentEnemy->EnemyRigidBody.onGround = TRUE;
+		//Logic for being on top of the wall
+		if(CurrentEnemy->EnemyRigidBody.Velocity.y <= 0 && EnemyBottom > WallTop - CurrentWall->WallCollider.height / 8)
+		{
+			CurrentEnemy->Position.y = WallTop - CurrentEnemy->EnemyCollider.Offset.y + CurrentEnemy->EnemyCollider.height / 2 - 0.01f;
+			CurrentEnemy->EnemyRigidBody.Velocity.y = 0;
+			CurrentEnemy->EnemyRigidBody.onGround = TRUE;
+		}
+		//Logic for being on the left side of the wall
+		else if(CurrentEnemy->Speed > 0 && CurrentEnemy->EnemyDirection == RIGHT && EnemyRight < WallLeft + CurrentWall->WallCollider.width / 8)
+		{
+			CurrentEnemy->Speed = 0.0f;
+			CurrentEnemy->Position.x = WallLeft - CurrentEnemy->EnemyCollider.Offset.x - CurrentEnemy->EnemyCollider.width / 2 + 0.01f;
+		}
+		//Logic for being on the right side of the wall
+		else if(CurrentEnemy->Speed > 0 && CurrentEnemy->EnemyDirection == LEFT && EnemyLeft > WallRight - CurrentWall->WallCollider.width / 8)
+		{
+			CurrentEnemy->Speed = 0.0f;
+			CurrentEnemy->Position.x = WallRight - CurrentEnemy->EnemyCollider.Offset.x + CurrentEnemy->EnemyCollider.width / 2 - 0.01f;
+		}
+		//Logic for being under a wall
+		else if(CurrentEnemy->EnemyRigidBody.Velocity.y > 0 && EnemyTop < WallBottom + CurrentWall->WallCollider.height / 8)
+		{
+			CurrentEnemy->Position.y = WallBottom - CurrentEnemy->EnemyCollider.Offset.y - CurrentEnemy->EnemyCollider.height / 2 + 0.01f;
+			CurrentEnemy->EnemyRigidBody.Velocity.y = 0;
+			CurrentEnemy->EnemyRigidBody.onGround = TRUE;
+		}
 	}
 }

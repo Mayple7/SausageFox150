@@ -63,6 +63,9 @@ Platform* Table1;
 
 Wall* Wall1;
 
+Wall* BBWallLeft;
+Wall* BBWallRight;
+
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
 
@@ -146,6 +149,15 @@ void InitializeLevel1(void)
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 2785, 130);
 	Wall1->WallSprite->Visible = FALSE;
+
+
+	// Bounding Box Walls
+	BBWallLeft = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, newID++, 0, 0);
+	BBWallLeft->WallSprite->Visible = FALSE;
+	BBWallLeft->enemyNotCollidable = TRUE;
+	BBWallRight = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, newID++, 0, 0);
+	BBWallRight->WallSprite->Visible = FALSE;
+	BBWallRight->enemyNotCollidable = TRUE;
 
 
 	//Enemy spawners
@@ -331,26 +343,44 @@ void EventLevel1(void)
 			SetNextState(GS_MapLevel);
 	}
 
-	/*////////////////////////////////
+	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //
-	////////////////////////////////*/
-	
+	//////////////////////////////////
 
+	printf("Locked : %i  Enemy Num: %i\n", GetCameraLockState(), EnemyPanelNumber[0]);
+	SetCameraLockState(FALSE);
 	//Panel1
 	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
+	{
+		if(EnemyPanelNumber[0] > 0 && GetCameraMovedState())
+			SetCameraLockState(TRUE);
 		SetCameraPan(0.0f, PANELSIZE);
+	}
 	//Panel2
 	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
+	{
+		if(EnemyPanelNumber[1] > 0 && GetCameraMovedState())
+			SetCameraLockState(TRUE);
 		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
+	}
 	//Panel3
 	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
+	{
+		if(EnemyPanelNumber[2] > 0 && GetCameraMovedState())
+			SetCameraLockState(TRUE);
 		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
-	//Panel4
+	}
 	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
 	{
-		levelComplete = TRUE;
+			levelComplete = TRUE;
 	}
 
+	BBWallLeft->Position.y = -1080 * GetLoadRatio() + 1080 * GetLoadRatio() * GetCameraLockState();
+	BBWallLeft->Position.x = GetCameraXPosition() - (PANELSIZE / 2 * GetLoadRatio());
+	UpdateCollisionPosition(&BBWallLeft->WallCollider, &BBWallLeft->Position);
+	BBWallRight->Position.y = -1080 * GetLoadRatio() + 1080 * GetLoadRatio() * GetCameraLockState();
+	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2 * GetLoadRatio());
+	UpdateCollisionPosition(&BBWallRight->WallCollider, &BBWallRight->Position);
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/

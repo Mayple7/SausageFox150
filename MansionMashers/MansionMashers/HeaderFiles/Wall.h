@@ -11,6 +11,7 @@ typedef struct Wall
 	RigidBody WallRigidBody;
 	CollisionBox WallCollider;
 	Vec2 Position;
+	int enemyNotCollidable;
 	int objID;
 }Wall;
 
