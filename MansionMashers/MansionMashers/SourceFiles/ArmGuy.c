@@ -81,15 +81,15 @@ void InitializeArmGuy(void)
 	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
 
 	//Background
-	CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 2, 1, 1, 140, 0);
-	CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 140, 0);
+	//CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 2, 1, 1, 140, 0);
+	//CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 140, 0);
 
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -400, -170);
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 400, -170);
 
 	//Create bounding walls
-	CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -1010, 0);
-	CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, 1010, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
 
 	Boss = CreateArmGuyBoss(0, 0, &newID);
 	Boss->BossCollider.collisionDebug = TRUE;
@@ -193,10 +193,10 @@ void EventArmGuy(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawArmGuy);
-		//UpdatePause();
+		InitializePause(&DrawArmGuy);
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
+		//SetNextState(GS_MainMenu);
 		//TogglePauseSound(&BackgroundSnd);
 	}
 	if(FoxInput_KeyTriggered('K'))

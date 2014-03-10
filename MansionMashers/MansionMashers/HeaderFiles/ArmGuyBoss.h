@@ -37,5 +37,6 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID);
 void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss);
 void DetectBossCollision(ArmGuyBoss *CurrentBoss);
 void BossCollideWeapon(ArmGuyBoss *CurrentBoss);
+void PlayerDamageResult(int damage);
 
 #endif
