@@ -347,7 +347,6 @@ void EventLevel1(void)
 	//    CAMERA POSITION SECOND    //
 	//////////////////////////////////
 
-	printf("Locked : %i  Enemy Num: %i\n", GetCameraLockState(), EnemyPanelNumber[0]);
 	SetCameraLockState(FALSE);
 	//Panel1
 	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
