@@ -55,6 +55,8 @@ typedef struct Enemy
 	int objID;
 	int CollisionData[COLLIDEAMOUNT];
 
+	int panelId;
+
 	float Speed;
 
 	int isAttacking;
@@ -102,6 +104,7 @@ void EnemyAnimation(Enemy *Object);
 void CreateEnemySprites(Enemy *Object);
 void EnemyAIUpdate(Enemy *Object);
 void EnemyBasicMeleeUpdate(Enemy *Object);
+void ResetEnemyPanelNumber(void);
 
 float RotateToAngle(float angle, float angleTo, float speed);
 #endif

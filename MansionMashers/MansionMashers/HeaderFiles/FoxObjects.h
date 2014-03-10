@@ -16,7 +16,11 @@
 //Number of spawners
 #define SPAWNERAMOUNT 20
 
+#define PANELAMOUNT 10
+
 enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
+
+int EnemyPanelNumber[PANELAMOUNT];
 
 //-------------------------------------------------------------------------
 // Fox object includes

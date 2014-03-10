@@ -48,10 +48,6 @@ static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimiation;
 
-// Enemies per panel, if adding more enemies add to the list
-static int EnemyPanelNumber[] = {1, 3, 4};
-static int PlayerPanelNumber = 0;
-
 TextGlyphs* LevelName;
 
 EnemySpawner* FirstSpawner;
@@ -99,6 +95,7 @@ void InitializeLevel1(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	ResetEnemyPanelNumber();
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1200, -220);

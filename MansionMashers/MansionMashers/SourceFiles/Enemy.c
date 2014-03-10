@@ -76,6 +76,10 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 	Enemy *CurrentEnemy = AddEnemy();
 	int i;
 
+	EnemyPanelNumber[panelId]++;
+
+	CurrentEnemy->panelId = panelId;
+
 	for(i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		CurrentEnemy->CollisionData[i] = -1;
@@ -220,6 +224,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		CurrentEnemy->EnemyParticleSystem->emitScale = 2.0f;
 		CurrentEnemy->EnemyParticleSystem->emitLife = 1.0f;
 		PlayAudio(CurrentEnemy->CurrentEnemySounds.YEAH);
+		EnemyPanelNumber[CurrentEnemy->panelId]--;
 		FreeEnemy(CurrentEnemy);
 	}
 
@@ -1006,4 +1011,14 @@ void EnemyAnimation(Enemy *Object)
 	Object->EnemyWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation + FOX_PI / 2) * Object->EnemyWeapon->WeaponLength);
 
 	//*************************************************************************************************
+}
+
+void ResetEnemyPanelNumber(void)
+{
+	int i;
+	
+	for(i = 0; i < PANELAMOUNT; i++)
+	{
+		EnemyPanelNumber[i] = 0;
+	}
 }
