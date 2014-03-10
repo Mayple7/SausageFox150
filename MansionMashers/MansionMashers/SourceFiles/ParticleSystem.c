@@ -134,10 +134,6 @@ void ParticleSystemUpdate(void)
 	int i;
 	for (i = 0; i < PARTICLESYSTEMAMOUNT; i++)
 	{
-		
-		float camX, camY;	
-		//Get camera position
-		AEGfxGetCamPosition(&camX, &camY);
 
 		if (particleSystemList[i].objID == 0)
 		{
@@ -155,9 +151,9 @@ void ParticleSystemUpdate(void)
 			{
 				if (particleSystemList[i].amountTotal > 0 || particleSystemList[i].amountTotal == -1)
 				{
-
 					
-					if (particleSystemList[i].Position.x < camX + 1000 && particleSystemList[i].Position.x > camX - 1000)
+					
+					if (particleSystemList[i].Position.x < GetCameraXPosition() + 1920 / GetLoadRatio() && particleSystemList[i].Position.x > GetCameraXPosition() - 1920 / GetLoadRatio())
 					{
 						Vec2 vel;
 
