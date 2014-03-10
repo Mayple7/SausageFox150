@@ -97,7 +97,7 @@ void InitializeHandGuy(void)
 	ChangeTextVisibility(LevelName);
 
 	//Boss dog
-	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 800.0f * GetLoadRatio(), GROUNDLEVEL);
+	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 800.0f * GetLoadRatio(), GROUNDLEVEL * GetLoadRatio(), 0);
 }
 
 /*************************************************************************/

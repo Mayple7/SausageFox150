@@ -47,6 +47,11 @@
 static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimiation;
+
+// Enemies per panel, if adding more enemies add to the list
+static int EnemyPanelNumber[] = {1, 3, 4};
+static int PlayerPanelNumber = 0;
+
 TextGlyphs* LevelName;
 
 EnemySpawner* FirstSpawner;
@@ -145,18 +150,18 @@ void InitializeLevel1(void)
 
 	//Enemy spawners
 	Vec2Set(&SpawnerLocation, -200, 0);
-	FirstSpawner = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
+	FirstSpawner = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
 
 	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
-	SecondSpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
-	SecondSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID);
+	SecondSpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+	SecondSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
 
 	Vec2Set(&SpawnerLocation, 1.90f * PANELSIZE, 0);
-	ThirdSpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID);
-	ThirdSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID);
+	ThirdSpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	ThirdSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
 
-	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL);
-	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL);
+	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL, 2);
+	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL, 2);
 	SetEnemy1->HomePos.x = 2 * PANELSIZE * GetLoadRatio();
 	SetEnemy2->HomePos.x = 2 * PANELSIZE * GetLoadRatio();
 

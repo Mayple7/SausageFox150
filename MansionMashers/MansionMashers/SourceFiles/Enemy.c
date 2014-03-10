@@ -69,7 +69,7 @@ void LoadEnemy(int enemyType)
 	A pointer to the enemy object to be initialized
 */
 /*************************************************************************/
-Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos)
+Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos, int panelId)
 {
 	float width, height;
 	Vec2 position;

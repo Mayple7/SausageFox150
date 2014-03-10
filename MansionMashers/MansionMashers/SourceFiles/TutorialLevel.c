@@ -140,7 +140,7 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + 1920.0f, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750 + 1920.0f, -250);
+	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750 + 1920.0f, -250, 1);
 }
  
 void UpdateTutorial(void)
