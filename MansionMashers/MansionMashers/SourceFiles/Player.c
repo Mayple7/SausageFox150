@@ -441,7 +441,7 @@ void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 {
 	//Placeholder move speed formula
-	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility + 900.0f;
+	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility + 600.0f;
 }
 
 /*************************************************************************/
