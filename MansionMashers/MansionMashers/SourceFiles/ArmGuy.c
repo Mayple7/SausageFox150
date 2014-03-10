@@ -92,8 +92,6 @@ void InitializeArmGuy(void)
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
 
 	Boss = CreateArmGuyBoss(0, 0, &newID);
-	Boss->BossCollider.collisionDebug = TRUE;
-	Boss->SpinAttack.collisionDebug = TRUE;
 	Boss->JabAttack.collisionDebug = TRUE;
 	Boss->SmashAttack.collisionDebug = TRUE;
 
@@ -134,9 +132,7 @@ void DrawArmGuy(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
-	displayCollisionDebug(&Boss->BossCollider);
 	displayCollisionDebug(&Boss->JabAttack);
-	displayCollisionDebug(&Boss->SpinAttack);
 	displayCollisionDebug(&Boss->SmashAttack);
 }
 
