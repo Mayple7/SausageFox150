@@ -22,6 +22,7 @@
 #include "../HeaderFiles/UIButton.h"
 #include "../HeaderFiles/PauseMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
+#include "../HeaderFiles/MapLevel.h"
 
 Sprite* PauseText;
 
@@ -131,11 +132,18 @@ void InitializePause(void (*DrawLevel)())
 		CheckMark->Visible = FALSE;
 
 	ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -250 + camX, -400, 300, 112.5f, newID++);
-	MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250 + camX, -400, 300, 112.5f, newID++);
 	ResumeButton->ButtonSprite->ZIndex = 502;
+	
+	LevelToDraw = DrawLevel;
+
+	// Check if we pause the map level or not
+	if(LevelToDraw == DrawMapLevel)
+		MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250 + camX, -400, 300, 112.5f, newID++);
+	else
+		MainMenuButton = CreateButton("TextureFiles/GoToMapButton.png", 250 + camX, -400, 300, 112.5f, newID++);
 	MainMenuButton->ButtonSprite->ZIndex = 502;
 
-	LevelToDraw = DrawLevel;
+
 	if(CurrentPlayer.PlayerActive)
 	{
 		CurrentPlayer.PlayerSpriteParts.Body->AnimationActive = 0;
@@ -286,8 +294,11 @@ void EventPause(void)
 	{
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
+			if(LevelToDraw == DrawMapLevel)
+				SetNextState(GS_MainMenu);
+			else
+				SetNextState(GS_MapLevel);
 			pause = FALSE;
-			SetNextState(GS_MainMenu);
 		}
 		MainMenuButton->ButtonSprite->ScaleX = 1.2f;
 		MainMenuButton->ButtonSprite->ScaleY = 1.2f;
