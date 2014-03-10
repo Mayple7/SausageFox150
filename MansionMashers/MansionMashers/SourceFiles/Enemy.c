@@ -350,6 +350,8 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 	switch(CurrentEnemy->EnemyState)
 	{
 		case AINone:
+			CurrentEnemy->isMoveRight	= FALSE;
+			CurrentEnemy->isMoveLeft	= FALSE;
 			break;
 		case AIAggressive:
 			CurrentEnemy->isJumping			= FALSE;

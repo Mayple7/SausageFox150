@@ -441,7 +441,7 @@ void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 {
 	//Placeholder move speed formula
-	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility + 900.0f;
+	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility * 15.0f + 600.0f;
 }
 
 /*************************************************************************/
@@ -837,7 +837,7 @@ void Animation(Player *Object)
 {
 	float sinOfLegValue = (float)sin(Object->LegSinValue);
 	float sinOfTwoLegValue = (float)sin(Object->LegSinValue*2);
-	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f / ((Object->Speed * GetLoadRatio() * 0.15f + 0.1f)) ))-(Object->Speed * GetLoadRatio());
+	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (1.5f / (((Object->Speed) * 0.15f + 0.1f)) ))-(Object->Speed);
 	float LegUpperDirection = sinOfLegValue/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = sinOfLegValue/(LegDistance);
