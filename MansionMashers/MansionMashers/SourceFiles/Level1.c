@@ -100,6 +100,9 @@ void InitializeLevel1(void)
 	ResetObjectList();
 	ResetCamera();
 
+	//Set the camera so it currently isn't gated
+	ResetGatedCamera();
+
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1200, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
@@ -334,12 +337,18 @@ void EventLevel1(void)
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
 	////////////////////////////////*/
+	
+
+	//Panel1
 	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
 		SetCameraPan(0.0f, PANELSIZE);
+	//Panel2
 	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
 		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
+	//Panel3
 	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
 		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
+	//Panel4
 	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
 	{
 		levelComplete = TRUE;

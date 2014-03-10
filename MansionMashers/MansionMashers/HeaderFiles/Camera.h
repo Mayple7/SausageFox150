@@ -10,5 +10,8 @@ void ResetCamera(void);
 float GetCameraXPosition();
 void SetCameraXPosition(float newX);
 void SetCameraPan(float newX, float PanelSize);
+void SetLockCameraState(int GateSet);
+int GetCameraLockSate(void);
+void ResetGatedCamera(void);
 
 #endif
