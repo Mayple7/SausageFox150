@@ -338,7 +338,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			{
 				// Player gets shot up
 				playerHit = TRUE;
-				Vec2Set(&CurrentPlayer.PlayerRigidBody.Velocity, 0.0f, 1500.0f);
+				Vec2Set(&CurrentPlayer.PlayerRigidBody.Velocity, 0.0f, 1500.0f * GetLoadRatio());
 				CurrentPlayer.Position.y += 2.0f;
 				PlayerDamageResult(CurrentBoss->SpinDamage);
 			}
@@ -367,7 +367,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			{
 				// Player gets shot up
 				playerHit = TRUE;
-				Vec2Set(&CurrentPlayer.PlayerRigidBody.Velocity, 0.0f, 1500.0f);
+				Vec2Set(&CurrentPlayer.PlayerRigidBody.Velocity, 0.0f, 1500.0f * GetLoadRatio());
 				CurrentPlayer.Position.y += 2.0f;
 				PlayerDamageResult(CurrentBoss->SpinDamage);
 			}
