@@ -10,10 +10,10 @@
 
 // ---------------------------------------------------------------------------
 // Globals
-Player CharacterMayple;
-Player CharacterGinko;
-Player CharacterHolly;
-Player CharacterKaya;
+Player *CharacterMayple;
+Player *CharacterGinko;
+Player *CharacterHolly;
+Player *CharacterKaya;
 
 Button* MaypleButton;
 Button* GinkoButton;
@@ -46,6 +46,12 @@ void LoadCharacterSelect(void)
 void InitializeCharacterSelect(void)
 {
 	Vec3 Tint;
+
+	CharacterMayple = (Player *)CallocMyAlloc(1, sizeof(Player));
+	CharacterGinko = (Player *)CallocMyAlloc(1, sizeof(Player));
+	CharacterHolly = (Player *)CallocMyAlloc(1, sizeof(Player));
+	CharacterKaya = (Player *)CallocMyAlloc(1, sizeof(Player));
+
 	selected = Mayple;
 	newID = 10;
 	ResetObjectList();
@@ -78,96 +84,96 @@ void InitializeCharacterSelect(void)
 		printf("FAILED");
 	}
 	//Create Mayple
-	InitializePlayer(&CharacterMayple, Mayple, -712, -80);
-	CharacterMayple.Speed = 0.0f;
-	CharacterMayple.FlipX = TRUE;
-	UpdatePlayerPosition(&CharacterMayple);
-	CharacterMayple.PlayerSpriteParts.Tail->CurrentFrame = 3;
+	InitializePlayer(CharacterMayple, Mayple, -712, -80);
+	CharacterMayple->Speed = 0.0f;
+	CharacterMayple->FlipX = TRUE;
+	UpdatePlayerPosition(CharacterMayple);
+	CharacterMayple->PlayerSpriteParts.Tail->CurrentFrame = 3;
 
 	//Create Ginko
-	InitializePlayer(&CharacterGinko, Ginko, -235, -80);
-	CharacterGinko.Speed = 0.0f;
-	CharacterGinko.FlipX = TRUE;
-	UpdatePlayerPosition(&CharacterGinko);
-	CharacterGinko.PlayerSpriteParts.Tail->CurrentFrame = 9;
+	InitializePlayer(CharacterGinko, Ginko, -235, -80);
+	CharacterGinko->Speed = 0.0f;
+	CharacterGinko->FlipX = TRUE;
+	UpdatePlayerPosition(CharacterGinko);
+	CharacterGinko->PlayerSpriteParts.Tail->CurrentFrame = 9;
 
 	//Create Kaya
-	InitializePlayer(&CharacterKaya, Kaya, 235, -80);
-	CharacterKaya.Speed = 0.0f;
-	CharacterKaya.FlipX = FALSE;
-	UpdatePlayerPosition(&CharacterKaya);
-	CharacterKaya.PlayerSpriteParts.Tail->CurrentFrame = 6;
+	InitializePlayer(CharacterKaya, Kaya, 235, -80);
+	CharacterKaya->Speed = 0.0f;
+	CharacterKaya->FlipX = FALSE;
+	UpdatePlayerPosition(CharacterKaya);
+	CharacterKaya->PlayerSpriteParts.Tail->CurrentFrame = 6;
 
 	//Create Holly
-	InitializePlayer(&CharacterHolly, Holly, 712, -80);
-	CharacterHolly.Speed = 0.0f;
-	CharacterHolly.FlipX = FALSE;
-	UpdatePlayerPosition(&CharacterHolly);
-	CharacterHolly.PlayerSpriteParts.Tail->CurrentFrame = 14;
+	InitializePlayer(CharacterHolly, Holly, 712, -80);
+	CharacterHolly->Speed = 0.0f;
+	CharacterHolly->FlipX = FALSE;
+	UpdatePlayerPosition(CharacterHolly);
+	CharacterHolly->PlayerSpriteParts.Tail->CurrentFrame = 14;
 }
 
 void UpdateCharacterSelect(void)
 {
 	EventCharacterSelect();
 
-	CharacterMayple.PlayerRigidBody.onGround = TRUE;
-	CharacterGinko.PlayerRigidBody.onGround = TRUE;
-	CharacterKaya.PlayerRigidBody.onGround = TRUE;
-	CharacterHolly.PlayerRigidBody.onGround = TRUE;
+	CharacterMayple->PlayerRigidBody.onGround = TRUE;
+	CharacterGinko->PlayerRigidBody.onGround = TRUE;
+	CharacterKaya->PlayerRigidBody.onGround = TRUE;
+	CharacterHolly->PlayerRigidBody.onGround = TRUE;
 
 	//Mayple not selected
 	if(selected != Mayple)
 	{
-		if (CharacterMayple.Speed - 48.0f * GetDeltaTime() >= 0.0f)
+		if (CharacterMayple->Speed - 48.0f * GetDeltaTime() >= 0.0f)
 		{
-			CharacterMayple.Speed -= 48.0f * GetDeltaTime();
+			CharacterMayple->Speed -= 48.0f * GetDeltaTime();
 		}
 		else
 		{
-			CharacterMayple.Speed = 0.0f;
-			CharacterMayple.LegSinValue = 0;
+			CharacterMayple->Speed = 0.0f;
+			CharacterMayple->LegSinValue = 0;
 		}
 	}
 
 	//Ginko not selected
 	if(selected != Ginko)
 	{
-		if (CharacterGinko.Speed - 48.0f * GetDeltaTime() >= 0.0f)
+		if (CharacterGinko->Speed - 48.0f * GetDeltaTime() >= 0.0f)
 		{
-			CharacterGinko.Speed -= 48.0f * GetDeltaTime();
+			CharacterGinko->Speed -= 48.0f * GetDeltaTime();
 		}
 		else
 		{
-			CharacterGinko.Speed = 0.0f;
-			CharacterGinko.LegSinValue = 0;
+			CharacterGinko->Speed = 0.0f;
+			CharacterGinko->LegSinValue = 0;
 		}
 	}
 
 	//Kaya not selected
 	if(selected != Kaya)
 	{
-		if (CharacterKaya.Speed - 48.0f * GetDeltaTime() >= 0.0f)
+		if (CharacterKaya->Speed - 48.0f * GetDeltaTime() >= 0.0f)
 		{
-			CharacterKaya.Speed -= 48.0f * GetDeltaTime();
+			CharacterKaya->Speed -= 48.0f * GetDeltaTime();
 		}
 		else
 		{
-			CharacterKaya.Speed = 0.0f;
-			CharacterKaya.LegSinValue = 0;
+			CharacterKaya->Speed = 0.0f;
+			CharacterKaya->LegSinValue = 0;
 		}
 	}
 
 	//Holly not selected
 	if(selected != Holly)
 	{
-		if (CharacterHolly.Speed - 48.0f * GetDeltaTime() >= 0.0f)
+		if (CharacterHolly->Speed - 48.0f * GetDeltaTime() >= 0.0f)
 		{
-			CharacterHolly.Speed -= 48.0f * GetDeltaTime();
+			CharacterHolly->Speed -= 48.0f * GetDeltaTime();
 		}
 		else
 		{
-			CharacterHolly.Speed = 0.0f;
-			CharacterHolly.LegSinValue = 0;
+			CharacterHolly->Speed = 0.0f;
+			CharacterHolly->LegSinValue = 0;
 		}
 	}
 
@@ -175,22 +181,22 @@ void UpdateCharacterSelect(void)
 	switch(selected)
 	{
 	case Mayple:
-		CharacterMayple.Speed = CharacterMayple.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterMayple->Speed = CharacterMayple->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 		break;
 	case Ginko:
-		CharacterGinko.Speed = CharacterGinko.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterGinko->Speed = CharacterGinko->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 		break;
 	case Kaya:
-		CharacterKaya.Speed = CharacterKaya.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterKaya->Speed = CharacterKaya->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 		break;
 	case Holly:
-		CharacterHolly.Speed = CharacterHolly.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterHolly->Speed = CharacterHolly->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
 		break;
 	}
-	Animation(&CharacterMayple);
-	Animation(&CharacterGinko);
-	Animation(&CharacterKaya);
-	Animation(&CharacterHolly);
+	Animation(CharacterMayple);
+	Animation(CharacterGinko);
+	Animation(CharacterKaya);
+	Animation(CharacterHolly);
 }
 
 void DrawCharacterSelect(void)
@@ -207,10 +213,10 @@ void FreeCharacterSelect(void)
 void UnloadCharacterSelect(void)
 {
 	DestroyTextureList();
-	DestroyPlayer(&CharacterMayple);
-	DestroyPlayer(&CharacterGinko);
-	DestroyPlayer(&CharacterHolly);
-	DestroyPlayer(&CharacterKaya);
+	DestroyPlayer(CharacterMayple);
+	DestroyPlayer(CharacterGinko);
+	DestroyPlayer(CharacterHolly);
+	DestroyPlayer(CharacterKaya);
 }
 
 void EventCharacterSelect(void)
@@ -225,7 +231,7 @@ void EventCharacterSelect(void)
 	{
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
-			SavePlayer(&CharacterMayple);
+			SavePlayer(CharacterMayple);
 			SetNextState(GS_Tutorial);
 		}
 		selected = Mayple;
@@ -238,7 +244,7 @@ void EventCharacterSelect(void)
 	{
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
-			SavePlayer(&CharacterGinko);
+			SavePlayer(CharacterGinko);
 			SetNextState(GS_Tutorial);
 		}
 		selected = Ginko;
@@ -251,7 +257,7 @@ void EventCharacterSelect(void)
 	{
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
-			SavePlayer(&CharacterKaya);
+			SavePlayer(CharacterKaya);
 			SetNextState(GS_Tutorial);
 		}
 		selected = Kaya;
@@ -264,7 +270,7 @@ void EventCharacterSelect(void)
 	{
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
-			SavePlayer(&CharacterHolly);
+			SavePlayer(CharacterHolly);
 			SetNextState(GS_Tutorial);
 		}
 		selected = Holly;

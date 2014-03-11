@@ -426,7 +426,9 @@ void DestroyPlayer(Player *CurrentPlayer)
 void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 {
 	//Placeholder max health formula
-	CurrentPlayerStats->MaxHealth = 50 + CurrentPlayerStats->Strength * 20 + CurrentPlayer.PlayerWeapon->BonusStrength * 20;
+	CurrentPlayerStats->MaxHealth = 50 + CurrentPlayerStats->Strength * 20;
+	if(CurrentPlayer.PlayerWeapon)
+		CurrentPlayerStats->MaxHealth += CurrentPlayer.PlayerWeapon->BonusStrength * 20;
 }
 
 /*************************************************************************/
@@ -1360,16 +1362,6 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	CurrentPlayer->CurrentPlayerStats.Agility = 0;
 	CurrentPlayer->CurrentPlayerStats.Strength = 0;
 	CurrentPlayer->CurrentPlayerStats.Defense = 0;
-	
-	updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
-	updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
-	updateDamage(CurrentPlayer);
-	updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
-	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
-
-	CurrentPlayer->CurrentPlayerStats.Money = 15;
-	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
-	CurrentPlayer->CurrentLevel = GS_Tutorial;
 
 	CurrentPlayer->armUnlock = FALSE;
 	CurrentPlayer->handUnlock = FALSE;
@@ -1425,6 +1417,16 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 		CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
 	}
 	CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
+
+	updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
+	updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
+	updateDamage(CurrentPlayer);
+	updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
+	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+
+	CurrentPlayer->CurrentPlayerStats.Money = 15;
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+	CurrentPlayer->CurrentLevel = GS_Tutorial;
 }
 
 void UpdateBuffTimers(Player* CurrentPlayer)
