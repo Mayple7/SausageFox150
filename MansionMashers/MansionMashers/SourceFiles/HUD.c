@@ -79,6 +79,9 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	CurrentHUD->HUDItem[2] = (Sprite *)CreateSprite("TextureFiles/Pizza.png", 50, 50, 401, 1, 1, GetCameraXPosition() - 548, 345);
 	CurrentHUD->HUDItem[3] = (Sprite *)CreateSprite("TextureFiles/Cake.png", 50, 50, 401, 1, 1, GetCameraXPosition() - 548, 345);
 
+	CurrentHUD->HUDItem[4] = (Sprite *)CreateSprite("TextureFiles/HealthBarMid.png", 2, 13, 401, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y / GetLoadRatio() + 36);
+	CurrentHUD->HUDItem[5] = (Sprite *)CreateSprite("TextureFiles/HealthBarEnd.png", 5, 11, 401, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y / GetLoadRatio() + 36);
+
 	CurrentHUD->HUDItem[0]->Visible = FALSE;
 	CurrentHUD->HUDItem[1]->Visible = FALSE;
 	CurrentHUD->HUDItem[2]->Visible = FALSE;
@@ -108,15 +111,20 @@ HUD* CreateHUD(Player* CurrentPlayer)
 void UpdateHUDPosition(HUD* CurrentHUD)
 {
 	Vec2 newPosition;
-	Vec2Set(&newPosition, (GetCameraXPosition() - 400), 300 * GetLoadRatio());
+	Vec2Set(&newPosition, (GetCameraXPosition() - 685 * GetLoadRatio()), 300 * GetLoadRatio());
 
 	//HUD items update position
-	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 450);
+	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 735 * GetLoadRatio());
 
-	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 515);
-	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 515);
-	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 515);
-	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 515);
+	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio());
+	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio());
+	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio());
+	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio());
+
+	CurrentHUD->HUDItem[4]->ScaleX = 71.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
+	CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - (2 * GetLoadRatio()) + (CurrentHUD->HUDItem[4]->ScaleX * GetLoadRatio()));
+	CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x + (CurrentHUD->HUDItem[4]->ScaleX * GetLoadRatio() * 2));
+	printf("Health: %3i/%3i\n", CurrentPlayer.CurrentPlayerStats.CurrentHealth, CurrentPlayer.CurrentPlayerStats.MaxHealth);
 
 	//Coin text update position
 	ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);

@@ -9,7 +9,7 @@
 typedef struct HUD
 {
 	Sprite* HUDBackground;
-	Sprite* HUDItem[4];
+	Sprite* HUDItem[6];
 
 	struct TextGlyphs *CoinText;
 	int currentHUDCoinValue;

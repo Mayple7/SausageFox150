@@ -189,6 +189,12 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		ChangeTextPosition(wList->WeaponGlyphs, glyphPos, Center);
 		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f - wList->WeaponGlyphs->Glyph->Height / 2));
 		ChangeTextPosition(wList->WeaponStatsGlyphs, glyphPos, Center);
+
+		updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
+		updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
+		updateDamage(CurrentPlayer);
+		updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
+		updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 	}
 }
 // height +/- (fontsize/2)
