@@ -20,6 +20,18 @@
  written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
 /*****************************************************************************/
+
+// ---------------------------------------------------------------------------
+// Level Notes!!!!
+//
+//	Since this level goes into the tree tops. There will be a fade out at
+//  the end of Panel one and game will switch to Level3.1 which will place
+//	the player at the bottom of the screen and the game will take place 
+//	as if in a high spot. Can only access Level3.1 through Level 3.
+//	Level3.1 is just a continuation of Level3.
+// ---------------------------------------------------------------------------
+
+
 // ---------------------------------------------------------------------------
 // includes
 
@@ -30,6 +42,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+#include "../HeaderFiles/EasyEdit.h"
 
 
 // ---------------------------------------------------------------------------
@@ -41,6 +54,9 @@
 static int newID;					// ID number
 static int levelComplete = FALSE;
 TextGlyphs* LevelName;
+
+Platform *Plat;
+Wall *Wall1;
 
 /*************************************************************************/
 /*!
@@ -74,6 +90,40 @@ void InitializeLevel3(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center);
 	ChangeTextVisibility(LevelName);
+
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
+	CreateSprite("TextureFiles/Level3Pan1.png", 1920, 1080, 1, 1, 1, 0, 0);
+
+	/////////////////////////////////
+	//		Platforms			   //
+	/////////////////////////////////
+	//Panel1
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 80.0f, 100.0f, newID++, 190, -255);
+	Plat->PlatformSprite->Visible = FALSE;
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 80.0f, 100.0f, newID++, 580, -35);
+	Plat->PlatformSprite->Visible = FALSE;
+
+
+	/////////////////////////////////
+	//			Walls			   //
+	/////////////////////////////////
+	//Ceiling
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, 930, 590);
+	Wall1->WallSprite->Visible = FALSE;
+	//Bounding Walls
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
+	Wall1->WallSprite->Visible = FALSE;
+	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 750.0f, newID++, 958, -170);
+	Wall1->WallSprite->Visible = FALSE;
+	//Final Platform (needs to have wall properties
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 940, -100);
+	Wall1->WallSprite->Visible = FALSE;
+
+	//Temporary Bounding Wall until rock pile is finalized
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 800, -340);
+	Wall1->WallSprite->Visible = FALSE;
 }
 
 /*************************************************************************/
@@ -85,6 +135,9 @@ void InitializeLevel3(void)
 void UpdateLevel3(void)
 {
 	EventLevel3();
+
+	EasyEditWall(Wall1, 10);
+
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
