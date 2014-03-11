@@ -284,6 +284,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawLevel3;
 			GSMPointers.pUnload = UnloadLevel3;
 			break;
+		case GS_Level31:
+			GSMPointers.pLoad = LoadLevel31;
+			GSMPointers.pInit = InitializeLevel31;
+			GSMPointers.pUpdate = UpdateLevel31;
+			GSMPointers.pFree = FreeLevel31;
+			GSMPointers.pDraw = DrawLevel31;
+			GSMPointers.pUnload = UnloadLevel31;
+			break;
 		case GS_YeahGuy:
 			GSMPointers.pLoad = LoadYeahGuy;
 			GSMPointers.pInit = InitializeYeahGuy;

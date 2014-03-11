@@ -31,7 +31,7 @@
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/BoundingBox.h"
-#include "../HeaderFiles/EasyEdit.h"
+
 
 
 
@@ -188,8 +188,6 @@ void UpdateLevel2(void)
 	BoundingBoxUpdate(); 
 
 	//ScrollPaperScroll(1);
-	EasyEditWall(Wall1, 10);
-	//EasyEditPlatform(Crate, 10);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);

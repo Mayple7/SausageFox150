@@ -118,6 +118,7 @@
     <ClInclude Include="HeaderFiles\Kevin.h" />
     <ClInclude Include="HeaderFiles\Level1.h" />
     <ClInclude Include="HeaderFiles\Level2.h" />
+    <ClInclude Include="HeaderFiles\Level3.1.h" />
     <ClInclude Include="HeaderFiles\Level3.h" />
     <ClInclude Include="HeaderFiles\Level4.h" />
     <ClInclude Include="HeaderFiles\Level5.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="SourceFiles\Kevin.c" />
     <ClCompile Include="SourceFiles\Level1.c" />
     <ClCompile Include="SourceFiles\Level2.c" />
+    <ClCompile Include="SourceFiles\Level3.1.c" />
     <ClCompile Include="SourceFiles\Level3.c" />
     <ClCompile Include="SourceFiles\Level4.c" />
     <ClCompile Include="SourceFiles\Level5.c" />

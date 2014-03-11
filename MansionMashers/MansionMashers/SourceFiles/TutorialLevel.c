@@ -96,8 +96,7 @@ void InitializeTutorial(void)
 	CreateBoundingBoxes();
 
 	//Black fade part
-	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 1920 * 2, 0);
-	BlackOverlay->Alpha = 0;
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	Vec3Set(&BlackOverlay->Tint, 0, 0, 0);
 
 	//Mansion mashers' logo
@@ -123,16 +122,16 @@ void InitializeTutorial(void)
 	BBWallRight->enemyNotCollidable = TRUE;
 
 	// Seclusion overlay for the player to focus on things in the tutorial
-	Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 200, 1200, 1, 1, 0, 440);
+	Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 400, 800, 1, 1, 0, 340);
 	Seclude1->Alpha = 0.8f;
 	Seclude1->Tint  = Tint;
-	Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 200, 1200, 1, 1, 0, -440);
+	Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 100, 800, 1, 1, 0, -490);
 	Seclude2->Alpha = 0.8f;
 	Seclude2->Tint  = Tint;
-	Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 200, 680, 1200, 1, 1, -860, 0);
+	Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 200, 580, 800, 1, 1, -860, -150);
 	Seclude3->Alpha = 0.8f;
 	Seclude3->Tint  = Tint;
-	Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 200, 680, 1200, 1, 1, 860, 0);
+	Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 200, 580, 800, 1, 1, 860, -150);
 	Seclude4->Alpha = 0.8f;
 	Seclude4->Tint  = Tint;
 
@@ -268,6 +267,17 @@ void EventTutorial(void)
 
 	if(!levelComplete)
 	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+		}
+
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
 		// Handle any input for the current player
@@ -280,15 +290,6 @@ void EventTutorial(void)
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
 	////////////////////////////////*/
-	/*if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
-		SetCameraPan(0.0f, PANELSIZE);
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
-		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 2 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
-	{
-		levelComplete = TRUE;
-	}*/
-
 	SetCameraLockState(FALSE);
 	//Panel1
 	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
@@ -334,13 +335,8 @@ void EventTutorial(void)
 
 void fadeToEnd(void)
 {
-	if(BlackOverlay->Alpha >= 1.0f)
-	{
-		BlackOverlay->Alpha = 1.0f;
+	BlackOverlay->Position.x = GetCameraXPosition();
+	BlackOverlay->Alpha += 1 * GetDeltaTime();
+	if(BlackOverlay->Alpha > 1)
 		SetNextState(GS_MapLevel);
-	}
-	else
-	{
-		BlackOverlay->Alpha += GetDeltaTime();
-	}
 }

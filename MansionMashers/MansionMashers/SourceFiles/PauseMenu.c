@@ -77,16 +77,16 @@ void InitializePause(void (*DrawLevel)())
 	camX = GetCameraXPosition() / GetLoadRatio();
 	printf("%f\n", camX);
 	pause = TRUE;
-	PauseText = (Sprite *) CreateSprite("TextureFiles/Paused.png", 472, 178, 500, 1, 1, camX, 350);
+	PauseText = (Sprite *) CreateSprite("TextureFiles/Paused.png", 472, 178, 1500, 1, 1, camX, 350);
 
-	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, 100);
-	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 501, 1, 1, camX, -100);
+	SFXSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 1501, 1, 1, camX, 100);
+	BGMSliderGuide = (Sprite *) CreateSprite("TextureFiles/VolumeSliderGuide.png", 492, 92, 1501, 1, 1, camX, -100);
 
-	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, 100);
-	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 500, 1, 1, camX, -100);
+	SFXSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 1500, 1, 1, camX, 100);
+	BGMSliderBack = (Sprite *) CreateSprite("TextureFiles/VolumeSliderBack.png", 552, 152, 1500, 1, 1, camX, -100);
 
 	Vec3Set(&TextColor, 0, 0, 0);
-	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, camX, 0);
+	PauseBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 1499, 1, 1, camX, 0);
 	PauseBackground->Alpha = 0.5;
 	PauseBackground->Tint = TextColor;
 
@@ -97,12 +97,12 @@ void InitializePause(void (*DrawLevel)())
 	BGMSliderPos /= GetLoadRatio();
 
 	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 100, 80, 80, newID++);
-	SFXSlider->ButtonSprite->ZIndex = 502;
+	SFXSlider->ButtonSprite->ZIndex = 1502;
 	SFXSlider->ButtonCollider.width *= 3;
 	SFXSlider->ButtonCollider.height = SFXSliderBack->Height;
 
 	BGMSlider = CreateButton("TextureFiles/fox_head.png", BGMSliderPos, -100, 80, 80, newID++);
-	BGMSlider->ButtonSprite->ZIndex = 502;
+	BGMSlider->ButtonSprite->ZIndex = 1502;
 	BGMSlider->ButtonCollider.width *= 3;
 	BGMSlider->ButtonCollider.height = BGMSliderBack->Height;
 
@@ -112,27 +112,27 @@ void InitializePause(void (*DrawLevel)())
 	volumestring = VolumetoString(volumestring, SFXVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(SFXText, volumestring);
-	ChangeTextZIndex(SFXText, 510);
+	ChangeTextZIndex(SFXText, 1510);
 
 	BGMText = CreateText(volumestring, (BGMSliderBack->Position.x + (BGMSliderBack->Width / 2)) / GetLoadRatio() + 50 * GetLoadRatio(), -100, 100, TextColor, Left);
 	volumestring = VolumetoString(volumestring, BGMVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(BGMText, volumestring);
-	ChangeTextZIndex(BGMText, 510);
+	ChangeTextZIndex(BGMText, 1510);
 
 	ChangeTextVisibility(SFXText);
 	ChangeTextVisibility(BGMText);
 
-	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 500, 1, 1, 180 + camX, -250);
+	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 1500, 1, 1, 180 + camX, -250);
 	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -250 + camX, -250, 100, 100, newID++);
-	CheatsButton->ButtonSprite->ZIndex = 500;
-	CheckMark = (Sprite *) CreateSprite("TextureFiles/CheckMark.png", 200, 200, 501, 1, 1, -250 + camX, -250);
+	CheatsButton->ButtonSprite->ZIndex = 1500;
+	CheckMark = (Sprite *) CreateSprite("TextureFiles/CheckMark.png", 200, 200, 1501, 1, 1, -250 + camX, -250);
 
 	if(!Cheats)
 		CheckMark->Visible = FALSE;
 
 	ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -250 + camX, -400, 300, 112.5f, newID++);
-	ResumeButton->ButtonSprite->ZIndex = 502;
+	ResumeButton->ButtonSprite->ZIndex = 1502;
 	
 	LevelToDraw = DrawLevel;
 
@@ -141,7 +141,7 @@ void InitializePause(void (*DrawLevel)())
 		MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250 + camX, -400, 300, 112.5f, newID++);
 	else
 		MainMenuButton = CreateButton("TextureFiles/GoToMapButton.png", 250 + camX, -400, 300, 112.5f, newID++);
-	MainMenuButton->ButtonSprite->ZIndex = 502;
+	MainMenuButton->ButtonSprite->ZIndex = 1502;
 
 
 	if(CurrentPlayer.PlayerActive)

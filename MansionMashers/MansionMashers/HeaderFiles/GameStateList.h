@@ -20,6 +20,7 @@ enum GSL
 	GS_Level7,
 	GS_Kevin,
 	GS_LevelNUM,
+	GS_Level31,       //Level already accounted for in Level 3 (this is Level 3.1)
 	GS_SplashScreen,
 	GS_MainMenu,
 	GS_Options,
