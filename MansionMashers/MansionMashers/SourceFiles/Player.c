@@ -426,7 +426,7 @@ void DestroyPlayer(Player *CurrentPlayer)
 void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 {
 	//Placeholder max health formula
-	CurrentPlayerStats->MaxHealth = 5 + CurrentPlayerStats->Strength * 2;
+	CurrentPlayerStats->MaxHealth = 50 + CurrentPlayerStats->Strength * 20 + CurrentPlayer.PlayerWeapon->BonusStrength * 20;
 }
 
 /*************************************************************************/
