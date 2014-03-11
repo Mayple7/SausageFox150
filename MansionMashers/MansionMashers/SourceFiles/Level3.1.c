@@ -36,7 +36,7 @@
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/Level3.h"
+#include "../HeaderFiles/Level3.1.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
@@ -48,11 +48,6 @@
 // ---------------------------------------------------------------------------
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
-
-// ---------------------------------------------------------------------------
-// defines
-
-#define PANELSIZE 1920.0f
 
 // ---------------------------------------------------------------------------
 // globals
@@ -69,7 +64,7 @@ Wall *Wall1;
 	Loads assets for the showcase level
 */
 /*************************************************************************/
-void LoadLevel3(void)
+void LoadLevel31(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
@@ -81,7 +76,7 @@ void LoadLevel3(void)
 	Initializes the objects for the level
 */
 /*************************************************************************/
-void InitializeLevel3(void)
+void InitializeLevel31(void)
 {
 	Vec3 TextTint;
 	newID = 10;
@@ -99,7 +94,7 @@ void InitializeLevel3(void)
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
-	CreateSprite("TextureFiles/Level3Pan1.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/Level3Pan2.png", 1920, 1080, 1, 1, 1, 0, 0);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -137,7 +132,7 @@ void InitializeLevel3(void)
 	Updates the level
 */
 /*************************************************************************/
-void UpdateLevel3(void)
+void UpdateLevel31(void)
 {
 	EventLevel3();
 
@@ -154,7 +149,7 @@ void UpdateLevel3(void)
 	Draws the level
 */
 /*************************************************************************/
-void DrawLevel3(void)
+void DrawLevel31(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
@@ -168,11 +163,10 @@ void DrawLevel3(void)
 	Frees all the objects in the level
 */
 /*************************************************************************/
-void FreeLevel3(void)
+void FreeLevel31(void)
 {
-	//Second Part of Level
-	if(levelComplete)
-		CurrentPlayer.CurrentLevel = GS_Level31;
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_YeahGuy)
+		CurrentPlayer.CurrentLevel = GS_YeahGuy;
 	else if(CurrentPlayer.CurrentLevel < GS_Level3)
 		CurrentPlayer.CurrentLevel = GS_Level3;
 	SavePlayer(&CurrentPlayer);
@@ -185,7 +179,7 @@ void FreeLevel3(void)
 	Unloads all the assets in the level
 */
 /*************************************************************************/
-void UnloadLevel3(void)
+void UnloadLevel31(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
@@ -198,18 +192,12 @@ void UnloadLevel3(void)
 	Handles all events in the level
 */
 /*************************************************************************/
-void EventLevel3(void)
+void EventLevel31(void)
 {
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
-
-	if(CurrentPlayer.Position.x > (960 * GetLoadRatio()))
-	{
-		levelComplete = TRUE;
-		SetNextState(GS_Level31);
-	}
 
 	if(FoxInput_KeyTriggered('U'))
 	{
