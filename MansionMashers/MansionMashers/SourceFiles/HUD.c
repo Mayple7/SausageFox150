@@ -124,7 +124,6 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	CurrentHUD->HUDItem[4]->ScaleX = 71.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
 	CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - (2 * GetLoadRatio()) + (CurrentHUD->HUDItem[4]->ScaleX * GetLoadRatio()));
 	CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x + (CurrentHUD->HUDItem[4]->ScaleX * GetLoadRatio() * 2));
-	printf("Health: %3i/%3i\n", CurrentPlayer.CurrentPlayerStats.CurrentHealth, CurrentPlayer.CurrentPlayerStats.MaxHealth);
 
 	//Coin text update position
 	ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);
