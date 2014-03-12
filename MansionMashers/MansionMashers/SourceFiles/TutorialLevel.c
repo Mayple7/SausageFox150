@@ -209,6 +209,8 @@ void UpdateTutorial(void)
 	////////////////////////////////*/
 	if (tutorialDone < 1 && CurrentPlayer.PlayerCollider.Position.x > 0)
 		tutorialDone = 1;
+	else if (tutorialDone < 2 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * GetLoadRatio())
+		tutorialDone = 2;
 
 	//If the dummy exists, prevent the player from moving past
 	if(StrawDummy->objID > 0)
@@ -280,8 +282,181 @@ void EventTutorial(void)
 
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
-		// Handle any input for the current player
-		InputPlayer(&CurrentPlayer);
+
+		// Handle any input for the current player [SPECIAL FOR TUTORIAL LEVEL]
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		// Move left if A is pressed
+		if(FoxInput_KeyDown('A'))
+		{
+			CurrentPlayer.FlipX = 0;
+			CurrentPlayer.PlayerDirection = LEFT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		}
+		// Move right if D is pressed
+		else if(FoxInput_KeyDown('D'))
+		{
+			CurrentPlayer.FlipX = 1;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		}
+		else
+		{
+			if (!(CurrentPlayer.Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentPlayer.PlayerRigidBody.onGround)
+			{
+				if (CurrentPlayer.Speed - 48.0f * GetDeltaTime() >= 0.0f)
+				{
+					CurrentPlayer.Speed -= 48.0f * GetDeltaTime();
+				}
+				else
+				{
+					CurrentPlayer.Speed = 0.0f;
+					CurrentPlayer.LegSinValue = 0;
+				}
+			}
+			else
+			{
+				if (CurrentPlayer.Speed - 48.0f * GetDeltaTime() >= 0.0f)
+				{
+					CurrentPlayer.Speed -= 48.0f * GetDeltaTime();
+				}
+				else
+				{
+					CurrentPlayer.Speed = 0.0f;
+					CurrentPlayer.LegSinValue = 0;
+				}
+			}
+		}
+
+		// TUTORIAL PART 1
+		if (tutorialDone > 0)
+		{
+			//Jump when space is pushed or drop down if S is pushed as well
+			if(FoxInput_KeyTriggered(VK_SPACE))
+			{
+				Vec2 velocity;
+		
+				if(FoxInput_KeyDown('S') && CurrentPlayer.PlayerRigidBody.onGround)
+				{
+					CurrentPlayer.PlayerRigidBody.onGround = FALSE;
+					CurrentPlayer.dropDown = TRUE;
+					CurrentPlayer.dropdownTimer = 0.25f;
+				}
+
+				Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
+				if(CurrentPlayer.Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer.PlayerRigidBody.onGround)
+				{
+					Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, CurrentPlayer.Position.y + 300.0f * GetDeltaTime() * GetLoadRatio());
+					CurrentPlayer.PlayerRigidBody.onGround = FALSE;
+					ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &velocity);
+				}
+			}
+		}
+		
+		// TUTORIAL PART 2
+		if (tutorialDone > 1)
+		{
+			if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer.isAttacking)
+			{
+				//Pick a random swing sound to play
+				if (rand() % 2)
+				{
+					if (!FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.Swing2))
+						PlayAudio(CurrentPlayer.CurrentPlayerSounds.Swing1);
+				}
+				else
+				{
+					if (!FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.Swing1))
+						PlayAudio(CurrentPlayer.CurrentPlayerSounds.Swing2);
+				}
+
+				//Set the attacking necessaries
+				CurrentPlayer.isAttacking = TRUE;
+				CurrentPlayer.PlayerSpriteParts.AttackRotation = 0;
+				CurrentPlayer.PlayerSpriteParts.AttackRotationArm = 0;
+				CurrentPlayer.PlayerSpriteParts.AttackRotationArmLower = 0;
+				UpdateCollider(&CurrentPlayer.PlayerCollider,CurrentPlayer.PlayerCollider.width, CurrentPlayer.PlayerCollider.height);
+			}
+
+			//Cycle through the buffs
+			if(FoxInput_KeyTriggered('Q'))
+			{
+				//The starting buff so we don't infini-loop
+				int startingBuff = CurrentPlayer.BuffSelected++;
+
+				//Loop back around
+				if(CurrentPlayer.BuffSelected > 3)
+					CurrentPlayer.BuffSelected = 0;
+
+				//Go to the next acquired buff, or stop looping
+				while(!CurrentPlayer.BuffHeld[CurrentPlayer.BuffSelected] && startingBuff != CurrentPlayer.BuffSelected)
+				{
+					CurrentPlayer.BuffSelected++;
+					if(CurrentPlayer.BuffSelected > 3)
+					{
+						CurrentPlayer.BuffSelected = 0;
+					}
+				}
+			}
+
+			//Use the buff
+			if(FoxInput_KeyTriggered('F'))
+			{
+				if(CurrentPlayer.BuffHeld[CurrentPlayer.BuffSelected])
+				{
+					int startingBuff;
+					// Currently going with a 20% increase
+					// Sets the timer for 10 seconds
+					switch(CurrentPlayer.BuffSelected)
+					{
+					// Buffs the player's attack speed
+					case Agility:
+						CurrentPlayer.CurrentPlayerStats.AttackSpeed *= 1.2f;
+						CurrentPlayer.CurrentPlayerStats.AgilityTimer = 10;
+						break;
+					// Buffs the player's damage
+					case Strength:
+						CurrentPlayer.CurrentPlayerStats.Damage = (int)(CurrentPlayer.CurrentPlayerStats.Damage * 1.2f);
+						CurrentPlayer.CurrentPlayerStats.StrengthTimer = 10;
+						break;
+					// Buffs the player's damage reduction
+					case Defense:
+						CurrentPlayer.CurrentPlayerStats.DamageReduction *= 1.2f;
+						CurrentPlayer.CurrentPlayerStats.DefenseTimer = 10;
+						break;
+					// Buffs the player's move speed
+					case Haste:
+						CurrentPlayer.CurrentPlayerStats.MoveSpeed *= 1.2f;
+						CurrentPlayer.CurrentPlayerStats.HasteTimer = 10;
+						break;
+					}
+					CurrentPlayer.BuffHeld[CurrentPlayer.BuffSelected] = FALSE;
+					//Cycles automatically to the next available buff
+					//The starting buff so we don't infini-loop
+					startingBuff = CurrentPlayer.BuffSelected++;
+					//Loop back around
+					if(CurrentPlayer.BuffSelected > 3)
+						CurrentPlayer.BuffSelected = 0;
+
+					//Go to the next acquired buff, or stop looping
+					while(!CurrentPlayer.BuffHeld[CurrentPlayer.BuffSelected] && startingBuff != CurrentPlayer.BuffSelected)
+					{
+						CurrentPlayer.BuffSelected++;
+						if(CurrentPlayer.BuffSelected > 3)
+						{
+							CurrentPlayer.BuffSelected = 0;
+						}
+					}
+				}
+			}
+		}
+
+		CurrentPlayer.PlayerRigidBody.Acceleration.x = 0;
+		CurrentPlayer.PlayerRigidBody.Acceleration.y = 0;
+
+		// Move the direction based on the speed
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+
 		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 	}
 	else
