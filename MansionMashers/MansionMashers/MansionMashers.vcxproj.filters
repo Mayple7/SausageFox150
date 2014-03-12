@@ -308,6 +308,9 @@
     <ClInclude Include="HeaderFiles\Level3.1.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Death.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -510,6 +513,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\Level3.1.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Death.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

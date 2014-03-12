@@ -68,8 +68,8 @@ Wall* RightBarrier;
 
 HUD* CurrentHUD;
 
-int levelComplete;
-int PlayerInSight; // Enemy in watch tower checks for player 
+static int PlayerInSight; // Enemy in watch tower checks for player 
+static int PlayerIsAlive; 
 
 Sprite* BlackOverlay;
 
@@ -98,6 +98,7 @@ void InitializeLevel2(void)
 
 	levelComplete = FALSE;
 	PlayerInSight = FALSE;
+	PlayerIsAlive = TRUE;
 
 	newID = 10;
 	ResetObjectList();
@@ -219,6 +220,14 @@ void InitializeLevel2(void)
 	Pan3SpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
 
 
+	/////////////////////////////////
+	//		On Death			   //
+	/////////////////////////////////
+
+	///Last thing in initialize
+	CreateDeathConfirmObjects(&newID);
+
+
 }
 
 /*************************************************************************/
@@ -243,6 +252,7 @@ void UpdateLevel2(void)
 	}
 	else if(PlayerInSight == FALSE)
 		Pan3Enemy->EnemyState = AINone;
+
 
 	//ScrollPaperScroll(1);
 
@@ -313,11 +323,14 @@ void EventLevel2(void)
 	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawLevel2);
-		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		if(PlayerIsAlive == TRUE)
+		{
+			InitializePause(&DrawLevel2);
+			//TogglePauseSound(&BackgroundSnd);
+			//SetNextState(GS_MainMenu);
+			UpdatePause();
+			//TogglePauseSound(&BackgroundSnd);
+		}
 	}
 	if(FoxInput_KeyTriggered('U'))
 		SetDebugMode();
@@ -333,15 +346,18 @@ void EventLevel2(void)
 	//    CAMERA POSITION SECOND    //
 	////////////////////////////////*/
 
-	//Don't Let camera go beyond left boundary
-	if(CurrentPlayer.Position.x <= 0 && GetCameraXPosition() <= 0.0f)
-		SetCameraXPosition(0.0f);
-	//Don't Let camera go beyond right boundary
-	else if(CurrentPlayer.Position.x >= (PANELSIZE * 3) * GetLoadRatio() && GetCameraXPosition() >= ((PANELSIZE * 3) * GetLoadRatio()))
-		SetCameraXPosition(PANELSIZE * 3 * GetLoadRatio());
-	//Free Roam Camera
-	else
-		SetCamera(&CurrentPlayer.Position, 250);
+	if(PlayerIsAlive == TRUE)
+	{
+		//Don't Let camera go beyond left boundary
+		if(CurrentPlayer.Position.x <= 0 && GetCameraXPosition() <= 5.0f)
+			SetCameraXPosition(0.0f);
+		//Don't Let camera go beyond right boundary
+		else if(CurrentPlayer.Position.x >= (PANELSIZE * 3) * GetLoadRatio() && GetCameraXPosition() >= ((PANELSIZE * 3 - 5.0f) * GetLoadRatio()))
+			SetCameraXPosition(PANELSIZE * 3 * GetLoadRatio());
+		//Free Roam Camera
+		else
+			SetCamera(&CurrentPlayer.Position, 250);
+	}
 
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
@@ -385,5 +401,17 @@ void EventLevel2(void)
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
 			SetNextState(GS_MapLevel);
+	}
+
+	//If player dies
+	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
+	{
+		PlayerIsAlive = FALSE;
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha = 0.5f;
+		CurrentPlayer.Position.x = -1920 * GetLoadRatio();
+		UpdateCollisionPosition(&CurrentPlayer.PlayerCollider, &CurrentPlayer.Position);
+
+		UpdateDeathConfirmObjects();
 	}
 }

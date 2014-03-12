@@ -47,6 +47,7 @@
 static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimiation;
+static int PlayerIsAlive; 
 
 TextGlyphs* LevelName;
 
@@ -182,6 +183,14 @@ void InitializeLevel1(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 806, -235, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	CreatePaperScroll(200);
+
+	/////////////////////////////////
+	//		On Death			   //
+	/////////////////////////////////
+
+	///Last thing in initialize
+	CreateDeathConfirmObjects(&newID);
+
 }
 
 /*************************************************************************/
@@ -396,4 +405,16 @@ void EventLevel1(void)
 	}
 
 	UpdateFloatingText();
+
+	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
+	{
+		PlayerIsAlive = FALSE;
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha = 0.5f;
+		CurrentPlayer.Position.x = -1920 * GetLoadRatio();
+		UpdateCollisionPosition(&CurrentPlayer.PlayerCollider, &CurrentPlayer.Position);
+
+		UpdateDeathConfirmObjects();
+	}
+
 }
