@@ -65,6 +65,7 @@ typedef struct Enemy
 	float TailSinValue;
 
 	int dropDown;  //Fake Boolean
+	float dropdownTimer;
 
 	int idleMove;
 	int idleTimer;

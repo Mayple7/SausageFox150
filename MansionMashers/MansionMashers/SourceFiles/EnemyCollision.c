@@ -37,6 +37,8 @@
 /*************************************************************************/
 void EnemyCollidePlatform(Enemy *CurrentEnemy, Platform *CurrentPlatform)
 {
+	if(CurrentEnemy->dropdownTimer > 0.0f)
+		return;
 	if(CurrentEnemy->EnemyRigidBody.Velocity.y <= 0)
 	{
 		if(CurrentEnemy->EnemyCollider.Position.y + CurrentEnemy->EnemyCollider.Offset.y - CurrentEnemy->EnemyCollider.height / 2.0f > CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y)
