@@ -96,6 +96,7 @@ void InitializeLevel1(void)
 
 	beginningAnimiation = TRUE;
 	levelComplete = FALSE;
+	PlayerIsAlive = TRUE;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -150,8 +151,8 @@ void InitializeLevel1(void)
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 2785, 130);
 	Wall1->WallSprite->Visible = FALSE;
-
-
+	
+	
 	// Bounding Box Walls
 	BBWallLeft = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, newID++, 0, 0);
 	BBWallLeft->WallSprite->Visible = FALSE;
@@ -160,6 +161,7 @@ void InitializeLevel1(void)
 	BBWallRight->WallSprite->Visible = FALSE;
 	BBWallRight->enemyNotCollidable = TRUE;
 
+	
 
 	//Enemy spawners
 	Vec2Set(&SpawnerLocation, -200, 0);
@@ -190,6 +192,7 @@ void InitializeLevel1(void)
 
 	///Last thing in initialize
 	CreateDeathConfirmObjects(&newID);
+
 
 }
 
@@ -301,11 +304,14 @@ void EventLevel1(void)
 	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawLevel1);
-		//TogglePauseSound(&BackgroundSnd);
-		//SetNextState(GS_MainMenu);
-		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		if(PlayerIsAlive == TRUE)
+		{
+			InitializePause(&DrawLevel1);
+			//TogglePauseSound(&BackgroundSnd);
+			//SetNextState(GS_MainMenu);
+			UpdatePause();
+			//TogglePauseSound(&BackgroundSnd);
+		}
 	}
 	if(FoxInput_KeyTriggered('U'))
 		SetDebugMode();

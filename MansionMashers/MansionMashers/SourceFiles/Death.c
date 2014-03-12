@@ -30,7 +30,7 @@ void CreateDeathConfirmObjects(int *newID)
 {
 	Vec3 TextTint;
 
-	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f, *newID++);
+	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f, *newID);
 	RestartButton->ButtonSprite->ZIndex = 1502;
 
 	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", -1920, -130, 300, 112.5f, *newID++);
