@@ -33,19 +33,8 @@
 // ---------------------------------------------------------------------------
 // Globals
 
-struct GameState State;
+static struct GameState State;
 
-// ---------------------------------------------------------------------------
-// Function Prototypes
-
-void GSMInitialize(int InitState);
-int GetPreviousState(void);
-int GetCurrentState(void);
-int GetNextState(void);
-void SetPreviousState(int PreviousState);
-void SetCurrentState(int CurrentState);
-void SetNextState(int NextState);
-void GSMUpdate(int CurState);
 
 // ---------------------------------------------------------------------------
 // Main Program
@@ -77,6 +66,8 @@ void GSMInitialize(int InitState)
 /*************************************************************************/
 int GetPreviousState(void)
 {
+	if(State.Previous >= GS_MAX)
+		printf("ERROR INVALID GET STATE");
 	return State.Previous;
 }
 
@@ -91,6 +82,8 @@ int GetPreviousState(void)
 /*************************************************************************/
 int GetCurrentState(void)
 {
+	if(State.Current >= GS_MAX)
+		printf("ERROR INVALID GET STATE");
 	return State.Current;
 }
 
@@ -105,6 +98,8 @@ int GetCurrentState(void)
 /*************************************************************************/
 int GetNextState(void)
 {
+	if(State.Next >= GS_MAX)
+		printf("ERROR INVALID GET STATE");
 	return State.Next;
 }
 
