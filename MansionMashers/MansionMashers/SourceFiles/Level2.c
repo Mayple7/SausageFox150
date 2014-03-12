@@ -240,7 +240,8 @@ void UpdateLevel2(void)
 {
 	EventLevel2();
 	
-	BoundingBoxUpdate(); 
+	BoundingBoxUpdate();
+	ParticleSystemUpdate();
 
 	if(CurrentPlayer.Position.x > (PANELSIZE * 2 - PANELSIZE / 4) * GetLoadRatio())
 	{
@@ -374,6 +375,7 @@ void EventLevel2(void)
 	}
 
 	UpdateFloatingText();
+
 
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
