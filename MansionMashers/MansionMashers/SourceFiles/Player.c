@@ -36,6 +36,7 @@
 // globals
 Player CurrentPlayer;
 
+
 /*************************************************************************/
 /*!
 	\brief
@@ -126,6 +127,15 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	}
 
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
+	
+	/*////////////////////////////////
+	//       PLAYER HEALTH          //
+	////////////////////////////////*/
+	
+	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+
 
 	/*////////////////////////////////
 	//       PLAYER SOUNDS          //
