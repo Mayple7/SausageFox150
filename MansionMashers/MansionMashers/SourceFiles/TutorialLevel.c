@@ -84,6 +84,7 @@ void InitializeTutorial(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	ResetEnemyPanelNumber();
 
 	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
