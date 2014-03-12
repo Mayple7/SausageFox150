@@ -100,29 +100,28 @@ void InitializeLevel31(void)
 	//		Platforms			   //
 	/////////////////////////////////
 	//Panel1
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 80.0f, 100.0f, newID++, 190, -255);
+	//Step 1
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 75.0f, 100.0f, newID++, -670, -290);
 	Plat->PlatformSprite->Visible = FALSE;
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 80.0f, 100.0f, newID++, 580, -35);
+	//Step 2
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 75.0f, 100.0f, newID++, -670, -85);
 	Plat->PlatformSprite->Visible = FALSE;
 
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, -670, 85);
+	Plat->PlatformSprite->Visible = FALSE;
 
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
-	//Ceiling
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, 930, 590);
-	Wall1->WallSprite->Visible = FALSE;
 	//Bounding Walls
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
 	Wall1->WallSprite->Visible = FALSE;
-	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 750.0f, newID++, 958, -170);
-	Wall1->WallSprite->Visible = FALSE;
-	//Final Platform (needs to have wall properties
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 940, -100);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, 0, 590);
 	Wall1->WallSprite->Visible = FALSE;
 
-	//Temporary Bounding Wall until rock pile is finalized
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 800, -340);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 100.0f, newID++, -840, 85);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1560.0f, 100.0f, newID++, 190, 85);
 	Wall1->WallSprite->Visible = FALSE;
 }
 
@@ -136,7 +135,8 @@ void UpdateLevel31(void)
 {
 	EventLevel3();
 
-	EasyEditWall(Wall1, 10);
+	//EasyEditPlatform(Plat, 10);
+	EasyEditWall(Wall1 ,10);
 
 
 	// This should be the last line in this function

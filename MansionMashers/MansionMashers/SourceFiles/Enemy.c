@@ -552,151 +552,150 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 	int hit = 0;
 	int hitPrev = 0;
 	
-	if(CurrentEnemy->EnemyState != AINone || CurrentEnemy->EnemyType == Dummy)
+
+
+	while(wList->objID != -1)
 	{
-		while(wList->objID != -1)
+		if(wList->objID > 0 && wList->WeaponFOF == PlayerWeapon)
 		{
-			if(wList->objID > 0 && wList->WeaponFOF == PlayerWeapon)
+			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &wList->WeaponAttack);
+			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, wList->WeaponAttack.collisionID);
+			if(hit && CurrentPlayer.isAttacking)
 			{
-				hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &wList->WeaponAttack);
-				hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, wList->WeaponAttack.collisionID);
-				if(hit && CurrentPlayer.isAttacking)
+				// New target, on start collision
+				if(hitPrev < 0)
 				{
-					// New target, on start collision
-					if(hitPrev < 0)
-					{
-						CurrentEnemy->CollisionData[-hitPrev] = wList->WeaponAttack.collisionID * 10 + 1;
-						//printf("NOT FOUND: %i\n", -hitPrev);
-						EnemyCollideWeapon(CurrentEnemy);
-					}
-					// Found target, hit previous frame, on persistant
-					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-					{
-						//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-					}
-					// Found target, did not hit previous frame, on start collision
-					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-					{
-						//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-						CurrentEnemy->CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
-						EnemyCollideWeapon(CurrentEnemy);
-					}
+					CurrentEnemy->CollisionData[-hitPrev] = wList->WeaponAttack.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					EnemyCollideWeapon(CurrentEnemy);
 				}
-				else if(hitPrev > 0 && !CurrentPlayer.isAttacking)
+				// Found target, hit previous frame, on persistant
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
 				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
+					EnemyCollideWeapon(CurrentEnemy);
+				}
+			}
+			else if(hitPrev > 0 && !CurrentPlayer.isAttacking)
+			{
+				CurrentEnemy->CollisionData[hitPrev] = 0;
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					//CurrentEnemy->CollisionData[hitPrev] = 0;
+				}
+			}
+		}
+		wList++;
+	}
+
+	while(pList->objID != -1)
+	{
+		if(pList->objID > 0)
+		{
+			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &pList->PlatformCollider);
+			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					CurrentEnemy->CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					EnemyCollidePlatform(CurrentEnemy, pList);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy->CollisionData[hitPrev]);
+					EnemyCollidePlatform(CurrentEnemy, pList);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
+					EnemyCollidePlatform(CurrentEnemy, pList);
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+					//printf("END COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
 					CurrentEnemy->CollisionData[hitPrev] = 0;
 				}
-				else
-				{
-					if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-					{
-						// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-						AE_ASSERT_MESG("No collision and not colliding, should never be here.");
-					}
-					// Found target, collision ended
-					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-					{
-						//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-						//CurrentEnemy->CollisionData[hitPrev] = 0;
-					}
-				}
 			}
-			wList++;
 		}
+		pList++;
+	}
 
-		while(pList->objID != -1)
+	while(walls->objID != -1)
+	{
+		if(walls->objID > 0)
 		{
-			if(pList->objID > 0)
+			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &walls->WallCollider);
+			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, walls->WallCollider.collisionID);
+			if(hit)
 			{
-				hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &pList->PlatformCollider);
-				hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, pList->PlatformCollider.collisionID);
-				if(hit)
+				// New target, on start collision
+				if(hitPrev < 0)
 				{
-					// New target, on start collision
-					if(hitPrev < 0)
-					{
-						CurrentEnemy->CollisionData[-hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
-						//printf("NOT FOUND: %i\n", -hitPrev);
-						EnemyCollidePlatform(CurrentEnemy, pList);
-					}
-					// Found target, hit previous frame, on persistant
-					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-					{
-						//printf("FOUND PERSISTANT: %i\n", CurrentEnemy->CollisionData[hitPrev]);
-						EnemyCollidePlatform(CurrentEnemy, pList);
-					}
-					// Found target, did not hit previous frame, on start collision
-					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-					{
-						//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
-						CurrentEnemy->CollisionData[hitPrev] = pList->PlatformCollider.collisionID * 10 + 1;
-						EnemyCollidePlatform(CurrentEnemy, pList);
-					}
+					CurrentEnemy->CollisionData[-hitPrev] = walls->WallCollider.collisionID * 10 + 1;
+					//printf("NOT FOUND: %i\n", -hitPrev);
+					EnemyCollideWall(CurrentEnemy, walls);
 				}
-				else
+				// Found target, hit previous frame, on persistant
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
 				{
-					if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-					{
-						// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-						AE_ASSERT_MESG("No collision and not colliding, should never be here.");
-					}
-					// Found target, collision ended
-					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-					{
-						//printf("END COLLISION: %i\n", CurrentEnemy->CollisionData[hitPrev]);
-						CurrentEnemy->CollisionData[hitPrev] = 0;
-					}
+					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					EnemyCollideWall(CurrentEnemy, walls);
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = walls->WallCollider.collisionID * 10 + 1;
+					EnemyCollideWall(CurrentEnemy, walls);
 				}
 			}
-			pList++;
-		}
-
-		while(walls->objID != -1)
-		{
-			if(walls->objID > 0)
+			else
 			{
-				hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &walls->WallCollider);
-				hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, walls->WallCollider.collisionID);
-				if(hit)
+				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
 				{
-					// New target, on start collision
-					if(hitPrev < 0)
-					{
-						CurrentEnemy->CollisionData[-hitPrev] = walls->WallCollider.collisionID * 10 + 1;
-						//printf("NOT FOUND: %i\n", -hitPrev);
-						EnemyCollideWall(CurrentEnemy, walls);
-					}
-					// Found target, hit previous frame, on persistant
-					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-					{
-						//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-						EnemyCollideWall(CurrentEnemy, walls);
-					}
-					// Found target, did not hit previous frame, on start collision
-					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-					{
-						//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-						CurrentEnemy->CollisionData[hitPrev] = walls->WallCollider.collisionID * 10 + 1;
-						EnemyCollideWall(CurrentEnemy, walls);
-					}
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
-				else
+				// Found target, collision ended
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
 				{
-					if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
-					{
-						// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-						AE_ASSERT_MESG("No collision and not colliding, should never be here.");
-					}
-					// Found target, collision ended
-					else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
-					{
-						//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
-						CurrentEnemy->CollisionData[hitPrev] = 0;
-					}
+					//printf("END COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
+					CurrentEnemy->CollisionData[hitPrev] = 0;
 				}
 			}
-			walls++;
 		}
+		walls++;
 	}
 }
 

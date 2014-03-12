@@ -32,8 +32,9 @@
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/BoundingBox.h"
 
-
-
+// ---------------------------------------------------------------------------
+// defines
+#define PANELSIZE 1920.0f
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -47,6 +48,14 @@ TextGlyphs* LevelName;
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
 
+EnemySpawner* Pan2SpawnerRight;
+EnemySpawner* Pan2SpawnerLeft;
+EnemySpawner* Pan3SpawnerRight;
+EnemySpawner* Pan3SpawnerLeft;
+EnemySpawner* Pan4SpawnerRight;
+
+Enemy* Pan3Enemy;
+
 Food* Ham;
 Food* Taco;
 Food* Pizza;
@@ -54,8 +63,15 @@ Food* Cake;
 
 Platform *Crate;
 Wall* Wall1;
+Wall* WTBot;
+Wall* RightBarrier;
 
 HUD* CurrentHUD;
+
+int levelComplete;
+int PlayerInSight; // Enemy in watch tower checks for player 
+
+Sprite* BlackOverlay;
 
 /*************************************************************************/
 /*!
@@ -78,6 +94,10 @@ void LoadLevel2(void)
 void InitializeLevel2(void)
 {
 	Vec3 TextTint;
+	Vec2 SpawnerLocation;
+
+	levelComplete = FALSE;
+	PlayerInSight = FALSE;
 
 	newID = 10;
 	ResetObjectList();
@@ -106,6 +126,11 @@ void InitializeLevel2(void)
 	CreateSprite("TextureFiles/OutsideMan2Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 1, 1, 1, 1920 * 3, 0);
 	CreateSprite("TextureFiles/OutsideMan3Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 3, 0);
+
+	Vec3Set(&TextTint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 400, 1, 1, 0, 0);
+	BlackOverlay->Tint = TextTint;
+
 
 	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
 	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
@@ -168,11 +193,32 @@ void InitializeLevel2(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, 4020, 370);
 	Wall1->WallSprite->Visible = FALSE;
 	//Bottom of Watch Tower
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 260.0f, 65.0f, newID++, 4025, 22);
-	Wall1->WallSprite->Visible = FALSE;
+	WTBot = CreateWall("TextureFiles/BlankPlatform.png", 260.0f, 65.0f, newID++, 4025, 22);
+	WTBot->WallSprite->Visible = FALSE;
 	//Top of Forest Door
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 250.0f, newID++, 6630, 2);
 	Wall1->WallSprite->Visible = FALSE;
+	//Right Bounding Wall
+	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, 6630, 0);
+	RightBarrier->WallSprite->Visible = FALSE;
+
+	/////////////////////////////////
+	//		Spawners			   //
+	/////////////////////////////////
+	//Panel2
+	Vec2Set(&SpawnerLocation, PANELSIZE + PANELSIZE / 4, 0);
+	Pan2SpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+	Pan2SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	//Panel3
+	Vec2Set(&SpawnerLocation, (PANELSIZE * 2), 0);
+	Pan3SpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	Pan3SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	Pan3Enemy = CreateEnemy(BasicMelee, EnemyType, newID++, WTBot->Position.x / GetLoadRatio(), 300, 2);
+	//Panel4
+	Vec2Set(&SpawnerLocation, (PANELSIZE * 3 - PANELSIZE / 4), 0);
+	Pan3SpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
+
+
 }
 
 /*************************************************************************/
@@ -186,6 +232,17 @@ void UpdateLevel2(void)
 	EventLevel2();
 	
 	BoundingBoxUpdate(); 
+
+	if(CurrentPlayer.Position.x > (PANELSIZE * 2 - PANELSIZE / 4) * GetLoadRatio())
+	{
+		if(Pan3Enemy->EnemyState == AINone)
+		{
+			Pan3Enemy->EnemyState = AIIdle;
+			PlayerInSight = TRUE;
+		}
+	}
+	else if(PlayerInSight == FALSE)
+		Pan3Enemy->EnemyState = AINone;
 
 	//ScrollPaperScroll(1);
 
@@ -249,6 +306,8 @@ void UnloadLevel2(void)
 /*************************************************************************/
 void EventLevel2(void)
 {
+	int i;
+
 	/*////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
@@ -273,10 +332,58 @@ void EventLevel2(void)
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
 	////////////////////////////////*/
-	SetCamera(&CurrentPlayer.Position, 250);
+
+	//Don't Let camera go beyond left boundary
+	if(CurrentPlayer.Position.x <= 0 && GetCameraXPosition() <= 0.0f)
+		SetCameraXPosition(0.0f);
+	//Don't Let camera go beyond right boundary
+	else if(CurrentPlayer.Position.x >= (PANELSIZE * 3) * GetLoadRatio() && GetCameraXPosition() >= ((PANELSIZE * 3) * GetLoadRatio()))
+		SetCameraXPosition(PANELSIZE * 3 * GetLoadRatio());
+	//Free Roam Camera
+	else
+		SetCamera(&CurrentPlayer.Position, 250);
 
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
+	for(i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Update the created enemies
+		if (enemyList[i].objID == -1)
+			break;
+		if (enemyList[i].objID == 0)
+			continue;
+
+		UpdateEnemy(&enemyList[i]);
+	}
+
 	UpdateFloatingText();
+
+	//Check if all enemies are dead & remove right barrier
+	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
+	{
+		levelComplete = TRUE;
+		RightBarrier->Position.y = -1080 * GetLoadRatio();
+		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
+	}
+
+
+	//At level start
+	if(!levelComplete)
+	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+	}
+
+	//Level Transition
+	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) * GetLoadRatio() && levelComplete)
+	{
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+			SetNextState(GS_MapLevel);
+	}
 }

@@ -380,6 +380,7 @@ void EventLevel1(void)
 	BBWallRight->Position.y = -1080 * GetLoadRatio() + 1080 * GetLoadRatio() * GetCameraLockState();
 	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2 * GetLoadRatio());
 	UpdateCollisionPosition(&BBWallRight->WallCollider, &BBWallRight->Position);
+
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
