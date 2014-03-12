@@ -37,7 +37,7 @@
 	A pointer to the enemy object to be initialized
 */
 /*************************************************************************/
-Button* CreateButton(char* texture, float xPos, float yPos, float width, float height, int objID)
+Button *CreateButton(char *texture, float xPos, float yPos, float width, float height, int objID)
 {
 	Button *CurrentButton = AddButton();
 
@@ -45,7 +45,7 @@ Button* CreateButton(char* texture, float xPos, float yPos, float width, float h
 	{
 		Vec2Set(&CurrentButton->Position, xPos, yPos);
 		CurrentButton->objID = objID;
-		CurrentButton->ButtonSprite = (Sprite* )CreateSprite(texture, width, height, 30, 1, 1, xPos, yPos);
+		CurrentButton->ButtonSprite = (Sprite *)CreateSprite(texture, width, height, 30, 1, 1, xPos, yPos);
 		CreateCollisionBox(&CurrentButton->ButtonCollider, &CurrentButton->Position, ButtonType, width, height, objID);
 
 		return CurrentButton;
@@ -54,3 +54,14 @@ Button* CreateButton(char* texture, float xPos, float yPos, float width, float h
 		return NULL;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Changes the button's position
+*/
+/*************************************************************************/
+void UpdateButtonPosition(Button *CurrentButton, float PosX, float PosY)
+{
+	Vec2Set(&CurrentButton->Position, PosX, PosY);
+	Vec2Set(&CurrentButton->ButtonSprite->Position, PosX, PosY);
+}
