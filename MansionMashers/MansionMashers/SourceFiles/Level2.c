@@ -103,6 +103,7 @@ void InitializeLevel2(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	ResetEnemyPanelNumber();
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);

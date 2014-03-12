@@ -244,13 +244,23 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	{
 		SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, FOX_GRAVITY_Y * GetLoadRatio());
 	}
-	//Player position updated when dropping down from a platform
+	/*/Player position updated when dropping down from a platform
 	if(CurrentEnemy->dropDown)
 	{
 		CurrentEnemy->Position.y -= 1200.0f * GetDeltaTime() * GetLoadRatio();
 		if(CurrentEnemy->EnemyRigidBody.Velocity.y < 0)
 		{
 			CurrentEnemy->EnemyRigidBody.Velocity.y = -1800.0f * GetDeltaTime() * GetLoadRatio();
+			CurrentEnemy->dropDown = FALSE;
+		}
+	}*/
+
+	if(CurrentEnemy->dropDown)
+	{
+		CurrentEnemy->dropdownTimer -= GetDeltaTime();
+		//Once gravity takes control stop the drop down stuffs
+		if(CurrentEnemy->dropdownTimer <= 0.0f)
+		{
 			CurrentEnemy->dropDown = FALSE;
 		}
 	}
@@ -342,6 +352,7 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
 		CurrentEnemy->isDropDown = FALSE;
 		CurrentEnemy->dropDown = TRUE;
+		CurrentEnemy->dropdownTimer = 0.25f;
 	}
 
 	if (CurrentEnemy->jumpTimer > 0)
@@ -398,9 +409,30 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 						continue;
 					if (platformList[i].objID == -1)
 						break;
-					if (CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed / GetDeltaTime()) - 60.0f * GetLoadRatio() && 
-						CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed / GetDeltaTime()) + 60.0f * GetLoadRatio() &&
+					if (CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f * GetLoadRatio() && 
+						CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f * GetLoadRatio() &&
 						CurrentEnemy->Position.y < platformList[i].Position.y + 40 * GetLoadRatio())
+					{
+						CurrentEnemy->isJumping			= TRUE;
+						CurrentEnemy->canDropDownTimer	= (int)(2 / GetDeltaTime());
+						break;
+					}
+				}
+			}
+
+			if (CurrentEnemy->Position.y < CurrentPlayer.Position.y - 10 * GetLoadRatio())
+			{
+				int i;
+				for (i = 0; i < COLLIDEAMOUNT; i++)
+				{
+					if (wallList[i].objID == 0)
+						continue;
+					if (wallList[i].objID == -1)
+						break;
+					
+					if (CurrentEnemy->Position.x > wallList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f * GetLoadRatio() && 
+						CurrentEnemy->Position.x < wallList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f * GetLoadRatio() &&
+						wallList[i].Position.y + CurrentEnemy->EnemyCollider.height * 2 > CurrentEnemy->Position.y - CurrentEnemy->EnemyCollider.height)
 					{
 						CurrentEnemy->isJumping			= TRUE;
 						CurrentEnemy->canDropDownTimer	= (int)(2 / GetDeltaTime());
@@ -410,7 +442,18 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			}
 			else if (CurrentEnemy->EnemyRigidBody.onGround && CurrentEnemy->canDropDownTimer <= 0 && CurrentEnemy->Position.y > CurrentPlayer.Position.y + 10 * GetLoadRatio())
 			{
-				CurrentEnemy->isDropDown		= TRUE;
+				int i;
+				for (i = 0; i < COLLIDEAMOUNT; i++)
+				{
+					if (platformList[i].objID == 0)
+						continue;
+					if (platformList[i].objID == -1)
+						break;
+				if (CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0.25f) / GetDeltaTime()) - 60.0f * GetLoadRatio() && 
+					CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0.25f) / GetDeltaTime()) + 60.0f * GetLoadRatio() &&
+					platformList[i].Position.y + platformList[i].PlatformCollider.height / 2 > CurrentEnemy->Position.y - CurrentEnemy->EnemyCollider.height / 1.5f)
+					CurrentEnemy->isDropDown		= TRUE;
+				}
 			}
 			
 			if (CurrentEnemy->canDropDownTimer > 0)
@@ -495,7 +538,7 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 						CurrentEnemy->idleMove	= 0;
 					}
 
-					if (CurrentEnemy->Position.y < CurrentEnemy->HomePos.y - 60 * GetLoadRatio())
+					if (CurrentEnemy->Position.y < CurrentEnemy->HomePos.y - 20 * GetLoadRatio())
 					{
 						int i;
 						for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -504,12 +547,28 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 								continue;
 							if (platformList[i].objID == -1)
 								break;
-							if (CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed / GetDeltaTime()) - 60.0f * GetLoadRatio() && 
-								CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed / GetDeltaTime()) + 60.0f * GetLoadRatio() &&
+							if (CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f * GetLoadRatio() && 
+								CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f * GetLoadRatio() &&
 								CurrentEnemy->Position.y < platformList[i].Position.y + 40 * GetLoadRatio())
 							{
 								CurrentEnemy->isJumping			= TRUE;
 								CurrentEnemy->canDropDownTimer	= (int)(2.0f / GetDeltaTime());
+								break;
+							}
+						}
+
+						for (i = 0; i < COLLIDEAMOUNT; i++)
+						{
+							if (wallList[i].objID == 0)
+								continue;
+							if (wallList[i].objID == -1)
+								break;
+							if (CurrentEnemy->Position.x > wallList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f * GetLoadRatio() && 
+								CurrentEnemy->Position.x < wallList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f * GetLoadRatio() &&
+								wallList[i].Position.y + CurrentEnemy->EnemyCollider.height * 2 > CurrentEnemy->Position.y - CurrentEnemy->EnemyCollider.height)
+							{
+								CurrentEnemy->isJumping			= TRUE;
+								CurrentEnemy->canDropDownTimer	= (int)(2 / GetDeltaTime());
 								break;
 							}
 						}
@@ -1014,10 +1073,5 @@ void EnemyAnimation(Enemy *Object)
 
 void ResetEnemyPanelNumber(void)
 {
-	int i;
-	
-	for(i = 0; i < PANELAMOUNT; i++)
-	{
-		EnemyPanelNumber[i] = 0;
-	}
+	MemsetMyAlloc(PANELAMOUNT, sizeof(*EnemyPanelNumber), 0, EnemyPanelNumber);
 }
