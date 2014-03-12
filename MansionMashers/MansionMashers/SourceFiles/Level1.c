@@ -221,9 +221,10 @@ void UpdateLevel1(void)
 		SetEnemy2->EnemyState = AINone;
 	}
 
+	
+	/*if(FoxInput_KeyTriggered('T'))
+		SetNextState(GS_Restart);
 	/*
-	if(FoxInput_KeyTriggered('R'))
-		Scroll = TRUE;
 	if(FoxInput_KeyTriggered('T'))
 		ReScroll = TRUE;
 	if(Scroll == TRUE)
@@ -411,8 +412,6 @@ void EventLevel1(void)
 		PlayerIsAlive = FALSE;
 		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha = 0.5f;
-		CurrentPlayer.Position.x = -1920 * GetLoadRatio();
-		UpdateCollisionPosition(&CurrentPlayer.PlayerCollider, &CurrentPlayer.Position);
 
 		UpdateDeathConfirmObjects();
 	}
