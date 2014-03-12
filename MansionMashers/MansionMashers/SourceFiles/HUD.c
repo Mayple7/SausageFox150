@@ -74,13 +74,13 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	ChangeTextVisibility(CurrentHUD->CoinText);
 
 	//Create the HUD sprites for the items
-	CurrentHUD->HUDItem[0] = (Sprite *)CreateSprite("TextureFiles/Taco.png", 50, 50, 401, 1, 1, GetCameraXPosition() - 548, 345);
-	CurrentHUD->HUDItem[1] = (Sprite *)CreateSprite("TextureFiles/Ham.png", 50, 50, 401, 1, 1, GetCameraXPosition() - 548, 345);
-	CurrentHUD->HUDItem[2] = (Sprite *)CreateSprite("TextureFiles/Pizza.png", 50, 50, 401, 1, 1, GetCameraXPosition() - 548, 345);
-	CurrentHUD->HUDItem[3] = (Sprite *)CreateSprite("TextureFiles/Cake.png", 50, 50, 401, 1, 1, GetCameraXPosition() - 548, 345);
+	CurrentHUD->HUDItem[0] = (Sprite *)CreateSprite("TextureFiles/Taco.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
+	CurrentHUD->HUDItem[1] = (Sprite *)CreateSprite("TextureFiles/Ham.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
+	CurrentHUD->HUDItem[2] = (Sprite *)CreateSprite("TextureFiles/Pizza.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
+	CurrentHUD->HUDItem[3] = (Sprite *)CreateSprite("TextureFiles/Cake.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
 
-	CurrentHUD->HUDItem[4] = (Sprite *)CreateSprite("TextureFiles/HealthBarMid.png", 2, 13, 401, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y / GetLoadRatio() + 36);
-	CurrentHUD->HUDItem[5] = (Sprite *)CreateSprite("TextureFiles/HealthBarEnd.png", 5, 11, 401, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y / GetLoadRatio() + 36);
+	CurrentHUD->HUDItem[4] = (Sprite *)CreateSprite("TextureFiles/HealthBarMid.png", 2, 13, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y / GetLoadRatio() + 36);
+	CurrentHUD->HUDItem[5] = (Sprite *)CreateSprite("TextureFiles/HealthBarEnd.png", 5, 11, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y / GetLoadRatio() + 36);
 
 	CurrentHUD->HUDItem[0]->Visible = FALSE;
 	CurrentHUD->HUDItem[1]->Visible = FALSE;

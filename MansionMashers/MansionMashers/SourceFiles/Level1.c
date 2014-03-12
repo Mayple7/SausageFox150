@@ -405,6 +405,7 @@ void EventLevel1(void)
 	}
 
 	UpdateFloatingText();
+	ParticleSystemUpdate();
 
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{

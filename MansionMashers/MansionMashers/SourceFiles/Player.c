@@ -1157,6 +1157,20 @@ void CreatePlayerSprites(Player *Object)
 	Object->TailSinValue = 0;
 
 	Object->PlayerSpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->Zindex + 3, 1, 1, 0, 0);
+
+	CurrentPlayer.PlayerSpriteParts.LegUpper->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.LegLower->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.LegUpper2->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.LegLower2->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.Body->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.Skirt->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.Tail->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.ArmUpper->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.ArmLower->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.ArmUpper2->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.ArmLower2->FlipX = TRUE;
+	CurrentPlayer.PlayerSpriteParts.Weapon->FlipX = TRUE;
+	CurrentPlayer.FlipX = TRUE;
 }
 
 /*************************************************************************/
