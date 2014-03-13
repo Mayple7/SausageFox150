@@ -46,6 +46,9 @@ void UpdateDeathConfirmObjects(void)
 	int worldX, worldY;
 	Vec2 MouseClick;
 
+	CurrentPlayer.Position.x = -1920 * GetLoadRatio();
+	UpdateCollisionPosition(&CurrentPlayer.PlayerCollider, &CurrentPlayer.Position);
+
 	FoxInput_GetWorldPosition(&worldX, &worldY);
 	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
 
