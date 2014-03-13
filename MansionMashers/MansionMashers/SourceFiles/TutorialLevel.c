@@ -89,7 +89,7 @@ void InitializeTutorial(void)
 	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
-	InitializePlayer(&CurrentPlayer, Ginko, -500.0f, GROUNDLEVEL * GetLoadRatio() + 1);
+	InitializePlayer(&CurrentPlayer, Ginko, -700.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
@@ -123,17 +123,17 @@ void InitializeTutorial(void)
 	BBWallRight->enemyNotCollidable = TRUE;
 
 	// Seclusion overlay for the player to focus on things in the tutorial
-	Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 400, 800, 1, 1, 0, 340);
-	Seclude1->Alpha = 0.8f;
+	Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 600, 800, 1, 1, 0, 240); //Top
+	Seclude1->Alpha = 0.9f;
 	Seclude1->Tint  = Tint;
-	Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 100, 800, 1, 1, 0, -490);
-	Seclude2->Alpha = 0.8f;
+	Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 100, 800, 1, 1, 0, -490); //Bottom
+	Seclude2->Alpha = 0.9f;
 	Seclude2->Tint  = Tint;
-	Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 200, 580, 800, 1, 1, -860, -150);
-	Seclude3->Alpha = 0.8f;
+	Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 100, 380, 800, 1, 1, -960, -250); //Left
+	Seclude3->Alpha = 0.9f;
 	Seclude3->Tint  = Tint;
-	Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 200, 580, 800, 1, 1, 860, -150);
-	Seclude4->Alpha = 0.8f;
+	Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1200, 380, 800, 1, 1, 360, -250); //Right
+	Seclude4->Alpha = 0.9f;
 	Seclude4->Tint  = Tint;
 
 	//Sound volume
@@ -184,6 +184,14 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + 1920.0f * 2, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f * 2, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 200, -156);
+	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f); 
+	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height * 3 / 8;
+
+	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 0, -240);
+	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
+	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
+
 	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750 + 1920.0f * 2, -250, 2);
 }
  
@@ -208,10 +216,33 @@ void UpdateTutorial(void)
 	/*////////////////////////////////
 	//     TUTORIAL COMPLETION      //
 	////////////////////////////////*/
-	if (tutorialDone < 1 && CurrentPlayer.PlayerCollider.Position.x > 0)
+	if (tutorialDone < 1 && CurrentPlayer.PlayerCollider.Position.x > -200)
+	{
 		tutorialDone = 1;
+
+		Seclude1->Position.y = 490 * GetLoadRatio();//Top
+		Seclude1->Height     = 100 * GetLoadRatio();
+		UpdateMesh(Seclude1);
+
+		Seclude3->Position.y = 0;//Left
+		Seclude3->Height     = 880 * GetLoadRatio();
+		UpdateMesh(Seclude3);
+
+		Seclude4->Position.x = 560 * GetLoadRatio();//Right
+		Seclude4->Position.y = 0;
+		Seclude4->Height     = 880 * GetLoadRatio();
+		Seclude4->Width      = 800 * GetLoadRatio();
+		UpdateMesh(Seclude4);
+
+		//Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 600, 800, 1, 1, 0, 240); //Top
+		//Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 100, 800, 1, 1, 0, -490); //Bottom
+		//Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 100, 380, 800, 1, 1, -960, -250); //Left
+		//Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1200, 380, 800, 1, 1, 360, -250); //Right
+	}
 	else if (tutorialDone < 2 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * GetLoadRatio())
+	{
 		tutorialDone = 2;
+	}
 
 	//If the dummy exists, prevent the player from moving past
 	if(StrawDummy->objID > 0)
