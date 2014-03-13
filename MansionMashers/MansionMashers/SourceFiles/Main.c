@@ -50,10 +50,7 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp);
 
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
-	// Variable declaration	
-	int Previous;										//Local State Variables
-	int Current;										//Local State Variables
-	int Next;											//Local State Variables					
+	// Variable declaration		
 	AESysInitInfo sysInitInfo;
 	WNDCLASS	winClass;
 	HWND winHandle;
@@ -145,33 +142,26 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	while(GameRunning)
 	{
-		//Setting local states
-		Previous = GetCurrentState();
-		Current = GetCurrentState();
-		Next = GetNextState();
-
 		//Memory start
 		TotalMemoryAllocs = 0;
 		TotalMemoryFrees  = 0;
 
 		//Checking if wanting to quit
-		if(Current == GS_Quit)
+		if(GetCurrentState() == GS_Quit)
 		{
 			FoxSystemExit();
 			AESysExit();
 			return 0;
 		}
 		//Checking if wanting to restart
-		else if(Current == GS_Restart)
+		else if(GetCurrentState() == GS_Restart)
 		{
-			SetCurrentState(Previous);
-			SetNextState(Previous);
-			Current = Previous;
-			Next = Previous;
+			SetCurrentState(GetPreviousState());
+			SetNextState(GetPreviousState());
 		}
 		else
 		{
-			GSMUpdate(Current);
+			GSMUpdate(GetCurrentState());
 			GSMPointers.pLoad();
 		}
 
@@ -181,7 +171,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		RemoveDebugMode();
 #endif
 		
-		while(Current == Next)
+		while(GetCurrentState() == GetNextState())
 		{
 			AESysFrameStart();
 			StartFoxFrame();						
@@ -192,7 +182,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			GSMPointers.pUpdate();
 			UpdateSoundSystem();
 			GSMPointers.pDraw();
-			Next = GetNextState();
 #ifdef _DEBUG
 			if(FoxInput_KeyTriggered('R'))
 			{
@@ -215,7 +204,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 		GSMPointers.pFree();
 
-		if(Next != GS_Restart)
+		if(GetNextState() != GS_Restart)
 			GSMPointers.pUnload();
 
 		/*
@@ -227,8 +216,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			AE_ASSERT_MESG(":: MEMORY LEAKS: PLEASE GET A BUCKET AND MOP ::");
 		printf("----------------A NEW DAY----------------\n\n");
 		
-		SetPreviousState(Current);
-		SetCurrentState(Next);
+		SetPreviousState(GetCurrentState());
+		SetCurrentState(GetNextState());
 	}
 	//End of GSM
 
@@ -264,7 +253,7 @@ LRESULT CALLBACK MyWinCallBack(HWND hWin, UINT msg, WPARAM wp, LPARAM lp)
 		break;
 	// when the window is created
 	case WM_CREATE:
-		printf("Hi Juli, I'm still here!\n");
+		printf("The Windows of all Windows has been created.\n");
 		break;
 
 	// when the rectangle is drawn

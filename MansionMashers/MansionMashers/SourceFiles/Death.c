@@ -22,20 +22,23 @@
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 
-static Sprite* DeathConfirm;
-static Button* RestartButton;
-static Button* MainMapButton;
+static Sprite *DeathConfirm;
+static Button *RestartButton;
+static Button *MainMapButton;
 
-void CreateDeathConfirmObjects(int* newID)
+void CreateDeathConfirmObjects(int *newID)
 {
 	Vec3 TextTint;
 
-	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f, *newID++);
-	RestartButton->ButtonSprite->ZIndex = 1502;
-	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", -1920, -130, 300, 112.5f, *newID++);
-	MainMapButton->ButtonSprite->ZIndex = 1502;
 	Vec3Set(&TextTint, 0, 0, 0);
 	DeathConfirm = (Sprite *) CreateSprite("TextureFiles/DeathConfirm.png", 639, 204, 500, 1, 1, -1920, 100);
+
+	(*newID)++;
+	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", -1920, -130, 300, 112.5f, (*newID)++);
+	MainMapButton->ButtonSprite->ZIndex = 1502;
+
+	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f, (*newID)++);
+	RestartButton->ButtonSprite->ZIndex = 1502;
 }
 
 void UpdateDeathConfirmObjects(void)
@@ -46,10 +49,12 @@ void UpdateDeathConfirmObjects(void)
 	FoxInput_GetWorldPosition(&worldX, &worldY);
 	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
 
-	RestartButton->ButtonSprite->Position.x = (-250 * GetLoadRatio()) + GetCameraXPosition();
+	UpdateButtonPosition(RestartButton, (-250 * GetLoadRatio()) + GetCameraXPosition(), -130);
 	UpdateCollisionPosition(&RestartButton->ButtonCollider, &RestartButton->ButtonSprite->Position);
-	MainMapButton->ButtonSprite->Position.x = (250 * GetLoadRatio()) + GetCameraXPosition();
+
+	UpdateButtonPosition(MainMapButton, (250 * GetLoadRatio()) + GetCameraXPosition(), -130);
 	UpdateCollisionPosition(&MainMapButton->ButtonCollider, &MainMapButton->ButtonSprite->Position);
+
 	DeathConfirm->Position.x = GetCameraXPosition();
 
 	if(PointRectCollision(&RestartButton->ButtonCollider, &MouseClick))
@@ -58,7 +63,12 @@ void UpdateDeathConfirmObjects(void)
 		RestartButton->ButtonSprite->ScaleY = 1.2f;
 
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			FreeButton(RestartButton);
+			FreeButton(MainMapButton);
+			FreeSprite(DeathConfirm);
 			SetNextState(GS_Restart);
+		}
 	}
 	else
 	{
@@ -70,7 +80,10 @@ void UpdateDeathConfirmObjects(void)
 	{
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
-				SetNextState(GS_MapLevel);
+			FreeButton(RestartButton);
+			FreeButton(MainMapButton);
+			FreeSprite(DeathConfirm);
+			SetNextState(GS_MapLevel);
 		}
 		MainMapButton->ButtonSprite->ScaleX = 1.2f;
 		MainMapButton->ButtonSprite->ScaleY = 1.2f;
