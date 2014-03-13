@@ -1090,6 +1090,8 @@ void Animation(Player *Object)
 	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
 	Object->PlayerWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
 
+	printf("Arm Position: %f\n", Object->PlayerSpriteParts.ArmLower->Position.x - Object->Position.x);
+
 	//*************************************************************************************************
 }
 
@@ -1158,19 +1160,19 @@ void CreatePlayerSprites(Player *Object)
 
 	Object->PlayerSpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->Zindex + 3, 1, 1, 0, 0);
 
-	CurrentPlayer.PlayerSpriteParts.LegUpper->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.LegLower->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.LegUpper2->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.LegLower2->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.Body->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.Skirt->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.Tail->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.ArmUpper->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.ArmLower->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.ArmUpper2->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.ArmLower2->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.Weapon->FlipX = TRUE;
-	CurrentPlayer.FlipX = TRUE;
+	Object->PlayerSpriteParts.LegUpper->FlipX = TRUE;
+	Object->PlayerSpriteParts.LegLower->FlipX = TRUE;
+	Object->PlayerSpriteParts.LegUpper2->FlipX = TRUE;
+	Object->PlayerSpriteParts.LegLower2->FlipX = TRUE;
+	Object->PlayerSpriteParts.Body->FlipX = TRUE;
+	Object->PlayerSpriteParts.Skirt->FlipX = TRUE;
+	Object->PlayerSpriteParts.Tail->FlipX = TRUE;
+	Object->PlayerSpriteParts.ArmUpper->FlipX = TRUE;
+	Object->PlayerSpriteParts.ArmLower->FlipX = TRUE;
+	Object->PlayerSpriteParts.ArmUpper2->FlipX = TRUE;
+	Object->PlayerSpriteParts.ArmLower2->FlipX = TRUE;
+	Object->PlayerSpriteParts.Weapon->FlipX = TRUE;
+	Object->FlipX = TRUE;
 }
 
 /*************************************************************************/
