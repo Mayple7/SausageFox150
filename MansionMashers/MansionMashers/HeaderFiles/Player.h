@@ -39,13 +39,11 @@ typedef struct PlayerSounds
 	//Weapon sounds
 	FoxSound *Swing1;
 	FoxSound *Swing2;
-	FoxSound *Hit1;
-	FoxSound *Hit2;
 
 	//Character sounds
-	FoxSound *Hurt1;
-	FoxSound *Hurt2;
-	FoxSound *YeahBebeGurrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrl;
+	FoxSound *GetHit1;
+	FoxSound *GetHit2;
+	FoxSound *YeahBebeGurrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrl;
 }PlayerSounds;
 
 typedef struct PlayerStats

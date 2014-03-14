@@ -140,8 +140,10 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//       PLAYER SOUNDS          //
 	////////////////////////////////*/
-	CurrentPlayer->CurrentPlayerSounds.Swing1 = CreateSound("Sounds/ToolSwing1.mp3", SmallSnd);
-	CurrentPlayer->CurrentPlayerSounds.Swing2 = CreateSound("Sounds/ToolSwing2.mp3", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.Swing1 = CreateSound("Sounds/SwordSwing1.wav", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.Swing2 = CreateSound("Sounds/SwordSwing2.wav", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.GetHit1 = CreateSound("Sounds/SwordHit1.wav", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.GetHit2 = CreateSound("Sounds/SwordHit2.wav", SmallSnd);
 
 
 	/*////////////////////////////////

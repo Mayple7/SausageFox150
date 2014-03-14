@@ -5,7 +5,7 @@
 #include "../FMODHeaders/fmod.h"
 
 //Defines
-#define MAX_SOUND_CHANNELS 40
+#define MAX_SOUND_CHANNELS 150
 #define MAX_CHANNEL_GROUPS 1
 
 //Global Basic Type Variables
