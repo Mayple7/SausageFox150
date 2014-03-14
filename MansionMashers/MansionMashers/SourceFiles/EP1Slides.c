@@ -208,10 +208,10 @@ static int fadeLogic(void)
 {
 	// Fade out the slide
 	if(fade == 2)
-		alpha -= 0.01f;
+		alpha -= 0.02f;
 	// Fade in the slide
 	else if(fade == 1)
-		alpha += 0.01f;
+		alpha += 0.02f;
 	else
 		alpha = 1.0f;
 

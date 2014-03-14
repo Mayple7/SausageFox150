@@ -365,7 +365,7 @@ void FreeTutorial(void)
 {
 	if(levelComplete)
 		CurrentPlayer.CurrentLevel = GS_Level1;
-	else
+	else if(CurrentPlayer.CurrentLevel < GS_Tutorial)
 		CurrentPlayer.CurrentLevel = GS_Tutorial;
 
 	SavePlayer(&CurrentPlayer);

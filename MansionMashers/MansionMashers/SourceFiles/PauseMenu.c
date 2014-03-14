@@ -137,7 +137,7 @@ void InitializePause(void (*DrawLevel)())
 	LevelToDraw = DrawLevel;
 
 	// Check if we pause the map level or not
-	if(LevelToDraw == DrawMapLevel)
+	if(GetCurrentState() == GS_MapLevel)
 		MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250 + camX, -400, 300, 112.5f, newID++);
 	else
 		MainMenuButton = CreateButton("TextureFiles/GoToMapButton.png", 250 + camX, -400, 300, 112.5f, newID++);
@@ -294,7 +294,7 @@ void EventPause(void)
 	{
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
-			if(LevelToDraw == DrawMapLevel)
+			if(GetCurrentState() == GS_MapLevel)
 				SetNextState(GS_MainMenu);
 			else
 				SetNextState(GS_MapLevel);

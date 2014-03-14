@@ -9,10 +9,10 @@
 
 Sprite* GameLogo;
 
-Sprite* EP1Button;
-Sprite* EP2Button;
-Sprite* TutorialButton;
-Sprite* QuitButton;
+Button* EP1Button;
+Button* EP2Button;
+Button* TutorialButton;
+Button* QuitButton;
 
 Sprite* Selector;
 
@@ -51,19 +51,19 @@ void InitializeEPMenu(void)
 	GameLogo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
 
 	// Create the start button
-	EP1Button = (Sprite *) CreateSprite("TextureFiles/EP1_button.png", 300.0f, 100.0f, 3, 1, 1, -500, 300);
+	EP1Button = CreateButton("TextureFiles/EP1_button.png", -500, 300, 300.0f, 100.0f, newID++);
 
 	// Create the start button
-	EP2Button = (Sprite *) CreateSprite("TextureFiles/EP2_button.png", 300.0f, 100.0f, 3, 1, 1, 500, 300);
+	EP2Button = CreateButton("TextureFiles/EP2_button.png",  500, 300, 300.0f, 100.0f, newID++);
 
 	// Creates the showcase button
-	TutorialButton = (Sprite *) CreateSprite("TextureFiles/tutorial_button.png", 300.0f, 100.0f, 3, 1, 1, -500, -300);
+	TutorialButton = CreateButton("TextureFiles/tutorial_button.png", -500, -300, 300.0f, 100.0f, newID++);
 	
 	// Creates the exit button
-	QuitButton = (Sprite *) CreateSprite("TextureFiles/quit_button.png", 300.0f, 100.0f, 3, 1, 1, 500, -300);
+	QuitButton = CreateButton("TextureFiles/quit_button.png", 500, -300, 300.0f, 100.0f, newID++);
 
 	// Creates the selector button - set to default position of the start button
-	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", 500.0f, 200.0f, 2, 1, 1, 100, 0);
+	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", EP1Button->ButtonSprite->Width * 1.1f, EP1Button->ButtonSprite->Height * 1.2f, 2, 1, 1, 100, 0);
 	
 	Vec3Set(&Tint, 0, 0, 0);
 	BlackBackground = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 499, 1, 1, 0, 0);
@@ -109,6 +109,13 @@ void UnloadEPMenu(void)
 
 void EPMenuInput(void)
 {
+	//Get mouse info
+	int worldX, worldY;
+	Vec2 MouseClick;
+
+	FoxInput_GetWorldPosition(&worldX, &worldY);
+	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
 	// check if forcing the application to quit
 	switch(selectedEPButton)
 	{
@@ -179,51 +186,51 @@ void EPMenuInput(void)
 		break;
 	}
 
-	if(FoxInput_KeyTriggered('C'))
+	// Mouse functionality
+	// EP1
+	if(PointRectCollision(&EP1Button->ButtonCollider, &MouseClick))
 	{
-		FILE *fp = fopen("../GameData.cfg", "r");
-		if(!fp)
-		{
-			SetNextState(GS_CharacterSelect);
-		}
-		else
-		{
-			deleteSave = TRUE;
-			BlackBackground->Visible = TRUE;
-			DeleteText->Visible = TRUE;
-			YesButton->ButtonSprite->Visible = TRUE;
-			NoButton->ButtonSprite->Visible = TRUE;
-			fclose(fp);
-		}
-	}
-
-	if(deleteSave)
-	{
+		selectedEPButton = EP1But;
+		UpdateEPSelector(Selector);
+		
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
-			int worldX, worldY;
-			Vec2 MouseClick;
-
-			FoxInput_GetWorldPosition(&worldX, &worldY);
-			Vec2Set(&MouseClick, (float)worldX, (float)worldY);
-
-			if(PointRectCollision(&YesButton->ButtonCollider, &MouseClick))
-			{
-				remove("../GameData.cfg");
-				SetNextState(GS_CharacterSelect);
-			}
-			else if(PointRectCollision(&NoButton->ButtonCollider, &MouseClick))
-			{
-				deleteSave = FALSE;
-				BlackBackground->Visible = FALSE;
-				DeleteText->Visible = FALSE;
-				YesButton->ButtonSprite->Visible = FALSE;
-				NoButton->ButtonSprite->Visible = FALSE;
-			}
+			SetNextState(GS_EP1Slides);
 		}
-
 	}
-
+	// EP2
+	else if(PointRectCollision(&EP2Button->ButtonCollider, &MouseClick))
+	{
+		selectedEPButton = EP2But;
+		UpdateEPSelector(Selector);
+		
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SetNextState(GS_EP2Slides);
+		}
+	}
+	// Tutorial
+	else if(PointRectCollision(&TutorialButton->ButtonCollider, &MouseClick))
+	{
+		selectedEPButton = TutBut;
+		UpdateEPSelector(Selector);
+		
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SetNextState(GS_MapLevel);
+		}
+	}
+	// Quit
+	else if(PointRectCollision(&QuitButton->ButtonCollider, &MouseClick))
+	{
+		selectedEPButton = QuitBut;
+		UpdateEPSelector(Selector);
+		
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SetNextState(GS_MainMenu);
+		}
+	}
 
 	if(FoxInput_KeyTriggered(VK_SHIFT) || FoxInput_KeyTriggered(VK_RSHIFT))
 	{
@@ -250,32 +257,23 @@ void UpdateEPSelector(struct Sprite *Selector)
 	switch(selectedEPButton)
 	{
 		case EP1But:
-			Selector->Position = EP1Button->Position;
-			Selector->Width = EP1Button->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
+			Selector->Position = EP1Button->ButtonSprite->Position;
 			UpdateMesh(Selector);
 			break;
 		case EP2But:
-			Selector->Position = EP2Button->Position;
-			Selector->Width = EP2Button->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
+			Selector->Position = EP2Button->ButtonSprite->Position;
 			UpdateMesh(Selector);
 			break;
 		case TutBut:
-			Selector->Position = TutorialButton->Position;
-			Selector->Width = TutorialButton->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
+			Selector->Position = TutorialButton->ButtonSprite->Position;
 			UpdateMesh(Selector);
 			break;
 		case QuitBut:
-			Selector->Position = QuitButton->Position;
-			Selector->Width = QuitButton->Width * (float)1.1;
-			Selector->Height = EP1Button->Height * (float)1.2;
+			Selector->Position = QuitButton->ButtonSprite->Position;
 			UpdateMesh(Selector);
 			break;
 		default:
-			Selector->Position = EP1Button->Position;
-			Selector->Width = EP1Button->Width * (float)1.1;
+			Selector->Position = EP1Button->ButtonSprite->Position;
 			UpdateMesh(Selector);
 			break;
 	}
