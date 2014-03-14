@@ -174,7 +174,7 @@ void EPMenuInput(void)
 		}
 		else if(FoxInput_KeyTriggered(VK_RETURN) || FoxInput_KeyTriggered(VK_SPACE))
 		{
-			SetNextState(GS_Quit);
+			SetNextState(GS_MainMenu);
 		}
 		break;
 	}
@@ -232,7 +232,7 @@ void EPMenuInput(void)
 
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
-		SetNextState(GS_Quit);
+		SetNextState(GS_MainMenu);
 }
 
 

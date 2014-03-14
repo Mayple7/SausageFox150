@@ -89,7 +89,7 @@ void InitializeTutorial(void)
 	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
-	InitializePlayer(&CurrentPlayer, Ginko, -500.0f, GROUNDLEVEL * GetLoadRatio() + 1);
+	InitializePlayer(&CurrentPlayer, Ginko, -700.0f, GROUNDLEVEL * GetLoadRatio() + 1);
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
@@ -123,17 +123,17 @@ void InitializeTutorial(void)
 	BBWallRight->enemyNotCollidable = TRUE;
 
 	// Seclusion overlay for the player to focus on things in the tutorial
-	Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 400, 800, 1, 1, 0, 340);
-	Seclude1->Alpha = 0.8f;
+	Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 600, 800, 1, 1, 0, 240); //Top
+	Seclude1->Alpha = 0.9f;
 	Seclude1->Tint  = Tint;
-	Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 100, 800, 1, 1, 0, -490);
-	Seclude2->Alpha = 0.8f;
+	Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 100, 800, 1, 1, 0, -490); //Bottom
+	Seclude2->Alpha = 0.9f;
 	Seclude2->Tint  = Tint;
-	Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 200, 580, 800, 1, 1, -860, -150);
-	Seclude3->Alpha = 0.8f;
+	Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 100, 380, 800, 1, 1, -910, -250); //Left
+	Seclude3->Alpha = 0.9f;
 	Seclude3->Tint  = Tint;
-	Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 200, 580, 800, 1, 1, 860, -150);
-	Seclude4->Alpha = 0.8f;
+	Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1200, 380, 800, 1, 1, 360, -250); //Right
+	Seclude4->Alpha = 0.9f;
 	Seclude4->Tint  = Tint;
 
 	//Sound volume
@@ -147,6 +147,16 @@ void InitializeTutorial(void)
 	CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+
+	Shelf = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 480, 60, newID++, 500, 20);
+	Shelf->PlatformSprite->Visible = FALSE;
+
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 500.0f, newID++, 220, -180); //Tall
+	WallTemp->WallSprite->Visible = FALSE;
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 500.0f, newID++, 300, -280); //Tall (back)
+	WallTemp->WallSprite->Visible = FALSE;
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 350.0f, newID++, 50, -350); //Short
+	WallTemp->WallSprite->Visible = FALSE;
 
 	/*////////////////////////////////
 	//          PANEL TWO           //
@@ -208,10 +218,41 @@ void UpdateTutorial(void)
 	/*////////////////////////////////
 	//     TUTORIAL COMPLETION      //
 	////////////////////////////////*/
-	if (tutorialDone < 1 && CurrentPlayer.PlayerCollider.Position.x > 0)
+	if (tutorialDone < 1 && CurrentPlayer.PlayerCollider.Position.x > -300)
+	{
 		tutorialDone = 1;
-	else if (tutorialDone < 2 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * GetLoadRatio())
+
+		Seclude1->Position.y = 490 * GetLoadRatio();//Top
+		Seclude1->Height     = 100 * GetLoadRatio();
+		UpdateMesh(Seclude1);
+
+		Seclude3->Position.y = 0;//Left
+		Seclude3->Height     = 880 * GetLoadRatio();
+		UpdateMesh(Seclude3);
+
+		Seclude4->Position.x = 610 * GetLoadRatio();//Right
+		Seclude4->Position.y = 0;
+		Seclude4->Height     = 880 * GetLoadRatio();
+		Seclude4->Width      = 700 * GetLoadRatio();
+		UpdateMesh(Seclude4);
+
+		//Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 600, 800, 1, 1, 0, 240); //Top
+		//Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 100, 800, 1, 1, 0, -490); //Bottom
+		//Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 100, 380, 800, 1, 1, -960, -250); //Left
+		//Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1200, 380, 800, 1, 1, 360, -250); //Right
+	}
+	else if (tutorialDone < 2 && CurrentPlayer.PlayerCollider.Position.x > 150 * GetLoadRatio())
+	{
 		tutorialDone = 2;
+
+		Seclude4->Position.x = 910 * GetLoadRatio();//Right
+		Seclude4->Width      = 100 * GetLoadRatio();
+		UpdateMesh(Seclude4);
+	}
+	else if (tutorialDone < 3 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * GetLoadRatio())
+	{
+		tutorialDone = 3;
+	}
 
 	//If the dummy exists, prevent the player from moving past
 	if(StrawDummy->objID > 0)
@@ -226,7 +267,29 @@ void UpdateTutorial(void)
 		}
 	}
 
-	UpdateHUDPosition(CurrentHUD);
+	if (tutorialDone > 2)
+		UpdateHUDPosition(CurrentHUD);
+	else
+	{
+		//DONT SHOW THE HUD YET
+		Vec2 newPosition;
+		Vec2Set(&newPosition, (GetCameraXPosition() - 685 * GetLoadRatio() - 1000), 300 * GetLoadRatio());
+
+		//HUD items update position
+		CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 735 * GetLoadRatio() - 1000);
+
+		CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio() - 1000);
+		CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio() - 1000);
+		CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio() - 1000);
+		CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio() - 1000);
+
+		CurrentHUD->HUDItem[4]->ScaleX = 71.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
+		CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - (2 * GetLoadRatio()) + (CurrentHUD->HUDItem[4]->ScaleX * GetLoadRatio() - 1000));
+		CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x + (CurrentHUD->HUDItem[4]->ScaleX * GetLoadRatio() * 2) - 1000);
+
+		//Coin text update position
+		ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);
+	}
 }
 
 void DrawTutorial(void)
@@ -337,7 +400,7 @@ void EventTutorial(void)
 			{
 				Vec2 velocity;
 		
-				if(FoxInput_KeyDown('S') && CurrentPlayer.PlayerRigidBody.onGround)
+				if(FoxInput_KeyDown('S') && CurrentPlayer.PlayerRigidBody.onGround && tutorialDone > 1) //TUTORIAL PART 2
 				{
 					CurrentPlayer.PlayerRigidBody.onGround = FALSE;
 					CurrentPlayer.dropDown = TRUE;
@@ -354,8 +417,8 @@ void EventTutorial(void)
 			}
 		}
 		
-		// TUTORIAL PART 2
-		if (tutorialDone > 1)
+		// TUTORIAL PART 3
+		if (tutorialDone > 2)
 		{
 			if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer.isAttacking)
 			{

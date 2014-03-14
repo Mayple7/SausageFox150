@@ -984,7 +984,7 @@ void Animation(Player *Object)
 			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, 0, 0.2f);
 			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
-			ArmUpr2->Rotation = (float)FOX_PI * 1.5f + 30.0f * GetLoadRatio() - Object->PlayerSpriteParts.AttackRotationArm;
+			ArmUpr2->Rotation = (float)FOX_PI * 1.5f + 30.0f * GetDeltaTime() - Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr2->Rotation = ArmUpr2->Rotation - (float)FOX_PI/2 + Object->PlayerSpriteParts.AttackRotationArmLower;
 			//Weap->Rotation = ArmLwr2->Rotation + Object->PlayerSpriteParts.AttackRotation;
 			if (Object->PlayerSpriteParts.AttackRotationArm == (float)FOX_PI)
@@ -1048,7 +1048,7 @@ void Animation(Player *Object)
 			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, (float)FOX_PI/6, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
-			ArmUpr->Rotation = (float)FOX_PI / 2 - 30.0f * GetLoadRatio() + Object->PlayerSpriteParts.AttackRotationArm;
+			ArmUpr->Rotation = (float)FOX_PI / 2 - 30.0f * GetDeltaTime() + Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr->Rotation = ArmUpr->Rotation + (float)FOX_PI/2 - Object->PlayerSpriteParts.AttackRotationArmLower;
 			//Weap->Rotation = ArmLwr->Rotation - Object->PlayerSpriteParts.AttackRotation;
 			if (Object->PlayerSpriteParts.AttackRotationArm == (float)FOX_PI)
@@ -1160,19 +1160,19 @@ void CreatePlayerSprites(Player *Object)
 
 	Object->PlayerSpriteParts.ArmLower = (Sprite *) CreateSprite("TextureFiles/ArmLower.png", 128.0f, 128.0f, Object->Zindex + 3, 1, 1, 0, 0);
 
-	CurrentPlayer.PlayerSpriteParts.LegUpper->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.LegLower->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.LegUpper2->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.LegLower2->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.Body->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.Skirt->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.Tail->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.ArmUpper->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.ArmLower->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.ArmUpper2->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.ArmLower2->FlipX = TRUE;
-	CurrentPlayer.PlayerSpriteParts.Weapon->FlipX = TRUE;
-	CurrentPlayer.FlipX = TRUE;
+	Object->PlayerSpriteParts.LegUpper->FlipX = TRUE;
+	Object->PlayerSpriteParts.LegLower->FlipX = TRUE;
+	Object->PlayerSpriteParts.LegUpper2->FlipX = TRUE;
+	Object->PlayerSpriteParts.LegLower2->FlipX = TRUE;
+	Object->PlayerSpriteParts.Body->FlipX = TRUE;
+	Object->PlayerSpriteParts.Skirt->FlipX = TRUE;
+	Object->PlayerSpriteParts.Tail->FlipX = TRUE;
+	Object->PlayerSpriteParts.ArmUpper->FlipX = TRUE;
+	Object->PlayerSpriteParts.ArmLower->FlipX = TRUE;
+	Object->PlayerSpriteParts.ArmUpper2->FlipX = TRUE;
+	Object->PlayerSpriteParts.ArmLower2->FlipX = TRUE;
+	Object->PlayerSpriteParts.Weapon->FlipX = TRUE;
+	Object->FlipX = TRUE;
 }
 
 /*************************************************************************/

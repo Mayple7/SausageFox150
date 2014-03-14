@@ -40,11 +40,13 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
-Platform* Shelf;
-Platform* Shelf2;
-Platform* Shelf3;
-Platform* Shelf4;
+TextGlyphs *LevelName;
+Platform *Shelf;
+Platform *Shelf2;
+Platform *Shelf3;
+Platform *Shelf4;
+
+EnemySpawner *FirstSpawner;
 
 /*************************************************************************/
 /*!
@@ -67,6 +69,7 @@ void LoadKevin(void)
 void InitializeKevin(void)
 {
 	Vec3 TextTint;
+	Vec2 SpawnerLocation;
 
 	newID = 10;
 	ResetObjectList();
@@ -96,6 +99,9 @@ void InitializeKevin(void)
 	Shelf4->PlatformCollider.Offset.y = 5 * Shelf4->PlatformSprite->Height / 16;
 	UpdateCollider(&Shelf4->PlatformCollider, Shelf4->PlatformCollider.width, Shelf4->PlatformCollider.height * 0.2f); 
 
+
+	Vec2Set(&SpawnerLocation, -200, 0);
+	FirstSpawner = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
 }
 
 /*************************************************************************/
