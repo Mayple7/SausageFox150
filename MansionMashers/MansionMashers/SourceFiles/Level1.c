@@ -67,6 +67,8 @@ Wall* Wall1;
 Wall* BBWallLeft;
 Wall* BBWallRight;
 
+FoxSound* BackSnd;
+
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
 
@@ -117,6 +119,8 @@ void InitializeLevel1(void)
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
+
+	BackSnd = CreateSound("Sounds/main.theme_.mp3", LargeSnd);
 
 	//Background: Panel 1
 	CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
@@ -208,6 +212,8 @@ void UpdateLevel1(void)
 {
 	//Handle the special events right off the bat yo
 	EventLevel1();
+
+	PlayAudio(BackSnd);
 
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
@@ -309,10 +315,10 @@ void EventLevel1(void)
 		if(PlayerIsAlive == TRUE)
 		{
 			InitializePause(&DrawLevel1);
-			//TogglePauseSound(&BackgroundSnd);
+			TogglePauseSound(BackSnd);
 			//SetNextState(GS_MainMenu);
 			UpdatePause();
-			//TogglePauseSound(&BackgroundSnd);
+			TogglePauseSound(BackSnd);
 		}
 	}
 	if(FoxInput_KeyTriggered('U'))

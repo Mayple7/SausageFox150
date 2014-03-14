@@ -88,7 +88,7 @@ void InitializeTutorial(void)
 	ResetCamera();
 	ResetEnemyPanelNumber();
 
-	BackSnd = CreateSound("Sounds/wave.mp3", SmallSnd);
+	BackSnd = CreateSound("Sounds/main.theme_.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
 	InitializePlayer(&CurrentPlayer, Ginko, -700.0f, GROUNDLEVEL * GetLoadRatio() + 1);
@@ -386,8 +386,10 @@ void EventTutorial(void)
 	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
+		TogglePauseSound(BackSnd);
 		InitializePause(&DrawTutorial);
 		UpdatePause();
+		TogglePauseSound(BackSnd);
 	}
 	if(FoxInput_KeyTriggered('U'))
 		SetDebugMode();

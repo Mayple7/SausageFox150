@@ -68,6 +68,8 @@ Wall* RightBarrier;
 
 HUD* CurrentHUD;
 
+FoxSound *BackSnd;
+
 static int PlayerInSight; // Enemy in watch tower checks for player 
 static int PlayerIsAlive; 
 
@@ -144,7 +146,8 @@ void InitializeLevel2(void)
 	//Test->WallSprite->Visible = FALSE;
 
 	//CreatePaperScroll(200);
-
+	
+	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -256,7 +259,7 @@ void UpdateLevel2(void)
 	else if(PlayerInSight == FALSE)
 		Pan3Enemy->EnemyState = AINone;
 
-
+	PlayAudio(BackSnd);
 	//ScrollPaperScroll(1);
 
 	// This should be the last line in this function
@@ -329,10 +332,10 @@ void EventLevel2(void)
 		if(PlayerIsAlive == TRUE)
 		{
 			InitializePause(&DrawLevel2);
-			//TogglePauseSound(&BackgroundSnd);
+			TogglePauseSound(BackSnd);
 			//SetNextState(GS_MainMenu);
 			UpdatePause();
-			//TogglePauseSound(&BackgroundSnd);
+			TogglePauseSound(BackSnd);
 		}
 	}
 	if(FoxInput_KeyTriggered('U'))
