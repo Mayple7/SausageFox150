@@ -31,14 +31,14 @@ void CreateDeathConfirmObjects(int *newID)
 	Vec3 TextTint;
 
 	Vec3Set(&TextTint, 0, 0, 0);
-	DeathConfirm = (Sprite *) CreateSprite("TextureFiles/DeathConfirm.png", 639, 204, 500, 1, 1, -1920, 100);
+	DeathConfirm = (Sprite *) CreateSprite("TextureFiles/DeathConfirm.png", 639, 204, 4020, 1, 1, -1920, 100);
 
 	(*newID)++;
 	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", -1920, -130, 300, 112.5f, (*newID)++);
-	MainMapButton->ButtonSprite->ZIndex = 1502;
+	MainMapButton->ButtonSprite->ZIndex = 4021;
 
 	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f, (*newID)++);
-	RestartButton->ButtonSprite->ZIndex = 1502;
+	RestartButton->ButtonSprite->ZIndex = 4022;
 }
 
 void UpdateDeathConfirmObjects(void)

@@ -88,7 +88,7 @@ void InitializeTutorial(void)
 	ResetCamera();
 	ResetEnemyPanelNumber();
 
-	BackSnd = CreateSound("Sounds/main.theme_.mp3", SmallSnd);
+	BackSnd = CreateSound("Sounds/Temp.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
 	InitializePlayer(&CurrentPlayer, Ginko, -700.0f, GROUNDLEVEL * GetLoadRatio() + 1);

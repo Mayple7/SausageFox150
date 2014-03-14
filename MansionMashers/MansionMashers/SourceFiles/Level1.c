@@ -120,7 +120,7 @@ void InitializeLevel1(void)
 	//Bounding Boxes
 	CreateBoundingBoxes();
 
-	BackSnd = CreateSound("Sounds/main.theme_.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 
 	//Background: Panel 1
 	CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
