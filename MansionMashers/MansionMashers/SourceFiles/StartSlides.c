@@ -38,7 +38,7 @@
 static float alpha = 0.0f;
 static int slideTextureNum = 0;
 static int fade = 1;								//0: no fade, 1: fade in, 2: fade out
-static int slideTimer = 0;
+static float slideTimer = 0;
 
 Sprite *SausageFox;
 Sprite *Title;
@@ -204,10 +204,10 @@ static int fadeLogic(void)
 
 	// Timer for the slide staying visible
 	if(fade == 0)
-		slideTimer += 1;
+		slideTimer += GetDeltaTime();
 
 	// Start fading out the slide after some time
-	if(slideTimer == 60)
+	if(slideTimer >= 1)
 	{
 		fade = 2;
 		slideTimer = 0;
