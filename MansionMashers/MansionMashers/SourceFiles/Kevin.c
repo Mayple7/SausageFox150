@@ -101,7 +101,7 @@ void InitializeKevin(void)
 
 
 	Vec2Set(&SpawnerLocation, -200, 0);
-	FirstSpawner = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
+	FirstSpawner = CreateEnemySpawner(20, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
 }
 
 /*************************************************************************/

@@ -98,6 +98,7 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	FirstLetter = CreateText(num, CurrentEnemy->Position.x / GetLoadRatio(), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2) / GetLoadRatio(), 100, textColor, Center);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
 }
 
 /*************************************************************************/
