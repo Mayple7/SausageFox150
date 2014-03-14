@@ -44,6 +44,8 @@ static int beginningAnimiation;
 HUD* CurrentHUD;
 Sprite* BlackOverlay;
 
+FoxSound *BackSnd;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -88,6 +90,8 @@ void InitializeShop1(void)
 	//Bounding Boxes
 	CreateBoundingBoxes();
 
+	BackSnd = CreateSound("Sounds/shop.song_.mp3", LargeSnd);
+
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 }
 
@@ -100,6 +104,8 @@ void InitializeShop1(void)
 void UpdateShop1(void)
 {
 	EventLevel();
+
+	PlayAudio(BackSnd);
 
 	UpdateHUDPosition(CurrentHUD);
 
@@ -228,9 +234,9 @@ void EventLevel(void)
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawShop1);
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(BackSnd);
 		//SetNextState(GS_MainMenu);
 		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(BackSnd);
 	}
 }
