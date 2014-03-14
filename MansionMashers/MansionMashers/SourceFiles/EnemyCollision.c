@@ -94,16 +94,17 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	
 	CurrentEnemy->CurrentEnemyStats.CurrentHealth -= damageDealt;
 	CurrentEnemy->EnemyParticleSystem->amountTotal += 5;
-	CurrentEnemy->KnockBack = TRUE;
-	CurrentEnemy->KnockBackTime = 0.25f / GetDeltaTime();
-	CurrentEnemy->KnockBackDir = CurrentPlayer.PlayerDirection;
-
-	Vec2Set(&velocity, 0.0f, 270.0f * GetLoadRatio());
-	if(CurrentEnemy->Position.y <= GROUNDLEVEL * GetLoadRatio())
-		Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
-	CurrentEnemy->EnemyRigidBody.onGround = FALSE;
-	ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
-
+	if (CurrentEnemy->EnemyType != Dummy)
+	{
+		CurrentEnemy->KnockBack = TRUE;
+		CurrentEnemy->KnockBackTime = 0.25f / GetDeltaTime();
+		CurrentEnemy->KnockBackDir = CurrentPlayer.PlayerDirection;
+		Vec2Set(&velocity, 0.0f, 270.0f * GetLoadRatio());
+		if(CurrentEnemy->Position.y <= GROUNDLEVEL * GetLoadRatio())
+			Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
+		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+		ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
+	}
 	PlayAudio(CurrentEnemy->CurrentEnemySounds.GetHit1);
 
 	sprintf(num, "%d", damageDealt);
