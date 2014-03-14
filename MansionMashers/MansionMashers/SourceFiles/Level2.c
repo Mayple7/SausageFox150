@@ -129,8 +129,9 @@ void InitializeLevel2(void)
 	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 1, 1, 1, 1920 * 3, 0);
 	CreateSprite("TextureFiles/OutsideMan3Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 3, 0);
 
+	//Black fade part
 	Vec3Set(&TextTint, 0, 0, 0);
-	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 400, 1, 1, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
 

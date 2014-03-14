@@ -137,6 +137,7 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 		CurrentHUD->currentHUDCoinValue = CurrentPlayer.CurrentPlayerStats.Money;
 		sprintf(CoinChar, "%i", CurrentHUD->currentHUDCoinValue);
 		ChangeTextString(CurrentHUD->CoinText, strcat(CoinChar, " Coins"));
+		ChangeTextZIndex(CurrentHUD->CoinText, 400);
 	}
 }
 
