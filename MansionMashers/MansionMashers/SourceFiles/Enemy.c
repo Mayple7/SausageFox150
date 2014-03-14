@@ -106,8 +106,6 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, height / 2, objID);
 		CurrentEnemy->EnemyCollider.Offset.y = -CurrentEnemy->EnemyCollider.height / 6;
 
-		CurrentEnemy->CurrentEnemySounds.YEAH = CreateSound("Sounds/Scream.wav", SmallSnd);
-
 		break;
 	case BasicMelee:
 		width = 261.0f;
@@ -159,7 +157,6 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->canAttackTimer	= 150;
 		CurrentEnemy->findHome			= FALSE;
 		CurrentEnemy->HomePos			= CurrentEnemy->Position;
-		CurrentEnemy->CurrentEnemySounds.YEAH = CreateSound("Sounds/Scream.wav", SmallSnd);
 		EnemyAnimation(CurrentEnemy);
 
 		break;
@@ -168,6 +165,13 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 	default:
 		break;
 	}
+
+	CurrentEnemy->CurrentEnemySounds.Poof = CreateSound(rand() % 2 ? "Sounds/Poof1.wav" : "Sounds/Poof2.wav", SmallSnd);
+	CurrentEnemy->CurrentEnemySounds.GetHit1 = CreateSound("Sounds/SwordHit1.wav", SmallSnd);
+	CurrentEnemy->CurrentEnemySounds.GetHit2 = CreateSound("Sounds/SwordHit2.wav", SmallSnd);
+	CurrentEnemy->CurrentEnemySounds.Swing1 = CreateSound("Sounds/SwordSwing1.wav", SmallSnd);
+	CurrentEnemy->CurrentEnemySounds.Swing2 = CreateSound("Sounds/SwordSwing2.wav", SmallSnd);
+
 	return CurrentEnemy;
 }
 
@@ -223,7 +227,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		strcpy(CurrentEnemy->EnemyParticleSystem->ParticleSprite, "TextureFiles/Particle.png");
 		CurrentEnemy->EnemyParticleSystem->emitScale = 2.0f;
 		CurrentEnemy->EnemyParticleSystem->emitLife = 1.0f;
-		PlayAudio(CurrentEnemy->CurrentEnemySounds.YEAH);
+		PlayAudio(CurrentEnemy->CurrentEnemySounds.Poof);
 		EnemyPanelNumber[CurrentEnemy->panelId]--;
 		FreeEnemy(CurrentEnemy);
 	}
@@ -264,6 +268,17 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 			CurrentEnemy->dropDown = FALSE;
 		}
 	}
+
+	if(CurrentEnemy->KnockBack)
+	{
+		CurrentEnemy->KnockBackTime--;
+
+		MoveObject(&CurrentEnemy->Position, CurrentEnemy->KnockBackDir, 8.0f);
+
+		if(CurrentEnemy->KnockBackTime <= 0 && (CurrentEnemy->EnemyRigidBody.onGround || CurrentEnemy->Position.y <= GROUNDLEVEL * GetLoadRatio()))
+			CurrentEnemy->KnockBack = FALSE;
+	}
+
 	//Update velocity and acceleration
 	UpdateVelocity(&CurrentEnemy->EnemyRigidBody);
 	Vec2Scale(&velocityTime, &CurrentEnemy->EnemyRigidBody.Velocity, GetDeltaTime());
@@ -286,6 +301,7 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 		CurrentEnemy->EnemySpriteParts.AttackRotationArm		= 0;
 		CurrentEnemy->EnemySpriteParts.AttackRotationArmLower	= 0;
 		UpdateCollider(&CurrentEnemy->EnemyCollider,CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
+		PlayAudio(rand() % 2 ? CurrentEnemy->CurrentEnemySounds.Swing1 : CurrentEnemy->CurrentEnemySounds.Swing1);
 	}
 	// Move left if A is pressed
 	if(CurrentEnemy->isMoveLeft)
@@ -330,7 +346,7 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 		}
 	}
 		
-	//Jump when space is pushed or drop down if S is pushed as well
+	//Jump when space is pushed
 	if(CurrentEnemy->isJumping && CurrentEnemy->jumpTimer <= 0)
 	{
 		Vec2 velocity;
@@ -358,7 +374,8 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 	if (CurrentEnemy->jumpTimer > 0)
 		CurrentEnemy->jumpTimer--;
 
-	MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
+	if (!CurrentEnemy->KnockBack)
+		MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
 }
 
 void EnemyAIUpdate(Enemy *CurrentEnemy)
@@ -809,7 +826,7 @@ void CreateEnemySprites(Enemy *Object)
 void EnemyAnimation(Enemy *Object)
 {
 	
-	float LegDistance = ((Object->CurrentEnemyStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (2.3f * GetLoadRatio() / (((Object->Speed) * 0.075 + 0.5f * GetLoadRatio())) ))-(Object->Speed);
+	float LegDistance = ((Object->CurrentEnemyStats.MoveSpeed * GetDeltaTime() * GetLoadRatio()) + (2.3f * GetLoadRatio() / (((Object->Speed) * 0.075f + 0.5f * GetLoadRatio())) ))-(Object->Speed);
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);

@@ -83,6 +83,7 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	char num[10];
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
+	Vec2 velocity;
 	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
 
 	// Calculate damage including enemy's damage reduction
@@ -93,11 +94,24 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	
 	CurrentEnemy->CurrentEnemyStats.CurrentHealth -= damageDealt;
 	CurrentEnemy->EnemyParticleSystem->amountTotal += 5;
+	CurrentEnemy->KnockBack = TRUE;
+	CurrentEnemy->KnockBackTime = 0.25f / GetDeltaTime();
+	CurrentEnemy->KnockBackDir = CurrentPlayer.PlayerDirection;
+
+	Vec2Set(&velocity, 0.0f, 270.0f * GetLoadRatio());
+	if(CurrentEnemy->Position.y <= GROUNDLEVEL * GetLoadRatio())
+		Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL * GetLoadRatio() + 0.1f);
+	CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+	ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
+
+	PlayAudio(CurrentEnemy->CurrentEnemySounds.GetHit1);
+
 	sprintf(num, "%d", damageDealt);
 	// Create Floating Combat Text
 	FirstLetter = CreateText(num, CurrentEnemy->Position.x / GetLoadRatio(), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2) / GetLoadRatio(), 100, textColor, Center);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
 }
 
 /*************************************************************************/

@@ -75,7 +75,7 @@ void InitializeShop1(void)
 	ResetCamera();
 
 	//Weapon/Shop
-	CreateWeaponShop(-400, -140, newID++, Sword, Common);
+	CreateWeaponShop(-400, -140, newID++, Spear, Common);
 	CreateWeaponShop(600, -140, newID++, Axe, Common);
 
 	CreateSprite("TextureFiles/LevelGrassGround.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);

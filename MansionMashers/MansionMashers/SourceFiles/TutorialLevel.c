@@ -55,6 +55,8 @@ Sprite *Seclude2;
 Sprite *Seclude3;
 Sprite *Seclude4;
 
+TextGlyphs *TutorialText;
+
 Weapon *StarterAxe;
 Weapon *StarterSword;
 
@@ -63,8 +65,8 @@ FoxSound *GongSnd;
 
 Wall *WallTemp;
 
-Wall* BBWallLeft;
-Wall* BBWallRight;
+Wall *BBWallLeft;
+Wall *BBWallRight;
 
 static int tutorialDone; // Keeps track of how much of the tutorial has been completed (Not a bool)
 static int newID;
@@ -136,6 +138,12 @@ void InitializeTutorial(void)
 	Seclude4->Alpha = 0.9f;
 	Seclude4->Tint  = Tint;
 
+	//Some text to use for whatever tutorial stuff
+	Vec3Set(&Tint, 1, 1, 1);
+	TutorialText = CreateText("Use A,D to move Left,Right.", -300 * GetLoadRatio(), 200 * GetLoadRatio(), 100, Tint, Center);
+	ChangeTextZIndex(TutorialText, 801);
+	ChangeTextVisibility(TutorialText);
+
 	//Sound volume
 	SetChannelGroupVolume(EffectType, SFXVolume);
 	SetChannelGroupVolume(MusicType, BGMVolume);
@@ -144,7 +152,7 @@ void InitializeTutorial(void)
 	//          PANEL ONE           //
 	////////////////////////////////*/
 	CreateSprite("TextureFiles/TutorialPanel1.png", 1920, 1080, 0, 1, 1, 0, 0);
-	CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/TutorialPanel1Door.png", 1920, 1080, 200, 1, 1, 0, 0);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
@@ -152,8 +160,6 @@ void InitializeTutorial(void)
 	Shelf->PlatformSprite->Visible = FALSE;
 
 	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 500.0f, newID++, 220, -180); //Tall
-	WallTemp->WallSprite->Visible = FALSE;
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 500.0f, newID++, 300, -280); //Tall (back)
 	WallTemp->WallSprite->Visible = FALSE;
 	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 350.0f, newID++, 50, -350); //Short
 	WallTemp->WallSprite->Visible = FALSE;
@@ -199,6 +205,8 @@ void InitializeTutorial(void)
  
 void UpdateTutorial(void)
 {
+	Vec2 newPosition;
+
 	//Handle the special events right off the bat yo
 	EventTutorial();
 
@@ -218,7 +226,7 @@ void UpdateTutorial(void)
 	/*////////////////////////////////
 	//     TUTORIAL COMPLETION      //
 	////////////////////////////////*/
-	if (tutorialDone < 1 && CurrentPlayer.PlayerCollider.Position.x > -300)
+	if (tutorialDone < 1 && CurrentPlayer.PlayerCollider.Position.x > -320)
 	{
 		tutorialDone = 1;
 
@@ -236,6 +244,12 @@ void UpdateTutorial(void)
 		Seclude4->Width      = 700 * GetLoadRatio();
 		UpdateMesh(Seclude4);
 
+		//Text
+		Vec2Set(&newPosition, -100 * GetLoadRatio(), 400 * GetLoadRatio());
+		ChangeTextString(TutorialText, "Use SPACE to Jump.");
+		ChangeTextPosition(TutorialText, newPosition, Center);
+		ChangeTextZIndex(TutorialText, 801);
+
 		//Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 600, 800, 1, 1, 0, 240); //Top
 		//Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 100, 800, 1, 1, 0, -490); //Bottom
 		//Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 100, 380, 800, 1, 1, -960, -250); //Left
@@ -248,10 +262,60 @@ void UpdateTutorial(void)
 		Seclude4->Position.x = 910 * GetLoadRatio();//Right
 		Seclude4->Width      = 100 * GetLoadRatio();
 		UpdateMesh(Seclude4);
+
+		//Text
+		Vec2Set(&newPosition, 100 * GetLoadRatio(), 400 * GetLoadRatio());
+		ChangeTextString(TutorialText, "Use SPACE with S to Fall Through.");
+		ChangeTextPosition(TutorialText, newPosition, Center);
+		ChangeTextZIndex(TutorialText, 801);
 	}
 	else if (tutorialDone < 3 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * GetLoadRatio())
 	{
 		tutorialDone = 3;
+
+		Seclude3->Visible = FALSE;
+		Seclude4->Visible = FALSE;
+
+		//Text
+		Vec2Set(&newPosition, 1920 * GetLoadRatio(), 280 * GetLoadRatio());
+		ChangeTextString(TutorialText, "Use E to Change Weapons.");
+		ChangeTextPosition(TutorialText, newPosition, Center);
+		ChangeTextZIndex(TutorialText, 801);
+	}
+	else if (tutorialDone < 4 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * 3 * GetLoadRatio())
+	{
+		tutorialDone = 4;
+
+		//Text
+		Vec2Set(&newPosition, 1920 * 2 * GetLoadRatio(), 300 * GetLoadRatio());
+		ChangeTextString(TutorialText, "Use Left Mouse to Fight!");
+		ChangeTextPosition(TutorialText, newPosition, Center);
+		ChangeTextZIndex(TutorialText, 801);
+	}
+	else if (tutorialDone < 5 && StrawDummy->CurrentEnemyStats.CurrentHealth <= 0)
+	{
+		tutorialDone = 5;
+
+		//Text
+		Vec2Set(&newPosition, 1920 * 2 * GetLoadRatio(), 200 * GetLoadRatio());
+		ChangeTextString(TutorialText, "Go Right to Continue.");
+		ChangeTextPosition(TutorialText, newPosition, Center);
+		ChangeTextZIndex(TutorialText, 801);
+	}
+
+	Seclude1->Position.x = GetCameraXPosition();
+	Seclude2->Position.x = GetCameraXPosition();
+
+	if (tutorialDone > 2 && Seclude1->Visible && Seclude2->Visible)
+	{
+		Seclude1->Position.y += 100 * GetLoadRatio() * GetDeltaTime();
+		Seclude2->Position.y -= 100 * GetLoadRatio() * GetDeltaTime();
+
+		if (Seclude1->Position.y > 600)
+		{
+			Seclude1->Visible = FALSE;
+			Seclude2->Visible = FALSE;
+		}
 	}
 
 	//If the dummy exists, prevent the player from moving past
@@ -272,7 +336,6 @@ void UpdateTutorial(void)
 	else
 	{
 		//DONT SHOW THE HUD YET
-		Vec2 newPosition;
 		Vec2Set(&newPosition, (GetCameraXPosition() - 685 * GetLoadRatio() - 1000), 300 * GetLoadRatio());
 
 		//HUD items update position

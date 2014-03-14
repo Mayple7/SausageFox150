@@ -140,8 +140,10 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//       PLAYER SOUNDS          //
 	////////////////////////////////*/
-	CurrentPlayer->CurrentPlayerSounds.Swing1 = CreateSound("Sounds/ToolSwing1.mp3", SmallSnd);
-	CurrentPlayer->CurrentPlayerSounds.Swing2 = CreateSound("Sounds/ToolSwing2.mp3", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.Swing1 = CreateSound("Sounds/SwordSwing1.wav", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.Swing2 = CreateSound("Sounds/SwordSwing2.wav", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.GetHit1 = CreateSound("Sounds/SwordHit1.wav", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.GetHit2 = CreateSound("Sounds/SwordHit2.wav", SmallSnd);
 
 
 	/*////////////////////////////////
@@ -868,6 +870,10 @@ void Animation(Player *Object)
 	Sprite *Weap = Object->PlayerSpriteParts.Weapon;
 	Sprite *Tail = Object->PlayerSpriteParts.Tail;
 
+	/*printf("YO YO YO\n%f\n", testFrameTime());
+
+	printf("%f\n", testFrameTime());*/
+
 	Object->LegSinValue += 10.0f * GetDeltaTime() * (Object->Speed * 0.1f); 
 
 	Object->PlayerSpriteParts.BlinkTimer += 1;
@@ -1090,7 +1096,7 @@ void Animation(Player *Object)
 	Object->PlayerWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
 	Object->PlayerWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
 
-	printf("Arm Position: %f\n", Object->PlayerSpriteParts.ArmLower->Position.x - Object->Position.x);
+	//printf("Arm Position: %f\n", Object->PlayerSpriteParts.ArmLower->Position.x - Object->Position.x);
 
 	//*************************************************************************************************
 }

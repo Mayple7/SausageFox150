@@ -46,7 +46,11 @@ typedef struct EnemyStats
 typedef struct EnemySounds
 {
 	//Weapon sounds
-	FoxSound *YEAH;
+	FoxSound *Poof;
+	FoxSound *GetHit1;
+	FoxSound *GetHit2;
+	FoxSound *Swing1;
+	FoxSound *Swing2;
 }EnemySounds;
 
 typedef struct Enemy
@@ -60,6 +64,10 @@ typedef struct Enemy
 	float Speed;
 
 	int isAttacking;
+
+	int KnockBack;
+	int KnockBackTime;
+	enum Direction KnockBackDir;
 
 	float LegSinValue;
 	float TailSinValue;
