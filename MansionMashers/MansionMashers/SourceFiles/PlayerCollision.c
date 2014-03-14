@@ -113,6 +113,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	if(AEInputCheckTriggered('E'))
 	{
 		int Shopping = FALSE;
+		float healthRatio = 0;
 
 		//Check if the weapon is in a shop
 		if (wList->CurrentShop)
@@ -194,7 +195,9 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
 		updateDamage(CurrentPlayer);
 		updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
+		healthRatio = (float)(CurrentPlayer->CurrentPlayerStats.CurrentHealth) / CurrentPlayer->CurrentPlayerStats.MaxHealth;
 		updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+		CurrentPlayer->CurrentPlayerStats.CurrentHealth = (int)(CurrentPlayer->CurrentPlayerStats.MaxHealth * healthRatio);
 	}
 }
 // height +/- (fontsize/2)
