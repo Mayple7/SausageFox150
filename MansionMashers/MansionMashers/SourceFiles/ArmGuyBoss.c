@@ -602,11 +602,12 @@ void BossCollideWeapon(ArmGuyBoss *CurrentBoss)
 		damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
 	CurrentBoss->CurrentHealth -= damageDealt;
-	sprintf(num, "%d", damageDealt);
+	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentBoss->Position.x, (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2), 100, textColor, Center, Plain);
+	FirstLetter = CreateText(num, (CurrentBoss->Position.x + rand() % 81 - 40), (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
 }
 
 /*************************************************************************/
@@ -633,10 +634,11 @@ void PlayerDamageResult(int damage)
 		damageDealt = damage;
 	
 	CurrentPlayer.CurrentPlayerStats.CurrentHealth -= damageDealt;
-	sprintf(num, "%d", damageDealt);
+	sprintf(num, "-%d", damageDealt);
 
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentPlayer.Position.x / GetLoadRatio(), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center, Plain);
+	FirstLetter = CreateText(num, (CurrentPlayer.Position.x + rand() % 81 - 40) / GetLoadRatio(), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
 }

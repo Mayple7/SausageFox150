@@ -97,7 +97,7 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	if (CurrentEnemy->EnemyType != Dummy)
 	{
 		CurrentEnemy->KnockBack = TRUE;
-		CurrentEnemy->KnockBackTime = 0.25f / GetDeltaTime();
+		CurrentEnemy->KnockBackTime = (int)(0.25f / GetDeltaTime());
 		CurrentEnemy->KnockBackDir = CurrentPlayer.PlayerDirection;
 		Vec2Set(&velocity, 0.0f, 270.0f * GetLoadRatio());
 		if(CurrentEnemy->Position.y <= GROUNDLEVEL * GetLoadRatio())
@@ -107,9 +107,9 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	}
 	PlayAudio(CurrentEnemy->CurrentEnemySounds.GetHit1);
 
-	sprintf(num, "%d", damageDealt);
+	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentEnemy->Position.x / GetLoadRatio(), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2) / GetLoadRatio(), 100, textColor, Center, Plain);
+	FirstLetter = CreateText(num, (CurrentEnemy->Position.x + rand() % 81 - 40) / GetLoadRatio(), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2) / GetLoadRatio(), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);

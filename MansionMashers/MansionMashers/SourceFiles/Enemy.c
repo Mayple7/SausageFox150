@@ -216,8 +216,21 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 
 	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
+		char num[10];
+		Vec3 textColor;
+		TextGlyphs *FirstLetter;
+
 		//Give the player thier loot!
 		CurrentPlayer.CurrentPlayerStats.Money += CurrentEnemy->CurrentEnemyStats.Money;
+		
+		Vec3Set(&textColor, 1.0f, 1.0f, 0.0f);
+		sprintf(num, "+%d", CurrentEnemy->CurrentEnemyStats.Money);
+		// Create Floating Coin Text
+		FirstLetter = CreateText(num, (CurrentEnemy->Position.x + rand() % 81 - 40) / GetLoadRatio(), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 80, textColor, Center, Border);
+		AddFloatingText(FirstLetter);
+		ChangeTextVisibility(FirstLetter);
+		ChangeTextZIndex(FirstLetter, 201);
+
 		// Run on death stuff here
 		CurrentEnemy->EnemyParticleSystem->emitAngleRandom = 360;
 		CurrentEnemy->EnemyParticleSystem->amountTotal = 20;
