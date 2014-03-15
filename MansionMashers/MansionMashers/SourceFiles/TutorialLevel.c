@@ -265,7 +265,7 @@ void UpdateTutorial(void)
 
 		//Text
 		Vec2Set(&newPosition, 100 * GetLoadRatio(), 400 * GetLoadRatio());
-		ChangeTextString(TutorialText, "Use SPACE with S to Fall Through.");
+		ChangeTextString(TutorialText, "Use S with SPACE to Fall Through.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 	}

@@ -47,6 +47,7 @@ void InitializeCharacterSelect(void)
 {
 	Vec3 Tint;
 
+	//Psuedo players for picking
 	CharacterMayple = (Player *)CallocMyAlloc(1, sizeof(Player));
 	CharacterGinko = (Player *)CallocMyAlloc(1, sizeof(Player));
 	CharacterHolly = (Player *)CallocMyAlloc(1, sizeof(Player));
@@ -217,6 +218,12 @@ void UnloadCharacterSelect(void)
 	DestroyPlayer(CharacterGinko);
 	DestroyPlayer(CharacterHolly);
 	DestroyPlayer(CharacterKaya);
+
+	//Free psuedo
+	FreeMyAlloc(CharacterMayple);
+	FreeMyAlloc(CharacterGinko);
+	FreeMyAlloc(CharacterHolly);
+	FreeMyAlloc(CharacterKaya);
 }
 
 void EventCharacterSelect(void)
