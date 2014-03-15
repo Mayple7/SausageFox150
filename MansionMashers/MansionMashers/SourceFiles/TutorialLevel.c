@@ -140,7 +140,7 @@ void InitializeTutorial(void)
 
 	//Some text to use for whatever tutorial stuff
 	Vec3Set(&Tint, 1, 1, 1);
-	TutorialText = CreateText("Use A,D to move Left,Right.", -300 * GetLoadRatio(), 200 * GetLoadRatio(), 100, Tint, Center);
+	TutorialText = CreateText("Use A,D to move Left,Right.", -300 * GetLoadRatio(), 200 * GetLoadRatio(), 100, Tint, Center, Border);
 	ChangeTextZIndex(TutorialText, 801);
 	ChangeTextVisibility(TutorialText);
 

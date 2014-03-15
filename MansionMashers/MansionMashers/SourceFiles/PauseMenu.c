@@ -108,13 +108,13 @@ void InitializePause(void (*DrawLevel)())
 
 	Vec3Set(&TextColor, 1, 1, 1);
 	
-	SFXText = CreateText(volumestring, (SFXSliderBack->Position.x + (SFXSliderBack->Width / 2)) / GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left);
+	SFXText = CreateText(volumestring, (SFXSliderBack->Position.x + (SFXSliderBack->Width / 2)) / GetLoadRatio() + 50 * GetLoadRatio(), 100, 100, TextColor, Left, Border);
 	volumestring = VolumetoString(volumestring, SFXVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(SFXText, volumestring);
 	ChangeTextZIndex(SFXText, 1510);
 
-	BGMText = CreateText(volumestring, (BGMSliderBack->Position.x + (BGMSliderBack->Width / 2)) / GetLoadRatio() + 50 * GetLoadRatio(), -100, 100, TextColor, Left);
+	BGMText = CreateText(volumestring, (BGMSliderBack->Position.x + (BGMSliderBack->Width / 2)) / GetLoadRatio() + 50 * GetLoadRatio(), -100, 100, TextColor, Left, Border);
 	volumestring = VolumetoString(volumestring, BGMVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(BGMText, volumestring);

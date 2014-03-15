@@ -604,7 +604,7 @@ void BossCollideWeapon(ArmGuyBoss *CurrentBoss)
 	CurrentBoss->CurrentHealth -= damageDealt;
 	sprintf(num, "%d", damageDealt);
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentBoss->Position.x, (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2), 100, textColor, Center);
+	FirstLetter = CreateText(num, CurrentBoss->Position.x, (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2), 100, textColor, Center, Plain);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 }
@@ -636,7 +636,7 @@ void PlayerDamageResult(int damage)
 	sprintf(num, "%d", damageDealt);
 
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentPlayer.Position.x / GetLoadRatio(), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+	FirstLetter = CreateText(num, CurrentPlayer.Position.x / GetLoadRatio(), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center, Plain);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 }

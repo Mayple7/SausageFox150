@@ -126,12 +126,12 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	
 				// Create Floating Error Text
 				Vec3Set(&textColor, 0.0f, 0.0f, 0.0f);
-				FirstLetter = CreateText("Not Enough Coin!", (CurrentPlayer->Position.x - 4) / GetLoadRatio(), (CurrentPlayer->Position.y - 4 + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+				FirstLetter = CreateText("Not Enough Coin!", (CurrentPlayer->Position.x - 4) / GetLoadRatio(), (CurrentPlayer->Position.y - 4 + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center, Plain);
 				AddFloatingText(FirstLetter);
 				ChangeTextVisibility(FirstLetter);
 
 				Vec3Set(&textColor, 1.0f, 0.1f, 0.1f);
-				FirstLetter = CreateText("Not Enough Coin!", CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+				FirstLetter = CreateText("Not Enough Coin!", CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center, Plain);
 				AddFloatingText(FirstLetter);
 				ChangeTextVisibility(FirstLetter);
 				return;
@@ -219,7 +219,7 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
 	sprintf(num, "%d", damageDealt);
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+	FirstLetter = CreateText(num, CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center, Plain);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 }

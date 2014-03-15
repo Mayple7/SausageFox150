@@ -109,7 +109,7 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 
 	sprintf(num, "%d", damageDealt);
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentEnemy->Position.x / GetLoadRatio(), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+	FirstLetter = CreateText(num, CurrentEnemy->Position.x / GetLoadRatio(), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2) / GetLoadRatio(), 100, textColor, Center, Plain);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);

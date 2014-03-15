@@ -114,7 +114,7 @@ void InitializeLevel2(void)
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 	
 	//Bounding Boxes

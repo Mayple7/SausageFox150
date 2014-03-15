@@ -80,7 +80,7 @@ void InitializeKevin(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("That Bitch Level", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("That Bitch Level", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
 	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
