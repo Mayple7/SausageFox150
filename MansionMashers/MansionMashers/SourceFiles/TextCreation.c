@@ -47,13 +47,13 @@
 	Returns a pointer to the first element in the text linked list
 */
 /*************************************************************************/
-TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor, int alignment)
+TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor, int alignment, int textSheet)
 {
 	TextGlyphs *textString, *firstLetter, *nextLetter;
 	int length, i;
 	float firstXPos;
 	length = strlen(string);
-	
+
 	if(alignment == Center)
 	{
 		firstXPos = xPos - (length * fontSize * 0.4f) / 2;
@@ -78,12 +78,12 @@ TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 
 			nextLetter = firstLetter;
 		
 		nextLetter->letter = string[i];
-		nextLetter->Glyph = ConvertToGlyph(string[i], fontSize, firstXPos + (i * fontSize * 0.4f), yPos);
+		nextLetter->textTexture = textSheet;
+		nextLetter->Glyph = ConvertToGlyph(string[i], fontSize, firstXPos + (i * fontSize * 0.4f), yPos, textSheet);
 		nextLetter->NextLetter = NULL;
 		if(nextLetter->Glyph)
 		{
 			nextLetter->Glyph->Tint = TextColor;
-			//nextLetter->Glyph->isHUD = TRUE;
 		}
 		if(i != 0)
 			textString->NextLetter = nextLetter;
@@ -105,7 +105,7 @@ TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 
 	The size of the letters
 */
 /*************************************************************************/
-Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
+Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos, int textSheet)
 {
 	int frame = -1;
 	Sprite *temp;
@@ -148,7 +148,17 @@ Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos)
 	}
 	if(frame >= 0)
 	{
-		temp = (Sprite *) CreateSprite("TextureFiles/Rumple_TextSheet_White.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 11, 11, 4, xPos, yPos);
+		switch(textSheet)
+		{
+		case Plain:
+			temp = (Sprite *) CreateSprite("TextureFiles/Rumple_TextSheet_White.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 11, 11, 4, xPos, yPos);
+			break;
+		case Border:
+			temp = (Sprite *) CreateSprite("TextureFiles/Rumple_TextSheet_Border.png", ((float)fontSize * 92.0f / 100.0f), (float)fontSize, 11, 11, 4, xPos, yPos);
+			break;
+		}
+
+		
 		temp->Visible = FALSE;
 		temp->AnimationActive = FALSE;
 		temp->CurrentFrame = frame;
@@ -346,7 +356,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 		else if(nextLetter)
 		{
 			nextLetter->letter = *newString;
-			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio());
+			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio(), FirstLetter->textTexture);
 		}
 		else
 		{
@@ -354,7 +364,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 			
 			prevLetter->NextLetter = nextLetter;
 			nextLetter->letter = *newString;
-			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio());
+			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio(), FirstLetter->textTexture);
 			nextLetter->NextLetter = NULL;
 			if(nextLetter->Glyph)
 				nextLetter->Glyph->ZIndex = FirstLetter->Glyph->ZIndex;

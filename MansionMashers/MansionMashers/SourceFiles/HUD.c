@@ -69,7 +69,7 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	Vec3Set(&TextTint, 1.0f, 1.0f, 0.0f);
 	CurrentHUD->currentHUDCoinValue = CurrentPlayer->CurrentPlayerStats.Money;
 	sprintf(CoinChar, "%i", CurrentHUD->currentHUDCoinValue);
-	CurrentHUD->CoinText = CreateText(strcat(CoinChar, " Coins"), 448, 192, 60, TextTint, Center);
+	CurrentHUD->CoinText = CreateText(strcat(CoinChar, " Coins"), 448, 192, 60, TextTint, Center, Border);
 	ChangeTextZIndex(CurrentHUD->CoinText, 400);
 	ChangeTextVisibility(CurrentHUD->CoinText);
 

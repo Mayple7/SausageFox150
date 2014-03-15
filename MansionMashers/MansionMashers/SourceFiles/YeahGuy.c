@@ -73,7 +73,7 @@ void InitializeYeahGuy(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("YeahGuy Level", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("YeahGuy Level", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 }
 

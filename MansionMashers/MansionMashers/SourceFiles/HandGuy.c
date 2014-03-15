@@ -93,7 +93,7 @@ void InitializeHandGuy(void)
 
 	//Title text
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
 	//Boss dog

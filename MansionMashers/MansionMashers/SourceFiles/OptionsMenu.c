@@ -126,19 +126,19 @@ void InitializeOptions(void)
 	//Create the volume text
 	Vec3Set(&TextColor, 1, 1, 1);
 	
-	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 200, 100, TextColor, Left);
+	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 200, 100, TextColor, Left, Border);
 	volumestring = VolumetoString(volumestring, SFXVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(SFXText, volumestring);
 	ChangeTextZIndex(SFXText, 510);
 
-	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 0, 100, TextColor, Left);
+	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 0, 100, TextColor, Left, Border);
 	volumestring = VolumetoString(volumestring, BGMVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(BGMText, volumestring);
 
-	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - SFXSliderBack->Width - 140 * GetLoadRatio(), 200, 100, TextColor, Right);
-	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - BGMSliderBack->Width - 140 * GetLoadRatio(), 0, 100, TextColor, Right);
+	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - SFXSliderBack->Width - 140 * GetLoadRatio(), 200, 100, TextColor, Right, Border);
+	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - BGMSliderBack->Width - 140 * GetLoadRatio(), 0, 100, TextColor, Right, Border);
 
 	//Set all text to be visible
 	TextAllVisible(SFXText);

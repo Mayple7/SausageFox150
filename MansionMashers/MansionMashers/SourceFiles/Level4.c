@@ -73,7 +73,7 @@ void InitializeLevel4(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 }
 
