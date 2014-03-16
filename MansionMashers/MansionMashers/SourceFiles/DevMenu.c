@@ -319,35 +319,35 @@ void UpdateSelector(struct Sprite *Selector)
 	switch(selectedButton)
 	{
 		case 0:
-			Vec2Scale(&Selector->Position, &Level1->Position, GetLoadRatio());
+			Vec2Scale(&Selector->Position, &Level1->Position, 1.0f);
 			UpdateMesh(Selector);
 			break;
 		case 1:
-			Vec2Scale(&Selector->Position, &Level2->Position, GetLoadRatio());
+			Vec2Scale(&Selector->Position, &Level2->Position, 1.0f);
 			UpdateMesh(Selector);
 			break;
 		case 2:
-			Vec2Scale(&Selector->Position, &Level3->Position, GetLoadRatio());
+			Vec2Scale(&Selector->Position, &Level3->Position, 1.0f);
 			UpdateMesh(Selector);
 			break;
 		case 3:
-			Vec2Scale(&Selector->Position, &Level4->Position, GetLoadRatio());
+			Vec2Scale(&Selector->Position, &Level4->Position, 1.0f);
 			UpdateMesh(Selector);
 			break;
 		case 4:
-			Vec2Scale(&Selector->Position, &ArmGuy->Position, GetLoadRatio());
+			Vec2Scale(&Selector->Position, &ArmGuy->Position, 1.0f);
 			UpdateMesh(Selector);
 			break;
 		case 5:
-			Vec2Scale(&Selector->Position, &HandGuy->Position, GetLoadRatio());
+			Vec2Scale(&Selector->Position, &HandGuy->Position, 1.0f);
 			UpdateMesh(Selector);
 			break;
 		case 6:
-			Vec2Scale(&Selector->Position, &YeahGuy->Position, GetLoadRatio());
+			Vec2Scale(&Selector->Position, &YeahGuy->Position, 1.0f);
 			UpdateMesh(Selector);
 			break;
 		case 7:
-			Vec2Scale(&Selector->Position, &Kevin->Position, GetLoadRatio());
+			Vec2Scale(&Selector->Position, &Kevin->Position, 1.0f);
 			UpdateMesh(Selector);
 			break;
 	}

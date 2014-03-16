@@ -356,7 +356,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 		else if(nextLetter)
 		{
 			nextLetter->letter = *newString;
-			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio(), FirstLetter->textTexture);
+			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y, FirstLetter->textTexture);
 		}
 		else
 		{
@@ -364,7 +364,7 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 			
 			prevLetter->NextLetter = nextLetter;
 			nextLetter->letter = *newString;
-			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height / GetLoadRatio()), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y / GetLoadRatio(), FirstLetter->textTexture);
+			nextLetter->Glyph = ConvertToGlyph(*newString, (int)(FirstLetter->Glyph->Height), FirstLetter->Glyph->Position.x + (i * FirstLetter->Glyph->Height * 0.4f), FirstLetter->Glyph->Position.y, FirstLetter->textTexture);
 			nextLetter->NextLetter = NULL;
 			if(nextLetter->Glyph)
 				nextLetter->Glyph->ZIndex = FirstLetter->Glyph->ZIndex;

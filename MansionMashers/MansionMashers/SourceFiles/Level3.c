@@ -205,7 +205,7 @@ void EventLevel3(void)
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
-	if(CurrentPlayer.Position.x > (960 * GetLoadRatio()))
+	if(CurrentPlayer.Position.x > (960))
 	{
 		levelComplete = TRUE;
 		SetNextState(GS_Level31);

@@ -23,6 +23,9 @@ void CreateBoundingBoxes(void)
 	BoundLeft = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 2080, 5000, 1, 1, -1920, 0);
 	BoundRight = (Sprite *) CreateSprite("TextureFiles/BoundingBox.png", 1920, 2080, 5000, 1, 1, 1920, 0);
 
+	//BoundLeft->Visible = FALSE;
+	//BoundRight->Visible = FALSE;
+
 	BoundTop->Tint = BoundingTint;
 	BoundBottom->Tint = BoundingTint;
 	BoundLeft->Tint = BoundingTint;
@@ -37,10 +40,10 @@ void BoundingBoxUpdate(void)
 	AEGfxGetCamPosition(&camX, &camY);
 
 
-	BoundTop->Position.x = camX;
-	BoundBottom->Position.x = camX;
-	BoundRight->Position.x = camX + 1920 * GetLoadRatio();
-	BoundLeft->Position.x = camX - 1920 * GetLoadRatio();
+	BoundTop->Position.x = camX / GetLoadRatio();
+	BoundBottom->Position.x = camX / GetLoadRatio();
+	BoundRight->Position.x = camX / GetLoadRatio() + 1920;
+	BoundLeft->Position.x = camX / GetLoadRatio() - 1920;
 
 }
 

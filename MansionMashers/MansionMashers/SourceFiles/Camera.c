@@ -36,12 +36,12 @@ void SetCamera(Vec2 *playerX, int offset)
 	else
 	{
 		//Moves camera Right
-		if(playerX->x > (camX + offset))
-			AEGfxSetCamPosition(playerX->x - offset, camY);
+		if(playerX->x > (camX / GetLoadRatio() + offset))
+			AEGfxSetCamPosition((playerX->x - offset) * GetLoadRatio(), camY);
 	
 		//Moves camera Left
-		else if(playerX->x < (camX - offset))
-			AEGfxSetCamPosition(playerX->x + offset, camY);
+		else if(playerX->x < (camX / GetLoadRatio() - offset))
+			AEGfxSetCamPosition((playerX->x + offset) * GetLoadRatio(), camY);
 	}
 }
 
@@ -54,26 +54,26 @@ float GetCameraXPosition()
 {
 	float camX, camY;
 	AEGfxGetCamPosition(&camX, &camY);
-	return camX;
+	return camX / GetLoadRatio();
 }
 
 void SetCameraXPosition(float newX)
 {
 	float camX, camY;
 	AEGfxGetCamPosition(&camX, &camY);
-	AEGfxSetCamPosition(newX, camY);
+	AEGfxSetCamPosition(newX * GetLoadRatio(), camY);
 }
 
 void SetCameraPan(float newX, float PanelSize)
 {
-	float camX, camY;	
+	float camX, camY;
 
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
 
 	CameraMoved = FALSE;
 
-	if(camX >= newX - ((PanelSize / 128) * GetLoadRatio()) && camX <= newX + ((PanelSize / 128) * GetLoadRatio()))
+	if(camX >= newX * GetLoadRatio() - (PanelSize / 128) && camX <= newX * GetLoadRatio() + (PanelSize / 128))
 		CameraMoved = TRUE;
 
 	if(GateCamera == TRUE)
@@ -81,13 +81,13 @@ void SetCameraPan(float newX, float PanelSize)
 	else
 	{
 		//Pans camera Right
-		if(camX < newX - ((PanelSize / 128) * GetLoadRatio()))
+		if(camX < newX * GetLoadRatio() - (PanelSize / 128))
 		{
 			camX += ((PanelSize / 1.25f) * GetLoadRatio()) * GetDeltaTime();
 			AEGfxSetCamPosition(camX, camY);
 		}
 		//Pans Camera Left
-		else if (camX > newX + ((PanelSize / 128) * GetLoadRatio()))
+		else if (camX > newX * GetLoadRatio() + (PanelSize / 128))
 		{
 			camX -= ((PanelSize / 1.25f) * GetLoadRatio()) * GetDeltaTime();
 			AEGfxSetCamPosition(camX, camY);
@@ -95,7 +95,7 @@ void SetCameraPan(float newX, float PanelSize)
 		else
 		{
 			//Keep Camera Where it is
-			AEGfxSetCamPosition(newX, camY);
+			AEGfxSetCamPosition(newX * GetLoadRatio(), camY);
 		}
 	}
 }

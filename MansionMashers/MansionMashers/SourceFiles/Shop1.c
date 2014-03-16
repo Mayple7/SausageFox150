@@ -80,7 +80,7 @@ void InitializeShop1(void)
 
 	CreateSprite("TextureFiles/LevelGrassGround.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);
 	Vec3Set(&Tint, 0, 0, 0);
-	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 400, 1, 1, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = Tint;
 
 	// Initialize the player
@@ -179,7 +179,7 @@ void EventLevel(void)
 		InputPlayer(&CurrentPlayer);
 		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 
-		if(CurrentPlayer.Position.x > (1920.0f / 2) * GetLoadRatio() + CurrentPlayer.PlayerCollider.width || CurrentPlayer.Position.x < -(1920.0f / 2) * GetLoadRatio() - CurrentPlayer.PlayerCollider.width)
+		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width || CurrentPlayer.Position.x < -(1920.0f / 2) - CurrentPlayer.PlayerCollider.width)
 		{
 			levelComplete = TRUE;
 		}
@@ -198,7 +198,7 @@ void EventLevel(void)
 			BlackOverlay->Alpha = 0.0f;
 			CurrentPlayer.FlipX = 1;
 			CurrentPlayer.PlayerDirection = RIGHT;
-			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 			
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -500)

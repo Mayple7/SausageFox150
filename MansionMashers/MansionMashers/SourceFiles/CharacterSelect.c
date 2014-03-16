@@ -182,16 +182,16 @@ void UpdateCharacterSelect(void)
 	switch(selected)
 	{
 	case Mayple:
-		CharacterMayple->Speed = CharacterMayple->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterMayple->Speed = CharacterMayple->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		break;
 	case Ginko:
-		CharacterGinko->Speed = CharacterGinko->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterGinko->Speed = CharacterGinko->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		break;
 	case Kaya:
-		CharacterKaya->Speed = CharacterKaya->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterKaya->Speed = CharacterKaya->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		break;
 	case Holly:
-		CharacterHolly->Speed = CharacterHolly->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterHolly->Speed = CharacterHolly->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		break;
 	}
 	Animation(CharacterMayple);

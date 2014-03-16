@@ -39,7 +39,7 @@ Wall* CreateWall(char* textureName, float width, float height, int newID, float 
 	ColliderPos.x = xPos;
 	ColliderPos.y = yPos;
 	CurrentWall->enemyNotCollidable = FALSE;
-	Vec2Set(&CurrentWall->Position, xPos * GetLoadRatio(), yPos * GetLoadRatio());
+	Vec2Set(&CurrentWall->Position, xPos, yPos);
 	CurrentWall->WallSprite = (Sprite *) CreateSprite(textureName, width, height, 4, 1, 1, xPos, yPos);
 
 	CreateCollisionBox(&CurrentWall->WallCollider, &ColliderPos, WallType, width, height, newID);

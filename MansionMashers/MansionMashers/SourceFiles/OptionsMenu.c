@@ -109,8 +109,6 @@ void InitializeOptions(void)
 	// Find default slider position based on sound volumes
 	SFXSliderPos = SFXSliderGuide->Position.x - SFXSliderGuide->Width / 2 + SFXSliderGuide->Width * SFXVolume;
 	BGMSliderPos = BGMSliderGuide->Position.x - BGMSliderGuide->Width / 2 + BGMSliderGuide->Width * BGMVolume;
-	SFXSliderPos /= GetLoadRatio();
-	BGMSliderPos /= GetLoadRatio();
 
 	//Create the slider buttons
 	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 200, 80, 80, newID++);
@@ -126,19 +124,19 @@ void InitializeOptions(void)
 	//Create the volume text
 	Vec3Set(&TextColor, 1, 1, 1);
 	
-	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 200, 100, TextColor, Left, Border);
+	SFXText = CreateText(volumestring, SFXSliderBack->Position.x + (SFXSliderBack->Width / 2) + 50, 200, 100, TextColor, Left, Border);
 	volumestring = VolumetoString(volumestring, SFXVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(SFXText, volumestring);
 	ChangeTextZIndex(SFXText, 510);
 
-	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) * GetLoadRatio() + 50 * GetLoadRatio(), 0, 100, TextColor, Left, Border);
+	BGMText = CreateText(volumestring, BGMSliderBack->Position.x + (BGMSliderBack->Width / 2) + 50, 0, 100, TextColor, Left, Border);
 	volumestring = VolumetoString(volumestring, BGMVolume * 100);
 	volumestring = strcat(volumestring, "%");
 	ChangeTextString(BGMText, volumestring);
 
-	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - SFXSliderBack->Width - 140 * GetLoadRatio(), 200, 100, TextColor, Right, Border);
-	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - BGMSliderBack->Width - 140 * GetLoadRatio(), 0, 100, TextColor, Right, Border);
+	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - SFXSliderBack->Width - 140, 200, 100, TextColor, Right, Border);
+	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - BGMSliderBack->Width - 140, 0, 100, TextColor, Right, Border);
 
 	//Set all text to be visible
 	TextAllVisible(SFXText);
@@ -242,7 +240,7 @@ void EventOptions(void)
 			SFXSlider->ButtonCollider.Position.x = SFXSlider->Position.x;
 
 			//Adjust the sounds based on the slider position
-			SFXVolume = (SFXSlider->Position.x + 480 * GetLoadRatio() + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
+			SFXVolume = (SFXSlider->Position.x + 480 + SFXSliderGuide->Width / 2) / SFXSliderGuide->Width;
 
 			//Bounds checking
 			if(SFXVolume < 0)
@@ -268,7 +266,7 @@ void EventOptions(void)
 			BGMSlider->ButtonCollider.Position.x = BGMSlider->Position.x;
 
 			//Adjust the sounds based on the slider position
-			BGMVolume = (BGMSlider->Position.x + 480 * GetLoadRatio() + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
+			BGMVolume = (BGMSlider->Position.x + 480 + BGMSliderGuide->Width / 2) / BGMSliderGuide->Width;
 
 			//Bounds checking
 			if(BGMVolume < 0)

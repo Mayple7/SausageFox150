@@ -55,7 +55,7 @@ EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, f
 	//Create the enemies and set them offscreen and AINone
 	for(i = 0; i < numEnemies; ++i)
 	{
-		CurrentSpawner->EnemyArray[i] = CreateEnemy(CurrentSpawner->enemyType, EnemyType, CurrentSpawner->objID + i + 1, CurrentSpawner->SpawnerCollider.Position.x + i * 200 * GetLoadRatio(), -10000, panelId);
+		CurrentSpawner->EnemyArray[i] = CreateEnemy(CurrentSpawner->enemyType, EnemyType, CurrentSpawner->objID + i + 1, CurrentSpawner->SpawnerCollider.Position.x + i * 200, -10000, panelId);
 		CurrentSpawner->EnemyArray[i]->HomePos = CurrentSpawner->SpawnerCollider.Position;
 		CurrentSpawner->EnemyArray[i]->EnemyState = AINone;
 	}
@@ -86,10 +86,10 @@ int SpawnEnemies(EnemySpawner *CurrentSpawner)
 	for(i = 0; i < CurrentSpawner->numEnemies; ++i)
 	{
 		if(CurrentSpawner->spawnSide)
-			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() + (1920.0f / 2) * GetLoadRatio() + 100 * i * GetLoadRatio() + 10 * (rand() % 10);
+			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() + (1920.0f / 2) + 100 * i + 10 * (rand() % 10);
 		else
-			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() - (1920.0f / 2) * GetLoadRatio() - 100 * i * GetLoadRatio() - 10 * (rand() % 10);
-		CurrentSpawner->EnemyArray[i]->Position.y = GROUNDLEVEL * GetLoadRatio();
+			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() - (1920.0f / 2) - 100 * i - 10 * (rand() % 10);
+		CurrentSpawner->EnemyArray[i]->Position.y = GROUNDLEVEL;
 		CurrentSpawner->EnemyArray[i]->HomePos = CurrentSpawner->SpawnerCollider.Position;
 		CurrentSpawner->EnemyArray[i]->EnemyState = AIIdle;
 	}

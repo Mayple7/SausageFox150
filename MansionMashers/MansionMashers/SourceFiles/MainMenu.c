@@ -228,10 +228,10 @@ void UpdateMainMenu(void)
 	}
 	
 	//If the position is greater than the final position
-	if(DogScrollBottom->Position.y >= -345 * GetLoadRatio())
+	if(DogScrollBottom->Position.y >= -345)
 	{
 		//Blaze the bottom down based on the total distance traveled divided by the number of frames and frames per change
-		DogScrollBottom->Position.y -= (420 * GetLoadRatio()) / 18 / DogScroll->AnimationSpeed;
+		DogScrollBottom->Position.y -= (420) / 18 / DogScroll->AnimationSpeed;
 	}
 	
 	if (DogScrollBottom->Position.y < OptionsButton->ButtonSprite->Position.y)
@@ -247,10 +247,10 @@ void UpdateMainMenu(void)
 	if (FoxScroll->CurrentFrame == 17)
 		FoxScroll->AnimationActive = FALSE;
 	
-	if(FoxScrollBottom->Position.y >= -345 * GetLoadRatio())
+	if(FoxScrollBottom->Position.y >= -345)
 	{
 		//Blaze the bottom down based on the total distance traveled divided by the number of frames and frames per change
-		FoxScrollBottom->Position.y -= (420 * GetLoadRatio()) / 18 / FoxScroll->AnimationSpeed;
+		FoxScrollBottom->Position.y -= (420) / 18 / FoxScroll->AnimationSpeed;
 	}
 
 	if (FoxScrollBottom->Position.y < LoadGameButton->ButtonSprite->Position.y)
@@ -595,8 +595,8 @@ void BackgroundAnimation(void)
 		// Top right
 		case 0:
 			//Update the position
-			FirstBackground->Position.x -= 640 * GetLoadRatio() / (10 / GetDeltaTime());
-			FirstBackground->Position.y -= 360 * GetLoadRatio() / (10 / GetDeltaTime());
+			FirstBackground->Position.x -= 640 / (10 / GetDeltaTime());
+			FirstBackground->Position.y -= 360 / (10 / GetDeltaTime());
 			//Fade out is complete
 			if(firstMoveTimer >= 10)
 			{
@@ -623,8 +623,8 @@ void BackgroundAnimation(void)
 			break;
 		// Bottom right
 		case 1:
-			FirstBackground->Position.x -= 640 * GetLoadRatio() / (10 / GetDeltaTime());
-			FirstBackground->Position.y -= -360 * GetLoadRatio() / (10 / GetDeltaTime());
+			FirstBackground->Position.x -= 640 / (10 / GetDeltaTime());
+			FirstBackground->Position.y -= -360 / (10 / GetDeltaTime());
 			if(firstMoveTimer >= 10)
 			{
 				firstAnimated = FALSE;
@@ -647,8 +647,8 @@ void BackgroundAnimation(void)
 			break;
 		// Top left
 		case 2:
-			FirstBackground->Position.x -= -640 * GetLoadRatio() / (10 / GetDeltaTime());
-			FirstBackground->Position.y -= 360 * GetLoadRatio() / (10 / GetDeltaTime());
+			FirstBackground->Position.x -= -640 / (10 / GetDeltaTime());
+			FirstBackground->Position.y -= 360 / (10 / GetDeltaTime());
 			if(firstMoveTimer >= 10)
 			{
 				firstAnimated = FALSE;
@@ -671,8 +671,8 @@ void BackgroundAnimation(void)
 			break;
 		// Bottom left
 		case 3:
-			FirstBackground->Position.x -= -640 * GetLoadRatio() / (10 / GetDeltaTime());
-			FirstBackground->Position.y -= -360 * GetLoadRatio() / (10 / GetDeltaTime());
+			FirstBackground->Position.x -= -640 / (10 / GetDeltaTime());
+			FirstBackground->Position.y -= -360 / (10 / GetDeltaTime());
 			if(firstMoveTimer >= 10)
 			{
 				firstAnimated = FALSE;
@@ -703,8 +703,8 @@ void BackgroundAnimation(void)
 		{
 		// Top right
 		case 0:
-			SecondBackground->Position.x -= 640 * GetLoadRatio() / (10 / GetDeltaTime());
-			SecondBackground->Position.y -= 360 * GetLoadRatio() / (10 / GetDeltaTime());
+			SecondBackground->Position.x -= 640 / (10 / GetDeltaTime());
+			SecondBackground->Position.y -= 360 / (10 / GetDeltaTime());
 			if(secondMoveTimer >= 10)
 			{
 				secondAnimated = FALSE;
@@ -727,8 +727,8 @@ void BackgroundAnimation(void)
 			break;
 		// Bottom right
 		case 1:
-			SecondBackground->Position.x -= 640 * GetLoadRatio() / (10 / GetDeltaTime());
-			SecondBackground->Position.y -= -360 * GetLoadRatio() / (10 / GetDeltaTime());
+			SecondBackground->Position.x -= 640 / (10 / GetDeltaTime());
+			SecondBackground->Position.y -= -360 / (10 / GetDeltaTime());
 			if(secondMoveTimer >= 10)
 			{
 				secondAnimated = FALSE;
@@ -751,8 +751,8 @@ void BackgroundAnimation(void)
 			break;
 		// Top left
 		case 2:
-			SecondBackground->Position.x -= -640 * GetLoadRatio() / (10 / GetDeltaTime());
-			SecondBackground->Position.y -= 360 * GetLoadRatio() / (10 / GetDeltaTime());
+			SecondBackground->Position.x -= -640 / (10 / GetDeltaTime());
+			SecondBackground->Position.y -= 360 / (10 / GetDeltaTime());
 			if(secondMoveTimer >= 10)
 			{
 				secondAnimated = FALSE;
@@ -775,8 +775,8 @@ void BackgroundAnimation(void)
 			break;
 		// Bottom left
 		case 3:
-			SecondBackground->Position.x -= -640 * GetLoadRatio() / (10 / GetDeltaTime());
-			SecondBackground->Position.y -= -360 * GetLoadRatio() / (10 / GetDeltaTime());
+			SecondBackground->Position.x -= -640 / (10 / GetDeltaTime());
+			SecondBackground->Position.y -= -360 / (10 / GetDeltaTime());
 			if(secondMoveTimer >= 10)
 			{
 				secondAnimated = FALSE;
@@ -822,23 +822,23 @@ void SetStartLocation(float *xPos, float *yPos, int startNum)
 	{
 	// Top right
 	case 0:
-		*xPos = 320.0f * GetLoadRatio();
-		*yPos = 180.0f * GetLoadRatio();
+		*xPos = 320.0f;
+		*yPos = 180.0f;
 		break;
 	// Bottom right
 	case 1:
-		*xPos = 320.0f * GetLoadRatio();
-		*yPos = -180.0f * GetLoadRatio();
+		*xPos = 320.0f;
+		*yPos = -180.0f;
 		break;
 	// Top left
 	case 2:
-		*xPos = -320.0f * GetLoadRatio();
-		*yPos = 180.0f * GetLoadRatio();
+		*xPos = -320.0f;
+		*yPos = 180.0f;
 		break;
 	// Bottom left
 	case 3:
-		*xPos = -320.0f * GetLoadRatio();
-		*yPos = -180.0f * GetLoadRatio();
+		*xPos = -320.0f;
+		*yPos = -180.0f;
 		break;
 	}
 }

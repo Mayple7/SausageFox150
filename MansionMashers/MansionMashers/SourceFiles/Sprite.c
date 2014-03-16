@@ -133,18 +133,18 @@ void* CreateSprite(char texture[], float width, float height, unsigned short ZIn
 	CurrentSprite->RotationPrev = 0.0f;
 
 	//Sprite Graphics Properties
-	CurrentSprite->SpriteMesh = createMesh(width * GetLoadRatio(), height * GetLoadRatio(), CurrentSprite->OffsetX, CurrentSprite->OffsetY);
+	CurrentSprite->SpriteMesh = createMesh(width, height, CurrentSprite->OffsetX, CurrentSprite->OffsetY);
 	CurrentSprite->SpriteTexture = LoadTexture(texture);
 
 	CurrentSprite->MeshOwner = TRUE;
 
 	// Size of the sprite
-	CurrentSprite->Width = width * GetLoadRatio();
-	CurrentSprite->Height = height * GetLoadRatio();
+	CurrentSprite->Width = width;
+	CurrentSprite->Height = height;
 
 	//Position of the sprite
-	CurrentSprite->Position.x = xPos * GetLoadRatio();
-	CurrentSprite->Position.y = yPos * GetLoadRatio();
+	CurrentSprite->Position.x = xPos;
+	CurrentSprite->Position.y = yPos;
 	CurrentSprite->ZIndex     = ZIndex;
 
 	//Animation Properties
@@ -228,12 +228,12 @@ Sprite* CreateSpriteNoMesh(char texture[], float width, float height, unsigned s
 	CurrentSprite->MeshOwner = FALSE;
 
 	// Size of the sprite
-	CurrentSprite->Width = width * GetLoadRatio();
-	CurrentSprite->Height = height * GetLoadRatio();
+	CurrentSprite->Width = width;
+	CurrentSprite->Height = height;
 
 	//Position of the sprite
-	CurrentSprite->Position.x = xPos * GetLoadRatio();
-	CurrentSprite->Position.y = yPos * GetLoadRatio();
+	CurrentSprite->Position.x = xPos;
+	CurrentSprite->Position.y = yPos;
 	CurrentSprite->ZIndex     = ZIndex;
 
 	//Animation Properties
@@ -328,8 +328,9 @@ void updateSpriteAnimation(Sprite *CurrentSprite, Vec2 *offset)
 /*************************************************************************/
 void DrawSprite(Sprite *CurrentSprite)
 {
-	Vec2 offset;  //For the sprite animation
-	Matrix3 Mtx;  //For the sprite position, rotation and scale
+	Vec2 offset;      //For the sprite animation
+	Matrix3 Mtx;	  //For the sprite position, rotation and scale
+	Matrix3 FinalMtx; //The final matrix to set
 
 	//Set draw mode to texture
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -337,7 +338,10 @@ void DrawSprite(Sprite *CurrentSprite)
 
 	//Set position for the sprite drawing
 	Mtx = CreateTranslationMtx(CurrentSprite);
-	AEGfxSetTransform(Mtx.m);
+
+	//Integrate the load ratio matrix
+	Matrix3Mult(&FinalMtx, &LoadRatioMtx, &Mtx);
+	AEGfxSetTransform(FinalMtx.m);
 	
 	//Update the transparency of the sprite if visible or not
 	if(CurrentSprite->Visible == FALSE)
@@ -381,38 +385,12 @@ Matrix3 CreateTranslationMtx(struct Sprite *CurrentSprite)
 	Matrix3 transMtx; 
 	Matrix3 scalMtx; 
 
-	rotMtx.m[0][0] = (float)cos(CurrentSprite->Rotation);
-	rotMtx.m[0][1] = (float)-sin(CurrentSprite->Rotation);
-	rotMtx.m[0][2] = 0;
-	rotMtx.m[1][0] = (float)sin(CurrentSprite->Rotation);
-	rotMtx.m[1][1] = (float)cos(CurrentSprite->Rotation);
-	rotMtx.m[1][2] = 0;
-	rotMtx.m[2][0] = 0;
-	rotMtx.m[2][1] = 0;
-	rotMtx.m[2][2] = 1;
-
-	transMtx.m[0][0] = 1;
-	transMtx.m[0][1] = 0;
-	transMtx.m[0][2] = CurrentSprite->Position.x;
-	transMtx.m[1][0] = 0;
-	transMtx.m[1][1] = 1;
-	transMtx.m[1][2] = CurrentSprite->Position.y;
-	transMtx.m[2][0] = 0;
-	transMtx.m[2][1] = 0;
-	transMtx.m[2][2] = 1;
-
-	scalMtx.m[0][0] = (float)(((2*CurrentSprite->FlipX)-1)*-1) * CurrentSprite->ScaleX;
-	scalMtx.m[0][1] = 0;
-	scalMtx.m[0][2] = 0;
-	scalMtx.m[1][0] = 0;
-	scalMtx.m[1][1] = (float)(((2*CurrentSprite->FlipY)-1)*-1) * CurrentSprite->ScaleY;
-	scalMtx.m[1][2] = 0;
-	scalMtx.m[2][0] = 0;
-	scalMtx.m[2][1] = 0;
-	scalMtx.m[2][2] = 1;
+	//Get the scale, rotation, and translation of the sprite
+	Matrix3ScaleMatrix(&scalMtx, (float)(((2 * CurrentSprite->FlipX)-1)*-1) * CurrentSprite->ScaleX, (float)(((2 * CurrentSprite->FlipY)-1)*-1) * CurrentSprite->ScaleY);
+	Matrix3RotRad(&rotMtx, CurrentSprite->Rotation);
+	Matrix3Translate(&transMtx, CurrentSprite->Position.x, CurrentSprite->Position.y);
 
 	Matrix3Mult(&tempMtx, &rotMtx, &scalMtx);
-
 	Matrix3Mult(&tempMtx, &transMtx, &tempMtx);
 
 	return tempMtx;

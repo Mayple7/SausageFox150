@@ -107,9 +107,9 @@ int FoxInput_MouseUp(MouseButton button)
 void FoxInput_GetMousePosition(int *mx, int *my)
 {
   if (mx != NULL)
-    *mx = mouseX;
+    *mx = mouseX / GetLoadRatio();
   if (my != NULL)
-    *my = mouseY;
+    *my = mouseY / GetLoadRatio();
 }
 
 void FoxInput_GetWorldPosition(int *mx, int *my)
@@ -118,9 +118,9 @@ void FoxInput_GetWorldPosition(int *mx, int *my)
 	AEGfxGetCamPosition(&camX, &camY);
 
 	if (mx != NULL)
-		*mx = mouseX + (int)camX - GetWindowWidth() / 2;
+		*mx = (mouseX + (int)camX - GetWindowWidth() / 2) / GetLoadRatio();
 	if (my != NULL)
-		*my = mouseY + (int)camY - GetWindowHeight() / 2;
+		*my = (mouseY + (int)camY - GetWindowHeight() / 2)  / GetLoadRatio();
 }
 
 int FoxInput_MouseWithinWindow(void)

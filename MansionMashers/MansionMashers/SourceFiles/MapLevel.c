@@ -242,13 +242,13 @@ void UpdateMapLevel(void)
 	EventLevel();
 
 	//Camera movement based on icon movement
-	if(PlayerIcon->Position.x > GetCameraXPosition() + 300 * GetLoadRatio() )
+	if(PlayerIcon->Position.x > GetCameraXPosition() + 300 )
 	{
-		SetCameraXPosition(PlayerIcon->Position.x - 300 * GetLoadRatio());
+		SetCameraXPosition(PlayerIcon->Position.x - 300);
 	}
-	else if(PlayerIcon->Position.x < GetCameraXPosition() - 300 * GetLoadRatio())
+	else if(PlayerIcon->Position.x < GetCameraXPosition() - 300)
 	{
-		SetCameraXPosition(PlayerIcon->Position.x + 300 * GetLoadRatio());
+		SetCameraXPosition(PlayerIcon->Position.x + 300);
 	}
 	MapInfoText->Position.x = GetCameraXPosition();
 	BoundingBoxUpdate();
@@ -514,7 +514,7 @@ void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 	}
 
 	//Account for a scaled window
-	Vec2Scale(NewPosition, NewPosition, GetLoadRatio());
+	Vec2Scale(NewPosition, NewPosition, 1.0f);
 }
 
 void UpdateProgression(Player *CurrentPlayer)
