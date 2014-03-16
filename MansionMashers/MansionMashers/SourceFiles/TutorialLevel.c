@@ -273,9 +273,6 @@ void UpdateTutorial(void)
 	{
 		tutorialDone = 3;
 
-		Seclude3->Visible = FALSE;
-		Seclude4->Visible = FALSE;
-
 		//Text
 		Vec2Set(&newPosition, 1920, 280);
 		ChangeTextString(TutorialText, "Use E to Change Weapons.");
@@ -303,6 +300,7 @@ void UpdateTutorial(void)
 		ChangeTextZIndex(TutorialText, 801);
 	}
 
+	//Make the bars slide away naturally
 	Seclude1->Position.x = GetCameraXPosition();
 	Seclude2->Position.x = GetCameraXPosition();
 
@@ -310,11 +308,21 @@ void UpdateTutorial(void)
 	{
 		Seclude1->Position.y += 100 * GetDeltaTime();
 		Seclude2->Position.y -= 100 * GetDeltaTime();
+		Seclude3->Position.x  = GetCameraXPosition() - 910;
+		Seclude4->Position.x  = GetCameraXPosition() + 910;
+		Seclude3->Height     += 200 * GetDeltaTime();
+		Seclude4->Height     += 200 * GetDeltaTime();
+		Seclude3->Alpha      -= 1.0f * GetDeltaTime();
+		Seclude4->Alpha      -= 1.0f * GetDeltaTime();
+		UpdateMesh(Seclude3);
+		UpdateMesh(Seclude4);
 
 		if (Seclude1->Position.y > 600)
 		{
 			Seclude1->Visible = FALSE;
 			Seclude2->Visible = FALSE;
+			Seclude3->Visible = FALSE;
+			Seclude4->Visible = FALSE;
 		}
 	}
 
@@ -621,10 +629,10 @@ void EventTutorial(void)
 			levelComplete = TRUE;
 	}
 
-	BBWallLeft->Position.y = -1080 + 1080 * GetCameraLockState();
+	BBWallLeft->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
 	BBWallLeft->Position.x = GetCameraXPosition() - (PANELSIZE / 2);
 	UpdateCollisionPosition(&BBWallLeft->WallCollider, &BBWallLeft->Position);
-	BBWallRight->Position.y = -1080 + 1080 * GetCameraLockState();
+	BBWallRight->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
 	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2);
 	UpdateCollisionPosition(&BBWallRight->WallCollider, &BBWallRight->Position);
 

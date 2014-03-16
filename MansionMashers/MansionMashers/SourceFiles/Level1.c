@@ -198,8 +198,6 @@ void InitializeLevel1(void)
 
 	///Last thing in initialize
 	CreateDeathConfirmObjects(&newID);
-
-
 }
 
 /*************************************************************************/
@@ -375,22 +373,31 @@ void EventLevel1(void)
 	//Panel1
 	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE / 2))
 	{
-		if(EnemyPanelNumber[0] > 0 && GetCameraMovedState())
+		//Only trap the player in if there are enemies spawned
+		if(EnemyPanelNumber[0] > 0 && GetCameraMovedState() && !FirstSpawner->objID)
 			SetCameraLockState(TRUE);
+
+		//Set the camera to the next panel
 		SetCameraPan(0.0f, PANELSIZE);
 	}
 	//Panel2
 	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)))
 	{
-		if(EnemyPanelNumber[1] > 0 && GetCameraMovedState())
+		//Only trap the player in if there are enemies spawned
+		if(EnemyPanelNumber[1] > 0 && GetCameraMovedState() && !SecondSpawnerRight->objID)
 			SetCameraLockState(TRUE);
+
+		//Set the camera to the next panel
 		SetCameraPan(PANELSIZE, PANELSIZE);
 	}
 	//Panel3
 	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)))
 	{
+		//Only trap the player in if there are enemies spawned (Enemies start spawned for this one, no need to check)
 		if(EnemyPanelNumber[2] > 0 && GetCameraMovedState())
 			SetCameraLockState(TRUE);
+
+		//Set the camera to the next panel
 		SetCameraPan((PANELSIZE * 2), PANELSIZE);
 	}
 	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 + CurrentPlayer.PlayerCollider.width)

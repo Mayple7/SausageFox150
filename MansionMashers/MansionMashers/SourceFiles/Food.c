@@ -58,7 +58,6 @@ Food* CreateFood(int buffType, float width, float height, float xPos, float yPos
 
 	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, FoodType, width, height, objID);
 	CurrentFood->objID = objID;
-	Vec2Scale(&CurrentFood->Position, &CurrentFood->Position, 1.0f);
 
 	return CurrentFood;
 }

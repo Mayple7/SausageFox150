@@ -136,7 +136,6 @@ void InitializeLevel2(void)
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
-
 	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
 	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
 	//Pizza = CreateFood(Defense, 150, 150, 0, 0, newID++);
@@ -349,27 +348,17 @@ void EventLevel2(void)
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
 	////////////////////////////////*/
-
 	if(PlayerIsAlive == TRUE)
 	{
 		//Don't Let camera go beyond left boundary
 		if(CurrentPlayer.Position.x <= 0 && GetCameraXPosition() <= 5.0f)
-		{
-			printf("Left bound\n");
 			SetCameraXPosition(0.0f);
-		}
 		//Don't Let camera go beyond right boundary
 		else if(CurrentPlayer.Position.x >= (PANELSIZE * 3) && GetCameraXPosition() >= (PANELSIZE * 3 - 5.0f))
-		{
-			printf("Right bound\n");
 			SetCameraXPosition(PANELSIZE * 3);
-		}
 		//Free Roam Camera
 		else
-		{
-			printf("Free Roam\n");
 			SetCamera(&CurrentPlayer.Position, 250);
-		}
 	}
 
 	/*////////////////////////////////
@@ -388,7 +377,6 @@ void EventLevel2(void)
 
 	UpdateFloatingText();
 
-
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
 	{
@@ -396,7 +384,6 @@ void EventLevel2(void)
 		RightBarrier->Position.y = -1080;
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
 	}
-
 
 	//At level start
 	if(!levelComplete)

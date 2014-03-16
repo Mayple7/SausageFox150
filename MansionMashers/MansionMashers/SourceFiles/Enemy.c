@@ -59,7 +59,6 @@ void LoadEnemy(int enemyType)
 	}
 }
 
-
 /*************************************************************************/
 /*!
 	\brief
@@ -90,8 +89,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 	case Dummy:
 		width = 261.0f;
 		height = 373.0f;
-		Vec2Set(&position, xPos, yPos);
-		Vec2Scale(&CurrentEnemy->Position, &position, 1.0f);
+		Vec2Set(&CurrentEnemy->Position, xPos, yPos);
 		CurrentEnemy->EnemyType = Dummy;
 		CurrentEnemy->objID = objID;
 		//Creates the enemy sprite
@@ -99,7 +97,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
-		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 0, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 10);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
 
@@ -110,8 +108,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 	case BasicMelee:
 		width = 261.0f;
 		height = 373.0f;
-		Vec2Set(&position, xPos, yPos);
-		Vec2Scale(&CurrentEnemy->Position, &position, 1.0f);
+		Vec2Set(&CurrentEnemy->Position, xPos, yPos);
 		CurrentEnemy->EnemyType = BasicMelee;
 		CurrentEnemy->objID = objID;
 
@@ -158,7 +155,6 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->findHome			= FALSE;
 		CurrentEnemy->HomePos			= CurrentEnemy->Position;
 		EnemyAnimation(CurrentEnemy);
-
 		break;
 	case BasicRanged:
 		break;

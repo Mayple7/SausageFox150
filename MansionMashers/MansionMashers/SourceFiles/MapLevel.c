@@ -512,9 +512,6 @@ void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 		Vec2Set(NewPosition, -596.4f, -41.4f);
 		break;
 	}
-
-	//Account for a scaled window
-	Vec2Scale(NewPosition, NewPosition, 1.0f);
 }
 
 void UpdateProgression(Player *CurrentPlayer)
