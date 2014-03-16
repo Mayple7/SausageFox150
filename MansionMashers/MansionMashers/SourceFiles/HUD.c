@@ -29,6 +29,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
+static int DebugHUD;
 
 /*************************************************************************/
 /*!
@@ -46,9 +47,17 @@ HUD* CreateHUD(Player* CurrentPlayer)
 {
 	//Allocate memory for the HUD
 	HUD *CurrentHUD = (HUD *)CallocMyAlloc(1, sizeof(HUD));
-	char CoinChar[32];
+	char CharTemp[32];
 	Vec3 TextTint;
 
+	//Only show FPS in debug mode
+	#ifndef _DEBUG
+		DebugHUD = FALSE;
+	#else
+		DebugHUD = TRUE;
+	#endif
+
+	//Get the princess to show on the HUD
 	switch(CurrentPlayer->Princess)
 	{
 	case Mayple:
@@ -68,10 +77,18 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	//Text for coin amount
 	Vec3Set(&TextTint, 1.0f, 1.0f, 0.0f);
 	CurrentHUD->currentHUDCoinValue = CurrentPlayer->CurrentPlayerStats.Money;
-	sprintf(CoinChar, "%i", CurrentHUD->currentHUDCoinValue);
-	CurrentHUD->CoinText = CreateText(strcat(CoinChar, " Coins"), 448, 192, 60, TextTint, Center, Border);
+	sprintf(CharTemp, "%i Coins", CurrentHUD->currentHUDCoinValue);
+	CurrentHUD->CoinText = CreateText(CharTemp, 448, 192, 60, TextTint, Left, Border);
 	ChangeTextZIndex(CurrentHUD->CoinText, 400);
 	ChangeTextVisibility(CurrentHUD->CoinText);
+
+	//Text for FPS
+	Vec3Set(&TextTint, 1.0f, 0.2f, 0.5f);
+	sprintf(CharTemp, "%.2f FPS", GetDeltaTime() * FRAMERATE * FRAMERATE);
+	CurrentHUD->FPSText = CreateText(CharTemp, 448, 192, 60, TextTint, Left, Border);
+	ChangeTextZIndex(CurrentHUD->FPSText, 400);
+	if (DebugHUD)
+		ChangeTextVisibility(CurrentHUD->FPSText);
 
 	//Create the HUD sprites for the items
 	CurrentHUD->HUDItem[0] = (Sprite *)CreateSprite("TextureFiles/Taco.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
@@ -111,7 +128,8 @@ HUD* CreateHUD(Player* CurrentPlayer)
 void UpdateHUDPosition(HUD* CurrentHUD)
 {
 	Vec2 newPosition;
-	Vec2Set(&newPosition, (GetCameraXPosition() - 685), 300);
+	char CharTemp[32];
+	Vec2Set(&newPosition, (GetCameraXPosition() - 790), 300);
 
 	//HUD items update position
 	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 735);
@@ -126,19 +144,28 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x + (CurrentHUD->HUDItem[4]->ScaleX * 2));
 
 	//Coin text update position
-	ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);
+	ChangeTextPosition(CurrentHUD->CoinText, newPosition, Left);
 
 	//See if coin amount has changed
 	if (CurrentHUD->currentHUDCoinValue != CurrentPlayer.CurrentPlayerStats.Money)
 	{
-		char CoinChar[32];
-
 		//Make a new text
 		CurrentHUD->currentHUDCoinValue = CurrentPlayer.CurrentPlayerStats.Money;
-		sprintf(CoinChar, "%i", CurrentHUD->currentHUDCoinValue);
-		ChangeTextString(CurrentHUD->CoinText, strcat(CoinChar, " Coins"));
+		sprintf(CharTemp, "%i Coins", CurrentHUD->currentHUDCoinValue);
+		ChangeTextString(CurrentHUD->CoinText, CharTemp);
 		ChangeTextZIndex(CurrentHUD->CoinText, 400);
 	}
+
+	//Only show debug stuff on the HUD if debug is active
+	if (!DebugHUD)
+		return;
+
+	//Framerate is probably always changing
+	newPosition.y -= 48;
+	ChangeTextPosition(CurrentHUD->FPSText, newPosition, Left);
+	sprintf(CharTemp, "%.2f FPS", FRAMERATE * FRAMERATE * GetDeltaTime());
+	ChangeTextString(CurrentHUD->FPSText, CharTemp);
+	ChangeTextZIndex(CurrentHUD->FPSText, 400);
 }
 
 /*************************************************************************/

@@ -61,4 +61,3 @@ Food* CreateFood(int buffType, float width, float height, float xPos, float yPos
 
 	return CurrentFood;
 }
-

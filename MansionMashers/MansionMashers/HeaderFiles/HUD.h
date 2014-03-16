@@ -11,6 +11,8 @@ typedef struct HUD
 	Sprite* HUDBackground;
 	Sprite* HUDItem[6];
 
+	struct TextGlyphs *FPSText;
+
 	struct TextGlyphs *CoinText;
 	int currentHUDCoinValue;
 }HUD;
