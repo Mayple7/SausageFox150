@@ -40,19 +40,19 @@ void getWeaponCoin(WeaponShop *newShop, int weaponRarity)
 	switch(weaponRarity)
 	{
 	case Common:
-		newShop->Coin = 5;
-		break;
-	case Uncommon:
 		newShop->Coin = 20;
 		break;
+	case Uncommon:
+		newShop->Coin = 50;
+		break;
 	case Rare:
-		newShop->Coin = 80;
+		newShop->Coin = 120;
 		break;
 	case Epic:
-		newShop->Coin = 200;
+		newShop->Coin = 400;
 		break;
 	case Sausage:
-		newShop->Coin = 500;
+		newShop->Coin = 1000;
 		break;
 	default:
 		newShop->Coin = 50;

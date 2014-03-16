@@ -84,7 +84,7 @@ HUD* CreateHUD(Player* CurrentPlayer)
 
 	//Text for FPS
 	Vec3Set(&TextTint, 1.0f, 0.2f, 0.5f);
-	sprintf(CharTemp, "%.2f FPS", GetDeltaTime() * FRAMERATE * FRAMERATE);
+	sprintf(CharTemp, "%.2f FPS ", FRAMERATE * (1 / (FRAMERATE * GetDeltaTime())));
 	CurrentHUD->FPSText = CreateText(CharTemp, 448, 192, 60, TextTint, Left, Border);
 	ChangeTextZIndex(CurrentHUD->FPSText, 400);
 	if (DebugHUD)
@@ -163,7 +163,7 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	//Framerate is probably always changing
 	newPosition.y -= 48;
 	ChangeTextPosition(CurrentHUD->FPSText, newPosition, Left);
-	sprintf(CharTemp, "%.2f FPS", FRAMERATE * FRAMERATE * GetDeltaTime());
+	sprintf(CharTemp, "%.2f FPS ", FRAMERATE * (1 / (FRAMERATE * GetDeltaTime()))); //If Dt is ever 0 then... well...
 	ChangeTextString(CurrentHUD->FPSText, CharTemp);
 	ChangeTextZIndex(CurrentHUD->FPSText, 400);
 }

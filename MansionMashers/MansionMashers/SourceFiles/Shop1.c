@@ -46,6 +46,8 @@ Sprite* BlackOverlay;
 
 FoxSound *BackSnd;
 
+static int PlayerIsAlive; 
+
 /*************************************************************************/
 /*!
 	\brief
@@ -69,6 +71,7 @@ void InitializeShop1(void)
 	Vec3 Tint;
 
 	levelComplete = FALSE;
+	PlayerIsAlive = TRUE;
 	beginningAnimiation = TRUE;
 	newID = 10;
 	ResetObjectList();
@@ -107,8 +110,6 @@ void UpdateShop1(void)
 
 	PlayAudio(BackSnd);
 
-	UpdateHUDPosition(CurrentHUD);
-
 	if(levelComplete)
 	{
 		BlackOverlay->Position.x = GetCameraXPosition();
@@ -121,6 +122,9 @@ void UpdateShop1(void)
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -171,6 +175,25 @@ void UnloadShop1(void)
 /*************************************************************************/
 void EventLevel(void)
 {
+	/*////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	////////////////////////////////*/
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
+	{
+		if(PlayerIsAlive == TRUE)
+		{
+			InitializePause(&DrawShop1);
+			TogglePauseSound(BackSnd);
+			//SetNextState(GS_MainMenu);
+			UpdatePause();
+			TogglePauseSound(BackSnd);
+		}
+	}
+	if(FoxInput_KeyTriggered('U'))
+		SetDebugMode();
+	if(FoxInput_KeyTriggered('I'))
+		RemoveDebugMode();
+
 	if(!beginningAnimiation && !levelComplete)
 	{
 		// Check for any collision and handle the results
@@ -222,21 +245,5 @@ void EventLevel(void)
 
 	}
 
-	if(FoxInput_KeyTriggered('U'))
-	{
-		SetDebugMode();
-	}
-	if(FoxInput_KeyTriggered('I'))
-	{
-		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
-	}
-	if(FoxInput_KeyTriggered(VK_ESCAPE))
-	{
-		InitializePause(&DrawShop1);
-		TogglePauseSound(BackSnd);
-		//SetNextState(GS_MainMenu);
-		UpdatePause();
-		TogglePauseSound(BackSnd);
-	}
+	UpdateFloatingText();
 }

@@ -360,6 +360,7 @@ void UpdateTutorial(void)
 
 		//Coin text update position
 		ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);
+		ChangeTextPosition(CurrentHUD->FPSText, newPosition, Center);
 	}
 }
 

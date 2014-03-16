@@ -118,25 +118,36 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		//Check if the weapon is in a shop
 		if (wList->CurrentShop)
 		{
+			//Negitive cose, what?
+			if (wList->CurrentShop->Coin < 0)
+			{
+				if (!Cheats)
+					return;
+
+				//Go positive again...
+				wList->CurrentShop->Coin *= -1;
+			}
+
+			//Not enough money, too expensive
 			if (wList->CurrentShop->Coin > CurrentPlayer->CurrentPlayerStats.Money && !Cheats)
 			{
 				//Not enough money
 				Vec3 textColor;
 				TextGlyphs *FirstLetter;
-	
-				// Create Floating Error Text
-				Vec3Set(&textColor, 0.0f, 0.0f, 0.0f);
-				FirstLetter = CreateText("Not Enough Coin!", (CurrentPlayer->Position.x - 4), (CurrentPlayer->Position.y - 4 + CurrentPlayer->PlayerSpriteParts.Body->Height / 2), 100, textColor, Center, Plain);
-				AddFloatingText(FirstLetter);
-				ChangeTextVisibility(FirstLetter);
 
+				// Create Floating Error Text
 				Vec3Set(&textColor, 1.0f, 0.1f, 0.1f);
-				FirstLetter = CreateText("Not Enough Coin!", CurrentPlayer->Position.x, (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2), 100, textColor, Center, Plain);
+				FirstLetter = CreateText("Not Enough Coin!", CurrentPlayer->Position.x, (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2), 100, textColor, Center, Border);
 				AddFloatingText(FirstLetter);
 				ChangeTextVisibility(FirstLetter);
+				ChangeTextZIndex(FirstLetter, 202);
+
+				//YOU WILL NEVER BUY THIS AGAIN, HAHAHAHAHAHA (Until you leave, get more money and then come back)
+				wList->CurrentShop->Coin *= -1;
 				return;
 			}
 			
+			//If you aren't cheating, we will take your money
 			if (!Cheats)
 				CurrentPlayer->CurrentPlayerStats.Money -= wList->CurrentShop->Coin;
 			Shopping = TRUE;
