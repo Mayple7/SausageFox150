@@ -118,7 +118,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		//Check if the weapon is in a shop
 		if (wList->CurrentShop)
 		{
-			//Negitive cose, what?
+			//Negitive coin, what?
 			if (wList->CurrentShop->Coin < 0)
 			{
 				if (!Cheats)
