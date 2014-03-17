@@ -46,6 +46,8 @@ Platform *Shelf2;
 Platform *Shelf3;
 Platform *Shelf4;
 
+HUD *CurrentHUD;
+
 EnemySpawner *FirstSpawner;
 
 /*************************************************************************/
@@ -79,8 +81,10 @@ void InitializeKevin(void)
 	InitializePlayer(&CurrentPlayer, Mayple, -400, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
+	CurrentHUD = CreateHUD(&CurrentPlayer);
+
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("That Bitch Level", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("That Bitch Level", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
 	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
@@ -116,6 +120,9 @@ void UpdateKevin(void)
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -144,6 +151,7 @@ void FreeKevin(void)
 		CurrentPlayer.CurrentLevel = GS_Kevin;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/

@@ -91,7 +91,7 @@ void InitializeTutorial(void)
 	BackSnd = CreateSound("Sounds/Temp.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
-	InitializePlayer(&CurrentPlayer, Ginko, -700.0f, GROUNDLEVEL * GetLoadRatio() + 1);
+	InitializePlayer(&CurrentPlayer, Ginko, -700.0f, GROUNDLEVEL + 1);
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
@@ -140,7 +140,7 @@ void InitializeTutorial(void)
 
 	//Some text to use for whatever tutorial stuff
 	Vec3Set(&Tint, 1, 1, 1);
-	TutorialText = CreateText("Use A,D to move Left,Right.", -300 * GetLoadRatio(), 200 * GetLoadRatio(), 100, Tint, Center);
+	TutorialText = CreateText("Use A,D to move Left,Right.", -300, 200, 100, Tint, Center, Border);
 	ChangeTextZIndex(TutorialText, 801);
 	ChangeTextVisibility(TutorialText);
 
@@ -172,12 +172,12 @@ void InitializeTutorial(void)
 
 	//Create the shelf sprite and initialize to be collidable
 	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 160 + 1920.0f, -156);
-	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f); 
+	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f);
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height * 3 / 8;
 
 	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, -40 + 1920.0f, -240);
 	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
-	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f); 
+	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f);
 
 	BouncyBed = CreatePlatform("TextureFiles/BlankPlatform.png", BounceType, 360.0f, 100.0f, newID++, -580 + 1920.0f, -320);
 	BouncyBed->PlatformSprite->Visible = FALSE;
@@ -230,22 +230,22 @@ void UpdateTutorial(void)
 	{
 		tutorialDone = 1;
 
-		Seclude1->Position.y = 490 * GetLoadRatio();//Top
-		Seclude1->Height     = 100 * GetLoadRatio();
+		Seclude1->Position.y = 490;//Top
+		Seclude1->Height     = 100;
 		UpdateMesh(Seclude1);
 
 		Seclude3->Position.y = 0;//Left
-		Seclude3->Height     = 880 * GetLoadRatio();
+		Seclude3->Height     = 880;
 		UpdateMesh(Seclude3);
 
-		Seclude4->Position.x = 610 * GetLoadRatio();//Right
+		Seclude4->Position.x = 610;//Right
 		Seclude4->Position.y = 0;
-		Seclude4->Height     = 880 * GetLoadRatio();
-		Seclude4->Width      = 700 * GetLoadRatio();
+		Seclude4->Height     = 880;
+		Seclude4->Width      = 700;
 		UpdateMesh(Seclude4);
 
 		//Text
-		Vec2Set(&newPosition, -100 * GetLoadRatio(), 400 * GetLoadRatio());
+		Vec2Set(&newPosition, -100, 400);
 		ChangeTextString(TutorialText, "Use SPACE to Jump.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
@@ -255,39 +255,36 @@ void UpdateTutorial(void)
 		//Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 100, 380, 800, 1, 1, -960, -250); //Left
 		//Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1200, 380, 800, 1, 1, 360, -250); //Right
 	}
-	else if (tutorialDone < 2 && CurrentPlayer.PlayerCollider.Position.x > 150 * GetLoadRatio())
+	else if (tutorialDone < 2 && CurrentPlayer.PlayerCollider.Position.x > 150)
 	{
 		tutorialDone = 2;
 
-		Seclude4->Position.x = 910 * GetLoadRatio();//Right
-		Seclude4->Width      = 100 * GetLoadRatio();
+		Seclude4->Position.x = 910;//Right
+		Seclude4->Width      = 100;
 		UpdateMesh(Seclude4);
 
 		//Text
-		Vec2Set(&newPosition, 100 * GetLoadRatio(), 400 * GetLoadRatio());
-		ChangeTextString(TutorialText, "Use SPACE with S to Fall Through.");
+		Vec2Set(&newPosition, 100, 400);
+		ChangeTextString(TutorialText, "Use S with SPACE to Fall Through.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 	}
-	else if (tutorialDone < 3 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * GetLoadRatio())
+	else if (tutorialDone < 3 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2))
 	{
 		tutorialDone = 3;
 
-		Seclude3->Visible = FALSE;
-		Seclude4->Visible = FALSE;
-
 		//Text
-		Vec2Set(&newPosition, 1920 * GetLoadRatio(), 280 * GetLoadRatio());
+		Vec2Set(&newPosition, 1920, 280);
 		ChangeTextString(TutorialText, "Use E to Change Weapons.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 	}
-	else if (tutorialDone < 4 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * 3 * GetLoadRatio())
+	else if (tutorialDone < 4 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * 3)
 	{
 		tutorialDone = 4;
 
 		//Text
-		Vec2Set(&newPosition, 1920 * 2 * GetLoadRatio(), 300 * GetLoadRatio());
+		Vec2Set(&newPosition, 1920 * 2, 300);
 		ChangeTextString(TutorialText, "Use Left Mouse to Fight!");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
@@ -297,24 +294,35 @@ void UpdateTutorial(void)
 		tutorialDone = 5;
 
 		//Text
-		Vec2Set(&newPosition, 1920 * 2 * GetLoadRatio(), 200 * GetLoadRatio());
+		Vec2Set(&newPosition, 1920 * 2, 200);
 		ChangeTextString(TutorialText, "Go Right to Continue.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 	}
 
+	//Make the bars slide away naturally
 	Seclude1->Position.x = GetCameraXPosition();
 	Seclude2->Position.x = GetCameraXPosition();
 
 	if (tutorialDone > 2 && Seclude1->Visible && Seclude2->Visible)
 	{
-		Seclude1->Position.y += 100 * GetLoadRatio() * GetDeltaTime();
-		Seclude2->Position.y -= 100 * GetLoadRatio() * GetDeltaTime();
+		Seclude1->Position.y += 100 * GetDeltaTime();
+		Seclude2->Position.y -= 100 * GetDeltaTime();
+		Seclude3->Position.x  = GetCameraXPosition() - 910;
+		Seclude4->Position.x  = GetCameraXPosition() + 910;
+		Seclude3->Height     += 200 * GetDeltaTime();
+		Seclude4->Height     += 200 * GetDeltaTime();
+		Seclude3->Alpha      -= 1.0f * GetDeltaTime();
+		Seclude4->Alpha      -= 1.0f * GetDeltaTime();
+		UpdateMesh(Seclude3);
+		UpdateMesh(Seclude4);
 
 		if (Seclude1->Position.y > 600)
 		{
 			Seclude1->Visible = FALSE;
 			Seclude2->Visible = FALSE;
+			Seclude3->Visible = FALSE;
+			Seclude4->Visible = FALSE;
 		}
 	}
 
@@ -336,22 +344,23 @@ void UpdateTutorial(void)
 	else
 	{
 		//DONT SHOW THE HUD YET
-		Vec2Set(&newPosition, (GetCameraXPosition() - 685 * GetLoadRatio() - 1000), 300 * GetLoadRatio());
+		Vec2Set(&newPosition, (GetCameraXPosition() - 685 - 1000), 300);
 
 		//HUD items update position
-		CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 735 * GetLoadRatio() - 1000);
+		CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 735 - 1000);
 
-		CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio() - 1000);
-		CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio() - 1000);
-		CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio() - 1000);
-		CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 800 * GetLoadRatio() - 1000);
+		CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 800 - 1000);
+		CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 800 - 1000);
+		CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 800 - 1000);
+		CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 800 - 1000);
 
 		CurrentHUD->HUDItem[4]->ScaleX = 71.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
-		CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - (2 * GetLoadRatio()) + (CurrentHUD->HUDItem[4]->ScaleX * GetLoadRatio() - 1000));
-		CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x + (CurrentHUD->HUDItem[4]->ScaleX * GetLoadRatio() * 2) - 1000);
+		CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - (2) + (CurrentHUD->HUDItem[4]->ScaleX - 1000));
+		CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x + (CurrentHUD->HUDItem[4]->ScaleX * 2) - 1000);
 
 		//Coin text update position
 		ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);
+		ChangeTextPosition(CurrentHUD->FPSText, newPosition, Center);
 	}
 }
 
@@ -420,18 +429,18 @@ void EventTutorial(void)
 		{
 			CurrentPlayer.FlipX = 0;
 			CurrentPlayer.PlayerDirection = LEFT;
-			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		}
 		// Move right if D is pressed
 		else if(FoxInput_KeyDown('D'))
 		{
 			CurrentPlayer.FlipX = 1;
 			CurrentPlayer.PlayerDirection = RIGHT;
-			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		}
 		else
 		{
-			if (!(CurrentPlayer.Position.y > GROUNDLEVEL * GetLoadRatio()) && !CurrentPlayer.PlayerRigidBody.onGround)
+			if (!(CurrentPlayer.Position.y > GROUNDLEVEL) && !CurrentPlayer.PlayerRigidBody.onGround)
 			{
 				if (CurrentPlayer.Speed - 48.0f * GetDeltaTime() >= 0.0f)
 				{
@@ -472,10 +481,10 @@ void EventTutorial(void)
 					CurrentPlayer.dropdownTimer = 0.25f;
 				}
 
-				Vec2Set(&velocity, 0.0f, 1080.0f * GetLoadRatio());
-				if(CurrentPlayer.Position.y <= GROUNDLEVEL * GetLoadRatio() || CurrentPlayer.PlayerRigidBody.onGround)
+				Vec2Set(&velocity, 0.0f, 1080.0f);
+				if(CurrentPlayer.Position.y <= GROUNDLEVEL || CurrentPlayer.PlayerRigidBody.onGround)
 				{
-					Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, CurrentPlayer.Position.y + 300.0f * GetDeltaTime() * GetLoadRatio());
+					Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, CurrentPlayer.Position.y + 300.0f * GetDeltaTime());
 					CurrentPlayer.PlayerRigidBody.onGround = FALSE;
 					ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &velocity);
 				}
@@ -596,36 +605,36 @@ void EventTutorial(void)
 	////////////////////////////////*/
 	SetCameraLockState(FALSE);
 	//Panel1
-	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
+	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE / 2))
 	{
 		if(EnemyPanelNumber[0] > 0 && GetCameraMovedState())
 			SetCameraLockState(TRUE);
 		SetCameraPan(0.0f, PANELSIZE);
 	}
 	//Panel2
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)))
 	{
 		if(EnemyPanelNumber[1] > 0 && GetCameraMovedState())
 			SetCameraLockState(TRUE);
-		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
+		SetCameraPan(PANELSIZE, PANELSIZE);
 	}
 	//Panel3
-	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
+	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)))
 	{
 		if(EnemyPanelNumber[2] > 0 && GetCameraMovedState())
 			SetCameraLockState(TRUE);
-		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
+		SetCameraPan((PANELSIZE * 2), PANELSIZE);
 	}
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 + CurrentPlayer.PlayerCollider.width)
 	{
 			levelComplete = TRUE;
 	}
 
-	BBWallLeft->Position.y = -1080 * GetLoadRatio() + 1080 * GetLoadRatio() * GetCameraLockState();
-	BBWallLeft->Position.x = GetCameraXPosition() - (PANELSIZE / 2 * GetLoadRatio());
+	BBWallLeft->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
+	BBWallLeft->Position.x = GetCameraXPosition() - (PANELSIZE / 2);
 	UpdateCollisionPosition(&BBWallLeft->WallCollider, &BBWallLeft->Position);
-	BBWallRight->Position.y = -1080 * GetLoadRatio() + 1080 * GetLoadRatio() * GetCameraLockState();
-	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2 * GetLoadRatio());
+	BBWallRight->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
+	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2);
 	UpdateCollisionPosition(&BBWallRight->WallCollider, &BBWallRight->Position);
 
 	/*////////////////////////////////

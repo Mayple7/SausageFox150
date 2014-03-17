@@ -72,30 +72,42 @@ void FoxSystemExit(void)
 {
 	FreeChannelGroupList();
 	FMODQuit();
-
 }
 
 void InitWindow(void)
 {
 	RECT rect;
 	HWND winHandle = AESysGetWindowHandle();
+	Matrix3 mapScale, mapTrans;
 	double ratio;
 
 	if(GetClientRect(winHandle, &rect))
 	{
+		//Set up a scalar matrix for drawing
 		winWidth = rect.right - rect.left;
 		winHeight = rect.bottom - rect.top;
 
+		Matrix3Translate(&mapTrans, 0.0f, 0.0f);
+
+		printf("Window Ratio: %f, %f\n", winWidth / 1920.0, winHeight / 1080.0);
+
+		//Decide whether the width is shorter or the height is shorter
 		if(winWidth / (double)winHeight >= 16.0f / 9.0f)
 		{
+			//Height too short
 			ratio = winHeight / 1080.0;
 			SetLoadRatio(ratio);
+			Matrix3ScaleMatrix(&mapScale, (float)ratio, (float)ratio);
 		}
 		else
 		{
+			//Width too skinny
 			ratio = winWidth / 1920.0;
 			SetLoadRatio(ratio);
+			Matrix3ScaleMatrix(&mapScale, (float)ratio, (float)ratio);
 		}
+
+		Matrix3Mult(&LoadRatioMtx, &mapScale, &mapTrans);
 	}
 }
 

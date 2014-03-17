@@ -119,6 +119,28 @@ Weapon *AddWeapon(void)
 /*************************************************************************/
 /*!
 	\brief
+	Adds an projectile to the projectile list
+	
+	\return
+	The projectile added to the list
+*/
+/*************************************************************************/
+Projectile *AddProjectile(void)
+{
+	int i;
+	for (i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		if(projectileList[i].objID == 0 || projectileList[i].objID == -1)
+		{
+			return &projectileList[i];
+		}
+	}
+	return NULL;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Adds an enemy to the enemy list
 	
 	\return
@@ -342,6 +364,7 @@ void ResetObjectList(void)
 		foodList			= (Food *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Food));
 		enemyList			= (Enemy *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Enemy));
 		weaponList			= (Weapon *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Weapon));
+		projectileList      = (Projectile *) CallocMyAlloc(COLLIDEAMOUNT, sizeof(Projectile));
 		floatTextList		= (TextGlyphs **) CallocMyAlloc(FLOATINGTEXTAMOUNT, sizeof(TextGlyphs *));
 		staticTextList		= (TextGlyphs **) CallocMyAlloc(COLLIDEAMOUNT, sizeof(TextGlyphs *));
 		particleList		= (Particle *) CallocMyAlloc(PARTICLEAMOUNT, sizeof(Particle));
@@ -356,6 +379,7 @@ void ResetObjectList(void)
 			platformList[i].objID = -1;
 			foodList[i].objID = -1;
 			enemyList[i].objID = -1;
+			projectileList[i].objID = -1;
 			weaponList[i].objID = -1;
 			wallList[i].objID = -1;
 		}
@@ -456,6 +480,12 @@ void DrawCollisionList(void)
 			displayCollisionDebug(&weaponList[i].WeaponPickup);
 			displayCollisionDebug(&weaponList[i].WeaponAttack);
 		}
+		//Make sure the sprite exists
+		if (projectileList[i].objID > 0 && projectileList[i].ProjectileAttack.collisionDebug)
+		{
+			//Free the mesh and texture data
+			displayCollisionDebug(&projectileList[i].ProjectileAttack);
+		}
 		if (wallList[i].objID > 0 && wallList[i].WallCollider.collisionDebug)
 		{
 			//Free the mesh and texture data
@@ -480,7 +510,6 @@ void DrawCollisionList(void)
 		}
 
 	}
-
 
 	//Players are special
 	if(CurrentPlayer.PlayerCollider.collisionDebug)
@@ -508,6 +537,12 @@ void SetDebugMode(void)
 			//Free the mesh and texture data
 			weaponList[i].WeaponPickup.collisionDebug = TRUE;
 			weaponList[i].WeaponAttack.collisionDebug = TRUE;
+		}
+		//Make sure the sprite exists
+		if (projectileList[i].objID)
+		{
+			//Free the mesh and texture data
+			projectileList[i].ProjectileAttack.collisionDebug = TRUE;
 		}
 		//Make sure the sprite exists
 		if (foodList[i].objID)
@@ -572,6 +607,12 @@ void RemoveDebugMode(void)
 			//Free the mesh and texture data
 			weaponList[i].WeaponPickup.collisionDebug = FALSE;
 			weaponList[i].WeaponAttack.collisionDebug = FALSE;
+		}
+		//Make sure the sprite exists
+		if (projectileList[i].objID)
+		{
+			//Free the mesh and texture data
+			projectileList[i].ProjectileAttack.collisionDebug = FALSE;
 		}
 		//Make sure the sprite exists
 		if (foodList[i].objID)

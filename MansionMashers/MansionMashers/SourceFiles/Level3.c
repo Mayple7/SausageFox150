@@ -58,7 +58,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 
 Platform *Plat;
 Wall *Wall1;
@@ -93,7 +93,7 @@ void InitializeLevel3(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
 	/////////////////////////////////
@@ -175,6 +175,7 @@ void FreeLevel3(void)
 		CurrentPlayer.CurrentLevel = GS_Level31;
 	else if(CurrentPlayer.CurrentLevel < GS_Level3)
 		CurrentPlayer.CurrentLevel = GS_Level3;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
@@ -200,12 +201,15 @@ void UnloadLevel3(void)
 /*************************************************************************/
 void EventLevel3(void)
 {
+	/*////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	////////////////////////////////*/
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
-	if(CurrentPlayer.Position.x > (960 * GetLoadRatio()))
+	if(CurrentPlayer.Position.x > (960))
 	{
 		levelComplete = TRUE;
 		SetNextState(GS_Level31);

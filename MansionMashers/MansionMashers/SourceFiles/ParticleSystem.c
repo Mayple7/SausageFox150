@@ -29,7 +29,7 @@ ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float
 	ParticleSystem *CurrentSystem = AddParticleSystem();
 
 	strcpy(CurrentSystem->ParticleSprite, particleTexture);
-	CurrentSystem->emitMesh = createMesh(64.0f * GetLoadRatio(), 64.0f * GetLoadRatio(), 1, 1);
+	CurrentSystem->emitMesh = createMesh(64.0f, 64.0f, 1, 1);
 	CurrentSystem->Position.x = posX;
 	CurrentSystem->Position.y = posY;
 	CurrentSystem->objID = 1;
@@ -58,14 +58,14 @@ void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX,
 	CurrentParticle->ParticleSprite = CreateSpriteNoMesh(particleTexture, 64.0f, 64.0f, ZIndex, 1, 1, posX, posY);
 	CurrentParticle->ParticleSprite->SpriteMesh = mesh;
 	CurrentParticle->ParticleSprite->Alpha = 0;
-	CurrentParticle->Position.x = posX * GetLoadRatio();
-	CurrentParticle->Position.y = posY * GetLoadRatio();
+	CurrentParticle->Position.x = posX;
+	CurrentParticle->Position.y = posY;
 	CurrentParticle->Velocity.x = VelX;
 	CurrentParticle->Velocity.y = VelY;
 	CurrentParticle->Lifetime = Life;
 	CurrentParticle->LifetimeMax = Life;
-	CurrentParticle->ParticleSprite->ScaleX = Scale * GetLoadRatio();
-	CurrentParticle->ParticleSprite->ScaleY = Scale * GetLoadRatio();
+	CurrentParticle->ParticleSprite->ScaleX = Scale;
+	CurrentParticle->ParticleSprite->ScaleY = Scale;
 	CurrentParticle->ScaleSpeed = ScaleSpeed;
 	CurrentParticle->objID = 1;
 	CurrentParticle->StartAlpha = StartAlpha;
@@ -153,7 +153,7 @@ void ParticleSystemUpdate(void)
 				{
 					
 					
-					if (particleSystemList[i].Position.x < GetCameraXPosition() + 1920 / GetLoadRatio() && particleSystemList[i].Position.x > GetCameraXPosition() - 1920 / GetLoadRatio())
+					if (particleSystemList[i].Position.x < GetCameraXPosition() + 1920 && particleSystemList[i].Position.x > GetCameraXPosition() - 1920)
 					{
 						Vec2 vel;
 

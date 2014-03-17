@@ -111,12 +111,12 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	winHandle = CreateWindow(winClass.lpszClassName, "Mansion Mashers", sysInitInfo.mWindowStyle, 100, 100, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, sysInitInfo.mAppInstance, NULL);
 
-	ShowWindow	(winHandle, SW_SHOWMAXIMIZED);
+	ShowWindow(winHandle, SW_SHOWMAXIMIZED);
 	
 	UpdateWindow(winHandle);
 	
-	sysInitInfo.mCreateWindow		= 0;
-	sysInitInfo.mWindowHandle		= winHandle;
+	sysInitInfo.mCreateWindow = 0;
+	sysInitInfo.mWindowHandle = winHandle;
 
 	if(0 == AESysInit (&sysInitInfo))
 	{

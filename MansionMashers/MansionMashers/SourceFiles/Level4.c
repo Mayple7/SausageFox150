@@ -40,7 +40,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 
 /*************************************************************************/
 /*!
@@ -73,7 +73,7 @@ void InitializeLevel4(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 }
 
@@ -117,6 +117,7 @@ void FreeLevel4(void)
 		CurrentPlayer.CurrentLevel = GS_Kevin;
 	else if(CurrentPlayer.CurrentLevel < GS_Level4)
 		CurrentPlayer.CurrentLevel = GS_Level4;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }

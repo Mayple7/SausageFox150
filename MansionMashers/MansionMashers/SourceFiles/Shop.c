@@ -40,19 +40,19 @@ void getWeaponCoin(WeaponShop *newShop, int weaponRarity)
 	switch(weaponRarity)
 	{
 	case Common:
-		newShop->Coin = 5;
-		break;
-	case Uncommon:
 		newShop->Coin = 20;
 		break;
+	case Uncommon:
+		newShop->Coin = 50;
+		break;
 	case Rare:
-		newShop->Coin = 80;
+		newShop->Coin = 120;
 		break;
 	case Epic:
-		newShop->Coin = 200;
+		newShop->Coin = 400;
 		break;
 	case Sausage:
-		newShop->Coin = 500;
+		newShop->Coin = 1000;
 		break;
 	default:
 		newShop->Coin = 50;
@@ -77,19 +77,19 @@ void getItemTextName(WeaponShop *newShop, int collisionGroup, Vec3 TextTint, flo
 	switch(collisionGroup)
 	{
 	case Sword:
-		newShop->ItemTextName = CreateText("SWORD", shopPosX + 20, shopPosY + 120, 80, TextTint, Center);
+		newShop->ItemTextName = CreateText("SWORD", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
 		break;
 	case Axe:
-		newShop->ItemTextName = CreateText("AXE", shopPosX + 20, shopPosY + 120, 80, TextTint, Center);
+		newShop->ItemTextName = CreateText("AXE", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
 		break;
 	case Hammer:
-		newShop->ItemTextName = CreateText("HAMMER", shopPosX + 20, shopPosY + 120, 80, TextTint, Center);
+		newShop->ItemTextName = CreateText("HAMMER", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
 		break;
 	case Spear:
-		newShop->ItemTextName = CreateText("SPEAR", shopPosX + 20, shopPosY + 120, 80, TextTint, Center);
+		newShop->ItemTextName = CreateText("SPEAR", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
 		break;
 	default:
-		newShop->ItemTextName = CreateText("WUT DID U DO", shopPosX + 20, shopPosY + 120, 80, TextTint, Center);
+		newShop->ItemTextName = CreateText("WUT DID U DO", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
 		break;
 	}
 
@@ -114,7 +114,7 @@ void CreateWeaponShop(float shopPosX, float shopPosY, int newID, int collisionGr
 
 	//Text
 	Vec3Set(&TextTint, 0.2f, 0.2f, 0.2f);
-	newShop->ItemTextCoin = CreateText(strcat(newShop->CoinChar, " coin"), shopPosX + 10, shopPosY + 60, 60, TextTint, Center);
+	newShop->ItemTextCoin = CreateText(strcat(newShop->CoinChar, " coin"), shopPosX + 10, shopPosY + 60, 60, TextTint, Center, Plain);
 	ChangeTextVisibility(newShop->ItemTextCoin);
 	getItemTextName(newShop, collisionGroup, TextTint, shopPosX, shopPosY);
 

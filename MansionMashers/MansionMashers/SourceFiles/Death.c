@@ -46,16 +46,16 @@ void UpdateDeathConfirmObjects(void)
 	int worldX, worldY;
 	Vec2 MouseClick;
 
-	CurrentPlayer.Position.x = -1920 * GetLoadRatio();
+	CurrentPlayer.Position.x = -1920;
 	UpdateCollisionPosition(&CurrentPlayer.PlayerCollider, &CurrentPlayer.Position);
 
 	FoxInput_GetWorldPosition(&worldX, &worldY);
 	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
 
-	UpdateButtonPosition(RestartButton, (-250 * GetLoadRatio()) + GetCameraXPosition(), -130);
+	UpdateButtonPosition(RestartButton, (-250) + GetCameraXPosition(), -130);
 	UpdateCollisionPosition(&RestartButton->ButtonCollider, &RestartButton->ButtonSprite->Position);
 
-	UpdateButtonPosition(MainMapButton, (250 * GetLoadRatio()) + GetCameraXPosition(), -130);
+	UpdateButtonPosition(MainMapButton, (250) + GetCameraXPosition(), -130);
 	UpdateCollisionPosition(&MainMapButton->ButtonCollider, &MainMapButton->ButtonSprite->Position);
 
 	DeathConfirm->Position.x = GetCameraXPosition();

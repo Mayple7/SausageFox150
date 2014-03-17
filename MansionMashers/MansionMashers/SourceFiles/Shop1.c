@@ -46,6 +46,8 @@ Sprite* BlackOverlay;
 
 FoxSound *BackSnd;
 
+static int PlayerIsAlive; 
+
 /*************************************************************************/
 /*!
 	\brief
@@ -69,6 +71,7 @@ void InitializeShop1(void)
 	Vec3 Tint;
 
 	levelComplete = FALSE;
+	PlayerIsAlive = TRUE;
 	beginningAnimiation = TRUE;
 	newID = 10;
 	ResetObjectList();
@@ -80,7 +83,7 @@ void InitializeShop1(void)
 
 	CreateSprite("TextureFiles/LevelGrassGround.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);
 	Vec3Set(&Tint, 0, 0, 0);
-	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 400, 1, 1, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = Tint;
 
 	// Initialize the player
@@ -107,8 +110,6 @@ void UpdateShop1(void)
 
 	PlayAudio(BackSnd);
 
-	UpdateHUDPosition(CurrentHUD);
-
 	if(levelComplete)
 	{
 		BlackOverlay->Position.x = GetCameraXPosition();
@@ -121,6 +122,9 @@ void UpdateShop1(void)
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -171,6 +175,25 @@ void UnloadShop1(void)
 /*************************************************************************/
 void EventLevel(void)
 {
+	/*////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	////////////////////////////////*/
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
+	{
+		if(PlayerIsAlive == TRUE)
+		{
+			InitializePause(&DrawShop1);
+			TogglePauseSound(BackSnd);
+			//SetNextState(GS_MainMenu);
+			UpdatePause();
+			TogglePauseSound(BackSnd);
+		}
+	}
+	if(FoxInput_KeyTriggered('U'))
+		SetDebugMode();
+	if(FoxInput_KeyTriggered('I'))
+		RemoveDebugMode();
+
 	if(!beginningAnimiation && !levelComplete)
 	{
 		// Check for any collision and handle the results
@@ -179,7 +202,7 @@ void EventLevel(void)
 		InputPlayer(&CurrentPlayer);
 		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 
-		if(CurrentPlayer.Position.x > (1920.0f / 2) * GetLoadRatio() + CurrentPlayer.PlayerCollider.width || CurrentPlayer.Position.x < -(1920.0f / 2) * GetLoadRatio() - CurrentPlayer.PlayerCollider.width)
+		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width || CurrentPlayer.Position.x < -(1920.0f / 2) - CurrentPlayer.PlayerCollider.width)
 		{
 			levelComplete = TRUE;
 		}
@@ -198,7 +221,7 @@ void EventLevel(void)
 			BlackOverlay->Alpha = 0.0f;
 			CurrentPlayer.FlipX = 1;
 			CurrentPlayer.PlayerDirection = RIGHT;
-			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 			
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -500)
@@ -222,21 +245,5 @@ void EventLevel(void)
 
 	}
 
-	if(FoxInput_KeyTriggered('U'))
-	{
-		SetDebugMode();
-	}
-	if(FoxInput_KeyTriggered('I'))
-	{
-		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
-	}
-	if(FoxInput_KeyTriggered(VK_ESCAPE))
-	{
-		InitializePause(&DrawShop1);
-		TogglePauseSound(BackSnd);
-		//SetNextState(GS_MainMenu);
-		UpdatePause();
-		TogglePauseSound(BackSnd);
-	}
+	UpdateFloatingText();
 }

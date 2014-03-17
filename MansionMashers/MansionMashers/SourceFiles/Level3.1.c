@@ -53,7 +53,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 
 Platform *Plat;
 Wall *Wall1;
@@ -88,7 +88,7 @@ void InitializeLevel31(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
 	/////////////////////////////////
@@ -137,7 +137,6 @@ void UpdateLevel31(void)
 
 	//EasyEditPlatform(Plat, 10);
 	EasyEditWall(Wall1 ,10);
-
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -217,4 +216,6 @@ void EventLevel31(void)
 		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
+
+	//UpdateAllEnemies();
 }

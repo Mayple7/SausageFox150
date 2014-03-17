@@ -49,28 +49,28 @@ static int levelComplete;
 static int beginningAnimiation;
 static int PlayerIsAlive; 
 
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 
-EnemySpawner* FirstSpawner;
-EnemySpawner* SecondSpawnerRight;
-EnemySpawner* SecondSpawnerLeft;
-EnemySpawner* ThirdSpawnerRight;
-EnemySpawner* ThirdSpawnerLeft;
+EnemySpawner *FirstSpawner;
+EnemySpawner *SecondSpawnerRight;
+EnemySpawner *SecondSpawnerLeft;
+EnemySpawner *ThirdSpawnerRight;
+EnemySpawner *ThirdSpawnerLeft;
 
-Enemy* SetEnemy1;
-Enemy* SetEnemy2;
+Enemy *SetEnemy1;
+Enemy *SetEnemy2;
 
-Platform* Table1;
+Platform *Table1;
 
-Wall* Wall1;
+Wall *Wall1;
 
-Wall* BBWallLeft;
-Wall* BBWallRight;
+Wall *BBWallLeft;
+Wall *BBWallRight;
 
-FoxSound* BackSnd;
+FoxSound *BackSnd;
 
-Sprite* BlackOverlay;
-HUD* CurrentHUD;
+Sprite *BlackOverlay;
+HUD *CurrentHUD;
 
 /*************************************************************************/
 /*!
@@ -114,7 +114,7 @@ void InitializeLevel1(void)
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center);
+	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
 	//Bounding Boxes
@@ -181,10 +181,10 @@ void InitializeLevel1(void)
 	ThirdSpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
 	ThirdSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
 
-	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL, 2);
-	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE / GetLoadRatio(), GROUNDLEVEL, 2);
-	SetEnemy1->HomePos.x = 2 * PANELSIZE * GetLoadRatio();
-	SetEnemy2->HomePos.x = 2 * PANELSIZE * GetLoadRatio();
+	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
+	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
+	SetEnemy1->HomePos.x = 2 * PANELSIZE;
+	SetEnemy2->HomePos.x = 2 * PANELSIZE;
 
 	//Particles fo Torches
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
@@ -198,8 +198,6 @@ void InitializeLevel1(void)
 
 	///Last thing in initialize
 	CreateDeathConfirmObjects(&newID);
-
-
 }
 
 /*************************************************************************/
@@ -218,7 +216,7 @@ void UpdateLevel1(void)
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 
-	if(CurrentPlayer.Position.x > (1.5f * PANELSIZE) * GetLoadRatio())
+	if(CurrentPlayer.Position.x > (1.5f * PANELSIZE))
 	{
 		if(SetEnemy1->EnemyState == AINone)
 		{
@@ -305,8 +303,6 @@ void UnloadLevel1(void)
 /*************************************************************************/
 void EventLevel1(void)
 {
-	int i;
-
 	/*////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
@@ -348,7 +344,7 @@ void EventLevel1(void)
 			BlackOverlay->Alpha = 0.0f;
 			CurrentPlayer.FlipX = TRUE;
 			CurrentPlayer.PlayerDirection = RIGHT;
-			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 			
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -500)
@@ -373,51 +369,51 @@ void EventLevel1(void)
 
 	SetCameraLockState(FALSE);
 	//Panel1
-	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE / 2) * GetLoadRatio())
+	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE / 2))
 	{
-		if(EnemyPanelNumber[0] > 0 && GetCameraMovedState())
+		//Only trap the player in if there are enemies spawned
+		if(EnemyPanelNumber[0] > 0 && GetCameraMovedState() && !FirstSpawner->objID)
 			SetCameraLockState(TRUE);
+
+		//Set the camera to the next panel
 		SetCameraPan(0.0f, PANELSIZE);
 	}
 	//Panel2
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * GetLoadRatio() && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio())
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)))
 	{
-		if(EnemyPanelNumber[1] > 0 && GetCameraMovedState())
+		//Only trap the player in if there are enemies spawned
+		if(EnemyPanelNumber[1] > 0 && GetCameraMovedState() && !SecondSpawnerRight->objID)
 			SetCameraLockState(TRUE);
-		SetCameraPan(PANELSIZE * GetLoadRatio(), PANELSIZE);
+
+		//Set the camera to the next panel
+		SetCameraPan(PANELSIZE, PANELSIZE);
 	}
 	//Panel3
-	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) * GetLoadRatio() && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)) * GetLoadRatio())
+	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)))
 	{
+		//Only trap the player in if there are enemies spawned (Enemies start spawned for this one, no need to check)
 		if(EnemyPanelNumber[2] > 0 && GetCameraMovedState())
 			SetCameraLockState(TRUE);
-		SetCameraPan((PANELSIZE * 2) * GetLoadRatio(), PANELSIZE);
+
+		//Set the camera to the next panel
+		SetCameraPan((PANELSIZE * 2), PANELSIZE);
 	}
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 * GetLoadRatio() + CurrentPlayer.PlayerCollider.width)
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 + CurrentPlayer.PlayerCollider.width)
 	{
 			levelComplete = TRUE;
 	}
 
-	BBWallLeft->Position.y = -1080 * GetLoadRatio() + 1080 * GetLoadRatio() * GetCameraLockState();
-	BBWallLeft->Position.x = GetCameraXPosition() - (PANELSIZE / 2 * GetLoadRatio());
+	BBWallLeft->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
+	BBWallLeft->Position.x = GetCameraXPosition() - (PANELSIZE / 2);
 	UpdateCollisionPosition(&BBWallLeft->WallCollider, &BBWallLeft->Position);
-	BBWallRight->Position.y = -1080 * GetLoadRatio() + 1080 * GetLoadRatio() * GetCameraLockState();
-	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2 * GetLoadRatio());
+	BBWallRight->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
+	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2);
 	UpdateCollisionPosition(&BBWallRight->WallCollider, &BBWallRight->Position);
 
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
-	for(i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Update the created enemies
-		if (enemyList[i].objID == -1)
-			break;
-		if (enemyList[i].objID == 0)
-			continue;
-
-		UpdateEnemy(&enemyList[i]);
-	}
+	UpdateAllEnemies();
 
 	UpdateFloatingText();
 

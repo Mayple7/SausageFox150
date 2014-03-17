@@ -47,6 +47,7 @@ void InitializeCharacterSelect(void)
 {
 	Vec3 Tint;
 
+	//Psuedo players for picking
 	CharacterMayple = (Player *)CallocMyAlloc(1, sizeof(Player));
 	CharacterGinko = (Player *)CallocMyAlloc(1, sizeof(Player));
 	CharacterHolly = (Player *)CallocMyAlloc(1, sizeof(Player));
@@ -181,16 +182,16 @@ void UpdateCharacterSelect(void)
 	switch(selected)
 	{
 	case Mayple:
-		CharacterMayple->Speed = CharacterMayple->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterMayple->Speed = CharacterMayple->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		break;
 	case Ginko:
-		CharacterGinko->Speed = CharacterGinko->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterGinko->Speed = CharacterGinko->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		break;
 	case Kaya:
-		CharacterKaya->Speed = CharacterKaya->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterKaya->Speed = CharacterKaya->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		break;
 	case Holly:
-		CharacterHolly->Speed = CharacterHolly->CurrentPlayerStats.MoveSpeed * GetLoadRatio() * GetDeltaTime();
+		CharacterHolly->Speed = CharacterHolly->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 		break;
 	}
 	Animation(CharacterMayple);
@@ -217,6 +218,12 @@ void UnloadCharacterSelect(void)
 	DestroyPlayer(CharacterGinko);
 	DestroyPlayer(CharacterHolly);
 	DestroyPlayer(CharacterKaya);
+
+	//Free psuedo
+	FreeMyAlloc(CharacterMayple);
+	FreeMyAlloc(CharacterGinko);
+	FreeMyAlloc(CharacterHolly);
+	FreeMyAlloc(CharacterKaya);
 }
 
 void EventCharacterSelect(void)

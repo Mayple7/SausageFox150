@@ -88,10 +88,10 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 
 	// Sets the initial position of all colliders
 	CurrentBoss->SpinAttack.Position.y -= CurrentBoss->SpinAttack.height / 2;
-	CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - 200 * GetLoadRatio();
-	CurrentBoss->JabAttack.Position.y = -40 * GetLoadRatio();
-	CurrentBoss->SmashAttack.Position.x = 640 * GetLoadRatio();
-	CurrentBoss->SmashAttack.Position.y = -40 * GetLoadRatio();
+	CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - 200;
+	CurrentBoss->JabAttack.Position.y = -40;
+	CurrentBoss->SmashAttack.Position.x = 640;
+	CurrentBoss->SmashAttack.Position.y = -40;
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->cooldownTimer = 0;
@@ -124,10 +124,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			if(CurrentBoss->Position.x > 0)
 			{
 				// Pull arm back
-				CurrentBoss->JabAttack.Position.x += 250 * GetLoadRatio() * GetDeltaTime();
+				CurrentBoss->JabAttack.Position.x += 250 * GetDeltaTime();
 				
 				// Its back enough, switch state
-				if(CurrentBoss->JabAttack.Position.x >= CurrentBoss->Position.x + 100 * GetLoadRatio())
+				if(CurrentBoss->JabAttack.Position.x >= CurrentBoss->Position.x + 100)
 				{
 					CurrentBoss->InnerState = Attack;
 					playerHit = FALSE;
@@ -137,10 +137,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			else
 			{
 				// Pull arm back
-				CurrentBoss->JabAttack.Position.x -= 250 * GetLoadRatio() * GetDeltaTime();
+				CurrentBoss->JabAttack.Position.x -= 250 * GetDeltaTime();
 
 				// Its back enough, switch state
-				if(CurrentBoss->JabAttack.Position.x <= CurrentBoss->Position.x - 100 * GetLoadRatio())
+				if(CurrentBoss->JabAttack.Position.x <= CurrentBoss->Position.x - 100)
 				{
 					CurrentBoss->InnerState = Attack;
 					playerHit = FALSE;
@@ -153,7 +153,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			if(CurrentBoss->Position.x > 0)
 			{
 				// Punch hard
-				CurrentBoss->JabAttack.Position.x -= 2400 * GetLoadRatio() * GetDeltaTime();
+				CurrentBoss->JabAttack.Position.x -= 2400 * GetDeltaTime();
 
 				// Check for collision (special to boss)
 				if(!playerHit && CollisionRectangles(&CurrentPlayer.PlayerCollider, &CurrentBoss->JabAttack))
@@ -165,18 +165,18 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				// Player gets shot back when hit
 				else if(playerHit)
 				{
-					CurrentPlayer.Position.x -= 3200 * GetLoadRatio() * GetDeltaTime();
+					CurrentPlayer.Position.x -= 3200 * GetDeltaTime();
 				}
 
 				// Max range hit, switch state
-				if(CurrentBoss->JabAttack.Position.x <= CurrentBoss->Position.x - 400 * GetLoadRatio())
+				if(CurrentBoss->JabAttack.Position.x <= CurrentBoss->Position.x - 400)
 					CurrentBoss->InnerState = End;
 			}
 			// Boss is on the left
 			else
 			{
 				// Punch hard
-				CurrentBoss->JabAttack.Position.x += 2400 * GetLoadRatio() * GetDeltaTime();
+				CurrentBoss->JabAttack.Position.x += 2400 * GetDeltaTime();
 
 				// Check for collision (special to boss)
 				if(!playerHit && CollisionRectangles(&CurrentPlayer.PlayerCollider, &CurrentBoss->JabAttack))
@@ -188,11 +188,11 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				// Player gets shot back when hit
 				else if(playerHit)
 				{
-					CurrentPlayer.Position.x += 3200 * GetLoadRatio() * GetDeltaTime();
+					CurrentPlayer.Position.x += 3200 * GetDeltaTime();
 				}
 
 				// Max range hit, switch state
-				if(CurrentBoss->JabAttack.Position.x >= CurrentBoss->Position.x + 400 * GetLoadRatio())
+				if(CurrentBoss->JabAttack.Position.x >= CurrentBoss->Position.x + 400)
 					CurrentBoss->InnerState = End;
 			}
 			break;
@@ -204,16 +204,16 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			if(CurrentBoss->Position.x > 0)
 			{
 				// Pull arm back into position
-				CurrentBoss->JabAttack.Position.x += 400 * GetLoadRatio() * GetDeltaTime();
+				CurrentBoss->JabAttack.Position.x += 400 * GetDeltaTime();
 
 				// Player is still reeling back a bit from the blow
 				if(playerHit)
 				{
-					CurrentPlayer.Position.x -= 1500 * GetLoadRatio() * GetDeltaTime();
+					CurrentPlayer.Position.x -= 1500 * GetDeltaTime();
 				}
 
 				// Back into position, onto the cooldown
-				if(CurrentBoss->JabAttack.Position.x >= CurrentBoss->Position.x - 200 * GetLoadRatio())
+				if(CurrentBoss->JabAttack.Position.x >= CurrentBoss->Position.x - 200)
 				{
 					CurrentBoss->CurrentState = Cooldown;
 					CurrentBoss->cooldownTimer = 0;
@@ -224,16 +224,16 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			else
 			{
 				// Pull arm back into position
-				CurrentBoss->JabAttack.Position.x -= 400 * GetLoadRatio() * GetDeltaTime();
+				CurrentBoss->JabAttack.Position.x -= 400 * GetDeltaTime();
 
 				// Player is still reeling back a bit from the blow
 				if(playerHit)
 				{
-					CurrentPlayer.Position.x += 1500 * GetLoadRatio() * GetDeltaTime();
+					CurrentPlayer.Position.x += 1500 * GetDeltaTime();
 				}
 
 				// Back into position, onto the cooldown
-				if(CurrentBoss->JabAttack.Position.x <= CurrentBoss->Position.x + 200 * GetLoadRatio())
+				if(CurrentBoss->JabAttack.Position.x <= CurrentBoss->Position.x + 200)
 				{
 					CurrentBoss->CurrentState = Cooldown;
 					CurrentBoss->cooldownTimer = 0;
@@ -250,8 +250,8 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			//printf("SMASH TIME START\n");
 
 			// Raise the arm and perhaps the roof!
-			CurrentBoss->SmashAttack.Position.y += 500 * GetLoadRatio() * GetDeltaTime();
-			if(CurrentBoss->SmashAttack.Position.y > 550 * GetLoadRatio())
+			CurrentBoss->SmashAttack.Position.y += 500 * GetDeltaTime();
+			if(CurrentBoss->SmashAttack.Position.y > 550)
 			{
 				CurrentBoss->InnerState = Attack;
 				playerHit = FALSE;
@@ -262,7 +262,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			//printf("SMASH TIME ATTACK\n");
 			
 			// Bring down the arm and perhaps the house!
-			CurrentBoss->SmashAttack.Position.y -= 3500 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->SmashAttack.Position.y -= 3500 * GetDeltaTime();
 
 			// Check for collision (special to boss)
 			if(!playerHit && CollisionRectangles(&CurrentPlayer.PlayerCollider, &CurrentBoss->SmashAttack))
@@ -276,10 +276,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			// Player gets taken down when hit
 			else if(playerHit)
 			{
-				CurrentPlayer.Position.y -= 3500 * GetLoadRatio() * GetDeltaTime();
+				CurrentPlayer.Position.y -= 3500 * GetDeltaTime();
 			}
 
-			if(CurrentBoss->SmashAttack.Position.y < GROUNDLEVEL * GetLoadRatio())
+			if(CurrentBoss->SmashAttack.Position.y < GROUNDLEVEL)
 			{
 				CurrentBoss->InnerState = End;
 				
@@ -289,9 +289,9 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			//printf("SMASH TIME END\n");
 
 			// Put things back in order
-			CurrentBoss->SmashAttack.Position.y += 500 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->SmashAttack.Position.y += 500 * GetDeltaTime();
 
-			if(CurrentBoss->SmashAttack.Position.y > -40 * GetLoadRatio())
+			if(CurrentBoss->SmashAttack.Position.y > -40)
 			{
 				CurrentBoss->CurrentState = Cooldown;
 				CurrentBoss->cooldownTimer = 0;
@@ -327,58 +327,58 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			break;
 		case SpinR:
 			// Spin to the right
-			CurrentBoss->Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
-			CurrentBoss->BodySprite->Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
-			CurrentBoss->SpinSprite->Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
-			CurrentBoss->SpinAttack.Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
-			CurrentBoss->BossCollider.Position.x += 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->Position.x += 1800 * GetDeltaTime();
+			CurrentBoss->BodySprite->Position.x += 1800 * GetDeltaTime();
+			CurrentBoss->SpinSprite->Position.x += 1800 * GetDeltaTime();
+			CurrentBoss->SpinAttack.Position.x += 1800 * GetDeltaTime();
+			CurrentBoss->BossCollider.Position.x += 1800 * GetDeltaTime();
 
 			// Check for collision (special to boss)
 			if(!playerHit && CollisionRectangles(&CurrentPlayer.PlayerCollider, &CurrentBoss->SpinAttack))
 			{
 				// Player gets shot up
 				playerHit = TRUE;
-				Vec2Set(&CurrentPlayer.PlayerRigidBody.Velocity, 0.0f, 1500.0f * GetLoadRatio());
+				Vec2Set(&CurrentPlayer.PlayerRigidBody.Velocity, 0.0f, 1500.0f);
 				CurrentPlayer.Position.y += 2.0f;
 				PlayerDamageResult(CurrentBoss->SpinDamage);
 			}
 
-			if(CurrentBoss->Position.x >= 700 * GetLoadRatio())
+			if(CurrentBoss->Position.x >= 700)
 			{
-				CurrentBoss->BodySprite->Position.x = 700 * GetLoadRatio();
-				CurrentBoss->SpinSprite->Position.x = 700 * GetLoadRatio();
-				CurrentBoss->Position.x = 700 * GetLoadRatio();
-				CurrentBoss->SpinAttack.Position.x = 700 * GetLoadRatio();
-				CurrentBoss->BossCollider.Position.x = 700 * GetLoadRatio();
+				CurrentBoss->BodySprite->Position.x = 700;
+				CurrentBoss->SpinSprite->Position.x = 700;
+				CurrentBoss->Position.x = 700;
+				CurrentBoss->SpinAttack.Position.x = 700;
+				CurrentBoss->BossCollider.Position.x = 700;
 				CurrentBoss->InnerState = End;
 				CurrentBoss->cooldownTimer = 0;
 			}
 			break;
 		case SpinL:
 			// Spin to the left
-			CurrentBoss->Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
-			CurrentBoss->BodySprite->Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
-			CurrentBoss->SpinSprite->Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
-			CurrentBoss->SpinAttack.Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
-			CurrentBoss->BossCollider.Position.x -= 1800 * GetLoadRatio() * GetDeltaTime();
+			CurrentBoss->Position.x -= 1800 * GetDeltaTime();
+			CurrentBoss->BodySprite->Position.x -= 1800 * GetDeltaTime();
+			CurrentBoss->SpinSprite->Position.x -= 1800 * GetDeltaTime();
+			CurrentBoss->SpinAttack.Position.x -= 1800 * GetDeltaTime();
+			CurrentBoss->BossCollider.Position.x -= 1800 * GetDeltaTime();
 
 			// Check for collision (special to boss)
 			if(!playerHit && CollisionRectangles(&CurrentPlayer.PlayerCollider, &CurrentBoss->SpinAttack))
 			{
 				// Player gets shot up
 				playerHit = TRUE;
-				Vec2Set(&CurrentPlayer.PlayerRigidBody.Velocity, 0.0f, 1500.0f * GetLoadRatio());
+				Vec2Set(&CurrentPlayer.PlayerRigidBody.Velocity, 0.0f, 1500.0f);
 				CurrentPlayer.Position.y += 2.0f;
 				PlayerDamageResult(CurrentBoss->SpinDamage);
 			}
 
-			if(CurrentBoss->Position.x <= -700 * GetLoadRatio())
+			if(CurrentBoss->Position.x <= -700)
 			{
-				CurrentBoss->BodySprite->Position.x = -700 * GetLoadRatio();
-				CurrentBoss->SpinSprite->Position.x = -700 * GetLoadRatio();
-				CurrentBoss->Position.x = -700 * GetLoadRatio();
-				CurrentBoss->SpinAttack.Position.x = -700 * GetLoadRatio();
-				CurrentBoss->BossCollider.Position.x = -700 * GetLoadRatio();
+				CurrentBoss->BodySprite->Position.x = -700;
+				CurrentBoss->SpinSprite->Position.x = -700;
+				CurrentBoss->Position.x = -700;
+				CurrentBoss->SpinAttack.Position.x = -700;
+				CurrentBoss->BossCollider.Position.x = -700;
 				CurrentBoss->InnerState = End;
 				CurrentBoss->cooldownTimer = 0;
 			}
@@ -394,10 +394,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->ArmSprite->Visible = TRUE;
 
 				CurrentBoss->BodySprite->FlipX = TRUE;
-				CurrentBoss->ArmSprite->Position.x = 580 * GetLoadRatio();
+				CurrentBoss->ArmSprite->Position.x = 580;
 				CurrentBoss->ArmSprite->FlipX = TRUE;
-				CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - 200 * GetLoadRatio();
-				CurrentBoss->SmashAttack.Position.x = 640 * GetLoadRatio();
+				CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - 200;
+				CurrentBoss->SmashAttack.Position.x = 640;
 				CurrentBoss->CurrentState = Cooldown;
 				CurrentBoss->cooldownTimer = 0;
 				playerHit = FALSE;
@@ -410,10 +410,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->ArmSprite->Visible = TRUE;
 
 				CurrentBoss->BodySprite->FlipX = FALSE;
-				CurrentBoss->ArmSprite->Position.x = -580 * GetLoadRatio();
+				CurrentBoss->ArmSprite->Position.x = -580;
 				CurrentBoss->ArmSprite->FlipX = FALSE;
-				CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x + 200 * GetLoadRatio();
-				CurrentBoss->SmashAttack.Position.x = -640 * GetLoadRatio();
+				CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x + 200;
+				CurrentBoss->SmashAttack.Position.x = -640;
 				CurrentBoss->CurrentState = Cooldown;
 				CurrentBoss->cooldownTimer = 0;
 				playerHit = FALSE;
@@ -436,7 +436,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->cooldownTimer = 0;
 			}
 			// Player is up high, smash or jab
-			else if(CurrentPlayer.Position.y > -150 * GetLoadRatio())
+			else if(CurrentPlayer.Position.y > -150)
 			{
 				if(rand() % 2)
 				{
@@ -479,7 +479,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->cooldownTimer = 0;
 			}
 			// Player is up high, smash or jab
-			else if(CurrentPlayer.Position.y > -150 * GetLoadRatio())
+			else if(CurrentPlayer.Position.y > -150)
 			{
 				if(rand() % 2)
 				{
@@ -602,11 +602,12 @@ void BossCollideWeapon(ArmGuyBoss *CurrentBoss)
 		damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
 	CurrentBoss->CurrentHealth -= damageDealt;
-	sprintf(num, "%d", damageDealt);
+	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentBoss->Position.x, (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2), 100, textColor, Center);
+	FirstLetter = CreateText(num, (CurrentBoss->Position.x + rand() % 81 - 40), (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
 }
 
 /*************************************************************************/
@@ -633,10 +634,11 @@ void PlayerDamageResult(int damage)
 		damageDealt = damage;
 	
 	CurrentPlayer.CurrentPlayerStats.CurrentHealth -= damageDealt;
-	sprintf(num, "%d", damageDealt);
+	sprintf(num, "-%d", damageDealt);
 
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentPlayer.Position.x / GetLoadRatio(), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+	FirstLetter = CreateText(num, (CurrentPlayer.Position.x + rand() % 81 - 40), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
 }

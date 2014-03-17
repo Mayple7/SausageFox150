@@ -30,7 +30,7 @@ void ScrollPaperScroll(float Speed)
 	if(TxtScrollMiddle->ScaleX < 50)
 	{
 		TxtScrollMiddle->ScaleX += .40f * Speed;
-		TxtScrollRight->Position.x += 10 * GetLoadRatio() * Speed;
+		TxtScrollRight->Position.x += 10 * Speed;
 	}
 	else
 		Scroll = FALSE;
@@ -41,7 +41,7 @@ void ReScrollPaperScroll(float Speed)
 	if(TxtScrollMiddle->ScaleX > 1)
 	{
 		TxtScrollMiddle->ScaleX -= .40f * Speed;
-		TxtScrollRight->Position.x -= 10 * GetLoadRatio() * Speed;
+		TxtScrollRight->Position.x -= 10 * Speed;
 	}
 
 	if(TxtScrollMiddle->ScaleX <= 1)

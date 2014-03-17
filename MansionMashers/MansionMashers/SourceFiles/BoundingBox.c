@@ -36,11 +36,8 @@ void BoundingBoxUpdate(void)
 	//Get camera position
 	AEGfxGetCamPosition(&camX, &camY);
 
-
-	BoundTop->Position.x = camX;
-	BoundBottom->Position.x = camX;
-	BoundRight->Position.x = camX + 1920 * GetLoadRatio();
-	BoundLeft->Position.x = camX - 1920 * GetLoadRatio();
-
+	BoundTop->Position.x = camX / GetLoadRatio();
+	BoundBottom->Position.x = camX / GetLoadRatio();
+	BoundRight->Position.x = camX / GetLoadRatio() + 1920;
+	BoundLeft->Position.x = camX / GetLoadRatio() - 1920;
 }
-

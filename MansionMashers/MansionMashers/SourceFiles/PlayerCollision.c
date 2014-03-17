@@ -118,25 +118,36 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		//Check if the weapon is in a shop
 		if (wList->CurrentShop)
 		{
+			//Negitive coin, what?
+			if (wList->CurrentShop->Coin < 0)
+			{
+				if (!Cheats)
+					return;
+
+				//Go positive again...
+				wList->CurrentShop->Coin *= -1;
+			}
+
+			//Not enough money, too expensive
 			if (wList->CurrentShop->Coin > CurrentPlayer->CurrentPlayerStats.Money && !Cheats)
 			{
 				//Not enough money
 				Vec3 textColor;
 				TextGlyphs *FirstLetter;
-	
-				// Create Floating Error Text
-				Vec3Set(&textColor, 0.0f, 0.0f, 0.0f);
-				FirstLetter = CreateText("Not Enough Coin!", (CurrentPlayer->Position.x - 4) / GetLoadRatio(), (CurrentPlayer->Position.y - 4 + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
-				AddFloatingText(FirstLetter);
-				ChangeTextVisibility(FirstLetter);
 
+				// Create Floating Error Text
 				Vec3Set(&textColor, 1.0f, 0.1f, 0.1f);
-				FirstLetter = CreateText("Not Enough Coin!", CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+				FirstLetter = CreateText("Not Enough Coin!", CurrentPlayer->Position.x, (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2), 100, textColor, Center, Border);
 				AddFloatingText(FirstLetter);
 				ChangeTextVisibility(FirstLetter);
+				ChangeTextZIndex(FirstLetter, 202);
+
+				//YOU WILL NEVER BUY THIS AGAIN, HAHAHAHAHAHA (Until you leave, get more money and then come back)
+				wList->CurrentShop->Coin *= -1;
 				return;
 			}
 			
+			//If you aren't cheating, we will take your money
 			if (!Cheats)
 				CurrentPlayer->CurrentPlayerStats.Money -= wList->CurrentShop->Coin;
 			Shopping = TRUE;
@@ -200,9 +211,16 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		CurrentPlayer->CurrentPlayerStats.CurrentHealth = (int)(CurrentPlayer->CurrentPlayerStats.MaxHealth * healthRatio);
 	}
 }
-// height +/- (fontsize/2)
+
+/*************************************************************************/
+/*!
+	\brief
+	Handles the collision with a enemy weapon
+*/
+/*************************************************************************/
 void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 {
+	// height +/- (fontsize/2)
 	int damageDealt;
 	char num[10];
 	Vec3 textColor;
@@ -217,11 +235,42 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 	
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
-	sprintf(num, "%d", damageDealt);
+	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
-	FirstLetter = CreateText(num, CurrentPlayer->Position.x / GetLoadRatio(), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2) / GetLoadRatio(), 100, textColor, Center);
+	FirstLetter = CreateText(num, (CurrentPlayer->Position.x + rand() % 81 - 40), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Handles the collision with a deadly projectile
+*/
+/*************************************************************************/
+void PlayerCollideEnemyProjectile(Player* CurrentPlayer, Projectile *CurrentProjectile)
+{
+	int damageDealt;
+	char num[10];
+	Vec3 textColor;
+	TextGlyphs *FirstLetter;
+	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
+	
+	// Calculate damage
+	if(Cheats)
+		damageDealt = 0;
+	else
+		damageDealt = CurrentProjectile->Damage;
+	
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
+	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
+	sprintf(num, "-%d", damageDealt);
+	// Create Floating Combat Text
+	FirstLetter = CreateText(num, (CurrentPlayer->Position.x + rand() % 81 - 40), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);
+	AddFloatingText(FirstLetter);
+	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
 }
 
 /*************************************************************************/
