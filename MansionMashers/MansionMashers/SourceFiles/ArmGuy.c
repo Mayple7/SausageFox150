@@ -96,7 +96,7 @@ void InitializeArmGuy(void)
 	Boss->SmashAttack.collisionDebug = TRUE;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center, Border);
 	TextProgressiveInit(LevelName);
 
 	CreateBoundingBoxes();

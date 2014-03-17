@@ -8,14 +8,16 @@
 typedef struct TextGlyphs
 {
 	Sprite *Glyph;
+	int textTexture;
 	char letter;
 	struct TextGlyphs *NextLetter;
 }TextGlyphs;
 
 enum TextAlignment { Left, Center, Right };
+enum TextTexture { Plain, Border };
 
-TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor, int alignment);
-Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos);
+TextGlyphs* CreateText(char *string, float xPos, float yPos, int fontSize, Vec3 TextColor, int alignment, int textSheet);
+Sprite* ConvertToGlyph(char character, int fontSize, float xPos, float yPos, int textSheet);
 void FreeText(TextGlyphs *FirstLetter);
 void ChangeTextPosition(TextGlyphs* FirstLetter, Vec2 Offset, int alignment);
 void ChangeTextVisibility(TextGlyphs* FirstLetter);

@@ -26,7 +26,7 @@ typedef struct EnemyParts
 	float AttackRotation;
 	float AttackRotationArm;
 	float AttackRotationArmLower;
-	int BlinkTimer;
+	float BlinkTimer;
 }EnemyParts;
 
 typedef struct EnemyStats
@@ -108,12 +108,16 @@ void LoadEnemy(int enemyType);
 Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos, int panelId);
 void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp);
 void UpdateEnemy(Enemy *CurrentEnemy);
+void UpdateAllEnemies(void);
 void DetectEnemyCollision(Enemy *CurrentEnemy);
 void EnemyAnimation(Enemy *Object);
 void CreateEnemySprites(Enemy *Object);
 void EnemyAIUpdate(Enemy *Object);
 void EnemyBasicMeleeUpdate(Enemy *Object);
 void ResetEnemyPanelNumber(void);
+
+void EnemyBasicRangedUpdate(Enemy *CurrentEnemy);
+void EnemyAnimationBasicRanged(Enemy *Object);
 
 float RotateToAngle(float angle, float angleTo, float speed);
 #endif

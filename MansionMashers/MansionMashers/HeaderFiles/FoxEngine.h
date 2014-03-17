@@ -9,6 +9,7 @@
 //-------------------------------------------------------------------------
 // Fox engine includes
 
+#include "FoxMath.h"
 #include "Camera.h"
 #include "Movement.h"
 #include "ObjectManager.h"
@@ -28,6 +29,8 @@
 
 //Special level include
 #include "PauseMenu.h"
+
+Matrix3 LoadRatioMtx;
 
 float GetLoadRatio(void);
 void SetLoadRatio(double ratio);

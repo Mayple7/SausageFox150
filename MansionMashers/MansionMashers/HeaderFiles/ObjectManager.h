@@ -14,6 +14,7 @@ Sprite *drawList;
 Platform *platformList;
 Food *foodList;
 Enemy *enemyList;
+Projectile *projectileList;
 Weapon *weaponList;
 Button *buttonList;
 Wall *wallList;
@@ -25,19 +26,20 @@ struct ParticleSystem *particleSystemList;
 struct Particle *particleList;
 
 //Functionz
-Sprite* AddObject(void);
-Platform* AddPlatform(void);
-Food* AddFood(void);
-Weapon* AddWeapon(void);
-Enemy* AddEnemy(void);
-Button* AddButton(void);
-Wall* AddWall(void);
-EnemySpawner* AddSpawner(void);
-void AddFloatingText(struct TextGlyphs* FirstLetter);
-void AddStaticText(struct TextGlyphs* FirstLetter);
+Sprite *AddObject(void);
+Platform *AddPlatform(void);
+Food *AddFood(void);
+Weapon *AddWeapon(void);
+Projectile *AddProjectile(void);
+Enemy *AddEnemy(void);
+Button *AddButton(void);
+Wall *AddWall(void);
+EnemySpawner *AddSpawner(void);
+void AddFloatingText(struct TextGlyphs *FirstLetter);
+void AddStaticText(struct TextGlyphs *FirstLetter);
 struct ParticleSystem *AddParticleSystem(void);
 struct Particle *AddParticle(void);
-struct WeaponShop* AddWeaponShop(void);
+struct WeaponShop *AddWeaponShop(void);
 
 
 void ResetObjectList(void);
@@ -45,7 +47,7 @@ void DrawObjectList(void);
 void freeSpriteList(void);
 void freeDrawList(void);
 void FreeAllLists(void);
-void FreeSprite(Sprite* objectNext);
+void FreeSprite(Sprite *objectNext);
 void DrawCollisionList(void);
 
 void FreeFood(Food *CurrentFood);
@@ -53,6 +55,7 @@ void FreePlatform(Platform *CurrentPlatform);
 void FreeEnemy(Enemy *CurrentEnemy);
 void FreeButton(Button *CurrentButton);
 void FreeWeapon(Weapon *CurrentWeapon);
+void FreeProjectile(Projectile *CurrentProjectile);
 void FreeWall(Wall *CurrentWall);
 void FreeSpawner(EnemySpawner *CurrentSpawner);
 void FreeFloatingText(struct TextGlyphs *FirstLetter);

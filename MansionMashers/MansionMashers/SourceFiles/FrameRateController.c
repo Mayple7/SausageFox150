@@ -35,38 +35,38 @@ static int vsync;
 /*************************************************************************/
 void StartFoxFrame(void)
 {
-	
 	DEVMODE *freq = (DEVMODE *) malloc(sizeof(DEVMODE));
 	freq->dmSize = sizeof(DEVMODE);
 	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, freq);
 	vsync = freq->dmDisplayFrequency;
+
+	//Start the first frame
 	QueryPerformanceCounter(&CycleStart);
-	
 }
 
 double testFrameTime(void)
 {
+	//For testing
 	QueryPerformanceCounter(&CycleEnd);
 	QueryPerformanceFrequency(&Freq);
 	return ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
 }
-
 
 /*************************************************************************/
 /*!
 	\brief
 	Gets CPU Cycles & Frequency and calculates DeltaTime in order
 	to keep game from going to fast.
-
 */
 /*************************************************************************/
 void EndFoxFrame(void)
 {
+	//Watch over framerate
 	QueryPerformanceCounter(&CycleEnd);
 	QueryPerformanceFrequency(&Freq);
 	DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
 	
-	while(DeltaTime < 1.0f/FRAMERATE)
+	while(DeltaTime < 1.0 / FRAMERATE)
 	{
 		QueryPerformanceCounter(&CycleEnd);
 		DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
@@ -80,7 +80,6 @@ void EndFoxFrame(void)
 
 	\return
 	Returns DeltaTime
-
 */
 /*************************************************************************/
 float GetDeltaTime(void)

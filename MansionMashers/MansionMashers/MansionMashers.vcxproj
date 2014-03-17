@@ -139,6 +139,7 @@
     <ClInclude Include="HeaderFiles\Platform.h" />
     <ClInclude Include="HeaderFiles\Player.h" />
     <ClInclude Include="HeaderFiles\PlayerCollision.h" />
+    <ClInclude Include="HeaderFiles\Projectile.h" />
     <ClInclude Include="HeaderFiles\RigidBody.h" />
     <ClInclude Include="HeaderFiles\SearchIntArray.h" />
     <ClInclude Include="HeaderFiles\Shop.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="SourceFiles\Platform.c" />
     <ClCompile Include="SourceFiles\Player.c" />
     <ClCompile Include="SourceFiles\PlayerCollision.c" />
+    <ClCompile Include="SourceFiles\Projectile.c" />
     <ClCompile Include="SourceFiles\RigidBody.c" />
     <ClCompile Include="SourceFiles\SearchIntArray.c" />
     <ClCompile Include="SourceFiles\Shop.c" />

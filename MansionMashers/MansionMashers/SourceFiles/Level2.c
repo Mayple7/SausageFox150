@@ -44,36 +44,36 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
 
-EnemySpawner* Pan2SpawnerRight;
-EnemySpawner* Pan2SpawnerLeft;
-EnemySpawner* Pan3SpawnerRight;
-EnemySpawner* Pan3SpawnerLeft;
-EnemySpawner* Pan4SpawnerRight;
+EnemySpawner *Pan2SpawnerRight;
+EnemySpawner *Pan2SpawnerLeft;
+EnemySpawner *Pan3SpawnerRight;
+EnemySpawner *Pan3SpawnerLeft;
+EnemySpawner *Pan4SpawnerRight;
 
-Enemy* Pan3Enemy;
+Enemy *Pan3Enemy;
 
-Food* Ham;
-Food* Taco;
-Food* Pizza;
-Food* Cake;
+Food *Ham;
+Food *Taco;
+Food *Pizza;
+Food *Cake;
 
 Platform *Crate;
-Wall* Wall1;
-Wall* WTBot;
-Wall* RightBarrier;
+Wall *Wall1;
+Wall *WTBot;
+Wall *RightBarrier;
 
-HUD* CurrentHUD;
+HUD *CurrentHUD;
 
 FoxSound *BackSnd;
 
 static int PlayerInSight; // Enemy in watch tower checks for player 
 static int PlayerIsAlive; 
 
-Sprite* BlackOverlay;
+Sprite *BlackOverlay;
 
 /*************************************************************************/
 /*!
@@ -114,7 +114,7 @@ void InitializeLevel2(void)
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 	
 	//Bounding Boxes
@@ -135,7 +135,6 @@ void InitializeLevel2(void)
 	Vec3Set(&TextTint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
-
 
 	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
 	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
@@ -217,9 +216,9 @@ void InitializeLevel2(void)
 	Pan2SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
 	//Panel3
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 2), 0);
-	Pan3SpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	Pan3SpawnerRight = CreateEnemySpawner(1, BasicRanged, TRUE, 100, 1080, SpawnerLocation, &newID, 2); //Was melee, please don't kill me!
 	Pan3SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
-	Pan3Enemy = CreateEnemy(BasicMelee, EnemyType, newID++, WTBot->Position.x / GetLoadRatio(), 300, 2);
+	Pan3Enemy = CreateEnemy(BasicMelee, EnemyType, newID++, WTBot->Position.x, 300, 2);
 	//Panel4
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 3 - PANELSIZE / 4), 0);
 	Pan3SpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
@@ -231,8 +230,6 @@ void InitializeLevel2(void)
 
 	///Last thing in initialize
 	CreateDeathConfirmObjects(&newID);
-
-
 }
 
 /*************************************************************************/
@@ -248,7 +245,7 @@ void UpdateLevel2(void)
 	BoundingBoxUpdate();
 	ParticleSystemUpdate();
 
-	if(CurrentPlayer.Position.x > (PANELSIZE * 2 - PANELSIZE / 4) * GetLoadRatio())
+	if(CurrentPlayer.Position.x > (PANELSIZE * 2 - PANELSIZE / 4))
 	{
 		if(Pan3Enemy->EnemyState == AINone)
 		{
@@ -277,7 +274,7 @@ void UpdateLevel2(void)
 /*************************************************************************/
 void DrawLevel2(void)
 {
-	// Draws the object list and sets the camera to the correct location
+	// Draws the object list
 	DrawObjectList();
 
 	//DrawHUD(&HUDList);
@@ -292,10 +289,11 @@ void DrawLevel2(void)
 /*************************************************************************/
 void FreeLevel2(void)
 {
-	if(levelComplete && CurrentPlayer.CurrentLevel < GS_HandGuy)
-		CurrentPlayer.CurrentLevel = GS_HandGuy;
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level3)
+		CurrentPlayer.CurrentLevel = GS_Level3;
 	else if(CurrentPlayer.CurrentLevel < GS_Level2)
 		CurrentPlayer.CurrentLevel = GS_Level2;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
@@ -322,8 +320,6 @@ void UnloadLevel2(void)
 /*************************************************************************/
 void EventLevel2(void)
 {
-	int i;
-
 	/*////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
@@ -351,15 +347,14 @@ void EventLevel2(void)
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
 	////////////////////////////////*/
-
 	if(PlayerIsAlive == TRUE)
 	{
 		//Don't Let camera go beyond left boundary
 		if(CurrentPlayer.Position.x <= 0 && GetCameraXPosition() <= 5.0f)
 			SetCameraXPosition(0.0f);
 		//Don't Let camera go beyond right boundary
-		else if(CurrentPlayer.Position.x >= (PANELSIZE * 3) * GetLoadRatio() && GetCameraXPosition() >= ((PANELSIZE * 3 - 5.0f) * GetLoadRatio()))
-			SetCameraXPosition(PANELSIZE * 3 * GetLoadRatio());
+		else if(CurrentPlayer.Position.x >= (PANELSIZE * 3) && GetCameraXPosition() >= (PANELSIZE * 3 - 5.0f))
+			SetCameraXPosition(PANELSIZE * 3);
 		//Free Roam Camera
 		else
 			SetCamera(&CurrentPlayer.Position, 250);
@@ -368,28 +363,17 @@ void EventLevel2(void)
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
-	for(i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Update the created enemies
-		if (enemyList[i].objID == -1)
-			break;
-		if (enemyList[i].objID == 0)
-			continue;
-
-		UpdateEnemy(&enemyList[i]);
-	}
-
+	UpdateAllEnemies();
+	UpdateAllProjectiles();
 	UpdateFloatingText();
-
 
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
 	{
 		levelComplete = TRUE;
-		RightBarrier->Position.y = -1080 * GetLoadRatio();
+		RightBarrier->Position.y = -1080;
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
 	}
-
 
 	//At level start
 	if(!levelComplete)
@@ -402,9 +386,9 @@ void EventLevel2(void)
 	}
 
 	//Level Transition
-	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) * GetLoadRatio() && levelComplete)
+	BlackOverlay->Position.x = GetCameraXPosition();
+	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
 	{
-		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
 			SetNextState(GS_MapLevel);
@@ -414,7 +398,6 @@ void EventLevel2(void)
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
 		PlayerIsAlive = FALSE;
-		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha = 0.5f;
 
 		UpdateDeathConfirmObjects();

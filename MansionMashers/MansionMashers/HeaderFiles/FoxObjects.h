@@ -32,6 +32,7 @@ int EnemyPanelNumber[PANELAMOUNT];
 #include "EnemyCollision.h"
 #include "PlayerCollision.h"
 #include "Food.h"
+#include "Projectile.h"
 #include "Weapon.h"
 #include "ParticleSystem.h"
 #include "Shop.h"

@@ -40,24 +40,24 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	else
 		CurrentWeapon->WeaponName = "Error: Memory Allocation Failed!";
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f + 25, 50, TextTint, Center);
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f + 25, 50, TextTint, Center, Plain);
 	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);
-	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f - 25), 50, TextTint, Center);
+	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f - 25), 50, TextTint, Center, Plain);
 	
 	CurrentWeapon->WeaponSprite = (Sprite *) CreateSprite(weaponTexture, 256, 256, 22, 1, 1, 0, 0);
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, height / 4, height / 4, objID);
-	CurrentWeapon->WeaponLength = 80.0f * GetLoadRatio();
+	CurrentWeapon->WeaponLength = 80.0f;
 
 	nameLen = strlen(CurrentWeapon->WeaponName);
 	statsLen = strlen(CurrentWeapon->WeaponStatsString);
 	if(nameLen >= statsLen)
 	{
-		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 48, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f));
+		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 48, 1, 1, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f));
 	}
 	else
 	{
-		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 48, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f));
+		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 48, 1, 1, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f));
 	}
 	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
 
@@ -83,7 +83,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CurrentWeapon->WeaponType = weaponType;
 	CurrentWeapon->WeaponName = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
 	CurrentWeapon->WeaponStatsString = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
-	CurrentWeapon->WeaponLength = 80.0f * GetLoadRatio();
+	CurrentWeapon->WeaponLength = 80.0f;
 
 	if(CurrentWeapon->WeaponName)
 		CreateWeaponName(&CurrentWeapon->WeaponName, CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity);
@@ -99,19 +99,19 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
 
-	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f + 25, 50, TextTint, Center);
+	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f + 25, 50, TextTint, Center, Plain);
 	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);
-	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y / GetLoadRatio() + CurrentWeapon->WeaponPickup.height / GetLoadRatio() * 1.5f - 25), 50, TextTint, Center);
+	CurrentWeapon->WeaponStatsGlyphs = CreateText(CurrentWeapon->WeaponStatsString, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f - 25), 50, TextTint, Center, Plain);
 	
 	nameLen = strlen(CurrentWeapon->WeaponName);
 	statsLen = strlen(CurrentWeapon->WeaponStatsString);
 	if(nameLen >= statsLen)
 	{
-		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f));
 	}
 	else
 	{
-		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x / GetLoadRatio(), (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f) / GetLoadRatio());
+		CurrentWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f));
 	}
 	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
 
@@ -157,7 +157,7 @@ void WeaponOnTheRun(Weapon* CurrentWeapon)
 		Vec2 glyphPos;
 		int hit = 0;
 
-		if (CurrentWeapon->WeaponPickup.Position.y <= (GROUNDLEVEL - 100) * GetLoadRatio())
+		if (CurrentWeapon->WeaponPickup.Position.y <= (GROUNDLEVEL - 100))
 		{
 			CurrentWeapon->WeaponFalling = FALSE;
 			return;
