@@ -108,6 +108,7 @@ void LoadEnemy(int enemyType);
 Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos, int panelId);
 void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp);
 void UpdateEnemy(Enemy *CurrentEnemy);
+void UpdateAllEnemies(void);
 void DetectEnemyCollision(Enemy *CurrentEnemy);
 void EnemyAnimation(Enemy *Object);
 void CreateEnemySprites(Enemy *Object);

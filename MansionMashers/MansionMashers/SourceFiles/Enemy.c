@@ -174,6 +174,28 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 /*************************************************************************/
 /*!
 	\brief
+	No need to have this loop in every level
+*/
+/*************************************************************************/
+void UpdateAllEnemies(void)
+{
+	int i;
+
+	for(i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Update the created enemies
+		if (enemyList[i].objID == -1)
+			break;
+		if (enemyList[i].objID == 0)
+			continue;
+
+		UpdateEnemy(&enemyList[i]);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Updates the enemy's position and sets the enemy sprite's position
 	  
 	\param CurrentEnemy

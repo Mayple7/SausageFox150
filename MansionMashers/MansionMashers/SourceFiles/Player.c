@@ -512,12 +512,12 @@ void updateDamage(Player *CurrentPlayer)
 void DetectPlayerCollision(void)
 {
 	//Make local pointers to all the lists
-	Platform* pList = platformList;
-	Food* fList = foodList;
-	Weapon* wList = weaponList;
-	Enemy* eList = enemyList;
-	Wall* walls = wallList;
-	EnemySpawner* spawner = spawnerList;
+	Platform *pList = platformList;
+	Food *fList = foodList;
+	Weapon *wList = weaponList;
+	Enemy *eList = enemyList;
+	Wall *walls = wallList;
+	EnemySpawner *spawner = spawnerList;
 
 	//Fake booleans for hit and hit previous frame
 	int hit = 0;

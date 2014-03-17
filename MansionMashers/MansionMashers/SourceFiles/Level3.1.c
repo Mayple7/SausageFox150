@@ -53,7 +53,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 
 Platform *Plat;
 Wall *Wall1;
@@ -138,7 +138,6 @@ void UpdateLevel31(void)
 	//EasyEditPlatform(Plat, 10);
 	EasyEditWall(Wall1 ,10);
 
-
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 }
@@ -217,4 +216,6 @@ void EventLevel31(void)
 		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
+
+	//UpdateAllEnemies();
 }

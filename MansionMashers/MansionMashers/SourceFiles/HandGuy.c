@@ -95,9 +95,6 @@ void InitializeHandGuy(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
-
-	//Boss dog
-	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 800.0f, GROUNDLEVEL, 0);
 }
 
 /*************************************************************************/
@@ -111,6 +108,8 @@ void UpdateHandGuy(void)
 	EventHandGuy();
 
 	UpdateFloatingText();
+
+	UpdateAllProjectiles();
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -142,6 +141,7 @@ void FreeHandGuy(void)
 		CurrentPlayer.CurrentLevel = GS_Level3;
 	else if(CurrentPlayer.CurrentLevel < GS_HandGuy)
 		CurrentPlayer.CurrentLevel = GS_HandGuy;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
@@ -189,5 +189,10 @@ void EventHandGuy(void)
 		SetNextState(GS_MainMenu);
 		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
+	}
+
+	if(FoxInput_KeyTriggered('Y'))
+	{
+		CreateProjectile("TextureFiles/HandGauy.png", 100, 100, 780, -300, Arrow, WeaponEnemy, newID++, 10, -400);
 	}
 }

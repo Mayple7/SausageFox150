@@ -40,7 +40,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 
 /*************************************************************************/
 /*!
@@ -117,6 +117,7 @@ void FreeLevel4(void)
 		CurrentPlayer.CurrentLevel = GS_Kevin;
 	else if(CurrentPlayer.CurrentLevel < GS_Level4)
 		CurrentPlayer.CurrentLevel = GS_Level4;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }

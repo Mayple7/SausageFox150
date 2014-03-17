@@ -34,7 +34,7 @@
 	The pointer to a sprite whose memory is to be deallocated
 */
 /*************************************************************************/
-void FreeSprite(Sprite* object)
+void FreeSprite(Sprite *object)
 {
 	//Make sure the sprite exists
 	if (object && object->Created)
@@ -60,7 +60,7 @@ void FreeFood(Food *CurrentFood)
 	//BECAUSE EVERYONE LIKES FREE FOOD
 	if(CurrentFood->objID > -1)
 	{
-		CurrentFood->objID = -1;
+		CurrentFood->objID = 0;
 		CurrentFood->FoodCollider.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentFood->FoodCollider.DebugMesh);
 
@@ -83,7 +83,7 @@ void FreePlatform(Platform *CurrentPlatform)
 	if(CurrentPlatform->objID > -1)
 	{
 		//Free that platform
-		CurrentPlatform->objID = -1;
+		CurrentPlatform->objID = 0;
 		CurrentPlatform->PlatformCollider.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentPlatform->PlatformCollider.DebugMesh);
 
@@ -106,7 +106,7 @@ void FreeWeapon(Weapon *CurrentWeapon)
 	//Weapon, pronounced: "We-pown"
 	if(CurrentWeapon->objID > -1)
 	{
-		CurrentWeapon->objID = -1;
+		CurrentWeapon->objID = 0;
 		FreeMyAlloc(CurrentWeapon->WeaponName);
 		FreeMyAlloc(CurrentWeapon->WeaponStatsString);
 		CurrentWeapon->WeaponPickup.collisionDebug = FALSE;
@@ -115,6 +115,29 @@ void FreeWeapon(Weapon *CurrentWeapon)
 
 		if(CurrentWeapon->WeaponSprite->Created)
 			FreeSprite(CurrentWeapon->WeaponSprite);
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees the object being passed
+	
+	\param CurrentWeapon
+	The pointer to the projectile whose memory is to be deallocated
+*/
+/*************************************************************************/
+void FreeProjectile(Projectile *CurrentProjectile)
+{
+	//Project me babe
+	if(CurrentProjectile->objID > -1)
+	{
+		CurrentProjectile->objID = 0;
+		CurrentProjectile->ProjectileAttack.collisionDebug = FALSE;
+		AEGfxMeshFree(CurrentProjectile->ProjectileAttack.DebugMesh);
+
+		if(CurrentProjectile->ProjectileSprite->Created)
+			FreeSprite(CurrentProjectile->ProjectileSprite);
 	}
 }
 
@@ -229,7 +252,7 @@ void FreeParticle(Particle *CurrentParticle)
 	The pointer to a button whose memory is to be deallocated
 */
 /*************************************************************************/
-void FreeButton(Button* CurrentButton)
+void FreeButton(Button *CurrentButton)
 {
 	//Make sure the sprite exists
 	if (CurrentButton->objID && CurrentButton->ButtonSprite->Created)
@@ -346,6 +369,12 @@ void freeSpriteList(void)
 			FreeWeapon(&weaponList[i]);
 		}
 		//Make sure the sprite exists
+		if (projectileList[i].objID)
+		{
+			//Free the mesh and texture data
+			FreeProjectile(&projectileList[i]);
+		}
+		//Make sure the sprite exists
 		if (enemyList[i].objID)
 		{
 			//Free the mesh and texture data
@@ -407,6 +436,7 @@ void freeSpriteList(void)
 	FreeMyAlloc(foodList);
 	FreeMyAlloc(enemyList);
 	FreeMyAlloc(weaponList);
+	FreeMyAlloc(projectileList);
 	FreeMyAlloc(floatTextList);
 	FreeMyAlloc(staticTextList);
 	FreeMyAlloc(buttonList);

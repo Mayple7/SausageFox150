@@ -58,7 +58,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 
 Platform *Plat;
 Wall *Wall1;
@@ -175,6 +175,7 @@ void FreeLevel3(void)
 		CurrentPlayer.CurrentLevel = GS_Level31;
 	else if(CurrentPlayer.CurrentLevel < GS_Level3)
 		CurrentPlayer.CurrentLevel = GS_Level3;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
@@ -200,6 +201,9 @@ void UnloadLevel3(void)
 /*************************************************************************/
 void EventLevel3(void)
 {
+	/*////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	////////////////////////////////*/
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	// Handle any input for the current player

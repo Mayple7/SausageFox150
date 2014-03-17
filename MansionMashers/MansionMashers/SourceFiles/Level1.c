@@ -49,28 +49,28 @@ static int levelComplete;
 static int beginningAnimiation;
 static int PlayerIsAlive; 
 
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 
-EnemySpawner* FirstSpawner;
-EnemySpawner* SecondSpawnerRight;
-EnemySpawner* SecondSpawnerLeft;
-EnemySpawner* ThirdSpawnerRight;
-EnemySpawner* ThirdSpawnerLeft;
+EnemySpawner *FirstSpawner;
+EnemySpawner *SecondSpawnerRight;
+EnemySpawner *SecondSpawnerLeft;
+EnemySpawner *ThirdSpawnerRight;
+EnemySpawner *ThirdSpawnerLeft;
 
-Enemy* SetEnemy1;
-Enemy* SetEnemy2;
+Enemy *SetEnemy1;
+Enemy *SetEnemy2;
 
-Platform* Table1;
+Platform *Table1;
 
-Wall* Wall1;
+Wall *Wall1;
 
-Wall* BBWallLeft;
-Wall* BBWallRight;
+Wall *BBWallLeft;
+Wall *BBWallRight;
 
-FoxSound* BackSnd;
+FoxSound *BackSnd;
 
-Sprite* BlackOverlay;
-HUD* CurrentHUD;
+Sprite *BlackOverlay;
+HUD *CurrentHUD;
 
 /*************************************************************************/
 /*!
@@ -303,8 +303,6 @@ void UnloadLevel1(void)
 /*************************************************************************/
 void EventLevel1(void)
 {
-	int i;
-
 	/*////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
@@ -415,16 +413,7 @@ void EventLevel1(void)
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
-	for(i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Update the created enemies
-		if (enemyList[i].objID == -1)
-			break;
-		if (enemyList[i].objID == 0)
-			continue;
-
-		UpdateEnemy(&enemyList[i]);
-	}
+	UpdateAllEnemies();
 
 	UpdateFloatingText();
 

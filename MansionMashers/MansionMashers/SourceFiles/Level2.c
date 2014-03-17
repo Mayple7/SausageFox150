@@ -44,36 +44,36 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
+TextGlyphs *LevelName;
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
 
-EnemySpawner* Pan2SpawnerRight;
-EnemySpawner* Pan2SpawnerLeft;
-EnemySpawner* Pan3SpawnerRight;
-EnemySpawner* Pan3SpawnerLeft;
-EnemySpawner* Pan4SpawnerRight;
+EnemySpawner *Pan2SpawnerRight;
+EnemySpawner *Pan2SpawnerLeft;
+EnemySpawner *Pan3SpawnerRight;
+EnemySpawner *Pan3SpawnerLeft;
+EnemySpawner *Pan4SpawnerRight;
 
-Enemy* Pan3Enemy;
+Enemy *Pan3Enemy;
 
-Food* Ham;
-Food* Taco;
-Food* Pizza;
-Food* Cake;
+Food *Ham;
+Food *Taco;
+Food *Pizza;
+Food *Cake;
 
 Platform *Crate;
-Wall* Wall1;
-Wall* WTBot;
-Wall* RightBarrier;
+Wall *Wall1;
+Wall *WTBot;
+Wall *RightBarrier;
 
-HUD* CurrentHUD;
+HUD *CurrentHUD;
 
 FoxSound *BackSnd;
 
 static int PlayerInSight; // Enemy in watch tower checks for player 
 static int PlayerIsAlive; 
 
-Sprite* BlackOverlay;
+Sprite *BlackOverlay;
 
 /*************************************************************************/
 /*!
@@ -293,6 +293,7 @@ void FreeLevel2(void)
 		CurrentPlayer.CurrentLevel = GS_Level3;
 	else if(CurrentPlayer.CurrentLevel < GS_Level2)
 		CurrentPlayer.CurrentLevel = GS_Level2;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
@@ -319,8 +320,6 @@ void UnloadLevel2(void)
 /*************************************************************************/
 void EventLevel2(void)
 {
-	int i;
-
 	/*////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
@@ -364,16 +363,7 @@ void EventLevel2(void)
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
-	for(i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Update the created enemies
-		if (enemyList[i].objID == -1)
-			break;
-		if (enemyList[i].objID == 0)
-			continue;
-
-		UpdateEnemy(&enemyList[i]);
-	}
+	UpdateAllEnemies();
 
 	UpdateFloatingText();
 
@@ -399,8 +389,6 @@ void EventLevel2(void)
 	BlackOverlay->Position.x = GetCameraXPosition();
 	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
 	{
-		printf("Level Transition\n");
-
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
 			SetNextState(GS_MapLevel);
