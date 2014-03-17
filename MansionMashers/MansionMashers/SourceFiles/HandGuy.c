@@ -95,6 +95,9 @@ void InitializeHandGuy(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
+
+	//BALLISTA
+	CreateEnemy(BasicRanged, EnemyType, newID++, 400, GROUNDLEVEL, 0);
 }
 
 /*************************************************************************/
@@ -110,6 +113,8 @@ void UpdateHandGuy(void)
 	UpdateFloatingText();
 
 	UpdateAllProjectiles();
+
+	UpdateAllEnemies();
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);

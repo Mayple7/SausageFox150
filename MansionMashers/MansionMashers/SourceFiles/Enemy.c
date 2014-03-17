@@ -55,6 +55,8 @@ void LoadEnemy(int enemyType)
 		LoadTexture("TextureFiles/BattleAxe.png");
 		break;
 	case BasicRanged:
+		LoadTexture("TextureFiles/Ballista.png");
+		LoadTexture("TextureFiles/BallistaArrow.png");
 		break;
 	}
 }
@@ -68,6 +70,8 @@ void LoadEnemy(int enemyType)
 	A pointer to the enemy object to be initialized
 */
 /*************************************************************************/
+#define BALLISTA_DEVISOR 1.4f
+
 Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos, int panelId)
 {
 	float width, height;
@@ -90,7 +94,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		width = 261.0f;
 		height = 373.0f;
 		Vec2Set(&CurrentEnemy->Position, xPos, yPos);
-		CurrentEnemy->EnemyType = Dummy;
+		CurrentEnemy->EnemyType = enemyType;
 		CurrentEnemy->objID = objID;
 		//Creates the enemy sprite
 		CurrentEnemy->EnemySprite = (Sprite *) CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
@@ -109,7 +113,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		width = 261.0f;
 		height = 373.0f;
 		Vec2Set(&CurrentEnemy->Position, xPos, yPos);
-		CurrentEnemy->EnemyType = BasicMelee;
+		CurrentEnemy->EnemyType = enemyType;
 		CurrentEnemy->objID = objID;
 
 		//Creates the enemy sprite
@@ -157,6 +161,56 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		EnemyAnimation(CurrentEnemy);
 		break;
 	case BasicRanged:
+		width = 600.0f / BALLISTA_DEVISOR;
+		height = 400.0f / BALLISTA_DEVISOR;
+		Vec2Set(&CurrentEnemy->Position, xPos, yPos);
+		CurrentEnemy->EnemyType = enemyType;
+		CurrentEnemy->objID = objID;
+
+		//Creates the enemy sprite
+		CurrentEnemy->EnemySprite = (Sprite *) CreateSprite("TextureFiles/Ballista.png", width, height, 8, 1, 1, xPos, yPos);
+		
+		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, FALSE, PLAYER_WIDTH, PLAYER_HEIGHT); //Lulz, a ballista with the same weight as a fox
+		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
+		CurrentEnemy->dropDown					= FALSE;
+
+		InitializeEnemyStats(CurrentEnemy, 80, (float)(150 + 10 * (rand() % 10)), 15.0f, 0, 10, 10, 10);
+
+		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
+
+		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 500 / BALLISTA_DEVISOR, 200 / BALLISTA_DEVISOR, objID);
+		CurrentEnemy->EnemyCollider.Offset.y = -80 / BALLISTA_DEVISOR;
+		CurrentEnemy->EnemyCollider.width = CurrentEnemy->EnemyCollider.width - 20 * BALLISTA_DEVISOR;
+		UpdateCollider(&CurrentEnemy->EnemyCollider, CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
+
+		CurrentEnemy->EnemyWeapon = CreateWeapon("Ballista Arrow You Cannot Have", "TextureFiles/BallistaArrow.png", FoxWeapon, Common, WeaponEnemy, 360 / BALLISTA_DEVISOR, 100 / BALLISTA_DEVISOR, objID++);
+		CurrentEnemy->EnemyWeapon->WeaponSprite->Width = 360 / BALLISTA_DEVISOR;
+		CurrentEnemy->EnemyWeapon->WeaponSprite->Height = 100 / BALLISTA_DEVISOR;
+		UpdateMesh(CurrentEnemy->EnemyWeapon->WeaponSprite);
+		CurrentEnemy->EnemySpriteParts.Weapon = CurrentEnemy->EnemyWeapon->WeaponSprite;
+		CurrentEnemy->EnemyWeapon->WeaponFOF = EnemyWeapon;
+
+		CurrentEnemy->Speed				= 0;
+		CurrentEnemy->LegSinValue		= 0; //Object ID? Ovah here, we ain't be needin' any a that stuff, ya hear?
+		CurrentEnemy->TailSinValue      = 2; //Attack wait time in seconds, none of that per frame jazz, yo.
+		CurrentEnemy->isAttacking		= FALSE;
+		CurrentEnemy->EnemyDirection	= LEFT;
+
+		CurrentEnemy->isMoveRight		= FALSE;
+		CurrentEnemy->isMoveLeft		= FALSE;
+		CurrentEnemy->isJumping			= FALSE;
+		CurrentEnemy->jumpTimer			= 0;
+		CurrentEnemy->isDropDown		= FALSE;
+		CurrentEnemy->canDropDownTimer	= 300;
+		CurrentEnemy->Attack			= FALSE;
+		CurrentEnemy->StateTimer		= 0;
+		CurrentEnemy->EnemyState		= AIIdle;
+		CurrentEnemy->idleMove			= 0;
+		CurrentEnemy->idleTimer			= rand() % 60;
+		CurrentEnemy->canAttack			= FALSE;
+		CurrentEnemy->canAttackTimer	= 150;
+		CurrentEnemy->findHome			= FALSE;
+		CurrentEnemy->HomePos			= CurrentEnemy->Position;
 		break;
 	default:
 		break;
@@ -224,6 +278,11 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		break;
 	case BasicRanged:
 		// Call enemy logic here
+		DetectEnemyCollision(CurrentEnemy);
+		EnemyAIUpdate(CurrentEnemy);
+		EnemyBasicRangedUpdate(CurrentEnemy);
+		EnemyAnimationBasicRanged(CurrentEnemy);
+		UpdateCollisionPosition(&CurrentEnemy->EnemyWeapon->WeaponAttack, &CurrentEnemy->EnemyWeapon->WeaponAttackPosition);
 		break;
 	default:
 		break;
@@ -376,7 +435,84 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 			}
 		}
 	}
+	
+	//Jump when space is pushed
+	if(CurrentEnemy->isJumping && CurrentEnemy->jumpTimer <= 0)
+	{
+		Vec2 velocity;
+		CurrentEnemy->isJumping = FALSE;
+		CurrentEnemy->jumpTimer = (int)(0.5f / GetDeltaTime());
 		
+		Vec2Set(&velocity, 0.0f, 1080.0f);
+		if(CurrentEnemy->Position.y <= GROUNDLEVEL || CurrentEnemy->EnemyRigidBody.onGround)
+		{
+			if(CurrentEnemy->Position.y <= GROUNDLEVEL)
+				Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL + 0.1f);
+			CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+			ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
+		}
+	}
+	//Drop down when told to
+	if(CurrentEnemy->isDropDown)
+	{
+		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+		CurrentEnemy->isDropDown = FALSE;
+		CurrentEnemy->dropDown = TRUE;
+		CurrentEnemy->dropdownTimer = 0.25f;
+	}
+
+	if (CurrentEnemy->jumpTimer > 0)
+		CurrentEnemy->jumpTimer--;
+
+	if (!CurrentEnemy->KnockBack)
+		MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
+}
+
+void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
+{
+	// Move left if A is pressed
+	if(CurrentEnemy->isMoveLeft)
+	{
+		CurrentEnemy->EnemySprite->FlipX	= TRUE;
+		CurrentEnemy->EnemyDirection		= LEFT;
+		CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetDeltaTime();
+	}
+	// Move right if D is pressed
+	else if(CurrentEnemy->isMoveRight)
+	{
+		CurrentEnemy->EnemySprite->FlipX	= FALSE;
+		CurrentEnemy->EnemyDirection		= RIGHT;
+		CurrentEnemy->Speed					= CurrentEnemy->CurrentEnemyStats.MoveSpeed * GetDeltaTime();
+	}
+	// not key press for direction then slow down!
+	else
+	{
+		if (!(CurrentEnemy->Position.y > GROUNDLEVEL) && !CurrentEnemy->EnemyRigidBody.onGround)
+		{
+			if (CurrentEnemy->Speed - 48.0f * GetDeltaTime() >= 0.0f)
+			{
+				CurrentEnemy->Speed -= 48.0f * GetDeltaTime();
+			}
+			else
+			{
+				CurrentEnemy->Speed			= 0.0f;
+				CurrentEnemy->LegSinValue	= 0;
+			}
+		}
+		else
+		{
+			if (CurrentEnemy->Speed - 48.0f * GetDeltaTime() >= 0.0f)
+			{
+				CurrentEnemy->Speed -= 48.0f * GetDeltaTime();
+			}
+			else
+			{
+				CurrentEnemy->Speed			= 0.0f;
+				CurrentEnemy->LegSinValue	= 0;
+			}
+		}
+	}
+	
 	//Jump when space is pushed
 	if(CurrentEnemy->isJumping && CurrentEnemy->jumpTimer <= 0)
 	{
@@ -437,7 +573,7 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 				
 			}
 
-			if (fabs(CurrentEnemy->Position.x - CurrentPlayer.Position.x) < 200)
+			if (CurrentEnemy->EnemyType != BasicRanged && fabs(CurrentEnemy->Position.x - CurrentPlayer.Position.x) < 200)
 			{
 				if (CurrentEnemy->canAttackTimer > 0)
 				{
@@ -507,7 +643,7 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			if (CurrentEnemy->canDropDownTimer > 0)
 				CurrentEnemy->canDropDownTimer--;
 
-			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 150 && !CurrentEnemy->isAttacking && !CurrentEnemy->Attack)
+			if (CurrentEnemy->EnemyType != BasicRanged && Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 150 && !CurrentEnemy->isAttacking && !CurrentEnemy->Attack)
 			{
 				CurrentEnemy->canAttackTimer	= (int)(1.5f / GetDeltaTime());
 				CurrentEnemy->Attack			= TRUE;
@@ -635,7 +771,6 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 	}
 }
 
-
 void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float atkSpeed, float dmgReduction, int dmg, int money, int exp)
 {
 	CurrentEnemy->CurrentEnemyStats.MaxHealth = maxHP;
@@ -659,7 +794,6 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 	int hit = 0;
 	int hitPrev = 0;
 	
-
 
 	while(wList->objID != -1)
 	{
@@ -846,6 +980,71 @@ void CreateEnemySprites(Enemy *Object)
 	Object->EnemySpriteParts.Skirt->SpriteMesh = Object->EnemySpriteParts.Body->SpriteMesh;
 
 	Object->EnemySpriteParts.Skirt->AnimationActive = 0;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Animates the Ballista.
+*/
+/*************************************************************************/
+void EnemyAnimationBasicRanged(Enemy *Object)
+{
+	Object->EnemySprite->Position.x = Object->Position.x;
+	Object->EnemySprite->Position.y = Object->Position.y;
+
+	//Arrow position
+	if (Object->EnemySprite->FlipX)
+	{
+		Object->EnemyWeapon->Position.x = Object->Position.x - 20 / BALLISTA_DEVISOR;
+		Object->EnemyWeapon->Position.y = Object->Position.y + 56 / BALLISTA_DEVISOR;
+	}
+	else
+	{
+		Object->EnemyWeapon->Position.x = Object->Position.x + 20 / BALLISTA_DEVISOR;
+		Object->EnemyWeapon->Position.y = Object->Position.y + 56 / BALLISTA_DEVISOR;
+	}
+
+	Object->EnemySpriteParts.Weapon->FlipX = Object->EnemySprite->FlipX;
+	Object->EnemySpriteParts.Weapon->Position.x = Object->EnemyWeapon->Position.x;
+	Object->EnemySpriteParts.Weapon->Position.y = Object->EnemyWeapon->Position.y;
+
+	//Shooting
+	if (!Object->canAttack)
+	{
+		//GRIMY H4X OVAH H3RRE
+		if (Object->TailSinValue < 0)
+			Object->canAttack = TRUE;
+
+		//Arrow back yet dog?
+		if (Object->TailSinValue < 0.5 && !Object->EnemySpriteParts.Weapon->Visible)
+			Object->EnemySpriteParts.Weapon->Visible = TRUE;
+
+		//Time ticks by
+		Object->TailSinValue -= GetDeltaTime();
+	}
+	else
+	{
+		//Project this right bby gril
+		float projectileSpeed = 1600;
+		if (Object->EnemySpriteParts.Weapon->FlipX)
+			projectileSpeed *= -1;
+
+		//NASTY NASTY HACKKKK
+		CreateProjectile("TextureFiles/BallistaArrow.png", Object->EnemySpriteParts.Weapon->Width, Object->EnemySpriteParts.Weapon->Height, 
+													       Object->EnemySpriteParts.Weapon->Position.x, Object->EnemySpriteParts.Weapon->Position.y, 
+													       Arrow, WeaponEnemy, (Object->objID + 100) * 8 + (int)Object->LegSinValue++, 10, projectileSpeed);
+
+		//Sound off
+		PlayAudio(rand() % 2 ? Object->CurrentEnemySounds.Swing1 : Object->CurrentEnemySounds.Swing1);
+
+		//Arrow long gone
+		Object->EnemySpriteParts.Weapon->Visible = FALSE;
+
+		//Reset my timerz
+		Object->canAttack = FALSE;
+		Object->TailSinValue = 2;
+	}
 }
 
 /*************************************************************************/

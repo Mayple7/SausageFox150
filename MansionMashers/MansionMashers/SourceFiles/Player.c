@@ -933,10 +933,10 @@ void Animation(Player *Object)
 	else
 	{
 		float sinLegOverTen = (float)sin(LegDistance/10);
-		LegUpperDirection = sinLegOverTen - 1.0f;
-		LegUpperDirection2 = sinLegOverTen - 1.0f;//60.0f * GetDeltaTime();
-		LegLowerDirection = LegUpperDirection + 0.5f;//30.0f * GetDeltaTime();
-		LegLowerDirection2 = LegUpperDirection2 - 0.5f;//30.0f * GetDeltaTime();
+		LegUpperDirection = sinLegOverTen - 1.0f * (GetDeltaTime() * FRAMERATE);
+		LegUpperDirection2 = sinLegOverTen - 1.0f * (GetDeltaTime() * FRAMERATE);//60.0f * GetDeltaTime();
+		LegLowerDirection = LegUpperDirection + 0.5f * (GetDeltaTime() * FRAMERATE);//30.0f * GetDeltaTime();
+		LegLowerDirection2 = LegUpperDirection2 - 0.5f * (GetDeltaTime() * FRAMERATE);//30.0f * GetDeltaTime();
 	}
 	LegUpr->FlipX = Object->FlipX;
 	LegLwr->FlipX = Object->FlipX;
@@ -977,8 +977,8 @@ void Animation(Player *Object)
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
 		
-		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
-		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
+		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f * (GetDeltaTime() * FRAMERATE);
+		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f * (GetDeltaTime() * FRAMERATE) + LegUpperDirection/2.0f;
 		ArmUpr->Position.x = Bdy->Position.x;
 		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
@@ -990,7 +990,7 @@ void Animation(Player *Object)
 			Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, 0, 0.2f);
 			Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, (float)FOX_PI, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, (float)FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
-			ArmUpr2->Rotation = (float)FOX_PI * 1.5f + 30.0f * GetDeltaTime() - Object->PlayerSpriteParts.AttackRotationArm;
+			ArmUpr2->Rotation = (float)FOX_PI * 1.5f * (GetDeltaTime() * FRAMERATE) + 30.0f * GetDeltaTime() - Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr2->Rotation = ArmUpr2->Rotation - (float)FOX_PI/2 + Object->PlayerSpriteParts.AttackRotationArmLower;
 			//Weap->Rotation = ArmLwr2->Rotation + Object->PlayerSpriteParts.AttackRotation;
 			if (Object->PlayerSpriteParts.AttackRotationArm == (float)FOX_PI)
@@ -998,8 +998,8 @@ void Animation(Player *Object)
 		}
 		else
 		{
-			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
-			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
+			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f * (GetDeltaTime() * FRAMERATE);
+			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f * (GetDeltaTime() * FRAMERATE) + LegUpperDirection/2.0f);
 			//Weap->Rotation = ArmLwr2->Rotation;
 		}
 		Weap->Rotation = ArmLwr2->Rotation;
@@ -1012,8 +1012,8 @@ void Animation(Player *Object)
 		{
 			if (!Object->isAttacking)
 			{
-				ArmLwr->Rotation = ArmUpr->Rotation - 0.2f;
-				ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f;
+				ArmLwr->Rotation = ArmUpr->Rotation - 0.2f * (GetDeltaTime() * FRAMERATE);
+				ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f * (GetDeltaTime() * FRAMERATE);
 				Weap->Rotation = ArmLwr2->Rotation;
 			}
 		}
@@ -1062,8 +1062,8 @@ void Animation(Player *Object)
 		}
 		else
 		{
-			ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
-			ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
+			ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f * (GetDeltaTime() * FRAMERATE);
+			ArmLwr->Rotation = ArmUpr->Rotation + 1.25f * (GetDeltaTime() * FRAMERATE) - LegUpperDirection/2.0f;
 		}
 		Weap->Rotation = ArmLwr->Rotation;
 		ArmUpr->Position.x = Bdy->Position.x;
@@ -1071,8 +1071,8 @@ void Animation(Player *Object)
 		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 		ArmLwr->Position.y = ArmUpr->Position.y + (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
 
-		ArmUpr2->Rotation = LegUpperDirection/1.5f - 1.5f;
-		ArmLwr2->Rotation = ArmUpr2->Rotation + 1.25f + LegUpperDirection/2.0f;
+		ArmUpr2->Rotation = LegUpperDirection/1.5f - 1.5f * (GetDeltaTime() * FRAMERATE);
+		ArmLwr2->Rotation = ArmUpr2->Rotation + 1.25f * (GetDeltaTime() * FRAMERATE) + LegUpperDirection/2.0f;
 		ArmUpr2->Position.x = Bdy->Position.x;
 		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
@@ -1082,8 +1082,8 @@ void Animation(Player *Object)
 		{
 			if (!Object->isAttacking)
 			{
-				ArmLwr->Rotation = ArmUpr->Rotation + 0.5f;
-				ArmLwr2->Rotation = ArmUpr2->Rotation + 0.2f;
+				ArmLwr->Rotation = ArmUpr->Rotation + 0.5f * (GetDeltaTime() * FRAMERATE);
+				ArmLwr2->Rotation = ArmUpr2->Rotation + 0.2f * (GetDeltaTime() * FRAMERATE);
 				Weap->Rotation = ArmLwr->Rotation;
 			}
 		}

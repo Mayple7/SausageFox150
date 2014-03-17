@@ -116,5 +116,8 @@ void EnemyAIUpdate(Enemy *Object);
 void EnemyBasicMeleeUpdate(Enemy *Object);
 void ResetEnemyPanelNumber(void);
 
+void EnemyBasicRangedUpdate(Enemy *CurrentEnemy);
+void EnemyAnimationBasicRanged(Enemy *Object);
+
 float RotateToAngle(float angle, float angleTo, float speed);
 #endif

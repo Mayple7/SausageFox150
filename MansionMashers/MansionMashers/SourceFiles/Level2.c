@@ -216,7 +216,7 @@ void InitializeLevel2(void)
 	Pan2SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
 	//Panel3
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 2), 0);
-	Pan3SpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	Pan3SpawnerRight = CreateEnemySpawner(1, BasicRanged, TRUE, 100, 1080, SpawnerLocation, &newID, 2); //Was melee, please don't kill me!
 	Pan3SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
 	Pan3Enemy = CreateEnemy(BasicMelee, EnemyType, newID++, WTBot->Position.x, 300, 2);
 	//Panel4
@@ -364,7 +364,7 @@ void EventLevel2(void)
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
 	UpdateAllEnemies();
-
+	UpdateAllProjectiles();
 	UpdateFloatingText();
 
 	//Check if all enemies are dead & remove right barrier
