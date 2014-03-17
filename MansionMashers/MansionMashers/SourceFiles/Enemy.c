@@ -174,13 +174,13 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 80, (float)(150 + 10 * (rand() % 10)), 15.0f, 0, 10, 10, 10);
+		InitializeEnemyStats(CurrentEnemy, 80, (float)(150 + 10 * (rand() % 10)), 15.0f, 0, 10, 20, 20);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 500 / BALLISTA_DEVISOR, 200 / BALLISTA_DEVISOR, objID);
-		CurrentEnemy->EnemyCollider.Offset.y = -80 / BALLISTA_DEVISOR;
-		CurrentEnemy->EnemyCollider.width = CurrentEnemy->EnemyCollider.width - 20 * BALLISTA_DEVISOR;
+		CurrentEnemy->EnemyCollider.Offset.y = -40 / BALLISTA_DEVISOR;
+		CurrentEnemy->EnemyCollider.width = CurrentEnemy->EnemyCollider.width - 60 * BALLISTA_DEVISOR;
 		UpdateCollider(&CurrentEnemy->EnemyCollider, CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
 
 		CurrentEnemy->EnemyWeapon = CreateWeapon("Ballista Arrow You Cannot Have", "TextureFiles/BallistaArrow.png", FoxWeapon, Common, WeaponEnemy, 360 / BALLISTA_DEVISOR, 100 / BALLISTA_DEVISOR, objID++);
@@ -258,7 +258,6 @@ void UpdateAllEnemies(void)
 /*************************************************************************/
 void UpdateEnemy(Enemy *CurrentEnemy)
 {
-
 	Vec2 velocityTime;
 
 	switch(CurrentEnemy->EnemyType)
@@ -315,7 +314,10 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		CurrentEnemy->EnemyParticleSystem->emitDisplacementX = 100;
 		CurrentEnemy->EnemyParticleSystem->emitDisplacementY = 101;
 		strcpy(CurrentEnemy->EnemyParticleSystem->ParticleSprite, "TextureFiles/Particle.png");
-		CurrentEnemy->EnemyParticleSystem->emitScale = 2.0f;
+		if (CurrentEnemy->EnemyType == BasicRanged)
+			CurrentEnemy->EnemyParticleSystem->emitScale = 3.2f;
+		else
+			CurrentEnemy->EnemyParticleSystem->emitScale = 2.0f;
 		CurrentEnemy->EnemyParticleSystem->emitLife = 1.0f;
 		PlayAudio(CurrentEnemy->CurrentEnemySounds.Poof);
 		EnemyPanelNumber[CurrentEnemy->panelId]--;
@@ -470,6 +472,10 @@ void EnemyBasicMeleeUpdate(Enemy *CurrentEnemy)
 
 void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 {
+	//Do nothing if offline
+	if (CurrentEnemy->EnemyState == AINone)
+		return;
+
 	// Move left if A is pressed
 	if(CurrentEnemy->isMoveLeft)
 	{
@@ -543,6 +549,57 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 
 	if (!CurrentEnemy->KnockBack)
 		MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
+
+	//Shooting
+	if (!CurrentEnemy->canAttack || CurrentEnemy->EnemyState == AIIdle)
+	{
+		//GRIMY H4X OVAH H3RRE
+		if (CurrentEnemy->TailSinValue < 0)
+		{
+			CurrentEnemy->canAttack = TRUE;
+
+			//On idle don't do shooting stuff
+			if (CurrentEnemy->EnemyState == AIIdle)
+				return;
+		}
+
+		//Arrow back yet dog?
+		if (CurrentEnemy->TailSinValue < 0.5 && !CurrentEnemy->EnemySpriteParts.Weapon->Visible)
+			CurrentEnemy->EnemySpriteParts.Weapon->Visible = TRUE;
+
+		//Time ticks by
+		CurrentEnemy->TailSinValue -= GetDeltaTime();
+	}
+	else
+	{
+		//Project this right bby gril
+		Projectile *smexyArrow;
+		float projectileSpeed = 1600;
+		if (CurrentEnemy->EnemySpriteParts.Weapon->FlipX)
+			projectileSpeed *= -1;
+
+		//NASTY NASTY HACKKKK
+		smexyArrow = CreateProjectile("TextureFiles/BallistaArrow.png", 
+									  CurrentEnemy->EnemySpriteParts.Weapon->Width, CurrentEnemy->EnemySpriteParts.Weapon->Height, 
+									  CurrentEnemy->EnemySpriteParts.Weapon->Position.x, CurrentEnemy->EnemySpriteParts.Weapon->Position.y, 
+									  Arrow, WeaponEnemy, (CurrentEnemy->objID + 100) * 8 + (int)CurrentEnemy->LegSinValue++, 10, projectileSpeed);
+
+		if (smexyArrow->ProjectileSprite->FlipX)
+			smexyArrow->ProjectileAttack.Offset.x = -smexyArrow->ProjectileAttack.width / 3;
+		else
+			smexyArrow->ProjectileAttack.Offset.x = smexyArrow->ProjectileAttack.width / 3;
+		UpdateCollider(&smexyArrow->ProjectileAttack, smexyArrow->ProjectileAttack.width / 4, smexyArrow->ProjectileAttack.height / 4);
+		
+		//Sound off
+		PlayAudio(rand() % 2 ? CurrentEnemy->CurrentEnemySounds.Swing1 : CurrentEnemy->CurrentEnemySounds.Swing1);
+
+		//Arrow long gone
+		CurrentEnemy->EnemySpriteParts.Weapon->Visible = FALSE;
+
+		//Reset my timerz
+		CurrentEnemy->canAttack = FALSE;
+		CurrentEnemy->TailSinValue = 2;
+	}
 }
 
 void EnemyAIUpdate(Enemy *CurrentEnemy)
@@ -570,7 +627,6 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			{
 				CurrentEnemy->isMoveRight	= FALSE;
 				CurrentEnemy->isMoveLeft	= FALSE;
-				
 			}
 
 			if (CurrentEnemy->EnemyType != BasicRanged && fabs(CurrentEnemy->Position.x - CurrentPlayer.Position.x) < 200)
@@ -1008,43 +1064,6 @@ void EnemyAnimationBasicRanged(Enemy *Object)
 	Object->EnemySpriteParts.Weapon->FlipX = Object->EnemySprite->FlipX;
 	Object->EnemySpriteParts.Weapon->Position.x = Object->EnemyWeapon->Position.x;
 	Object->EnemySpriteParts.Weapon->Position.y = Object->EnemyWeapon->Position.y;
-
-	//Shooting
-	if (!Object->canAttack)
-	{
-		//GRIMY H4X OVAH H3RRE
-		if (Object->TailSinValue < 0)
-			Object->canAttack = TRUE;
-
-		//Arrow back yet dog?
-		if (Object->TailSinValue < 0.5 && !Object->EnemySpriteParts.Weapon->Visible)
-			Object->EnemySpriteParts.Weapon->Visible = TRUE;
-
-		//Time ticks by
-		Object->TailSinValue -= GetDeltaTime();
-	}
-	else
-	{
-		//Project this right bby gril
-		float projectileSpeed = 1600;
-		if (Object->EnemySpriteParts.Weapon->FlipX)
-			projectileSpeed *= -1;
-
-		//NASTY NASTY HACKKKK
-		CreateProjectile("TextureFiles/BallistaArrow.png", Object->EnemySpriteParts.Weapon->Width, Object->EnemySpriteParts.Weapon->Height, 
-													       Object->EnemySpriteParts.Weapon->Position.x, Object->EnemySpriteParts.Weapon->Position.y, 
-													       Arrow, WeaponEnemy, (Object->objID + 100) * 8 + (int)Object->LegSinValue++, 10, projectileSpeed);
-
-		//Sound off
-		PlayAudio(rand() % 2 ? Object->CurrentEnemySounds.Swing1 : Object->CurrentEnemySounds.Swing1);
-
-		//Arrow long gone
-		Object->EnemySpriteParts.Weapon->Visible = FALSE;
-
-		//Reset my timerz
-		Object->canAttack = FALSE;
-		Object->TailSinValue = 2;
-	}
 }
 
 /*************************************************************************/

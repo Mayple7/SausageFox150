@@ -211,9 +211,16 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		CurrentPlayer->CurrentPlayerStats.CurrentHealth = (int)(CurrentPlayer->CurrentPlayerStats.MaxHealth * healthRatio);
 	}
 }
-// height +/- (fontsize/2)
+
+/*************************************************************************/
+/*!
+	\brief
+	Handles the collision with a enemy weapon
+*/
+/*************************************************************************/
 void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 {
+	// height +/- (fontsize/2)
 	int damageDealt;
 	char num[10];
 	Vec3 textColor;
@@ -225,6 +232,36 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 		damageDealt = 0;
 	else
 		damageDealt = CurrentEnemy->CurrentEnemyStats.Damage;
+	
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
+	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
+	sprintf(num, "-%d", damageDealt);
+	// Create Floating Combat Text
+	FirstLetter = CreateText(num, (CurrentPlayer->Position.x + rand() % 81 - 40), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);
+	AddFloatingText(FirstLetter);
+	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Handles the collision with a deadly projectile
+*/
+/*************************************************************************/
+void PlayerCollideEnemyProjectile(Player* CurrentPlayer, Projectile *CurrentProjectile)
+{
+	int damageDealt;
+	char num[10];
+	Vec3 textColor;
+	TextGlyphs *FirstLetter;
+	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
+	
+	// Calculate damage
+	if(Cheats)
+		damageDealt = 0;
+	else
+		damageDealt = CurrentProjectile->Damage;
 	
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);

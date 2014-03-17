@@ -26,7 +26,7 @@ typedef struct EnemyParts
 	float AttackRotation;
 	float AttackRotationArm;
 	float AttackRotationArmLower;
-	int BlinkTimer;
+	float BlinkTimer;
 }EnemyParts;
 
 typedef struct EnemyStats

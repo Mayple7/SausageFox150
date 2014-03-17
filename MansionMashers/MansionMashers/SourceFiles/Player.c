@@ -516,6 +516,7 @@ void DetectPlayerCollision(void)
 	Food *fList = foodList;
 	Weapon *wList = weaponList;
 	Enemy *eList = enemyList;
+	Projectile *bList = projectileList; //bList as in Ballista, I didn't even think of that before hand, what a brilliant coincident
 	Wall *walls = wallList;
 	EnemySpawner *spawner = spawnerList;
 
@@ -685,6 +686,54 @@ void DetectPlayerCollision(void)
 		}
 		wList++;
 	}
+	//Projectiles ('b' as in Ballista)
+	while(bList->objID != -1)
+	{
+		// If the weapon is the enemy's
+		if(bList->objID > 0 && bList->ProjectileFOF == EnemyWeapon)
+		{
+			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &bList->ProjectileAttack);
+			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, bList->ProjectileAttack.collisionID);
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					//Damage the player
+					PlayerCollideEnemyProjectile(&CurrentPlayer, bList);
+					PoofProjectile(bList);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					PlayerCollideEnemyProjectile(&CurrentPlayer, bList);
+					PoofProjectile(bList);
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
+				{
+				}
+			}
+			if(hitPrev > 0 && bList->ProjectileFOF == EnemyWeapon)
+			{
+				CurrentPlayer.CollisionData[hitPrev] = 0;
+			}
+
+		}
+		bList++;
+	}
 	//Enemy list for their pointy sticks
 	while(eList->objID != -1)
 	{
@@ -849,12 +898,12 @@ void DetectPlayerCollision(void)
 /*************************************************************************/
 void Animation(Player *Object)
 {
-	float sinOfLegValue = (float)sin(Object->LegSinValue);
-	float sinOfTwoLegValue = (float)sin(Object->LegSinValue*2);
-	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime()) + (2.3f / (((Object->Speed) * 0.15f + 0.15f)) ))-(Object->Speed);
-	float LegUpperDirection = sinOfLegValue/(LegDistance);
+	float sinOfLegValue = (float)sin(Object->LegSinValue * (GetDeltaTime() * FRAMERATE)) * (GetDeltaTime() * FRAMERATE);
+	float sinOfTwoLegValue = (float)sin(Object->LegSinValue * (GetDeltaTime() * FRAMERATE) * 2) * (GetDeltaTime() * FRAMERATE);
+	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime()) + (2.3f / (((Object->Speed) * 0.15f * (GetDeltaTime() * FRAMERATE) + 0.15f * (GetDeltaTime() * FRAMERATE))) ))-(Object->Speed * (GetDeltaTime() * FRAMERATE));
+	float LegUpperDirection = sinOfLegValue / (LegDistance);
 	float LegLowerDirection;
-	float LegUpperDirection2 = sinOfLegValue/(LegDistance);
+	float LegUpperDirection2 = sinOfLegValue / (LegDistance);
 	float LegLowerDirection2;
 	
 	Sprite *LegUpr = Object->PlayerSpriteParts.LegUpper;
@@ -876,7 +925,7 @@ void Animation(Player *Object)
 
 	Object->LegSinValue += 10.0f * GetDeltaTime() * (Object->Speed * 0.1f); 
 
-	Object->PlayerSpriteParts.BlinkTimer += 1;
+	Object->PlayerSpriteParts.BlinkTimer += 1 * (GetDeltaTime() * FRAMERATE);
 
 	if (Object->PlayerSpriteParts.BlinkTimer <= 150)
 	{
@@ -893,29 +942,29 @@ void Animation(Player *Object)
 	}
 
 	Bdy->Position.x = Object->Position.x;
-	Bdy->Position.y = Object->Position.y - ((float)sin(-Object->LegSinValue*2)*5/(LegDistance));
+	Bdy->Position.y = Object->Position.y - ((float)sin(-Object->LegSinValue * 2) * 5/ (LegDistance));
 	Skrt->Position = Bdy->Position;
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
-		Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection*4));
+		Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection * 4));
 	else
 		Skrt->CurrentFrame = 3;
-	Tail->Position.y = Bdy->Position.y + (Bdy->Height/30);
-	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
+	Tail->Position.y = Bdy->Position.y + (Bdy->Height / 30);
+	Tail->Rotation = (float)sin(Object->TailSinValue * 1.25f) / 4;
 
 	if (Object->Speed > 90.0f * GetDeltaTime())
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailRun.png");
 		Object->TailSinValue += 6.0f * GetDeltaTime();
-		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3 * FRAMERATE / 60;
+		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed) / 2 + 3 * FRAMERATE / 60 * (GetDeltaTime() * FRAMERATE);
 	}
 	else
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailIdle.png");
 		Object->TailSinValue = 0;
 		if(Object->Princess == Mayple)
-			Object->PlayerSpriteParts.Tail->AnimationSpeed = 2 * FRAMERATE / 60;
+			Object->PlayerSpriteParts.Tail->AnimationSpeed = 2 * FRAMERATE / 60 * (GetDeltaTime() * FRAMERATE);
 		else
-			Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
+			Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60 * (GetDeltaTime() * FRAMERATE);
 	}
 
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
@@ -932,10 +981,10 @@ void Animation(Player *Object)
 	}
 	else
 	{
-		float sinLegOverTen = (float)sin(LegDistance/10);
-		LegUpperDirection = sinLegOverTen - 1.0f * (GetDeltaTime() * FRAMERATE);
+		float sinLegOverTen = (float)sin(LegDistance / 10);
+		LegUpperDirection  = sinLegOverTen - 1.0f * (GetDeltaTime() * FRAMERATE);
 		LegUpperDirection2 = sinLegOverTen - 1.0f * (GetDeltaTime() * FRAMERATE);//60.0f * GetDeltaTime();
-		LegLowerDirection = LegUpperDirection + 0.5f * (GetDeltaTime() * FRAMERATE);//30.0f * GetDeltaTime();
+		LegLowerDirection  = LegUpperDirection + 0.5f * (GetDeltaTime() * FRAMERATE);//30.0f * GetDeltaTime();
 		LegLowerDirection2 = LegUpperDirection2 - 0.5f * (GetDeltaTime() * FRAMERATE);//30.0f * GetDeltaTime();
 	}
 	LegUpr->FlipX = Object->FlipX;
@@ -1088,8 +1137,8 @@ void Animation(Player *Object)
 			}
 		}
 
-		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
-		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * (ArmLwr->Width/3.5f);
+		Weap->Position.x = ArmLwr->Position.x + (float)cos(ArmLwr->Rotation) * (ArmLwr->Width / 3.5f);
+		Weap->Position.y = ArmLwr->Position.y + (float)sin(ArmLwr->Rotation) * (ArmLwr->Width / 3.5f);
 		Weap->ZIndex = Object->Zindex + 2;
 	}
 

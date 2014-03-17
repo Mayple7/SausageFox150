@@ -55,7 +55,8 @@ EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, f
 	//Create the enemies and set them offscreen and AINone
 	for(i = 0; i < numEnemies; ++i)
 	{
-		CurrentSpawner->EnemyArray[i] = CreateEnemy(CurrentSpawner->enemyType, EnemyType, CurrentSpawner->objID + i + 1, CurrentSpawner->SpawnerCollider.Position.x + i * 200, -10000, panelId);
+		CurrentSpawner->EnemyArray[i] = CreateEnemy(CurrentSpawner->enemyType, EnemyType, CurrentSpawner->objID + i + 1, 
+								                    CurrentSpawner->SpawnerCollider.Position.x + i * 200, -10000, panelId);
 		CurrentSpawner->EnemyArray[i]->HomePos = CurrentSpawner->SpawnerCollider.Position;
 		CurrentSpawner->EnemyArray[i]->EnemyState = AINone;
 	}
@@ -85,10 +86,11 @@ int SpawnEnemies(EnemySpawner *CurrentSpawner)
 	//Spawn all the enemies at the indicated position
 	for(i = 0; i < CurrentSpawner->numEnemies; ++i)
 	{
+		float spawnOffset = (1920.0f + CurrentSpawner->EnemyArray[i]->EnemyCollider.width) / 2 + 120 * i + 10 * (rand() % 6 + 2);
 		if(CurrentSpawner->spawnSide)
-			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() + (1920.0f / 2) + 120 * i + 10 * (rand() % 10);
+			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() + spawnOffset;
 		else
-			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() - (1920.0f / 2) - 120 * i - 10 * (rand() % 10);
+			CurrentSpawner->EnemyArray[i]->Position.x = GetCameraXPosition() - spawnOffset;
 		CurrentSpawner->EnemyArray[i]->Position.y = GROUNDLEVEL;
 		CurrentSpawner->EnemyArray[i]->HomePos = CurrentSpawner->SpawnerCollider.Position;
 		CurrentSpawner->EnemyArray[i]->EnemyState = AIIdle;

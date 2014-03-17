@@ -31,7 +31,7 @@ typedef struct PlayerParts
 	float AttackRotation;
 	float AttackRotationArm;
 	float AttackRotationArmLower;
-	int BlinkTimer;
+	float BlinkTimer;
 }PlayerParts;
 
 typedef struct PlayerSounds

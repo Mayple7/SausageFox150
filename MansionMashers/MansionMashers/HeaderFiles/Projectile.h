@@ -24,5 +24,6 @@ typedef struct Projectile
 Projectile *CreateProjectile(char *texture, float width, float height, float xPos, float yPos, enum ProjectileType type, enum collisionGroup collisionGroup, int objID, int damage, float speed);
 void UpdateProjectile(Projectile *CurrentProjectile);
 void UpdateAllProjectiles(void);
+void PoofProjectile(Projectile *CurrentProjectile);
 
 #endif

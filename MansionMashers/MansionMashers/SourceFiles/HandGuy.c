@@ -110,6 +110,8 @@ void UpdateHandGuy(void)
 {
 	EventHandGuy();
 
+	ParticleSystemUpdate();
+
 	UpdateFloatingText();
 
 	UpdateAllProjectiles();
