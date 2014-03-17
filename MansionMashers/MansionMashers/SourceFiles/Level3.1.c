@@ -1,8 +1,8 @@
 /*****************************************************************************/
 /*!
 \file				Level3.c
-\author				Dan Muller (d.muller)
-\date				Feb 15, 2034
+\author				Juli Gregg (j.gregg)
+\date				Mar 17, 2014
 
 \brief				Functions for the showcase level
 
@@ -15,7 +15,7 @@
 \li					UnloadLevel3
   
 \par 
-<b> Copyright (C) 2034 DigiPen Institute of Technology.
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
  Reproduction or disclosure of this file or its contents without the prior 
  written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
@@ -57,6 +57,7 @@ TextGlyphs* LevelName;
 
 Platform *Plat;
 Wall *Wall1;
+Sprite* SecondOverlay;
 
 /*************************************************************************/
 /*!
@@ -95,20 +96,24 @@ void InitializeLevel31(void)
 	//		Backgrounds			   //
 	/////////////////////////////////
 	CreateSprite("TextureFiles/Level3Pan2.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, 0, 0);
+	SecondOverlay = (Sprite *)CreateSprite("TextureFiles/Level3Pan2Overlay2.png", 1920, 1080, 400, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/Level3Pan3.png", 1920, 1080, 1, 1, 1, 1920, 0);
+	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, 1920, 0);
 
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
 	//Panel1
 	//Step 1
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 75.0f, 100.0f, newID++, -670, -290);
-	Plat->PlatformSprite->Visible = FALSE;
-	//Step 2
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 75.0f, 100.0f, newID++, -670, -85);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 50.0f, 100.0f, newID++, -655, -210);
 	Plat->PlatformSprite->Visible = FALSE;
 
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, -670, 85);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1920.0f, 100.0f, newID++, 0, -20);
 	Plat->PlatformSprite->Visible = FALSE;
+
+	//Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, -670, 85);
+	//Plat->PlatformSprite->Visible = FALSE;
 
 	/////////////////////////////////
 	//			Walls			   //
@@ -119,9 +124,10 @@ void InitializeLevel31(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, 0, 590);
 	Wall1->WallSprite->Visible = FALSE;
 
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 100.0f, newID++, -840, 85);
+
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 100.0f, newID++, -880, -20);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1560.0f, 100.0f, newID++, 190, 85);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 120.0f, 100.0f, newID++, -495, -20);
 	Wall1->WallSprite->Visible = FALSE;
 }
 
@@ -133,7 +139,8 @@ void InitializeLevel31(void)
 /*************************************************************************/
 void UpdateLevel31(void)
 {
-	EventLevel3();
+	EventLevel31();
+
 
 	//EasyEditPlatform(Plat, 10);
 	EasyEditWall(Wall1 ,10);
@@ -209,12 +216,12 @@ void EventLevel31(void)
 		RemoveDebugMode();
 		//OverlayGrid->Visible = FALSE;
 	}
-	if(FoxInput_KeyTriggered(VK_ESCAPE))
-	{
-		//InitializePause(&DrawLevel3);
-		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
-	}
+
+	if(CurrentPlayer.Position.y > 105)
+		SecondOverlay->Alpha = 0.0;
+	else 
+		SecondOverlay->Alpha = 1.0;
+
+	SetCamera(&CurrentPlayer.Position, 250);
+
 }
