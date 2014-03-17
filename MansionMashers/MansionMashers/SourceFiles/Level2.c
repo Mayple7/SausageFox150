@@ -75,6 +75,12 @@ static int PlayerIsAlive;
 
 Sprite* BlackOverlay;
 
+// Tree Background
+Sprite* TreeBackground1[4];
+Sprite* TreeBackground2[4];
+Sprite* TreeBackground3[4];
+static void TreeBackgroundUpdate(void);
+
 /*************************************************************************/
 /*!
 	\brief
@@ -95,6 +101,7 @@ void LoadLevel2(void)
 /*************************************************************************/
 void InitializeLevel2(void)
 {
+	int i;
 	Vec3 TextTint;
 	Vec2 SpawnerLocation;
 
@@ -123,13 +130,22 @@ void InitializeLevel2(void)
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
-	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 5, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan0Overlay.png", 1920, 1080, 200, 1, 1, 0, 0);
-	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 1, 1, 1, 1920, 0);
-	CreateSprite("TextureFiles/OutsideMan2.png", 1920, 1080, 1, 1, 1, 1920 * 2, 0);
+	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 5, 1, 1, 1920, 0);
+	CreateSprite("TextureFiles/OutsideMan2.png", 1920, 1080, 5, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan2Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 2, 0);
-	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 1, 1, 1, 1920 * 3, 0);
+	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 5, 1, 1, 1920 * 3, 0);
 	CreateSprite("TextureFiles/OutsideMan3Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 3, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground1.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground2.png", 1920, 1080, 1, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
 
 	//Black fade part
 	Vec3Set(&TextTint, 0, 0, 0);
@@ -381,6 +397,7 @@ void EventLevel2(void)
 
 	UpdateFloatingText();
 
+	TreeBackgroundUpdate();
 
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
@@ -419,4 +436,15 @@ void EventLevel2(void)
 
 		UpdateDeathConfirmObjects();
 	}
+}
+
+void TreeBackgroundUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 30.0f);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 60.0f);
 }
