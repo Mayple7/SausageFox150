@@ -15,6 +15,12 @@ static Sprite *BoundRight;
 static Wall *BBWallLeft;
 static Wall *BBWallRight;
 
+/*************************************************************************/
+/*!
+	\brief
+	Creates sprite for the bounding boxes
+*/
+/*************************************************************************/
 void CreateBoundingBoxes(void)
 {
 	Vec3 BoundingTint;
@@ -32,6 +38,12 @@ void CreateBoundingBoxes(void)
 	BoundRight->Tint = BoundingTint;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates the position of the bounding boxes
+*/
+/*************************************************************************/
 void BoundingBoxUpdate(void)
 {
 	float camX, camY;	
@@ -45,6 +57,15 @@ void BoundingBoxUpdate(void)
 	BoundLeft->Position.x = camX / GetLoadRatio() - 1920;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Creates sprite for the blocker boxes
+
+	\param newID
+	ID for collision objects
+*/
+/*************************************************************************/
 void CreateBlockerBoxes(int *newID)
 {
 	// Bounding Box Walls
@@ -56,8 +77,18 @@ void CreateBlockerBoxes(int *newID)
 	BBWallRight->enemyNotCollidable = TRUE;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates the blocker boxes
+
+	\param panelsize
+	Size of the panel in the level
+*/
+/*************************************************************************/
 void UpdateBlockerBoxes(float panelsize)
 {
+	//Update position (including blocked state)
 	BBWallLeft->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
 	BBWallLeft->Position.x = GetCameraXPosition() - (panelsize / 2);
 	UpdateCollisionPosition(&BBWallLeft->WallCollider, &BBWallLeft->Position);

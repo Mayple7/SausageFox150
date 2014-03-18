@@ -30,7 +30,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/BoundingBox.h"
+
 
 // ---------------------------------------------------------------------------
 // defines
@@ -48,11 +48,7 @@ TextGlyphs* LevelName;
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
 
-EnemySpawner* Pan2SpawnerRight;
-EnemySpawner* Pan2SpawnerLeft;
-EnemySpawner* Pan3SpawnerRight;
-EnemySpawner* Pan3SpawnerLeft;
-EnemySpawner* Pan4SpawnerRight;
+EnemySpawner* Spawners[6]; //2 Per Panel not including first (can do this because no blocker boxes)
 
 Enemy* Pan3Enemy;
 
@@ -179,7 +175,7 @@ void InitializeLevel2(void)
 	//Panel3
 	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 3640, -240);
 	Crate->PlatformSprite->Visible = FALSE;
-	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 3780, -210);
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 90.0f, 100.0f, newID++, 3765, -210);
 	Crate->PlatformSprite->Visible = FALSE;
 
 
@@ -232,16 +228,26 @@ void InitializeLevel2(void)
 	/////////////////////////////////
 	//Panel2
 	Vec2Set(&SpawnerLocation, PANELSIZE + PANELSIZE / 4, 0);
-	Pan2SpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
-	Pan2SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	//Left
+	Spawners[0] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	//Right
+	Spawners[1] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+
 	//Panel3
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 2), 0);
-	Pan3SpawnerRight = CreateEnemySpawner(1, BasicRanged, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
-	Pan3SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	//Left
+	Spawners[2] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	//Right
+	Spawners[3] = CreateEnemySpawner(1, BasicRanged, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	//PreSpawned
 	Pan3Enemy = CreateEnemy(BasicMelee, EnemyType, newID++, WTBot->Position.x, 300, 2);
+
 	//Panel4
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 3 - PANELSIZE / 4), 0);
-	Pan4SpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
+	//Left
+	Spawners[4] = NULL;
+	//Right
+	Spawners[5] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
 
 
 	/////////////////////////////////

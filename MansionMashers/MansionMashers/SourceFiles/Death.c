@@ -69,7 +69,10 @@ void UpdateDeathConfirmObjects(void)
 			FreeButton(RestartButton);
 			FreeButton(MainMapButton);
 			FreeSprite(DeathConfirm);
-			SetNextState(GS_Restart);
+			if(GetCurrentState() == GS_Level31)
+				SetNextState(GS_Level3);
+			else
+				SetNextState(GS_Restart);
 		}
 	}
 	else
