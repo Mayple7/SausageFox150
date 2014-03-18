@@ -57,7 +57,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete;
-static int beginningAnimiation;
+static int beginningAnimation;
 static int numPanels;
 static int PlayerIsAlive;
 TextGlyphs* LevelName;
@@ -98,7 +98,7 @@ void InitializeLevel31(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
-	beginningAnimiation = TRUE;
+	beginningAnimation = TRUE;
 	levelComplete = FALSE;
 	numPanels = 3;
 	PlayerIsAlive = TRUE;
@@ -231,9 +231,6 @@ void UpdateLevel31(void)
 {
 	EventLevel31();
 
-	ParticleSystemUpdate();
-	BoundingBoxUpdate();
-
 	//EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1 ,10);
 
@@ -322,7 +319,7 @@ void EventLevel31(void)
 	}	
 
 	// Runs if the beginning animation is finished
-	if(!beginningAnimiation && !levelComplete)
+	if(!beginningAnimation && !levelComplete)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
@@ -347,7 +344,7 @@ void EventLevel31(void)
 			
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -800)
-				beginningAnimiation = FALSE;
+				beginningAnimation = FALSE;
 		}
 		//Always animate the player otherwise the sprites get stuck in the middle
 		Animation(&CurrentPlayer);
@@ -375,18 +372,10 @@ void EventLevel31(void)
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
-	for(i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Update the created enemies
-		if (enemyList[i].objID == -1)
-			break;
-		if (enemyList[i].objID == 0)
-			continue;
-
-		UpdateEnemy(&enemyList[i]);
-	}
-
+	ParticleSystemUpdate();
+	BoundingBoxUpdate();
 	UpdateFloatingText();
+	UpdateAllEnemies();
 
 	//Logic for upper deck overlays
 	if(CurrentPlayer.Position.y > 105)
