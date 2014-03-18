@@ -90,6 +90,9 @@ void InitializeTutorial(void)
 	BackSnd = CreateSound("Sounds/Temp.mp3", SmallSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
+	//Set the camera so it currently isn't gated
+	ResetGatedCamera();
+
 	InitializePlayer(&CurrentPlayer, Ginko, -700.0f, GROUNDLEVEL + 1);
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
