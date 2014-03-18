@@ -8,4 +8,6 @@ double testFrameTime(void);
 void EndFoxFrame(void);
 float GetDeltaTime(void);
 
+float animationTest; //To test clunky animation
+
 #endif
