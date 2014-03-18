@@ -938,7 +938,7 @@ void Animation(Player *Object)
 
 	printf("%f\n", testFrameTime());*/
 
-	Object->LegSinValue += 10.0f * GetDeltaTime() * (Object->Speed * 0.1f); 
+	Object->LegSinValue += (Object->Speed) / 75.0f; 
 
 	Object->PlayerSpriteParts.BlinkTimer += 1;
 
