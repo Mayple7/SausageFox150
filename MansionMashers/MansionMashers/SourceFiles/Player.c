@@ -915,7 +915,7 @@ void Animation(Player *Object)
 {
 	float sinOfLegValue = (float)sin(Object->LegSinValue);
 	float sinOfTwoLegValue = (float)sin(Object->LegSinValue * 2);
-	float LegDistance = (2.3f / (((Object->CurrentPlayerStats.MoveSpeed * (1 / 60.0f)) * 0.15f + 0.15f)) );
+	float LegDistance = Object->CurrentPlayerStats.MoveSpeed * (1 / 60.0f) + (2.3f / (((Object->CurrentPlayerStats.MoveSpeed * (1 / 60.0f)) * 0.15f + 0.15f)) ) - Object->Speed;
 	float LegUpperDirection = sinOfLegValue / (LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = sinOfLegValue / (LegDistance);

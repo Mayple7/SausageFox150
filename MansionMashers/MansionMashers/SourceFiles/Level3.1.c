@@ -102,6 +102,7 @@ void InitializeLevel31(void)
 	levelComplete = FALSE;
 	numPanels = 3;
 	PlayerIsAlive = TRUE;
+	ResetEnemyPanelNumber();
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
