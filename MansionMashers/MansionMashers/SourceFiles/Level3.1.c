@@ -56,13 +56,19 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
+static int levelComplete;
 static int beginningAnimiation;
+static int numPanels;
+static int PlayerIsAlive;
 TextGlyphs* LevelName;
 
 Platform *Plat;
 Wall *Wall1;
+
 Sprite* SecondOverlay[3];
+
+static EnemySpawner* Spawners[6];
+static Enemy* TopDeckEnemy[4];
 
 Sprite* BlackOverlay;
 
@@ -87,12 +93,15 @@ void LoadLevel31(void)
 void InitializeLevel31(void)
 {
 	Vec3 TextTint;
+	Vec2 SpawnerLocation;
 	int i;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	beginningAnimiation = TRUE;
-	
+	levelComplete = FALSE;
+	numPanels = 3;
+	PlayerIsAlive = TRUE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -126,6 +135,9 @@ void InitializeLevel31(void)
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
@@ -158,18 +170,54 @@ void InitializeLevel31(void)
 	//Panel 1
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 100.0f, newID++, -880, -20);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 120.0f, 100.0f, newID++, -495, -20);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 115.0f, 100.0f, newID++, -490, -20);
 	Wall1->WallSprite->Visible = FALSE;
 	//Panel 2
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 100.0f, newID++, 1060, -20);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 120.0f, 100.0f, newID++, -495 + 1920, -20);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 115.0f, 100.0f, newID++, -490 + 1920, -20);
 	Wall1->WallSprite->Visible = FALSE;
 	//Panel 3
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 100.0f, newID++, 1060 + 1920, -20);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 120.0f, 100.0f, newID++, -495 + (1920 * 2), -20);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 115.0f, 100.0f, newID++, -490 + (1920 * 2), -20);
 	Wall1->WallSprite->Visible = FALSE;
+
+	//Blocker Boxes
+	CreateBlockerBoxes(&newID);
+
+	/////////////////////////////////
+	//			Spawners		   //
+	/////////////////////////////////
+	Vec2Set(&SpawnerLocation, 0, 0);
+	//1st Left
+	Spawners[0] = CreateEnemySpawner(2, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 0);
+	//1st Right
+	Spawners[1] = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
+	TopDeckEnemy[0] = CreateEnemy(BasicMelee, EnemyType, newID++, 300, 110, 0);
+	
+	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
+	//2nd Left
+	Spawners[2] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	//2nd Right
+	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+	TopDeckEnemy[1] = CreateEnemy(BasicMelee, EnemyType, newID++, 300 + PANELSIZE, 110, 1);
+
+	Vec2Set(&SpawnerLocation, PANELSIZE * 2, 0);
+	//3rd /eft
+	Spawners[4] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	//3rd Right
+	Spawners[5] = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	TopDeckEnemy[2] = CreateEnemy(BasicMelee, EnemyType, newID++, 300 + (2 * PANELSIZE), 110, 2);
+	TopDeckEnemy[3] = CreateEnemy(BasicMelee, EnemyType, newID++, (2 * PANELSIZE), 110, 2);
+
+	/////////////////////////////////
+	//		On Death			   //
+	/////////////////////////////////
+
+	///Last thing in initialize
+	CreateDeathConfirmObjects(&newID);
+
 }
 
 /*************************************************************************/
@@ -182,6 +230,8 @@ void UpdateLevel31(void)
 {
 	EventLevel31();
 
+	ParticleSystemUpdate();
+	BoundingBoxUpdate();
 
 	//EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1 ,10);
@@ -242,6 +292,8 @@ void UnloadLevel31(void)
 /*************************************************************************/
 void EventLevel31(void)
 {
+	int i;
+
 	/*////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
@@ -312,46 +364,25 @@ void EventLevel31(void)
 	//    CAMERA POSITION SECOND    //
 	////////////////////////////////*/
 
-	//Setting Up for when I add spawners
-	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE / 2))
-	{
-		//Only trap the player in if there are enemies spawned
-		//if(EnemyPanelNumber[0] > 0 && GetCameraMovedState() && !FirstSpawner->objID)
-			//SetCameraLockState(TRUE);
-
-		//Set the camera to the next panel
-		SetCameraPan(0.0f, PANELSIZE);
-	}
-	//Panel2
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)))
-	{
-		//Only trap the player in if there are enemies spawned
-		//if(EnemyPanelNumber[1] > 0 && GetCameraMovedState() && !SecondSpawnerRight->objID)
-			//SetCameraLockState(TRUE);
-
-		//Set the camera to the next panel
-		SetCameraPan(PANELSIZE, PANELSIZE);
-	}
-	//Panel3
-	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)))
-	{
-		//Only trap the player in if there are enemies spawned (Enemies start spawned for this one, no need to check)
-		//if(EnemyPanelNumber[2] > 0 && GetCameraMovedState())
-			//SetCameraLockState(TRUE);
-
-		//Set the camera to the next panel
-		SetCameraPan((PANELSIZE * 2), PANELSIZE);
-	}
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 + CurrentPlayer.PlayerCollider.width)
-	{
-			levelComplete = TRUE;
-	}
-
+	SetUpCameraPanAndLock(&levelComplete, PANELSIZE, Spawners, numPanels);
+	UpdateBlockerBoxes(PANELSIZE);
 
 
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
+	for(i = 0; i < COLLIDEAMOUNT; i++)
+	{
+		//Update the created enemies
+		if (enemyList[i].objID == -1)
+			break;
+		if (enemyList[i].objID == 0)
+			continue;
+
+		UpdateEnemy(&enemyList[i]);
+	}
+
+	UpdateFloatingText();
 
 	//Logic for upper deck overlays
 	if(CurrentPlayer.Position.y > 105)
@@ -377,5 +408,13 @@ void EventLevel31(void)
 		}
 	}
 
+	//If player dies
+	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
+	{
+		PlayerIsAlive = FALSE;
+		BlackOverlay->Alpha = 0.5f;
+
+		UpdateDeathConfirmObjects();
+	}
 
 }

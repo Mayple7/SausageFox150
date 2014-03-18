@@ -31,7 +31,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/BoundingBox.h"
+
 
 
 // ---------------------------------------------------------------------------
@@ -52,13 +52,7 @@ static int numPanels;
 
 TextGlyphs *LevelName;
 
-EnemySpawner *FirstSpawner;
-EnemySpawner *SecondSpawnerRight;
-EnemySpawner *SecondSpawnerLeft;
-EnemySpawner *ThirdSpawnerRight;
-EnemySpawner *ThirdSpawnerLeft;
-
-EnemySpawner *Spawners[6];
+static EnemySpawner *Spawners[6]; //Two per panel, Left & Right
 
 Enemy *SetEnemy1;
 Enemy *SetEnemy2;
