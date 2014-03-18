@@ -89,6 +89,7 @@ void InitializeLevel3(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	ResetGatedCamera();
 	beginningAnimiation = TRUE;
 	levelComplete = FALSE;
 
