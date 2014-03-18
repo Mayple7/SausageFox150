@@ -54,6 +54,8 @@
 
 #define PANELSIZE 1920.0f
 
+#define BACKGROUND_LENGTH 1
+
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
@@ -64,6 +66,11 @@ TextGlyphs *LevelName;
 Sprite* BlackOverlay;
 Platform *Plat;
 Wall *Wall1;
+
+Sprite* TreeBackground1[BACKGROUND_LENGTH];
+Sprite* TreeBackground2[BACKGROUND_LENGTH];
+Sprite* TreeBackground3[BACKGROUND_LENGTH];
+static void TreeBackgroundUpdate(void);
 
 /*************************************************************************/
 /*!
@@ -85,6 +92,7 @@ void LoadLevel3(void)
 /*************************************************************************/
 void InitializeLevel3(void)
 {
+	int i;
 	Vec3 TextTint;
 	newID = 10;
 	ResetObjectList();
@@ -104,12 +112,22 @@ void InitializeLevel3(void)
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
-	CreateSprite("TextureFiles/Level3Pan1.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/Level3Pan1.png", 1920, 1080, 5, 1, 1, 0, 0);
 	
 	//Black Overlay
 	Vec3Set(&TextTint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
+
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground1.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground2[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground2.png", 1920, 1080, 1, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground4.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
+
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -276,4 +294,15 @@ void EventLevel3(void)
 	if(CurrentPlayer.Position.x > (1920 / 2.0f) + CurrentPlayer.PlayerCollider.width)
 		levelComplete = TRUE;
 
+}
+
+void TreeBackgroundUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground2[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 30.0f);
+
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
 }
