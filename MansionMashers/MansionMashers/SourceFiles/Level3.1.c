@@ -261,13 +261,19 @@ void DrawLevel31(void)
 /*************************************************************************/
 void FreeLevel31(void)
 {
-	if(levelComplete && CurrentPlayer.CurrentLevel < GS_ArmGuy)
+	// Level complete and not reached level 5 zone
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level5)
 	{
-		CurrentPlayer.CurrentLevel = GS_ArmGuy;
+		CurrentPlayer.CurrentLevel = GS_Level5;
 		CurrentPlayer.armUnlock = TRUE;
 	}
+	// Level complete and has reached level 5 zone
+	else if(levelComplete)
+		CurrentPlayer.armUnlock = TRUE;
+	// Level NOT complete
 	else if(CurrentPlayer.CurrentLevel < GS_Level3)
 		CurrentPlayer.CurrentLevel = GS_Level3;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }

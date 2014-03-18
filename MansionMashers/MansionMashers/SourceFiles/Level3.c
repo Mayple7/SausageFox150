@@ -139,6 +139,8 @@ void InitializeLevel3(void)
 	//Temporary Bounding Wall until rock pile is finalized
 	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 800, -340);
 	Wall1->WallSprite->Visible = FALSE;
+
+	CreateBoundingBoxes();
 }
 
 /*************************************************************************/
