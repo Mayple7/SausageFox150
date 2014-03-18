@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /*!
-\file				Boss.c
+\file				ArmGuyBoss.c
 \author				Dan Muller (d.muller)
 \date				Mar 4, 2014
 
@@ -24,6 +24,7 @@
 // includes
 
 #include "../AEEngine.h"
+#include "../HeaderFiles/ArmGuyBoss.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
@@ -82,12 +83,12 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 
 	// Armguy colliders
 	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 530, (*objID)++);
-	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 500, 200, (*objID)++); 
+	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 300, 200, (*objID)++); 
 	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 100, (*objID)++); 
 	CreateCollisionBox(&CurrentBoss->SmashAttack, &CurrentBoss->Position, WeaponEnemy, 800, 200, (*objID)++);
 
 	// Sets the initial position of all colliders
-	CurrentBoss->SpinAttack.Position.y -= CurrentBoss->SpinAttack.height / 2;
+	CurrentBoss->SpinAttack.Position.y -= 2 * CurrentBoss->SpinAttack.height / 3;
 	CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - 200;
 	CurrentBoss->JabAttack.Position.y = -40;
 	CurrentBoss->SmashAttack.Position.x = 640;
@@ -313,13 +314,13 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			CurrentBoss->SpinSprite->Visible = TRUE;
 			
 			// Boss is on the right and start up timer is done
-			if(CurrentBoss->cooldownTimer > 0.5f && CurrentBoss->Position.x > 0)
+			if(CurrentBoss->cooldownTimer > 1.0f && CurrentBoss->Position.x > 0)
 			{
 				CurrentBoss->InnerState = SpinL;
 				playerHit = FALSE;
 			}
 			// Boss is on the left and start up timer is done
-			else if(CurrentBoss->cooldownTimer > 0.5f)
+			else if(CurrentBoss->cooldownTimer > 1.0f)
 			{
 				CurrentBoss->InnerState = SpinR;
 				playerHit = FALSE;
@@ -527,7 +528,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 	Pointer to the enemy object
 */
 /*************************************************************************/
-void DetectBossCollision(ArmGuyBoss *CurrentBoss)
+void DetectArmGuyBossCollision(ArmGuyBoss *CurrentBoss)
 {
 	Weapon* wList = weaponList;
 
@@ -547,7 +548,7 @@ void DetectBossCollision(ArmGuyBoss *CurrentBoss)
 				{
 					CurrentBoss->playerHit = wList->WeaponAttack.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
-					BossCollideWeapon(CurrentBoss);
+					ArmGuyBossCollideWeapon(CurrentBoss);
 				}
 				// Found target, hit previous frame, on persistant
 				else if(hitPrev % 10 == 1)
@@ -587,13 +588,13 @@ void DetectBossCollision(ArmGuyBoss *CurrentBoss)
 	Pointer to the enemy object
 */
 /*************************************************************************/
-void BossCollideWeapon(ArmGuyBoss *CurrentBoss)
+void ArmGuyBossCollideWeapon(ArmGuyBoss *CurrentBoss)
 {
 	int damageDealt;
 	char num[10];
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
-	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
+	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
 
 	// Calculate damage including enemy's damage reduction
 	if(Cheats)
@@ -625,7 +626,7 @@ void PlayerDamageResult(int damage)
 	char num[10];
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
-	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
+	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
 	
 	// Calculate damage
 	if(Cheats)

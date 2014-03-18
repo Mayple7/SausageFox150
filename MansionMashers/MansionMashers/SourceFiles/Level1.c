@@ -31,7 +31,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/BoundingBox.h"
+
 
 
 // ---------------------------------------------------------------------------
@@ -48,14 +48,11 @@ static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimiation;
 static int PlayerIsAlive; 
+static int numPanels;
 
 TextGlyphs *LevelName;
 
-EnemySpawner *FirstSpawner;
-EnemySpawner *SecondSpawnerRight;
-EnemySpawner *SecondSpawnerLeft;
-EnemySpawner *ThirdSpawnerRight;
-EnemySpawner *ThirdSpawnerLeft;
+static EnemySpawner *Spawners[6]; //Two per panel, Left & Right
 
 Enemy *SetEnemy1;
 Enemy *SetEnemy2;
@@ -64,8 +61,8 @@ Platform *Table1;
 
 Wall *Wall1;
 
-Wall *BBWallLeft;
-Wall *BBWallRight;
+//Wall *BBWallLeft;
+//Wall *BBWallRight;
 
 FoxSound *BackSnd;
 
@@ -99,6 +96,7 @@ void InitializeLevel1(void)
 	beginningAnimiation = TRUE;
 	levelComplete = FALSE;
 	PlayerIsAlive = TRUE;
+	numPanels = 3;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -159,27 +157,29 @@ void InitializeLevel1(void)
 	Wall1->WallSprite->Visible = FALSE;
 	
 	
-	// Bounding Box Walls
-	BBWallLeft = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, newID++, 0, 0);
-	BBWallLeft->WallSprite->Visible = FALSE;
-	BBWallLeft->enemyNotCollidable = TRUE;
-	BBWallRight = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, newID++, 0, 0);
-	BBWallRight->WallSprite->Visible = FALSE;
-	BBWallRight->enemyNotCollidable = TRUE;
+	// Blocker Box Walls
+	CreateBlockerBoxes(&newID);	
 
-	
-
-	//Enemy spawners
+	//Enemy spawners (always set left and then right if none set to null)
 	Vec2Set(&SpawnerLocation, -200, 0);
-	FirstSpawner = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
+	//First Spawner Left (none so set to null
+	Spawners[0] = NULL;
+	//First Spawner Right
+	Spawners[1] = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
 
 	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
-	SecondSpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
-	SecondSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	//2nd Spawner Left
+	Spawners[2] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	//2nd Spawner Right
+	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+
 
 	Vec2Set(&SpawnerLocation, 1.90f * PANELSIZE, 0);
-	ThirdSpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
-	ThirdSpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	//3rd Spawner Left
+	Spawners[4] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	//3rd Spawner Right
+	Spawners[5] = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+
 
 	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
 	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
@@ -367,48 +367,8 @@ void EventLevel1(void)
 	//    CAMERA POSITION SECOND    //
 	//////////////////////////////////
 
-	SetCameraLockState(FALSE);
-	//Panel1
-	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE / 2))
-	{
-		//Only trap the player in if there are enemies spawned
-		if(EnemyPanelNumber[0] > 0 && GetCameraMovedState() && !FirstSpawner->objID)
-			SetCameraLockState(TRUE);
-
-		//Set the camera to the next panel
-		SetCameraPan(0.0f, PANELSIZE);
-	}
-	//Panel2
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)))
-	{
-		//Only trap the player in if there are enemies spawned
-		if(EnemyPanelNumber[1] > 0 && GetCameraMovedState() && !SecondSpawnerRight->objID)
-			SetCameraLockState(TRUE);
-
-		//Set the camera to the next panel
-		SetCameraPan(PANELSIZE, PANELSIZE);
-	}
-	//Panel3
-	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)))
-	{
-		//Only trap the player in if there are enemies spawned (Enemies start spawned for this one, no need to check)
-		if(EnemyPanelNumber[2] > 0 && GetCameraMovedState())
-			SetCameraLockState(TRUE);
-
-		//Set the camera to the next panel
-		SetCameraPan((PANELSIZE * 2), PANELSIZE);
-	}
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 + CurrentPlayer.PlayerCollider.width)
-	{
-			levelComplete = TRUE;
-	}
-
-	BBWallLeft->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
-	BBWallLeft->Position.x = GetCameraXPosition() - (PANELSIZE / 2);
-	UpdateCollisionPosition(&BBWallLeft->WallCollider, &BBWallLeft->Position);
-	BBWallRight->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
-	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2);
-	UpdateCollisionPosition(&BBWallRight->WallCollider, &BBWallRight->Position);
+	SetUpCameraPanAndLock(&levelComplete, PANELSIZE, Spawners, numPanels);
+	UpdateBlockerBoxes(PANELSIZE);
 
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //

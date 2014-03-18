@@ -94,6 +94,7 @@ void InitializeArmGuy(void)
 	Boss = CreateArmGuyBoss(0, 0, &newID);
 	Boss->JabAttack.collisionDebug = TRUE;
 	Boss->SmashAttack.collisionDebug = TRUE;
+	Boss->SpinAttack.collisionDebug = TRUE;
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center, Border);
@@ -134,6 +135,7 @@ void DrawArmGuy(void)
 	DrawCollisionList();
 	displayCollisionDebug(&Boss->JabAttack);
 	displayCollisionDebug(&Boss->SmashAttack);
+	displayCollisionDebug(&Boss->SpinAttack);
 }
 
 /*************************************************************************/
@@ -175,7 +177,7 @@ void EventArmGuy(void)
 {
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
-	DetectBossCollision(Boss);
+	DetectArmGuyBossCollision(Boss);
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 

@@ -33,7 +33,6 @@ void CreateDeathConfirmObjects(int *newID)
 	Vec3Set(&TextTint, 0, 0, 0);
 	DeathConfirm = (Sprite *) CreateSprite("TextureFiles/DeathConfirm.png", 639, 204, 4020, 1, 1, -1920, 100);
 
-	(*newID)++;
 	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", -1920, -130, 300, 112.5f, (*newID)++);
 	MainMapButton->ButtonSprite->ZIndex = 4021;
 
@@ -70,7 +69,10 @@ void UpdateDeathConfirmObjects(void)
 			FreeButton(RestartButton);
 			FreeButton(MainMapButton);
 			FreeSprite(DeathConfirm);
-			SetNextState(GS_Restart);
+			if(GetCurrentState() == GS_Level31)
+				SetNextState(GS_Level3);
+			else
+				SetNextState(GS_Restart);
 		}
 	}
 	else

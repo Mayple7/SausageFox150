@@ -3,5 +3,7 @@
 
 void CreateBoundingBoxes(void);
 void BoundingBoxUpdate(void);
+void CreateBlockerBoxes(int *newID);
+void UpdateBlockerBoxes(float panelsize);
 
 #endif
