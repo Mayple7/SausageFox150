@@ -95,11 +95,16 @@ void InitializeLevel31(void)
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
+	//Panel 1
 	CreateSprite("TextureFiles/Level3Pan2.png", 1920, 1080, 1, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, 0, 0);
 	SecondOverlay = (Sprite *)CreateSprite("TextureFiles/Level3Pan2Overlay2.png", 1920, 1080, 400, 1, 1, 0, 0);
+	//Panel2
 	CreateSprite("TextureFiles/Level3Pan3.png", 1920, 1080, 1, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, 1920, 0);
+	//Panel3
+	CreateSprite("TextureFiles/Level3Pan4.png", 1920, 1080, 1, 1, 1, (1920 * 2), 0);
+	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, (1920 * 2), 0);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -110,14 +115,17 @@ void InitializeLevel31(void)
 	//Step 2
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 50.0f, 100.0f, newID++, -655 + 1920, -210);
 	Plat->PlatformSprite->Visible = FALSE;
+	//Step 3
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 50.0f, 100.0f, newID++, -655 + (1920 * 2), -210);
+	Plat->PlatformSprite->Visible = FALSE;
 
 	//Top Walkway
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1920.0f, 100.0f, newID++, 0, -20);
 	Plat->PlatformSprite->Visible = FALSE;
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1920.0f, 100.0f, newID++, 1920, -20);
 	Plat->PlatformSprite->Visible = FALSE;
-	//Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, -670, 85);
-	//Plat->PlatformSprite->Visible = FALSE;
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1920.0f, 100.0f, newID++, (1920 * 2), -20);
+	Plat->PlatformSprite->Visible = FALSE;
 
 	/////////////////////////////////
 	//			Walls			   //
@@ -138,6 +146,11 @@ void InitializeLevel31(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 100.0f, newID++, 1060, -20);
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 120.0f, 100.0f, newID++, -495 + 1920, -20);
+	Wall1->WallSprite->Visible = FALSE;
+	//Panel 3
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 100.0f, newID++, 1060 + 1920, -20);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 120.0f, 100.0f, newID++, -495 + (1920 * 2), -20);
 	Wall1->WallSprite->Visible = FALSE;
 }
 
