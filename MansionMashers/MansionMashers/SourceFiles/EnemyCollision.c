@@ -84,7 +84,7 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
 	Vec2 velocity;
-	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
+	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
 
 	// Calculate damage including enemy's damage reduction
 	if(Cheats)
