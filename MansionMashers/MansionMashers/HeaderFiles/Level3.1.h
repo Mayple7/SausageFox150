@@ -8,6 +8,6 @@ void DrawLevel31(void);
 void FreeLevel31(void);
 void UnloadLevel31(void);
 
-void EventLevel3(void);
+void EventLevel31(void);
 
 #endif
