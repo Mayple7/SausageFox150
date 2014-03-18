@@ -34,8 +34,8 @@ typedef struct HandGuyBoss
 void LoadHandGuyBoss(void);
 HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID);
 void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss);
-void DetectBossCollision(HandGuyBoss *CurrentBoss);
-void BossCollideWeapon(HandGuyBoss *CurrentBoss);
-void PlayerDamageResult(int damage);
+void DetectHandGuyBossCollision(HandGuyBoss *CurrentBoss);
+void HandGuyBossCollideWeapon(HandGuyBoss *CurrentBoss);
+static void PlayerDamageResult(int damage);
 
 #endif

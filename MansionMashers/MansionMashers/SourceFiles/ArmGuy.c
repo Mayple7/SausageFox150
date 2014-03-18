@@ -177,7 +177,7 @@ void EventArmGuy(void)
 {
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
-	DetectBossCollision(Boss);
+	DetectArmGuyBossCollision(Boss);
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 

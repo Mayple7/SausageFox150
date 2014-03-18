@@ -528,7 +528,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 	Pointer to the enemy object
 */
 /*************************************************************************/
-void DetectBossCollision(ArmGuyBoss *CurrentBoss)
+void DetectArmGuyBossCollision(ArmGuyBoss *CurrentBoss)
 {
 	Weapon* wList = weaponList;
 
@@ -548,7 +548,7 @@ void DetectBossCollision(ArmGuyBoss *CurrentBoss)
 				{
 					CurrentBoss->playerHit = wList->WeaponAttack.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
-					BossCollideWeapon(CurrentBoss);
+					ArmGuyBossCollideWeapon(CurrentBoss);
 				}
 				// Found target, hit previous frame, on persistant
 				else if(hitPrev % 10 == 1)
@@ -588,7 +588,7 @@ void DetectBossCollision(ArmGuyBoss *CurrentBoss)
 	Pointer to the enemy object
 */
 /*************************************************************************/
-void BossCollideWeapon(ArmGuyBoss *CurrentBoss)
+void ArmGuyBossCollideWeapon(ArmGuyBoss *CurrentBoss)
 {
 	int damageDealt;
 	char num[10];
