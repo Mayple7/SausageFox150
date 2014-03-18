@@ -53,11 +53,14 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
+static int beginningAnimiation;
 TextGlyphs* LevelName;
 
 Platform *Plat;
 Wall *Wall1;
-Sprite* SecondOverlay;
+Sprite* SecondOverlay[3];
+
+Sprite* BlackOverlay;
 
 /*************************************************************************/
 /*!
@@ -80,12 +83,15 @@ void LoadLevel31(void)
 void InitializeLevel31(void)
 {
 	Vec3 TextTint;
+	int i;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	beginningAnimiation = TRUE;
+	
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
@@ -98,13 +104,23 @@ void InitializeLevel31(void)
 	//Panel 1
 	CreateSprite("TextureFiles/Level3Pan2.png", 1920, 1080, 1, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, 0, 0);
-	SecondOverlay = (Sprite *)CreateSprite("TextureFiles/Level3Pan2Overlay2.png", 1920, 1080, 400, 1, 1, 0, 0);
 	//Panel2
 	CreateSprite("TextureFiles/Level3Pan3.png", 1920, 1080, 1, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, 1920, 0);
 	//Panel3
 	CreateSprite("TextureFiles/Level3Pan4.png", 1920, 1080, 1, 1, 1, (1920 * 2), 0);
 	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, (1920 * 2), 0);
+
+	//Create Upper Deck Overlays
+	for(i = 0; i < 3; i++)
+	{
+		SecondOverlay[i] = (Sprite *)CreateSprite("TextureFiles/Level3Pan2Overlay2.png", 1920, 1080, 400, 1, 1, (1920 * i), 0);
+	}
+
+	//Black Overlay
+	Vec3Set(&TextTint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = TextTint;
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -131,8 +147,8 @@ void InitializeLevel31(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Bounding Walls
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
-	Wall1->WallSprite->Visible = FALSE;
+	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
+	//Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, 0, 590);
 	Wall1->WallSprite->Visible = FALSE;
 
@@ -224,6 +240,49 @@ void UnloadLevel31(void)
 /*************************************************************************/
 void EventLevel31(void)
 {
+
+		// Runs if the beginning animation is finished
+	if(!beginningAnimiation && !levelComplete)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		//UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+	}
+	else if(!levelComplete)
+	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = TRUE;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -800)
+				beginningAnimiation = FALSE;
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+	else
+	{
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+			SetNextState(GS_MapLevel);
+	}
+
+
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	// Handle any input for the current player
@@ -242,17 +301,34 @@ void EventLevel31(void)
 
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawLevel3);
+		InitializePause(&DrawLevel31);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
+		//SetNextState(GS_MainMenu);
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 
+	//Logic for upper level overlays
 	if(CurrentPlayer.Position.y > 105)
-		SecondOverlay->Alpha = 0.0;
+	{
+		int i;
+		for(i = 0; i < 3; i++)
+		{
+			SecondOverlay[i]->Alpha = 0.0f;
+		}
+	}
 	else 
-		SecondOverlay->Alpha = 1.0;
+	{
+		//Don't run loop if Alpha is already 1.0f
+		if(SecondOverlay[0]->Alpha == 0.0f)
+		{
+			int i;
+			for(i = 0; i < 3; i++)
+			{
+				SecondOverlay[i]->Alpha = 1.0f;
+			}
+		}
+	}
 
 	SetCamera(&CurrentPlayer.Position, 250);
 

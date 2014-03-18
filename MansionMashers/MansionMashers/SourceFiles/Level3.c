@@ -123,11 +123,11 @@ void InitializeLevel3(void)
 	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 750.0f, newID++, 958, -170);
 	Wall1->WallSprite->Visible = FALSE;
 	//Final Platform (needs to have wall properties
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 940, -100);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 250.0f, 780.0f, newID++, 880, -105);
 	Wall1->WallSprite->Visible = FALSE;
 
 	//Temporary Bounding Wall until rock pile is finalized
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 800, -340);
+	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 800, -340);
 	Wall1->WallSprite->Visible = FALSE;
 }
 
@@ -141,7 +141,7 @@ void UpdateLevel3(void)
 {
 	EventLevel3();
 
-	EasyEditPlatform(Plat, 10);
+	EasyEditWall(Wall1, 10);
 
 
 	// This should be the last line in this function
