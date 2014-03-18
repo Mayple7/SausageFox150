@@ -174,3 +174,4 @@ void SetUpCameraPanAndLockNoSpawner(int* levelComplete, float panelsize, int num
 		*levelComplete = TRUE;
 
 }
+
