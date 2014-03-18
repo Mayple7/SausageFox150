@@ -50,6 +50,9 @@ TextGlyphs *LevelName;
 
 Sprite* BlackOverlay;
 
+Wall* Wall1;
+Wall* RightBarrier;
+
 // Tree Background
 Sprite* TreeBackground1[4];
 Sprite* TreeBackground2[4];
@@ -102,6 +105,7 @@ void InitializeLevel4(void)
 	CreateSprite("TextureFiles/Level4Pan0.png", 1920, 1080, 5, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/Level4Pan1.png", 1920, 1080, 5, 1, 1, PANELSIZE, 0);
 	CreateSprite("TextureFiles/Level4Pan2.png", 1920, 1080, 5, 1, 1, PANELSIZE * 2, 0);
+	CreateSprite("TextureFiles/Level4Pan3.png", 1920, 1080, 5, 1, 1, PANELSIZE * 3, 0);
 
 	//Tree Backgrounds
 	for(i = 0; i < 4; i++)
@@ -128,6 +132,12 @@ void InitializeLevel4(void)
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
+	//Right Bounding Wall
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, 6630, 0);
+	Wall1->WallSprite->Visible = FALSE;
+	//Right Bounding Wall
+	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, 6630, 0);
+	RightBarrier->WallSprite->Visible = FALSE;
 
 	/////////////////////////////////
 	//		Spawners			   //
@@ -289,6 +299,16 @@ void EventLevel4(void)
 	UpdateAllEnemies();
 	UpdateFloatingText();
 	
+
+	//Level Transition
+	BlackOverlay->Position.x = GetCameraXPosition();
+	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
+	{
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+			SetNextState(GS_MapLevel);
+	}
+
 	//If player dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
