@@ -46,6 +46,8 @@ Platform *Pedestal;
 
 Enemy* SetEnemy1;
 
+HUD *CurrentHUD;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -75,7 +77,8 @@ void InitializeHandGuy(void)
 	//Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
-	CurrentPlayer.PlayerCollider.collisionDebug = FALSE;
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	HandGauy = (Sprite *) CreateSprite("TextureFiles/HandGauy.png", 400, 400, 10, 1, 1, -800, -250);
 
@@ -120,6 +123,8 @@ void UpdateHandGuy(void)
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -151,6 +156,7 @@ void FreeHandGuy(void)
 
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/

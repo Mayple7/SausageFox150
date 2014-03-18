@@ -133,6 +133,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
 	//GSM Start
+	animationTest = 1.0f; //For testing
 	FoxSystemInitialize();
 #ifndef _DEBUG
 	GSMInitialize(GS_SplashScreen);
