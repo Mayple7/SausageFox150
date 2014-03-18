@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /*!
-\file				Boss.c
+\file				ArmGuyBoss.c
 \author				Dan Muller (d.muller)
 \date				Mar 4, 2014
 
@@ -24,6 +24,7 @@
 // includes
 
 #include "../AEEngine.h"
+#include "../HeaderFiles/ArmGuyBoss.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"

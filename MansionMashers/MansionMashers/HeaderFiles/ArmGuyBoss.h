@@ -1,5 +1,5 @@
-#ifndef FOX_BOSS
-#define FOX_BOSS
+#ifndef FOX_ARMBOSS
+#define FOX_ARMBOSS
 
 #include "Vector2.h"
 #include "RigidBody.h"
@@ -8,8 +8,6 @@
 
 typedef struct ArmGuyBoss
 {
-	int BossType;
-
 	Sprite *BodySprite;
 	Sprite *SpinSprite;
 	Sprite *ArmSprite; // Arm for armguy, hand for handguy etc
