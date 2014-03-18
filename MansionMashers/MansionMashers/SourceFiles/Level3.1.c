@@ -264,7 +264,10 @@ void DrawLevel31(void)
 void FreeLevel31(void)
 {
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_ArmGuy)
+	{
 		CurrentPlayer.CurrentLevel = GS_ArmGuy;
+		CurrentPlayer.armUnlock = TRUE;
+	}
 	else if(CurrentPlayer.CurrentLevel < GS_Level3)
 		CurrentPlayer.CurrentLevel = GS_Level3;
 	SavePlayer(&CurrentPlayer);

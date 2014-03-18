@@ -180,6 +180,8 @@ void DrawLevel3(void)
 /*************************************************************************/
 void FreeLevel3(void)
 {
+	if(CurrentPlayer.CurrentLevel < GS_Level3)
+		CurrentPlayer.CurrentLevel = GS_Level3;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
