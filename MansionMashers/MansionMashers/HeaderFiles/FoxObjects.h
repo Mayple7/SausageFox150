@@ -39,6 +39,7 @@ int EnemyPanelNumber[PANELAMOUNT];
 #include "PaperScroll.h"
 #include "EnemySpawner.h"
 #include "ArmGuyBoss.h"
+#include "HandGuyBoss.h"
 #include "Death.h"
 #include "BoundingBox.h"
 

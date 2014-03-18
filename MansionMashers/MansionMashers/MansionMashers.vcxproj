@@ -114,6 +114,7 @@
     <ClInclude Include="HeaderFiles\GameStateList.h" />
     <ClInclude Include="HeaderFiles\GameStateManager.h" />
     <ClInclude Include="HeaderFiles\HandGuy.h" />
+    <ClInclude Include="HeaderFiles\HandGuyBoss.h" />
     <ClInclude Include="HeaderFiles\HUD.h" />
     <ClInclude Include="HeaderFiles\Input.h" />
     <ClInclude Include="HeaderFiles\Kevin.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="SourceFiles\FrameRateController.c" />
     <ClCompile Include="SourceFiles\GameStateManager.c" />
     <ClCompile Include="SourceFiles\HandGuy.c" />
+    <ClCompile Include="SourceFiles\HandGuyBoss.c" />
     <ClCompile Include="SourceFiles\HUD.c" />
     <ClCompile Include="SourceFiles\Input.c" />
     <ClCompile Include="SourceFiles\Kevin.c" />
