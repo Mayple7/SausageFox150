@@ -105,9 +105,9 @@ void InitializeLevel3(void)
 	//		Platforms			   //
 	/////////////////////////////////
 	//Panel1
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 80.0f, 100.0f, newID++, 190, -255);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 170.0f, 100.0f, newID++, 270, -250);
 	Plat->PlatformSprite->Visible = FALSE;
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 80.0f, 100.0f, newID++, 580, -35);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 560, -30);
 	Plat->PlatformSprite->Visible = FALSE;
 
 
@@ -141,7 +141,7 @@ void UpdateLevel3(void)
 {
 	EventLevel3();
 
-	EasyEditWall(Wall1, 10);
+	EasyEditPlatform(Plat, 10);
 
 
 	// This should be the last line in this function
