@@ -1093,7 +1093,7 @@ void EnemyAnimation(Enemy *Object)
 	Sprite *Tail = Object->EnemySpriteParts.Tail;
 	Sprite *Skrt = Object->EnemySpriteParts.Skirt;
 
-	Object->LegSinValue += 10.0f * GetDeltaTime() * (Object->Speed * 0.25f); 
+	Object->LegSinValue += (Object->Speed) / 45.0f; 
 
 	Object->EnemySpriteParts.BlinkTimer += 1;
 

@@ -419,9 +419,9 @@ void EventLevel2(void)
 	}
 
 	//Level Transition
+	BlackOverlay->Position.x = GetCameraXPosition();
 	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
 	{
-		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
 			SetNextState(GS_MapLevel);
@@ -431,7 +431,6 @@ void EventLevel2(void)
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
 		PlayerIsAlive = FALSE;
-		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha = 0.5f;
 
 		UpdateDeathConfirmObjects();
