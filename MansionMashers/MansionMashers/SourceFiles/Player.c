@@ -898,9 +898,9 @@ void DetectPlayerCollision(void)
 /*************************************************************************/
 void Animation(Player *Object)
 {
-	float sinOfLegValue = (float)sin(Object->LegSinValue * (GetDeltaTime() * FRAMERATE)) * (GetDeltaTime() * FRAMERATE);
-	float sinOfTwoLegValue = (float)sin(Object->LegSinValue * (GetDeltaTime() * FRAMERATE) * 2) * (GetDeltaTime() * FRAMERATE);
-	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime()) + (2.3f / (((Object->Speed) * 0.15f * (GetDeltaTime() * FRAMERATE) + 0.15f * (GetDeltaTime() * FRAMERATE))) ))-(Object->Speed * (GetDeltaTime() * FRAMERATE));
+	float sinOfLegValue = (float)sin(Object->LegSinValue);
+	float sinOfTwoLegValue = (float)sin(Object->LegSinValue * 2);
+	float LegDistance = (2.3f / (((Object->CurrentPlayerStats.MoveSpeed * (1 / 60.0f)) * 0.15f + 0.15f)) );
 	float LegUpperDirection = sinOfLegValue / (LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = sinOfLegValue / (LegDistance);
@@ -919,9 +919,9 @@ void Animation(Player *Object)
 	Sprite *Weap = Object->PlayerSpriteParts.Weapon;
 	Sprite *Tail = Object->PlayerSpriteParts.Tail;
 
-	/*printf("YO YO YO\n%f\n", testFrameTime());
+	/*printf("YO YO YO\n%f\n", testFrameTime());*/
 
-	printf("%f\n", testFrameTime());*/
+	printf("%f, %f\n", (Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime()), Object->Speed);
 
 	Object->LegSinValue += 10.0f * GetDeltaTime() * (Object->Speed * 0.1f); 
 

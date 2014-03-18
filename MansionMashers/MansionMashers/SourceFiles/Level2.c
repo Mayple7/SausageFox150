@@ -121,7 +121,7 @@ void InitializeLevel2(void)
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 	
 	//Bounding Boxes
@@ -233,12 +233,12 @@ void InitializeLevel2(void)
 	Pan2SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
 	//Panel3
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 2), 0);
-	Pan3SpawnerRight = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	Pan3SpawnerRight = CreateEnemySpawner(1, BasicRanged, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
 	Pan3SpawnerLeft = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
-	Pan3Enemy = CreateEnemy(BasicMelee, EnemyType, newID++, WTBot->Position.x / GetLoadRatio(), 300, 2);
+	Pan3Enemy = CreateEnemy(BasicMelee, EnemyType, newID++, WTBot->Position.x, 300, 2);
 	//Panel4
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 3 - PANELSIZE / 4), 0);
-	Pan3SpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
+	Pan4SpawnerRight = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
 
 
 	/////////////////////////////////
@@ -264,7 +264,7 @@ void UpdateLevel2(void)
 	BoundingBoxUpdate();
 	ParticleSystemUpdate();
 
-	if(CurrentPlayer.Position.x > (PANELSIZE * 2 - PANELSIZE / 4) * GetLoadRatio())
+	if(CurrentPlayer.Position.x > (PANELSIZE * 2 - PANELSIZE / 4))
 	{
 		if(Pan3Enemy->EnemyState == AINone)
 		{
@@ -374,8 +374,8 @@ void EventLevel2(void)
 		if(CurrentPlayer.Position.x <= 0 && GetCameraXPosition() <= 5.0f)
 			SetCameraXPosition(0.0f);
 		//Don't Let camera go beyond right boundary
-		else if(CurrentPlayer.Position.x >= (PANELSIZE * 3) * GetLoadRatio() && GetCameraXPosition() >= ((PANELSIZE * 3 - 5.0f) * GetLoadRatio()))
-			SetCameraXPosition(PANELSIZE * 3 * GetLoadRatio());
+		else if(CurrentPlayer.Position.x >= (PANELSIZE * 3) && GetCameraXPosition() >= ((PANELSIZE * 3 - 5.0f)))
+			SetCameraXPosition(PANELSIZE * 3);
 		//Free Roam Camera
 		else
 			SetCamera(&CurrentPlayer.Position, 250);
@@ -396,14 +396,14 @@ void EventLevel2(void)
 	}
 
 	UpdateFloatingText();
-
+	UpdateAllProjectiles();
 	TreeBackgroundUpdate();
 
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
 	{
 		levelComplete = TRUE;
-		RightBarrier->Position.y = -1080 * GetLoadRatio();
+		RightBarrier->Position.y = -1080;
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
 	}
 
@@ -419,7 +419,7 @@ void EventLevel2(void)
 	}
 
 	//Level Transition
-	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) * GetLoadRatio() && levelComplete)
+	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
 	{
 		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
@@ -446,5 +446,5 @@ void TreeBackgroundUpdate(void)
 		TreeBackground2[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 30.0f);
 
 	for(i = 0; i < 4; i++)
-		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 60.0f);
+		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
 }
