@@ -58,8 +58,10 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
+static int beginningAnimiation;
 TextGlyphs *LevelName;
 
+Sprite* BlackOverlay;
 Platform *Plat;
 Wall *Wall1;
 
@@ -87,9 +89,10 @@ void InitializeLevel3(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	beginningAnimiation = TRUE;
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
@@ -100,6 +103,11 @@ void InitializeLevel3(void)
 	//		Backgrounds			   //
 	/////////////////////////////////
 	CreateSprite("TextureFiles/Level3Pan1.png", 1920, 1080, 1, 1, 1, 0, 0);
+	
+	//Black Overlay
+	Vec3Set(&TextTint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = TextTint;
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -172,7 +180,7 @@ void FreeLevel3(void)
 {
 	//Second Part of Level
 	if(levelComplete)
-		CurrentPlayer.CurrentLevel = GS_Level31;
+		CurrentPlayer.CurrentLevel = GS_Level3;
 	else if(CurrentPlayer.CurrentLevel < GS_Level3)
 		CurrentPlayer.CurrentLevel = GS_Level3;
 
@@ -201,20 +209,9 @@ void UnloadLevel3(void)
 /*************************************************************************/
 void EventLevel3(void)
 {
-	/*////////////////////////////////
+		/*////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
-
-	if(CurrentPlayer.Position.x > (960))
-	{
-		levelComplete = TRUE;
-		SetNextState(GS_Level31);
-	}
-
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
@@ -225,12 +222,58 @@ void EventLevel3(void)
 		RemoveDebugMode();
 		//OverlayGrid->Visible = FALSE;
 	}
+
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawLevel3);
+		InitializePause(&DrawLevel3);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
+		//SetNextState(GS_MainMenu);
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
+	}	
+
+	// Runs if the beginning animation is finished
+	if(!beginningAnimiation && !levelComplete)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		//UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 	}
+	else if(!levelComplete)
+	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = TRUE;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -800)
+				beginningAnimiation = FALSE;
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+	else
+	{
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+			SetNextState(GS_Level31);
+	}
+
+	if(CurrentPlayer.Position.x > (1920 / 2.0f) + CurrentPlayer.PlayerCollider.width)
+		levelComplete = TRUE;
+
 }

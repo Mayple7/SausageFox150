@@ -50,6 +50,10 @@
 #pragma comment (lib, "Alpha_Engine.lib")
 
 // ---------------------------------------------------------------------------
+// defines
+#define PANELSIZE 1920.0f
+
+// ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
@@ -114,7 +118,7 @@ void InitializeLevel31(void)
 	//Create Upper Deck Overlays
 	for(i = 0; i < 3; i++)
 	{
-		SecondOverlay[i] = (Sprite *)CreateSprite("TextureFiles/Level3Pan2Overlay2.png", 1920, 1080, 400, 1, 1, (1920 * i), 0);
+		SecondOverlay[i] = (Sprite *)CreateSprite("TextureFiles/Level3Pan2Overlay2.png", 1920, 1080, 400, 1, 1, (1920.0f * i), 0);
 	}
 
 	//Black Overlay
@@ -147,8 +151,6 @@ void InitializeLevel31(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Bounding Walls
-	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
-	//Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, 0, 590);
 	Wall1->WallSprite->Visible = FALSE;
 
@@ -182,7 +184,7 @@ void UpdateLevel31(void)
 
 
 	//EasyEditPlatform(Plat, 10);
-	EasyEditWall(Wall1 ,10);
+	//EasyEditWall(Wall1 ,10);
 
 
 	// This should be the last line in this function
@@ -211,8 +213,8 @@ void DrawLevel31(void)
 /*************************************************************************/
 void FreeLevel31(void)
 {
-	if(levelComplete && CurrentPlayer.CurrentLevel < GS_YeahGuy)
-		CurrentPlayer.CurrentLevel = GS_YeahGuy;
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_ArmGuy)
+		CurrentPlayer.CurrentLevel = GS_ArmGuy;
 	else if(CurrentPlayer.CurrentLevel < GS_Level3)
 		CurrentPlayer.CurrentLevel = GS_Level3;
 	SavePlayer(&CurrentPlayer);
@@ -240,8 +242,30 @@ void UnloadLevel31(void)
 /*************************************************************************/
 void EventLevel31(void)
 {
+	/*////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	////////////////////////////////*/
+	if(FoxInput_KeyTriggered('U'))
+	{
+		SetDebugMode();
+		//OverlayGrid->Visible = TRUE;
+	}
+	if(FoxInput_KeyTriggered('I'))
+	{
+		RemoveDebugMode();
+		//OverlayGrid->Visible = FALSE;
+	}
 
-		// Runs if the beginning animation is finished
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
+	{
+		InitializePause(&DrawLevel31);
+		//TogglePauseSound(&BackgroundSnd);
+		//SetNextState(GS_MainMenu);
+		UpdatePause();
+		//TogglePauseSound(&BackgroundSnd);
+	}	
+
+	// Runs if the beginning animation is finished
 	if(!beginningAnimiation && !levelComplete)
 	{
 		// Check for any collision and handle the results
@@ -283,34 +307,56 @@ void EventLevel31(void)
 	}
 
 
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
 
-	if(FoxInput_KeyTriggered('U'))
+	/*////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	////////////////////////////////*/
+
+	//Setting Up for when I add spawners
+	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE / 2))
 	{
-		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
+		//Only trap the player in if there are enemies spawned
+		//if(EnemyPanelNumber[0] > 0 && GetCameraMovedState() && !FirstSpawner->objID)
+			//SetCameraLockState(TRUE);
+
+		//Set the camera to the next panel
+		SetCameraPan(0.0f, PANELSIZE);
 	}
-	if(FoxInput_KeyTriggered('I'))
+	//Panel2
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)))
 	{
-		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
+		//Only trap the player in if there are enemies spawned
+		//if(EnemyPanelNumber[1] > 0 && GetCameraMovedState() && !SecondSpawnerRight->objID)
+			//SetCameraLockState(TRUE);
+
+		//Set the camera to the next panel
+		SetCameraPan(PANELSIZE, PANELSIZE);
+	}
+	//Panel3
+	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)))
+	{
+		//Only trap the player in if there are enemies spawned (Enemies start spawned for this one, no need to check)
+		//if(EnemyPanelNumber[2] > 0 && GetCameraMovedState())
+			//SetCameraLockState(TRUE);
+
+		//Set the camera to the next panel
+		SetCameraPan((PANELSIZE * 2), PANELSIZE);
+	}
+	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 + CurrentPlayer.PlayerCollider.width)
+	{
+			levelComplete = TRUE;
 	}
 
-	if(FoxInput_KeyTriggered(VK_ESCAPE))
-	{
-		InitializePause(&DrawLevel31);
-		//TogglePauseSound(&BackgroundSnd);
-		//SetNextState(GS_MainMenu);
-		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
-	}
 
-	//Logic for upper level overlays
+
+	/*////////////////////////////////
+	//       EVERYTHING ELSE        //
+	////////////////////////////////*/
+
+	//Logic for upper deck overlays
 	if(CurrentPlayer.Position.y > 105)
 	{
+		//Player is on top deck so don't show overlay
 		int i;
 		for(i = 0; i < 3; i++)
 		{
@@ -322,6 +368,7 @@ void EventLevel31(void)
 		//Don't run loop if Alpha is already 1.0f
 		if(SecondOverlay[0]->Alpha == 0.0f)
 		{
+			//Player is on bottom deck so show overlays
 			int i;
 			for(i = 0; i < 3; i++)
 			{
@@ -330,6 +377,5 @@ void EventLevel31(void)
 		}
 	}
 
-	SetCamera(&CurrentPlayer.Position, 250);
 
 }
