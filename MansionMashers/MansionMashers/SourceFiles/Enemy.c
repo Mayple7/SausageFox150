@@ -1078,7 +1078,7 @@ void EnemyAnimationBasicRanged(Enemy *Object)
 /*************************************************************************/
 void EnemyAnimation(Enemy *Object)
 {
-	float LegDistance = (2.3f / (((Object->CurrentEnemyStats.MoveSpeed * (1 / 60.0f)) * 0.075f + 0.5f)) );
+	float LegDistance = Object->CurrentEnemyStats.MoveSpeed * (1 / 60.0f) + (2.3f / (((Object->CurrentEnemyStats.MoveSpeed * (1 / 60.0f)) * 0.075f + 0.5f)) ) - Object->Speed;
 	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
