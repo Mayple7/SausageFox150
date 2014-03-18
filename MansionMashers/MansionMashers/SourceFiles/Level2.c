@@ -36,6 +36,8 @@
 // defines
 #define PANELSIZE 1920.0f
 
+#define BACKGROUND_LENGTH 4
+
 // ---------------------------------------------------------------------------
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
@@ -72,9 +74,9 @@ static int PlayerIsAlive;
 Sprite* BlackOverlay;
 
 // Tree Background
-Sprite* TreeBackground1[4];
-Sprite* TreeBackground2[4];
-Sprite* TreeBackground3[4];
+Sprite* TreeBackground1[BACKGROUND_LENGTH];
+Sprite* TreeBackground2[BACKGROUND_LENGTH];
+Sprite* TreeBackground3[BACKGROUND_LENGTH];
 static void TreeBackgroundUpdate(void);
 
 /*************************************************************************/
@@ -137,13 +139,13 @@ void InitializeLevel2(void)
 	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 5, 1, 1, 1920 * 3, 0);
 	CreateSprite("TextureFiles/OutsideMan3Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 3, 0);
 
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground1.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
 
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground2[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground2.png", 1920, 1080, 1, 1, 1, 1920.0f * i, 0);
 
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
 
 	//Black fade part
@@ -439,9 +441,9 @@ void TreeBackgroundUpdate(void)
 {
 	int i;
 
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground2[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 30.0f);
 
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
 }
