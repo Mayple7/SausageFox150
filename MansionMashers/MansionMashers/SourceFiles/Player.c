@@ -910,7 +910,7 @@ void DetectPlayerCollision(void)
 	The player to animate
 */
 /*************************************************************************/
-/*
+
 void Animation(Player *Object)
 {
 	float sinOfLegValue = (float)sin(Object->LegSinValue);
@@ -1163,12 +1163,12 @@ void Animation(Player *Object)
 	//printf("Arm Position: %f\n", Object->PlayerSpriteParts.ArmLower->Position.x - Object->Position.x);
 
 	//*************************************************************************************************
-}*/
+}
 
 /////////////////////////////////////////////////////
 //                    EDITED ANIMATION
 /////////////////////////////////////////////////////
-
+/*
 void Animation(Player *Object)
 {
 	float Dt1    = GetDeltaTime() * FRAMERATE;                            //Sort of ambiguous, I know, but just an easy multiplier for fixing movement
@@ -1419,7 +1419,7 @@ void Animation(Player *Object)
 	Object->PlayerWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
 
 	//*************************************************************************************************
-}
+}*/
 
 /*************************************************************************/
 /*!
