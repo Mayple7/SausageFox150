@@ -110,6 +110,9 @@ void InitializeLevel2(void)
 	ResetCamera();
 	ResetEnemyPanelNumber();
 
+	//Set the camera so it currently isn't gated
+	ResetGatedCamera();
+
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
@@ -344,8 +347,6 @@ void UnloadLevel2(void)
 /*************************************************************************/
 void EventLevel2(void)
 {
-	int i;
-
 	/*////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
@@ -390,16 +391,7 @@ void EventLevel2(void)
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
-	for(i = 0; i < COLLIDEAMOUNT; i++)
-	{
-		//Update the created enemies
-		if (enemyList[i].objID == -1)
-			break;
-		if (enemyList[i].objID == 0)
-			continue;
-
-		UpdateEnemy(&enemyList[i]);
-	}
+	UpdateAllEnemies();
 
 	UpdateFloatingText();
 	UpdateAllProjectiles();

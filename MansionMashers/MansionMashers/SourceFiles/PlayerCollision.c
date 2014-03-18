@@ -225,7 +225,7 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 	char num[10];
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
-	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
+	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
 	
 	// Calculate damage
 	if(Cheats)
@@ -255,7 +255,7 @@ void PlayerCollideEnemyProjectile(Player* CurrentPlayer, Projectile *CurrentProj
 	char num[10];
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
-	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
+	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
 	
 	// Calculate damage
 	if(Cheats)
