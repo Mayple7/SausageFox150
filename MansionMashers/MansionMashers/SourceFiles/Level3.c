@@ -57,7 +57,7 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
+static int levelComplete;
 static int beginningAnimiation;
 TextGlyphs *LevelName;
 
@@ -90,6 +90,7 @@ void InitializeLevel3(void)
 	ResetObjectList();
 	ResetCamera();
 	beginningAnimiation = TRUE;
+	levelComplete = FALSE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -178,12 +179,6 @@ void DrawLevel3(void)
 /*************************************************************************/
 void FreeLevel3(void)
 {
-	//Second Part of Level
-	if(levelComplete)
-		CurrentPlayer.CurrentLevel = GS_Level3;
-	else if(CurrentPlayer.CurrentLevel < GS_Level3)
-		CurrentPlayer.CurrentLevel = GS_Level3;
-
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }

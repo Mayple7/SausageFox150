@@ -33,7 +33,6 @@ void CreateDeathConfirmObjects(int *newID)
 	Vec3Set(&TextTint, 0, 0, 0);
 	DeathConfirm = (Sprite *) CreateSprite("TextureFiles/DeathConfirm.png", 639, 204, 4020, 1, 1, -1920, 100);
 
-	(*newID)++;
 	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", -1920, -130, 300, 112.5f, (*newID)++);
 	MainMapButton->ButtonSprite->ZIndex = 4021;
 

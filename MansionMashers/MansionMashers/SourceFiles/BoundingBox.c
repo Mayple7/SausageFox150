@@ -7,10 +7,13 @@
 #include "../HeaderFiles/GameStateList.h"
 
 //Bounding Boxes
-Sprite *BoundTop;
-Sprite *BoundBottom;
-Sprite *BoundLeft;
-Sprite *BoundRight;
+static Sprite *BoundTop;
+static Sprite *BoundBottom;
+static Sprite *BoundLeft;
+static Sprite *BoundRight;
+
+static Wall *BBWallLeft;
+static Wall *BBWallRight;
 
 void CreateBoundingBoxes(void)
 {
@@ -40,4 +43,25 @@ void BoundingBoxUpdate(void)
 	BoundBottom->Position.x = camX / GetLoadRatio();
 	BoundRight->Position.x = camX / GetLoadRatio() + 1920;
 	BoundLeft->Position.x = camX / GetLoadRatio() - 1920;
+}
+
+void CreateBlockerBoxes(int *newID)
+{
+	// Bounding Box Walls
+	BBWallLeft = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, (*newID)++, 0, 0);
+	BBWallLeft->WallSprite->Visible = FALSE;
+	BBWallLeft->enemyNotCollidable = TRUE;
+	BBWallRight = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, (*newID)++, 0, 0);
+	BBWallRight->WallSprite->Visible = FALSE;
+	BBWallRight->enemyNotCollidable = TRUE;
+}
+
+void UpdateBlockerBoxes(float panelsize)
+{
+	BBWallLeft->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
+	BBWallLeft->Position.x = GetCameraXPosition() - (panelsize / 2);
+	UpdateCollisionPosition(&BBWallLeft->WallCollider, &BBWallLeft->Position);
+	BBWallRight->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
+	BBWallRight->Position.x = GetCameraXPosition() + (panelsize / 2);
+	UpdateCollisionPosition(&BBWallRight->WallCollider, &BBWallRight->Position);
 }

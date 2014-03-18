@@ -65,12 +65,10 @@ FoxSound *GongSnd;
 
 Wall *WallTemp;
 
-Wall *BBWallLeft;
-Wall *BBWallRight;
-
 static int tutorialDone; // Keeps track of how much of the tutorial has been completed (Not a bool)
 static int newID;
 static int levelComplete;
+static int numPanels;
 
 void LoadTutorial(void)
 {
@@ -83,6 +81,7 @@ void InitializeTutorial(void)
 
 	levelComplete = FALSE;
 	tutorialDone = 0;
+	numPanels = 3;			//Kaden Update this if you add more panels
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -117,12 +116,8 @@ void InitializeTutorial(void)
 	WallTemp->WallSprite->Visible = FALSE;
 
 	// Bounding Box Walls
-	BBWallLeft = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, newID++, 0, 0);
-	BBWallLeft->WallSprite->Visible = FALSE;
-	BBWallLeft->enemyNotCollidable = TRUE;
-	BBWallRight = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, newID++, 0, 0);
-	BBWallRight->WallSprite->Visible = FALSE;
-	BBWallRight->enemyNotCollidable = TRUE;
+	CreateBlockerBoxes(&newID);
+
 
 	// Seclusion overlay for the player to focus on things in the tutorial
 	Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 600, 800, 1, 1, 0, 240); //Top
@@ -603,39 +598,9 @@ void EventTutorial(void)
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
 	////////////////////////////////*/
-	SetCameraLockState(FALSE);
-	//Panel1
-	if(CurrentPlayer.Position.x > -(PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE / 2))
-	{
-		if(EnemyPanelNumber[0] > 0 && GetCameraMovedState())
-			SetCameraLockState(TRUE);
-		SetCameraPan(0.0f, PANELSIZE);
-	}
-	//Panel2
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) && CurrentPlayer.Position.x < (PANELSIZE + (PANELSIZE / 2)))
-	{
-		if(EnemyPanelNumber[1] > 0 && GetCameraMovedState())
-			SetCameraLockState(TRUE);
-		SetCameraPan(PANELSIZE, PANELSIZE);
-	}
-	//Panel3
-	else if(CurrentPlayer.Position.x > (PANELSIZE + (PANELSIZE / 2)) && CurrentPlayer.Position.x < ((PANELSIZE * 2) + (PANELSIZE / 2)))
-	{
-		if(EnemyPanelNumber[2] > 0 && GetCameraMovedState())
-			SetCameraLockState(TRUE);
-		SetCameraPan((PANELSIZE * 2), PANELSIZE);
-	}
-	else if(CurrentPlayer.Position.x > (PANELSIZE / 2) * 5 + CurrentPlayer.PlayerCollider.width)
-	{
-			levelComplete = TRUE;
-	}
 
-	BBWallLeft->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
-	BBWallLeft->Position.x = GetCameraXPosition() - (PANELSIZE / 2);
-	UpdateCollisionPosition(&BBWallLeft->WallCollider, &BBWallLeft->Position);
-	BBWallRight->Position.y = -1080.0f + 1080.0f * GetCameraLockState();
-	BBWallRight->Position.x = GetCameraXPosition() + (PANELSIZE / 2);
-	UpdateCollisionPosition(&BBWallRight->WallCollider, &BBWallRight->Position);
+	SetUpCameraPanAndLockNoSpawner(&levelComplete, PANELSIZE, numPanels);
+	UpdateBlockerBoxes(PANELSIZE);
 
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //

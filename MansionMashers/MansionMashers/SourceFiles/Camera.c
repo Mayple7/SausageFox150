@@ -127,3 +127,50 @@ int GetCameraMovedState(void)
 {
 	return CameraMoved;
 }
+
+void SetUpCameraPanAndLock(int* levelComplete, float panelsize, EnemySpawner** Spawners, int numPanels)
+{
+	int i;
+	SetCameraLockState(FALSE);
+
+	for(i = 0; i < numPanels; i++)
+	{
+		if(CurrentPlayer.Position.x > (-(panelsize / 2) + (panelsize * i)) && CurrentPlayer.Position.x < ((panelsize / 2) + (panelsize * i)))
+		{
+			//Spawners will be set left to right always checking right one
+			if(EnemyPanelNumber[i] > 0 && GetCameraMovedState() && !Spawners[i + 1]->objID)
+				SetCameraLockState(TRUE);
+
+			//Set the camera to the next panel
+			SetCameraPan((panelsize * i), panelsize);
+		}
+	}
+
+		//Checking for level completed
+	if(CurrentPlayer.Position.x > (panelsize / 2) * (2 * numPanels - 1) + CurrentPlayer.PlayerCollider.width)
+		*levelComplete = TRUE;
+}
+
+void SetUpCameraPanAndLockNoSpawner(int* levelComplete, float panelsize, int numPanels)
+{
+	int i;
+	SetCameraLockState(FALSE);
+
+	for(i = 0; i < numPanels; i++)
+	{
+		if(CurrentPlayer.Position.x > (-(panelsize / 2) + (panelsize * i)) && CurrentPlayer.Position.x < ((panelsize / 2) + (panelsize * i)))
+		{
+			//No spawners but their are enemies (tutorial)
+			if(EnemyPanelNumber[i] > 0 && GetCameraMovedState())
+				SetCameraLockState(TRUE);
+
+			//Set the camera to the next panel
+			SetCameraPan((panelsize * i), panelsize);
+		}
+	}
+
+		//Checking for level completed
+	if(CurrentPlayer.Position.x > (panelsize / 2) * (2 * numPanels - 1) + CurrentPlayer.PlayerCollider.width)
+		*levelComplete = TRUE;
+
+}
