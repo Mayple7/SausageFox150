@@ -910,12 +910,12 @@ void DetectPlayerCollision(void)
 	The player to animate
 */
 /*************************************************************************/
-/*
+
 void Animation(Player *Object)
 {
 	float sinOfLegValue = (float)sin(Object->LegSinValue);
 	float sinOfTwoLegValue = (float)sin(Object->LegSinValue * 2);
-	float LegDistance = ((Object->CurrentPlayerStats.MoveSpeed * GetDeltaTime()) + (2.3f / (((Object->Speed) * 0.15f + 0.15f)) ))-(Object->Speed);
+	float LegDistance = (2.3f / (((Object->CurrentPlayerStats.MoveSpeed * (1 / 60.0f)) * 0.15f + 0.15f)) );
 	float LegUpperDirection = sinOfLegValue / (LegDistance);
 	float LegLowerDirection;
 	float LegUpperDirection2 = sinOfLegValue / (LegDistance);
@@ -933,6 +933,10 @@ void Animation(Player *Object)
 	Sprite *Bdy = Object->PlayerSpriteParts.Body;
 	Sprite *Weap = Object->PlayerSpriteParts.Weapon;
 	Sprite *Tail = Object->PlayerSpriteParts.Tail;
+
+	/*printf("YO YO YO\n%f\n", testFrameTime());
+
+	printf("%f\n", testFrameTime());*/
 
 	Object->LegSinValue += 10.0f * GetDeltaTime() * (Object->Speed * 0.1f); 
 
@@ -1159,12 +1163,12 @@ void Animation(Player *Object)
 	//printf("Arm Position: %f\n", Object->PlayerSpriteParts.ArmLower->Position.x - Object->Position.x);
 
 	//*************************************************************************************************
-}*/
+}
 
 /////////////////////////////////////////////////////
 //                    EDITED ANIMATION
 /////////////////////////////////////////////////////
-
+/*
 void Animation(Player *Object)
 {
 	float Dt1    = GetDeltaTime() * FRAMERATE;                            //Sort of ambiguous, I know, but just an easy multiplier for fixing movement
@@ -1415,7 +1419,7 @@ void Animation(Player *Object)
 	Object->PlayerWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation + FOX_PI / 2) * Object->PlayerWeapon->WeaponLength);
 
 	//*************************************************************************************************
-}
+}*/
 
 /*************************************************************************/
 /*!
