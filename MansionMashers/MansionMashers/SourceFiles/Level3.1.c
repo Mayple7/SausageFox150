@@ -89,7 +89,7 @@ void InitializeLevel31(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	//LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center);
+	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
 	/////////////////////////////////
@@ -104,14 +104,18 @@ void InitializeLevel31(void)
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
-	//Panel1
 	//Step 1
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 50.0f, 100.0f, newID++, -655, -210);
 	Plat->PlatformSprite->Visible = FALSE;
-
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1920.0f, 100.0f, newID++, 0, -20);
+	//Step 2
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 50.0f, 100.0f, newID++, -655 + 1920, -210);
 	Plat->PlatformSprite->Visible = FALSE;
 
+	//Top Walkway
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1920.0f, 100.0f, newID++, 0, -20);
+	Plat->PlatformSprite->Visible = FALSE;
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1920.0f, 100.0f, newID++, 1920, -20);
+	Plat->PlatformSprite->Visible = FALSE;
 	//Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, -670, 85);
 	//Plat->PlatformSprite->Visible = FALSE;
 
@@ -124,10 +128,16 @@ void InitializeLevel31(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, 0, 590);
 	Wall1->WallSprite->Visible = FALSE;
 
-
+	//Top Cicle Blockers
+	//Panel 1
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 100.0f, newID++, -880, -20);
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 120.0f, 100.0f, newID++, -495, -20);
+	Wall1->WallSprite->Visible = FALSE;
+	//Panel 2
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 100.0f, newID++, 1060, -20);
+	Wall1->WallSprite->Visible = FALSE;
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 120.0f, 100.0f, newID++, -495 + 1920, -20);
 	Wall1->WallSprite->Visible = FALSE;
 }
 
@@ -215,6 +225,15 @@ void EventLevel31(void)
 	{
 		RemoveDebugMode();
 		//OverlayGrid->Visible = FALSE;
+	}
+
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
+	{
+		//InitializePause(&DrawLevel3);
+		//TogglePauseSound(&BackgroundSnd);
+		SetNextState(GS_MainMenu);
+		//UpdatePause();
+		//TogglePauseSound(&BackgroundSnd);
 	}
 
 	if(CurrentPlayer.Position.y > 105)
