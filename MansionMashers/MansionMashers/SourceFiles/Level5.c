@@ -41,6 +41,12 @@ static int newID;					// ID number
 static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 
+// Tree Background
+Sprite* TreeBackground1[4];
+Sprite* TreeBackground2[4];
+Sprite* TreeBackground3[4];
+static void TreeBackgroundUpdate(void);
+
 /*************************************************************************/
 /*!
 	\brief
@@ -62,7 +68,7 @@ void LoadLevel5(void)
 void InitializeLevel5(void)
 {
 	Vec3 TextTint;
-
+	int i;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -74,6 +80,23 @@ void InitializeLevel5(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 5", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
+
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
+	//Panel1
+	CreateSprite("TextureFiles/Level5Pan1.png", 1920, 1080, 5, 1, 1, 0, 0);
+
+	//Tree Backgrounds
+	for(i = 0; i < 4; i++)
+		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground1.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground2.png", 1920, 1080, 1, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
+
 }
 
 /*************************************************************************/
@@ -156,4 +179,18 @@ void EventLevel(void)
 		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
+
+	TreeBackgroundUpdate();
+}
+
+
+void TreeBackgroundUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 30.0f);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
 }
