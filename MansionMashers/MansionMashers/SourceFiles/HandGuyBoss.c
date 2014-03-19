@@ -79,13 +79,13 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
-	CurrentBoss->CurrentState = Jab;
+	CurrentBoss->CurrentState = Move;
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = B;
 
 	// Armguy colliders
-	CurrentBoss->ShoutRadius = 400.0f;
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 400, (*objID)++);
+	CurrentBoss->ShoutRadius = 600.0f;
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 320, (*objID)++);
 	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 200, (*objID)++); 
 
 	// Sets the initial position of all colliders
@@ -94,7 +94,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 
 	// Physics stuff
 	InitializeRigidBody(&CurrentBoss->HandGuyRigidBody, FALSE, 150, 300);
-	CurrentBoss->HandGuyRigidBody.Mass = 5;
+	CurrentBoss->HandGuyRigidBody.Mass = 7;
 	CurrentBoss->dropDown = FALSE;
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
@@ -118,6 +118,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 {
 	Vec2 velocityTime;
+	int movementPicker;
 
 	switch(CurrentBoss->CurrentState)
 	{
@@ -127,22 +128,32 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		case Start:
 			//printf("JAB TIME START\n");
 			CurrentBoss->dropDown = FALSE;
-			
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+
 			// Move into damage range
 			if(CurrentBoss->Position.x > CurrentPlayer.Position.x + CurrentBoss->JabAttack.width)
 				CurrentBoss->Position.x -= 1000 * GetDeltaTime();
 			else if(CurrentBoss->Position.x < CurrentPlayer.Position.x - CurrentBoss->JabAttack.width)
 				CurrentBoss->Position.x += 1000 * GetDeltaTime();
-			else
-				CurrentBoss->InnerState = Attack;
-
+			// Don't move to attack on the very first frame
+			else if(CurrentBoss->cooldownTimer > GetDeltaTime() * 2)
+			{
+				// Change states when the boss lands on something ground or platform
+				if(CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4 || CurrentBoss->HandGuyRigidBody.onGround)
+				{
+					CurrentBoss->InnerState = Attack;
+					CurrentBoss->cooldownTimer = 0.0f;
+					CurrentBoss->InnerState = Attack;
+				}
+			}
+			
 			// Jump up to the platform if needed
-			if(CurrentPlayer.Position.y > GROUNDLEVEL && CurrentPlayer.PlayerRigidBody.onGround && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4)
+			if((CurrentPlayer.PlayerRigidBody.Velocity.y > 0 || CurrentPlayer.Position.y > 0) && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4)
 			{
 				// Set y velocity for jumping
 				Vec2 velocity;
 				CurrentBoss->Position.y += 3;
-				Vec2Set(&velocity, 0.0f, 3250.0f);
+				Vec2Set(&velocity, 0.0f, 1200.0f);
 				ApplyVelocity(&CurrentBoss->HandGuyRigidBody, &velocity);
 			}
 			// Drop down if needed
@@ -164,11 +175,22 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			
 			// Once all damage is dealt move to a new location
 			if(CurrentBoss->cooldownTimer > GetDeltaTime() * CurrentBoss->JabDamage)
+			{
 				CurrentBoss->InnerState = End;
+				CurrentBoss->cooldownTimer = 0.0f;
+			}
 			break;
 		case End:
 			//printf("JAB TIME END\n");
 			CurrentBoss->JabSprite->Visible = FALSE;
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+
+			if(CurrentBoss->cooldownTimer > 1.0f)
+			{
+				CurrentBoss->CurrentState = Shout;
+				CurrentBoss->InnerState = Start;
+				CurrentBoss->cooldownTimer = 0.0f;
+			}
 			break;
 		}
 		break;
@@ -184,11 +206,25 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			break;
 		case Attack:
 			//printf("SHOUT TIME ATTACK\n");
-			
+			if(RectCircleCollision(&CurrentBoss->Position, CurrentBoss->ShoutRadius, &CurrentPlayer.PlayerCollider))
+			{
+				PlayerDamageResult(CurrentBoss->ShoutDamage);
+				CurrentPlayer.CurrentPlayerStats.MoveSpeed /= 3.0f;
+				CurrentPlayer.CurrentPlayerStats.HasteTimer = 2;
+				CurrentBoss->CurrentState = Jab;
+				CurrentBoss->InnerState = Start;
+				CurrentBoss->cooldownTimer = 0.0f;
+			}
+			else
+			{
+				CurrentBoss->InnerState = End;
+				CurrentBoss->cooldownTimer = 0.0f;
+			}
 			break;
 		case End:
 			//printf("SHOUT TIME END\n");
 			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
+
 			break;
 		}
 		break;
@@ -212,12 +248,117 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		{
 		case Start:
 			//printf("MOVE TIME START\n");
+			movementPicker = rand() % 100;
+			printf("%i\n", movementPicker);
+			switch(CurrentBoss->PositionState)
+			{
+			case A:
+				// Choose a new state based on the random number
+				if(movementPicker > 80)
+					CurrentBoss->PositionState = C;		// 20% chance
+				else if(movementPicker > 40)
+					CurrentBoss->PositionState = B;		// 40% chance
+				else
+					CurrentBoss->PositionState = D;		// 40% chance;
+				break;
+			case B:
+				// Choose a new state based on the random number
+				if(movementPicker > 80)
+					CurrentBoss->PositionState = C;		// 20% chance
+				else if(movementPicker > 40)
+					CurrentBoss->PositionState = A;		// 40% chance
+				else
+					CurrentBoss->PositionState = D;		// 40% chance
+				break;
+			case C:
+				// Choose a new state based on the random number
+				if(movementPicker > 90)
+					CurrentBoss->PositionState = A;		// 10% chance
+				else if(movementPicker > 80)
+					CurrentBoss->PositionState = B;		// 10% chance
+				else
+					CurrentBoss->PositionState = D;		// 80% chance
+				break;
+			case D:
+				// Choose a new state based on the random number
+				if(movementPicker > 90)
+					CurrentBoss->PositionState = C;		// 10% chance
+				else if(movementPicker > 45)
+					CurrentBoss->PositionState = B;		// 45% chance
+				else
+					CurrentBoss->PositionState = A;		// 45% chance
+				break;
+			}
+
+			// Do the movement next
+			CurrentBoss->InnerState = Attack;
 			break;
 		case Attack:
 			//printf("MOVE TIME START\n");
+			switch(CurrentBoss->PositionState)
+			{
+			// Left side
+			case A:
+				CurrentBoss->dropDown = TRUE;
+
+				if(CurrentBoss->Position.x > -775.0f)
+					CurrentBoss->Position.x -= 600 * GetDeltaTime();
+				else
+					CurrentBoss->InnerState = End;
+				break;
+			// Right side
+			case B:
+				CurrentBoss->dropDown = TRUE;
+
+				if(CurrentBoss->Position.x < 775.0f)
+					CurrentBoss->Position.x += 600 * GetDeltaTime();
+				else
+					CurrentBoss->InnerState = End;
+				break;
+			// Under platform
+			case C:
+				CurrentBoss->dropDown = TRUE;
+
+				// Move to the middle
+				if(CurrentBoss->Position.x < -20.0f)
+					CurrentBoss->Position.x += 600 * GetDeltaTime();
+				else if(CurrentBoss->Position.x > 20.0f)
+					CurrentBoss->Position.x -= 600 * GetDeltaTime();
+				else
+					CurrentBoss->InnerState = End;
+				break;
+			// On platform
+			case D:
+				CurrentBoss->dropDown = FALSE;
+
+				// Move to the middle
+				if(CurrentBoss->Position.x < -20.0f)
+					CurrentBoss->Position.x += 600 * GetDeltaTime();
+				else if(CurrentBoss->Position.x > 20.0f)
+					CurrentBoss->Position.x -= 600 * GetDeltaTime();
+				else if(CurrentBoss->Position.y > 0 && CurrentBoss->HandGuyRigidBody.onGround)
+					CurrentBoss->InnerState = End;
+
+				// Jump up to the platform if needed
+				if(CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4 && (CurrentBoss->Position.x < 200 && CurrentBoss->Position.x > -200))
+				{
+					// Set y velocity for jumping
+					Vec2 velocity;
+					CurrentBoss->Position.y += 3;
+					Vec2Set(&velocity, 0.0f, 1200.0f);
+					ApplyVelocity(&CurrentBoss->HandGuyRigidBody, &velocity);
+				}
+				
+				break;
+			}
+			CurrentBoss->cooldownTimer = 0.0f;
 			break;
 		case End:
 			//printf("MOVE TIME START\n");
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+
+			if(CurrentBoss->cooldownTimer > 2.0f)
+				CurrentBoss->InnerState = Start;
 			break;
 		}
 		break;
@@ -275,8 +416,8 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		break;
 	}
 
-	//Check platform collision
-
+	// Set acceleration to zero
+	ZeroAcceleration(&CurrentBoss->HandGuyRigidBody);
 
 	//Brings the player back to the surface if something bad happens
 	if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 < GROUNDLEVEL)
