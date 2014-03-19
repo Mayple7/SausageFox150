@@ -27,6 +27,7 @@
 // globals
 
 static int textinProgress; //bool
+static int texttoDisappear; //bool
 
 /*************************************************************************/
 /*!
@@ -523,6 +524,8 @@ void TextProgressiveInit(TextGlyphs* FirstLetter)
 		}
 		nextLetter = nextLetter->NextLetter;
 	}
+	textinProgress = TRUE;
+	texttoDisappear = FALSE;
 
 }
 
@@ -631,7 +634,7 @@ void TextProgressiveDisappear(TextGlyphs* FirstLetter, int fadeinSpeed)
 
 	while(nextLetter)
 	{
-		textinProgress = TRUE;
+		texttoDisappear = TRUE;
 		if(nextLetter->Glyph && nextLetter->Glyph->Alpha <= 0.0f)
 		{
 			nextLetter->Glyph->Alpha = 0.0f;
@@ -647,7 +650,7 @@ void TextProgressiveDisappear(TextGlyphs* FirstLetter, int fadeinSpeed)
 			nextLetter = nextLetter->NextLetter;
 		}
 	}
-	textinProgress = FALSE;
+	//texttoDisappear = FALSE;
 }
 
 /*************************************************************************/
@@ -687,4 +690,18 @@ void TextDisappearEnd(TextGlyphs* FirstLetter)
 int GetTextInProgress(void)
 {
 	return textinProgress;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	gets progress of text disappearing
+	
+	\return
+	Fake bool
+*/
+/*************************************************************************/
+int GetTextToDisappear(void)
+{
+	return texttoDisappear;
 }
