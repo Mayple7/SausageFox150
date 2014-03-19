@@ -49,9 +49,9 @@ static enum PositionState { A, B, C, D };
 /*************************************************************************/
 void LoadHandGuyBoss(void)
 {
-	LoadTexture("TextureFiles/TempArmGuy.png");
-	LoadTexture("TextureFiles/TempArmGuyArm.png");
-	LoadTexture("TextureFiles/TempBossSpin.png");
+	LoadTexture("TextureFiles/TempHandGuy.png");
+	LoadTexture("TextureFiles/TempHandGuyShout.png");
+	LoadTexture("TextureFiles/QuickJab.png");
 }
 
 /*************************************************************************/
@@ -69,10 +69,12 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 
 	//Initialize boss struct
 	Vec2Set(&CurrentBoss->Position, 700, -200);
-	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempArmGuy.png", 319, 612, 10, 1, 1, 700, -200);
+	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempHandGuy.png", 150, 300, 10, 1, 1, 700, -200);
 	CurrentBoss->BodySprite->FlipX = TRUE;
-	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/TempArmGuyArm.png", 237, 110, 11, 1, 1, 580, -120);
+	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/QuickJab.png", 200, 200, 11, 4, 4, 580, -120);
 	CurrentBoss->JabSprite->FlipX = TRUE;
+	CurrentBoss->JabSprite->AnimationSpeed = 3;
+	//CurrentBoss->JabSprite->Visible = FALSE;
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
@@ -82,12 +84,14 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 
 	// Armguy colliders
 	CurrentBoss->ShoutRadius = 400.0f;
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 530, (*objID)++);
-	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 100, (*objID)++); 
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 400, (*objID)++);
+	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 200, (*objID)++); 
 
 	// Sets the initial position of all colliders
-	CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - 200;
-	CurrentBoss->JabAttack.Position.y = -40;
+	CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - CurrentBoss->JabAttack.width / 2;
+	CurrentBoss->JabAttack.Position.y = CurrentBoss->Position.y;
+
+	InitializeRigidBody(&CurrentBoss->HandGuyRigidBody, FALSE, 150, 300);
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->cooldownTimer = 0;
@@ -109,6 +113,8 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 /*************************************************************************/
 void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 {
+	Vec2 velocityTime;
+
 	switch(CurrentBoss->CurrentState)
 	{
 	case Jab:
@@ -132,15 +138,15 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
-			//printf("SMASH TIME START\n");
+			//printf("SHOUT TIME START\n");
 
 			break;
 		case Attack:
-			//printf("SMASH TIME ATTACK\n");
+			//printf("SHOUT TIME ATTACK\n");
 			
 			break;
 		case End:
-			//printf("SMASH TIME END\n");
+			//printf("SHOUT TIME END\n");
 
 			break;
 		}
@@ -149,13 +155,13 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
-			//printf("SPIN TIME START\n");
+			//printf("QUESTION TIME START\n");
 			break;
 		case Attack:
-			//printf("SPIN TIME START\n");
+			//printf("QUESTION TIME START\n");
 			break;
 		case End:
-			//printf("SPIN TIME START\n");
+			//printf("QUESTION TIME START\n");
 			break;
 		}
 		break;
@@ -163,13 +169,13 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
-			//printf("SPIN TIME START\n");
+			//printf("MOVE TIME START\n");
 			break;
 		case Attack:
-			//printf("SPIN TIME START\n");
+			//printf("MOVE TIME START\n");
 			break;
 		case End:
-			//printf("SPIN TIME START\n");
+			//printf("MOVE TIME START\n");
 			break;
 		}
 		break;
@@ -226,6 +232,57 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		}
 		break;
 	}
+
+	//Brings the player back to the surface if something bad happens
+	if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 < GROUNDLEVEL)
+	{
+		CurrentBoss->Position.y = GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4;
+	}
+	//Stop vertical velocity and acceleration when the player lands on the floor
+	if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL || CurrentBoss->HandGuyRigidBody.onGround)
+	{
+		Vec2Zero(&CurrentBoss->HandGuyRigidBody.Acceleration);
+		Vec2Zero(&CurrentBoss->HandGuyRigidBody.Velocity);
+		ZeroGravity(&CurrentBoss->HandGuyRigidBody);
+	}
+	//Set gravity if not on floor or on a platform
+	else
+	{
+		SetGravity(&CurrentBoss->HandGuyRigidBody, 0.0f, FOX_GRAVITY_Y);
+	}
+
+	//Update velocity and acceleration
+	UpdateVelocity(&CurrentBoss->HandGuyRigidBody);
+	Vec2Scale(&velocityTime, &CurrentBoss->HandGuyRigidBody.Velocity, GetDeltaTime());
+	
+	Vec2Add(&CurrentBoss->Position, &CurrentBoss->Position, &velocityTime);
+
+	//Updates the collision box
+	UpdateCollisionPosition(&CurrentBoss->BossCollider, &CurrentBoss->Position);
+	CurrentBoss->HandGuyRigidBody.onGround = FALSE;
+
+	CurrentBoss->BodySprite->Position = CurrentBoss->Position;
+	CurrentBoss->JabAttack.Position.y = CurrentBoss->Position.y;
+	CurrentBoss->JabSprite->Position.y = CurrentBoss->Position.y;
+
+	if(CurrentPlayer.Position.x > CurrentBoss->Position.x)
+	{
+		// Flip to face player
+		CurrentBoss->BodySprite->FlipX = FALSE;
+		CurrentBoss->JabSprite->Position.x = CurrentBoss->Position.x + CurrentBoss->JabAttack.width / 2;
+		CurrentBoss->JabSprite->FlipX = FALSE;
+		CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x + CurrentBoss->JabAttack.width / 2;
+		
+	}
+	else
+	{
+		// Flip to face player
+		CurrentBoss->BodySprite->FlipX = TRUE;
+		CurrentBoss->JabSprite->Position.x = CurrentBoss->Position.x - CurrentBoss->JabAttack.width / 2;
+		CurrentBoss->JabSprite->FlipX = TRUE;
+		CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - CurrentBoss->JabAttack.width / 2;
+	}
+
 
 	//Check if boss is dead
 	//Give ability to end the level
