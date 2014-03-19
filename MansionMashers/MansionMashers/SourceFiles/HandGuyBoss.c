@@ -79,7 +79,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
-	CurrentBoss->CurrentState = Move;
+	CurrentBoss->CurrentState = Question;
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = B;
 
@@ -118,6 +118,10 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 {
 	Vec2 velocityTime;
+	Projectile *CurrentProjectile;
+	int projectileID = 100;
+	static int numProjectiles;
+	float projectileAngle;
 	int movementPicker;
 
 	switch(CurrentBoss->CurrentState)
@@ -233,13 +237,52 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		{
 		case Start:
 			//printf("QUESTION TIME START\n");
-			
+			numProjectiles = 0;
+			projectileAngle = 0;
+			CurrentBoss->InnerState = Attack;
 			break;
 		case Attack:
 			//printf("QUESTION TIME START\n");
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+			if(CurrentBoss->cooldownTimer >= 0.75f)
+			{
+				if(CurrentPlayer.Position.x > CurrentBoss->Position.x)
+				{
+					projectileAngle = 0;
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle + (numProjectiles * 12 * FOX_PI / 180.0f));
+					FreeSprite(CurrentProjectile->ProjectileSprite);
+					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
+					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
+				}
+				else
+				{
+					projectileAngle = FOX_PI;
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle - (float)(numProjectiles * 12 * FOX_PI / 180.0f));
+					FreeSprite(CurrentProjectile->ProjectileSprite);
+					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
+					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
+				}
+
+				CurrentBoss->cooldownTimer = 0.0f;
+				++numProjectiles;
+			}
+
+			if(numProjectiles >= 5)
+			{
+				CurrentBoss->InnerState = End;
+				CurrentBoss->cooldownTimer = 0.0f;
+			}
 			break;
 		case End:
 			//printf("QUESTION TIME START\n");
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+
+			if(CurrentBoss->cooldownTimer >= 3)
+			{
+				CurrentBoss->CurrentState = Move;
+				CurrentBoss->InnerState = Start;
+			}
+
 			break;
 		}
 		break;
@@ -302,7 +345,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				CurrentBoss->dropDown = TRUE;
 
 				if(CurrentBoss->Position.x > -775.0f)
-					CurrentBoss->Position.x -= 600 * GetDeltaTime();
+					CurrentBoss->Position.x -= 750 * GetDeltaTime();
 				else
 					CurrentBoss->InnerState = End;
 				break;
@@ -311,7 +354,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				CurrentBoss->dropDown = TRUE;
 
 				if(CurrentBoss->Position.x < 775.0f)
-					CurrentBoss->Position.x += 600 * GetDeltaTime();
+					CurrentBoss->Position.x += 750 * GetDeltaTime();
 				else
 					CurrentBoss->InnerState = End;
 				break;
@@ -321,9 +364,9 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 
 				// Move to the middle
 				if(CurrentBoss->Position.x < -20.0f)
-					CurrentBoss->Position.x += 600 * GetDeltaTime();
+					CurrentBoss->Position.x += 750 * GetDeltaTime();
 				else if(CurrentBoss->Position.x > 20.0f)
-					CurrentBoss->Position.x -= 600 * GetDeltaTime();
+					CurrentBoss->Position.x -= 750 * GetDeltaTime();
 				else
 					CurrentBoss->InnerState = End;
 				break;
@@ -333,9 +376,9 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 
 				// Move to the middle
 				if(CurrentBoss->Position.x < -20.0f)
-					CurrentBoss->Position.x += 600 * GetDeltaTime();
+					CurrentBoss->Position.x += 750 * GetDeltaTime();
 				else if(CurrentBoss->Position.x > 20.0f)
-					CurrentBoss->Position.x -= 600 * GetDeltaTime();
+					CurrentBoss->Position.x -= 750 * GetDeltaTime();
 				else if(CurrentBoss->Position.y > 0 && CurrentBoss->HandGuyRigidBody.onGround)
 					CurrentBoss->InnerState = End;
 

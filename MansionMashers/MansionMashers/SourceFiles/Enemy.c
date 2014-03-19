@@ -26,6 +26,9 @@
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
 
+#define BALLISTA_DEVISOR 1.4f
+#define PANELSIZE 1920.0f
+
 // ---------------------------------------------------------------------------
 // globals
 static int LogicTimer = 0;
@@ -70,8 +73,6 @@ void LoadEnemy(int enemyType)
 	A pointer to the enemy object to be initialized
 */
 /*************************************************************************/
-#define BALLISTA_DEVISOR 1.4f
-
 Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos, int panelId)
 {
 	float width, height;
@@ -582,6 +583,11 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 		if (CurrentEnemy->EnemySpriteParts.Weapon->FlipX)
 			projectileSpeed *= -1;
 
+		//Don't shoot if we aren't in sight, that is just rude
+		if (CurrentEnemy->Position.x > GetCameraXPosition() + (PANELSIZE + CurrentEnemy->EnemySprite->Width / 2) / 2
+		 || CurrentEnemy->Position.x < GetCameraXPosition() - (PANELSIZE + CurrentEnemy->EnemySprite->Width / 2) / 2)
+			return;
+
 		//NASTY NASTY HACKKKK
 		smexyArrow = CreateProjectile("TextureFiles/BallistaArrow.png", 
 									  CurrentEnemy->EnemySpriteParts.Weapon->Width, CurrentEnemy->EnemySpriteParts.Weapon->Height, 
@@ -729,8 +735,13 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 			break;
 			
 		case AIIdle:
-			//printf("%f\n", Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position));
-			if (Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 500.0f)
+			if (CurrentEnemy->EnemyType == BasicRanged && Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 1600.0f
+				&& CurrentEnemy->Position.x < GetCameraXPosition() + (PANELSIZE + CurrentEnemy->EnemySprite->Width) / 2
+				&& CurrentEnemy->Position.x > GetCameraXPosition() - (PANELSIZE + CurrentEnemy->EnemySprite->Width) / 2)
+			{
+				CurrentEnemy->EnemyState = AIAggressive;
+			}
+			else if (CurrentEnemy->EnemyType != BasicRanged && Vec2Distance(&CurrentEnemy->Position, &CurrentPlayer.Position) < 500.0f)
 			{
 				CurrentEnemy->EnemyState = AIAggressive;
 			}
@@ -1207,11 +1218,11 @@ void EnemyAnimation(Enemy *Object)
 		if (Object->isAttacking)
 		{
 			Object->EnemySpriteParts.AttackRotation = RotateToAngle(Object->EnemySpriteParts.AttackRotation, 0, 0.2f);
-			Object->EnemySpriteParts.AttackRotationArm = RotateToAngle(Object->EnemySpriteParts.AttackRotationArm, (float)FOX_PI, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
-			Object->EnemySpriteParts.AttackRotationArmLower = RotateToAngle(Object->EnemySpriteParts.AttackRotationArmLower, (float)FOX_PI/2, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
-			ArmUpr2->Rotation = (float)FOX_PI * 1.5f + 0.5f - Object->EnemySpriteParts.AttackRotationArm;
-			ArmLwr2->Rotation = ArmUpr2->Rotation - (float)FOX_PI/2 + Object->EnemySpriteParts.AttackRotationArmLower;
-			if (Object->EnemySpriteParts.AttackRotationArm == (float)FOX_PI)
+			Object->EnemySpriteParts.AttackRotationArm = RotateToAngle(Object->EnemySpriteParts.AttackRotationArm, FOX_PI, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
+			Object->EnemySpriteParts.AttackRotationArmLower = RotateToAngle(Object->EnemySpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
+			ArmUpr2->Rotation = FOX_PI * 1.5f + 0.5f - Object->EnemySpriteParts.AttackRotationArm;
+			ArmLwr2->Rotation = ArmUpr2->Rotation - FOX_PI/2 + Object->EnemySpriteParts.AttackRotationArmLower;
+			if (Object->EnemySpriteParts.AttackRotationArm == FOX_PI)
 			{
 				Object->isAttacking		= FALSE;
 				Object->canAttack		= FALSE;
@@ -1281,12 +1292,12 @@ void EnemyAnimation(Enemy *Object)
 		// Attacking! -----------------------------------------------------------------------------------------
 		if (Object->isAttacking)
 		{
-			Object->EnemySpriteParts.AttackRotation = RotateToAngle(Object->EnemySpriteParts.AttackRotation, (float)FOX_PI/6, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
-			Object->EnemySpriteParts.AttackRotationArm = RotateToAngle(Object->EnemySpriteParts.AttackRotationArm, (float)FOX_PI, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
-			Object->EnemySpriteParts.AttackRotationArmLower = RotateToAngle(Object->EnemySpriteParts.AttackRotationArmLower, (float)FOX_PI/2, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
-			ArmUpr->Rotation = (float)FOX_PI / 2 - 0.5f + Object->EnemySpriteParts.AttackRotationArm;
-			ArmLwr->Rotation = ArmUpr->Rotation + (float)FOX_PI/2 - Object->EnemySpriteParts.AttackRotationArmLower;
-			if (Object->EnemySpriteParts.AttackRotationArm == (float)FOX_PI)
+			Object->EnemySpriteParts.AttackRotation = RotateToAngle(Object->EnemySpriteParts.AttackRotation, FOX_PI/6, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
+			Object->EnemySpriteParts.AttackRotationArm = RotateToAngle(Object->EnemySpriteParts.AttackRotationArm, FOX_PI, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
+			Object->EnemySpriteParts.AttackRotationArmLower = RotateToAngle(Object->EnemySpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentEnemyStats.AttackSpeed * GetDeltaTime());
+			ArmUpr->Rotation = FOX_PI / 2 - 0.5f + Object->EnemySpriteParts.AttackRotationArm;
+			ArmLwr->Rotation = ArmUpr->Rotation + FOX_PI/2 - Object->EnemySpriteParts.AttackRotationArmLower;
+			if (Object->EnemySpriteParts.AttackRotationArm == FOX_PI)
 			{
 				Object->isAttacking		= FALSE;
 				Object->canAttack		= FALSE;

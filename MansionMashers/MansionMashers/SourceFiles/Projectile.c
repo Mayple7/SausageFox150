@@ -41,7 +41,7 @@ Projectile *CreateProjectile(char *texture, float width, float height, float xPo
 	CurrentProjectile->ProjectileType = type;
 
 	if (angle < 0)
-		angle = (float)FOX_PI + angle;
+		angle = FOX_PI * 2 + angle;
 
 	CurrentProjectile->Damage     = damage;
 	CurrentProjectile->Speed      =  speed;
@@ -104,6 +104,22 @@ void UpdateProjectile(Projectile *CurrentProjectile)
 		CurrentProjectile->Direction = 0 - CurrentProjectile->Direction;
 	else if (!CurrentProjectile->ProjectileSprite->FlipX && CurrentProjectile->Direction < 0)
 		CurrentProjectile->Direction = 0 + CurrentProjectile->Direction;
+
+	//Rotate the mesh to the correct angle
+	CurrentProjectile->ProjectileSprite->Rotation = CurrentProjectile->Direction;
+
+	//Cannon ball shoots in an arc (Arrows clearly can fly straight forever) //TODO: FIX THE DROP
+	if (CurrentProjectile->ProjectileType == CannonBall)
+	{
+		if (CurrentProjectile->ProjectileSprite->FlipX)
+		{
+			CurrentProjectile->Direction += 0.8f * GetDeltaTime();
+		}
+		else
+		{
+			CurrentProjectile->Direction -= 0.8f * GetDeltaTime();
+		}
+	}
 
 	//Negative speed will go left, positive will go right, the more you know!
 	CurrentProjectile->Position.x += cosf(CurrentProjectile->Direction) * CurrentProjectile->Speed * GetDeltaTime();
