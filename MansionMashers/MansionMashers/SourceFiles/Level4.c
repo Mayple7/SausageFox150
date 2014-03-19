@@ -1,10 +1,10 @@
 /*****************************************************************************/
 /*!
 \file				Level4.c
-\author				Dan Muller (d.muller)
-\date				Feb 15, 2044
+\author				Juli Gregg (j.gregg)
+\date				Mar 18, 2014
 
-\brief				Functions for the showcase level
+\brief				Functions for level 4
 
 \par				Functions:
 \li					LoadLevel4
@@ -15,7 +15,7 @@
 \li					UnloadLevel4
   
 \par 
-<b> Copyright (C) 2044 DigiPen Institute of Technology.
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
  Reproduction or disclosure of this file or its contents without the prior 
  written consent of DigiPen Institute of Technology is prohibited. </b>
 */ 
@@ -281,9 +281,9 @@ void EventLevel4(void)
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawLevel4);
-		//TogglePauseSound(BackSnd);
+		TogglePauseSound(BackSnd);
 		UpdatePause();
-		//TogglePauseSound(BackSnd);
+		TogglePauseSound(BackSnd);
 	}
 
 	// Runs if the beginning animation is finished

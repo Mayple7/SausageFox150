@@ -75,8 +75,11 @@ void InitializeArmGuy(void)
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
-	//Create background
-	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
+	//Panel1
+	CreateSprite("TextureFiles/ArmGuyPan.png", 1920, 1080, 5, 1, 1, 0, 0);
 
 	//Background
 	//CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 2, 1, 1, 140, 0);
