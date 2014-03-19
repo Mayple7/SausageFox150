@@ -67,6 +67,8 @@ TextGlyphs* LevelName;
 Platform *Plat;
 Wall *Wall1;
 
+HUD* CurrentHUD;
+
 Sprite* SecondOverlay[3];
 
 static EnemySpawner* Spawners[6];
@@ -114,6 +116,8 @@ void InitializeLevel31(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center, Border);
@@ -253,6 +257,9 @@ void UpdateLevel31(void)
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -292,6 +299,7 @@ void FreeLevel31(void)
 
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/

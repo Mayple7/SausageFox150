@@ -67,6 +67,8 @@ Sprite* BlackOverlay;
 Platform *Plat;
 Wall *Wall1;
 
+HUD* CurrentHUD;
+
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
 Sprite* TreeBackground3[BACKGROUND_LENGTH];
@@ -104,6 +106,8 @@ void InitializeLevel3(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center, Border);
@@ -176,6 +180,9 @@ void UpdateLevel3(void)
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -204,6 +211,7 @@ void FreeLevel3(void)
 		CurrentPlayer.CurrentLevel = GS_Level3;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
