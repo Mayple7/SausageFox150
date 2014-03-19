@@ -2,7 +2,7 @@
 #define FOX_VECTOR2
 
 #ifndef FOX_PI
-#define FOX_PI 3.14159265358979323846
+#define FOX_PI 3.14159265358979323846f
 #endif
 
 typedef struct Vector2
