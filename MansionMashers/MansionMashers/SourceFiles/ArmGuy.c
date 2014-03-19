@@ -41,7 +41,6 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-static Sprite* BossBody;
 TextGlyphs* LevelName;
 
 ArmGuyBoss *Boss;

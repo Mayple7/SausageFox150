@@ -17,6 +17,7 @@ typedef struct HandGuyBoss
 
 	float ShoutRadius;
 
+	RigidBody HandGuyRigidBody;
 	CollisionBox JabAttack;
 	CollisionBox BossCollider;
 	int playerHit; // No need for a collision list
