@@ -44,6 +44,8 @@ static int newID;					// ID number
 static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 
+Sprite* DebugCircle;
+
 HandGuyBoss *Boss;
 
 /*************************************************************************/
@@ -93,6 +95,9 @@ void InitializeHandGuy(void)
 	Boss->JabAttack.collisionDebug = TRUE;
 	Boss->BossCollider.collisionDebug = TRUE;
 
+	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->ShoutRadius * 2, Boss->ShoutRadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
+	DebugCircle->Visible = FALSE;
+
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("HandGuy Level", 0, 300, 100, TextTint, Center, Border);
 	TextProgressiveInit(LevelName);
@@ -116,6 +121,15 @@ void UpdateHandGuy(void)
 
 	UpdateFloatingText();
 	BoundingBoxUpdate();
+
+	if(Boss->CurrentState == 1)
+	{
+		DebugCircle->Visible = TRUE;
+		DebugCircle->Position = Boss->Position;
+	}
+	else
+		DebugCircle->Visible = FALSE;
+
 }
 
 /*************************************************************************/

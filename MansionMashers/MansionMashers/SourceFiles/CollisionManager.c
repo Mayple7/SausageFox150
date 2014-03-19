@@ -30,11 +30,6 @@
 // ---------------------------------------------------------------------------
 // Main
 
-////////  Collision Detection        [C&R]   ///////
-void circleRectangleCollision(Sprite* objA, Sprite* objB)
-{
-}
-
 ////////  Collision Detection        [C&C]   ///////
 void circleCircleCollision(Sprite* objA, Sprite* objB)
 {
@@ -143,4 +138,48 @@ int PointCircleCollision(Vec2* APos, float radius, Vec2* objB)
 		return TRUE;
 	else
 		return FALSE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Determines if there is a collision between a rectangle and a circle
+	  
+	\param APos
+	Position of the circle
+	  
+	\param radius
+	Radius of the circle
+
+	\param objB
+	Collision box for the other object
+*/
+/*************************************************************************/
+int RectCircleCollision(Vec2* APos, float radius, CollisionBox* objB)
+{
+	Vec2 closestPoint;
+
+	//Collidable
+	float leftBx   = objB->Position.x + objB->Offset.x - (objB->width / 2);
+	float rightBx  = leftBx + objB->width;
+	float topBy    = objB->Position.y + objB->Offset.y + (objB->height / 2);
+	float bottomBy = topBy - objB->height;
+
+	// Test X coordinate
+	if(APos->x < leftBx)
+		closestPoint.x = leftBx;
+	else if(APos->x > rightBx)
+		closestPoint.x = rightBx;
+	else
+		closestPoint.x = APos->x;
+
+	// Test Y coordinate
+	if(APos->y < bottomBy)
+		closestPoint.x = bottomBy;
+	else if(APos->y > topBy)
+		closestPoint.y = topBy;
+	else
+		closestPoint.y = APos->y;
+
+	return PointCircleCollision(APos, radius, &closestPoint);
 }

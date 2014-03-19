@@ -52,6 +52,7 @@ void LoadHandGuyBoss(void)
 	LoadTexture("TextureFiles/TempHandGuy.png");
 	LoadTexture("TextureFiles/TempHandGuyShout.png");
 	LoadTexture("TextureFiles/QuickJab.png");
+	LoadTexture("TextureFiles/DebugCircle.png");
 }
 
 /*************************************************************************/
@@ -100,7 +101,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->cooldownTimer = 0;
 	CurrentBoss->ShoutDamage = 30;
 	CurrentBoss->QuestionDamage = 10;
-	CurrentBoss->JabDamage = 1;
+	CurrentBoss->JabDamage = 15;
 
 	return CurrentBoss;
 }
@@ -154,6 +155,8 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			//printf("JAB TIME ATTACK\n");
 			CurrentBoss->JabSprite->Visible = TRUE;
 			CurrentBoss->cooldownTimer += GetDeltaTime();
+
+			// Deal 1 damage if in range
 			if(CollisionRectangles(&CurrentPlayer.PlayerCollider, &CurrentBoss->JabAttack))
 			{
 				PlayerDamageResult(1);
@@ -174,7 +177,10 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		{
 		case Start:
 			//printf("SHOUT TIME START\n");
-
+			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuyShout.png");
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+			if(CurrentBoss->cooldownTimer > 1.0f)
+				CurrentBoss->InnerState = Attack;
 			break;
 		case Attack:
 			//printf("SHOUT TIME ATTACK\n");
@@ -182,7 +188,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			break;
 		case End:
 			//printf("SHOUT TIME END\n");
-
+			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
 			break;
 		}
 		break;
