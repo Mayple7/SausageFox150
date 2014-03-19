@@ -37,10 +37,27 @@
 #pragma comment (lib, "Alpha_Engine.lib")
 
 // ---------------------------------------------------------------------------
+// defines
+#define PANELSIZE 1920.0f
+
+// ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
+static int levelComplete;
+static int beginningAnimation;
+static int PlayerIsAlive;
 TextGlyphs *LevelName;
+
+Sprite* BlackOverlay;
+
+Wall* Wall1;
+Wall* RightBarrier;
+
+// Tree Background
+Sprite* TreeBackground1[4];
+Sprite* TreeBackground2[4];
+Sprite* TreeBackground3[4];
+static void TreeBackgroundUpdate(void);
 
 /*************************************************************************/
 /*!
@@ -63,18 +80,73 @@ void LoadLevel4(void)
 void InitializeLevel4(void)
 {
 	Vec3 TextTint;
-
+	int i;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	ResetEnemyPanelNumber();
+	ResetGatedCamera();
+	levelComplete = FALSE;
+	beginningAnimation = TRUE;
+	PlayerIsAlive = TRUE;
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
+
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
+	//Panel1
+	CreateSprite("TextureFiles/Level4Pan0.png", 1920, 1080, 5, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/Level4Pan1.png", 1920, 1080, 5, 1, 1, PANELSIZE, 0);
+	CreateSprite("TextureFiles/Level4Pan2.png", 1920, 1080, 5, 1, 1, PANELSIZE * 2, 0);
+	CreateSprite("TextureFiles/Level4Pan3.png", 1920, 1080, 5, 1, 1, PANELSIZE * 3, 0);
+
+	//Tree Backgrounds
+	for(i = 0; i < 4; i++)
+		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground1.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground2.png", 1920, 1080, 1, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
+
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
+	//Black Overlay
+	Vec3Set(&TextTint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = TextTint;
+
+	/////////////////////////////////
+	//		Platforms			   //
+	/////////////////////////////////
+
+	/////////////////////////////////
+	//			Walls			   //
+	/////////////////////////////////
+	//Right Bounding Wall
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, 6630, 0);
+	Wall1->WallSprite->Visible = FALSE;
+	//Right Bounding Wall
+	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, 6630, 0);
+	RightBarrier->WallSprite->Visible = FALSE;
+
+	/////////////////////////////////
+	//		Spawners			   //
+	/////////////////////////////////
+
+	/////////////////////////////////
+	//		On Death			   //
+	/////////////////////////////////
+	CreateDeathConfirmObjects(&newID);
 }
 
 /*************************************************************************/
@@ -143,27 +215,117 @@ void UnloadLevel4(void)
 /*************************************************************************/
 void EventLevel4(void)
 {
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
+	//////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	//////////////////////////////////
 
 	if(FoxInput_KeyTriggered('U'))
-	{
 		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
-	}
+	
 	if(FoxInput_KeyTriggered('I'))
-	{
 		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
-	}
+
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawLevel4);
-		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		InitializePause(&DrawLevel4);
+		//TogglePauseSound(BackSnd);
+		UpdatePause();
+		//TogglePauseSound(BackSnd);
 	}
+
+	// Runs if the beginning animation is finished
+	if(!beginningAnimation && !levelComplete)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		//UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+	}
+	else if(!levelComplete)
+	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = TRUE;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -800)
+				beginningAnimation = FALSE;
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+	else
+	{
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+			SetNextState(GS_MapLevel);
+	}
+
+	//////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	//////////////////////////////////
+	if(PlayerIsAlive == TRUE)
+	{
+		//Don't Let camera go beyond left boundary
+		if(CurrentPlayer.Position.x <= 0 && GetCameraXPosition() <= 5.0f)
+			SetCameraXPosition(0.0f);
+		//Don't Let camera go beyond right boundary
+		else if(CurrentPlayer.Position.x >= (PANELSIZE * 3) && GetCameraXPosition() >= ((PANELSIZE * 3 - 5.0f)))
+			SetCameraXPosition(PANELSIZE * 3);
+		//Free Roam Camera
+		else
+			SetCamera(&CurrentPlayer.Position, 250);
+	}
+
+	//////////////////////////////////
+	//       EVERYTHING ELSE        //
+	//////////////////////////////////
+	BoundingBoxUpdate();
+	ParticleSystemUpdate();
+	TreeBackgroundUpdate();
+	UpdateAllEnemies();
+	UpdateFloatingText();
+	
+
+	//Level Transition
+	BlackOverlay->Position.x = GetCameraXPosition();
+	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
+	{
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+			SetNextState(GS_MapLevel);
+	}
+
+	//If player dies
+	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
+	{
+		PlayerIsAlive = FALSE;
+		BlackOverlay->Alpha = 0.5f;
+
+		UpdateDeathConfirmObjects();
+	}
+}
+
+void TreeBackgroundUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 30.0f);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
 }
