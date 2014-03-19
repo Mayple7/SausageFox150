@@ -100,7 +100,7 @@ void InitializeHandGuy(void)
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("HandGuy Level", 0, 300, 100, TextTint, Center, Border);
-	TextProgressiveInit(LevelName);
+	TextDisappearInit(LevelName);
 
 	CreateBoundingBoxes();
 }
@@ -113,7 +113,7 @@ void InitializeHandGuy(void)
 /*************************************************************************/
 void UpdateHandGuy(void)
 {
-	TextProgressiveVisible(LevelName, 30);
+	TextProgressiveDisappear(LevelName, 30);
 	EventHandGuy();
 	// This should be the last line in this function
 	UpdateHandGuyBoss(Boss);
@@ -211,6 +211,6 @@ void EventHandGuy(void)
 	}
 	if(FoxInput_KeyTriggered('K'))
 	{
-		TextProgressiveEnd(LevelName);
+		TextDisappearEnd(LevelName);
 	}
 }

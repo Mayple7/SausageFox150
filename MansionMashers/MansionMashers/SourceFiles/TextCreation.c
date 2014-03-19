@@ -591,6 +591,93 @@ void TextProgressiveEnd(TextGlyphs* FirstLetter)
 /*************************************************************************/
 /*!
 	\brief
+	Initializes text for progressive visibility
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
+void TextDisappearInit(TextGlyphs* FirstLetter)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+		{
+			nextLetter->Glyph->Visible = TRUE;
+			nextLetter->Glyph->Alpha = 1.0f;
+		}
+		nextLetter = nextLetter->NextLetter;
+	}
+
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Makes all the text invisible
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+
+	\param fadeinSpeed
+	How many frames for a glyph to go from fully invisible to fully visible
+*/
+/*************************************************************************/
+void TextProgressiveDisappear(TextGlyphs* FirstLetter, int fadeinSpeed)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		textinProgress = TRUE;
+		if(nextLetter->Glyph && nextLetter->Glyph->Alpha <= 0.0f)
+		{
+			nextLetter->Glyph->Alpha = 0.0f;
+			nextLetter = nextLetter->NextLetter;
+		}
+		else if(nextLetter->Glyph)
+		{
+			nextLetter->Glyph->Alpha -= 1.0f / fadeinSpeed;
+			return;
+		}
+		else
+		{
+			nextLetter = nextLetter->NextLetter;
+		}
+	}
+	textinProgress = FALSE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Initializes text for progressive visibility
+	
+	\param FirstLetter
+	A pointer to the first letter in the text.
+*/
+/*************************************************************************/
+void TextDisappearEnd(TextGlyphs* FirstLetter)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+		{
+			nextLetter->Glyph->Visible = FALSE;
+			nextLetter->Glyph->Alpha = 0.0f;
+		}
+		nextLetter = nextLetter->NextLetter;
+	}
+
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	gets progress of text visibility
 	
 	\return
