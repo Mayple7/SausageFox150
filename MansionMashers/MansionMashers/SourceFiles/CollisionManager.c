@@ -175,7 +175,7 @@ int RectCircleCollision(Vec2* APos, float radius, CollisionBox* objB)
 
 	// Test Y coordinate
 	if(APos->y < bottomBy)
-		closestPoint.x = bottomBy;
+		closestPoint.y = bottomBy;
 	else if(APos->y > topBy)
 		closestPoint.y = topBy;
 	else

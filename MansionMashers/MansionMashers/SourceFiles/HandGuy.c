@@ -122,7 +122,7 @@ void UpdateHandGuy(void)
 	UpdateFloatingText();
 	BoundingBoxUpdate();
 
-	if(Boss->CurrentState == 1)
+	if(Boss->CurrentState == 1 && Boss->InnerState != 2)
 	{
 		DebugCircle->Visible = TRUE;
 		DebugCircle->Position = Boss->Position;
