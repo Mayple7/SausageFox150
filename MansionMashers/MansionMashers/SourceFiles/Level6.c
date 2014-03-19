@@ -74,6 +74,13 @@ void InitializeLevel6(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 5", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
+
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
+	//Panel1
+	CreateSprite("TextureFiles/Level6Pan0.png", 1920, 1080, 5, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/Level6Pan0Overlay.png", 1920, 1080, 400, 1, 1, 0, 0);
 }
 
 /*************************************************************************/
