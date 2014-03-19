@@ -4,6 +4,8 @@
 void CreatePaperScroll(float height);
 void ScrollPaperScroll(float Speed);
 void ReScrollPaperScroll(float Speed);
+void FadeScroll(void);
+
 
 //Bool Vaulues
 int Scroll;
