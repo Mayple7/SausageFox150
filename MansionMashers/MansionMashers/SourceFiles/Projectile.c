@@ -41,7 +41,7 @@ Projectile *CreateProjectile(char *texture, float width, float height, float xPo
 	CurrentProjectile->ProjectileType = type;
 
 	if (angle < 0)
-		angle = (float)FOX_PI * 2 + angle;
+		angle = FOX_PI * 2 + angle;
 
 	CurrentProjectile->Damage     = damage;
 	CurrentProjectile->Speed      =  speed;

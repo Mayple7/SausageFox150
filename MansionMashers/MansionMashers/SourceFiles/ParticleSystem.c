@@ -75,7 +75,7 @@ void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX,
 
 	srand( lastRandomNumber );
 	lastRandomNumber = rand();
-	CurrentParticle->ParticleSprite->Rotation = (float)((int)lastRandomNumber % 360) / 180.0f * (float)FOX_PI;
+	CurrentParticle->ParticleSprite->Rotation = (float)((int)lastRandomNumber % 360) / 180.0f * FOX_PI;
 
 	CurrentParticle->FadeIn = FadeIn;
 }

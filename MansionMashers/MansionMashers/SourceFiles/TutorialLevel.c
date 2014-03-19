@@ -185,7 +185,7 @@ void InitializeTutorial(void)
 	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;
 
 	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 160 + 1920.0f, 0);
-	StarterSword->WeaponSprite->Rotation = (float)FOX_PI /4;
+	StarterSword->WeaponSprite->Rotation = FOX_PI /4;
 
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + 1920.0f, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);

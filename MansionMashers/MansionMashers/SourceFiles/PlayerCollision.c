@@ -175,7 +175,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		wList->WeaponSprite->ZIndex = (unsigned short)50;
 		wList->WeaponFOF = DroppedWeapon;
 		
-		wList->WeaponSprite->Rotation = (float)FOX_PI / 4;
+		wList->WeaponSprite->Rotation = FOX_PI / 4;
 		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
 
 		//If it is a shop we like it straight, oh ja
