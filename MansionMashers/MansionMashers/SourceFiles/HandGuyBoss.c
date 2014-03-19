@@ -74,11 +74,11 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/QuickJab.png", 200, 200, 11, 4, 4, 580, -120);
 	CurrentBoss->JabSprite->FlipX = TRUE;
 	CurrentBoss->JabSprite->AnimationSpeed = 3;
-	//CurrentBoss->JabSprite->Visible = FALSE;
+	CurrentBoss->JabSprite->Visible = FALSE;
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
-	CurrentBoss->CurrentState = Cooldown;
+	CurrentBoss->CurrentState = Jab;
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = B;
 
@@ -91,13 +91,16 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - CurrentBoss->JabAttack.width / 2;
 	CurrentBoss->JabAttack.Position.y = CurrentBoss->Position.y;
 
+	// Physics stuff
 	InitializeRigidBody(&CurrentBoss->HandGuyRigidBody, FALSE, 150, 300);
+	CurrentBoss->HandGuyRigidBody.Mass = 5;
+	CurrentBoss->dropDown = FALSE;
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->cooldownTimer = 0;
 	CurrentBoss->ShoutDamage = 30;
 	CurrentBoss->QuestionDamage = 10;
-	CurrentBoss->JabDamage = 10;
+	CurrentBoss->JabDamage = 1;
 
 	return CurrentBoss;
 }
@@ -122,15 +125,47 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		{
 		case Start:
 			//printf("JAB TIME START\n");
+			CurrentBoss->dropDown = FALSE;
 			
+			// Move into damage range
+			if(CurrentBoss->Position.x > CurrentPlayer.Position.x + CurrentBoss->JabAttack.width)
+				CurrentBoss->Position.x -= 1000 * GetDeltaTime();
+			else if(CurrentBoss->Position.x < CurrentPlayer.Position.x - CurrentBoss->JabAttack.width)
+				CurrentBoss->Position.x += 1000 * GetDeltaTime();
+			else
+				CurrentBoss->InnerState = Attack;
+
+			// Jump up to the platform if needed
+			if(CurrentPlayer.Position.y > GROUNDLEVEL && CurrentPlayer.PlayerRigidBody.onGround && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4)
+			{
+				// Set y velocity for jumping
+				Vec2 velocity;
+				CurrentBoss->Position.y += 3;
+				Vec2Set(&velocity, 0.0f, 3250.0f);
+				ApplyVelocity(&CurrentBoss->HandGuyRigidBody, &velocity);
+			}
+			// Drop down if needed
+			else if(CurrentPlayer.Position.y <= GROUNDLEVEL && CurrentBoss->Position.y > 0)
+			{
+				CurrentBoss->dropDown = TRUE;
+			}
 			break;
 		case Attack:
 			//printf("JAB TIME ATTACK\n");
+			CurrentBoss->JabSprite->Visible = TRUE;
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+			if(CollisionRectangles(&CurrentPlayer.PlayerCollider, &CurrentBoss->JabAttack))
+			{
+				PlayerDamageResult(1);
+			}
 			
+			// Once all damage is dealt move to a new location
+			if(CurrentBoss->cooldownTimer > GetDeltaTime() * CurrentBoss->JabDamage)
+				CurrentBoss->InnerState = End;
 			break;
 		case End:
 			//printf("JAB TIME END\n");
-			
+			CurrentBoss->JabSprite->Visible = FALSE;
 			break;
 		}
 		break;
@@ -156,6 +191,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		{
 		case Start:
 			//printf("QUESTION TIME START\n");
+			
 			break;
 		case Attack:
 			//printf("QUESTION TIME START\n");
@@ -182,7 +218,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 	case Cooldown:
 		//printf("CD TIME\n");
 		CurrentBoss->cooldownTimer += GetDeltaTime();
-
+		CurrentBoss->dropDown = FALSE;
 		// Cooldown is up, choose a move
 		if(CurrentBoss->cooldownTimer > 2)
 		{
@@ -232,6 +268,9 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		}
 		break;
 	}
+
+	//Check platform collision
+
 
 	//Brings the player back to the surface if something bad happens
 	if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 < GROUNDLEVEL)
@@ -300,10 +339,27 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 void DetectHandGuyBossCollision(HandGuyBoss *CurrentBoss)
 {
 	Weapon* wList = weaponList;
+	Platform* pList = platformList;
 
 	int hit = 0;
 	int hitPrev = 0;
 
+	//Cycle through the platform list
+	while(pList->objID != -1)
+	{
+		//If platform exists
+		if(pList->objID > 0)
+		{
+			//Checks if there is collision this frame
+			hit = CollisionRectangles(&CurrentBoss->BossCollider, &pList->PlatformCollider);
+			
+			if(hit)
+			{
+				HandGuyPlatformCollision(CurrentBoss, pList);
+			}
+		}
+		pList++;
+	}
 	while(wList->objID != -1)
 	{
 		if(wList->objID > 0 && wList->WeaponFOF == PlayerWeapon)
@@ -411,4 +467,37 @@ void PlayerDamageResult(int damage)
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);
+}
+
+void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatform)
+{
+	if(CurrentBoss->dropDown)
+		return;
+	if(CurrentBoss->HandGuyRigidBody.Velocity.y <= 0)
+	{
+		if(CurrentBoss->BossCollider.Position.y + CurrentBoss->BossCollider.Offset.y - CurrentBoss->BossCollider.height / 2.0f > CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y)
+		{
+			if(CurrentBoss->HandGuyRigidBody.Velocity.y != 0 && CurrentPlatform->PlatformCollider.collisionGroup == PlatformType)
+			{
+				CurrentBoss->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentBoss->BossCollider.Offset.y + CurrentBoss->BossCollider.height / 2 - 0.01f;
+				CurrentBoss->HandGuyRigidBody.onGround = TRUE;
+			}
+			else if(CurrentBoss->HandGuyRigidBody.Velocity.y != 0 && CurrentPlatform->PlatformCollider.collisionGroup == BounceType)
+			{
+				if(CurrentBoss->HandGuyRigidBody.Velocity.y > -(CurrentPlatform->PlatformRigidBody.Restitution + CurrentBoss->HandGuyRigidBody.Restitution))
+				{
+					CurrentBoss->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentBoss->BossCollider.Offset.y + CurrentBoss->BossCollider.height / 2 - 0.01f;
+					CurrentBoss->HandGuyRigidBody.onGround = TRUE;
+				}
+				else
+				{
+					CurrentBoss->Position.y = CurrentPlatform->PlatformCollider.Position.y + CurrentPlatform->PlatformCollider.Offset.y + CurrentPlatform->PlatformCollider.height / 2 - CurrentBoss->BossCollider.Offset.y + CurrentBoss->BossCollider.height / 2 + 0.5f;
+					BounceObject(&CurrentBoss->HandGuyRigidBody, &CurrentPlatform->PlatformRigidBody);
+					
+				}
+			}
+			else
+				CurrentBoss->HandGuyRigidBody.onGround = TRUE;
+		}
+	}
 }

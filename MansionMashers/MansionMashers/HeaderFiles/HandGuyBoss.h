@@ -5,6 +5,7 @@
 #include "RigidBody.h"
 #include "Sprite.h"
 #include "CollisionBox.h"
+#include "Platform.h"
 
 typedef struct HandGuyBoss
 {
@@ -18,6 +19,8 @@ typedef struct HandGuyBoss
 	float ShoutRadius;
 
 	RigidBody HandGuyRigidBody;
+	int dropDown;
+
 	CollisionBox JabAttack;
 	CollisionBox BossCollider;
 	int playerHit; // No need for a collision list
@@ -38,5 +41,6 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss);
 void DetectHandGuyBossCollision(HandGuyBoss *CurrentBoss);
 void HandGuyBossCollideWeapon(HandGuyBoss *CurrentBoss);
 static void PlayerDamageResult(int damage);
+void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatform);
 
 #endif
