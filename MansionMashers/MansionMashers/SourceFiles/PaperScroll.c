@@ -8,16 +8,16 @@ static Sprite *TxtScrollMiddle;
 
 void CreatePaperScroll(float height)
 {
-	TxtScrollMiddle = (Sprite*) CreateSprite("TextureFiles/scrollbar.png", 50, 400, 400, 1, 1, -800, height);
+	TxtScrollMiddle = (Sprite*) CreateSprite("TextureFiles/scrollbar.png", 50, 400, 400, 1, 1, -650, height);
 	TxtScrollMiddle->Visible = FALSE;
 
-	TxtScrollRight = (Sprite*) CreateSprite("TextureFiles/rightscroll.png", 300, 400, 400, 1, 1, -775, height);
+	TxtScrollRight = (Sprite*) CreateSprite("TextureFiles/rightscroll.png", 300, 400, 400, 1, 1, -625, height);
 	TxtScrollRight->Visible = FALSE;
 
-	TxtScrollLeft = (Sprite*) CreateSprite("TextureFiles/leftscroll.png", 300, 400, 400, 1, 1, -800, height);
+	TxtScrollLeft = (Sprite*) CreateSprite("TextureFiles/leftscroll.png", 300, 400, 400, 1, 1, -650, height);
 	TxtScrollLeft->Visible = FALSE;
 
-	Scroll = FALSE;
+	Scroll = TRUE;
 	ReScroll = FALSE;
 }
 
@@ -33,7 +33,10 @@ void ScrollPaperScroll(float Speed)
 		TxtScrollRight->Position.x += 10 * Speed;
 	}
 	else
+	{
 		Scroll = FALSE;
+		ReScroll = TRUE;
+	}
 }
 
 void ReScrollPaperScroll(float Speed)

@@ -23,6 +23,11 @@
 // includes
 #include "../HeaderFiles/TextCreation.h"
 
+// ---------------------------------------------------------------------------
+// globals
+
+int textinProgress; //bool
+
 /*************************************************************************/
 /*!
 	\brief
@@ -539,6 +544,7 @@ void TextProgressiveVisible(TextGlyphs* FirstLetter, int fadeinSpeed)
 
 	while(nextLetter)
 	{
+		textinProgress = TRUE;
 		if(nextLetter->Glyph && nextLetter->Glyph->Alpha >= 1.0f)
 		{
 			nextLetter->Glyph->Alpha = 1.0f;
@@ -554,6 +560,7 @@ void TextProgressiveVisible(TextGlyphs* FirstLetter, int fadeinSpeed)
 			nextLetter = nextLetter->NextLetter;
 		}
 	}
+	textinProgress = FALSE;
 }
 
 /*************************************************************************/
@@ -579,4 +586,18 @@ void TextProgressiveEnd(TextGlyphs* FirstLetter)
 		nextLetter = nextLetter->NextLetter;
 	}
 
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	gets progress of text visibility
+	
+	\return
+	Fake bool
+*/
+/*************************************************************************/
+int GetTextInProgress(void)
+{
+	return textinProgress;
 }

@@ -30,5 +30,6 @@ void TextAllNotVisible(TextGlyphs* FirstLetter);
 void TextProgressiveInit(TextGlyphs* FirstLetter);
 void TextProgressiveVisible(TextGlyphs* FirstLetter, int fadeinSpeed);
 void TextProgressiveEnd(TextGlyphs* FirstLetter);
+int GetTextInProgress(void);
 
 #endif

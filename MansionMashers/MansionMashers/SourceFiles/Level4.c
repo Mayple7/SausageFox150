@@ -107,6 +107,12 @@ void InitializeLevel4(void)
 	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
+	LevelName = CreateText("Defeat All Enemies", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(LevelName, 500);
+	TextProgressiveInit(LevelName);
+
+	CreatePaperScroll(150);
+
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
@@ -197,6 +203,7 @@ void InitializeLevel4(void)
 /*************************************************************************/
 void UpdateLevel4(void)
 {
+
 	EventLevel4();
 	PlayAudio(BackSnd);
 
@@ -345,6 +352,14 @@ void EventLevel4(void)
 	UpdateAllEnemies();
 	UpdateFloatingText();
 	UpdateAllProjectiles();
+
+	if(Scroll == TRUE)
+		ScrollPaperScroll(2);
+	else
+		TextProgressiveVisible(LevelName, 10);
+
+	if(ReScroll == TRUE && !GetTextInProgress())
+		ReScrollPaperScroll(1);
 
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
