@@ -46,6 +46,7 @@ static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int PlayerIsAlive;
+static int counter;
 TextGlyphs *LevelName;
 
 Sprite* BlackOverlay;
@@ -96,6 +97,7 @@ void InitializeLevel4(void)
 	levelComplete = FALSE;
 	beginningAnimation = TRUE;
 	PlayerIsAlive = TRUE;
+	counter = 2 * FRAMERATE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -353,13 +355,27 @@ void EventLevel4(void)
 	UpdateFloatingText();
 	UpdateAllProjectiles();
 
+	//Can scroll so scroll
 	if(Scroll == TRUE)
-		ScrollPaperScroll(2);
-	else
-		TextProgressiveVisible(LevelName, 10);
-
+		ScrollPaperScroll(3);
+	//Scroll is out so roll out that text 
+	//but not if were trying to get rid of text
+	else if(!GetTextToDisappear())
+		TextProgressiveVisible(LevelName, 2);
+	//Time to rescroll and the text is up
 	if(ReScroll == TRUE && !GetTextInProgress())
-		ReScrollPaperScroll(1);
+	{
+		//wait a bit people need to read that stuff
+		if(counter > 0)
+			counter -= 1;
+		//get rid of that text and scroll
+		else
+		{
+			TextProgressiveDisappear(LevelName, 1);
+			FadeScroll();
+		}
+	}
+
 
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)

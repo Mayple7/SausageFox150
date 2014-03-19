@@ -40,5 +40,6 @@ void TextProgressiveDisappear(TextGlyphs* FirstLetter, int fadeinSpeed);
 void TextDisappearEnd(TextGlyphs* FirstLetter);
 
 int GetTextInProgress(void);
+int GetTextToDisappear(void);
 
 #endif
