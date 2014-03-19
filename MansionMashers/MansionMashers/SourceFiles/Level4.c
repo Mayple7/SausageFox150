@@ -49,9 +49,15 @@ static int PlayerIsAlive;
 TextGlyphs *LevelName;
 
 Sprite* BlackOverlay;
+HUD* CurrentHUD;
 
 Wall* Wall1;
 Wall* RightBarrier;
+
+EnemySpawner* Spawners[8];
+Enemy* PreSpawned;
+
+FoxSound* BackSnd;
 
 // Tree Background
 Sprite* TreeBackground1[4];
@@ -80,6 +86,7 @@ void LoadLevel4(void)
 void InitializeLevel4(void)
 {
 	Vec3 TextTint;
+	Vec2 SpawnerLocation;
 	int i;
 	newID = 10;
 	ResetObjectList();
@@ -93,6 +100,8 @@ void InitializeLevel4(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center, Border);
@@ -125,6 +134,9 @@ void InitializeLevel4(void)
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
+	//Background Sound
+	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
@@ -133,7 +145,7 @@ void InitializeLevel4(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Right Bounding Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, 6630, 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, -(PANELSIZE / 2), 0);
 	Wall1->WallSprite->Visible = FALSE;
 	//Right Bounding Wall
 	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, 6630, 0);
@@ -142,6 +154,34 @@ void InitializeLevel4(void)
 	/////////////////////////////////
 	//		Spawners			   //
 	/////////////////////////////////
+	//Panel1
+	Vec2Set(&SpawnerLocation, -(PANELSIZE / 4), 0);
+	//Left
+	Spawners[0] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 0);
+	//Right
+	Spawners[1] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
+	//Panel2
+	PreSpawned = CreateEnemy(BasicRanged, EnemyType, newID++, PANELSIZE, 0, 1);
+	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
+	//Left
+	Spawners[2] = CreateEnemySpawner(2, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	//Right
+	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+	//Panel3
+	Vec2Set(&SpawnerLocation, (PANELSIZE * 2), 0);
+	//Left
+	Spawners[4] = CreateEnemySpawner(2, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	//Right
+	Spawners[5] = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	//Panel4
+	PreSpawned = CreateEnemy(BasicRanged, EnemyType, newID++, PANELSIZE * 3, 0, 3);
+	Vec2Set(&SpawnerLocation, (PANELSIZE * 3), 0);
+	//Left
+	Spawners[6] = CreateEnemySpawner(3, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 3);
+	//Right
+	Spawners[7] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
+
+	
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -158,9 +198,13 @@ void InitializeLevel4(void)
 void UpdateLevel4(void)
 {
 	EventLevel4();
+	PlayAudio(BackSnd);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -185,13 +229,22 @@ void DrawLevel4(void)
 /*************************************************************************/
 void FreeLevel4(void)
 {
-	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Kevin)
-		CurrentPlayer.CurrentLevel = GS_Kevin;
+	// Level complete and not reached level 5 zone
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level5)
+	{
+		CurrentPlayer.CurrentLevel = GS_Level5;
+		CurrentPlayer.handUnlock = TRUE;
+	}
+	// Level complete and has reached level 5 zone
+	else if(levelComplete)
+		CurrentPlayer.handUnlock = TRUE;
+	// Level NOT complete
 	else if(CurrentPlayer.CurrentLevel < GS_Level4)
 		CurrentPlayer.CurrentLevel = GS_Level4;
 
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -234,7 +287,7 @@ void EventLevel4(void)
 	}
 
 	// Runs if the beginning animation is finished
-	if(!beginningAnimation && !levelComplete)
+	if(!beginningAnimation)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
@@ -266,13 +319,6 @@ void EventLevel4(void)
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
-	else
-	{
-		BlackOverlay->Position.x = GetCameraXPosition();
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
-	}
 
 	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -298,7 +344,15 @@ void EventLevel4(void)
 	TreeBackgroundUpdate();
 	UpdateAllEnemies();
 	UpdateFloatingText();
-	
+	UpdateAllProjectiles();
+
+	//Check if all enemies are dead & remove right barrier
+	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
+	{
+		levelComplete = TRUE;
+		RightBarrier->Position.y = -1080;
+		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
+	}
 
 	//Level Transition
 	BlackOverlay->Position.x = GetCameraXPosition();

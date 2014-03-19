@@ -25,11 +25,13 @@
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/HandGuy.h"
+#include "../HeaderFiles/HandGuyBoss.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+#include "../HeaderFiles/BoundingBox.h"
 
 
 // ---------------------------------------------------------------------------
@@ -40,13 +42,9 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs *LevelName;
-Sprite *HandGauy;
-Platform *Pedestal;
+TextGlyphs* LevelName;
 
-Enemy* SetEnemy1;
-
-HUD *CurrentHUD;
+HandGuyBoss *Boss;
 
 /*************************************************************************/
 /*!
@@ -58,6 +56,7 @@ void LoadHandGuy(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
+
 }
 
 /*************************************************************************/
@@ -69,38 +68,36 @@ void LoadHandGuy(void)
 void InitializeHandGuy(void)
 {
 	Vec3 TextTint;
-
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
-	//Initialize the player
+	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
-	CurrentHUD = CreateHUD(&CurrentPlayer);
-
-	HandGauy = (Sprite *) CreateSprite("TextureFiles/HandGauy.png", 400, 400, 10, 1, 1, -800, -250);
+	//Create background
+	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
 
 	//Background
-	CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 0, 1, 1, 0, 0);
-	CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 0, 0);
+	//CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 2, 1, 1, 140, 0);
+	//CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 140, 0);
 
-	//Weapon/Shop
-	CreateWeaponShop(-400, -140, newID++, Sword, Common);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 400, 50, newID++, 0, -170);
 
-	//Platform
-	Pedestal = CreatePlatform("TextureFiles/MarblePedestal.png", PlatformType, 1920, 1080, newID++, 0, 0);
-	Pedestal->PlatformCollider.Offset.y = -3.6f * Pedestal->PlatformSprite->Height / 16;
-	UpdateCollider(&Pedestal->PlatformCollider, Pedestal->PlatformCollider.width * 0.19f, Pedestal->PlatformCollider.height * 0.05f); 
+	//Create bounding walls
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
 
-	//Title text
+	Boss = CreateHandGuyBoss(0, 0, &newID);
+	Boss->JabAttack.collisionDebug = TRUE;
+	Boss->BossCollider.collisionDebug = TRUE;
+
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("HandGauy Level", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
+	LevelName = CreateText("HandGuy Level", 0, 300, 100, TextTint, Center, Border);
+	TextProgressiveInit(LevelName);
 
-	//BALLISTA
-	CreateEnemy(BasicRanged, EnemyType, newID++, 400, GROUNDLEVEL, 0);
+	CreateBoundingBoxes();
 }
 
 /*************************************************************************/
@@ -111,20 +108,14 @@ void InitializeHandGuy(void)
 /*************************************************************************/
 void UpdateHandGuy(void)
 {
+	TextProgressiveVisible(LevelName, 30);
 	EventHandGuy();
-
-	ParticleSystemUpdate();
-
-	UpdateFloatingText();
-
-	UpdateAllProjectiles();
-
-	UpdateAllEnemies();
-
 	// This should be the last line in this function
+	UpdateHandGuyBoss(Boss);
 	UpdatePlayerPosition(&CurrentPlayer);
 
-	UpdateHUDPosition(CurrentHUD);
+	UpdateFloatingText();
+	BoundingBoxUpdate();
 }
 
 /*************************************************************************/
@@ -139,6 +130,8 @@ void DrawHandGuy(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
+	displayCollisionDebug(&Boss->BossCollider);
+	displayCollisionDebug(&Boss->JabAttack);
 }
 
 /*************************************************************************/
@@ -149,14 +142,15 @@ void DrawHandGuy(void)
 /*************************************************************************/
 void FreeHandGuy(void)
 {
-	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level3)
-		CurrentPlayer.CurrentLevel = GS_Level3;
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level5)
+	{
+		CurrentPlayer.CurrentLevel = GS_Level5;
+		CurrentPlayer.handClear = TRUE;
+	}
 	else if(CurrentPlayer.CurrentLevel < GS_HandGuy)
 		CurrentPlayer.CurrentLevel = GS_HandGuy;
-
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
-	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -182,30 +176,27 @@ void EventHandGuy(void)
 {
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
+	DetectHandGuyBossCollision(Boss);
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
 	}
 	if(FoxInput_KeyTriggered('I'))
 	{
 		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawHandGuy);
+		InitializePause(&DrawHandGuy);
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
-
-	if(FoxInput_KeyTriggered('Y'))
+	if(FoxInput_KeyTriggered('K'))
 	{
-		CreateProjectile("TextureFiles/HandGauy.png", 100, 100, 780, -300, Arrow, WeaponEnemy, newID++, 10, -400);
+		TextProgressiveEnd(LevelName);
 	}
 }
