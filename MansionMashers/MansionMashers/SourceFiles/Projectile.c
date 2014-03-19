@@ -32,7 +32,7 @@
 	Functions sort of like a weapon
 */
 /*************************************************************************/
-Projectile *CreateProjectile(char *texture, float width, float height, float xPos, float yPos, enum ProjectileType type, enum collisionGroup collisionGroup, int objID, int damage, float speed)
+Projectile *CreateProjectile(char *texture, float width, float height, float xPos, float yPos, enum ProjectileType type, enum collisionGroup collisionGroup, int objID, int damage, float speed, float angle)
 {
 	Projectile *CurrentProjectile = AddProjectile();
 
@@ -40,15 +40,20 @@ Projectile *CreateProjectile(char *texture, float width, float height, float xPo
 	CurrentProjectile->objID = objID;
 	CurrentProjectile->ProjectileType = type;
 
-	CurrentProjectile->Damage = damage;
-	CurrentProjectile->Speed  =  speed;
+	if (angle < 0)
+		angle = (float)FOX_PI + angle;
+
+	CurrentProjectile->Damage     = damage;
+	CurrentProjectile->Speed      =  speed;
+	CurrentProjectile->Direction  =  angle;
 
 	CurrentProjectile->Position.x = xPos;
 	CurrentProjectile->Position.y = yPos;
 
-	CurrentProjectile->ProjectileSprite = (Sprite *) CreateSprite(texture, width, height, 36, 1, 1, xPos, yPos);
+	CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite(texture, width, height, 36, 1, 1, xPos, yPos);
 	CreateCollisionBox(&CurrentProjectile->ProjectileAttack, &CurrentProjectile->Position, collisionGroup, width, height, objID);
 
+	//It will go backwards if the speed is negative
 	if (CurrentProjectile->Speed < 0)
 		CurrentProjectile->ProjectileSprite->FlipX = TRUE;
 	else
@@ -88,18 +93,29 @@ void UpdateAllProjectiles(void)
 /*************************************************************************/
 void UpdateProjectile(Projectile *CurrentProjectile)
 {
-	//Negative speed will go left, positive will go right, the more you know!
-	CurrentProjectile->Position.x += CurrentProjectile->Speed * GetDeltaTime();
-	CurrentProjectile->ProjectileAttack.Position.x  = CurrentProjectile->Position.x;
-	CurrentProjectile->ProjectileSprite->Position.x = CurrentProjectile->Position.x;
-
+	//Flip projectile sprite if the speed is negative
 	if (CurrentProjectile->Speed < 0)
 		CurrentProjectile->ProjectileSprite->FlipX = TRUE;
 	else
 		CurrentProjectile->ProjectileSprite->FlipX = FALSE;
 
+	//Flip the direction angle if the sprite is flipped
+	if (CurrentProjectile->ProjectileSprite->FlipX && CurrentProjectile->Direction > 0)
+		CurrentProjectile->Direction = 0 - CurrentProjectile->Direction;
+	else if (!CurrentProjectile->ProjectileSprite->FlipX && CurrentProjectile->Direction < 0)
+		CurrentProjectile->Direction = 0 + CurrentProjectile->Direction;
+
+	//Negative speed will go left, positive will go right, the more you know!
+	CurrentProjectile->Position.x += cosf(CurrentProjectile->Direction) * CurrentProjectile->Speed * GetDeltaTime();
+	CurrentProjectile->Position.y += sinf(CurrentProjectile->Direction) * CurrentProjectile->Speed * GetDeltaTime();
+	CurrentProjectile->ProjectileAttack.Position.x  = CurrentProjectile->Position.x;
+	CurrentProjectile->ProjectileAttack.Position.y  = CurrentProjectile->Position.y;
+	CurrentProjectile->ProjectileSprite->Position.x = CurrentProjectile->Position.x;
+	CurrentProjectile->ProjectileSprite->Position.y = CurrentProjectile->Position.y;
+
 	//Delete it if it's far outside the camera
-	if (CurrentProjectile->Position.x > GetCameraXPosition() + PANELSIZE || CurrentProjectile->Position.x < GetCameraXPosition() - PANELSIZE)
+	if (CurrentProjectile->Position.x > GetCameraXPosition() + PANELSIZE || CurrentProjectile->Position.x < GetCameraXPosition() - PANELSIZE
+	 || CurrentProjectile->Position.y > PANELSIZE || CurrentProjectile->Position.y < -PANELSIZE)
 		FreeProjectile(CurrentProjectile);
 }
 

@@ -586,7 +586,7 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 		smexyArrow = CreateProjectile("TextureFiles/BallistaArrow.png", 
 									  CurrentEnemy->EnemySpriteParts.Weapon->Width, CurrentEnemy->EnemySpriteParts.Weapon->Height, 
 									  CurrentEnemy->EnemySpriteParts.Weapon->Position.x, CurrentEnemy->EnemySpriteParts.Weapon->Position.y, 
-									  Arrow, WeaponEnemy, (CurrentEnemy->objID + 100) * 8 + (int)CurrentEnemy->LegSinValue++, 10, projectileSpeed);
+									  Arrow, WeaponEnemy, (CurrentEnemy->objID + 100) * 8 + (int)CurrentEnemy->LegSinValue++, 10, projectileSpeed, 0);
 
 		if (smexyArrow->ProjectileSprite->FlipX)
 			smexyArrow->ProjectileAttack.Offset.x = -smexyArrow->ProjectileAttack.width / 3;
