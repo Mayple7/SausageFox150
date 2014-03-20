@@ -228,7 +228,15 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		case End:
 			//printf("SHOUT TIME END\n");
 			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
-			CurrentBoss->CurrentState = Move;
+
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+			if(CurrentBoss->cooldownTimer > 2.0f)
+			{
+				CurrentBoss->cooldownTimer = 0.0f;
+				CurrentBoss->InnerState = Attack;
+				CurrentBoss->CurrentState = Move;
+				CurrentBoss->InnerState = Start;
+			}
 			break;
 		}
 		break;
