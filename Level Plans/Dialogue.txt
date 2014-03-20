@@ -1,0 +1,88 @@
+Dialogue:
+
+(Spoken/Voice Actor)
+Scene:  fox mansion, after tutorial
+
+King/random fox: Princess, we need your help were under attack!
+
+
+Scene:  fox mansion, after attack
+
+King: there has been an attempt to mash our mansion. You bravely fought the invaders but they have taken our dear Prince Oakley. Many have been injured including myself. Therefore the prince's return is in your hands. Be brave. And give those dogs a mashin'.
+
+Princess: Yes, sir.
+
+Scene: After Kevin is defeated, back at mansion
+
+King: Thank you Princess. You have returned Prince Oakley to us. For this you are awarded the fox paw of honor. Now your mashing will be remembered throughout fox history. 
+
+----------------------------------------------------------------
+
+(Nonspoken just written with text and scrolls)
+Scene: Level 2
+
+Intel Fox: Intel Fox: Princess I'll be giving you intel along the way. Mash all the enemies and get to the forest.
+
+Intel Fox: Use boxes as platforms
+
+Intel Fox: Look for supplies(buffs) in the watch tower
+
+(when all enemies defeated)
+Intel Fox: Great job Princess it's now clear to enter the forest
+
+Scene: Level 3
+
+Intel Fox: The next outpost is up in the trees. Take TreeTop Way.
+
+Intel Fox: Defeat enemies to move to the next section.
+
+Intel Fox: You did it Princess. Time to mash their outpost.
+
+Scene: Level 4
+
+Intel Fox: Mash all the enemies to get to the next outpost.
+
+Intel Fox: Great Job Princess it's clear to head to their outpost.
+
+Scene: Level 5
+
+(No keys).
+Intel Fox: This passage is a way to get through the wall. It looks like we need two keys. Maybe they're at the dog outposts.
+
+(1 Keys).
+Intel Fox: We still need one more key. Try the dog outposts.
+
+(2 Keys).
+Intel Fox: Alright Princess time to head underground.
+
+Scene: ArmGuy/HandGuy
+
+Intel Fox: Be careful princess.
+
+Intel Fox: Great job, you've found a key!
+
+Scene: Level 6
+
+Intel Fox: Mash enemies to move to the next section.
+
+Intel Fox: You did it princess. We've made it into Dog Territory.
+
+Scene: YeahGuy
+
+Intel Fox: Be careful Princess.
+
+Intel Fox: Great job, but were not done yet.
+
+Scene: Level 7
+
+Intel Fox: Survive for two minutes and you'll be able to breach their mansion.
+
+Intel Fox: Way to go. Now to mash their king!
+
+Scene: Keven
+
+Intel Fox: Oh dear, you're breaking up. I think you're on your own Princess. Goodluck.
+
+(After defeat)
+Intel Fox: Princess? Princess, you there? Princess! You did it! 
+
