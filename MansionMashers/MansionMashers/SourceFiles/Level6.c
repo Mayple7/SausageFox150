@@ -103,6 +103,8 @@ void InitializeLevel6(void)
 	//Panel1
 	CreateSprite("TextureFiles/Level6Pan0.png", 1920, 1080, 5, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/Level6Pan0Overlay.png", 1920, 1080, 300, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/Level6Pan1.png", 1920, 1080, 5, 1, 1, PANELSIZE, 0);
+	CreateSprite("TextureFiles/Level6Pan1Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE, 0);
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
@@ -122,13 +124,23 @@ void InitializeLevel6(void)
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 160, -285);
 	Plat->PlatformSprite->Visible = FALSE;
 
+	//Panel1
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 1380, -285);
+	Plat->PlatformSprite->Visible = FALSE;
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 1790, -255);
+	Plat->PlatformSprite->Visible = FALSE;
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 2000, -255);
+	Plat->PlatformSprite->Visible = FALSE;
+
+
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
 	//Ceiling
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, 0, 250);
 	Wall1->WallSprite->Visible = FALSE;
-
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, PANELSIZE, 250);
+	Wall1->WallSprite->Visible = FALSE;
 }
 
 /*************************************************************************/
@@ -141,8 +153,8 @@ void UpdateLevel6(void)
 {
 	EventLevel();
 
-	//EasyEditPlatform(Plat, 10);
-	EasyEditWall(Wall1, 10);
+	EasyEditPlatform(Plat, 10);
+	//EasyEditWall(Wall1, 10);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -255,6 +267,7 @@ void EventLevel(void)
 	//    CAMERA POSITION SECOND    //
 	//////////////////////////////////
 
+	//SetCamera(&CurrentPlayer.Position, 250);
 	SetUpCameraPanAndLockNoSpawner(&levelComplete, PANELSIZE, numPanels);
 	UpdateBlockerBoxes(PANELSIZE);
 
