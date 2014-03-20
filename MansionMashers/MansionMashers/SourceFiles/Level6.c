@@ -108,7 +108,7 @@ void InitializeLevel6(void)
 	CreateSprite("TextureFiles/Level6Pan1Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE, 0);
 	//Panel3
 	CreateSprite("TextureFiles/Level6Pan2.png", 1920, 1080, 5, 1, 1, PANELSIZE * 2, 0);
-	CreateSprite("TextureFiles/Level6Pan1Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE * 2, 0);
+	CreateSprite("TextureFiles/Level6Pan2Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE * 2, 0);
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
