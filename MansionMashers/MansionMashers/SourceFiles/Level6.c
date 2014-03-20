@@ -30,16 +30,30 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+#include "../HeaderFiles/EasyEdit.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
 
 // ---------------------------------------------------------------------------
+// define
+#define PANELSIZE 1920.0f
+
+// ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
+static int levelComplete;
+static int beginningAnimation;
+static int PlayerIsAlive;
+static int numPanels;
 TextGlyphs* LevelName;
+
+Sprite* BlackOverlay;
+HUD* CurrentHUD;
+
+Platform* Plat;
+Wall* Wall1;
 
 /*************************************************************************/
 /*!
@@ -66,10 +80,18 @@ void InitializeLevel6(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	ResetEnemyPanelNumber();
+	ResetGatedCamera();
+	levelComplete = FALSE;
+	beginningAnimation = TRUE;
+	PlayerIsAlive = TRUE;
+	numPanels = 4;
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 5", 0, 300, 100, TextTint, Center, Border);
@@ -80,7 +102,33 @@ void InitializeLevel6(void)
 	/////////////////////////////////
 	//Panel1
 	CreateSprite("TextureFiles/Level6Pan0.png", 1920, 1080, 5, 1, 1, 0, 0);
-	CreateSprite("TextureFiles/Level6Pan0Overlay.png", 1920, 1080, 400, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/Level6Pan0Overlay.png", 1920, 1080, 300, 1, 1, 0, 0);
+
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
+	//Black Overlay
+	Vec3Set(&TextTint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = TextTint;
+
+	//Blocker Boxes
+	CreateBlockerBoxes(&newID);
+
+	/////////////////////////////////
+	//		Platforms			   //
+	/////////////////////////////////
+	//Panel1
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 160, -285);
+	Plat->PlatformSprite->Visible = FALSE;
+
+	/////////////////////////////////
+	//			Walls			   //
+	/////////////////////////////////
+	//Ceiling
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, 0, 250);
+	Wall1->WallSprite->Visible = FALSE;
+
 }
 
 /*************************************************************************/
@@ -93,8 +141,14 @@ void UpdateLevel6(void)
 {
 	EventLevel();
 
+	//EasyEditPlatform(Plat, 10);
+	EasyEditWall(Wall1, 10);
+
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -143,11 +197,9 @@ void UnloadLevel6(void)
 /*************************************************************************/
 void EventLevel(void)
 {
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
-
+	//////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	//////////////////////////////////
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
@@ -163,4 +215,51 @@ void EventLevel(void)
 		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
+
+
+	// Runs if the beginning animation is finished
+	if(!beginningAnimation)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		//UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+	}
+	else if(!levelComplete)
+	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = TRUE;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -800)
+				beginningAnimation = FALSE;
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+
+	//////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	//////////////////////////////////
+
+	SetUpCameraPanAndLockNoSpawner(&levelComplete, PANELSIZE, numPanels);
+	UpdateBlockerBoxes(PANELSIZE);
+
+	//////////////////////////////////
+	//       EVERYTHING ELSE        //
+	//////////////////////////////////
+	BoundingBoxUpdate();
 }
