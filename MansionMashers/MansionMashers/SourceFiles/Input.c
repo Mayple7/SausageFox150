@@ -112,6 +112,11 @@ void FoxInput_GetMousePosition(int *mx, int *my)
     *my =(int)( mouseY / GetLoadRatio());
 }
 
+int FoxInput_GetMousePositionX(void)
+{
+	return (int)(mouseX / GetLoadRatio());
+}
+
 void FoxInput_GetWorldPosition(int *mx, int *my)
 {
 	float camX, camY;
