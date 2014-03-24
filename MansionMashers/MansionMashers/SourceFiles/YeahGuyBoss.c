@@ -50,6 +50,7 @@ void LoadYeahGuyBoss(void)
 {
 	LoadTexture("TextureFiles/YeahProjectile.png");
 	LoadTexture("TextureFiles/YeahProjectileBack.png");
+	LoadTexture("TextureFiles/TempYeahGuy.png");
 }
 
 /*************************************************************************/
@@ -67,7 +68,7 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos, int *objID)
 
 	//Initialize boss struct
 	Vec2Set(&CurrentBoss->Position, 700, -200);
-	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempHandGuy.png", 150, 300, 10, 1, 1, 700, -200);
+	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempYeahGuy.png", 225, 300, 10, 1, 1, 700, -200);
 	CurrentBoss->BodySprite->FlipX = TRUE;
 
 	CurrentBoss->playerHit = 0;
@@ -140,7 +141,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			break;
 		case End:
 			//printf("AOE TIME END\n");
-			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
+			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempYeahGuy.png");
 
 			CurrentBoss->cooldownTimer += GetDeltaTime();
 			if(CurrentBoss->cooldownTimer > 2.0f)
