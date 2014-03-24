@@ -280,7 +280,7 @@ void EventLevel(void)
 
 
 	//Key Checking
-	if(CurrentPlayer.armUnlock && CurrentPlayer.handUnlock && !beginningAnimation)
+	if(CurrentPlayer.armClear && CurrentPlayer.handClear && !beginningAnimation)
 	{
 		RightBarrier->WallCollider.Position.x = 870;
 		keysObtained = TRUE;
