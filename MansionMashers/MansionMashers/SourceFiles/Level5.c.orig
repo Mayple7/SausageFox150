@@ -183,14 +183,29 @@ void DrawLevel5(void)
 /*************************************************************************/
 void FreeLevel5(void)
 {
+<<<<<<< HEAD
+	// Level complete and not reached level 5 zone
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level6)
+	{
 		CurrentPlayer.CurrentLevel = GS_Level6;
+		CurrentPlayer.handUnlock = TRUE;
+	}
+	// Level NOT complete
 	else if(CurrentPlayer.CurrentLevel < GS_Level5)
 		CurrentPlayer.CurrentLevel = GS_Level5;
 
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
+=======
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level6)
+		CurrentPlayer.CurrentLevel = GS_Level6;
+	else if(CurrentPlayer.CurrentLevel < GS_Level5)
+		CurrentPlayer.CurrentLevel = GS_Level5;
+	SavePlayer(&CurrentPlayer);
+	FreeAllLists();
+	//FreeHUD(CurrentHUD);
+>>>>>>> 3b309a87a85231d64127c501c1fcfd6a5525b8ab
 }
 
 /*************************************************************************/
