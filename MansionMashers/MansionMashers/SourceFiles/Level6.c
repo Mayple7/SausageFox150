@@ -316,7 +316,7 @@ void EventLevel(void)
 
 
 	// Runs if the beginning animation is finished
-	if(!beginningAnimation)
+	if(!beginningAnimation && !levelComplete)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();

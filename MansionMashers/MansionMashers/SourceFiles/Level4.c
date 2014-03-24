@@ -47,6 +47,7 @@ static int levelComplete;
 static int beginningAnimation;
 static int PlayerIsAlive;
 static int counter;
+static int enemiesDefeated;
 TextGlyphs *LevelName;
 
 Sprite* BlackOverlay;
@@ -98,6 +99,7 @@ void InitializeLevel4(void)
 	beginningAnimation = TRUE;
 	PlayerIsAlive = TRUE;
 	counter = 2 * FRAMERATE;
+	enemiesDefeated = FALSE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -296,7 +298,7 @@ void EventLevel4(void)
 	}
 
 	// Runs if the beginning animation is finished
-	if(!beginningAnimation)
+	if(!beginningAnimation && !levelComplete)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
@@ -380,15 +382,16 @@ void EventLevel4(void)
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
 	{
-		levelComplete = TRUE;
+		enemiesDefeated = TRUE;
 		RightBarrier->Position.y = -1080;
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
 	}
 
 	//Level Transition
 	BlackOverlay->Position.x = GetCameraXPosition();
-	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
+	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && enemiesDefeated)
 	{
+		levelComplete = TRUE;
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
 			SetNextState(GS_MapLevel);
