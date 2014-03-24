@@ -243,8 +243,10 @@ void FreePause(void)
 	FreeButton(BGMSlider);
 
 	FreeButton(ResumeButton);
-	FreeButton(RestartButton);
 	FreeButton(MainMenuButton);
+
+	if(GetCurrentState() != GS_MapLevel)
+		FreeButton(RestartButton);
 
 	FreeText(SFXText);
 	FreeText(BGMText);
