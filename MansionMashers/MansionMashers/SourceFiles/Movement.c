@@ -48,7 +48,7 @@ void MoveObject(Vec2 *Pos, enum Direction dirMove, float move_dist)
 			Pos->x += move_dist;
 			break;
 		case UP:
-			Pos->y += move_dist;				
+			Pos->y += move_dist;
 			break;
 		case DOWN:
 			Pos->y -= move_dist;
