@@ -18,6 +18,8 @@ extern int FoxInput_MouseUp(MouseButton button);
 
 extern void FoxInput_GetMousePosition(int *mouseX, int *mouseY);
 
+extern int FoxInput_GetMousePositionX(void);
+
 void FoxInput_GetWorldPosition(int *mx, int *my);
 
 extern int FoxInput_MouseWithinWindow(void);
