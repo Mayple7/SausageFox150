@@ -36,6 +36,10 @@
 #pragma comment (lib, "Alpha_Engine.lib")
 
 // ---------------------------------------------------------------------------
+// define
+#define PANELSIZE 1920.0f
+
+// ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
@@ -72,8 +76,17 @@ void InitializeLevel7(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 5", 0, 300, 100, TextTint, Center, Border);
+	LevelName = CreateText("Level 7", 0, 300, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
+
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
+	//Panel1
+	CreateSprite("TextureFiles/Level7Pan0.png", 1920, 1080, 5, 1, 1, 0, 0);
+	//Panel2
+	CreateSprite("TextureFiles/Level7Pan1.png", 1920, 1080, 5, 1, 1, PANELSIZE, 0);
+
 }
 
 /*************************************************************************/
@@ -156,4 +169,6 @@ void EventLevel(void)
 		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
+
+	SetCamera(&CurrentPlayer.Position, 250);
 }
