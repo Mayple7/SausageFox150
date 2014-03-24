@@ -200,19 +200,19 @@ void InitializeMapLevel(void)
 	case GS_Shop2:
 	case GS_Shop3:
 		if(CurrentPlayer.armUnlock || CurrentPlayer.handUnlock)
-			FadeOverlay->Position.x = 900.0f;
+			FadeOverlay->Position.x = 1100.0f;
 		else
 			FadeOverlay->Position.x = 700.0f;
 		break;
 	case GS_Level6:
-		FadeOverlay->Position.x = 900.0f;
+		FadeOverlay->Position.x = 1100.0f;
 		break;
 	case GS_YeahGuy:
-		FadeOverlay->Position.x = 1300.0f;
+		FadeOverlay->Position.x = 1500.0f;
 		break;
 	case GS_Level7:
 	case GS_Shop4:
-		FadeOverlay->Position.x = 1600.0f;
+		FadeOverlay->Position.x = 1800.0f;
 		break;
 	case GS_Kevin:
 		FadeOverlay->Visible = FALSE;
