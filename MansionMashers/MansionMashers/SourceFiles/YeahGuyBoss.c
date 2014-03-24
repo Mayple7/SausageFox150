@@ -52,6 +52,7 @@ void LoadYeahGuyBoss(void)
 	LoadTexture("TextureFiles/YeahProjectile.png");
 	LoadTexture("TextureFiles/YeahProjectileBack.png");
 	LoadTexture("TextureFiles/TempYeahGuy.png");
+	LoadTexture("TextureFiles/TempYeahGuyShout.png");
 }
 
 /*************************************************************************/
@@ -93,9 +94,10 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->numHeads = 3;
 	
 	CurrentBoss->YeahAOEDamage = 30;
-	CurrentBoss->YeahAOERadius = 80;
+	CurrentBoss->YeahAOERadius = 600;
 
 	CurrentBoss->YeahPoundDamage = 30;
+
 	CurrentBoss->YeahProjectileDamage = 20;
 
 	return CurrentBoss;
@@ -117,7 +119,36 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 	int projectileID = 100;
 	static int numProjectiles = 0;
 	float projectileAngle;
-	int movementPicker;
+	static int movementPicker = 0;
+
+	switch(CurrentBoss->numHeads)
+	{
+	case 1:
+		CurrentBoss->YeahAOEDamage = 30;
+		CurrentBoss->YeahAOERadius = 400;
+
+		CurrentBoss->YeahPoundDamage = 30;
+
+		CurrentBoss->YeahProjectileDamage = 45;
+		break;
+	case 2:
+		CurrentBoss->YeahAOEDamage = 20;
+		CurrentBoss->YeahAOERadius = 500;
+
+		CurrentBoss->YeahPoundDamage = 20;
+
+		CurrentBoss->YeahProjectileDamage = 30;
+		break;
+	case 3:
+		CurrentBoss->YeahAOEDamage = 10;
+		CurrentBoss->YeahAOERadius = 600;
+
+		CurrentBoss->YeahPoundDamage = 10;
+
+		CurrentBoss->YeahProjectileDamage = 15;
+		break;
+	}
+
 
 	switch(CurrentBoss->CurrentState)
 	{
@@ -126,7 +157,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		{
 		case Start:
 			//printf("AOE TIME START\n");
-			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuyShout.png");
+			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempYeahGuyShout.png");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
 			if(CurrentBoss->cooldownTimer > 2.0f)
 				CurrentBoss->InnerState = Attack;
@@ -147,13 +178,9 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			//printf("AOE TIME END\n");
 			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempYeahGuy.png");
 
-			CurrentBoss->cooldownTimer += GetDeltaTime();
-			if(CurrentBoss->cooldownTimer > 2.0f)
-			{
-				CurrentBoss->cooldownTimer = 0.0f;
-				CurrentBoss->CurrentState = Cooldown;
-				CurrentBoss->InnerState = Start;
-			}
+			CurrentBoss->cooldownTimer = 0.0f;
+			CurrentBoss->CurrentState = Cooldown;
+			CurrentBoss->InnerState = Start;
 			break;
 		}
 		break;
@@ -164,7 +191,9 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			//printf("QUESTION TIME START\n");
 			// Change boss sprite to attacking
 			projectileAngle = (float)atan2(CurrentPlayer.Position.y - CurrentBoss->Position.y, CurrentPlayer.Position.x - CurrentBoss->Position.x);
-			CurrentProjectile = CreateProjectile("TextureFiles/YeahProjectile.png", 210, 90, CurrentBoss->Position.x, CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2, Arrow, WeaponEnemy, projectileID++, CurrentBoss->YeahProjectileDamage / CurrentBoss->numHeads, 800, projectileAngle);
+			CurrentProjectile = CreateProjectile("TextureFiles/YeahProjectile.png", 210, 90, CurrentBoss->Position.x, CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2, Arrow, WeaponEnemy, projectileID++, CurrentBoss->YeahProjectileDamage, 800, projectileAngle);
+
+			// Select the correct texture depending on which direction attacking
 			if(CurrentBoss->Position.x > CurrentPlayer.Position.x)
 			{
 				CurrentProjectile->ProjectileSprite->SpriteTexture = LoadTexture("TextureFiles/YeahProjectileBack.png");
@@ -175,7 +204,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		case Attack:
 			//printf("QUESTION TIME START\n");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
-			// Waits 2 seconds
+			// Waits 1 second
 			if(CurrentBoss->cooldownTimer >= 1.0f)
 			{
 				CurrentBoss->cooldownTimer = 0.0f;
@@ -184,7 +213,6 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			break;
 		case End:
 			//printf("QUESTION TIME START\n");
-			CurrentBoss->cooldownTimer += GetDeltaTime();
 			
 			// Shoots out as many projectiles as he has heads
 			if(numProjectiles >= CurrentBoss->numHeads)
@@ -202,6 +230,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
+			// Choose where to ground pound
 			movementPicker = rand() % 2;
 			if(movementPicker)
 				CurrentBoss->PositionState = D;
@@ -221,6 +250,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 				{
 					CurrentBoss->YeahGuyRigidBody.Velocity.x = -1000;
 				}
+				// X position reached, time to pound down
 				else
 				{
 					CurrentBoss->Position.x = -275;
@@ -230,6 +260,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			}
 			else if(CurrentBoss->PositionState == D)
 			{
+				// Set velocity based on position
 				if(CurrentBoss->Position.x < 300 && CurrentBoss->YeahGuyRigidBody.Velocity.x >= 0)
 				{
 					CurrentBoss->YeahGuyRigidBody.Velocity.x = 1000;
@@ -238,6 +269,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 				{
 					CurrentBoss->YeahGuyRigidBody.Velocity.x = -1000;
 				}
+				// X position reached, time to pound down
 				else
 				{
 					CurrentBoss->Position.x = 275;
@@ -245,6 +277,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 				}
 			}
 
+			// Jump if on a platform
 			if(CurrentBoss->YeahGuyRigidBody.onGround)
 			{
 				// Set y velocity for jumping
@@ -257,11 +290,24 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 
 			break;
 		case End:
+			// Stop horizontal velocity and ground pound down.
 			CurrentBoss->YeahGuyRigidBody.Velocity.x = 0;
 			CurrentBoss->YeahGuyRigidBody.Gravity.y = CurrentBoss->YeahGuyRigidBody.Gravity.y * 2;
 			
+			// When the boss hits the floor
 			if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL)
 			{
+				// Set the boss to be on the ground
+				CurrentBoss->Position.y = GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4;
+				CurrentBoss->BossCollider.Position.y = CurrentBoss->Position.y;
+
+				// Check if the ground pound hit the player
+				if(CollisionRectangles(&CurrentBoss->BossCollider, &CurrentPlayer.PlayerCollider) || CurrentPlayer.Position.y <= GROUNDLEVEL)
+				{
+					PlayerDamageResult(CurrentBoss->YeahPoundDamage);
+				}
+
+				// Go to cooldown state to pick the next move
 				CurrentBoss->CurrentState = Cooldown;
 				CurrentBoss->InnerState = Start;
 				CurrentBoss->cooldownTimer = 0.0f;
@@ -274,22 +320,203 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
+			// Choose where to ground pound
 			movementPicker = rand() % 3;
+
+			CurrentBoss->InnerState = Attack;
 			break;
 		case Attack:
-/*			switch(movementPicker)
+			if(CurrentBoss->PositionState == B)
 			{
-			case 0:
+				// Vault to A
+				if(movementPicker == 1)
+				{
+					// Set velocity based on position
+					if(CurrentBoss->Position.x < -630 && CurrentBoss->YeahGuyRigidBody.Velocity.x >= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 250;
+					}
+					else if(CurrentBoss->Position.x > -530 && CurrentBoss->YeahGuyRigidBody.Velocity.x <= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = -250;
+					}
+					// X position reached, time to pound down
+					else if(CurrentBoss->YeahGuyRigidBody.onGround)
+					{
+						CurrentBoss->PositionState = A;
+						CurrentBoss->InnerState = End;
+					}
 
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
+					// Jump if on the ground
+					if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL)
+					{
+						// Set y velocity for jumping
+						Vec2 velocity;
+						CurrentBoss->Position.y += 3;
+						Vec2Set(&velocity, 0.0f, 1500.0f);
+						ApplyVelocity(&CurrentBoss->YeahGuyRigidBody, &velocity);
+						CurrentBoss->YeahGuyRigidBody.onGround = FALSE;
+					}
+				}
+				// Vault to C
+				else if(movementPicker == 2)
+				{
+					// Set velocity based on position
+					if(CurrentBoss->Position.x < -50 && CurrentBoss->YeahGuyRigidBody.Velocity.x >= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 250;
+					}
+					else if(CurrentBoss->Position.x > 50 && CurrentBoss->YeahGuyRigidBody.Velocity.x <= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = -250;
+					}
+					// X position reached, time to pound down
+					else if(CurrentBoss->YeahGuyRigidBody.onGround)
+					{
+						CurrentBoss->PositionState = C;
+						CurrentBoss->InnerState = End;
+					}
+
+					// Jump if on the ground
+					if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL)
+					{
+						// Set y velocity for jumping
+						Vec2 velocity;
+						CurrentBoss->Position.y += 3;
+						Vec2Set(&velocity, 0.0f, 1800.0f);
+						ApplyVelocity(&CurrentBoss->YeahGuyRigidBody, &velocity);
+						CurrentBoss->YeahGuyRigidBody.onGround = FALSE;
+					}
+				}
+				// Vault to E
+				else
+				{
+					// Set velocity based on position
+					if(CurrentBoss->Position.x < 530 && CurrentBoss->YeahGuyRigidBody.Velocity.x >= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 670;
+					}
+					else if(CurrentBoss->Position.x > 630 && CurrentBoss->YeahGuyRigidBody.Velocity.x <= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = -670;
+					}
+					// X position reached, time to pound down
+					else if(CurrentBoss->YeahGuyRigidBody.onGround)
+					{
+						CurrentBoss->PositionState = E;
+						CurrentBoss->InnerState = End;
+					}
+
+					// Jump if on the ground
+					if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL)
+					{
+						// Set y velocity for jumping
+						Vec2 velocity;
+						CurrentBoss->Position.y += 3;
+						Vec2Set(&velocity, 0.0f, 1550.0f);
+						ApplyVelocity(&CurrentBoss->YeahGuyRigidBody, &velocity);
+						CurrentBoss->YeahGuyRigidBody.onGround = FALSE;
+					}
+				}
 			}
-			*/
+			else if(CurrentBoss->PositionState == D)
+			{
+				// Vault to A
+				if(movementPicker == 1)
+				{
+					// Set velocity based on position
+					if(CurrentBoss->Position.x < -630 && CurrentBoss->YeahGuyRigidBody.Velocity.x >= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 670;
+					}
+					else if(CurrentBoss->Position.x > -530 && CurrentBoss->YeahGuyRigidBody.Velocity.x <= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = -670;
+					}
+					// X position reached, time to pound down
+					else if(CurrentBoss->YeahGuyRigidBody.onGround)
+					{
+						CurrentBoss->PositionState = A;
+						CurrentBoss->InnerState = End;
+					}
+
+					// Jump if on the ground
+					if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL)
+					{
+						// Set y velocity for jumping
+						Vec2 velocity;
+						CurrentBoss->Position.y += 3;
+						Vec2Set(&velocity, 0.0f, 1550.0f);
+						ApplyVelocity(&CurrentBoss->YeahGuyRigidBody, &velocity);
+						CurrentBoss->YeahGuyRigidBody.onGround = FALSE;
+					}
+				}
+				// Vault to C
+				else if(movementPicker == 2)
+				{
+					// Set velocity based on position
+					if(CurrentBoss->Position.x < -50 && CurrentBoss->YeahGuyRigidBody.Velocity.x >= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 250;
+					}
+					else if(CurrentBoss->Position.x > 50 && CurrentBoss->YeahGuyRigidBody.Velocity.x <= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = -250;
+					}
+					// X position reached, time to pound down
+					else if(CurrentBoss->YeahGuyRigidBody.onGround)
+					{
+						CurrentBoss->PositionState = C;
+						CurrentBoss->InnerState = End;
+					}
+
+					// Jump if on the ground
+					if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL)
+					{
+						// Set y velocity for jumping
+						Vec2 velocity;
+						CurrentBoss->Position.y += 3;
+						Vec2Set(&velocity, 0.0f, 1800.0f);
+						ApplyVelocity(&CurrentBoss->YeahGuyRigidBody, &velocity);
+						CurrentBoss->YeahGuyRigidBody.onGround = FALSE;
+					}
+				}
+				// Vault to E
+				else
+				{
+					// Set velocity based on position
+					if(CurrentBoss->Position.x < 530 && CurrentBoss->YeahGuyRigidBody.Velocity.x >= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 250;
+					}
+					else if(CurrentBoss->Position.x > 630 && CurrentBoss->YeahGuyRigidBody.Velocity.x <= 0)
+					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = -250;
+					}
+					// X position reached, time to pound down
+					else if(CurrentBoss->YeahGuyRigidBody.onGround)
+					{
+						CurrentBoss->PositionState = E;
+						CurrentBoss->InnerState = End;
+					}
+
+					// Jump if on the ground
+					if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL)
+					{
+						// Set y velocity for jumping
+						Vec2 velocity;
+						CurrentBoss->Position.y += 3;
+						Vec2Set(&velocity, 0.0f, 1500.0f);
+						ApplyVelocity(&CurrentBoss->YeahGuyRigidBody, &velocity);
+						CurrentBoss->YeahGuyRigidBody.onGround = FALSE;
+					}
+				}
+			}
 			break;
 		case End:
+			CurrentBoss->CurrentState = Cooldown;
+			CurrentBoss->InnerState = Start;
+			CurrentBoss->cooldownTimer = 0.0f;
 			break;
 		}
 		break;
@@ -298,14 +525,67 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		{
 		case Start:
 			CurrentBoss->cooldownTimer += GetDeltaTime();
-			if(CurrentBoss->cooldownTimer > 2.0f)
+			if(CurrentBoss->cooldownTimer > 3.0f / CurrentBoss->numHeads)
 			{
-				CurrentBoss->CurrentState = ProjectYeah;
+				CurrentBoss->InnerState = Attack;
 				CurrentBoss->cooldownTimer = 0.0f;
 			}
 
 			break;
 		case Attack:
+			// Choses the next move to use
+			movementPicker = rand() % 3;
+
+			switch(CurrentBoss->PositionState)
+			{
+			case A:
+				// 33$ chance to go to a new location
+				if(movementPicker == 1)
+					CurrentBoss->CurrentState = AOE;
+				else if(movementPicker == 2)
+					CurrentBoss->CurrentState = ProjectYeah;
+				else
+					CurrentBoss->CurrentState = Pound;
+				break;
+			case B:
+				// 33$ chance to go to a new location
+				if(movementPicker == 1)
+					CurrentBoss->CurrentState = AOE;
+				else if(movementPicker == 2)
+					CurrentBoss->CurrentState = ProjectYeah;
+				else
+					CurrentBoss->CurrentState = Vault;
+				break;
+			case C:
+				// 33$ chance to go to a new location
+				if(movementPicker == 1)
+					CurrentBoss->CurrentState = AOE;
+				else if(movementPicker == 2)
+					CurrentBoss->CurrentState = ProjectYeah;
+				else
+					CurrentBoss->CurrentState = Pound;
+				break;
+			case D:
+				// 33$ chance to go to a new location
+				if(movementPicker == 1)
+					CurrentBoss->CurrentState = AOE;
+				else if(movementPicker == 2)
+					CurrentBoss->CurrentState = ProjectYeah;
+				else
+					CurrentBoss->CurrentState = Vault;
+				break;
+			case E:
+				// 33$ chance to go to a new location
+				if(movementPicker == 1)
+					CurrentBoss->CurrentState = AOE;
+				else if(movementPicker == 2)
+					CurrentBoss->CurrentState = ProjectYeah;
+				else
+					CurrentBoss->CurrentState = Pound;
+				break;
+			}
+			CurrentBoss->cooldownTimer = 0.0f;
+			CurrentBoss->InnerState = Start;
 			break;
 		case End:
 			break;
