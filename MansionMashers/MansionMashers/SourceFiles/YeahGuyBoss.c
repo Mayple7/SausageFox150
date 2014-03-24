@@ -351,6 +351,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 					// X position reached, time to pound down
 					else if(CurrentBoss->YeahGuyRigidBody.onGround)
 					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 0;
 						CurrentBoss->PositionState = A;
 						CurrentBoss->InnerState = End;
 					}
@@ -381,6 +382,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 					// X position reached, time to pound down
 					else if(CurrentBoss->YeahGuyRigidBody.onGround)
 					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 0;
 						CurrentBoss->PositionState = C;
 						CurrentBoss->InnerState = End;
 					}
@@ -411,6 +413,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 					// X position reached, time to pound down
 					else if(CurrentBoss->YeahGuyRigidBody.onGround)
 					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 0;
 						CurrentBoss->PositionState = E;
 						CurrentBoss->InnerState = End;
 					}
@@ -444,6 +447,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 					// X position reached, time to pound down
 					else if(CurrentBoss->YeahGuyRigidBody.onGround)
 					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 0;
 						CurrentBoss->PositionState = A;
 						CurrentBoss->InnerState = End;
 					}
@@ -474,6 +478,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 					// X position reached, time to pound down
 					else if(CurrentBoss->YeahGuyRigidBody.onGround)
 					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 0;
 						CurrentBoss->PositionState = C;
 						CurrentBoss->InnerState = End;
 					}
@@ -504,6 +509,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 					// X position reached, time to pound down
 					else if(CurrentBoss->YeahGuyRigidBody.onGround)
 					{
+						CurrentBoss->YeahGuyRigidBody.Velocity.x = 0;
 						CurrentBoss->PositionState = E;
 						CurrentBoss->InnerState = End;
 					}
@@ -613,7 +619,8 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 	if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL || CurrentBoss->YeahGuyRigidBody.onGround)
 	{
 		Vec2Zero(&CurrentBoss->YeahGuyRigidBody.Acceleration);
-		Vec2Zero(&CurrentBoss->YeahGuyRigidBody.Velocity);
+		//Vec2Zero(&CurrentBoss->YeahGuyRigidBody.Velocity);
+		CurrentBoss->YeahGuyRigidBody.Velocity.y = 0;
 		ZeroGravity(&CurrentBoss->YeahGuyRigidBody);
 	}
 	//Set gravity if not on floor or on a platform
