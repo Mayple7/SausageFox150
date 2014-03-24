@@ -42,6 +42,10 @@ static int newID;					// ID number
 static int levelComplete = TRUE;
 TextGlyphs* LevelName;
 
+Sprite* DebugCircle;
+
+YeahGuyBoss *Boss;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -63,7 +67,6 @@ void LoadYeahGuy(void)
 void InitializeYeahGuy(void)
 {
 	Vec3 TextTint;
-
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -72,9 +75,31 @@ void InitializeYeahGuy(void)
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
+	//Panel1
+	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
+
+	//Background
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -550, -170);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 550, -170);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 0, 100);
+
+	//Create bounding walls
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
+
+	Boss = CreateYeahGuyBoss(0, 0, &newID);
+	Boss->BossCollider.collisionDebug = TRUE;
+
+	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->YeahAOERadius * 2, Boss->YeahAOERadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
+	DebugCircle->Visible = FALSE;
+
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("YeahGuy Level", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
+
+	CreateBoundingBoxes();
 }
 
 /*************************************************************************/
@@ -86,9 +111,23 @@ void InitializeYeahGuy(void)
 void UpdateYeahGuy(void)
 {
 	EventYeahGuy();
-
 	// This should be the last line in this function
+	UpdateYeahGuyBoss(Boss);
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateFloatingText();
+	BoundingBoxUpdate();
+
+	UpdateAllProjectiles();
+
+	if(Boss->CurrentState == 1 && Boss->InnerState != 2)
+	{
+		DebugCircle->Visible = TRUE;
+		DebugCircle->Position = Boss->Position;
+	}
+	else
+		DebugCircle->Visible = FALSE;
+
 }
 
 /*************************************************************************/
@@ -114,7 +153,7 @@ void DrawYeahGuy(void)
 void FreeYeahGuy(void)
 {
 	if(levelComplete)
-		CurrentPlayer.CurrentLevel = GS_Level4;
+		CurrentPlayer.CurrentLevel = GS_Level7;
 	else
 		CurrentPlayer.CurrentLevel = GS_YeahGuy;
 	SavePlayer(&CurrentPlayer);
@@ -144,25 +183,23 @@ void EventYeahGuy(void)
 {
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
+	DetectYeahGuyBossCollision(Boss);
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
-		//OverlayGrid->Visible = TRUE;
 	}
 	if(FoxInput_KeyTriggered('I'))
 	{
 		RemoveDebugMode();
-		//OverlayGrid->Visible = FALSE;
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//InitializePause(&DrawYeahGuy);
+		InitializePause(&DrawYeahGuy);
 		//TogglePauseSound(&BackgroundSnd);
-		SetNextState(GS_MainMenu);
-		//UpdatePause();
+		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
 }

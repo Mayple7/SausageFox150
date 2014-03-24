@@ -92,8 +92,6 @@ void InitializeHandGuy(void)
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
 
 	Boss = CreateHandGuyBoss(0, 0, &newID);
-	Boss->JabAttack.collisionDebug = TRUE;
-	Boss->BossCollider.collisionDebug = TRUE;
 
 	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->ShoutRadius * 2, Boss->ShoutRadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
 	DebugCircle->Visible = FALSE;
@@ -146,8 +144,6 @@ void DrawHandGuy(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
-	displayCollisionDebug(&Boss->BossCollider);
-	displayCollisionDebug(&Boss->JabAttack);
 }
 
 /*************************************************************************/
