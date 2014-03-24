@@ -28,14 +28,21 @@ Store
 2-3level tracks
 Boss Battle
 
+
+
 Dialogue
 4 Fox Princesses
 -Hitting, Getting Hit (oof)
 -Flavor Chat, smack talk
+-Picking up an item
 -dying, respawn, close to death
 -using/losing buffs
+
 -healing
 -special pick ups
+
+
+
 Scripted dialogue
 Basic enemy
 -getting hit
