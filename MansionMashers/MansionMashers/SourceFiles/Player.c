@@ -51,8 +51,6 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 {
 	int i, startingBuff;
 
-	LookAtMouse = TRUE;
-
 	for(i = 0; i < COLLIDEAMOUNT; i++)
 	{
 		CurrentPlayer->CollisionData[i] = -1;
