@@ -161,7 +161,7 @@ void InitializeLevel1(void)
 	CreateBlockerBoxes(&newID);	
 
 	//Enemy spawners (always set left and then right if none set to null)
-	Vec2Set(&SpawnerLocation, -200, 0);
+	Vec2Set(&SpawnerLocation, -(PANELSIZE / 4) - 100, 0);
 	//First Spawner Left (none so set to null
 	Spawners[0] = NULL;
 	//First Spawner Right
@@ -347,7 +347,7 @@ void EventLevel1(void)
 			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 			
 			// Threshold to give control back to the player
-			if(CurrentPlayer.Position.x > -500)
+			if(CurrentPlayer.Position.x > -800)
 				beginningAnimiation = FALSE;
 		}
 		//Always animate the player otherwise the sprites get stuck in the middle
