@@ -38,8 +38,6 @@ Player CurrentPlayer;
 
 #define PANELSIZE 1920.0f
 
-static int FollowMouse; //If you like that sort of thing, life is about choice isn't it?
-
 /*************************************************************************/
 /*!
 	\brief
@@ -53,7 +51,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 {
 	int i, startingBuff;
 
-	FollowMouse = TRUE;
+	LookAtMouse = TRUE;
 
 	for(i = 0; i < COLLIDEAMOUNT; i++)
 	{
@@ -171,6 +169,9 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
+	int mouseX = FoxInput_GetMousePositionX();
+	float camX = GetCameraXPosition();
+
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
 	if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer->isAttacking)
@@ -195,11 +196,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 	}
 
-	if (FollowMouse)
+	if (LookAtMouse)
 	{
-		if (GetCameraXPosition() + (FoxInput_GetMousePositionX() - PANELSIZE / 2) < CurrentPlayer->Position.x)
+		if (camX + (mouseX - PANELSIZE / 2) < CurrentPlayer->Position.x - 20)
 			CurrentPlayer->FlipX = FALSE;
-		else
+		else if (camX + (mouseX - PANELSIZE / 2) > CurrentPlayer->Position.x + 20)
 			CurrentPlayer->FlipX = TRUE;
 	}
 
@@ -208,7 +209,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->PlayerDirection = LEFT;
 		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
-		if (!FollowMouse)
+		if (!LookAtMouse)
 			CurrentPlayer->FlipX = FALSE;
 	}
 	// Move right if D is pressed
@@ -216,34 +217,19 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->PlayerDirection = RIGHT;
 		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
-		if (!FollowMouse)
+		if (!LookAtMouse)
 			CurrentPlayer->FlipX = TRUE;
 	}
 	else
 	{
-		if (!(CurrentPlayer->Position.y > GROUNDLEVEL) && !CurrentPlayer->PlayerRigidBody.onGround)
+		if (CurrentPlayer->Speed - 48.0f * GetDeltaTime() >= 0.0f)
 		{
-			if (CurrentPlayer->Speed - 48.0f * GetDeltaTime() >= 0.0f)
-			{
-				CurrentPlayer->Speed -= 48.0f * GetDeltaTime();
-			}
-			else
-			{
-				CurrentPlayer->Speed = 0.0f;
-				CurrentPlayer->LegSinValue = 0;
-			}
+			CurrentPlayer->Speed -= 48.0f * GetDeltaTime();
 		}
 		else
 		{
-			if (CurrentPlayer->Speed - 48.0f * GetDeltaTime() >= 0.0f)
-			{
-				CurrentPlayer->Speed -= 48.0f * GetDeltaTime();
-			}
-			else
-			{
-				CurrentPlayer->Speed = 0.0f;
-				CurrentPlayer->LegSinValue = 0;
-			}
+			CurrentPlayer->Speed = 0.0f;
+			CurrentPlayer->LegSinValue = 0;
 		}
 	}
 	
@@ -913,9 +899,7 @@ void DetectPlayerCollision(void)
 		spawner++;
 	}
 }
-/////////////////////////////////////////////////////
-//                    ORIGINAL ANIMATION
-/////////////////////////////////////////////////////
+
 /*************************************************************************/
 /*!
 	\brief
@@ -925,9 +909,10 @@ void DetectPlayerCollision(void)
 	The player to animate
 */
 /*************************************************************************/
-
 void Animation(Player *Object)
 {
+	float DT1 = FRAMERATE * GetDeltaTime(); //Just so it isn't hard-coded too much
+
 	float sinOfLegValue = (float)sin(Object->LegSinValue);
 	float sinOfTwoLegValue = (float)sin(Object->LegSinValue * 2);
 	float LegDistance = Object->CurrentPlayerStats.MoveSpeed * (1 / 60.0f) + (2.3f / (((Object->CurrentPlayerStats.MoveSpeed * (1 / 60.0f)) * 0.15f + 0.15f)) ) - (Object->Speed / GetDeltaTime()) * (1 / 60.0f);
@@ -949,9 +934,6 @@ void Animation(Player *Object)
 	Sprite *Weap = Object->PlayerSpriteParts.Weapon;
 	Sprite *Tail = Object->PlayerSpriteParts.Tail;
 
-	/*
-	printf("%f\n", testFrameTime());*/
-
 	Object->LegSinValue += (Object->Speed) / 75.0f; 
 
 	Object->PlayerSpriteParts.BlinkTimer += 1;
@@ -971,7 +953,7 @@ void Animation(Player *Object)
 	}
 
 	Bdy->Position.x = Object->Position.x;
-	Bdy->Position.y = Object->Position.y - ((float)sin(-Object->LegSinValue * 2) * 5/ (LegDistance));
+	Bdy->Position.y = Object->Position.y - ((float)sin(-Object->LegSinValue * 2) * 5 / (LegDistance));
 	Skrt->Position = Bdy->Position;
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
 		Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection * 4));
@@ -984,16 +966,16 @@ void Animation(Player *Object)
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailRun.png");
 		Object->TailSinValue += 6.0f * GetDeltaTime();
-		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed) / 2 + 3 * FRAMERATE / 60;
+		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed) / 2 + 3 * DT1;
 	}
 	else
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailIdle.png");
 		Object->TailSinValue = 0;
 		if(Object->Princess == Mayple)
-			Object->PlayerSpriteParts.Tail->AnimationSpeed = 2 * FRAMERATE / 60;
+			Object->PlayerSpriteParts.Tail->AnimationSpeed = 2 * DT1;
 		else
-			Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
+			Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * DT1;
 	}
 
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
@@ -1012,9 +994,9 @@ void Animation(Player *Object)
 	{
 		float sinLegOverTen = (float)sin(LegDistance / 10);
 		LegUpperDirection  = sinLegOverTen - 1.0f;
-		LegUpperDirection2 = sinLegOverTen - 1.0f;//60.0f * GetDeltaTime();
-		LegLowerDirection  = LegUpperDirection + 0.5f;//30.0f * GetDeltaTime();
-		LegLowerDirection2 = LegUpperDirection2 - 0.5f;//30.0f * GetDeltaTime();
+		LegUpperDirection2 = sinLegOverTen - 1.0f;
+		LegLowerDirection  = LegUpperDirection + 0.5f;
+		LegLowerDirection2 = LegUpperDirection2 - 0.5f;
 	}
 	LegUpr->FlipX = Object->FlipX;
 	LegLwr->FlipX = Object->FlipX;
@@ -1070,7 +1052,6 @@ void Animation(Player *Object)
 			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			ArmUpr2->Rotation = FOX_PI * 1.5f + 0.5f - Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr2->Rotation = ArmUpr2->Rotation - FOX_PI/2 + Object->PlayerSpriteParts.AttackRotationArmLower;
-			//Weap->Rotation = ArmLwr2->Rotation + Object->PlayerSpriteParts.AttackRotation;
 			if (Object->PlayerSpriteParts.AttackRotationArm == FOX_PI)
 				Object->isAttacking = FALSE;
 		}
@@ -1078,7 +1059,6 @@ void Animation(Player *Object)
 		{
 			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
 			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
-			//Weap->Rotation = ArmLwr2->Rotation;
 		}
 		Weap->Rotation = ArmLwr2->Rotation;
 		ArmUpr2->Position.x = Bdy->Position.x;
@@ -1134,7 +1114,6 @@ void Animation(Player *Object)
 			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			ArmUpr->Rotation = FOX_PI / 2 - 0.5f + Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr->Rotation = ArmUpr->Rotation + FOX_PI/2 - Object->PlayerSpriteParts.AttackRotationArmLower;
-			//Weap->Rotation = ArmLwr->Rotation - Object->PlayerSpriteParts.AttackRotation;
 			if (Object->PlayerSpriteParts.AttackRotationArm == FOX_PI)
 				Object->isAttacking = FALSE;
 		}
