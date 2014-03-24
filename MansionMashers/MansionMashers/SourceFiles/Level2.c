@@ -121,7 +121,7 @@ void InitializeLevel2(void)
 	ResetGatedCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, -1300, 0);
+	InitializePlayer(&CurrentPlayer, Mayple, -1200, 0);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
