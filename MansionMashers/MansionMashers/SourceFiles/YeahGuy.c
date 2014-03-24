@@ -39,7 +39,7 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = TRUE;
+static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 
 Sprite* DebugCircle;
@@ -152,9 +152,9 @@ void DrawYeahGuy(void)
 /*************************************************************************/
 void FreeYeahGuy(void)
 {
-	if(levelComplete)
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level7)
 		CurrentPlayer.CurrentLevel = GS_Level7;
-	else
+	else if(CurrentPlayer.CurrentLevel < GS_YeahGuy)
 		CurrentPlayer.CurrentLevel = GS_YeahGuy;
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();

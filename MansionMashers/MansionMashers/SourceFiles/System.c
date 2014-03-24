@@ -34,7 +34,7 @@ void FoxSystemInitialize(void)
 	if(!fp)
 	{
 		fp = fopen(Settings, "wt");
-		fprintf(fp, "SFX: 100\nBGM: 100\nCheats: 0");
+		fprintf(fp, "SFX: 100\nBGM: 100\nCheats: 0\nLookAtMouse: 0");
 		fclose(fp);
 		fp = fopen(Settings, "rt");
 	}
@@ -42,7 +42,7 @@ void FoxSystemInitialize(void)
 	if(fp)
 	{
 		int num = 0;
-		num = fscanf(fp, "%*s %f %*s %f %*s %d", &SFXVolume, &BGMVolume, &Cheats);
+		num = fscanf(fp, "%*s %f %*s %f %*s %d %*s %d", &SFXVolume, &BGMVolume, &Cheats, &LookAtMouse);
 		fclose(fp);
 	}
 	if(SFXVolume > 100)
@@ -124,7 +124,7 @@ void SaveSettings(void)
 	fp = fopen(Settings, "wt");
 	if(fp)
 	{
-		fprintf(fp, "SFX: %d\nBGM: %d\nCheats: %d", (int)(SFXVolume * 100), (int)(BGMVolume * 100), Cheats);
+		fprintf(fp, "SFX: %d\nBGM: %d\nCheats: %d\nLookAtMouse: %d", (int)(SFXVolume * 100), (int)(BGMVolume * 100), Cheats, LookAtMouse);
 		fclose(fp);
 	}
 }
