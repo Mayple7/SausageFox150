@@ -382,22 +382,33 @@ void InputHandling(void)
 	//If exit confirmation is up
 	else if(exitGame)
 	{
-		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		//Get mouse info
+		int worldX, worldY;
+		Vec2 MouseClick;
+
+		FoxInput_GetWorldPosition(&worldX, &worldY);
+		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
+		// All for exit button
+		if(PointRectCollision(&ExitButton->ButtonCollider, &MouseClick))
 		{
-			//Get mouse info
-			int worldX, worldY;
-			Vec2 MouseClick;
-
-			FoxInput_GetWorldPosition(&worldX, &worldY);
-			Vec2Set(&MouseClick, (float)worldX, (float)worldY);
-
-			//We want a new game right meow!
-			if(PointRectCollision(&ExitButton->ButtonCollider, &MouseClick))
+			if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 			{
 				SetNextState(GS_Quit);
 			}
-			//I'm so close, lets just continue!
-			else if(PointRectCollision(&NoButton->ButtonCollider, &MouseClick))
+			ExitButton->ButtonSprite->ScaleX = 1.2f;
+			ExitButton->ButtonSprite->ScaleY = 1.2f;
+		}
+		else
+		{
+			ExitButton->ButtonSprite->ScaleX = 1.0f;
+			ExitButton->ButtonSprite->ScaleY = 1.0f;
+		}
+
+		// All for the don't quit button
+		if(PointRectCollision(&NoButton->ButtonCollider, &MouseClick))
+		{
+			if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 			{
 				//Hides all the save deletion sprites
 				exitGame = FALSE;
@@ -405,7 +416,20 @@ void InputHandling(void)
 				ExitConfirm->Visible = FALSE;
 				ExitButton->ButtonSprite->Visible = FALSE;
 				NoButton->ButtonSprite->Visible = FALSE;
+
+				NoButton->ButtonSprite->ScaleX = 1.0f;
+				NoButton->ButtonSprite->ScaleY = 1.0f;
 			}
+			else
+			{
+				NoButton->ButtonSprite->ScaleX = 1.2f;
+				NoButton->ButtonSprite->ScaleY = 1.2f;
+			}
+		}
+		else
+		{
+			NoButton->ButtonSprite->ScaleX = 1.0f;
+			NoButton->ButtonSprite->ScaleY = 1.0f;
 		}
 	}
 	//Mouse clicks for the regular buttons
@@ -460,6 +484,12 @@ void InputHandling(void)
 			ExitConfirm->Visible = TRUE;
 			ExitButton->ButtonSprite->Visible = TRUE;
 			NoButton->ButtonSprite->Visible = TRUE;
+
+			NoButton->ButtonSprite->ScaleX = 1.0f;
+			NoButton->ButtonSprite->ScaleY = 1.0f;
+
+			ExitButton->ButtonSprite->ScaleX = 1.0f;
+			ExitButton->ButtonSprite->ScaleY = 1.0f;
 		}
 	}
 	//Mouse hover stuff
@@ -565,6 +595,12 @@ void InputHandling(void)
 			ExitConfirm->Visible = TRUE;
 			ExitButton->ButtonSprite->Visible = TRUE;
 			NoButton->ButtonSprite->Visible = TRUE;
+
+			NoButton->ButtonSprite->ScaleX = 1.0f;
+			NoButton->ButtonSprite->ScaleY = 1.0f;
+
+			ExitButton->ButtonSprite->ScaleX = 1.0f;
+			ExitButton->ButtonSprite->ScaleY = 1.0f;
 		}
 		else
 		{

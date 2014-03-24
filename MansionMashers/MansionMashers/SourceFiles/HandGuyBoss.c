@@ -233,7 +233,6 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			if(CurrentBoss->cooldownTimer > 2.0f)
 			{
 				CurrentBoss->cooldownTimer = 0.0f;
-				CurrentBoss->InnerState = Attack;
 				CurrentBoss->CurrentState = Move;
 				CurrentBoss->InnerState = Start;
 			}
