@@ -83,7 +83,7 @@ void InitializeShop1(void)
 
 	CreateSprite("TextureFiles/LevelGrassGround.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);
 
-	CreateSprite("TextureFiles/ShopKeeper.png", 350.0f, 350.0f, 100, 1, 1, 0, -250);
+	CreateSprite("TextureFiles/ShopKeeper.png", 350.0f, 350.0f, 80, 1, 1, 0, -250);
 
 	Vec3Set(&Tint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);

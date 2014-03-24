@@ -163,6 +163,7 @@
     <ClInclude Include="HeaderFiles\Weapon.h" />
     <ClInclude Include="HeaderFiles\WeaponNames.h" />
     <ClInclude Include="HeaderFiles\YeahGuy.h" />
+    <ClInclude Include="HeaderFiles\YeahGuyBoss.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Point4.h" />
     <ClInclude Include="resource.h" />
@@ -239,6 +240,7 @@
     <ClCompile Include="SourceFiles\Weapon.c" />
     <ClCompile Include="SourceFiles\WeaponNames.c" />
     <ClCompile Include="SourceFiles\YeahGuy.c" />
+    <ClCompile Include="SourceFiles\YeahGuyBoss.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\fox_head.ico" />

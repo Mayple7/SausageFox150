@@ -42,6 +42,7 @@ Button* SFXSlider;
 Button* BGMSlider;
 
 Button* ResumeButton;
+Button* RestartButton;
 Button* MainMenuButton;
 
 TextGlyphs* SFXText;
@@ -128,16 +129,23 @@ void InitializePause(void (*DrawLevel)())
 	if(!Cheats)
 		CheckMark->Visible = FALSE;
 
-	ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -250 + camX, -400, 300, 112.5f, newID++);
-	ResumeButton->ButtonSprite->ZIndex = 4002;
-	
 	LevelToDraw = DrawLevel;
 
 	// Check if we pause the map level or not
 	if(GetCurrentState() == GS_MapLevel)
+	{
+		ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -250 + camX, -400, 300, 112.5f, newID++);
 		MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250 + camX, -400, 300, 112.5f, newID++);
+	}
 	else
-		MainMenuButton = CreateButton("TextureFiles/GoToMapButton.png", 250 + camX, -400, 300, 112.5f, newID++);
+	{
+		ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -400 + camX, -400, 300, 112.5f, newID++);
+		RestartButton = CreateButton("TextureFiles/RestartButton.png", camX, -400, 300, 112.5f, newID++);	
+		RestartButton->ButtonSprite->ZIndex = 4002;
+		MainMenuButton = CreateButton("TextureFiles/GoToMapButton.png", 400 + camX, -400, 300, 112.5f, newID++);
+	}
+
+	ResumeButton->ButtonSprite->ZIndex = 4002;
 	MainMenuButton->ButtonSprite->ZIndex = 4002;
 
 
@@ -164,15 +172,7 @@ void UpdatePause(void)
 			pause = FALSE;
 		}
 
-#if defined _DEBUG
-		if(FoxInput_KeyTriggered(VK_SHIFT))
-		{
-			pause = FALSE;
-			SetNextState(GS_MainMenu);
-		}
-#endif
-
-		if(GetNextState() == GS_Quit)
+		if(GetNextState() == GS_Quit || GetNextState() == GS_Restart)
 		{
 			pause = FALSE;
 		}
@@ -216,8 +216,11 @@ void FreePause(void)
 	FreeButton(CheatsButton);
 	FreeButton(SFXSlider);
 	FreeButton(BGMSlider);
+
 	FreeButton(ResumeButton);
+	FreeButton(RestartButton);
 	FreeButton(MainMenuButton);
+
 	FreeText(SFXText);
 	FreeText(BGMText);
 	FreeMyAlloc(volumestring);
@@ -318,5 +321,22 @@ void EventPause(void)
 	{
 		ResumeButton->ButtonSprite->ScaleX = 1.0f;
 		ResumeButton->ButtonSprite->ScaleY = 1.0f;
+	}
+
+	if(GetCurrentState() != GS_MapLevel && PointRectCollision(&RestartButton->ButtonCollider, &MouseClick))
+	{
+		RestartButton->ButtonSprite->ScaleX = 1.2f;
+		RestartButton->ButtonSprite->ScaleY = 1.2f;
+
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		{
+			SetNextState(GS_Restart);
+			pause = FALSE;
+		}
+	}
+	else if(GetCurrentState() != GS_MapLevel)
+	{
+		RestartButton->ButtonSprite->ScaleX = 1.0f;
+		RestartButton->ButtonSprite->ScaleY = 1.0f;
 	}
 }

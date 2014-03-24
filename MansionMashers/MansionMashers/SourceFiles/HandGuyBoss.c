@@ -79,7 +79,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
-	CurrentBoss->CurrentState = Question;
+	CurrentBoss->CurrentState = Cooldown;
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = B;
 
@@ -139,18 +139,14 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				CurrentBoss->Position.x -= 1000 * GetDeltaTime();
 			else if(CurrentBoss->Position.x < CurrentPlayer.Position.x - CurrentBoss->JabAttack.width)
 				CurrentBoss->Position.x += 1000 * GetDeltaTime();
-			// Don't move to attack on the very first frame
-			else if(CurrentBoss->cooldownTimer > GetDeltaTime() * 2)
+			// Don't attack on the very first frame
+			else if(CurrentBoss->cooldownTimer > GetDeltaTime() * 2 && CollisionRectangles(&CurrentPlayer.PlayerCollider, &CurrentBoss->JabAttack))
 			{
-				// Change states when the boss lands on something ground or platform
-				if(CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4 || CurrentBoss->HandGuyRigidBody.onGround)
-				{
-					CurrentBoss->InnerState = Attack;
-					CurrentBoss->cooldownTimer = 0.0f;
-					CurrentBoss->InnerState = Attack;
-				}
+				CurrentBoss->InnerState = Attack;
+				CurrentBoss->cooldownTimer = 0.0f;
+				CurrentBoss->InnerState = Attack;
 			}
-			
+
 			// Jump up to the platform if needed
 			if((CurrentPlayer.PlayerRigidBody.Velocity.y > 0 || CurrentPlayer.Position.y > 0) && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4)
 			{
@@ -164,6 +160,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			else if(CurrentPlayer.Position.y <= GROUNDLEVEL && CurrentBoss->Position.y > 0)
 			{
 				CurrentBoss->dropDown = TRUE;
+				CurrentBoss->HandGuyRigidBody.onGround = FALSE;
 			}
 			break;
 		case Attack:
@@ -191,7 +188,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 
 			if(CurrentBoss->cooldownTimer > 1.0f)
 			{
-				CurrentBoss->CurrentState = Shout;
+				CurrentBoss->CurrentState = Move;
 				CurrentBoss->InnerState = Start;
 				CurrentBoss->cooldownTimer = 0.0f;
 			}
@@ -205,19 +202,21 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			//printf("SHOUT TIME START\n");
 			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuyShout.png");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
-			if(CurrentBoss->cooldownTimer > 1.0f)
+			if(CurrentBoss->cooldownTimer > 2.0f)
 				CurrentBoss->InnerState = Attack;
 			break;
 		case Attack:
 			//printf("SHOUT TIME ATTACK\n");
 			if(RectCircleCollision(&CurrentBoss->Position, CurrentBoss->ShoutRadius, &CurrentPlayer.PlayerCollider))
 			{
+				// If attack hits, daze player and switch to the jab
 				PlayerDamageResult(CurrentBoss->ShoutDamage);
 				CurrentPlayer.CurrentPlayerStats.MoveSpeed /= 3.0f;
 				CurrentPlayer.CurrentPlayerStats.HasteTimer = 2;
 				CurrentBoss->CurrentState = Jab;
 				CurrentBoss->InnerState = Start;
 				CurrentBoss->cooldownTimer = 0.0f;
+				CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
 			}
 			else
 			{
@@ -225,10 +224,18 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				CurrentBoss->cooldownTimer = 0.0f;
 			}
 			break;
+			// Move if the shout doesn't hit
 		case End:
 			//printf("SHOUT TIME END\n");
 			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
 
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+			if(CurrentBoss->cooldownTimer > 2.0f)
+			{
+				CurrentBoss->cooldownTimer = 0.0f;
+				CurrentBoss->CurrentState = Move;
+				CurrentBoss->InnerState = Start;
+			}
 			break;
 		}
 		break;
@@ -244,8 +251,10 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		case Attack:
 			//printf("QUESTION TIME START\n");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
+			// Throws out ? every 0.75s
 			if(CurrentBoss->cooldownTimer >= 0.75f)
 			{
+				// Creates the projectile and aims to in the direction of the player in a cone
 				if(CurrentPlayer.Position.x > CurrentBoss->Position.x)
 				{
 					projectileAngle = 0;
@@ -254,6 +263,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
 					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
 				}
+				// Creates the projectile and aims to in the direction of the player in a cone
 				else
 				{
 					projectileAngle = FOX_PI;
@@ -267,6 +277,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				++numProjectiles;
 			}
 
+			// Change to end once enough projectiles are created
 			if(numProjectiles >= 5)
 			{
 				CurrentBoss->InnerState = End;
@@ -277,7 +288,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			//printf("QUESTION TIME START\n");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
 
-			if(CurrentBoss->cooldownTimer >= 3)
+			if(CurrentBoss->cooldownTimer >= 2)
 			{
 				CurrentBoss->CurrentState = Move;
 				CurrentBoss->InnerState = Start;
@@ -292,7 +303,6 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		case Start:
 			//printf("MOVE TIME START\n");
 			movementPicker = rand() % 100;
-			printf("%i\n", movementPicker);
 			switch(CurrentBoss->PositionState)
 			{
 			case A:
@@ -398,10 +408,9 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			break;
 		case End:
 			//printf("MOVE TIME START\n");
-			CurrentBoss->cooldownTimer += GetDeltaTime();
-
-			if(CurrentBoss->cooldownTimer > 2.0f)
-				CurrentBoss->InnerState = Start;
+			CurrentBoss->InnerState = Start;
+			CurrentBoss->CurrentState = Cooldown;
+			CurrentBoss->cooldownTimer = 0.0f;
 			break;
 		}
 		break;
@@ -511,7 +520,6 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		CurrentBoss->JabSprite->FlipX = TRUE;
 		CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - CurrentBoss->JabAttack.width / 2;
 	}
-
 
 	//Check if boss is dead
 	//Give ability to end the level
