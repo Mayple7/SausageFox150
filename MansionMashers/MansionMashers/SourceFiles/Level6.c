@@ -203,7 +203,13 @@ void DrawLevel6(void)
 /*************************************************************************/
 void FreeLevel6(void)
 {
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_YeahGuy)
+		CurrentPlayer.CurrentLevel = GS_YeahGuy;
+	else if(CurrentPlayer.CurrentLevel < GS_Level6)
+		CurrentPlayer.CurrentLevel = GS_Level6;
+	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
