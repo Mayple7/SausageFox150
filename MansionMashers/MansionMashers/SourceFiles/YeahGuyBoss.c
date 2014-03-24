@@ -75,7 +75,13 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos, int *objID)
 
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
-	CurrentBoss->CurrentHealth = 1000;
+	CurrentBoss->CurrentRedHealth = 1000;
+	CurrentBoss->CurrentGreenHealth = 1000;
+	CurrentBoss->CurrentBlueHealth = 1000;
+
+	CurrentBoss->redHead = TRUE;
+	CurrentBoss->greenHead = TRUE;
+	CurrentBoss->blueHead = TRUE;
 
 	// Default starting states
 	CurrentBoss->CurrentState = Pound;
@@ -120,6 +126,8 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 	static int numProjectiles = 0;
 	float projectileAngle;
 	static int movementPicker = 0;
+
+	CurrentBoss->numHeads = CurrentBoss->redHead + CurrentBoss->greenHead + CurrentBoss->blueHead;
 
 	switch(CurrentBoss->numHeads)
 	{
@@ -640,6 +648,12 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		CurrentBoss->BodySprite->FlipX = TRUE;
 	}
 
+	if(CurrentBoss->CurrentRedHealth <= 0)
+		CurrentBoss->redHead = FALSE;
+	if(CurrentBoss->CurrentGreenHealth <= 0)
+		CurrentBoss->greenHead = FALSE;
+	if(CurrentBoss->CurrentBlueHealth <= 0)
+		CurrentBoss->blueHead = FALSE;
 	//Check if boss is dead
 	//Give ability to end the level
 }
@@ -653,7 +667,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 	Pointer to the enemy object
 */
 /*************************************************************************/
-void DetectYeahGuyBossCollision(YeahGuyBoss *CurrentBoss)
+void DetectYeahGuyBossCollision(YeahGuyBoss *CurrentBoss, int CurrentBuff)
 {
 	Weapon* wList = weaponList;
 	Platform* pList = platformList;
@@ -690,7 +704,7 @@ void DetectYeahGuyBossCollision(YeahGuyBoss *CurrentBoss)
 				{
 					CurrentBoss->playerHit = wList->WeaponAttack.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
-					YeahGuyBossCollideWeapon(CurrentBoss);
+					YeahGuyBossCollideWeapon(CurrentBoss, CurrentBuff);
 				}
 				// Found target, hit previous frame, on persistant
 				else if(hitPrev % 10 == 1)
@@ -730,7 +744,7 @@ void DetectYeahGuyBossCollision(YeahGuyBoss *CurrentBoss)
 	Pointer to the enemy object
 */
 /*************************************************************************/
-void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss)
+void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff)
 {
 	int damageDealt;
 	char num[10];
@@ -744,8 +758,17 @@ void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss)
 	else
 		damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
-	CurrentBoss->CurrentHealth -= damageDealt;
-	sprintf(num, "-%d", damageDealt);
+	// Deal damage to the specific head
+	if(CurrentBoss->redHead && CurrentBuff == 1)
+		CurrentBoss->CurrentRedHealth -= damageDealt * 2;
+	else if(CurrentBoss->greenHead && CurrentBuff == 2)
+		CurrentBoss->CurrentGreenHealth -= damageDealt * 2;
+	else if(CurrentBoss->blueHead && CurrentBuff == 3)
+		CurrentBoss->CurrentBlueHealth -= damageDealt * 2;
+	else
+		damageDealt = 0;
+
+	sprintf(num, "-%d", damageDealt * 2);
 	// Create Floating Combat Text
 	FirstLetter = CreateText(num, (CurrentBoss->Position.x + rand() % 81 - 40), (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
