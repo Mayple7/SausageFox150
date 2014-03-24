@@ -139,7 +139,7 @@ void InitializePause(void (*DrawLevel)())
 		CheckMark->Visible = FALSE;
 
 	//Look at mouse check mark
-	EnableLookAt = (Sprite *) CreateSprite("TextureFiles/EnableLookAt.png", 592, 106.4f, 4000, 1, 1, 180 + camX, -280);
+	EnableLookAt = (Sprite *) CreateSprite("TextureFiles/FaceMouse.png", 592, 106.4f, 4000, 1, 1, 180 + camX, -280);
 	LookAtButton = CreateButton("TextureFiles/CheckBox.png", -250 + camX, -280, 100, 100, newID++);
 	LookAtButton->ButtonSprite->ZIndex = 4000;
 	UpdateCollider(&LookAtButton->ButtonCollider, 800, LookAtButton->ButtonCollider.height);

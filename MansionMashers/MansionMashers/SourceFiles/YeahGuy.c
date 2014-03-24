@@ -40,11 +40,33 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
+static int CurrentBuff;
+float buffTimer;
+float playerBuffTimer;
+
+// Fake Bools
+int buffsShown;
+int redHead;
+int greenHead;
+int blueHead;
+
+// Buff Sprites and Collision boxes
+Sprite* RedBuff;
+CollisionBox* RedBuffCollider;
+
+Sprite* GreenBuff;
+CollisionBox* GreenBuffCollider;
+
+Sprite* BlueBuff;
+CollisionBox* BlueBuffCollider;
+
 TextGlyphs* LevelName;
 
 Sprite* DebugCircle;
 
 YeahGuyBoss *Boss;
+
+static enum BossBuff { None, Red, Green, Blue };
 
 /*************************************************************************/
 /*!
@@ -56,6 +78,10 @@ void LoadYeahGuy(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
+
+	LoadTexture("TextureFiles/RedBuff.png");
+	LoadTexture("TextureFiles/GreenBuff.png");
+	LoadTexture("TextureFiles/BlueBuff.png");
 }
 
 /*************************************************************************/
@@ -67,6 +93,7 @@ void LoadYeahGuy(void)
 void InitializeYeahGuy(void)
 {
 	Vec3 TextTint;
+	Vec2 Position;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -74,6 +101,11 @@ void InitializeYeahGuy(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentBuff = None;
+	buffsShown = FALSE;
+	buffTimer = 0.0f;
+	playerBuffTimer = 0.0f;
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -99,6 +131,28 @@ void InitializeYeahGuy(void)
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("YeahGuy Level", 0, 300, 100, TextTint, Center, Border);
 
+	redHead = TRUE;
+	greenHead = TRUE;
+	blueHead = TRUE;
+
+	Vec2Set(&Position, 0, 0);
+
+	// Creates the buffs, do not add these to 
+	RedBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
+	GreenBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
+	BlueBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
+
+	RedBuff = (Sprite *)CreateSprite("TextureFiles/RedBuff.png", 200, 200, 20, 1, 1, 0, 0);
+	CreateCollisionBox(RedBuffCollider, &Position, FoodType, 200, 200, newID++);
+
+	GreenBuff = (Sprite *)CreateSprite("TextureFiles/GreenBuff.png", 200, 200, 20, 1, 1, 0, 0);
+	CreateCollisionBox(GreenBuffCollider, &Position, FoodType, 200, 200, newID++);
+
+	BlueBuff = (Sprite *)CreateSprite("TextureFiles/BlueBuff.png", 200, 200, 20, 1, 1, 0, 0);
+	CreateCollisionBox(BlueBuffCollider, &Position, FoodType, 200, 200, newID++);
+
+	HideBuffs();
+
 	CreateBoundingBoxes();
 }
 
@@ -110,6 +164,29 @@ void InitializeYeahGuy(void)
 /*************************************************************************/
 void UpdateYeahGuy(void)
 {
+	buffTimer += GetDeltaTime();
+
+	// Update all buffs if needed
+	if(buffTimer >= 10.0f)
+	{
+		HideBuffs();
+		buffTimer = 0.0f;
+		buffsShown = FALSE;
+	}
+	else if(buffTimer >= 5.0f && !buffsShown)
+	{
+		ShowBuffs();
+		buffsShown = TRUE;
+	}
+
+	// Make buffs invisible if the head does not exist
+	if(!redHead)
+		RedBuff->Visible = FALSE;
+	if(!greenHead)
+		GreenBuff->Visible = FALSE;
+	if(!blueHead)
+		BlueBuff->Visible = FALSE;
+
 	EventYeahGuy();
 	// This should be the last line in this function
 	UpdateYeahGuyBoss(Boss);
@@ -156,6 +233,10 @@ void FreeYeahGuy(void)
 		CurrentPlayer.CurrentLevel = GS_Level7;
 	else if(CurrentPlayer.CurrentLevel < GS_YeahGuy)
 		CurrentPlayer.CurrentLevel = GS_YeahGuy;
+
+	FreeMyAlloc(RedBuffCollider);
+	FreeMyAlloc(GreenBuffCollider);
+	FreeMyAlloc(BlueBuffCollider);
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 }
@@ -202,4 +283,178 @@ void EventYeahGuy(void)
 		UpdatePause();
 		//TogglePauseSound(&BackgroundSnd);
 	}
+}
+
+void ShowBuffs(void)
+{
+	int buffLocations = rand() % 6;
+
+	if(CurrentBuff == None)
+	{
+		switch(buffLocations)
+		{
+		case 0:
+			// 1-2-3
+			// Sets up red buff if needed
+			if(redHead)
+			{
+				Vec2Set(&RedBuff->Position, -550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&RedBuffCollider->Position, -550, 0);
+			}
+			// Sets up green buff if needed
+			if(greenHead)
+			{
+				Vec2Set(&GreenBuff->Position, 0, 270);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&GreenBuffCollider->Position, 0, 270);
+			}
+			// Sets up blue buff if needed
+			if(blueHead)
+			{
+				Vec2Set(&BlueBuff->Position, 550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&BlueBuffCollider->Position, 550, 0);
+			}
+			break;
+		case 1:
+			// 1-3-2
+			// Sets up red buff if needed
+			if(redHead)
+			{
+				Vec2Set(&RedBuff->Position, -550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&RedBuffCollider->Position, -550, 0);
+			}
+			// Sets up green buff if needed
+			if(greenHead)
+			{
+				Vec2Set(&GreenBuff->Position, 550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&GreenBuffCollider->Position, 550, 0);
+			}
+			// Sets up blue buff if needed
+			if(blueHead)
+			{
+				Vec2Set(&BlueBuff->Position, 0, 270);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&BlueBuffCollider->Position, 0, 270);
+			}
+			break;
+		case 2:
+			// 2-1-3
+			// Sets up red buff if needed
+			if(redHead)
+			{
+				Vec2Set(&RedBuff->Position, 550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&RedBuffCollider->Position, 550, 0);
+			}
+			// Sets up green buff if needed
+			if(greenHead)
+			{
+				Vec2Set(&GreenBuff->Position, -550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&GreenBuffCollider->Position, -550, 0);
+			}
+			// Sets up blue buff if needed
+			if(blueHead)
+			{
+				Vec2Set(&BlueBuff->Position, 0, 270);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&BlueBuffCollider->Position, 0, 270);
+			}
+			break;
+		case 3:
+			// 2-3-1
+			// Sets up red buff if needed
+			if(redHead)
+			{
+				Vec2Set(&RedBuff->Position, 550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&RedBuffCollider->Position, 550, 0);
+			}
+			// Sets up green buff if needed
+			if(greenHead)
+			{
+				Vec2Set(&GreenBuff->Position, 0, 270);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&GreenBuffCollider->Position, 0, 270);
+			}
+			// Sets up blue buff if needed
+			if(blueHead)
+			{
+				Vec2Set(&BlueBuff->Position, -550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&BlueBuffCollider->Position, -550, 0);
+			}
+			break;
+		case 4:
+			// 3-1-2
+			// Sets up red buff if needed
+			if(redHead)
+			{
+				Vec2Set(&RedBuff->Position, 550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&RedBuffCollider->Position, 550, 0);
+			}
+			// Sets up green buff if needed
+			if(greenHead)
+			{
+				Vec2Set(&GreenBuff->Position, -550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&GreenBuffCollider->Position, -550, 0);
+			}
+			// Sets up blue buff if needed
+			if(blueHead)
+			{
+				Vec2Set(&BlueBuff->Position, 0, 270);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&BlueBuffCollider->Position, 0, 270);
+			}
+			break;
+		case 5:
+			// 3-2-1
+			// Sets up red buff if needed
+			if(redHead)
+			{
+				Vec2Set(&RedBuff->Position, 550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&RedBuffCollider->Position, 550, 0);
+			}
+			// Sets up green buff if needed
+			if(greenHead)
+			{
+				Vec2Set(&GreenBuff->Position, 0, 270);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&GreenBuffCollider->Position, 0, 270);
+			}
+			// Sets up blue buff if needed
+			if(blueHead)
+			{
+				Vec2Set(&BlueBuff->Position, -550, 0);
+				RedBuff->Visible = TRUE;
+				Vec2Set(&BlueBuffCollider->Position, -550, 0);
+			}
+			break;
+		}
+	}
+	else
+		HideBuffs();
+}
+
+void HideBuffs(void)
+{
+	// Moves everything down below
+	Vec2Set(&RedBuff->Position, 550, -999);
+	RedBuff->Visible = TRUE;
+	Vec2Set(&RedBuffCollider->Position, 550, -999);
+	
+	Vec2Set(&GreenBuff->Position, 0, -999);
+	RedBuff->Visible = TRUE;
+	Vec2Set(&GreenBuffCollider->Position, 0, -999);
+	
+	Vec2Set(&BlueBuff->Position, -550, -999);
+	RedBuff->Visible = TRUE;
+	Vec2Set(&BlueBuffCollider->Position, -550, -999);
 }
