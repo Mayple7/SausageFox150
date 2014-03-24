@@ -38,8 +38,6 @@ Player CurrentPlayer;
 
 #define PANELSIZE 1920.0f
 
-static int FollowMouse; //If you like that sort of thing, life is about choice isn't it?
-
 /*************************************************************************/
 /*!
 	\brief
@@ -53,7 +51,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 {
 	int i, startingBuff;
 
-	FollowMouse = TRUE;
+	LookAtMouse = TRUE;
 
 	for(i = 0; i < COLLIDEAMOUNT; i++)
 	{
@@ -195,7 +193,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 	}
 
-	if (FollowMouse)
+	if (LookAtMouse)
 	{
 		if (GetCameraXPosition() + (FoxInput_GetMousePositionX() - PANELSIZE / 2) < CurrentPlayer->Position.x)
 			CurrentPlayer->FlipX = FALSE;
@@ -208,7 +206,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->PlayerDirection = LEFT;
 		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
-		if (!FollowMouse)
+		if (!LookAtMouse)
 			CurrentPlayer->FlipX = FALSE;
 	}
 	// Move right if D is pressed
@@ -216,7 +214,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->PlayerDirection = RIGHT;
 		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
-		if (!FollowMouse)
+		if (!LookAtMouse)
 			CurrentPlayer->FlipX = TRUE;
 	}
 	else
