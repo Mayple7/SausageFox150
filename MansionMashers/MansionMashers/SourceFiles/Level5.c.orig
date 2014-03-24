@@ -1,18 +1,18 @@
 /*****************************************************************************/
 /*!
-\file				Level6.c
+\file				Level5.c
 \author				Dan Muller (d.muller)
 \date				Mar 8, 2014
 
-\brief				Functions for Level6
+\brief				Functions for Level5
 
 \par				Functions:
-\li					LoadLevel6
-\li					InitializeLevel6
-\li					UpdateLevel6
-\li					DrawLevel6
-\li					FreeLevel6
-\li					UnloadLevel6
+\li					LoadLevel5
+\li					InitializeLevel5
+\li					UpdateLevel5
+\li					DrawLevel5
+\li					FreeLevel5
+\li					UnloadLevel5
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -24,13 +24,12 @@
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/Level6.h"
+#include "../HeaderFiles/Level5.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/EasyEdit.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -45,19 +44,26 @@
 static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
-static int PlayerIsAlive;
-static int numPanels;
+static int keysObtained;
+static int goingBack;
 TextGlyphs* LevelName;
-
-EnemySpawner* Spawners[8];
-
-FoxSound* BackSnd;
 
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
 
+FoxSound* BackSnd;
+
 Platform* Plat;
 Wall* Wall1;
+
+Wall* RightBarrier;
+
+// Tree Background
+Sprite* TreeBackground1[4];
+Sprite* TreeBackground2[4];
+Sprite* TreeBackground3[4];
+static void TreeBackgroundUpdate(void);
+
 
 /*************************************************************************/
 /*!
@@ -65,7 +71,7 @@ Wall* Wall1;
 	Loads assets for the showcase level
 */
 /*************************************************************************/
-void LoadLevel6(void)
+void LoadLevel5(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
@@ -77,10 +83,10 @@ void LoadLevel6(void)
 	Initializes the objects for the level
 */
 /*************************************************************************/
-void InitializeLevel6(void)
+void InitializeLevel5(void)
 {
 	Vec3 TextTint;
-	Vec2 SpawnerLocation;
+	int i;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -88,8 +94,9 @@ void InitializeLevel6(void)
 	ResetGatedCamera();
 	levelComplete = FALSE;
 	beginningAnimation = TRUE;
-	PlayerIsAlive = TRUE;
-	numPanels = 4;
+	keysObtained = FALSE;
+	goingBack = FALSE;
+	
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -105,113 +112,36 @@ void InitializeLevel6(void)
 	//		Backgrounds			   //
 	/////////////////////////////////
 	//Panel1
-	CreateSprite("TextureFiles/Level6Pan0.png", 1920, 1080, 5, 1, 1, 0, 0);
-	CreateSprite("TextureFiles/Level6Pan0Overlay.png", 1920, 1080, 300, 1, 1, 0, 0);
-	//Panel2
-	CreateSprite("TextureFiles/Level6Pan1.png", 1920, 1080, 5, 1, 1, PANELSIZE, 0);
-	CreateSprite("TextureFiles/Level6Pan1Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE, 0);
-	//Panel3
-	CreateSprite("TextureFiles/Level6Pan2.png", 1920, 1080, 5, 1, 1, PANELSIZE * 2, 0);
-	CreateSprite("TextureFiles/Level6Pan2Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE * 2, 0);
-	//Panel4
-	CreateSprite("TextureFiles/Level6Pan3.png", 1920, 1080, 5, 1, 1, PANELSIZE * 3, 0);
-	CreateSprite("TextureFiles/Level6Pan3Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE * 3, 0);
+	CreateSprite("TextureFiles/Level5Pan1.png", 1920, 1080, 5, 1, 1, 0, 0);
 
-	//Bounding Boxes
-	CreateBoundingBoxes();
+	//Tree Backgrounds
+	for(i = 0; i < 4; i++)
+		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground1.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground2.png", 1920, 1080, 1, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
 
 	//Black Overlay
 	Vec3Set(&TextTint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
-	//Blocker Boxes
-	CreateBlockerBoxes(&newID);
-
-	//Background Sound
-	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
-
+	//Bounding Boxes
+	CreateBoundingBoxes();
 
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
-	//Panel1
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 160, -285);
-	Plat->PlatformSprite->Visible = FALSE;
-
-	//Panel1
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 1380, -285);
-	Plat->PlatformSprite->Visible = FALSE;
-	//Panel2
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 1790, -255);
-	Plat->PlatformSprite->Visible = FALSE;
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 2000, -255);
-	Plat->PlatformSprite->Visible = FALSE;
-	//Panel3
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 3670, -255);
-	Plat->PlatformSprite->Visible = FALSE;
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 3480, -285);
-	Plat->PlatformSprite->Visible = FALSE;
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 130.0f, 100.0f, newID++, 4350, -285);
-	Plat->PlatformSprite->Visible = FALSE;
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 130.0f, 100.0f, newID++, 4150, -285);
-	Plat->PlatformSprite->Visible = FALSE;
-	//Panel4
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 4960, -285);
-	Plat->PlatformSprite->Visible = FALSE;
-
 
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
-	//Ceiling
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, 0, 250);
-	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, PANELSIZE, 250);
-	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, PANELSIZE * 2, 250);
-	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, PANELSIZE * 3, 250);
-	Wall1->WallSprite->Visible = FALSE;	//Far Left Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, -958, 0);
-	Wall1->WallSprite->Visible = FALSE;
-
-	/////////////////////////////////
-	//		Spawners			   //
-	/////////////////////////////////
-	//Panel1
-	Vec2Set(&SpawnerLocation, -(PANELSIZE / 4), 0);
-	//Left
-	Spawners[0] = NULL;
-	//Right
-	Spawners[1] = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
-	
-	//Panel2
-	Vec2Set(&SpawnerLocation, PANELSIZE -(PANELSIZE / 4), 0);
-	//Left
-	Spawners[2] = CreateEnemySpawner(3, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
-	//Right
-	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
-	
-	//Panel3
-	Vec2Set(&SpawnerLocation, (PANELSIZE * 2) -(PANELSIZE / 4), 0);
-	//Left
-	Spawners[4] = CreateEnemySpawner(3, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
-	//Right
-	Spawners[5] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
-	
-	//Panel4
-	Vec2Set(&SpawnerLocation, (PANELSIZE * 3), 0);
-	//Left
-	Spawners[6] = CreateEnemySpawner(2, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 3);
-	//Right
-	Spawners[7] = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
-
-
-	/////////////////////////////////
-	//		On Death			   //
-	/////////////////////////////////
-	CreateDeathConfirmObjects(&newID);
+	//Right Blocker Barrier
+	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, 820, 0);
+	RightBarrier->WallSprite->Visible = FALSE;
 }
 
 /*************************************************************************/
@@ -220,12 +150,9 @@ void InitializeLevel6(void)
 	Updates the level
 */
 /*************************************************************************/
-void UpdateLevel6(void)
+void UpdateLevel5(void)
 {
 	EventLevel();
-	PlayAudio(BackSnd);
-	//EasyEditPlatform(Plat, 10);
-	//EasyEditWall(Wall1, 10);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -240,7 +167,7 @@ void UpdateLevel6(void)
 	Draws the level
 */
 /*************************************************************************/
-void DrawLevel6(void)
+void DrawLevel5(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
@@ -254,15 +181,31 @@ void DrawLevel6(void)
 	Frees all the objects in the level
 */
 /*************************************************************************/
-void FreeLevel6(void)
+void FreeLevel5(void)
 {
-	if(levelComplete && CurrentPlayer.CurrentLevel < GS_YeahGuy)
-		CurrentPlayer.CurrentLevel = GS_YeahGuy;
-	else if(CurrentPlayer.CurrentLevel < GS_Level6)
+<<<<<<< HEAD
+	// Level complete and not reached level 5 zone
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level6)
+	{
 		CurrentPlayer.CurrentLevel = GS_Level6;
+		CurrentPlayer.handUnlock = TRUE;
+	}
+	// Level NOT complete
+	else if(CurrentPlayer.CurrentLevel < GS_Level5)
+		CurrentPlayer.CurrentLevel = GS_Level5;
+
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
+=======
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level6)
+		CurrentPlayer.CurrentLevel = GS_Level6;
+	else if(CurrentPlayer.CurrentLevel < GS_Level5)
+		CurrentPlayer.CurrentLevel = GS_Level5;
+	SavePlayer(&CurrentPlayer);
+	FreeAllLists();
+	//FreeHUD(CurrentHUD);
+>>>>>>> 3b309a87a85231d64127c501c1fcfd6a5525b8ab
 }
 
 /*************************************************************************/
@@ -271,7 +214,7 @@ void FreeLevel6(void)
 	Unloads all the assets in the level
 */
 /*************************************************************************/
-void UnloadLevel6(void)
+void UnloadLevel5(void)
 {
 	//Destroy the textures
 	DestroyTextureList();
@@ -299,15 +242,14 @@ void EventLevel(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawLevel6);
-		TogglePauseSound(BackSnd);
+		InitializePause(&DrawLevel5);
+		//TogglePauseSound(&BackgroundSnd);
 		UpdatePause();
-		TogglePauseSound(BackSnd);
+		//TogglePauseSound(&BackgroundSnd);
 	}
 
-
 	// Runs if the beginning animation is finished
-	if(!beginningAnimation && !levelComplete)
+	if(!beginningAnimation && !levelComplete && !goingBack)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
@@ -315,7 +257,7 @@ void EventLevel(void)
 		InputPlayer(&CurrentPlayer);
 		//UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 	}
-	else if(!levelComplete)
+	else if(!levelComplete && !goingBack)
 	{
 		// Fade in the level
 		if(BlackOverlay->Alpha > 0)
@@ -344,34 +286,49 @@ void EventLevel(void)
 	//    CAMERA POSITION SECOND    //
 	//////////////////////////////////
 
-	//SetCamera(&CurrentPlayer.Position, 250);
-	SetUpCameraPanAndLock(&levelComplete, PANELSIZE, Spawners, numPanels);
-	UpdateBlockerBoxes(PANELSIZE);
-
 	//////////////////////////////////
 	//       EVERYTHING ELSE        //
 	//////////////////////////////////
 	BoundingBoxUpdate();
 	ParticleSystemUpdate();
-	UpdateAllEnemies();
-	UpdateFloatingText();
-	UpdateAllProjectiles();
+	TreeBackgroundUpdate();
 
-	//Level Transition
-	BlackOverlay->Position.x = GetCameraXPosition();
-	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
+
+	//Key Checking
+	if(CurrentPlayer.armUnlock && CurrentPlayer.handUnlock && !beginningAnimation)
 	{
+		RightBarrier->WallCollider.Position.x = 870;
+		keysObtained = TRUE;
+	}
+
+	//Level Transition if complete
+	BlackOverlay->Position.x = GetCameraXPosition();
+	if(CurrentPlayer.Position.x >= 720 + CurrentPlayer.PlayerCollider.width / 2 && keysObtained)
+	{
+		levelComplete = TRUE;
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
 			SetNextState(GS_MapLevel);
 	}
-
-	//If player dies
-	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
+	//Level Transition if not complete
+	if(CurrentPlayer.Position.x <= -PANELSIZE /2 - CurrentPlayer.PlayerCollider.width / 2 && !beginningAnimation)
 	{
-		PlayerIsAlive = FALSE;
-		BlackOverlay->Alpha = 0.5f;
+		goingBack = TRUE;
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+			SetNextState(GS_MapLevel);
 
-		UpdateDeathConfirmObjects();
 	}
+}
+
+
+void TreeBackgroundUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 30.0f);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
 }

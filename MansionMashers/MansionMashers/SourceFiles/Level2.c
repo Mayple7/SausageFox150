@@ -45,7 +45,9 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
+static int levelComplete;
+static int beginningAnimation;
+static int enemiesDefeated;
 TextGlyphs* LevelName;
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
@@ -62,6 +64,7 @@ Food* Cake;
 Platform *Crate;
 Wall* Wall1;
 Wall* WTBot;
+Wall* LeftBarrier;
 Wall* RightBarrier;
 
 HUD* CurrentHUD;
@@ -106,6 +109,8 @@ void InitializeLevel2(void)
 	levelComplete = FALSE;
 	PlayerInSight = FALSE;
 	PlayerIsAlive = TRUE;
+	enemiesDefeated = FALSE;
+	beginningAnimation = TRUE;
 
 	newID = 10;
 	ResetObjectList();
@@ -116,7 +121,7 @@ void InitializeLevel2(void)
 	ResetGatedCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1300, 0);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
@@ -184,8 +189,12 @@ void InitializeLevel2(void)
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
+	//Hidden Wall for beginning animation
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920, 100.0f, newID++, -1920, -232);
+	Wall1->WallSprite->Visible = FALSE;
+	
 	//Stairs
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, -819, -232);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 450.0f, 100.0f, newID++, -869, -232);
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -618, -281);
 	Wall1->WallSprite->Visible = FALSE;
@@ -204,8 +213,8 @@ void InitializeLevel2(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -473, -404);
 	Wall1->WallSprite->Visible = FALSE;
 	//Left Bounding Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
-	Wall1->WallSprite->Visible = FALSE;
+	LeftBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
+	LeftBarrier->WallSprite->Visible = FALSE;
 	//Stone Door
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 540.0f, newID++, 810, 140);
 	Wall1->WallSprite->Visible = FALSE;
@@ -368,10 +377,41 @@ void EventLevel2(void)
 	if(FoxInput_KeyTriggered('I'))
 		RemoveDebugMode();
 
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
+	// Runs if the beginning animation is finished
+	if(!beginningAnimation && !levelComplete)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		//UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+	}
+	else if(!levelComplete)
+	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = TRUE;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -830)
+				beginningAnimation = FALSE;
+		}
+		//DetectCollision For stairs
+		DetectPlayerCollision();
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
 
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -394,34 +434,29 @@ void EventLevel2(void)
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
 	UpdateAllEnemies();
-
 	UpdateFloatingText();
 	UpdateAllProjectiles();
 	TreeBackgroundUpdate();
 
+	//Switch barrier position for beginning
+	if(beginningAnimation)
+		LeftBarrier->WallCollider.Position.y = -1080;
+	else
+		LeftBarrier->WallCollider.Position.y = 0;
+
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
 	{
-		levelComplete = TRUE;
+		enemiesDefeated = TRUE;
 		RightBarrier->Position.y = -1080;
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
 	}
 
-
-	//At level start
-	if(!levelComplete)
-	{
-		// Fade in the level
-		if(BlackOverlay->Alpha > 0)
-		{
-			BlackOverlay->Alpha -= 1 * GetDeltaTime();
-		}
-	}
-
 	//Level Transition
 	BlackOverlay->Position.x = GetCameraXPosition();
-	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
+	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && enemiesDefeated)
 	{
+		levelComplete = TRUE;
 		BlackOverlay->Alpha += 1 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
 			SetNextState(GS_MapLevel);
