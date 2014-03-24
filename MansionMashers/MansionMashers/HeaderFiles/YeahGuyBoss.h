@@ -13,6 +13,7 @@ typedef struct YeahGuyBoss
 
 	int CurrentState;
 	int InnerState;
+	int PositionState;
 
 	CollisionBox BossCollider;
 	RigidBody YeahGuyRigidBody;

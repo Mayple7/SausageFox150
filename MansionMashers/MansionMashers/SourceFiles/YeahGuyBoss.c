@@ -36,6 +36,7 @@ static int playerHit = FALSE;
 
 static enum YeahGuyState { Cooldown, AOE, ProjectYeah, Pound, Vault };
 static enum InnerState {Start, Attack, End };
+static enum PositionState { A, B, C, D, E };
 
 /*************************************************************************/
 /*!
@@ -67,22 +68,25 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos, int *objID)
 	YeahGuyBoss *CurrentBoss = (YeahGuyBoss *) CallocMyAlloc(1, sizeof(YeahGuyBoss));
 
 	//Initialize boss struct
-	Vec2Set(&CurrentBoss->Position, 700, -200);
-	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempYeahGuy.png", 225, 300, 10, 1, 1, 700, -200);
+	Vec2Set(&CurrentBoss->Position, 580, 0);
+	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempYeahGuy.png", 225, 300, 10, 1, 1, 580, 0);
 	CurrentBoss->BodySprite->FlipX = TRUE;
 
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
-	CurrentBoss->CurrentState = ProjectYeah;
+
+	// Default starting states
+	CurrentBoss->CurrentState = Pound;
 	CurrentBoss->InnerState = Start;
+	CurrentBoss->PositionState = E;
 
 	// Armguy colliders
 	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 320, (*objID)++);
 
 	// Physics stuff
 	InitializeRigidBody(&CurrentBoss->YeahGuyRigidBody, FALSE, 150, 300);
-	CurrentBoss->YeahGuyRigidBody.Mass = 7;
+	CurrentBoss->YeahGuyRigidBody.Mass = 5;
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->cooldownTimer = 0;
@@ -113,7 +117,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 	int projectileID = 100;
 	static int numProjectiles = 0;
 	float projectileAngle;
-	//int movementPicker;
+	int movementPicker;
 
 	switch(CurrentBoss->CurrentState)
 	{
@@ -159,7 +163,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		case Start:
 			//printf("QUESTION TIME START\n");
 			// Change boss sprite to attacking
-			projectileAngle = atan2(CurrentPlayer.Position.y - CurrentBoss->Position.y, CurrentPlayer.Position.x - CurrentBoss->Position.x);
+			projectileAngle = (float)atan2(CurrentPlayer.Position.y - CurrentBoss->Position.y, CurrentPlayer.Position.x - CurrentBoss->Position.x);
 			CurrentProjectile = CreateProjectile("TextureFiles/YeahProjectile.png", 210, 90, CurrentBoss->Position.x, CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2, Arrow, WeaponEnemy, projectileID++, CurrentBoss->YeahProjectileDamage / CurrentBoss->numHeads, 800, projectileAngle);
 			if(CurrentBoss->Position.x > CurrentPlayer.Position.x)
 			{
@@ -198,10 +202,71 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
+			movementPicker = rand() % 2;
+			if(movementPicker)
+				CurrentBoss->PositionState = D;
+			else
+				CurrentBoss->PositionState = B;
+			CurrentBoss->InnerState = Attack;
 			break;
 		case Attack:
+			if(CurrentBoss->PositionState == B)
+			{
+				// Set velocity based on position
+				if(CurrentBoss->Position.x < -300 && CurrentBoss->YeahGuyRigidBody.Velocity.x >= 0)
+				{
+					CurrentBoss->YeahGuyRigidBody.Velocity.x = 1000;
+				}
+				else if(CurrentBoss->Position.x > -250 && CurrentBoss->YeahGuyRigidBody.Velocity.x <= 0)
+				{
+					CurrentBoss->YeahGuyRigidBody.Velocity.x = -1000;
+				}
+				else
+				{
+					CurrentBoss->Position.x = -275;
+					CurrentBoss->InnerState = End;
+				}
+
+			}
+			else if(CurrentBoss->PositionState == D)
+			{
+				if(CurrentBoss->Position.x < 300 && CurrentBoss->YeahGuyRigidBody.Velocity.x >= 0)
+				{
+					CurrentBoss->YeahGuyRigidBody.Velocity.x = 1000;
+				}
+				else if(CurrentBoss->Position.x > 250 && CurrentBoss->YeahGuyRigidBody.Velocity.x <= 0)
+				{
+					CurrentBoss->YeahGuyRigidBody.Velocity.x = -1000;
+				}
+				else
+				{
+					CurrentBoss->Position.x = 275;
+					CurrentBoss->InnerState = End;
+				}
+			}
+
+			if(CurrentBoss->YeahGuyRigidBody.onGround)
+			{
+				// Set y velocity for jumping
+				Vec2 velocity;
+				CurrentBoss->Position.y += 3;
+				Vec2Set(&velocity, 0.0f, 1500.0f);
+				ApplyVelocity(&CurrentBoss->YeahGuyRigidBody, &velocity);
+				CurrentBoss->YeahGuyRigidBody.onGround = FALSE;
+			}
+
 			break;
 		case End:
+			CurrentBoss->YeahGuyRigidBody.Velocity.x = 0;
+			CurrentBoss->YeahGuyRigidBody.Gravity.y = CurrentBoss->YeahGuyRigidBody.Gravity.y * 2;
+			
+			if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL)
+			{
+				CurrentBoss->CurrentState = Cooldown;
+				CurrentBoss->InnerState = Start;
+				CurrentBoss->cooldownTimer = 0.0f;
+			}
+
 			break;
 		}
 		break;
@@ -209,8 +274,20 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
+			movementPicker = rand() % 3;
 			break;
 		case Attack:
+/*			switch(movementPicker)
+			{
+			case 0:
+
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			}
+			*/
 			break;
 		case End:
 			break;
@@ -254,7 +331,10 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 	//Set gravity if not on floor or on a platform
 	else
 	{
-		SetGravity(&CurrentBoss->YeahGuyRigidBody, 0.0f, FOX_GRAVITY_Y);
+		if(CurrentBoss->CurrentState != Pound || CurrentBoss->InnerState != End)
+		{
+			SetGravity(&CurrentBoss->YeahGuyRigidBody, 0.0f, FOX_GRAVITY_Y);
+		}
 	}
 
 	//Update velocity and acceleration

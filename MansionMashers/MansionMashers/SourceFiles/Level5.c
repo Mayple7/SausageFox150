@@ -183,11 +183,11 @@ void DrawLevel5(void)
 /*************************************************************************/
 void FreeLevel5(void)
 {
-	// Level complete and not reached level 5 zone
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level6)
-	{
 		CurrentPlayer.CurrentLevel = GS_Level6;
-		CurrentPlayer.handUnlock = TRUE;
+	else if(CurrentPlayer.CurrentLevel < GS_Level5)
+		CurrentPlayer.CurrentLevel = GS_Level5;
+	SavePlayer(&CurrentPlayer);
 	}
 	// Level NOT complete
 	else if(CurrentPlayer.CurrentLevel < GS_Level5)

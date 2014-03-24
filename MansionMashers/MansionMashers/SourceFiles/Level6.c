@@ -52,10 +52,6 @@ TextGlyphs* LevelName;
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
 
-EnemySpawner* Spawners[8];
-
-FoxSound* BackSnd;
-
 Platform* Plat;
 Wall* Wall1;
 
@@ -80,7 +76,7 @@ void LoadLevel6(void)
 void InitializeLevel6(void)
 {
 	Vec3 TextTint;
-	Vec2 SpawnerLocation;
+
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -113,10 +109,6 @@ void InitializeLevel6(void)
 	//Panel3
 	CreateSprite("TextureFiles/Level6Pan2.png", 1920, 1080, 5, 1, 1, PANELSIZE * 2, 0);
 	CreateSprite("TextureFiles/Level6Pan2Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE * 2, 0);
-	//Panel4
-	CreateSprite("TextureFiles/Level6Pan3.png", 1920, 1080, 5, 1, 1, PANELSIZE * 3, 0);
-	CreateSprite("TextureFiles/Level6Pan3Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE * 3, 0);
-
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
@@ -128,10 +120,6 @@ void InitializeLevel6(void)
 
 	//Blocker Boxes
 	CreateBlockerBoxes(&newID);
-
-	//Background Sound
-	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
-
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -157,9 +145,6 @@ void InitializeLevel6(void)
 	Plat->PlatformSprite->Visible = FALSE;
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 130.0f, 100.0f, newID++, 4150, -285);
 	Plat->PlatformSprite->Visible = FALSE;
-	//Panel4
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 4960, -285);
-	Plat->PlatformSprite->Visible = FALSE;
 
 	/////////////////////////////////
 	//			Walls			   //
@@ -174,46 +159,6 @@ void InitializeLevel6(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, PANELSIZE * 3, 250);
 	Wall1->WallSprite->Visible = FALSE;
 
-	//Far Left Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, -958, 0);
-	Wall1->WallSprite->Visible = FALSE;
-
-	/////////////////////////////////
-	//		Spawners			   //
-	/////////////////////////////////
-	//Panel1
-	Vec2Set(&SpawnerLocation, -(PANELSIZE / 4), 0);
-	//Left
-	Spawners[0] = NULL;
-	//Right
-	Spawners[1] = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
-	
-	//Panel2
-	Vec2Set(&SpawnerLocation, PANELSIZE -(PANELSIZE / 4), 0);
-	//Left
-	Spawners[2] = CreateEnemySpawner(3, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
-	//Right
-	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
-	
-	//Panel3
-	Vec2Set(&SpawnerLocation, (PANELSIZE * 2) -(PANELSIZE / 4), 0);
-	//Left
-	Spawners[4] = CreateEnemySpawner(3, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
-	//Right
-	Spawners[5] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
-	
-	//Panel4
-	Vec2Set(&SpawnerLocation, (PANELSIZE * 3), 0);
-	//Left
-	Spawners[6] = CreateEnemySpawner(2, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 3);
-	//Right
-	Spawners[7] = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
-
-
-	/////////////////////////////////
-	//		On Death			   //
-	/////////////////////////////////
-	CreateDeathConfirmObjects(&newID);
 }
 
 /*************************************************************************/
@@ -225,7 +170,6 @@ void InitializeLevel6(void)
 void UpdateLevel6(void)
 {
 	EventLevel();
-	PlayAudio(BackSnd);
 
 	EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1, 10);
@@ -259,16 +203,10 @@ void DrawLevel6(void)
 /*************************************************************************/
 void FreeLevel6(void)
 {
-	// Level complete and not reached level 5 zone
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_YeahGuy)
-	{
 		CurrentPlayer.CurrentLevel = GS_YeahGuy;
-		CurrentPlayer.handUnlock = TRUE;
-	}
-	// Level NOT complete
 	else if(CurrentPlayer.CurrentLevel < GS_Level6)
 		CurrentPlayer.CurrentLevel = GS_Level6;
-
 	SavePlayer(&CurrentPlayer);
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
@@ -309,9 +247,9 @@ void EventLevel(void)
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawLevel6);
-		TogglePauseSound(BackSnd);
+		//TogglePauseSound(&BackgroundSnd);
 		UpdatePause();
-		TogglePauseSound(BackSnd);
+		//TogglePauseSound(&BackgroundSnd);
 	}
 
 
@@ -354,33 +292,11 @@ void EventLevel(void)
 	//////////////////////////////////
 
 	//SetCamera(&CurrentPlayer.Position, 250);
-	SetUpCameraPanAndLock(&levelComplete, PANELSIZE, Spawners, numPanels);
+	SetUpCameraPanAndLockNoSpawner(&levelComplete, PANELSIZE, numPanels);
 	UpdateBlockerBoxes(PANELSIZE);
 
 	//////////////////////////////////
 	//       EVERYTHING ELSE        //
 	//////////////////////////////////
 	BoundingBoxUpdate();
-	ParticleSystemUpdate();
-	UpdateAllEnemies();
-	UpdateFloatingText();
-	UpdateAllProjectiles();
-
-	//Level Transition
-	BlackOverlay->Position.x = GetCameraXPosition();
-	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
-	{
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
-	}
-
-	//If player dies
-	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
-	{
-		PlayerIsAlive = FALSE;
-		BlackOverlay->Alpha = 0.5f;
-
-		UpdateDeathConfirmObjects();
-	}
 }
