@@ -370,12 +370,15 @@ void DrawTutorial(void)
 
 void FreeTutorial(void)
 {
-	if(levelComplete)
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level1)
 		CurrentPlayer.CurrentLevel = GS_Level1;
 	else if(CurrentPlayer.CurrentLevel < GS_Tutorial)
 		CurrentPlayer.CurrentLevel = GS_Tutorial;
 
-	SavePlayer(&CurrentPlayer);
+	//Only save stats if the level was actually completed
+	if (levelComplete)
+		SavePlayer(&CurrentPlayer);
+
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
 }

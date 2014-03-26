@@ -322,6 +322,22 @@ void EventPause(void)
 		}
 	}
 
+	//RESUME: Nothing weird happens
+	if(PointRectCollision(&ResumeButton->ButtonCollider, &MouseClick))
+	{
+		ResumeButton->ButtonSprite->ScaleX = 1.2f;
+		ResumeButton->ButtonSprite->ScaleY = 1.2f;
+
+		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+			pause = FALSE;
+	}
+	else
+	{
+		ResumeButton->ButtonSprite->ScaleX = 1.0f;
+		ResumeButton->ButtonSprite->ScaleY = 1.0f;
+	}
+
+	//MAIN MENU: Don't save stats
 	if(PointRectCollision(&MainMenuButton->ButtonCollider, &MouseClick))
 	{
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
@@ -341,20 +357,7 @@ void EventPause(void)
 		MainMenuButton->ButtonSprite->ScaleY = 1.0f;
 	}
 
-	if(PointRectCollision(&ResumeButton->ButtonCollider, &MouseClick))
-	{
-		ResumeButton->ButtonSprite->ScaleX = 1.2f;
-		ResumeButton->ButtonSprite->ScaleY = 1.2f;
-
-		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
-			pause = FALSE;
-	}
-	else
-	{
-		ResumeButton->ButtonSprite->ScaleX = 1.0f;
-		ResumeButton->ButtonSprite->ScaleY = 1.0f;
-	}
-
+	//RESTART: Reset stats
 	if(GetCurrentState() != GS_MapLevel && PointRectCollision(&RestartButton->ButtonCollider, &MouseClick))
 	{
 		RestartButton->ButtonSprite->ScaleX = 1.2f;

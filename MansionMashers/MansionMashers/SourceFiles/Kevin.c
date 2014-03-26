@@ -149,7 +149,11 @@ void FreeKevin(void)
 {
 	if(CurrentPlayer.CurrentLevel < GS_Kevin)
 		CurrentPlayer.CurrentLevel = GS_Kevin;
-	SavePlayer(&CurrentPlayer);
+
+	//Only save stats if the level was actually completed
+	if (levelComplete)
+		SavePlayer(&CurrentPlayer);
+
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
 }

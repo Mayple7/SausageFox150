@@ -152,7 +152,10 @@ void DrawShop1(void)
 /*************************************************************************/
 void FreeShop1(void)
 {
-	SavePlayer(&CurrentPlayer);
+	//Only save stats if the level was actually completed
+	if (levelComplete)
+		SavePlayer(&CurrentPlayer);
+
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
 }
