@@ -121,7 +121,7 @@ void InitializeLevel2(void)
 	ResetGatedCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, -1200, 0);
+	InitializePlayer(&CurrentPlayer, Mayple, -1150, 0);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
@@ -402,7 +402,7 @@ void EventLevel2(void)
 			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 			
 			// Threshold to give control back to the player
-			if(CurrentPlayer.Position.x > -830)
+			if(CurrentPlayer.Position.x > -850)
 				beginningAnimation = FALSE;
 		}
 		//DetectCollision For stairs
