@@ -172,7 +172,8 @@ void InitializeLevel6(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, PANELSIZE * 2, 250);
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, newID++, PANELSIZE * 3, 250);
-	Wall1->WallSprite->Visible = FALSE;	//Far Left Wall
+	Wall1->WallSprite->Visible = FALSE;	
+	//Far Left Wall
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, -958, 0);
 	Wall1->WallSprite->Visible = FALSE;
 
