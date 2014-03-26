@@ -190,7 +190,7 @@ void InitializeLevel2(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Hidden Wall for beginning animation
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920, 100.0f, newID++, -1920, -232);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920, 300.0f, newID++, -1920, -332);
 	Wall1->WallSprite->Visible = FALSE;
 	
 	//Stairs
