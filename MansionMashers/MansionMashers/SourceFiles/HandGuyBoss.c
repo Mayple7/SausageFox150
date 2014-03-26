@@ -148,7 +148,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			}
 
 			// Jump up to the platform if needed
-			if((CurrentPlayer.PlayerRigidBody.Velocity.y > 0 || CurrentPlayer.Position.y > 0) && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4)
+			if((CurrentPlayer.PlayerRigidBody.Velocity.y >= 0 || CurrentPlayer.Position.y > 0) && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4)
 			{
 				// Set y velocity for jumping
 				Vec2 velocity;

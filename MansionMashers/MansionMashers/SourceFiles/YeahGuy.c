@@ -50,6 +50,8 @@ int redHead;
 int greenHead;
 int blueHead;
 
+Sprite* CurrentBuffSprite;
+
 // Buff Sprites and Collision boxes
 Sprite* RedBuff;
 CollisionBox* RedBuffCollider;
@@ -137,18 +139,20 @@ void InitializeYeahGuy(void)
 
 	Vec2Set(&Position, 0, 0);
 
+	CurrentBuffSprite = (Sprite *)CreateSprite("TextureFiles/RedBuff.png", 50, 50, 200, 1, 1, 920, 500);
+
 	// Creates the buffs, do not add these to 
 	RedBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
 	GreenBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
 	BlueBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
 
-	RedBuff = (Sprite *)CreateSprite("TextureFiles/RedBuff.png", 200, 200, 20, 1, 1, 0, 0);
+	RedBuff = (Sprite *)CreateSprite("TextureFiles/RedBuff.png", 200, 200, 8, 1, 1, 0, 0);
 	CreateCollisionBox(RedBuffCollider, &Position, FoodType, 200, 200, newID++);
 
-	GreenBuff = (Sprite *)CreateSprite("TextureFiles/GreenBuff.png", 200, 200, 20, 1, 1, 0, 0);
+	GreenBuff = (Sprite *)CreateSprite("TextureFiles/GreenBuff.png", 200, 200, 8, 1, 1, 0, 0);
 	CreateCollisionBox(GreenBuffCollider, &Position, FoodType, 200, 200, newID++);
 
-	BlueBuff = (Sprite *)CreateSprite("TextureFiles/BlueBuff.png", 200, 200, 20, 1, 1, 0, 0);
+	BlueBuff = (Sprite *)CreateSprite("TextureFiles/BlueBuff.png", 200, 200, 8, 1, 1, 0, 0);
 	CreateCollisionBox(BlueBuffCollider, &Position, FoodType, 200, 200, newID++);
 
 	HideBuffs();
@@ -164,19 +168,38 @@ void InitializeYeahGuy(void)
 /*************************************************************************/
 void UpdateYeahGuy(void)
 {
-	buffTimer += GetDeltaTime();
+	redHead = Boss->redHead;
+	greenHead = Boss->greenHead;
+	blueHead = Boss->blueHead;
+
+	if(CurrentBuff == None)
+	{
+		buffTimer += GetDeltaTime();
+		CurrentBuffSprite->Visible = FALSE;
+	}
+	else
+	{
+		CurrentBuffSprite->Visible = TRUE;
+		if(CurrentBuff == Red)
+			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/RedBuff.png");
+		else if(CurrentBuff == Green)
+			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/GreenBuff.png");
+		else if(CurrentBuff == Blue)
+			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/BlueBuff.png");
+	}
+
+
+	UpdatePlayerBuff();
 
 	// Update all buffs if needed
 	if(buffTimer >= 10.0f)
 	{
 		HideBuffs();
 		buffTimer = 0.0f;
-		buffsShown = FALSE;
 	}
-	else if(buffTimer >= 5.0f && !buffsShown)
+	else if(buffTimer >= 2.0f && !buffsShown)
 	{
 		ShowBuffs();
-		buffsShown = TRUE;
 	}
 
 	// Make buffs invisible if the head does not exist
@@ -186,6 +209,15 @@ void UpdateYeahGuy(void)
 		GreenBuff->Visible = FALSE;
 	if(!blueHead)
 		BlueBuff->Visible = FALSE;
+
+	DebugCircle->Width = Boss->YeahAOERadius * 2;
+	if(DebugCircle->Height > DebugCircle->Width)
+	{
+		DebugCircle->Height = Boss->YeahAOERadius * 2;
+		UpdateMesh(DebugCircle);
+	}
+
+	printf("%f\n", DebugCircle->Width);
 
 	EventYeahGuy();
 	// This should be the last line in this function
@@ -204,6 +236,12 @@ void UpdateYeahGuy(void)
 	}
 	else
 		DebugCircle->Visible = FALSE;
+
+	if(!Boss->redHead && !Boss->greenHead && !Boss->blueHead)
+	{
+		levelComplete = TRUE;
+		SetNextState(GS_MapLevel);
+	}
 
 }
 
@@ -264,7 +302,7 @@ void EventYeahGuy(void)
 {
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
-	DetectYeahGuyBossCollision(Boss);
+	DetectYeahGuyBossCollision(Boss, CurrentBuff);
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
@@ -438,6 +476,7 @@ void ShowBuffs(void)
 			}
 			break;
 		}
+		buffsShown = TRUE;
 	}
 	else
 		HideBuffs();
@@ -457,4 +496,47 @@ void HideBuffs(void)
 	Vec2Set(&BlueBuff->Position, -550, -999);
 	RedBuff->Visible = TRUE;
 	Vec2Set(&BlueBuffCollider->Position, -550, -999);
+
+	buffsShown = FALSE;
+}
+
+void UpdatePlayerBuff(void)
+{
+	// If a buff is already active ignore
+	if(CurrentBuff != None)
+	{
+		playerBuffTimer += GetDeltaTime();
+
+		// Buff time is up
+		if(playerBuffTimer >= 10)
+		{
+			CurrentBuff = None;
+			playerBuffTimer = 0.0f;
+		}
+	}
+	// If there is a redHead, check collision with red buff
+	else if(redHead && RectCircleCollision(&RedBuffCollider->Position, RedBuffCollider->width / 2, &CurrentPlayer.PlayerCollider))
+	{
+		CurrentBuff = Red;
+		playerBuffTimer = 0.0f;
+		HideBuffs();
+		buffTimer = 0.0f;
+	}
+	// If there is a greenHead, check collision with green buff
+	else if(greenHead && RectCircleCollision(&GreenBuffCollider->Position, GreenBuffCollider->width / 2, &CurrentPlayer.PlayerCollider))
+	{
+		CurrentBuff = Green;
+		playerBuffTimer = 0.0f;
+		HideBuffs();
+		buffTimer = 0.0f;
+	}
+	// If there is a blueHead, check collision with blue buff
+	else if(blueHead && RectCircleCollision(&BlueBuffCollider->Position, BlueBuffCollider->width / 2, &CurrentPlayer.PlayerCollider))
+	{
+		CurrentBuff = Blue;
+		playerBuffTimer = 0.0f;
+		HideBuffs();
+		buffTimer = 0.0f;
+	}
+
 }
