@@ -92,10 +92,14 @@ void InitializeHandGuy(void)
 	//Bounding Boxes
 	CreateBoundingBoxes();
 
+<<<<<<< HEAD
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 400, 50, newID++, 0, -180);
+=======
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 400, 50, newID++, 0, -195);
+>>>>>>> 42bfa889c0495ee085fb952c91cd5b8b267d47c3
 	Plat->PlatformSprite->Visible = FALSE;
 
 	/////////////////////////////////
