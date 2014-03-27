@@ -148,7 +148,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			}
 
 			// Jump up to the platform if needed
-			if((CurrentPlayer.PlayerRigidBody.Velocity.y >= 0 || CurrentPlayer.Position.y > 0) && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4)
+			if((CurrentPlayer.PlayerRigidBody.Velocity.y >= 0 || CurrentPlayer.Position.y > -15) && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4)
 			{
 				// Set y velocity for jumping
 				Vec2 velocity;
@@ -157,7 +157,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				ApplyVelocity(&CurrentBoss->HandGuyRigidBody, &velocity);
 			}
 			// Drop down if needed
-			else if(CurrentPlayer.Position.y <= GROUNDLEVEL && CurrentBoss->Position.y > 0)
+			else if(CurrentPlayer.Position.y <= GROUNDLEVEL && CurrentBoss->Position.y > -15)
 			{
 				CurrentBoss->dropDown = TRUE;
 				CurrentBoss->HandGuyRigidBody.onGround = FALSE;
@@ -389,7 +389,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 					CurrentBoss->Position.x += 750 * GetDeltaTime();
 				else if(CurrentBoss->Position.x > 20.0f)
 					CurrentBoss->Position.x -= 750 * GetDeltaTime();
-				else if(CurrentBoss->Position.y > 0 && CurrentBoss->HandGuyRigidBody.onGround)
+				else if(CurrentBoss->Position.y > -15 && CurrentBoss->HandGuyRigidBody.onGround)
 					CurrentBoss->InnerState = End;
 
 				// Jump up to the platform if needed

@@ -302,7 +302,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		}
 		break;
 	case Spin:
-		printf("SPIN TIME START\n");
+		//printf("SPIN TIME START\n");
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
