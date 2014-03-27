@@ -95,7 +95,6 @@ void InitializeHandGuy(void)
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 400, 50, newID++, 0, -180);
 	Plat->PlatformSprite->Visible = FALSE;
 
 	/////////////////////////////////
@@ -137,6 +136,7 @@ void UpdateHandGuy(void)
 	BoundingBoxUpdate();
 
 	UpdateAllProjectiles();
+	ParticleSystemUpdate();
 
 	if(Boss->CurrentState == 1 && Boss->InnerState != 2)
 	{
@@ -230,5 +230,10 @@ void EventHandGuy(void)
 	if(FoxInput_KeyTriggered('K'))
 	{
 		TextDisappearEnd(LevelName);
+	}
+
+	if(FoxInput_KeyTriggered('Y'))
+	{
+		CreateProjectile("TextureFiles/HandGauy.png", 100, 100, 780, -300, Arrow, WeaponEnemy, newID++, 10, -400, 0);
 	}
 }

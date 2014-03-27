@@ -218,7 +218,7 @@ void FreeParticleSystem(ParticleSystem *CurrentSystem)
 	if(CurrentSystem->objID > -1)
 	{
 		//I'm sure everyone will miss you particle system
-		CurrentSystem->objID = -1;
+		CurrentSystem->objID = 0;
 	}
 }
 
@@ -236,7 +236,7 @@ void FreeParticle(Particle *CurrentParticle)
 	if(CurrentParticle->objID > -1)
 	{
 		//I'm sure everyone will miss you particle
-		CurrentParticle->objID = -1;
+		CurrentParticle->objID = 0;
 
 		//if (CurrentParticle->ParticleSprite->Created)
 		//	FreeSprite(CurrentParticle->ParticleSprite);

@@ -324,6 +324,8 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		else
 			CurrentEnemy->EnemyParticleSystem->emitScale = 2.0f;
 		CurrentEnemy->EnemyParticleSystem->emitLife = 1.0f;
+		CurrentEnemy->EnemyParticleSystem->emitThenDestroy = TRUE;
+
 		PlayAudio(CurrentEnemy->CurrentEnemySounds.Poof);
 		EnemyPanelNumber[CurrentEnemy->panelId]--;
 		FreeEnemy(CurrentEnemy);

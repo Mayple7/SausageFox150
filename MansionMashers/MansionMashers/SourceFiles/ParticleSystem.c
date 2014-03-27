@@ -7,9 +7,10 @@
 \brief				Functions for the particle system.
 
 \par				Functions:
-\li					InitializeEnemy
-\li					UpdateEnemy
-\li					EnemyLogic
+\li					CreateFoxParticleSystem
+\li					CreateFoxParticle
+\li					ParticleUpdate
+\li					ParticleSystemUpdate
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -24,7 +25,7 @@
 #include <time.h>
 
 
-ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float posY, int ZIndex, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, float emitScaleSpeed, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife, float StartAlpha)
+ParticleSystem *CreateFoxParticleSystem(char *particleTexture, float posX, float posY, int ZIndex, int amountTotal, int emitAmount, float emitSpeed, int emitAngle, int emitAngleRandom, float emitScale, float emitScaleSpeed, int emitDisplacementX, int emitDisplacementY, float emitVelocity, float emitLife, float StartAlpha)
 {
 	ParticleSystem *CurrentSystem = AddParticleSystem();
 
@@ -48,10 +49,11 @@ ParticleSystem* CreateFoxParticleSystem(char* particleTexture, float posX, float
 	CurrentSystem->ZIndex = ZIndex;
 	CurrentSystem->ParticleStartAlpha = StartAlpha;
 	CurrentSystem->FadeIn = FALSE;
+	CurrentSystem->emitThenDestroy = FALSE;
 	return CurrentSystem;
 }
 
-void CreateFoxParticle(char* particleTexture, AEGfxVertexList* mesh, float posX, float posY, int ZIndex, float VelX, float VelY, float Life, float Scale, float ScaleSpeed, float StartAlpha, int FadeIn)
+void CreateFoxParticle(char *particleTexture, AEGfxVertexList *mesh, float posX, float posY, int ZIndex, float VelX, float VelY, float Life, float Scale, float ScaleSpeed, float StartAlpha, int FadeIn)
 {
 	Particle *CurrentParticle = AddParticle();
 
@@ -134,7 +136,6 @@ void ParticleSystemUpdate(void)
 	int i;
 	for (i = 0; i < PARTICLESYSTEMAMOUNT; i++)
 	{
-
 		if (particleSystemList[i].objID == 0)
 		{
 			continue;
@@ -149,10 +150,9 @@ void ParticleSystemUpdate(void)
 			int j;
 			for(j = 0; j < particleSystemList[i].emitAmount; j++)
 			{
+				//NOTE: Spawn particles infinitely if amountTotal is -1, count down spawned amount if amountTotal > 0
 				if (particleSystemList[i].amountTotal > 0 || particleSystemList[i].amountTotal == -1)
 				{
-					
-					
 					if (particleSystemList[i].Position.x < GetCameraXPosition() + 1920 && particleSystemList[i].Position.x > GetCameraXPosition() - 1920)
 					{
 						Vec2 vel;
@@ -191,9 +191,13 @@ void ParticleSystemUpdate(void)
 						}
 						if (particleSystemList[i].amountTotal > 0)
 							particleSystemList[i].amountTotal--;
+
 						srand( rand() % (rand() + 1) );
 						lastRandomNumber = rand();
 				}
+				//Destroy when done emitting if told to, otherwise just leave it there
+				else if (particleSystemList[i].amountTotal == 0 && particleSystemList[i].emitThenDestroy)
+					FreeParticleSystem(&particleSystemList[i]);
 			}
 			particleSystemList[i].emitSpeedTimer = particleSystemList[i].emitSpeed;
 		}
@@ -204,7 +208,4 @@ void ParticleSystemUpdate(void)
 	}
 
 	ParticleUpdate();
-
-	
-	
 }
