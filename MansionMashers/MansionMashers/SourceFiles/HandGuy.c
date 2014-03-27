@@ -46,6 +46,8 @@ TextGlyphs* LevelName;
 
 Sprite* DebugCircle;
 
+Platform* Plat;
+
 HandGuyBoss *Boss;
 
 /*************************************************************************/
@@ -79,13 +81,14 @@ void InitializeHandGuy(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	//Create background
-	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/HandGuyBG.png", 1920, 1080, 1, 1, 1, 0, 0);
 
 	//Background
 	//CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 2, 1, 1, 140, 0);
 	//CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 140, 0);
 
-	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 400, 50, newID++, 0, -170);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 400, 50, newID++, 0, -180);
+	Plat->PlatformSprite->Visible = FALSE;
 
 	//Create bounding walls
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
