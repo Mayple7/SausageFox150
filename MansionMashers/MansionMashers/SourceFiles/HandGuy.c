@@ -80,30 +80,43 @@ void InitializeHandGuy(void)
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
-	//Create background
+	Vec3Set(&TextTint, 1, 1, 1);
+	LevelName = CreateText("HandGuy Level", 0, 300, 100, TextTint, Center, Border);
+	TextDisappearInit(LevelName);
+
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
 	CreateSprite("TextureFiles/HandGuyBG.png", 1920, 1080, 1, 1, 1, 0, 0);
 
-	//Background
-	//CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 2, 1, 1, 140, 0);
-	//CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 140, 0);
+	//Bounding Boxes
+	CreateBoundingBoxes();
 
+	/////////////////////////////////
+	//		Platforms			   //
+	/////////////////////////////////
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 400, 50, newID++, 0, -180);
 	Plat->PlatformSprite->Visible = FALSE;
 
-	//Create bounding walls
+	/////////////////////////////////
+	//			Walls			   //
+	/////////////////////////////////
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
 
+	/////////////////////////////////
+	//			Boss			   //
+	/////////////////////////////////
 	Boss = CreateHandGuyBoss(0, 0, &newID);
 
 	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->ShoutRadius * 2, Boss->ShoutRadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
 	DebugCircle->Visible = FALSE;
 
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("HandGuy Level", 0, 300, 100, TextTint, Center, Border);
-	TextDisappearInit(LevelName);
+	/////////////////////////////////
+	//		On Death			   //
+	/////////////////////////////////
+	CreateDeathConfirmObjects(&newID);
 
-	CreateBoundingBoxes();
 }
 
 /*************************************************************************/
@@ -209,10 +222,10 @@ void EventHandGuy(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
+		//TogglePauseSound(BackSnd);
 		InitializePause(&DrawHandGuy);
 		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
-		//TogglePauseSound(&BackgroundSnd);
+		//TogglePauseSound(BackSnd);
 	}
 	if(FoxInput_KeyTriggered('K'))
 	{

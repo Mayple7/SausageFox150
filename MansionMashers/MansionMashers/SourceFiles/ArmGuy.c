@@ -85,6 +85,10 @@ void InitializeArmGuy(void)
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
+	Vec3Set(&TextTint, 1, 1, 1);
+	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center, Border);
+	TextProgressiveInit(LevelName);
+
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
@@ -100,27 +104,36 @@ void InitializeArmGuy(void)
 
 	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground7.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
-	//Background
-	//CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 2, 1, 1, 140, 0);
-	//CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 140, 0);
 
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
+	/////////////////////////////////
+	//		Platforms			   //
+	/////////////////////////////////
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -400, -170);
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 400, -170);
 
-	//Create bounding walls
+	/////////////////////////////////
+	//			Walls			   //
+	/////////////////////////////////
+	//Create Bounding Walls
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
 
+	/////////////////////////////////
+	//			Boss			   //
+	/////////////////////////////////
 	Boss = CreateArmGuyBoss(0, 0, &newID);
 	Boss->JabAttack.collisionDebug = TRUE;
 	Boss->SmashAttack.collisionDebug = TRUE;
 	Boss->SpinAttack.collisionDebug = TRUE;
 
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center, Border);
-	TextProgressiveInit(LevelName);
+	/////////////////////////////////
+	//		On Death			   //
+	/////////////////////////////////
+	CreateDeathConfirmObjects(&newID);
 
-	CreateBoundingBoxes();
 }
 
 /*************************************************************************/
@@ -133,6 +146,7 @@ void UpdateArmGuy(void)
 {
 	TextProgressiveVisible(LevelName, 30);
 	EventArmGuy();
+
 	// This should be the last line in this function
 	UpdateArmGuyBoss(Boss);
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -199,6 +213,9 @@ void UnloadArmGuy(void)
 /*************************************************************************/
 void EventArmGuy(void)
 {
+	//////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	//////////////////////////////////
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	DetectArmGuyBossCollision(Boss);
@@ -215,17 +232,23 @@ void EventArmGuy(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
+		//TogglePauseSound(BackSnd);
 		InitializePause(&DrawArmGuy);
 		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
-		//SetNextState(GS_MainMenu);
-		//TogglePauseSound(&BackgroundSnd);
+		//TogglePauseSound(BackSnd);
 	}
 	if(FoxInput_KeyTriggered('K'))
 	{
 		TextProgressiveEnd(LevelName);
 	}
 
+	//////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	//////////////////////////////////
+
+	//////////////////////////////////
+	//       EVERYTHING ELSE        //
+	//////////////////////////////////
 	TreeBackgroundUpdate();
 }
 
