@@ -253,7 +253,10 @@ void FreeLevel4(void)
 	else if(CurrentPlayer.CurrentLevel < GS_Level4)
 		CurrentPlayer.CurrentLevel = GS_Level4;
 
-	SavePlayer(&CurrentPlayer);
+	//Only save stats if the level was actually completed
+	if (levelComplete)
+		SavePlayer(&CurrentPlayer);
+
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
 }

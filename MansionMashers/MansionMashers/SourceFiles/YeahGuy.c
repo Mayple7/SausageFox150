@@ -275,7 +275,11 @@ void FreeYeahGuy(void)
 	FreeMyAlloc(RedBuffCollider);
 	FreeMyAlloc(GreenBuffCollider);
 	FreeMyAlloc(BlueBuffCollider);
-	SavePlayer(&CurrentPlayer);
+
+	//Only save stats if the level was actually completed
+	if (levelComplete)
+		SavePlayer(&CurrentPlayer);
+
 	FreeAllLists();
 }
 

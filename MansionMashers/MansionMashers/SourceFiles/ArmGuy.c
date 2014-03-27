@@ -170,7 +170,11 @@ void FreeArmGuy(void)
 		CurrentPlayer.CurrentLevel = GS_Level3;
 	else if(CurrentPlayer.CurrentLevel < GS_ArmGuy)
 		CurrentPlayer.CurrentLevel = GS_ArmGuy;
-	SavePlayer(&CurrentPlayer);
+
+	//Only save stats if the level was actually completed
+	if (levelComplete)
+		SavePlayer(&CurrentPlayer);
+
 	FreeAllLists();
 }
 
