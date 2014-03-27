@@ -44,6 +44,7 @@ typedef struct ParticleSystem
 	int ZIndex;
 
 	int FadeIn;
+	int emitThenDestroy;		    //Destroy when finished emitting
 
 }ParticleSystem;
 
