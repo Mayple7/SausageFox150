@@ -38,12 +38,21 @@
 #pragma comment (lib, "Alpha_Engine.lib")
 
 // ---------------------------------------------------------------------------
+// Libraries
+#define BACKGROUND_LENGTH 3
+
+// ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 
 ArmGuyBoss *Boss;
+
+Sprite* TreeBackground1[BACKGROUND_LENGTH];
+Sprite* TreeBackground2[BACKGROUND_LENGTH];
+Sprite* TreeBackground3[BACKGROUND_LENGTH];
+static void TreeBackgroundUpdate(void);
 
 /*************************************************************************/
 /*!
@@ -66,6 +75,7 @@ void LoadArmGuy(void)
 /*************************************************************************/
 void InitializeArmGuy(void)
 {
+	int i;
 	Vec3 TextTint;
 	newID = 10;
 	ResetObjectList();
@@ -81,6 +91,15 @@ void InitializeArmGuy(void)
 	//Panel1
 	CreateSprite("TextureFiles/ArmGuyPan.png", 1920, 1080, 5, 1, 1, 0, 0);
 
+	//Trees in Background
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground5.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground2[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground6.png", 1920, 1080, 1, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground7.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
 	//Background
 	//CreateSprite("TextureFiles/MansionHandGauy.png", 1920, 1080, 2, 1, 1, 140, 0);
 	//CreateSprite("TextureFiles/MansionHandGauyDoor.png", 1920, 1080, 200, 1, 1, 140, 0);
@@ -202,4 +221,17 @@ void EventArmGuy(void)
 	{
 		TextProgressiveEnd(LevelName);
 	}
+
+	TreeBackgroundUpdate();
+}
+
+void TreeBackgroundUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground2[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 30.0f);
+
+	for(i = 0; i < BACKGROUND_LENGTH; i++)
+		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
 }
