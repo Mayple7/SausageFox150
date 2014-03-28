@@ -92,23 +92,23 @@ void getItemTextName(WeaponShop *newShop, int collisionGroup, Vec3 TextTint, flo
 	{
 	case Sword:
 		strcat(placardName, "sword");
-		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 70, TextTint, Center, Plain);
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	case Axe:
 		strcat(placardName, "axe");
-		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 70, TextTint, Center, Plain);
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	case Hammer:
 		strcat(placardName, "hammer");
-		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 70, TextTint, Center, Plain);
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	case Spear:
 		strcat(placardName, "spear");
-		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 70, TextTint, Center, Plain);
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	default:
 		strcat(placardName, "wut did u do");
-		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 70, TextTint, Center, Plain);
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	}
 
