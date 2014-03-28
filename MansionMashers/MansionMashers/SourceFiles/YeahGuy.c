@@ -109,34 +109,48 @@ void InitializeYeahGuy(void)
 	buffTimer = 0.0f;
 	playerBuffTimer = 0.0f;
 
+	Vec3Set(&TextTint, 1, 1, 1);
+	LevelName = CreateText("YeahGuy Level", 0, 300, 100, TextTint, Center, Border);
+
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
 	//Panel1
 	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
 
-	//Background
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
+	/////////////////////////////////
+	//		Platforms			   //
+	/////////////////////////////////
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -550, -170);
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 550, -170);
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 0, 100);
 
+	/////////////////////////////////
+	//			Walls			   //
+	/////////////////////////////////
 	//Create bounding walls
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
 
+	/////////////////////////////////
+	//			Boss			   //
+	/////////////////////////////////
 	Boss = CreateYeahGuyBoss(0, 0, &newID);
 	Boss->BossCollider.collisionDebug = TRUE;
 
 	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->YeahAOERadius * 2, Boss->YeahAOERadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
 	DebugCircle->Visible = FALSE;
 
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("YeahGuy Level", 0, 300, 100, TextTint, Center, Border);
-
 	redHead = TRUE;
 	greenHead = TRUE;
 	blueHead = TRUE;
 
+	/////////////////////////////////
+	//			Buffs			   //
+	/////////////////////////////////
 	Vec2Set(&Position, 0, 0);
 
 	CurrentBuffSprite = (Sprite *)CreateSprite("TextureFiles/RedBuff.png", 50, 50, 200, 1, 1, 920, 500);
@@ -157,7 +171,11 @@ void InitializeYeahGuy(void)
 
 	HideBuffs();
 
-	CreateBoundingBoxes();
+	/////////////////////////////////
+	//		On Death			   //
+	/////////////////////////////////
+	CreateDeathConfirmObjects(&newID);
+
 }
 
 /*************************************************************************/
@@ -321,9 +339,9 @@ void EventYeahGuy(void)
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawYeahGuy);
-		//TogglePauseSound(&BackgroundSnd);
+		//TogglePauseSound(&BackSnd);
 		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		//TogglePauseSound(&BackSnd);
 	}
 }
 

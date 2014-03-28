@@ -122,7 +122,7 @@ void InitializeShop1(void)
 	//Bounding Boxes
 	CreateBoundingBoxes();
 
-	BackSnd = CreateSound("Sounds/shop.song_.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/ShopTheme.wav", LargeSnd);
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 }

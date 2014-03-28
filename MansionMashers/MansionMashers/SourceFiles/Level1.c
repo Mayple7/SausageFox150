@@ -61,9 +61,6 @@ Platform *Table1;
 
 Wall *Wall1;
 
-//Wall *BBWallLeft;
-//Wall *BBWallRight;
-
 FoxSound *BackSnd;
 
 Sprite *BlackOverlay;
@@ -115,24 +112,35 @@ void InitializeLevel1(void)
 	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
-	//Bounding Boxes
-	CreateBoundingBoxes();
+	CreatePaperScroll(200);
 
-	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
-
-	//Background: Panel 1
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
+	//Panel 1
 	CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OverlayDoorTorch.png", 1920, 1080, 200, 1, 1, 0, 0);
+	//Panel 2
 	CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 300, 1, 1, 1920, 0);
+	//Panel 3
 	CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, (1920 * 2), 0);
 	
-	//Black fade part
+	//Black Overlay
 	Vec3Set(&TextTint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
-	//Platforms
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
+	//Background Sound
+	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+
+
+	/////////////////////////////////
+	//		Platforms			   //
+	/////////////////////////////////
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -628, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
@@ -148,7 +156,9 @@ void InitializeLevel1(void)
 	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 290.0f, 40.0f, newID++, 1774, -255);
 	Table1->PlatformSprite->Visible = FALSE;
 	
-	//Walls
+	/////////////////////////////////
+	//			Walls			   //
+	/////////////////////////////////
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 865, 130);
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -900, 0);
@@ -156,10 +166,19 @@ void InitializeLevel1(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 2785, 130);
 	Wall1->WallSprite->Visible = FALSE;
 	
-	
 	// Blocker Box Walls
 	CreateBlockerBoxes(&newID);	
 
+	/////////////////////////////////
+	//			Particles		   //
+	/////////////////////////////////
+	//Particles fo Torches
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 806, -235, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+
+	/////////////////////////////////
+	//			Spawners		   //
+	/////////////////////////////////
 	//Enemy spawners (always set left and then right if none set to null)
 	Vec2Set(&SpawnerLocation, -(PANELSIZE / 4) - 100, 0);
 	//First Spawner Left (none so set to null
@@ -173,24 +192,16 @@ void InitializeLevel1(void)
 	//2nd Spawner Right
 	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
 
-
 	Vec2Set(&SpawnerLocation, 1.90f * PANELSIZE, 0);
 	//3rd Spawner Left
 	Spawners[4] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
 	//3rd Spawner Right
 	Spawners[5] = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
 
-
 	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
 	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
 	SetEnemy1->HomePos.x = 2 * PANELSIZE;
 	SetEnemy2->HomePos.x = 2 * PANELSIZE;
-
-	//Particles fo Torches
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 695, -140, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 806, -235, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
-
-	CreatePaperScroll(200);
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -210,40 +221,9 @@ void UpdateLevel1(void)
 {
 	//Handle the special events right off the bat yo
 	EventLevel1();
-
 	PlayAudio(BackSnd);
 
-	ParticleSystemUpdate();
-	BoundingBoxUpdate();
-
-	if(CurrentPlayer.Position.x > (1.5f * PANELSIZE))
-	{
-		if(SetEnemy1->EnemyState == AINone)
-		{
-			SetEnemy1->EnemyState = AIIdle;
-			SetEnemy2->EnemyState = AIIdle;
-		}
-	}
-	else
-	{
-		SetEnemy1->EnemyState = AINone;
-		SetEnemy2->EnemyState = AINone;
-	}
-
 	
-	/*if(FoxInput_KeyTriggered('T'))
-		SetNextState(GS_Restart);
-	/*
-	if(FoxInput_KeyTriggered('T'))
-		ReScroll = TRUE;
-	if(Scroll == TRUE)
-		ScrollPaperScroll(2);
-	if(ReScroll == TRUE)
-	{
-		Scroll = FALSE;
-		ReScrollPaperScroll(2);
-	}
-	*/
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
@@ -260,7 +240,6 @@ void DrawLevel1(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
-	//DrawHUD(&HUDList);
 	DrawCollisionList();
 }
 
@@ -306,16 +285,15 @@ void UnloadLevel1(void)
 /*************************************************************************/
 void EventLevel1(void)
 {
-	/*////////////////////////////////
+	//////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
-	////////////////////////////////*/
+	//////////////////////////////////
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		if(PlayerIsAlive == TRUE)
 		{
 			InitializePause(&DrawLevel1);
 			TogglePauseSound(BackSnd);
-			//SetNextState(GS_MainMenu);
 			UpdatePause();
 			TogglePauseSound(BackSnd);
 		}
@@ -373,13 +351,30 @@ void EventLevel1(void)
 	SetUpCameraPanAndLock(&levelComplete, PANELSIZE, Spawners, numPanels);
 	UpdateBlockerBoxes(PANELSIZE);
 
-	/*////////////////////////////////
+	//////////////////////////////////
 	//       EVERYTHING ELSE        //
-	////////////////////////////////*/
+	//////////////////////////////////
 	UpdateAllEnemies();
-
 	UpdateFloatingText();
+	ParticleSystemUpdate();
+	BoundingBoxUpdate();
 
+	//Setting Enemy AI Stuff
+	if(CurrentPlayer.Position.x > (1.5f * PANELSIZE))
+	{
+		if(SetEnemy1->EnemyState == AINone)
+		{
+			SetEnemy1->EnemyState = AIIdle;
+			SetEnemy2->EnemyState = AIIdle;
+		}
+	}
+	else
+	{
+		SetEnemy1->EnemyState = AINone;
+		SetEnemy2->EnemyState = AINone;
+	}
+
+	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
 		PlayerIsAlive = FALSE;
@@ -388,5 +383,4 @@ void EventLevel1(void)
 
 		UpdateDeathConfirmObjects();
 	}
-
 }
