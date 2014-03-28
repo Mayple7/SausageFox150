@@ -1300,8 +1300,8 @@ void SavePlayer(Player *CurrentPlayer)
 		BuffValue = BuffValue | 0x8;
 
 	// Ugly code that puts all needed info into one string
-	sprintf(string, "Level: %d\nArmUnlock: %d\nHandUnlock: %d\nArmClear: %d\nHandClear: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
-		CurrentPlayer->CurrentLevel, CurrentPlayer->armUnlock, CurrentPlayer->handUnlock, CurrentPlayer->armClear, CurrentPlayer->handClear, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+	sprintf(string, "Level: %d\nRank: %d\nXP: %d\nArmUnlock: %d\nHandUnlock: %d\nArmClear: %d\nHandClear: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
+		CurrentPlayer->CurrentLevel, CurrentPlayer->CurrentPlayerStats.Rank, CurrentPlayer->CurrentPlayerStats.Experience, CurrentPlayer->armUnlock, CurrentPlayer->handUnlock, CurrentPlayer->armClear, CurrentPlayer->handClear, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
@@ -1341,14 +1341,14 @@ int LoadPlayer(Player *CurrentPlayer)
 	{
 		//Ugly code which should read the file if its in the correct format
 		int num = 0;
-		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
-			&CurrentPlayer->CurrentLevel, &CurrentPlayer->armUnlock, &CurrentPlayer->handUnlock, &CurrentPlayer->armClear, &CurrentPlayer->handClear, &CurrentPlayer->Princess, &BuffValue, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
+		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
+			&CurrentPlayer->CurrentLevel, &CurrentPlayer->CurrentPlayerStats.Rank, &CurrentPlayer->CurrentPlayerStats.Experience, &CurrentPlayer->armUnlock, &CurrentPlayer->handUnlock, &CurrentPlayer->armClear, &CurrentPlayer->handClear, &CurrentPlayer->Princess, &BuffValue, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
 			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
 			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 		fclose(fp);
 
 		//If all the data was read successfully
-		if(num == 18)
+		if(num == 20)
 		{
 			//Update all the other required player data
 			int nameLen, statsLen;
@@ -1507,6 +1507,9 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	updateDamage(CurrentPlayer);
 	updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+
+	CurrentPlayer->CurrentPlayerStats.Rank = 1;
+	CurrentPlayer->CurrentPlayerStats.Experience = 0;
 
 	CurrentPlayer->CurrentPlayerStats.Money = 15;
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;

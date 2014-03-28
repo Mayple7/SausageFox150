@@ -302,7 +302,8 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		TextGlyphs *FirstLetter;
 
 		//Give the player thier loot!
-		CurrentPlayer.CurrentPlayerStats.Money += CurrentEnemy->CurrentEnemyStats.Money;
+		CurrentPlayer.CurrentPlayerStats.Money      += CurrentEnemy->CurrentEnemyStats.Money;
+		CurrentPlayer.CurrentPlayerStats.Experience += CurrentEnemy->CurrentEnemyStats.Experience;
 		
 		Vec3Set(&textColor, 1.0f, 1.0f, 0.0f);
 		sprintf(num, "+%d", CurrentEnemy->CurrentEnemyStats.Money);

@@ -68,6 +68,10 @@ typedef struct PlayerStats
 	float HasteTimer;
 
 	int Money;
+
+	//Level
+	int Rank;	    //Wanted to name this "Echelon" but seemed unnecessary
+	int Experience; //XP
 }PlayerStats;
 
 typedef struct Player

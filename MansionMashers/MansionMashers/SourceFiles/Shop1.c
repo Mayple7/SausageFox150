@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*!
-\file				Level.c
-\author				Dan Muller (d.muller)
+\file				Shop1.c
+\author				Kaden Nugent (kaden.n)
 \date				Feb 15, 2014
 
 \brief				Functions for the showcase level
@@ -46,7 +46,7 @@ Sprite* BlackOverlay;
 
 FoxSound *BackSnd;
 
-static int PlayerIsAlive; 
+static int PlayerIsAlive;
 
 /*************************************************************************/
 /*!
@@ -79,7 +79,7 @@ void InitializeShop1(void)
 	ResetCamera();
 
 	//Weapon/Shop
-	randNum = rand() % 100;
+	randNum = rand() % 60;
 	randType = rand() % FoxWeapon;
 
 	// First shop plackard
