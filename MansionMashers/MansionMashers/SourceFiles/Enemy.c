@@ -298,6 +298,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
 		char num[10];
+		int dropWeapon;
 		Vec3 textColor;
 		TextGlyphs *FirstLetter;
 
@@ -326,6 +327,19 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 			CurrentEnemy->EnemyParticleSystem->emitScale = 2.0f;
 		CurrentEnemy->EnemyParticleSystem->emitLife = 1.0f;
 		CurrentEnemy->EnemyParticleSystem->emitThenDestroy = TRUE;
+
+		//Give the player a chance at the enemy's weapon sometimes
+		if (CurrentEnemy->EnemyType == BasicRanged)
+			dropWeapon = 0;
+		else
+			dropWeapon = rand() % 2;
+
+		if (dropWeapon == 1)
+		{
+			Weapon *CurrentWeapon = CreateDroppedWeapon(CurrentEnemy->EnemyWeapon->WeaponType, CurrentEnemy->EnemyWeapon->WeaponRarity, 250, 250, CurrentEnemy->objID, CurrentEnemy->Position.x, CurrentEnemy->Position.y);
+			CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (rand() % 50 - 20) / 4; //A random angle for the dropped weapon
+			CurrentWeapon->WeaponFalling = TRUE;
+		}
 
 		PlayAudio(CurrentEnemy->CurrentEnemySounds.Poof);
 		EnemyPanelNumber[CurrentEnemy->panelId]--;
