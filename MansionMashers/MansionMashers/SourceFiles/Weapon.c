@@ -144,6 +144,46 @@ void CreateWeaponName(char** Name, int WType, int WRarity)
 		}
 		strcat(*Name, GetCommonEnd());
 	}
+	else if(WRarity == Uncommon)
+	{
+		strcpy(*Name, GetUncommonStart());
+		switch(WType)
+		{
+		case Sword:
+			strcat(*Name, GetSwordSynonym());
+			break;
+		case Axe:
+			strcat(*Name, GetAxeSynonym());
+			break;
+		case Hammer:
+			strcat(*Name, GetHammerSynonym());
+			break;
+		case Spear:
+			strcat(*Name, GetSpearSynonym());
+			break;
+		}
+		strcat(*Name, GetUncommonEnd());
+	}
+	else if(WRarity == Rare)
+	{
+		strcpy(*Name, GetRareStart());
+		switch(WType)
+		{
+		case Sword:
+			strcat(*Name, GetSwordSynonym());
+			break;
+		case Axe:
+			strcat(*Name, GetAxeSynonym());
+			break;
+		case Hammer:
+			strcat(*Name, GetHammerSynonym());
+			break;
+		case Spear:
+			strcat(*Name, GetSpearSynonym());
+			break;
+		}
+		strcat(*Name, GetRareEnd());
+	}
 }
 
 void WeaponOnTheRun(Weapon* CurrentWeapon)
@@ -241,7 +281,68 @@ void CreateWeaponStats(int WType, int WRarity, int* BonusStrength, int* BonusAgi
 			*BonusDefense = rand() % 2 + 1;
 			break;
 		}
-
+	}
+	else if(WRarity == Uncommon)
+	{
+		switch(WType)
+		{
+		case Sword:
+			*BonusStrength = rand() % 3 + 3;
+			*BonusAgility = rand() % 3 + 5;
+			*BonusDefense = rand() % 3 + 5;
+			break;
+		case Axe:
+			*BonusStrength = rand() % 3 + 5;
+			*BonusAgility = rand() % 3 + 5;
+			*BonusDefense = rand() % 3 + 3;
+			break;
+		case Hammer:
+			*BonusStrength = rand() % 3 + 5;
+			*BonusAgility = rand() % 3 + 3;
+			*BonusDefense = rand() % 3 + 5;
+			break;
+		case Spear:
+			*BonusStrength = rand() % 3 + 3;
+			*BonusAgility = rand() % 3 + 7;
+			*BonusDefense = rand() % 3 + 3;
+			break;
+		case FoxWeapon:
+			*BonusStrength = rand() % 3 + 5;
+			*BonusAgility = rand() % 3 + 5;
+			*BonusDefense = rand() % 3 + 5;
+			break;
+		}
+	}
+	else if(WRarity == Rare)
+	{
+		switch(WType)
+		{
+		case Sword:
+			*BonusStrength = rand() % 4 + 6;
+			*BonusAgility = rand() % 4 + 8;
+			*BonusDefense = rand() % 4 + 8;
+			break;
+		case Axe:
+			*BonusStrength = rand() % 4 + 8;
+			*BonusAgility = rand() % 4 + 8;
+			*BonusDefense = rand() % 4 + 6;
+			break;
+		case Hammer:
+			*BonusStrength = rand() % 4 + 8;
+			*BonusAgility = rand() % 4 + 6;
+			*BonusDefense = rand() % 4 + 8;
+			break;
+		case Spear:
+			*BonusStrength = rand() % 4 + 6;
+			*BonusAgility = rand() % 4 + 10;
+			*BonusDefense = rand() % 4 + 6;
+			break;
+		case FoxWeapon:
+			*BonusStrength = rand() % 4 + 8;
+			*BonusAgility = rand() % 4 + 8;
+			*BonusDefense = rand() % 4 + 8;
+			break;
+		}
 	}
 }
 
@@ -267,7 +368,49 @@ Sprite* CreateWeaponSprite(int WType, int WRarity, float xPos, float yPos)
 		case FoxWeapon:
 			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/GinkoSmall.png", 256, 256, 50, 1, 1, xPos, yPos);
 			break;
-		};
+		}
+	}
+	else if(WRarity == Uncommon)
+	{
+		switch(WType)
+		{
+		case Sword:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		case Axe:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		case Hammer:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		case Spear:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		case FoxWeapon:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/GinkoSmall.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		}
+	}
+	else if(WRarity == Rare)
+	{
+		switch(WType)
+		{
+		case Sword:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		case Axe:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		case Hammer:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		case Spear:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		case FoxWeapon:
+			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/GinkoSmall.png", 256, 256, 50, 1, 1, xPos, yPos);
+			break;
+		}
 	}
 	return WeaponSprite;
 }
