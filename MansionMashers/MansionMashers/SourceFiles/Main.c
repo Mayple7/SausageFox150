@@ -138,7 +138,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 #ifndef _DEBUG
 	GSMInitialize(GS_SplashScreen);
 #else
-	GSMInitialize(GS_DevMenu);
+	GSMInitialize(GS_MainMenu);
 #endif
 
 	while(GameRunning)

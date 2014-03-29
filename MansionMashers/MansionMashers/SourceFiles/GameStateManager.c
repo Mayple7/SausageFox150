@@ -335,14 +335,6 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawKevin;
 			GSMPointers.pUnload = UnloadKevin;
 			break;
-		case GS_DevMenu:
-			GSMPointers.pLoad = LoadDevMenu;
-			GSMPointers.pInit = InitializeDevMenu;
-			GSMPointers.pUpdate = UpdateDevMenu;
-			GSMPointers.pFree = FreeDevMenu;
-			GSMPointers.pDraw = DrawDevMenu;
-			GSMPointers.pUnload = UnloadDevMenu;
-			break;
 		case GS_Shop1:
 			GSMPointers.pLoad = LoadShop1;
 			GSMPointers.pInit = InitializeShop1;
