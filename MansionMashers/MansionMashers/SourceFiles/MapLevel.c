@@ -306,13 +306,42 @@ void UnloadMapLevel(void)
 /*************************************************************************/
 /*!
 	\brief
+	I wasn't going to make this function...but then I did...
+*/
+/*************************************************************************/
+int pointRectCollisionSprite(Sprite *objA, Vec2 *objB)
+{
+	Vec2 posA = objA->Position;
+
+	//Collidable 1
+	float leftAx   = posA.x - (objA->Width / 2);
+	float rightAx  = leftAx + objA->Width;
+	float topAy    = posA.y + (objA->Height / 2);
+	float bottomAy = topAy - objA->Height;
+
+	if(objB->x >= leftAx && objB->x <= rightAx && objB->y >= bottomAy && objB->y <= topAy)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Handles all events in the level
 */
 /*************************************************************************/
 void EventLevel(void)
 {
+	int worldX, worldY;
+	Vec2 MouseClick;
+
+	FoxInput_GetWorldPosition(&worldX, &worldY);
+	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
 	//Update the particles
 	ParticleSystemUpdate();
+
 	//Execute the pause menu
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
@@ -328,14 +357,15 @@ void EventLevel(void)
 		//TogglePauseSound(&BackgroundSnd);
 	}
 
+	// Go into the level the icon is on
+	if(FoxInput_KeyTriggered(VK_SPACE) || FoxInput_KeyTriggered('E') || 
+	   FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && pointRectCollisionSprite(PlayerIcon, &MouseClick))
+	{
+		SetNextState(iconPosition);
+	}
+
 	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 	{
-		int worldX, worldY;
-		Vec2 MouseClick;
-
-		FoxInput_GetWorldPosition(&worldX, &worldY);
-		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
-
 		//Tutorial
 		if(PointRectCollision(&Tutorial->ButtonCollider, &MouseClick) && (GS_Tutorial <= CurrentPlayer.CurrentLevel || Cheats))
 		{
@@ -432,13 +462,6 @@ void EventLevel(void)
 			GetNewIconPosition(&PlayerIcon->Position, GS_Kevin);
 			iconPosition = GS_Kevin;
 		}
-	}
-
-
-	// Go into the level the icon is on
-	if(FoxInput_KeyTriggered(VK_SPACE) || FoxInput_KeyTriggered('E'))
-	{
-		SetNextState(iconPosition);
 	}
 
 	//Debug Buttons

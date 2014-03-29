@@ -15,4 +15,5 @@ static void EventLevel(void);
 void GetNewIconPosition(Vec2 *NewPosition, int newLocation);
 void UpdateProgression(Player *CurrentPlayer);
 void SetClearFlags(Player *CurrentPlayer);
+int pointRectCollisionSprite(Sprite *objA, Vec2 *objB);
 #endif

@@ -153,6 +153,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	CreatePlayerSprites(CurrentPlayer);
 	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = CurrentPlayer->Zindex + 2;
 	Animation(CurrentPlayer);
+
+	InitializePlayerRank(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -380,6 +382,9 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 
 	//Update the buff timers
 	UpdateBuffTimers(CurrentPlayer);
+
+	//Update the player XP and Rank
+	UpdatePlayerRank(CurrentPlayer);
 
 	//Brings the player back to the surface if something bad happens
 	if(CurrentPlayer->Position.y < GROUNDLEVEL)

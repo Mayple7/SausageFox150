@@ -80,6 +80,9 @@ void InitializeCharacterSelect(void)
 	HollyButton = CreateButton("TextureFiles/BlankPlatform.png", 712, -62, 405.0f, 724.0f, newID++);
 	HollyButton->ButtonSprite->Visible = FALSE;
 
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
 	if(remove(GameData))
 	{
 		printf("FAILED");

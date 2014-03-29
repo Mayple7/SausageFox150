@@ -102,7 +102,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
-		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 29);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
 
@@ -125,7 +125,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 50, (float)(300 + 10 * (rand() % 10)), 15.0f, 0, 10, 10, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, (float)(300 + 10 * (rand() % 10)), 15.0f, 0, 10, 10, 33);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -179,7 +179,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 80, (float)(150 + 10 * (rand() % 10)), 15.0f, 0, 10, 20, 20);
+		InitializeEnemyStats(CurrentEnemy, 80, (float)(150 + 10 * (rand() % 10)), 15.0f, 0, 10, 20, 47);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 

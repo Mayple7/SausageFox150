@@ -261,7 +261,7 @@ void FreeLevel1(void)
 
 	//Only save stats if the level was actually completed
 	if (levelComplete)
-		SavePlayer(&CurrentPlayer);
+		LevelCompletion(&CurrentPlayer);
 
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
