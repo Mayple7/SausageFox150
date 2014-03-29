@@ -72,6 +72,7 @@ typedef struct PlayerStats
 	//Level
 	int Rank;	    //Wanted to name this "Echelon" but seemed unnecessary
 	int Experience; //XP
+	int Upgrades;   //How many times the player ranked up
 }PlayerStats;
 
 typedef struct Player

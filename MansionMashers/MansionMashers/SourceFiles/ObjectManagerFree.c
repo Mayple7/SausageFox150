@@ -152,7 +152,7 @@ void FreeProjectile(Projectile *CurrentProjectile)
 /*************************************************************************/
 void FreeEnemy(Enemy *CurrentEnemy)
 {
-	if(CurrentEnemy->objID > -1)
+	if(CurrentEnemy->objID > 0)
 	{
 		//I'm sure someone will miss you enemy
 		CurrentEnemy->objID = 0;
