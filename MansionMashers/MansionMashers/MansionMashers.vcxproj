@@ -118,6 +118,7 @@
     <ClInclude Include="HeaderFiles\HUD.h" />
     <ClInclude Include="HeaderFiles\Input.h" />
     <ClInclude Include="HeaderFiles\Kevin.h" />
+    <ClInclude Include="HeaderFiles\Level.h" />
     <ClInclude Include="HeaderFiles\Level1.h" />
     <ClInclude Include="HeaderFiles\Level2.h" />
     <ClInclude Include="HeaderFiles\Level3.1.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="SourceFiles\HUD.c" />
     <ClCompile Include="SourceFiles\Input.c" />
     <ClCompile Include="SourceFiles\Kevin.c" />
+    <ClCompile Include="SourceFiles\Level.c" />
     <ClCompile Include="SourceFiles\Level1.c" />
     <ClCompile Include="SourceFiles\Level2.c" />
     <ClCompile Include="SourceFiles\Level3.1.c" />

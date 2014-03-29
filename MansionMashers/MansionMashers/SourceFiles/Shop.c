@@ -43,16 +43,13 @@ void getWeaponCoin(WeaponShop *newShop, int weaponRarity)
 		newShop->Coin = 20;
 		break;
 	case Uncommon:
-		newShop->Coin = 50;
+		newShop->Coin = 300;
 		break;
 	case Rare:
-		newShop->Coin = 120;
-		break;
-	case Epic:
-		newShop->Coin = 400;
+		newShop->Coin = 800;
 		break;
 	case Sausage:
-		newShop->Coin = 1000;
+		newShop->Coin = 1200;
 		break;
 	default:
 		newShop->Coin = 50;
@@ -69,27 +66,49 @@ void getWeaponCoin(WeaponShop *newShop, int weaponRarity)
 	Gets the item title of a weapon
 */
 /*************************************************************************/
-void getItemTextName(WeaponShop *newShop, int collisionGroup, Vec3 TextTint, float shopPosX, float shopPosY)
+void getItemTextName(WeaponShop *newShop, int collisionGroup, Vec3 TextTint, float shopPosX, float shopPosY, int weaponRarity)
 {
+	char placardName[50];
 	Vec3Set(&TextTint, 0, 0, 0);
+
+	switch(weaponRarity)
+	{
+	case Common:
+		strcpy(placardName, "Common ");
+		break;
+	case Uncommon:
+		strcpy(placardName, "Uncommon ");
+		break;
+	case Rare:
+		strcpy(placardName, "Rare ");
+		break;
+	case Sausage:
+		strcpy(placardName, "Sausage ");
+		break;
+	}
 
 	//For now just manually create the generic weapon text
 	switch(collisionGroup)
 	{
 	case Sword:
-		newShop->ItemTextName = CreateText("SWORD", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
+		strcat(placardName, "sword");
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	case Axe:
-		newShop->ItemTextName = CreateText("AXE", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
+		strcat(placardName, "axe");
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	case Hammer:
-		newShop->ItemTextName = CreateText("HAMMER", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
+		strcat(placardName, "hammer");
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	case Spear:
-		newShop->ItemTextName = CreateText("SPEAR", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
+		strcat(placardName, "spear");
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	default:
-		newShop->ItemTextName = CreateText("WUT DID U DO", shopPosX + 20, shopPosY + 120, 80, TextTint, Center, Plain);
+		strcat(placardName, "wut did u do");
+		newShop->ItemTextName = CreateText(placardName, shopPosX + 20, shopPosY + 120, 65, TextTint, Center, Plain);
 		break;
 	}
 
@@ -116,7 +135,7 @@ void CreateWeaponShop(float shopPosX, float shopPosY, int newID, int collisionGr
 	Vec3Set(&TextTint, 0.2f, 0.2f, 0.2f);
 	newShop->ItemTextCoin = CreateText(strcat(newShop->CoinChar, " coin"), shopPosX + 10, shopPosY + 60, 60, TextTint, Center, Plain);
 	ChangeTextVisibility(newShop->ItemTextCoin);
-	getItemTextName(newShop, collisionGroup, TextTint, shopPosX, shopPosY);
+	getItemTextName(newShop, collisionGroup, TextTint, shopPosX, shopPosY, weaponRarity);
 
 	//Weapon
 	newShop->Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, newID, shopPosX + 50, shopPosY);

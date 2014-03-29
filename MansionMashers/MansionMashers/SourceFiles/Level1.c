@@ -252,13 +252,16 @@ void DrawLevel1(void)
 void FreeLevel1(void)
 {
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level2)
+	{
+		CurrentPlayer.levelClearBitFlags |= 2;
 		CurrentPlayer.CurrentLevel = GS_Level2;
+	}
 	else if(CurrentPlayer.CurrentLevel < GS_Level1)
 		CurrentPlayer.CurrentLevel = GS_Level1;
 
 	//Only save stats if the level was actually completed
 	if (levelComplete)
-		SavePlayer(&CurrentPlayer);
+		LevelCompletion(&CurrentPlayer);
 
 	FreeAllLists();
 	FreeHUD(CurrentHUD);

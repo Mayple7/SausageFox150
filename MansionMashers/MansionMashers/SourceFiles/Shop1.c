@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*!
-\file				Level.c
-\author				Dan Muller (d.muller)
+\file				Shop1.c
+\author				Kaden Nugent (kaden.n)
 \date				Feb 15, 2014
 
 \brief				Functions for the showcase level
@@ -46,7 +46,7 @@ Sprite* BlackOverlay;
 
 FoxSound *BackSnd;
 
-static int PlayerIsAlive; 
+static int PlayerIsAlive;
 
 /*************************************************************************/
 /*!
@@ -69,6 +69,7 @@ void LoadShop1(void)
 void InitializeShop1(void)
 {
 	Vec3 Tint;
+	int randNum, randType;
 
 	levelComplete = FALSE;
 	PlayerIsAlive = TRUE;
@@ -78,8 +79,33 @@ void InitializeShop1(void)
 	ResetCamera();
 
 	//Weapon/Shop
-	CreateWeaponShop(-400, -140, newID++, Spear, Common);
-	CreateWeaponShop(600, -140, newID++, Axe, Common);
+	randNum = rand() % 60;
+	randType = rand() % FoxWeapon;
+
+	// First shop plackard
+	if(randNum > 98)
+		CreateWeaponShop(-400, -140, newID++, randType, Sausage);
+	else if(randNum > 85)
+		CreateWeaponShop(-400, -140, newID++, randType, Rare);
+	else if(randNum > 50)
+		CreateWeaponShop(-400, -140, newID++, randType, Uncommon);
+	else
+		CreateWeaponShop(-400, -140, newID++, randType, Common);
+	
+	randNum = rand() % 100;
+	randType = rand() % FoxWeapon;
+
+	// Second shop plackard
+	if(randNum > 98)
+		CreateWeaponShop(600, -140, newID++, randType, Sausage);
+	else if(randNum > 85)
+		CreateWeaponShop(600, -140, newID++, randType, Rare);
+	else if(randNum > 50)
+		CreateWeaponShop(600, -140, newID++, randType, Uncommon);
+	else
+		CreateWeaponShop(600, -140, newID++, randType, Common);
+
+	
 
 	CreateSprite("TextureFiles/LevelGrassGround.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);
 

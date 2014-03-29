@@ -286,7 +286,10 @@ void DrawYeahGuy(void)
 void FreeYeahGuy(void)
 {
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level7)
+	{
+		CurrentPlayer.levelClearBitFlags |= 128;
 		CurrentPlayer.CurrentLevel = GS_Level7;
+	}
 	else if(CurrentPlayer.CurrentLevel < GS_YeahGuy)
 		CurrentPlayer.CurrentLevel = GS_YeahGuy;
 

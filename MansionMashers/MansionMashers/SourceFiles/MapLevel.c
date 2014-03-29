@@ -74,6 +74,19 @@ Button* Shop4;
 Button* Level7;
 Button* Kevin;
 
+/*
+	1		GS_Tutorial,
+	2		GS_Level1,
+	4		GS_Level2,
+	8		GS_Level3,
+	16		GS_Level4,
+	32		GS_Level5,
+	64		GS_Level6,
+	128		GS_YeahGuy,
+	256		GS_Level7,
+	512		GS_Kevin,
+*/
+
 /*************************************************************************/
 /*!
 	\brief
@@ -121,6 +134,8 @@ void InitializeMapLevel(void)
 
 	//If not coming from a level set to the player's latest level
 	if(iconPosition > GS_LevelNUM)
+		iconPosition = CurrentPlayer.CurrentLevel;
+	else if(iconPosition == CurrentPlayer.CurrentLevel - 1)
 		iconPosition = CurrentPlayer.CurrentLevel;
 
 	//Create the large sprites
@@ -173,11 +188,6 @@ void InitializeMapLevel(void)
 	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
 	SystemOne->FadeIn = TRUE;
 
-/*	GS_Level6,
-	GS_YeahGuy,
-	GS_Shop4,
-	GS_Level7,
-	GS_Kevin,*/
 	// Adjusts the fade overlay based on the farthest progressed level
 	switch(CurrentPlayer.CurrentLevel)
 	{
@@ -228,6 +238,7 @@ void InitializeMapLevel(void)
 
 	//Sets icon to the correct position
 	GetNewIconPosition(&PlayerIcon->Position, iconPosition);
+	SetClearFlags(&CurrentPlayer);
 	MapInfoText->Position.x = GetCameraXPosition();
 }
 
@@ -295,13 +306,42 @@ void UnloadMapLevel(void)
 /*************************************************************************/
 /*!
 	\brief
+	I wasn't going to make this function...but then I did...
+*/
+/*************************************************************************/
+int pointRectCollisionSprite(Sprite *objA, Vec2 *objB)
+{
+	Vec2 posA = objA->Position;
+
+	//Collidable 1
+	float leftAx   = posA.x - (objA->Width / 2);
+	float rightAx  = leftAx + objA->Width;
+	float topAy    = posA.y + (objA->Height / 2);
+	float bottomAy = topAy - objA->Height;
+
+	if(objB->x >= leftAx && objB->x <= rightAx && objB->y >= bottomAy && objB->y <= topAy)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Handles all events in the level
 */
 /*************************************************************************/
 void EventLevel(void)
 {
+	int worldX, worldY;
+	Vec2 MouseClick;
+
+	FoxInput_GetWorldPosition(&worldX, &worldY);
+	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
 	//Update the particles
 	ParticleSystemUpdate();
+
 	//Execute the pause menu
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
@@ -317,14 +357,15 @@ void EventLevel(void)
 		//TogglePauseSound(&BackgroundSnd);
 	}
 
+	// Go into the level the icon is on
+	if(FoxInput_KeyTriggered(VK_SPACE) || FoxInput_KeyTriggered('E') || 
+	   FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && pointRectCollisionSprite(PlayerIcon, &MouseClick))
+	{
+		SetNextState(iconPosition);
+	}
+
 	if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 	{
-		int worldX, worldY;
-		Vec2 MouseClick;
-
-		FoxInput_GetWorldPosition(&worldX, &worldY);
-		Vec2Set(&MouseClick, (float)worldX, (float)worldY);
-
 		//Tutorial
 		if(PointRectCollision(&Tutorial->ButtonCollider, &MouseClick) && (GS_Tutorial <= CurrentPlayer.CurrentLevel || Cheats))
 		{
@@ -421,13 +462,6 @@ void EventLevel(void)
 			GetNewIconPosition(&PlayerIcon->Position, GS_Kevin);
 			iconPosition = GS_Kevin;
 		}
-	}
-
-
-	// Go into the level the icon is on
-	if(FoxInput_KeyTriggered(VK_SPACE) || FoxInput_KeyTriggered('E'))
-	{
-		SetNextState(iconPosition);
 	}
 
 	//Debug Buttons
@@ -616,3 +650,77 @@ void UpdateProgression(Player *CurrentPlayer)
 
 }
 
+void SetClearFlags(Player *CurrentPlayer)
+{
+	// Tutorial Level
+	if(CurrentPlayer->levelClearBitFlags & 1)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, -645.52f, -179.28f);
+	}
+
+	// Level 1
+	if(CurrentPlayer->levelClearBitFlags & 2)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, -422.86f, -172.43f);
+	}
+
+	// Level 2
+	if(CurrentPlayer->levelClearBitFlags & 4)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, -103.06f, -70.21f);
+	}
+
+	// Level 3
+	if(CurrentPlayer->levelClearBitFlags & 8)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 122.14f, -222.12f);
+	}
+
+	// Level 4
+	if(CurrentPlayer->levelClearBitFlags & 16)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 132.75f, 281.19f);
+	}
+
+	// ArmGuy
+	if(CurrentPlayer->armClear)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 398.71f, -185.43f);
+	}
+
+	// HandGuy
+	if(CurrentPlayer->handClear)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 397.63f, 235.97f);
+	}
+
+	// Level 5
+	if(CurrentPlayer->levelClearBitFlags & 32)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 410.56f, 53.77f);
+	}
+
+	// Level 6
+	if(CurrentPlayer->levelClearBitFlags & 64)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 668.98f, 17.69f);
+	}
+
+	// YeahGuy
+	if(CurrentPlayer->levelClearBitFlags & 128)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 1077.22f, -37.76f);
+	}
+
+	// Level 7
+	if(CurrentPlayer->levelClearBitFlags & 256)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 1334.43f, -71.29f);
+	}
+
+	// Kevin
+	if(CurrentPlayer->levelClearBitFlags & 512)
+	{
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 1597.85f, -85.60f);
+	}
+}

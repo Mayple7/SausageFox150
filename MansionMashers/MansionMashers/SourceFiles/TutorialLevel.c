@@ -64,6 +64,8 @@ FoxSound *BackSnd;
 FoxSound *GongSnd;
 
 Wall *WallTemp;
+Wall *IronDoor;
+Wall *DummyBlock;
 
 static int tutorialDone; // Keeps track of how much of the tutorial has been completed (Not a bool)
 static int newID;
@@ -81,13 +83,13 @@ void InitializeTutorial(void)
 
 	levelComplete = FALSE;
 	tutorialDone = 0;
-	numPanels = 3;			//Kaden Update this if you add more panels
+	numPanels = 3;			//Kaden Update this if you add more panels -- what is a panel?
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	ResetEnemyPanelNumber();
 
-	BackSnd = CreateSound("Sounds/Temp.mp3", SmallSnd);
+	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
 	//Set the camera so it currently isn't gated
@@ -118,9 +120,22 @@ void InitializeTutorial(void)
 	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 240.0f, 500.0f, newID++, 840 + 1920 * 2, 200);
 	WallTemp->WallSprite->Visible = FALSE;
 
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, newID++, 800, 280);            //Above arch, room 1
+	WallTemp->WallSprite->Visible = FALSE;
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, newID++, 800 + 1920, 280);     //Above arch, room 2
+	WallTemp->WallSprite->Visible = FALSE;
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, newID++, 800 + 1920 * 2, 280); //Above arch, room 3
+	WallTemp->WallSprite->Visible = FALSE;
+
+	//The great iron door
+	IronDoor = CreateWall("TextureFiles/IronDoor.png", PANELSIZE, 1080, newID++, PANELSIZE * 2, 0);
+	IronDoor->WallSprite->ZIndex = 80;
+	UpdateCollider(&IronDoor->WallCollider, 200, 380);
+	IronDoor->WallCollider.Offset.x = 870;
+	IronDoor->WallCollider.Offset.y = -230;
+
 	// Bounding Box Walls
 	CreateBlockerBoxes(&newID);
-
 
 	// Seclusion overlay for the player to focus on things in the tutorial
 	Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 600, 800, 1, 1, 0, 240); //Top
@@ -198,7 +213,10 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + 1920.0f * 2, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f * 2, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 750 + 1920.0f * 2, -250, 2);
+	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 240 + 1920.0f * 2, -250, 2);
+	DummyBlock = CreateWall("TextureFiles/BlankPlatform.png", StrawDummy->EnemySprite->Width / 2, StrawDummy->EnemySprite->Height / 2, 
+				            newID++, StrawDummy->Position.x, StrawDummy->Position.y - 40);
+	DummyBlock->WallSprite->Visible = FALSE;
 }
  
 void UpdateTutorial(void)
@@ -323,19 +341,23 @@ void UpdateTutorial(void)
 			Seclude4->Visible = FALSE;
 		}
 	}
+	else if (tutorialDone > 4 && IronDoor->Position.y < 300)
+		UpdateWallPosition(IronDoor, IronDoor->Position.x, IronDoor->Position.y + 160 * GetDeltaTime());
 
 	//If the dummy exists, prevent the player from moving past
 	if(StrawDummy->objID > 0)
 	{
-		if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2)
+		/*if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2)
 		{
 			CurrentPlayer.Position.x = (StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
 		}
 		else if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
 		{
 			CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
-		}
+		}*/
 	}
+	else
+		FreeWall(DummyBlock);
 
 	if (tutorialDone > 2)
 		UpdateHUDPosition(CurrentHUD);
@@ -371,7 +393,10 @@ void DrawTutorial(void)
 void FreeTutorial(void)
 {
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level1)
+	{
+		CurrentPlayer.levelClearBitFlags |= 1;
 		CurrentPlayer.CurrentLevel = GS_Level1;
+	}
 	else if(CurrentPlayer.CurrentLevel < GS_Tutorial)
 		CurrentPlayer.CurrentLevel = GS_Tutorial;
 

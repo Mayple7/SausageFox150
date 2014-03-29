@@ -184,7 +184,10 @@ void DrawLevel5(void)
 void FreeLevel5(void)
 {
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level6)
+	{
+		CurrentPlayer.levelClearBitFlags |= 32;
 		CurrentPlayer.CurrentLevel = GS_Level6;
+	}
 	else if(CurrentPlayer.CurrentLevel < GS_Level5)
 		CurrentPlayer.CurrentLevel = GS_Level5;
 

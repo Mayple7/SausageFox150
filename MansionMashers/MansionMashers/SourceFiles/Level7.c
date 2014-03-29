@@ -47,6 +47,7 @@ static int levelComplete;
 static int PlayerIsAlive;
 static int beginningAnimation;
 TextGlyphs* LevelName;
+HUD* CurrentHUD;
 
 Sprite* BlackOverlay;
 
@@ -90,6 +91,7 @@ void InitializeLevel7(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	LevelName = CreateText("Level 7", 0, 300, 100, TextTint, Center, Border);
@@ -172,6 +174,8 @@ void UpdateLevel7(void)
 	EasyEditPlatform(Plat, 10);
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -196,7 +200,20 @@ void DrawLevel7(void)
 /*************************************************************************/
 void FreeLevel7(void)
 {
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Kevin)
+	{
+		CurrentPlayer.levelClearBitFlags |= 256;
+		CurrentPlayer.CurrentLevel = GS_Kevin;
+	}
+	else if(CurrentPlayer.CurrentLevel < GS_Level7)
+		CurrentPlayer.CurrentLevel = GS_Level7;
+
+	//Only save stats if the level was actually completed
+	if (levelComplete)
+		SavePlayer(&CurrentPlayer);
+
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/

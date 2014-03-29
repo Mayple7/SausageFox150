@@ -157,7 +157,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				ApplyVelocity(&CurrentBoss->HandGuyRigidBody, &velocity);
 			}
 			// Drop down if needed
-			else if(CurrentPlayer.Position.y <= GROUNDLEVEL && CurrentBoss->Position.y > -15)
+			else
 			{
 				CurrentBoss->dropDown = TRUE;
 				CurrentBoss->HandGuyRigidBody.onGround = FALSE;
