@@ -81,6 +81,7 @@ typedef struct Player
 	int CurrentLevel;
 	int PlayerActive;
 
+	int levelClearBitFlags;
 	int armUnlock;
 	int handUnlock;
 	int armClear;

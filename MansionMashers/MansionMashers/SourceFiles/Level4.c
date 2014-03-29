@@ -243,12 +243,16 @@ void FreeLevel4(void)
 	// Level complete and not reached level 5 zone
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level5)
 	{
+		CurrentPlayer.levelClearBitFlags |= 16;
 		CurrentPlayer.CurrentLevel = GS_Level5;
 		CurrentPlayer.handUnlock = TRUE;
 	}
 	// Level complete and has reached level 5 zone
 	else if(levelComplete)
+	{
+		CurrentPlayer.levelClearBitFlags |= 16;
 		CurrentPlayer.handUnlock = TRUE;
+	}
 	// Level NOT complete
 	else if(CurrentPlayer.CurrentLevel < GS_Level4)
 		CurrentPlayer.CurrentLevel = GS_Level4;

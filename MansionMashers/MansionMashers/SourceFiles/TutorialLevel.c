@@ -393,7 +393,10 @@ void DrawTutorial(void)
 void FreeTutorial(void)
 {
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level1)
+	{
+		CurrentPlayer.levelClearBitFlags |= 1;
 		CurrentPlayer.CurrentLevel = GS_Level1;
+	}
 	else if(CurrentPlayer.CurrentLevel < GS_Tutorial)
 		CurrentPlayer.CurrentLevel = GS_Tutorial;
 
