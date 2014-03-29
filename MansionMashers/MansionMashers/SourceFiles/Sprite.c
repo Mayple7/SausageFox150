@@ -291,7 +291,7 @@ void updateSpriteAnimation(Sprite *CurrentSprite, Vec2 *offset)
 	Vec2Set(&offsetDiff, 1.0f / CurrentSprite->NumWidthFrames, 1.0f / CurrentSprite->NumHeightFrames);
 	Vec2Zero(offset);
 
-	if(CurrentSprite->AnimationActive)
+	if(CurrentSprite->AnimationActive && !pause)
 	{
 		// Updates to the next frame of animation if needed
 		CurrentSprite->AnimationTimer++;

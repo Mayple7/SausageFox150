@@ -34,6 +34,16 @@
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
 
+#if _DEBUG
+ 
+#pragma region MEMORY_LEAKS
+#define _CRTDBG_MAP_ALLOC
+#define _NO_DEBUG_HEAP 1
+#include <crtdbg.h>
+#pragma endregion
+ 
+#endif
+
 // ---------------------------------------------------------------------------
 // globals
 int GameRunning;

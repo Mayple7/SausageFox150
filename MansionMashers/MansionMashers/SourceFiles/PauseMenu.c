@@ -59,7 +59,6 @@ void (*LevelToDraw)();
 float SFXSliderPos, BGMSliderPos;
 static char* volumestring;
 
-static int pause;
 static int newID;
 
 void InitializePause(void (*DrawLevel)())

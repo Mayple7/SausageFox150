@@ -30,6 +30,8 @@
 //Special level include
 #include "PauseMenu.h"
 
+int pause;
+
 Matrix3 LoadRatioMtx;
 
 float GetLoadRatio(void);
