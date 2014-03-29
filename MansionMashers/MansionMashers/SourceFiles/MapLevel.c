@@ -141,7 +141,7 @@ void InitializeMapLevel(void)
 	//Create the large sprites
 	HazeBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
 	MapBackground = (Sprite *)CreateSprite("TextureFiles/Map.png", 2880, 1080, 20, 1, 1, 480, 0);
-	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 40, 1, 1, 0, 0);
+	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 50, 1, 1, 0, 0);
 	MapInfoText = (Sprite *)CreateSprite("TextureFiles/MapInfoText.png", 769, 119, 50, 1, 1, GetCameraXPosition(), 450);
 
 	// Foxy icon ^_^
