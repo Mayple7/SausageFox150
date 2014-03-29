@@ -22,6 +22,8 @@
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 
+static Sprite *HurtOverlay;
+static int lastHealth;
 static Sprite *GuudJub;
 static float holdTime;
 
@@ -103,6 +105,46 @@ void UpdateUpgradeScreenObjects(void)
 		MainMapButton->ButtonSprite->ScaleX = 1.0f;
 		MainMapButton->ButtonSprite->ScaleY = 1.0f;
 	}*/
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Shows a hurt overlay if the player is damaged
+*/
+/*************************************************************************/
+void InitializePlayerHurt(Player *CurrentPlayer)
+{
+	HurtOverlay = (Sprite *) CreateSprite("TextureFiles/HurtOverlay.png", 1920, 1080, 1400, 1, 1, 0, 0);
+	HurtOverlay->ScaleX = 1.4f;
+	HurtOverlay->ScaleY = 1.4f;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Shows a hurt overlay if the player is damaged
+*/
+/*************************************************************************/
+void UpdatePlayerHurt(Player *CurrentPlayer)
+{
+	HurtOverlay->Position.x = GetCameraXPosition();
+
+	if (HurtOverlay->ScaleX < 1.4f)
+	{
+		HurtOverlay->ScaleX += GetDeltaTime();
+		HurtOverlay->ScaleY += GetDeltaTime();
+	}
+
+	//Displayer that player damage layer
+	if (lastHealth > CurrentPlayer->CurrentPlayerStats.CurrentHealth && lastHealth > 0)
+	{
+		float overlayScalar = 1.0f + 0.18f * ((float)CurrentPlayer->CurrentPlayerStats.CurrentHealth / CurrentPlayer->CurrentPlayerStats.MaxHealth);
+		HurtOverlay->ScaleX = overlayScalar;
+		HurtOverlay->ScaleY = overlayScalar;
+	}
+
+	lastHealth = CurrentPlayer->CurrentPlayerStats.CurrentHealth;
 }
 
 /*************************************************************************/

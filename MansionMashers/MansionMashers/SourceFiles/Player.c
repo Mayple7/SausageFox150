@@ -155,6 +155,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	Animation(CurrentPlayer);
 
 	InitializePlayerRank(CurrentPlayer);
+	InitializePlayerHurt(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -385,6 +386,9 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 
 	//Update the player XP and Rank
 	UpdatePlayerRank(CurrentPlayer);
+
+	//Update the player hurt overlay
+	UpdatePlayerHurt(CurrentPlayer);
 
 	//Brings the player back to the surface if something bad happens
 	if(CurrentPlayer->Position.y < GROUNDLEVEL)
