@@ -50,6 +50,12 @@ Platform* Plat;
 
 HandGuyBoss *Boss;
 
+// Tree Background
+Sprite* TreeBackground1[4];
+Sprite* TreeBackground2[4];
+Sprite* TreeBackground3[4];
+static void TreeBackgroundUpdate(void);
+
 /*************************************************************************/
 /*!
 	\brief
@@ -71,6 +77,7 @@ void LoadHandGuy(void)
 /*************************************************************************/
 void InitializeHandGuy(void)
 {
+	int i;
 	Vec3 TextTint;
 	newID = 10;
 	ResetObjectList();
@@ -87,7 +94,17 @@ void InitializeHandGuy(void)
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
-	CreateSprite("TextureFiles/HandGuyBG.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/HandGuyBG.png", 1920, 1080, 4, 1, 1, 0, 0);
+
+	//Tree Backgrounds
+	for(i = 0; i < 4; i++)
+		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground1.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground2.png", 1920, 1080, 1, 1, 1, 1920.0f * i, 0);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
@@ -237,4 +254,19 @@ void EventHandGuy(void)
 	{
 		CreateProjectile("TextureFiles/HandGauy.png", 100, 100, 780, -300, Arrow, WeaponEnemy, newID++, 10, -400, 0);
 	}
+
+	TreeBackgroundUpdate();
+
 }
+
+void TreeBackgroundUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < 4; i++)
+		TreeBackground2[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 30.0f);
+
+	for(i = 0; i < 4; i++)
+		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
+}
+
