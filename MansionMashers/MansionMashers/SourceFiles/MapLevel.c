@@ -374,7 +374,6 @@ void EventLevel(void)
 		else
 			FadeOverlay->Visible = TRUE;
 
-		UpdateProgression(&CurrentPlayer);
 		//TogglePauseSound(&BackgroundSnd);
 	}
 
