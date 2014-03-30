@@ -1,6 +1,8 @@
 #include "../AEEngine.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
+#include "../HeaderFiles/TextCreation.h"
+#include "../HeaderFiles/PaperScroll.h"
 
 static Sprite *TxtScrollRight;
 static Sprite *TxtScrollLeft;
@@ -81,4 +83,31 @@ void UpdateSrollObjects(void)
 	TxtScrollMiddle->Position.x = (GetCameraXPosition() - 650);
 	//TxtScrollRight->Position.x =  TxtScrollRight->Position.x - GetCameraXPosition() - 635;
 	TxtScrollLeft->Position.x = GetCameraXPosition() - 650;
+}
+
+
+void SetUpScrollWithText(TextGlyphs* string, int* counter)
+{
+	//Can scroll so scroll
+	if(Scroll == TRUE)
+	{
+		ScrollPaperScroll(2);
+	}
+	//Scroll is out so roll out that text 
+	//but not if were trying to get rid of text
+	else if(!GetTextToDisappear())
+		TextProgressiveVisible(string, 2);
+	//Time to rescroll and the text is up
+	if(ReScroll == TRUE && !GetTextInProgress())
+	{
+		//wait a bit people need to read that stuff
+		if(*counter > 0)
+			*counter -= 1;
+		//get rid of that text and scroll
+		else
+		{
+			TextProgressiveDisappear(string, 1);
+			FadeScroll();
+		}
+	}
 }

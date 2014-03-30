@@ -60,13 +60,18 @@
 // globals
 static int newID;					// ID number
 static int levelComplete;
-static int beginningAnimiation;
+static int beginningAnimation;
+static int counter;
 
 Sprite* BlackOverlay;
 Platform *Plat;
 Wall *Wall1;
 
 HUD* CurrentHUD;
+
+TextGlyphs *IntelFoxTxtStart;
+
+FoxSound* IntelFoxStart;
 
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
@@ -99,14 +104,24 @@ void InitializeLevel3(void)
 	ResetObjectList();
 	ResetCamera();
 	ResetGatedCamera();
-	beginningAnimiation = TRUE;
+	beginningAnimation = TRUE;
 	levelComplete = FALSE;
+	counter = 2 * FRAMERATE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
+
+
+	/////////////////////////////////
+	//		Text				   //
+	/////////////////////////////////
+	Vec3Set(&TextTint, 1, 1, 1);
+	IntelFoxTxtStart = CreateText("Take TreeTop Way", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtStart, 500);
+	TextProgressiveInit(IntelFoxTxtStart);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -127,6 +142,12 @@ void InitializeLevel3(void)
 	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground4.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
 
+	CreateBoundingBoxes();
+
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
+	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl3Start.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -157,7 +178,17 @@ void InitializeLevel3(void)
 	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 800, -340);
 	Wall1->WallSprite->Visible = FALSE;
 
-	CreateBoundingBoxes();
+	
+
+	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	// Arrows
+	//Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 0);
+	//Arrow1->Visible = FALSE;
+	//Arrow1Grow = FALSE;
+
+	CreatePaperScroll(GetCameraXPosition(), 150);
 }
 
 /*************************************************************************/
@@ -234,9 +265,9 @@ void UnloadLevel3(void)
 /*************************************************************************/
 void EventLevel3(void)
 {
-		/*////////////////////////////////
-	//   INPUT & COLLISION FIRST    //
-	////////////////////////////////*/
+	/////////////////////////////////
+	//   INPUT & COLLISION FIRST  //
+	////////////////////////////////
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
@@ -258,7 +289,7 @@ void EventLevel3(void)
 	}	
 
 	// Runs if the beginning animation is finished
-	if(!beginningAnimiation && !levelComplete)
+	if(!beginningAnimation && !levelComplete)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
@@ -283,7 +314,7 @@ void EventLevel3(void)
 			
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -800)
-				beginningAnimiation = FALSE;
+				beginningAnimation = FALSE;
 		}
 		//Always animate the player otherwise the sprites get stuck in the middle
 		Animation(&CurrentPlayer);
@@ -298,6 +329,23 @@ void EventLevel3(void)
 			SetNextState(GS_Level31);
 	}
 
+	//////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	//////////////////////////////////
+
+	//////////////////////////////////
+	//       EVERYTHING ELSE        //
+	//////////////////////////////////
+	SetUpScrollWithText(IntelFoxTxtStart, &counter);
+
+	//Intel Fox Starting Narrative
+	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
+	{
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
+	}
+
+	//Level Complete
 	if(CurrentPlayer.Position.x > (1920 / 2.0f) + CurrentPlayer.PlayerCollider.width)
 		levelComplete = TRUE;
 

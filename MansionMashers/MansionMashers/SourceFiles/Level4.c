@@ -51,18 +51,24 @@ static int enemiesDefeated;
 
 static int enemiesRemaining;
 
-TextGlyphs *IntelFoxTxtStart;
+
 
 
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
 
+// Arrows
+Sprite *Arrow1;
+static int Arrow1Grow;
 
 Wall* Wall1;
 Wall* RightBarrier;
 
 EnemySpawner* Spawners[8];
 Enemy* PreSpawned;
+
+
+TextGlyphs *IntelFoxTxtStart;
 
 FoxSound* BackSnd;
 FoxSound* IntelFoxStart;
@@ -113,12 +119,14 @@ void InitializeLevel4(void)
 	InitializePlayer(&CurrentPlayer, Mayple, -1100, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
+	/////////////////////////////////
+	//		Text				   //
+	/////////////////////////////////
 	Vec3Set(&TextTint, 1, 1, 1);
 	IntelFoxTxtStart = CreateText("Mash all the enemies", 0, 150, 100, TextTint, Center, Border);
 	ChangeTextZIndex(IntelFoxTxtStart, 500);
 	TextProgressiveInit(IntelFoxTxtStart);
 
-	CreatePaperScroll(GetCameraXPosition(), 150);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -207,6 +215,16 @@ void InitializeLevel4(void)
 		enemiesRemaining += EnemyPanelNumber[i];
 	}
 
+	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	// Arrows
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 0);
+	Arrow1->Visible = FALSE;
+	Arrow1Grow = FALSE;
+
+	CreatePaperScroll(GetCameraXPosition(), 150);
+	
 	// Create the HUD
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
@@ -397,6 +415,7 @@ void EventLevel4(void)
 	UpdateAllEnemies();
 	UpdateFloatingText();
 	UpdateAllProjectiles();
+	UpdateArrow(Arrow1, &Arrow1Grow);
 
 	//Intel Fox Starting Narrative
 	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
@@ -405,44 +424,21 @@ void EventLevel4(void)
 		IntelFoxStart->hasPlayed = TRUE;
 	}
 
-	//Can scroll so scroll
-	if(Scroll == TRUE)
-	{
-		ScrollPaperScroll(2);
-	}
-	//Scroll is out so roll out that text 
-	//but not if were trying to get rid of text
-	else if(!GetTextToDisappear())
-		TextProgressiveVisible(IntelFoxTxtStart, 2);
-	//Time to rescroll and the text is up
-	if(ReScroll == TRUE && !GetTextInProgress())
-	{
-		//wait a bit people need to read that stuff
-		if(counter > 0)
-			counter -= 1;
-		//get rid of that text and scroll
-		else
-		{
-			TextProgressiveDisappear(IntelFoxTxtStart, 1);
-			FadeScroll();
-		}
-	}
-	
+	SetUpScrollWithText(IntelFoxTxtStart, &counter);
 
-	if(FoxInput_KeyTriggered('Y'))
-		ResetScrollObjects(GetCameraXPosition());
-
-	//Check if all enemies are dead & remove right barrier
+	//Check if all enemies are dead & remove right barrier & play sounds & show arrow
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
 	{
 		enemiesDefeated = TRUE;
 		RightBarrier->Position.y = -1080;
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
-		if(!IntelFoxEnd->hasPlayed)
+		if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
 		{
 			PlayAudio(IntelFoxEnd);
 			IntelFoxEnd->hasPlayed = TRUE;
 		}
+		Arrow1->Visible = TRUE;
+		Arrow1->Position.x = GetCameraXPosition() + 750;
 	}
 
 	//Level Transition

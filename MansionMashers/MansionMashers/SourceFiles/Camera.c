@@ -279,6 +279,8 @@ void SetUpCameraPanAndLock(int* levelComplete, float panelsize, EnemySpawner** S
 		//Checking for level completed
 	if(CurrentPlayer.Position.x > (panelsize / 2) * (2 * numPanels - 1) + CurrentPlayer.PlayerCollider.width)
 		*levelComplete = TRUE;
+
+
 }
 
 /*************************************************************************/
