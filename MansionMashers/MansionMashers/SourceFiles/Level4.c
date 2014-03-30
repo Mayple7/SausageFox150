@@ -49,6 +49,8 @@ static int PlayerIsAlive;
 static int counter;
 static int enemiesDefeated;
 
+static int enemiesRemaining;
+
 TextGlyphs *IntelFoxTxtStart;
 
 
@@ -110,8 +112,6 @@ void InitializeLevel4(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1100, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
-
-	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
 	IntelFoxTxtStart = CreateText("Mash all the enemies", 0, 150, 100, TextTint, Center, Border);
@@ -200,6 +200,16 @@ void InitializeLevel4(void)
 	//Right
 	Spawners[7] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
 
+	// Set number of enemies remaining
+	enemiesRemaining = 0;
+	for(i = 0; i < PANELAMOUNT; ++i)
+	{
+		enemiesRemaining += EnemyPanelNumber[i];
+	}
+
+	// Create the HUD
+	CurrentHUD = CreateHUD(&CurrentPlayer);
+
 	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
@@ -214,9 +224,26 @@ void InitializeLevel4(void)
 /*************************************************************************/
 void UpdateLevel4(void)
 {
+	int i, numEnemies = 0;
 
 	EventLevel4();
 	PlayAudio(BackSnd);
+
+	// Update remaining enemies
+	for(i = 0; i < PANELAMOUNT; ++i)
+	{
+		numEnemies += EnemyPanelNumber[i];
+	}
+
+	// Update HUD if needed
+	if(numEnemies < enemiesRemaining)
+	{
+		char CharTemp[32];
+
+		enemiesRemaining = numEnemies;
+		sprintf(CharTemp, "Enemies Remaining: %d", enemiesRemaining);
+		ChangeTextString(CurrentHUD->StatusText, CharTemp);
+	}
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);

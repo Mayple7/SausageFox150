@@ -61,7 +61,6 @@
 static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimiation;
-TextGlyphs *LevelName;
 
 Sprite* BlackOverlay;
 Platform *Plat;
@@ -108,10 +107,6 @@ void InitializeLevel3(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
 
 	/////////////////////////////////
 	//		Backgrounds			   //

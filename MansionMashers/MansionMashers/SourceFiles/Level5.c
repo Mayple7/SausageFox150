@@ -46,7 +46,6 @@ static int levelComplete;
 static int beginningAnimation;
 static int keysObtained;
 static int goingBack;
-TextGlyphs* LevelName;
 
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
@@ -103,10 +102,6 @@ void InitializeLevel5(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 5", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
 
 	/////////////////////////////////
 	//		Backgrounds			   //

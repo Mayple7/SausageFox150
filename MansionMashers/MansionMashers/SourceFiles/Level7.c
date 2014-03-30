@@ -49,7 +49,6 @@ static int PlayerIsAlive;
 static int beginningAnimation;
 static int numEnemies;
 
-TextGlyphs* LevelName;
 HUD* CurrentHUD;
 
 Sprite* BlackOverlay;
@@ -95,10 +94,6 @@ void InitializeLevel7(void)
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 	CurrentHUD = CreateHUD(&CurrentPlayer);
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 7", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
 
 	/////////////////////////////////
 	//		Backgrounds			   //

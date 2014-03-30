@@ -13,6 +13,7 @@ typedef struct HUD
 
 	struct TextGlyphs *FPSText;
 
+	struct TextGlyphs *StatusText;
 	struct TextGlyphs *CoinText;
 	int currentHUDCoinValue;
 }HUD;

@@ -40,7 +40,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs *LevelName;
+
 Platform *Shelf;
 Platform *Shelf2;
 Platform *Shelf3;
@@ -70,7 +70,6 @@ void LoadKevin(void)
 /*************************************************************************/
 void InitializeKevin(void)
 {
-	Vec3 TextTint;
 	Vec2 SpawnerLocation;
 
 	newID = 10;
@@ -82,10 +81,6 @@ void InitializeKevin(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("That Bitch Level", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
 
 	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, 280, -280);
 	Shelf->PlatformCollider.Offset.y = 5 * Shelf->PlatformSprite->Height / 16;

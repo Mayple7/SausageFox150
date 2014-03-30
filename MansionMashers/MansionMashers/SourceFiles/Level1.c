@@ -114,8 +114,6 @@ void InitializeLevel1(void)
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
-	CreatePaperScroll(200);
-
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////

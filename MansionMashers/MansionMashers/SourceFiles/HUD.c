@@ -51,11 +51,43 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	Vec3 TextTint;
 
 	//Only show FPS in debug mode
-	#ifndef _DEBUG
-		DebugHUD = FALSE;
-	#else
-		DebugHUD = TRUE;
-	#endif
+#ifndef _DEBUG
+	DebugHUD = FALSE;
+#else
+	DebugHUD = TRUE;
+#endif
+
+	Vec3Set(&TextTint, 0.8705f, 0.5216f, 0.0196f);
+
+	// Create the status text for specific levels
+	if(GetCurrentState() == GS_Level2 || GetCurrentState() == GS_Level4)
+	{
+		int i, totalEnemies = 0;
+		for(i = 0; i < PANELAMOUNT; ++i)
+		{
+			totalEnemies += EnemyPanelNumber[i];
+		}
+
+		sprintf(CharTemp, "Enemies Remaining: %d", totalEnemies);
+		CurrentHUD->StatusText = CreateText(CharTemp, 0, 400, 100, TextTint, Center, Border);
+		ChangeTextZIndex(CurrentHUD->StatusText, 400);
+		TextAllVisible(CurrentHUD->StatusText);
+	}
+	else if(GetCurrentState() == GS_Level7)
+	{
+		sprintf(CharTemp, "Seconds Remaining: %d", 60);
+		CurrentHUD->StatusText = CreateText(CharTemp, 0, 400, 100, TextTint, Center, Border);
+		ChangeTextZIndex(CurrentHUD->StatusText, 400);
+		TextAllVisible(CurrentHUD->StatusText);
+	}
+	else
+	{
+		sprintf(CharTemp, "Should never see me ^_^");
+		CurrentHUD->StatusText = CreateText(CharTemp, 0, 400, 100, TextTint, Center, Border);
+		ChangeTextZIndex(CurrentHUD->StatusText, 400);
+		TextAllNotVisible(CurrentHUD->StatusText);
+	}
+
 
 	//Get the princess to show on the HUD
 	switch(CurrentPlayer->Princess)
@@ -166,6 +198,10 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	sprintf(CharTemp, "%.2f FPS ", FRAMERATE * (1 / (FRAMERATE * GetDeltaTime()))); //If Dt is ever 0 then... well...
 	ChangeTextString(CurrentHUD->FPSText, CharTemp);
 	ChangeTextZIndex(CurrentHUD->FPSText, 400);
+
+	// Status text update position
+	Vec2Set(&newPosition, GetCameraXPosition(), CurrentHUD->StatusText->Glyph->Position.y);
+	ChangeTextPosition(CurrentHUD->StatusText, newPosition, Center);
 }
 
 /*************************************************************************/
