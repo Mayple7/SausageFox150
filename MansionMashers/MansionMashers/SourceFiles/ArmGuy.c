@@ -152,6 +152,7 @@ void UpdateArmGuy(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	UpdateFloatingText();
+	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 
 	if(Boss->CurrentHealth <= 0)
@@ -173,9 +174,7 @@ void DrawArmGuy(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
-	displayCollisionDebug(&Boss->JabAttack);
-	displayCollisionDebug(&Boss->SmashAttack);
-	displayCollisionDebug(&Boss->SpinAttack);
+	
 }
 
 /*************************************************************************/

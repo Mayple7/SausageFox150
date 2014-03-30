@@ -11,6 +11,10 @@ typedef struct ArmGuyBoss
 	Sprite *BodySprite;
 	Sprite *SpinSprite;
 	Sprite *ArmSprite; // Arm for armguy, hand for handguy etc
+	Sprite *OffArmSprite;
+	Sprite *ArmJabSprite;
+	Sprite *ArmSmashSprite;
+	struct ParticleSystem *ArmGuyParticle;
 
 	int CurrentState;
 	int InnerState;

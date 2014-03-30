@@ -98,7 +98,17 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 	{
 		CurrentEnemy->KnockBack = TRUE;
 		CurrentEnemy->KnockBackTime = (int)(0.25f / GetDeltaTime());
-		CurrentEnemy->KnockBackDir = CurrentPlayer.PlayerDirection;
+
+		// Set knockback direction based on the position of the enemy and player
+		if(CurrentEnemy->Position.x >= CurrentPlayer.Position.x)
+		{
+			CurrentEnemy->KnockBackDir = RIGHT;
+		}
+		else
+		{
+			CurrentEnemy->KnockBackDir = LEFT;
+		}
+		
 		Vec2Set(&velocity, 0.0f, 270.0f);
 		if(CurrentEnemy->Position.y <= GROUNDLEVEL)
 			Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL + 0.1f);
