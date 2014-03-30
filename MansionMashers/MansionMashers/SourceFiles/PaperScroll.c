@@ -6,12 +6,12 @@ static Sprite *TxtScrollRight;
 static Sprite *TxtScrollLeft;
 static Sprite *TxtScrollMiddle;
 
-void CreatePaperScroll(float height)
+void CreatePaperScroll(float posx, float height)
 {
 
-	TxtScrollMiddle = (Sprite*) CreateSprite("TextureFiles/scrollbar.png", 50, 400, 400, 1, 1, -650, height);
-	TxtScrollRight = (Sprite*) CreateSprite("TextureFiles/rightscroll.png", 300, 400, 400, 1, 1, -625, height);
-	TxtScrollLeft = (Sprite*) CreateSprite("TextureFiles/leftscroll.png", 300, 400, 400, 1, 1, -650, height);
+	TxtScrollMiddle = (Sprite*) CreateSprite("TextureFiles/scrollbar.png", 50, 400, 400, 1, 1, posx - 650, height);
+	TxtScrollRight = (Sprite*) CreateSprite("TextureFiles/rightscroll.png", 300, 400, 400, 1, 1, posx - 635, height);
+	TxtScrollLeft = (Sprite*) CreateSprite("TextureFiles/leftscroll.png", 300, 400, 400, 1, 1, posx - 650, height);
 
 	TxtScrollRight->Visible = FALSE;
 	TxtScrollMiddle->Visible = FALSE;
@@ -61,4 +61,24 @@ void FadeScroll(void)
 	TxtScrollMiddle->Alpha -= .05f;
 	TxtScrollRight->Alpha -= .05f;
 	TxtScrollLeft->Alpha -= .05f;
+}
+
+void ResetScrollObjects(float posx)
+{
+	TxtScrollMiddle->ScaleX = 1;
+	Scroll = TRUE;
+	ReScroll = FALSE;
+	TxtScrollMiddle->Alpha = 1.0f;
+	TxtScrollRight->Alpha = 1.0f;
+	TxtScrollLeft->Alpha = 1.0f;
+	TxtScrollMiddle->Position.x = posx - 650;
+	TxtScrollRight->Position.x = posx - 635;
+	TxtScrollLeft->Position.x = posx - 650;
+}
+
+void UpdateSrollObjects(void)
+{
+	TxtScrollMiddle->Position.x = (GetCameraXPosition() - 650);
+	//TxtScrollRight->Position.x =  TxtScrollRight->Position.x - GetCameraXPosition() - 635;
+	TxtScrollLeft->Position.x = GetCameraXPosition() - 650;
 }

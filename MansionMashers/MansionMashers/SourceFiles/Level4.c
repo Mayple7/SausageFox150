@@ -48,10 +48,13 @@ static int beginningAnimation;
 static int PlayerIsAlive;
 static int counter;
 static int enemiesDefeated;
-TextGlyphs *LevelName;
+
+TextGlyphs *IntelFoxTxtStart;
+
 
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
+
 
 Wall* Wall1;
 Wall* RightBarrier;
@@ -60,6 +63,8 @@ EnemySpawner* Spawners[8];
 Enemy* PreSpawned;
 
 FoxSound* BackSnd;
+FoxSound* IntelFoxStart;
+FoxSound* IntelFoxEnd;
 
 // Tree Background
 Sprite* TreeBackground1[4];
@@ -100,22 +105,20 @@ void InitializeLevel4(void)
 	PlayerIsAlive = TRUE;
 	counter = 2 * FRAMERATE;
 	enemiesDefeated = FALSE;
+	
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1100, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
+	IntelFoxTxtStart = CreateText("Mash all the enemies", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtStart, 500);
+	TextProgressiveInit(IntelFoxTxtStart);
 
-	LevelName = CreateText("Defeat All Enemies", 0, 150, 100, TextTint, Center, Border);
-	ChangeTextZIndex(LevelName, 500);
-	TextProgressiveInit(LevelName);
-
-	CreatePaperScroll(150);
+	CreatePaperScroll(GetCameraXPosition(), 150);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -144,8 +147,14 @@ void InitializeLevel4(void)
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
 	//Background Sound
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+
+	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl4Start.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl4End.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -190,8 +199,6 @@ void InitializeLevel4(void)
 	Spawners[6] = CreateEnemySpawner(3, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 3);
 	//Right
 	Spawners[7] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
-
-	
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -364,13 +371,22 @@ void EventLevel4(void)
 	UpdateFloatingText();
 	UpdateAllProjectiles();
 
+	//Intel Fox Starting Narrative
+	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
+	{
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
+	}
+
 	//Can scroll so scroll
 	if(Scroll == TRUE)
-		ScrollPaperScroll(3);
+	{
+		ScrollPaperScroll(2);
+	}
 	//Scroll is out so roll out that text 
 	//but not if were trying to get rid of text
 	else if(!GetTextToDisappear())
-		TextProgressiveVisible(LevelName, 2);
+		TextProgressiveVisible(IntelFoxTxtStart, 2);
 	//Time to rescroll and the text is up
 	if(ReScroll == TRUE && !GetTextInProgress())
 	{
@@ -380,11 +396,14 @@ void EventLevel4(void)
 		//get rid of that text and scroll
 		else
 		{
-			TextProgressiveDisappear(LevelName, 1);
+			TextProgressiveDisappear(IntelFoxTxtStart, 1);
 			FadeScroll();
 		}
 	}
+	
 
+	if(FoxInput_KeyTriggered('Y'))
+		ResetScrollObjects(GetCameraXPosition());
 
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
@@ -392,6 +411,11 @@ void EventLevel4(void)
 		enemiesDefeated = TRUE;
 		RightBarrier->Position.y = -1080;
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
+		if(!IntelFoxEnd->hasPlayed)
+		{
+			PlayAudio(IntelFoxEnd);
+			IntelFoxEnd->hasPlayed = TRUE;
+		}
 	}
 
 	//Level Transition
