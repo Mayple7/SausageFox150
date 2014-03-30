@@ -201,6 +201,8 @@ void UpdateCharacterSelect(void)
 	Animation(CharacterGinko);
 	Animation(CharacterKaya);
 	Animation(CharacterHolly);
+	
+	UpdatePlayerHurt(&CurrentPlayer);
 }
 
 void DrawCharacterSelect(void)

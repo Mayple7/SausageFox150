@@ -174,7 +174,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
-	if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer->isAttacking)
+	if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer->isAttacking)
 	{
 		//Pick a random swing sound to play
 		if (rand() % 2)
@@ -305,18 +305,18 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 	}
 
+	// Drop down when S is pushed
+	if(FoxInput_KeyTriggered('S') && CurrentPlayer->PlayerRigidBody.onGround)
+	{
+		CurrentPlayer->PlayerRigidBody.onGround = FALSE;
+		CurrentPlayer->dropDown = TRUE;
+		CurrentPlayer->dropdownTimer = 0.25f;
+	}
+
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(FoxInput_KeyTriggered(VK_SPACE))
 	{
 		Vec2 velocity;
-		
-		if(FoxInput_KeyDown('S') && CurrentPlayer->PlayerRigidBody.onGround)
-		{
-			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
-			CurrentPlayer->dropDown = TRUE;
-			CurrentPlayer->dropdownTimer = 0.25f;
-		}
-
 		
 		Vec2Set(&velocity, 0.0f, 1080.0f);
 		if(CurrentPlayer->Position.y <= GROUNDLEVEL || CurrentPlayer->PlayerRigidBody.onGround)
@@ -489,7 +489,7 @@ void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 {
 	//Placeholder attack speed formula
-	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 5.0f + 12.0f;
+	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 2.0f + 8.0f;
 }
 
 /*************************************************************************/

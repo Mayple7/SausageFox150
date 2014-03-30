@@ -104,7 +104,7 @@ void FreePlatform(Platform *CurrentPlatform)
 void FreeWeapon(Weapon *CurrentWeapon)
 {
 	//Weapon, pronounced: "We-pown"
-	if(CurrentWeapon->objID > -1)
+	if(CurrentWeapon->objID > 0)
 	{
 		CurrentWeapon->objID = 0;
 		FreeMyAlloc(CurrentWeapon->WeaponName);

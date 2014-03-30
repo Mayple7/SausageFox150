@@ -281,7 +281,7 @@ void UpdateTutorial(void)
 
 		//Text
 		Vec2Set(&newPosition, 100, 400);
-		ChangeTextString(TutorialText, "Use S with SPACE to Fall Through.");
+		ChangeTextString(TutorialText, "Use S to Fall Through.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 	}
@@ -301,7 +301,7 @@ void UpdateTutorial(void)
 
 		//Text
 		Vec2Set(&newPosition, 1920 * 2, 300);
-		ChangeTextString(TutorialText, "Use Left Mouse to Fight!");
+		ChangeTextString(TutorialText, "Use Left Mouse or N to Fight!");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 	}
@@ -495,17 +495,17 @@ void EventTutorial(void)
 		// TUTORIAL PART 1
 		if (tutorialDone > 0)
 		{
+			if(FoxInput_KeyTriggered('S') && CurrentPlayer.PlayerRigidBody.onGround && tutorialDone > 1) //TUTORIAL PART 2
+			{
+				CurrentPlayer.PlayerRigidBody.onGround = FALSE;
+				CurrentPlayer.dropDown = TRUE;
+				CurrentPlayer.dropdownTimer = 0.25f;
+			}
+
 			//Jump when space is pushed or drop down if S is pushed as well
 			if(FoxInput_KeyTriggered(VK_SPACE))
 			{
 				Vec2 velocity;
-		
-				if(FoxInput_KeyDown('S') && CurrentPlayer.PlayerRigidBody.onGround && tutorialDone > 1) //TUTORIAL PART 2
-				{
-					CurrentPlayer.PlayerRigidBody.onGround = FALSE;
-					CurrentPlayer.dropDown = TRUE;
-					CurrentPlayer.dropdownTimer = 0.25f;
-				}
 
 				Vec2Set(&velocity, 0.0f, 1080.0f);
 				if(CurrentPlayer.Position.y <= GROUNDLEVEL || CurrentPlayer.PlayerRigidBody.onGround)
@@ -520,7 +520,7 @@ void EventTutorial(void)
 		// TUTORIAL PART 3
 		if (tutorialDone > 2)
 		{
-			if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer.isAttacking)
+			if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer.isAttacking)
 			{
 				//Pick a random swing sound to play
 				if (rand() % 2)
