@@ -543,6 +543,10 @@ void DetectPlayerCollision(void)
 	int hit = 0;
 	int hitPrev = 0;
 
+	// Used to only display one weapon
+	float closestDropLength = 100000;
+	Weapon *displayWeapon = NULL;
+
 	//Cycle through the platform list
 	while(pList->objID != -1)
 	{
@@ -658,19 +662,32 @@ void DetectPlayerCollision(void)
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, wList->WeaponPickup.collisionID);
 			if(hit)
 			{
+				float currentDist = Vec2SquareDistance(&CurrentPlayer.Position, &wList->WeaponPickup.Position);
+
+				TextAllNotVisible(wList->WeaponGlyphs);
+				TextAllNotVisible(wList->WeaponStatsGlyphs);
+				wList->WeaponHoverBackground->Visible = FALSE;
+
+				if(currentDist < closestDropLength)
+				{
+					closestDropLength = currentDist;
+					displayWeapon = wList;
+				}
+
 				// New target, on start collision
 				if(hitPrev < 0)
 				{
 					CurrentPlayer.CollisionData[-hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
-					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+
+					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
 					updateDamage(&CurrentPlayer);
 				}
 				// Found target, hit previous frame, on persistant
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
 				{
 					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
 					updateDamage(&CurrentPlayer);
 				}
 				// Found target, did not hit previous frame, on start collision
@@ -678,7 +695,7 @@ void DetectPlayerCollision(void)
 				{
 					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
-					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
 					updateDamage(&CurrentPlayer);
 				}
 			}
@@ -696,8 +713,8 @@ void DetectPlayerCollision(void)
 					CurrentPlayer.CollisionData[hitPrev] = 0;
 					if(wList->WeaponGlyphs->Glyph->Visible)
 					{
-						ChangeTextVisibility(wList->WeaponGlyphs);
-						ChangeTextVisibility(wList->WeaponStatsGlyphs);
+						TextAllNotVisible(wList->WeaponGlyphs);
+						TextAllNotVisible(wList->WeaponStatsGlyphs);
 						wList->WeaponHoverBackground->Visible = FALSE;
 					}
 				}
@@ -705,6 +722,12 @@ void DetectPlayerCollision(void)
 		}
 		wList++;
 	}
+	// Display the weapon info and handle that collision
+	if(displayWeapon)
+	{
+		PlayerCollideWeaponDrop(&CurrentPlayer, displayWeapon);
+	}
+
 	//Projectiles ('b' as in Ballista)
 	while(bList->objID != -1)
 	{
