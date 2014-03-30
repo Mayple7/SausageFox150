@@ -395,3 +395,37 @@ Matrix3 CreateTranslationMtx(struct Sprite *CurrentSprite)
 
 	return tempMtx;
 }
+
+/*************************************************************************/
+/*!
+	\brief
+	Updates the mesh for a sprite
+	
+	\param currentSprite
+	The sprite whose mesh will be updated
+*/
+/*************************************************************************/
+void UpdateArrow(Sprite *currentSprite, int *growBool)
+{
+	if(*growBool)
+	{
+		currentSprite->ScaleX += 0.01f;
+		currentSprite->ScaleY += 0.01f;
+
+		if(currentSprite->ScaleX >= 1.5f)
+		{
+			*growBool = FALSE;
+		}
+
+	}
+	else
+	{
+		currentSprite->ScaleX -= 0.01f;
+		currentSprite->ScaleY -= 0.01f;
+
+		if(currentSprite->ScaleX <= 0.7f)
+		{
+			*growBool = TRUE;
+		}
+	}
+}
