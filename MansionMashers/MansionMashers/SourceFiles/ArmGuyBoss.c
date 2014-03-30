@@ -48,8 +48,8 @@ static enum InnerState {Start, Attack, End, SpinR, SpinL };
 /*************************************************************************/
 void LoadArmGuyBoss(void)
 {
-	LoadTexture("TextureFiles/TempArmGuy.png");
-	LoadTexture("TextureFiles/TempArmGuyArm.png");
+	LoadTexture("TextureFiles/ArmGuy.png");
+	LoadTexture("TextureFiles/ArmGuyArm.png");
 	LoadTexture("TextureFiles/TempBossSpin.png");
 }
 
@@ -68,24 +68,38 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 
 	//Initialize boss struct
 	Vec2Set(&CurrentBoss->Position, 700, -200);
-	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempArmGuy.png", 319, 612, 10, 1, 1, 700, -200);
+	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/ArmGuyBody.png", 600, 600, 10, 3, 3, 700, -200);
 	CurrentBoss->BodySprite->FlipX = TRUE;
-	CurrentBoss->SpinSprite = (Sprite *) CreateSprite("TextureFiles/TempBossSpin.png", 319, 612, 10, 2, 1, 700, -200);
+	CurrentBoss->BodySprite->AnimationActive = FALSE;
+	CurrentBoss->BodySprite->AnimationSpeed = 4;
+	CurrentBoss->SpinSprite = (Sprite *) CreateSprite("TextureFiles/ArmGuySpin.png", 600, 600, 60, 2, 1, 700, -200);
 	CurrentBoss->SpinSprite->Visible = FALSE;
 	CurrentBoss->SpinSprite->AnimationSpeed = 8;
-	CurrentBoss->ArmSprite = (Sprite *) CreateSprite("TextureFiles/TempArmGuyArm.png", 237, 110, 11, 1, 1, 580, -120);
+	CurrentBoss->ArmSprite = (Sprite *) CreateSprite("TextureFiles/ArmGuyArm.png", 600, 600, 11, 1, 1, 750, -140);
 	CurrentBoss->ArmSprite->FlipX = TRUE;
+	CurrentBoss->OffArmSprite = (Sprite *) CreateSprite("TextureFiles/ArmGuyOffArm.png", 600, 600, 9, 1, 1, 750, -140);
+	CurrentBoss->OffArmSprite->FlipX = TRUE;
+	CurrentBoss->ArmJabSprite = (Sprite *) CreateSprite("TextureFiles/ArmGuyArmPoke.png", 600, 600, 11, 3, 3, 750, -140);
+	CurrentBoss->ArmJabSprite->FlipX = TRUE;
+	CurrentBoss->ArmJabSprite->Visible = FALSE;
+	CurrentBoss->ArmSmashSprite = (Sprite *) CreateSprite("TextureFiles/ArmGuyArmSmash.png", 600, 600, 11, 3, 3, 750, -140);
+	CurrentBoss->ArmSmashSprite->FlipX = TRUE;
+	CurrentBoss->ArmSmashSprite->Visible = FALSE;
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
 	CurrentBoss->CurrentState = Cooldown;
 	CurrentBoss->InnerState = Start;
 
+	// Particle System
+	CurrentBoss->ArmGuyParticle = CreateFoxParticleSystem("TextureFiles/ArmGuyParticle.png", CurrentBoss->Position.x, CurrentBoss->Position.y - 260.0f, CurrentBoss->SpinSprite->ZIndex + 1, 0, 5, 0.0f, 90, 110, 1, 1, 90, 0, 750, 0.25f, 0.5f);
+
 	// Armguy colliders
 	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 530, (*objID)++);
 	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 300, 200, (*objID)++); 
 	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 100, (*objID)++); 
 	CreateCollisionBox(&CurrentBoss->SmashAttack, &CurrentBoss->Position, WeaponEnemy, 800, 200, (*objID)++);
+
 
 	// Sets the initial position of all colliders
 	CurrentBoss->SpinAttack.Position.y -= 2 * CurrentBoss->SpinAttack.height / 3;
@@ -117,21 +131,36 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 	switch(CurrentBoss->CurrentState)
 	{
 	case Jab:
+		CurrentBoss->ArmGuyParticle->Position.x = CurrentBoss->JabAttack.Position.x;
+		CurrentBoss->ArmGuyParticle->Position.y = CurrentBoss->JabAttack.Position.y;
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
 			//printf("JAB TIME START\n");
 			// Boss is on the right
+
+			CurrentBoss->ArmJabSprite->Visible = TRUE;
+			CurrentBoss->ArmSprite->Visible = FALSE;
+			CurrentBoss->BodySprite->AnimationActive = TRUE;
+
+			if (CurrentBoss->BodySprite->CurrentFrame == 4)
+				CurrentBoss->BodySprite->AnimationActive = FALSE;
+
+			if (CurrentBoss->BodySprite->Position.y < 75.0f)
+				CurrentBoss->BodySprite->Position.y += 320.0f * GetDeltaTime();
+			else
+				CurrentBoss->BodySprite->Position.y = 75.0f;
 			if(CurrentBoss->Position.x > 0)
 			{
 				// Pull arm back
 				CurrentBoss->JabAttack.Position.x += 250 * GetDeltaTime();
-				
 				// Its back enough, switch state
 				if(CurrentBoss->JabAttack.Position.x >= CurrentBoss->Position.x + 100)
 				{
 					CurrentBoss->InnerState = Attack;
 					playerHit = FALSE;
+					CurrentBoss->ArmJabSprite->AnimationSpeed = 3;
+					CurrentBoss->BodySprite->AnimationActive = FALSE;
 				}
 			}
 			// Boss is on the left
@@ -145,12 +174,20 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				{
 					CurrentBoss->InnerState = Attack;
 					playerHit = FALSE;
+					CurrentBoss->ArmJabSprite->AnimationSpeed = 3;
+					CurrentBoss->BodySprite->AnimationActive = FALSE;
 				}
 			}
 			break;
 		case Attack:
 			//printf("JAB TIME ATTACK\n");
 			// Boss is on the right
+			CurrentBoss->ArmGuyParticle->amountTotal = -1;
+			CurrentBoss->ArmGuyParticle->emitAmount = 5;
+			CurrentBoss->ArmGuyParticle->emitDisplacementX = 90;
+			CurrentBoss->ArmGuyParticle->emitDisplacementY = 90;
+			CurrentBoss->ArmGuyParticle->emitAngle = 0;
+
 			if(CurrentBoss->Position.x > 0)
 			{
 				// Punch hard
@@ -171,7 +208,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 
 				// Max range hit, switch state
 				if(CurrentBoss->JabAttack.Position.x <= CurrentBoss->Position.x - 400)
+				{
 					CurrentBoss->InnerState = End;
+					CurrentBoss->ArmJabSprite->AnimationSpeed = 24;
+				}
 			}
 			// Boss is on the left
 			else
@@ -194,13 +234,27 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 
 				// Max range hit, switch state
 				if(CurrentBoss->JabAttack.Position.x >= CurrentBoss->Position.x + 400)
+				{
 					CurrentBoss->InnerState = End;
+					CurrentBoss->ArmJabSprite->AnimationSpeed = 24;
+				}
 			}
 			break;
 		case End:
 			//printf("JAB TIME END\n");
 			// Reset the player hit fake bool
-			
+			CurrentBoss->ArmGuyParticle->amountTotal = 0;
+
+			if (CurrentBoss->BodySprite->Position.y - 1024.0f * GetDeltaTime() > -200.0f)
+				CurrentBoss->BodySprite->Position.y -= 1024.0f * GetDeltaTime();
+			else
+				CurrentBoss->BodySprite->Position.y = -200.0f;
+
+			CurrentBoss->BodySprite->AnimationActive = TRUE;
+
+			if (CurrentBoss->BodySprite->CurrentFrame == 8)
+				CurrentBoss->BodySprite->AnimationActive = FALSE;
+
 			// Boss is on the right
 			if(CurrentBoss->Position.x > 0)
 			{
@@ -218,6 +272,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				{
 					CurrentBoss->CurrentState = Cooldown;
 					CurrentBoss->cooldownTimer = 0;
+					CurrentBoss->ArmJabSprite->Visible = FALSE;
+					CurrentBoss->ArmSprite->Visible = TRUE;
+					CurrentBoss->OffArmSprite->Visible = TRUE;
+					CurrentBoss->BodySprite->AnimationActive = FALSE;
 					playerHit = FALSE;
 				}
 			}
@@ -238,6 +296,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				{
 					CurrentBoss->CurrentState = Cooldown;
 					CurrentBoss->cooldownTimer = 0;
+					CurrentBoss->ArmJabSprite->Visible = FALSE;
+					CurrentBoss->ArmSprite->Visible = TRUE;
+					CurrentBoss->OffArmSprite->Visible = TRUE;
+					CurrentBoss->BodySprite->AnimationActive = FALSE;
 					playerHit = FALSE;
 				}
 			}
@@ -245,10 +307,27 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		}
 		break;
 	case Smash:
+		CurrentBoss->ArmGuyParticle->Position.x = CurrentBoss->Position.x + 250 * (CurrentBoss->Position.x < 0 ? 1 : -1);
+		CurrentBoss->ArmGuyParticle->Position.y = CurrentBoss->SmashAttack.Position.y;
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
 			//printf("SMASH TIME START\n");
+			if (CurrentBoss->BodySprite->Position.y + 480.0f * GetDeltaTime() < 250.0f)
+				CurrentBoss->BodySprite->Position.y += 480.0f * GetDeltaTime();
+			else
+				CurrentBoss->BodySprite->Position.y = 250.0f;
+
+			CurrentBoss->ArmSprite->Visible = FALSE;
+			CurrentBoss->ArmSmashSprite->Visible = TRUE;
+			CurrentBoss->ArmSmashSprite->AnimationActive = TRUE;
+			CurrentBoss->BodySprite->AnimationActive = TRUE;
+
+			if (CurrentBoss->BodySprite->CurrentFrame == 4)
+				CurrentBoss->BodySprite->AnimationActive = FALSE;
+
+			if (CurrentBoss->ArmSmashSprite->CurrentFrame == 4)
+				CurrentBoss->ArmSmashSprite->AnimationActive = FALSE;
 
 			// Raise the arm and perhaps the roof!
 			CurrentBoss->SmashAttack.Position.y += 500 * GetDeltaTime();
@@ -256,12 +335,24 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			{
 				CurrentBoss->InnerState = Attack;
 				playerHit = FALSE;
+				CurrentBoss->BodySprite->AnimationActive = FALSE;
+				CurrentBoss->ArmSmashSprite->AnimationSpeed = 4;
+				CurrentBoss->ArmSmashSprite->AnimationActive = TRUE;
 			}
 
 			break;
 		case Attack:
 			//printf("SMASH TIME ATTACK\n");
-			
+			CurrentBoss->ArmGuyParticle->amountTotal = -1;
+			CurrentBoss->ArmGuyParticle->emitAmount = 15;
+			CurrentBoss->ArmGuyParticle->emitDisplacementX = 500;
+			CurrentBoss->ArmGuyParticle->emitDisplacementY = 0;
+			CurrentBoss->ArmGuyParticle->emitAngle = 90;
+
+			if (CurrentBoss->BodySprite->Position.y - 2048.0f * GetDeltaTime() > -200.0f)
+				CurrentBoss->BodySprite->Position.y -= 2048.0f * GetDeltaTime();
+			else
+				CurrentBoss->BodySprite->Position.y = -200.0f;
 			// Bring down the arm and perhaps the house!
 			CurrentBoss->SmashAttack.Position.y -= 3500 * GetDeltaTime();
 
@@ -283,11 +374,26 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			if(CurrentBoss->SmashAttack.Position.y < GROUNDLEVEL)
 			{
 				CurrentBoss->InnerState = End;
+				CurrentBoss->ArmGuyParticle->amountTotal = 0;
 				
 			}
 			break;
 		case End:
 			//printf("SMASH TIME END\n");
+			if (CurrentBoss->BodySprite->Position.y - 960.0f * GetDeltaTime() > -200.0f)
+				CurrentBoss->BodySprite->Position.y -= 960.0f * GetDeltaTime();
+			else
+				CurrentBoss->BodySprite->Position.y = -200.0f;
+
+			CurrentBoss->BodySprite->AnimationActive = TRUE;
+
+			if (CurrentBoss->BodySprite->CurrentFrame >= 8)
+				CurrentBoss->BodySprite->AnimationActive = FALSE;
+
+			CurrentBoss->ArmSmashSprite->AnimationActive = TRUE;
+
+			if (CurrentBoss->ArmSmashSprite->CurrentFrame >= 8)
+				CurrentBoss->ArmSmashSprite->AnimationActive = FALSE;
 
 			// Put things back in order
 			CurrentBoss->SmashAttack.Position.y += 500 * GetDeltaTime();
@@ -297,20 +403,39 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->CurrentState = Cooldown;
 				CurrentBoss->cooldownTimer = 0;
 				playerHit = FALSE;
+				CurrentBoss->ArmSprite->Visible = TRUE;
+				CurrentBoss->OffArmSprite->Visible = TRUE;
+				CurrentBoss->ArmSmashSprite->Visible = FALSE;
+				CurrentBoss->BodySprite->AnimationActive = FALSE;
+				
 			}
 			break;
 		}
 		break;
 	case Spin:
-		printf("SPIN TIME START\n");
+		//printf("SPIN TIME START\n");
+		CurrentBoss->ArmGuyParticle->Position.x = CurrentBoss->Position.x;
+		CurrentBoss->ArmGuyParticle->Position.y = CurrentBoss->Position.y - 260.0f;
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
-			CurrentBoss->cooldownTimer += GetDeltaTime();
 
+			if (CurrentBoss->Position.x < 0)
+				CurrentBoss->SpinSprite->FlipX = FALSE;
+			else
+				CurrentBoss->SpinSprite->FlipX = TRUE;
+
+			CurrentBoss->cooldownTimer += GetDeltaTime();
+			CurrentBoss->ArmGuyParticle->amountTotal = -1;
+			CurrentBoss->ArmGuyParticle->emitAmount = 5;
+			CurrentBoss->ArmGuyParticle->emitDisplacementX = 90;
+			CurrentBoss->ArmGuyParticle->emitDisplacementY = 0;
+			CurrentBoss->ArmGuyParticle->emitAngle = 90;
 			// Switch to the spinning sprite
 			CurrentBoss->BodySprite->Visible = FALSE;
 			CurrentBoss->ArmSprite->Visible = FALSE;
+			CurrentBoss->OffArmSprite->Visible = FALSE;
+			CurrentBoss->ArmJabSprite->Visible = FALSE;
 			CurrentBoss->SpinSprite->Visible = TRUE;
 			
 			// Boss is on the right and start up timer is done
@@ -386,17 +511,18 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			break;
 		case End:
 			CurrentBoss->cooldownTimer += GetDeltaTime();
-
 			if(CurrentBoss->cooldownTimer > 0.5f && CurrentBoss->Position.x > 0)
 			{
 				// Switch to the standing sprite
 				CurrentBoss->BodySprite->Visible = TRUE;
 				CurrentBoss->SpinSprite->Visible = FALSE;
+				CurrentBoss->ArmJabSprite->Visible = FALSE;
 				CurrentBoss->ArmSprite->Visible = TRUE;
+				CurrentBoss->OffArmSprite->Visible = TRUE;
 
 				CurrentBoss->BodySprite->FlipX = TRUE;
-				CurrentBoss->ArmSprite->Position.x = 580;
 				CurrentBoss->ArmSprite->FlipX = TRUE;
+				CurrentBoss->OffArmSprite->FlipX = TRUE;
 				CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - 200;
 				CurrentBoss->SmashAttack.Position.x = 640;
 				CurrentBoss->CurrentState = Cooldown;
@@ -409,10 +535,11 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->BodySprite->Visible = TRUE;
 				CurrentBoss->SpinSprite->Visible = FALSE;
 				CurrentBoss->ArmSprite->Visible = TRUE;
+				CurrentBoss->OffArmSprite->Visible = TRUE;
 
 				CurrentBoss->BodySprite->FlipX = FALSE;
-				CurrentBoss->ArmSprite->Position.x = -580;
 				CurrentBoss->ArmSprite->FlipX = FALSE;
+				CurrentBoss->OffArmSprite->FlipX = FALSE;
 				CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x + 200;
 				CurrentBoss->SmashAttack.Position.x = -640;
 				CurrentBoss->CurrentState = Cooldown;
@@ -425,7 +552,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 	case Cooldown:
 		//printf("CD TIME\n");
 		CurrentBoss->cooldownTimer += GetDeltaTime();
-
+		CurrentBoss->ArmGuyParticle->amountTotal = 0;
 		// Cooldown is up, choose a move, Boss on right
 		if(CurrentBoss->cooldownTimer > 2 && CurrentBoss->BodySprite->Position.x > 0)
 		{
@@ -442,14 +569,20 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				if(rand() % 2)
 				{
 					CurrentBoss->CurrentState = Smash;
+					CurrentBoss->ArmSmashSprite->AnimationSpeed = 8;
+					CurrentBoss->ArmSmashSprite->CurrentFrame = 0;
 					CurrentBoss->InnerState = Start;
 					CurrentBoss->cooldownTimer = 0;
+					CurrentBoss->BodySprite->CurrentFrame = 1;
 				}
 				else
 				{
 					CurrentBoss->CurrentState = Jab;
+					CurrentBoss->ArmJabSprite->AnimationSpeed = 24;
+					CurrentBoss->ArmJabSprite->CurrentFrame = 0;
 					CurrentBoss->InnerState = Start;
 					CurrentBoss->cooldownTimer = 0;
+					CurrentBoss->BodySprite->CurrentFrame = 1;
 				}
 			}
 			// Player is low, smash or spin
@@ -458,8 +591,11 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				if(rand() % 2)
 				{
 					CurrentBoss->CurrentState = Smash;
+					CurrentBoss->ArmSmashSprite->AnimationSpeed = 8;
+					CurrentBoss->ArmSmashSprite->CurrentFrame = 0;
 					CurrentBoss->InnerState = Start;
 					CurrentBoss->cooldownTimer = 0;
+					CurrentBoss->BodySprite->CurrentFrame = 1;
 				}
 				else
 				{
@@ -485,6 +621,8 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				if(rand() % 2)
 				{
 					CurrentBoss->CurrentState = Smash;
+					CurrentBoss->ArmSmashSprite->AnimationSpeed = 8;
+					CurrentBoss->ArmSmashSprite->CurrentFrame = 0;
 					CurrentBoss->InnerState = Start;
 					CurrentBoss->cooldownTimer = 0;
 				}
@@ -492,7 +630,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				{
 					CurrentBoss->CurrentState = Jab;
 					CurrentBoss->InnerState = Start;
+					CurrentBoss->ArmJabSprite->AnimationSpeed = 24;
+					CurrentBoss->ArmJabSprite->CurrentFrame = 0;
 					CurrentBoss->cooldownTimer = 0;
+					CurrentBoss->BodySprite->CurrentFrame = 1;
 				}
 			}
 			// Player is low, smash or spin
@@ -501,6 +642,8 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				if(rand() % 2)
 				{
 					CurrentBoss->CurrentState = Smash;
+					CurrentBoss->ArmSmashSprite->AnimationSpeed = 8;
+					CurrentBoss->ArmSmashSprite->CurrentFrame = 0;
 					CurrentBoss->InnerState = Start;
 					CurrentBoss->cooldownTimer = 0;
 				}
@@ -514,6 +657,17 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		}
 		break;
 	}
+	CurrentBoss->ArmSprite->Position.y = CurrentBoss->BodySprite->Position.y + 50.0f;
+	CurrentBoss->ArmSprite->Position.x = CurrentBoss->BodySprite->Position.x + 50.0f * (CurrentBoss->BodySprite->Position.x > 0 ? 1 : -1);
+	CurrentBoss->OffArmSprite->Position.y = CurrentBoss->BodySprite->Position.y;
+	CurrentBoss->OffArmSprite->Position.x = CurrentBoss->Position.x;
+	CurrentBoss->ArmJabSprite->Position.y = CurrentBoss->BodySprite->Position.y + 50.0f;
+	CurrentBoss->ArmJabSprite->Position.x = CurrentBoss->BodySprite->Position.x + 50.0f * (CurrentBoss->BodySprite->Position.x > 0 ? 1 : -1);
+	CurrentBoss->ArmJabSprite->FlipX = CurrentBoss->ArmSprite->FlipX;
+	CurrentBoss->ArmSmashSprite->Position.y = CurrentBoss->BodySprite->Position.y + 50.0f;
+	CurrentBoss->ArmSmashSprite->Position.x = CurrentBoss->BodySprite->Position.x + 50.0f * (CurrentBoss->BodySprite->Position.x > 0 ? 1 : -1);
+	CurrentBoss->ArmSmashSprite->FlipX = CurrentBoss->ArmSprite->FlipX;
+	
 
 	//Check if boss is dead
 	//Give ability to end the level

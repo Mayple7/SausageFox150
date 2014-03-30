@@ -119,6 +119,7 @@ void UpdateArmGuy(void)
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	UpdateFloatingText();
+	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 }
 
@@ -134,9 +135,7 @@ void DrawArmGuy(void)
 	DrawObjectList();
 	//DrawHUD(&HUDList);
 	DrawCollisionList();
-	displayCollisionDebug(&Boss->JabAttack);
-	displayCollisionDebug(&Boss->SmashAttack);
-	displayCollisionDebug(&Boss->SpinAttack);
+	
 }
 
 /*************************************************************************/
