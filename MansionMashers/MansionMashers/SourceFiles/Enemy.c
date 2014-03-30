@@ -345,6 +345,14 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 
 		PlayAudio(CurrentEnemy->CurrentEnemySounds.Poof);
 		EnemyPanelNumber[CurrentEnemy->panelId]--;
+
+		// Free all the sounds
+		freeSound(CurrentEnemy->CurrentEnemySounds.GetHit1);
+		freeSound(CurrentEnemy->CurrentEnemySounds.GetHit2);
+		freeSound(CurrentEnemy->CurrentEnemySounds.Poof);
+		freeSound(CurrentEnemy->CurrentEnemySounds.Swing1);
+		freeSound(CurrentEnemy->CurrentEnemySounds.Swing2);
+
 		FreeEnemy(CurrentEnemy);
 	}
 
@@ -364,16 +372,6 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	{
 		SetGravity(&CurrentEnemy->EnemyRigidBody, 0.0f, FOX_GRAVITY_Y);
 	}
-	/*/Player position updated when dropping down from a platform
-	if(CurrentEnemy->dropDown)
-	{
-		CurrentEnemy->Position.y -= 1200.0f * GetDeltaTime();
-		if(CurrentEnemy->EnemyRigidBody.Velocity.y < 0)
-		{
-			CurrentEnemy->EnemyRigidBody.Velocity.y = -1800.0f * GetDeltaTime();
-			CurrentEnemy->dropDown = FALSE;
-		}
-	}*/
 
 	if(CurrentEnemy->dropDown)
 	{

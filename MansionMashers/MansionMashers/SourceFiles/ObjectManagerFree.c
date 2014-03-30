@@ -109,7 +109,12 @@ void FreeWeapon(Weapon *CurrentWeapon)
 		CurrentWeapon->objID = 0;
 		FreeMyAlloc(CurrentWeapon->WeaponName);
 		FreeMyAlloc(CurrentWeapon->WeaponStatsString);
+
+		FreeText(CurrentWeapon->WeaponGlyphs);
+		FreeText(CurrentWeapon->WeaponStatsGlyphs);
+
 		CurrentWeapon->WeaponPickup.collisionDebug = FALSE;
+		FreeSprite(CurrentWeapon->WeaponHoverBackground);
 		AEGfxMeshFree(CurrentWeapon->WeaponPickup.DebugMesh);
 		AEGfxMeshFree(CurrentWeapon->WeaponAttack.DebugMesh);
 
