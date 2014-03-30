@@ -26,6 +26,8 @@ static Sprite *DeathConfirm;
 static Button *RestartButton;
 static Button *MainMapButton;
 
+static float confirmTimer;
+
 void CreateDeathConfirmObjects(int *newID)
 {
 	Vec3 TextTint;
@@ -38,12 +40,26 @@ void CreateDeathConfirmObjects(int *newID)
 
 	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f, (*newID)++);
 	RestartButton->ButtonSprite->ZIndex = 4022;
+
+	confirmTimer = 0;
 }
 
 void UpdateDeathConfirmObjects(void)
 {
 	int worldX, worldY;
 	Vec2 MouseClick;
+
+	if(confirmTimer < 1.0f)
+	{
+		confirmTimer += GetDeltaTime();
+		MainMapButton->ButtonSprite->Visible = FALSE;
+		RestartButton->ButtonSprite->Visible = FALSE;
+	}
+	else
+	{
+		MainMapButton->ButtonSprite->Visible = TRUE;
+		RestartButton->ButtonSprite->Visible = TRUE;
+	}
 
 	CurrentPlayer.Position.x = -1920;
 	UpdateCollisionPosition(&CurrentPlayer.PlayerCollider, &CurrentPlayer.Position);
@@ -64,7 +80,7 @@ void UpdateDeathConfirmObjects(void)
 		RestartButton->ButtonSprite->ScaleX = 1.2f;
 		RestartButton->ButtonSprite->ScaleY = 1.2f;
 
-		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		if(confirmTimer > 1.0f && FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
 			FreeButton(RestartButton);
 			FreeButton(MainMapButton);
@@ -83,7 +99,7 @@ void UpdateDeathConfirmObjects(void)
 
 	if(PointRectCollision(&MainMapButton->ButtonCollider, &MouseClick))
 	{
-		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
+		if(confirmTimer > 1.0f && FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
 			FreeButton(RestartButton);
 			FreeButton(MainMapButton);

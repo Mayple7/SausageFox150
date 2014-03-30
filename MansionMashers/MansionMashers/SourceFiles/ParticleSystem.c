@@ -71,13 +71,10 @@ void CreateFoxParticle(char *particleTexture, AEGfxVertexList *mesh, float posX,
 	CurrentParticle->ScaleSpeed = ScaleSpeed;
 	CurrentParticle->objID = 1;
 	CurrentParticle->StartAlpha = StartAlpha;
-	srand( lastRandomNumber );
 	lastRandomNumber = rand();
-	CurrentParticle->RotationSpeed = (float)(((int)lastRandomNumber % 100 - 50) / 1000.0f);
-
-	srand( lastRandomNumber );
+	CurrentParticle->RotationSpeed = (float)(((int)((lastRandomNumber / (float)RAND_MAX) * 50)) / 1000.0f);
 	lastRandomNumber = rand();
-	CurrentParticle->ParticleSprite->Rotation = (float)((int)lastRandomNumber % 360) / 180.0f * FOX_PI;
+	CurrentParticle->ParticleSprite->Rotation = (float)((int)((lastRandomNumber / (float)RAND_MAX) * 360)) / 180.0f * FOX_PI;
 
 	CurrentParticle->FadeIn = FadeIn;
 }
@@ -171,7 +168,6 @@ void ParticleSystemUpdate(void)
 						if (particleSystemList[i].emitDisplacementY == 0)
 							particleSystemList[i].emitDisplacementY++;
 
-						srand( lastRandomNumber );
 						lastRandomNumber = rand();
 						Vec2RotateDegrees(&vel, particleSystemList[i].emitAngle + ((float)((int)lastRandomNumber % particleSystemList[i].emitAngleRandom - (particleSystemList[i].emitAngleRandom/2))));
 
@@ -192,7 +188,6 @@ void ParticleSystemUpdate(void)
 						if (particleSystemList[i].amountTotal > 0)
 							particleSystemList[i].amountTotal--;
 
-						srand( rand() % (rand() + 1) );
 						lastRandomNumber = rand();
 				}
 				//Destroy when done emitting if told to, otherwise just leave it there

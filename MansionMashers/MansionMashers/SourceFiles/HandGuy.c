@@ -164,6 +164,12 @@ void UpdateHandGuy(void)
 	else
 		DebugCircle->Visible = FALSE;
 
+	if(Boss->CurrentHealth <= 0)
+	{
+		levelComplete = TRUE;
+		SetNextState(GS_MapLevel);
+	}
+
 }
 
 /*************************************************************************/
@@ -191,14 +197,16 @@ void FreeHandGuy(void)
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level5)
 	{
 		CurrentPlayer.CurrentLevel = GS_Level5;
-		CurrentPlayer.handClear = TRUE;
 	}
 	else if(CurrentPlayer.CurrentLevel < GS_HandGuy)
 		CurrentPlayer.CurrentLevel = GS_HandGuy;
 
 	//Only save stats if the level was actually completed
 	if (levelComplete)
+	{
+		CurrentPlayer.handClear = TRUE;
 		SavePlayer(&CurrentPlayer);
+	}
 
 	FreeAllLists();
 }

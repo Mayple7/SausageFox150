@@ -141,7 +141,7 @@ void InitializeMapLevel(void)
 	//Create the large sprites
 	HazeBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
 	MapBackground = (Sprite *)CreateSprite("TextureFiles/Map.png", 2880, 1080, 20, 1, 1, 480, 0);
-	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 40, 1, 1, 0, 0);
+	FadeOverlay = (Sprite *)CreateSprite("TextureFiles/FadeOverlay.png", 1920, 1080, 50, 1, 1, 0, 0);
 	MapInfoText = (Sprite *)CreateSprite("TextureFiles/MapInfoText.png", 769, 119, 50, 1, 1, GetCameraXPosition(), 450);
 
 	// Foxy icon ^_^
@@ -183,7 +183,27 @@ void InitializeMapLevel(void)
 	Level7 = CreateButton("TextureFiles/RedX.png", 1324.43f, -121.29f, 175, 75, newID++);
 	Kevin = CreateButton("TextureFiles/RedX.png", 1582.85f, -139.60f, 175, 75, newID++);
 
-	UpdateProgression(&CurrentPlayer);
+	Tutorial->ButtonSprite->Visible = FALSE;
+	Level1->ButtonSprite->Visible = FALSE;
+	Level2->ButtonSprite->Visible = FALSE;
+
+	Shop1->ButtonSprite->Visible = FALSE;
+	Level3->ButtonSprite->Visible = FALSE;
+	Level4->ButtonSprite->Visible = FALSE;
+
+	ArmGuy->ButtonSprite->Visible = FALSE;
+	Shop2->ButtonSprite->Visible = FALSE;
+
+	HandGuy->ButtonSprite->Visible = FALSE;
+	Shop3->ButtonSprite->Visible = FALSE;
+
+	Level5->ButtonSprite->Visible = FALSE;
+	Level6->ButtonSprite->Visible = FALSE;
+	YeahGuy->ButtonSprite->Visible = FALSE;
+
+	Shop4->ButtonSprite->Visible = FALSE;
+	Level7->ButtonSprite->Visible = FALSE;
+	Kevin->ButtonSprite->Visible = FALSE;
 
 	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
 	SystemOne->FadeIn = TRUE;
@@ -262,6 +282,7 @@ void UpdateMapLevel(void)
 		SetCameraXPosition(PlayerIcon->Position.x + 300);
 	}
 	MapInfoText->Position.x = GetCameraXPosition();
+	UpdatePlayerHurt(&CurrentPlayer);
 	BoundingBoxUpdate();
 }
 
@@ -353,7 +374,6 @@ void EventLevel(void)
 		else
 			FadeOverlay->Visible = TRUE;
 
-		UpdateProgression(&CurrentPlayer);
 		//TogglePauseSound(&BackgroundSnd);
 	}
 
@@ -445,13 +465,13 @@ void EventLevel(void)
 			iconPosition = GS_YeahGuy;
 		}
 		//Shop4
-		else if(PointRectCollision(&Shop4->ButtonCollider, &MouseClick) && (GS_Shop4 <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&Shop4->ButtonCollider, &MouseClick) && (GS_Level7 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Shop4);
 			iconPosition = GS_Shop4;
 		}
 		//Level7
-		else if(PointRectCollision(&Level7->ButtonCollider, &MouseClick) && (GS_Shop4 <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&Level7->ButtonCollider, &MouseClick) && (GS_Level7 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Level7);
 			iconPosition = GS_Level7;
@@ -548,108 +568,6 @@ void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 	}
 }
 
-void UpdateProgression(Player *CurrentPlayer)
-{
-	Tutorial->ButtonSprite->Visible = TRUE;
-	Level1->ButtonSprite->Visible = TRUE;
-	Level2->ButtonSprite->Visible = TRUE;
-
-	Shop1->ButtonSprite->Visible = TRUE;
-	Level3->ButtonSprite->Visible = TRUE;
-	Level4->ButtonSprite->Visible = TRUE;
-
-	ArmGuy->ButtonSprite->Visible = TRUE;
-	Shop2->ButtonSprite->Visible = TRUE;
-
-	HandGuy->ButtonSprite->Visible = TRUE;
-	Shop3->ButtonSprite->Visible = TRUE;
-
-	Level5->ButtonSprite->Visible = TRUE;
-	Level6->ButtonSprite->Visible = TRUE;
-	YeahGuy->ButtonSprite->Visible = TRUE;
-
-	Shop4->ButtonSprite->Visible = TRUE;
-	Level7->ButtonSprite->Visible = TRUE;
-	Kevin->ButtonSprite->Visible = TRUE;
-
-	if(!Cheats)
-	{
-		switch(CurrentPlayer->CurrentLevel)
-		{
-		case GS_Kevin:
-			Kevin->ButtonSprite->Visible = FALSE;
-		case GS_Level7:
-		case GS_Shop4:
-			Level7->ButtonSprite->Visible = FALSE;
-			Shop4->ButtonSprite->Visible = FALSE;
-		case GS_YeahGuy:
-			YeahGuy->ButtonSprite->Visible = FALSE;
-		case GS_Level6:
-			Level6->ButtonSprite->Visible = FALSE;
-		case GS_Level5:
-		case GS_ArmGuy:
-		case GS_HandGuy:
-		case GS_Shop2:
-		case GS_Shop3:
-			Level5->ButtonSprite->Visible = FALSE;
-		case GS_Level4:
-		case GS_Level3:
-		case GS_Shop1:
-			Level3->ButtonSprite->Visible = FALSE;
-			Level4->ButtonSprite->Visible = FALSE;
-			Shop1->ButtonSprite->Visible = FALSE;;
-		case GS_Level2:
-			Level2->ButtonSprite->Visible = FALSE;
-		case GS_Level1:
-			Level1->ButtonSprite->Visible = FALSE;
-		case GS_Tutorial:
-			Tutorial->ButtonSprite->Visible = FALSE;
-		}
-		if(CurrentPlayer->armUnlock)
-		{
-			ArmGuy->ButtonSprite->Visible = FALSE;
-			
-			if(CurrentPlayer->armClear)
-			{
-				Shop2->ButtonSprite->Visible = FALSE;
-			}
-		}
-		if(CurrentPlayer->handUnlock)
-		{
-			HandGuy->ButtonSprite->Visible = FALSE;
-			if(CurrentPlayer->handClear)
-			{
-				Shop3->ButtonSprite->Visible = FALSE;
-			}
-		}
-	}
-	else
-	{
-		Tutorial->ButtonSprite->Visible = FALSE;
-		Level1->ButtonSprite->Visible = FALSE;
-		Level2->ButtonSprite->Visible = FALSE;
-
-		Shop1->ButtonSprite->Visible = FALSE;
-		Level3->ButtonSprite->Visible = FALSE;
-		Level4->ButtonSprite->Visible = FALSE;
-
-		ArmGuy->ButtonSprite->Visible = FALSE;
-		Shop2->ButtonSprite->Visible = FALSE;
-
-		HandGuy->ButtonSprite->Visible = FALSE;
-		Shop3->ButtonSprite->Visible = FALSE;
-
-		Level5->ButtonSprite->Visible = FALSE;
-		Level6->ButtonSprite->Visible = FALSE;
-		YeahGuy->ButtonSprite->Visible = FALSE;
-
-		Shop4->ButtonSprite->Visible = FALSE;
-		Level7->ButtonSprite->Visible = FALSE;
-		Kevin->ButtonSprite->Visible = FALSE;
-	}
-
-}
-
 void SetClearFlags(Player *CurrentPlayer)
 {
 	// Tutorial Level
@@ -657,11 +575,20 @@ void SetClearFlags(Player *CurrentPlayer)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, -645.52f, -179.28f);
 	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, -645.52f, -179.28f);
+	}
+
 
 	// Level 1
 	if(CurrentPlayer->levelClearBitFlags & 2)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, -422.86f, -172.43f);
+	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, -422.86f, -172.43f);
 	}
 
 	// Level 2
@@ -669,11 +596,19 @@ void SetClearFlags(Player *CurrentPlayer)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, -103.06f, -70.21f);
 	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, -103.06f, -70.21f);
+	}
 
 	// Level 3
 	if(CurrentPlayer->levelClearBitFlags & 8)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 122.14f, -222.12f);
+	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 122.14f, -222.12f);
 	}
 
 	// Level 4
@@ -681,11 +616,19 @@ void SetClearFlags(Player *CurrentPlayer)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 132.75f, 281.19f);
 	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 132.75f, 281.19f);
+	}
 
 	// ArmGuy
 	if(CurrentPlayer->armClear)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 398.71f, -185.43f);
+	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 398.71f, -185.43f);
 	}
 
 	// HandGuy
@@ -693,11 +636,19 @@ void SetClearFlags(Player *CurrentPlayer)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 397.63f, 235.97f);
 	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 397.63f, 235.97f);
+	}
 
 	// Level 5
 	if(CurrentPlayer->levelClearBitFlags & 32)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 410.56f, 53.77f);
+	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 410.56f, 53.77f);
 	}
 
 	// Level 6
@@ -705,11 +656,19 @@ void SetClearFlags(Player *CurrentPlayer)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 668.98f, 17.69f);
 	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 668.98f, 17.69f);
+	}
 
 	// YeahGuy
 	if(CurrentPlayer->levelClearBitFlags & 128)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 1077.22f, -37.76f);
+	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 1077.22f, -37.76f);
 	}
 
 	// Level 7
@@ -717,10 +676,18 @@ void SetClearFlags(Player *CurrentPlayer)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 1334.43f, -71.29f);
 	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 1334.43f, -71.29f);
+	}
 
 	// Kevin
 	if(CurrentPlayer->levelClearBitFlags & 512)
 	{
 		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 1597.85f, -85.60f);
+	}
+	else
+	{
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 1597.85f, -85.60f);
 	}
 }
