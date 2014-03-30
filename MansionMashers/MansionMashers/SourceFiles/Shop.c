@@ -36,23 +36,25 @@
 /*************************************************************************/
 void getWeaponCoin(WeaponShop *newShop, int weaponRarity)
 {
+	int weaponWorth = newShop->Weapon->BonusStrength * 10 + newShop->Weapon->BonusDefense * 5 + newShop->Weapon->BonusAgility * 5;
+
 	//Manually pick the coin value and then sprintf it into the coinchar value for use
 	switch(weaponRarity)
 	{
 	case Common:
-		newShop->Coin = 20;
+		newShop->Coin = 20 + weaponWorth;
 		break;
 	case Uncommon:
-		newShop->Coin = 300;
+		newShop->Coin = 200 + weaponWorth;
 		break;
 	case Rare:
-		newShop->Coin = 800;
+		newShop->Coin = 500 + weaponWorth;
 		break;
 	case Sausage:
-		newShop->Coin = 1200;
+		newShop->Coin = 900 + weaponWorth;
 		break;
 	default:
-		newShop->Coin = 50;
+		newShop->Coin = 50 + weaponWorth;
 		break;
 	}
 
@@ -125,22 +127,24 @@ void CreateWeaponShop(float shopPosX, float shopPosY, int newID, int collisionGr
 {
 	Vec3 TextTint;
 	WeaponShop *newShop = AddWeaponShop();
-	getWeaponCoin(newShop, weaponRarity);
-
+	
 	//Sign
 	newShop->ShopSprite     = (Sprite *) CreateSprite("TextureFiles/WoodSign.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
 	newShop->ShopTextSprite = (Sprite *) CreateSprite("TextureFiles/WoodSignText.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
+
+	//Weapon
+	newShop->Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, newID, shopPosX + 50, shopPosY);
+	newShop->Weapon->WeaponSprite->Rotation = FOX_PI / 2;
+	newShop->Weapon->CurrentShop = newShop;
+
+	//Based on the weapon, get the price
+	getWeaponCoin(newShop, weaponRarity);
 
 	//Text
 	Vec3Set(&TextTint, 0.2f, 0.2f, 0.2f);
 	newShop->ItemTextCoin = CreateText(strcat(newShop->CoinChar, " coin"), shopPosX + 10, shopPosY + 60, 60, TextTint, Center, Plain);
 	ChangeTextVisibility(newShop->ItemTextCoin);
 	getItemTextName(newShop, collisionGroup, TextTint, shopPosX, shopPosY, weaponRarity);
-
-	//Weapon
-	newShop->Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, newID, shopPosX + 50, shopPosY);
-	newShop->Weapon->WeaponSprite->Rotation = FOX_PI / 2;
-	newShop->Weapon->CurrentShop = newShop;
 
 	//Gongratz
 	newShop->Created = TRUE;
