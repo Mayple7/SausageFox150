@@ -79,8 +79,8 @@ void InitializeShop1(void)
 	ResetCamera();
 
 	//Weapon/Shop
-	randNum = rand() % 60;
-	randType = rand() % FoxWeapon;
+	randNum = (int)((rand() / (float)RAND_MAX) * 60);
+	randType = (int)((rand() / (float)RAND_MAX) * FoxWeapon);
 
 	// First shop plackard
 	if(randNum > 98)
@@ -92,8 +92,8 @@ void InitializeShop1(void)
 	else
 		CreateWeaponShop(-400, -140, newID++, randType, Common);
 	
-	randNum = rand() % 100;
-	randType = rand() % FoxWeapon;
+	randNum = (int)((rand() / (float)RAND_MAX) * 60);
+	randType = (int)((rand() / (float)RAND_MAX) * FoxWeapon);
 
 	// Second shop plackard
 	if(randNum > 98)
