@@ -63,6 +63,14 @@ Wall *Wall1;
 
 FoxSound *BackSnd;
 
+Sprite *Arrow1;
+Sprite *Arrow2;
+Sprite *Arrow3;
+
+static int Arrow1Grow;
+static int Arrow2Grow;
+static int Arrow3Grow;
+
 Sprite *BlackOverlay;
 HUD *CurrentHUD;
 
@@ -137,6 +145,14 @@ void InitializeLevel1(void)
 	//Background Sound
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 
+	// Arrows
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 200, 1, 1, 0, 200);
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 200, 1, 1, PANELSIZE, 200);
+	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 200, 1, 1, 2 * PANELSIZE, 200);
+
+	Arrow1Grow = FALSE;
+	Arrow2Grow = TRUE;
+	Arrow3Grow = FALSE;
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -223,6 +239,10 @@ void UpdateLevel1(void)
 	EventLevel1();
 	PlayAudio(BackSnd);
 
+	// Update all the arrows
+	UpdateArrow(Arrow1, &Arrow1Grow);
+	UpdateArrow(Arrow2, &Arrow2Grow);
+	UpdateArrow(Arrow3, &Arrow3Grow);
 	
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);

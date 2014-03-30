@@ -153,6 +153,12 @@ void UpdateArmGuy(void)
 
 	UpdateFloatingText();
 	BoundingBoxUpdate();
+
+	if(Boss->CurrentHealth <= 0)
+	{
+		levelComplete = TRUE;
+		SetNextState(GS_MapLevel);
+	}
 }
 
 /*************************************************************************/
@@ -180,14 +186,19 @@ void DrawArmGuy(void)
 /*************************************************************************/
 void FreeArmGuy(void)
 {
-	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level3)
-		CurrentPlayer.CurrentLevel = GS_Level3;
+	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level5)
+	{
+		CurrentPlayer.CurrentLevel = GS_Level5;
+	}
 	else if(CurrentPlayer.CurrentLevel < GS_ArmGuy)
 		CurrentPlayer.CurrentLevel = GS_ArmGuy;
 
 	//Only save stats if the level was actually completed
 	if (levelComplete)
+	{
+		CurrentPlayer.armClear = TRUE;
 		SavePlayer(&CurrentPlayer);
+	}
 
 	FreeAllLists();
 }

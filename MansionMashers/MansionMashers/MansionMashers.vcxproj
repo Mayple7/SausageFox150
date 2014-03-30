@@ -97,7 +97,6 @@
     <ClInclude Include="HeaderFiles\CollisionBox.h" />
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
     <ClInclude Include="HeaderFiles\Death.h" />
-    <ClInclude Include="HeaderFiles\DevMenu.h" />
     <ClInclude Include="HeaderFiles\EasyEdit.h" />
     <ClInclude Include="HeaderFiles\Enemy.h" />
     <ClInclude Include="HeaderFiles\EnemyCollision.h" />
@@ -179,7 +178,6 @@
     <ClCompile Include="SourceFiles\CollisionBox.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
     <ClCompile Include="SourceFiles\Death.c" />
-    <ClCompile Include="SourceFiles\DevMenu.c" />
     <ClCompile Include="SourceFiles\EasyEdit.c" />
     <ClCompile Include="SourceFiles\Enemy.c" />
     <ClCompile Include="SourceFiles\EnemyCollision.c" />

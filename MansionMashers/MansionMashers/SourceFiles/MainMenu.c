@@ -34,7 +34,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/BoundingBox.h"
 
-#define MAX_TEXTURES 4
+#define MAX_TEXTURES 14
 
 //The backgrounds for animation
 Sprite* FirstBackground;
@@ -94,6 +94,22 @@ void LoadMainMenu(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
+
+	// Loads all the blur textures
+	LoadTexture("TextureFiles/BlurFoxHall.png");
+	LoadTexture("TextureFiles/BlurFoxMansion.png");
+	LoadTexture("TextureFiles/BlurFoxCafe.png");
+	LoadTexture("TextureFiles/BlurLevel21.png");
+	LoadTexture("TextureFiles/BlurLevel22.png");
+	LoadTexture("TextureFiles/BlurLevel31.png");
+	LoadTexture("TextureFiles/BlurLevel32.png");
+	LoadTexture("TextureFiles/BlurLevel41.png");
+	LoadTexture("TextureFiles/BlurLevel42.png");
+	LoadTexture("TextureFiles/BlurLevel60.png");
+	LoadTexture("TextureFiles/BlurLevel61.png");
+	LoadTexture("TextureFiles/BlurLevel62.png");
+	LoadTexture("TextureFiles/BlurLevel71.png");
+	LoadTexture("TextureFiles/BlurLevel72.png");
 }
 
 /*************************************************************************/
@@ -577,14 +593,6 @@ void InputHandling(void)
 		}
 	}
 
-#if defined _DEBUG
-	//Sneaky keys to get to the dev menu
-	if(FoxInput_KeyTriggered(VK_SHIFT) || FoxInput_KeyTriggered(VK_RSHIFT))
-	{
-		SetNextState(GS_DevMenu);
-	}
-#endif
-
 	// check if forcing the application to quit
 	if (FoxInput_KeyTriggered(VK_ESCAPE))
 	{
@@ -916,7 +924,37 @@ int RandomNewTexture(Sprite* CurrentSprite, int prevTexture)
 		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurFoxCafe.png");
 		break;
 	case 3:
-		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurFoxHandGuy.png");
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel21.png");
+		break;
+	case 4:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel22.png");
+		break;
+	case 5:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel31.png");
+		break;
+	case 6:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel32.png");
+		break;
+	case 7:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel41.png");
+		break;
+	case 8:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel42.png");
+		break;
+	case 9:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel60.png");
+		break;
+	case 10:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel61.png");
+		break;
+	case 11:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel62.png");
+		break;
+	case 12:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel71.png");
+		break;
+	case 13:
+		CurrentSprite->SpriteTexture = LoadTexture("TextureFiles/BlurLevel72.png");
 		break;
 	}
 	//Returns the texture assigned
