@@ -97,7 +97,6 @@
     <ClInclude Include="HeaderFiles\CollisionBox.h" />
     <ClInclude Include="HeaderFiles\CollisionManager.h" />
     <ClInclude Include="HeaderFiles\Death.h" />
-    <ClInclude Include="HeaderFiles\DevMenu.h" />
     <ClInclude Include="HeaderFiles\EasyEdit.h" />
     <ClInclude Include="HeaderFiles\Enemy.h" />
     <ClInclude Include="HeaderFiles\EnemyCollision.h" />
@@ -118,6 +117,7 @@
     <ClInclude Include="HeaderFiles\HUD.h" />
     <ClInclude Include="HeaderFiles\Input.h" />
     <ClInclude Include="HeaderFiles\Kevin.h" />
+    <ClInclude Include="HeaderFiles\Level.h" />
     <ClInclude Include="HeaderFiles\Level1.h" />
     <ClInclude Include="HeaderFiles\Level2.h" />
     <ClInclude Include="HeaderFiles\Level3.1.h" />
@@ -178,7 +178,6 @@
     <ClCompile Include="SourceFiles\CollisionBox.c" />
     <ClCompile Include="SourceFiles\CollisionManager.c" />
     <ClCompile Include="SourceFiles\Death.c" />
-    <ClCompile Include="SourceFiles\DevMenu.c" />
     <ClCompile Include="SourceFiles\EasyEdit.c" />
     <ClCompile Include="SourceFiles\Enemy.c" />
     <ClCompile Include="SourceFiles\EnemyCollision.c" />
@@ -194,6 +193,7 @@
     <ClCompile Include="SourceFiles\HUD.c" />
     <ClCompile Include="SourceFiles\Input.c" />
     <ClCompile Include="SourceFiles\Kevin.c" />
+    <ClCompile Include="SourceFiles\Level.c" />
     <ClCompile Include="SourceFiles\Level1.c" />
     <ClCompile Include="SourceFiles\Level2.c" />
     <ClCompile Include="SourceFiles\Level3.1.c" />

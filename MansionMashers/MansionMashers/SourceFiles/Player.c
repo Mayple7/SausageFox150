@@ -34,11 +34,8 @@
 
 // ---------------------------------------------------------------------------
 // globals
-Player CurrentPlayer;
 
 #define PANELSIZE 1920.0f
-
-static int FollowMouse; //If you like that sort of thing, life is about choice isn't it?
 
 /*************************************************************************/
 /*!
@@ -52,8 +49,6 @@ static int FollowMouse; //If you like that sort of thing, life is about choice i
 void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, float xPos, float yPos)
 {
 	int i, startingBuff;
-
-	FollowMouse = TRUE;
 
 	for(i = 0; i < COLLIDEAMOUNT; i++)
 	{
@@ -158,6 +153,9 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	CreatePlayerSprites(CurrentPlayer);
 	CurrentPlayer->PlayerSpriteParts.Weapon->ZIndex = CurrentPlayer->Zindex + 2;
 	Animation(CurrentPlayer);
+
+	InitializePlayerRank(CurrentPlayer);
+	InitializePlayerHurt(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -171,6 +169,9 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
+	int mouseX = FoxInput_GetMousePositionX();
+	float camX = GetCameraXPosition();
+
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
 	if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer->isAttacking)
@@ -195,11 +196,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 	}
 
-	if (FollowMouse)
+	if (LookAtMouse)
 	{
-		if (GetCameraXPosition() + (FoxInput_GetMousePositionX() - PANELSIZE / 2) < CurrentPlayer->Position.x)
+		if (camX + (mouseX - PANELSIZE / 2) < CurrentPlayer->Position.x - 20)
 			CurrentPlayer->FlipX = FALSE;
-		else
+		else if (camX + (mouseX - PANELSIZE / 2) > CurrentPlayer->Position.x + 20)
 			CurrentPlayer->FlipX = TRUE;
 	}
 
@@ -208,7 +209,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->PlayerDirection = LEFT;
 		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
-		if (!FollowMouse)
+		if (!LookAtMouse)
 			CurrentPlayer->FlipX = FALSE;
 	}
 	// Move right if D is pressed
@@ -216,34 +217,19 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->PlayerDirection = RIGHT;
 		CurrentPlayer->Speed = CurrentPlayer->CurrentPlayerStats.MoveSpeed * GetDeltaTime();
-		if (!FollowMouse)
+		if (!LookAtMouse)
 			CurrentPlayer->FlipX = TRUE;
 	}
 	else
 	{
-		if (!(CurrentPlayer->Position.y > GROUNDLEVEL) && !CurrentPlayer->PlayerRigidBody.onGround)
+		if (CurrentPlayer->Speed - 48.0f * GetDeltaTime() >= 0.0f)
 		{
-			if (CurrentPlayer->Speed - 48.0f * GetDeltaTime() >= 0.0f)
-			{
-				CurrentPlayer->Speed -= 48.0f * GetDeltaTime();
-			}
-			else
-			{
-				CurrentPlayer->Speed = 0.0f;
-				CurrentPlayer->LegSinValue = 0;
-			}
+			CurrentPlayer->Speed -= 48.0f * GetDeltaTime();
 		}
 		else
 		{
-			if (CurrentPlayer->Speed - 48.0f * GetDeltaTime() >= 0.0f)
-			{
-				CurrentPlayer->Speed -= 48.0f * GetDeltaTime();
-			}
-			else
-			{
-				CurrentPlayer->Speed = 0.0f;
-				CurrentPlayer->LegSinValue = 0;
-			}
+			CurrentPlayer->Speed = 0.0f;
+			CurrentPlayer->LegSinValue = 0;
 		}
 	}
 	
@@ -398,6 +384,12 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	//Update the buff timers
 	UpdateBuffTimers(CurrentPlayer);
 
+	//Update the player XP and Rank
+	UpdatePlayerRank(CurrentPlayer);
+
+	//Update the player hurt overlay
+	UpdatePlayerHurt(CurrentPlayer);
+
 	//Brings the player back to the surface if something bad happens
 	if(CurrentPlayer->Position.y < GROUNDLEVEL)
 	{
@@ -551,6 +543,10 @@ void DetectPlayerCollision(void)
 	int hit = 0;
 	int hitPrev = 0;
 
+	// Used to only display one weapon
+	float closestDropLength = 100000;
+	Weapon *displayWeapon = NULL;
+
 	//Cycle through the platform list
 	while(pList->objID != -1)
 	{
@@ -666,19 +662,32 @@ void DetectPlayerCollision(void)
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, wList->WeaponPickup.collisionID);
 			if(hit)
 			{
+				float currentDist = Vec2SquareDistance(&CurrentPlayer.Position, &wList->WeaponPickup.Position);
+
+				TextAllNotVisible(wList->WeaponGlyphs);
+				TextAllNotVisible(wList->WeaponStatsGlyphs);
+				wList->WeaponHoverBackground->Visible = FALSE;
+
+				if(currentDist < closestDropLength)
+				{
+					closestDropLength = currentDist;
+					displayWeapon = wList;
+				}
+
 				// New target, on start collision
 				if(hitPrev < 0)
 				{
 					CurrentPlayer.CollisionData[-hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
-					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+
+					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
 					updateDamage(&CurrentPlayer);
 				}
 				// Found target, hit previous frame, on persistant
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
 				{
 					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
 					updateDamage(&CurrentPlayer);
 				}
 				// Found target, did not hit previous frame, on start collision
@@ -686,7 +695,7 @@ void DetectPlayerCollision(void)
 				{
 					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
-					PlayerCollideWeaponDrop(&CurrentPlayer, wList);
+					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
 					updateDamage(&CurrentPlayer);
 				}
 			}
@@ -704,8 +713,8 @@ void DetectPlayerCollision(void)
 					CurrentPlayer.CollisionData[hitPrev] = 0;
 					if(wList->WeaponGlyphs->Glyph->Visible)
 					{
-						ChangeTextVisibility(wList->WeaponGlyphs);
-						ChangeTextVisibility(wList->WeaponStatsGlyphs);
+						TextAllNotVisible(wList->WeaponGlyphs);
+						TextAllNotVisible(wList->WeaponStatsGlyphs);
 						wList->WeaponHoverBackground->Visible = FALSE;
 					}
 				}
@@ -713,6 +722,12 @@ void DetectPlayerCollision(void)
 		}
 		wList++;
 	}
+	// Display the weapon info and handle that collision
+	if(displayWeapon)
+	{
+		PlayerCollideWeaponDrop(&CurrentPlayer, displayWeapon);
+	}
+
 	//Projectiles ('b' as in Ballista)
 	while(bList->objID != -1)
 	{
@@ -913,9 +928,7 @@ void DetectPlayerCollision(void)
 		spawner++;
 	}
 }
-/////////////////////////////////////////////////////
-//                    ORIGINAL ANIMATION
-/////////////////////////////////////////////////////
+
 /*************************************************************************/
 /*!
 	\brief
@@ -925,9 +938,10 @@ void DetectPlayerCollision(void)
 	The player to animate
 */
 /*************************************************************************/
-
 void Animation(Player *Object)
 {
+	float DT1 = FRAMERATE * GetDeltaTime(); //Just so it isn't hard-coded too much
+
 	float sinOfLegValue = (float)sin(Object->LegSinValue);
 	float sinOfTwoLegValue = (float)sin(Object->LegSinValue * 2);
 	float LegDistance = Object->CurrentPlayerStats.MoveSpeed * (1 / 60.0f) + (2.3f / (((Object->CurrentPlayerStats.MoveSpeed * (1 / 60.0f)) * 0.15f + 0.15f)) ) - (Object->Speed / GetDeltaTime()) * (1 / 60.0f);
@@ -949,9 +963,6 @@ void Animation(Player *Object)
 	Sprite *Weap = Object->PlayerSpriteParts.Weapon;
 	Sprite *Tail = Object->PlayerSpriteParts.Tail;
 
-	/*
-	printf("%f\n", testFrameTime());*/
-
 	Object->LegSinValue += (Object->Speed) / 75.0f; 
 
 	Object->PlayerSpriteParts.BlinkTimer += 1;
@@ -971,7 +982,7 @@ void Animation(Player *Object)
 	}
 
 	Bdy->Position.x = Object->Position.x;
-	Bdy->Position.y = Object->Position.y - ((float)sin(-Object->LegSinValue * 2) * 5/ (LegDistance));
+	Bdy->Position.y = Object->Position.y - ((float)sin(-Object->LegSinValue * 2) * 5 / (LegDistance));
 	Skrt->Position = Bdy->Position;
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
 		Skrt->CurrentFrame = (int)floor(fabs(LegUpperDirection * 4));
@@ -984,16 +995,16 @@ void Animation(Player *Object)
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailRun.png");
 		Object->TailSinValue += 6.0f * GetDeltaTime();
-		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed) / 2 + 3 * FRAMERATE / 60;
+		Object->PlayerSpriteParts.Tail->AnimationSpeed = (Object->Speed) / 2 + 3 * DT1;
 	}
 	else
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailIdle.png");
 		Object->TailSinValue = 0;
 		if(Object->Princess == Mayple)
-			Object->PlayerSpriteParts.Tail->AnimationSpeed = 2 * FRAMERATE / 60;
+			Object->PlayerSpriteParts.Tail->AnimationSpeed = 2 * DT1;
 		else
-			Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
+			Object->PlayerSpriteParts.Tail->AnimationSpeed = 4 * DT1;
 	}
 
 	if (Object->PlayerRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
@@ -1012,9 +1023,9 @@ void Animation(Player *Object)
 	{
 		float sinLegOverTen = (float)sin(LegDistance / 10);
 		LegUpperDirection  = sinLegOverTen - 1.0f;
-		LegUpperDirection2 = sinLegOverTen - 1.0f;//60.0f * GetDeltaTime();
-		LegLowerDirection  = LegUpperDirection + 0.5f;//30.0f * GetDeltaTime();
-		LegLowerDirection2 = LegUpperDirection2 - 0.5f;//30.0f * GetDeltaTime();
+		LegUpperDirection2 = sinLegOverTen - 1.0f;
+		LegLowerDirection  = LegUpperDirection + 0.5f;
+		LegLowerDirection2 = LegUpperDirection2 - 0.5f;
 	}
 	LegUpr->FlipX = Object->FlipX;
 	LegLwr->FlipX = Object->FlipX;
@@ -1070,7 +1081,6 @@ void Animation(Player *Object)
 			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			ArmUpr2->Rotation = FOX_PI * 1.5f + 0.5f - Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr2->Rotation = ArmUpr2->Rotation - FOX_PI/2 + Object->PlayerSpriteParts.AttackRotationArmLower;
-			//Weap->Rotation = ArmLwr2->Rotation + Object->PlayerSpriteParts.AttackRotation;
 			if (Object->PlayerSpriteParts.AttackRotationArm == FOX_PI)
 				Object->isAttacking = FALSE;
 		}
@@ -1078,7 +1088,6 @@ void Animation(Player *Object)
 		{
 			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
 			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
-			//Weap->Rotation = ArmLwr2->Rotation;
 		}
 		Weap->Rotation = ArmLwr2->Rotation;
 		ArmUpr2->Position.x = Bdy->Position.x;
@@ -1134,7 +1143,6 @@ void Animation(Player *Object)
 			Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 			ArmUpr->Rotation = FOX_PI / 2 - 0.5f + Object->PlayerSpriteParts.AttackRotationArm;
 			ArmLwr->Rotation = ArmUpr->Rotation + FOX_PI/2 - Object->PlayerSpriteParts.AttackRotationArmLower;
-			//Weap->Rotation = ArmLwr->Rotation - Object->PlayerSpriteParts.AttackRotation;
 			if (Object->PlayerSpriteParts.AttackRotationArm == FOX_PI)
 				Object->isAttacking = FALSE;
 		}
@@ -1324,8 +1332,8 @@ void SavePlayer(Player *CurrentPlayer)
 		BuffValue = BuffValue | 0x8;
 
 	// Ugly code that puts all needed info into one string
-	sprintf(string, "Level: %d\nArmUnlock: %d\nHandUnlock: %d\nArmClear: %d\nHandClear: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
-		CurrentPlayer->CurrentLevel, CurrentPlayer->armUnlock, CurrentPlayer->handUnlock, CurrentPlayer->armClear, CurrentPlayer->handClear, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+	sprintf(string, "Level: %d\nLevelBitFlags: %d\nRank: %d\nXP: %d\nArmUnlock: %d\nHandUnlock: %d\nArmClear: %d\nHandClear: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
+		CurrentPlayer->CurrentLevel, CurrentPlayer->levelClearBitFlags, CurrentPlayer->CurrentPlayerStats.Rank, CurrentPlayer->CurrentPlayerStats.Experience, CurrentPlayer->armUnlock, CurrentPlayer->handUnlock, CurrentPlayer->armClear, CurrentPlayer->handClear, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
@@ -1365,14 +1373,14 @@ int LoadPlayer(Player *CurrentPlayer)
 	{
 		//Ugly code which should read the file if its in the correct format
 		int num = 0;
-		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
-			&CurrentPlayer->CurrentLevel, &CurrentPlayer->armUnlock, &CurrentPlayer->handUnlock, &CurrentPlayer->armClear, &CurrentPlayer->handClear, &CurrentPlayer->Princess, &BuffValue, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
+		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
+			&CurrentPlayer->CurrentLevel, &CurrentPlayer->levelClearBitFlags, &CurrentPlayer->CurrentPlayerStats.Rank, &CurrentPlayer->CurrentPlayerStats.Experience, &CurrentPlayer->armUnlock, &CurrentPlayer->handUnlock, &CurrentPlayer->armClear, &CurrentPlayer->handClear, &CurrentPlayer->Princess, &BuffValue, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
 			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
 			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 		fclose(fp);
 
 		//If all the data was read successfully
-		if(num == 18)
+		if(num == 21)
 		{
 			//Update all the other required player data
 			int nameLen, statsLen;
@@ -1471,6 +1479,7 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	CurrentPlayer->CurrentPlayerStats.Strength = 0;
 	CurrentPlayer->CurrentPlayerStats.Defense = 0;
 
+	CurrentPlayer->levelClearBitFlags = 0;
 	CurrentPlayer->armUnlock = FALSE;
 	CurrentPlayer->handUnlock = FALSE;
 	CurrentPlayer->armClear = FALSE;
@@ -1531,6 +1540,9 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	updateDamage(CurrentPlayer);
 	updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
+
+	CurrentPlayer->CurrentPlayerStats.Rank = 1;
+	CurrentPlayer->CurrentPlayerStats.Experience = 0;
 
 	CurrentPlayer->CurrentPlayerStats.Money = 15;
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;

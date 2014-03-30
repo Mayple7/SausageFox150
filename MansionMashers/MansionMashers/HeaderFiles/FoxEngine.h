@@ -30,6 +30,8 @@
 //Special level include
 #include "PauseMenu.h"
 
+int pause;
+
 Matrix3 LoadRatioMtx;
 
 float GetLoadRatio(void);
@@ -41,6 +43,7 @@ int GetWindowHeight(void);
 void SaveSettings(void);
 
 int Cheats;
+int LookAtMouse;//If you like that sort of thing, life is about choice isn't it?
 char Settings[200];
 char GameData[200];
 

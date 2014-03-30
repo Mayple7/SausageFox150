@@ -6,16 +6,16 @@
 //Create collide list
 #define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
 //Create particle system
-#define PARTICLESYSTEMAMOUNT 50
+#define PARTICLESYSTEMAMOUNT 60
 //Create particle list
-#define PARTICLEAMOUNT 500
+#define PARTICLEAMOUNT 1200 //FUN FACT: If there are all 60 particle systems, with 20 paticles each, that is the max
 //Number of buttons
 #define BUTTONAMOUNT 50
 //Number of floating text
-#define FLOATINGTEXTAMOUNT 30
+#define FLOATINGTEXTAMOUNT 60
 //Number of spawners
 #define SPAWNERAMOUNT 20
-
+//Number of pannels
 #define PANELAMOUNT 10
 
 enum Rarity {Common, Uncommon, Rare, Epic, Sausage};
@@ -42,6 +42,7 @@ int EnemyPanelNumber[PANELAMOUNT];
 #include "HandGuyBoss.h"
 #include "YeahGuyBoss.h"
 #include "Death.h"
+#include "Level.h"
 #include "BoundingBox.h"
 
 #endif

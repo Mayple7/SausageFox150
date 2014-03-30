@@ -67,5 +67,6 @@ Matrix3 CreateTranslationMtx(Sprite *CurrentSprite);
 AEGfxVertexList* createMesh(float width, float height, float offsetX, float offsetY);
 void UpdateMesh(Sprite *currentSprite);
 void DrawSprite(Sprite *currentSprite);
+void UpdateArrow(Sprite *currentSprite, int *growBool);
 
 #endif

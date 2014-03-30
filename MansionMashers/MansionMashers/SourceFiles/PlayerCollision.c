@@ -102,12 +102,12 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	// Need to pop up weapon info //
 	if(!wList->WeaponGlyphs->Glyph->Visible)
 	{
-		ChangeTextVisibility(wList->WeaponGlyphs);
+		TextAllVisible(wList->WeaponGlyphs);
 		wList->WeaponHoverBackground->Visible = TRUE;
 	}
 	if(!wList->WeaponStatsGlyphs->Glyph->Visible)
 	{
-		ChangeTextVisibility(wList->WeaponStatsGlyphs);
+		TextAllVisible(wList->WeaponStatsGlyphs);
 	}
 	//Switch weapons
 	if(AEInputCheckTriggered('E'))
@@ -161,11 +161,11 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 		if(CurrentPlayer->PlayerWeapon->WeaponGlyphs->Glyph->Visible)
 		{
-			ChangeTextVisibility(CurrentPlayer->PlayerWeapon->WeaponGlyphs);
+			TextAllNotVisible(CurrentPlayer->PlayerWeapon->WeaponGlyphs);
 		}
 		if(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs->Glyph->Visible)
 		{
-			ChangeTextVisibility(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs);
+			TextAllNotVisible(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs);
 		}
 		CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 		

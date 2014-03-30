@@ -144,15 +144,12 @@ void UpdateProjectile(Projectile *CurrentProjectile)
 void PoofProjectile(Projectile *CurrentProjectile)
 {
 	//Poof the arrow away
-	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentProjectile->Position.x, CurrentProjectile->Position.y, CurrentProjectile->ProjectileSprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
-	Poof->emitAngleRandom = 360;
-	Poof->amountTotal = 20;
-	Poof->emitAmount = 20;
+	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentProjectile->Position.x, CurrentProjectile->Position.y, CurrentProjectile->ProjectileSprite->ZIndex + 5, 20, 20, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 	Poof->emitDisplacementX = 100;
 	Poof->emitDisplacementY = 101;
-	strcpy(Poof->ParticleSprite, "TextureFiles/Particle.png");
 	Poof->emitScale = 2.0f;
 	Poof->emitLife = 1.0f;
+	Poof->emitThenDestroy = TRUE;
 
 	//Get rid of the arrow
 	FreeProjectile(CurrentProjectile);

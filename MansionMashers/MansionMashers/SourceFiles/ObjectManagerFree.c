@@ -152,7 +152,7 @@ void FreeProjectile(Projectile *CurrentProjectile)
 /*************************************************************************/
 void FreeEnemy(Enemy *CurrentEnemy)
 {
-	if(CurrentEnemy->objID > -1)
+	if(CurrentEnemy->objID > 0)
 	{
 		//I'm sure someone will miss you enemy
 		CurrentEnemy->objID = 0;
@@ -218,7 +218,7 @@ void FreeParticleSystem(ParticleSystem *CurrentSystem)
 	if(CurrentSystem->objID > -1)
 	{
 		//I'm sure everyone will miss you particle system
-		CurrentSystem->objID = -1;
+		CurrentSystem->objID = 0;
 	}
 }
 
@@ -236,7 +236,7 @@ void FreeParticle(Particle *CurrentParticle)
 	if(CurrentParticle->objID > -1)
 	{
 		//I'm sure everyone will miss you particle
-		CurrentParticle->objID = -1;
+		CurrentParticle->objID = 0;
 
 		//if (CurrentParticle->ParticleSprite->Created)
 		//	FreeSprite(CurrentParticle->ParticleSprite);

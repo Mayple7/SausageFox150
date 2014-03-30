@@ -1,18 +1,18 @@
 /*****************************************************************************/
 /*!
 \file				Shop4.c
-\author				Dan Muller (d.muller)
-\date				Mar 8, 2014
+\author				Kaden Nugent (kaden.n)
+\date				Feb 15, 2014
 
-\brief				Functions for Shop4
+\brief				Functions for the showcase level
 
 \par				Functions:
-\li					LoadShop4
-\li					InitializeShop4
-\li					UpdateShop4
-\li					DrawShop4
-\li					FreeShop4
-\li					UnloadShop4
+\li					LoadLevel
+\li					InitializeLevel
+\li					UpdateLevel
+\li					DrawLevel
+\li					FreeLevel
+\li					UnloadLevel
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -24,12 +24,13 @@
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/Shop4.h"
+#include "../HeaderFiles/Shop1.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+#include "../HeaderFiles/BoundingBox.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -38,8 +39,14 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
-TextGlyphs* LevelName;
+static int levelComplete;
+static int beginningAnimiation;
+HUD* CurrentHUD;
+Sprite* BlackOverlay;
+
+FoxSound *BackSnd;
+
+static int PlayerIsAlive; 
 
 /*************************************************************************/
 /*!
@@ -61,19 +68,63 @@ void LoadShop4(void)
 /*************************************************************************/
 void InitializeShop4(void)
 {
-	Vec3 TextTint;
+	Vec3 Tint;
+	int randNum, randType;
 
+	levelComplete = FALSE;
+	PlayerIsAlive = TRUE;
+	beginningAnimiation = TRUE;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
+	//Weapon/Shop
+	randNum = (int)((rand() / (float)RAND_MAX) * 50 + 50);
+	randType = (int)((rand() / (float)RAND_MAX) * FoxWeapon);
+
+	// First shop plackard
+	if(randNum > 98)
+		CreateWeaponShop(-400, -140, newID++, randType, Sausage);
+	else if(randNum > 85)
+		CreateWeaponShop(-400, -140, newID++, randType, Rare);
+	else if(randNum > 50)
+		CreateWeaponShop(-400, -140, newID++, randType, Uncommon);
+	else
+		CreateWeaponShop(-400, -140, newID++, randType, Common);
+	
+	randNum = (int)((rand() / (float)RAND_MAX) * 50 + 50);
+	randType = (int)((rand() / (float)RAND_MAX) * FoxWeapon);
+
+	// Second shop plackard
+	if(randNum > 98)
+		CreateWeaponShop(600, -140, newID++, randType, Sausage);
+	else if(randNum > 85)
+		CreateWeaponShop(600, -140, newID++, randType, Rare);
+	else if(randNum > 50)
+		CreateWeaponShop(600, -140, newID++, randType, Uncommon);
+	else
+		CreateWeaponShop(600, -140, newID++, randType, Common);
+
+	
+
+	CreateSprite("TextureFiles/LevelGrassGround.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);
+
+	CreateSprite("TextureFiles/ShopKeeper.png", 350.0f, 350.0f, 80, 1, 1, 0, -250);
+
+	Vec3Set(&Tint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = Tint;
+
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1200, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 5", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
+	//Bounding Boxes
+	CreateBoundingBoxes();
+
+	BackSnd = CreateSound("Sounds/ShopTheme.wav", LargeSnd);
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -86,8 +137,23 @@ void UpdateShop4(void)
 {
 	EventLevel();
 
+	PlayAudio(BackSnd);
+
+	if(levelComplete)
+	{
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+		{
+			SetNextState(GS_MapLevel);
+		}
+	}
+
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -112,7 +178,12 @@ void DrawShop4(void)
 /*************************************************************************/
 void FreeShop4(void)
 {
+	//Only save stats if the level was actually completed
+	if (levelComplete)
+		SavePlayer(&CurrentPlayer);
+
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -136,24 +207,75 @@ void UnloadShop4(void)
 /*************************************************************************/
 void EventLevel(void)
 {
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
-
-	if(FoxInput_KeyTriggered('U'))
-	{
-		SetDebugMode();
-	}
-	if(FoxInput_KeyTriggered('I'))
-	{
-		RemoveDebugMode();
-	}
+	/*////////////////////////////////
+	//   INPUT & COLLISION FIRST    //
+	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawShop4);
-		//TogglePauseSound(&BackgroundSnd);
-		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		if(PlayerIsAlive == TRUE)
+		{
+			InitializePause(&DrawShop1);
+			TogglePauseSound(BackSnd);
+			//SetNextState(GS_MainMenu);
+			UpdatePause();
+			TogglePauseSound(BackSnd);
+		}
 	}
+	if(FoxInput_KeyTriggered('U'))
+		SetDebugMode();
+	if(FoxInput_KeyTriggered('I'))
+		RemoveDebugMode();
+
+	if(!beginningAnimiation && !levelComplete)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+
+		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width || CurrentPlayer.Position.x < -(1920.0f / 2) - CurrentPlayer.PlayerCollider.width)
+		{
+			levelComplete = TRUE;
+		}
+
+	}
+	else if(!levelComplete)
+	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = 1;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -500)
+			{
+				beginningAnimiation = FALSE;
+			}
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+	else
+	{
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+		{
+			SetNextState(GS_MapLevel);
+		}
+
+	}
+
+	UpdateFloatingText();
 }

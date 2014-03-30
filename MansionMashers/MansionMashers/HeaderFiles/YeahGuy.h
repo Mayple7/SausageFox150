@@ -9,5 +9,8 @@ void FreeYeahGuy(void);
 void UnloadYeahGuy(void);
 
 void EventYeahGuy(void);
+void ShowBuffs(void);
+void HideBuffs(void);
+void UpdatePlayerBuff(void);
 
 #endif

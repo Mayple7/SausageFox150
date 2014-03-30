@@ -13,6 +13,11 @@ typedef struct YeahGuyBoss
 
 	int CurrentState;
 	int InnerState;
+	int PositionState;
+
+	int redHead;
+	int greenHead;
+	int blueHead;
 
 	CollisionBox BossCollider;
 	RigidBody YeahGuyRigidBody;
@@ -27,7 +32,9 @@ typedef struct YeahGuyBoss
 	int YeahProjectileDamage;
 
 	int MaxHealth;
-	int CurrentHealth;
+	int CurrentRedHealth;
+	int CurrentGreenHealth;
+	int CurrentBlueHealth;
 
 	int numHeads;
 
@@ -37,8 +44,8 @@ typedef struct YeahGuyBoss
 void LoadYeahGuyBoss(void);
 YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos, int *objID);
 void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss);
-void DetectYeahGuyBossCollision(YeahGuyBoss *CurrentBoss);
-void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss);
+void DetectYeahGuyBossCollision(YeahGuyBoss *CurrentBoss, int CurrentBuff);
+void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff);
 static void PlayerDamageResult(int damage);
 void YeahGuyPlatformCollision(YeahGuyBoss* CurrentBoss, Platform* CurrentPlatform);
 

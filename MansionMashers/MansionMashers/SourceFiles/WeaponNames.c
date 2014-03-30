@@ -59,11 +59,74 @@ char* GetCommonStart(void)
 	default:
 		return "Common ";
 	}
-
 }
 
-//char* GetUncommonStart(void);
-//char* GetRareStart(void);
+char* GetUncommonStart(void)
+{
+	int randomName = rand() % NUM_COMMON_START;
+
+	switch(randomName)
+	{
+	case 0:
+		return "Uncommon ";
+	case 1:
+		return "Uncommon ";
+	case 2:
+		return "Uncommon ";
+	case 3:
+		return "Uncommon ";
+	case 4:
+		return "Uncommon ";
+	case 5:
+		return "Uncommon ";
+	case 6:
+		return "Uncommon ";
+	case 7:
+		return "Uncommon ";
+	case 8:
+		return "Uncommon ";
+	case 9:
+		return "Uncommon ";
+	case 10:
+		return "Uncommon ";
+	default:
+		return "Uncommon ";
+	}
+}
+
+char* GetRareStart(void)
+{
+	int randomName = rand() % NUM_COMMON_START;
+
+	switch(randomName)
+	{
+	case 0:
+		return "Rare ";
+	case 1:
+		return "Rare ";
+	case 2:
+		return "Rare ";
+	case 3:
+		return "Rare ";
+	case 4:
+		return "Rare ";
+	case 5:
+		return "Rare ";
+	case 6:
+		return "Rare ";
+	case 7:
+		return "Rare ";
+	case 8:
+		return "Rare ";
+	case 9:
+		return "Rare ";
+	case 10:
+		return "Rare ";
+	default:
+		return "Rare ";
+	}
+}
+
 
 char* GetSwordSynonym(void)
 {
@@ -211,5 +274,56 @@ char* GetCommonEnd(void)
 	}
 }
 
-//char* GetUncommonEnd(void);
-//char* GetRareEnd(void);
+char* GetUncommonEnd(void)
+{
+	int randomName = rand() % NUM_COMMON_END;
+
+	switch(randomName)
+	{
+	case 0:
+		return "of uncommon";
+	case 1:
+		return "of uncommon";
+	case 2:
+		return "of uncommon";
+	case 3:
+		return "of uncommon";
+	case 4:
+		return "of uncommon";
+	case 5:
+		return "of uncommon";
+	case 6:
+		return "of uncommon";
+	case 7:
+		return "of uncommon";
+	default:
+		return "";
+	}
+}
+
+char* GetRareEnd(void)
+{
+	int randomName = rand() % NUM_COMMON_END;
+
+	switch(randomName)
+	{
+	case 0:
+		return "of rare";
+	case 1:
+		return "of rare";
+	case 2:
+		return "of rare";
+	case 3:
+		return "of rare";
+	case 4:
+		return "of rare";
+	case 5:
+		return "of rare";
+	case 6:
+		return "of rare";
+	case 7:
+		return "of rare";
+	default:
+		return "";
+	}
+}

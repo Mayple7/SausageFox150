@@ -102,7 +102,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
-		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 29);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
 
@@ -125,7 +125,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 50, (float)(250 + 10 * (rand() % 10)), 15.0f, 0, 10, 10, 10);
+		InitializeEnemyStats(CurrentEnemy, 50, (float)(300 + 10 * (rand() % 10)), 15.0f, 0, 10, 10, 33);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -179,7 +179,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 80, (float)(150 + 10 * (rand() % 10)), 15.0f, 0, 10, 20, 20);
+		InitializeEnemyStats(CurrentEnemy, 80, (float)(150 + 10 * (rand() % 10)), 15.0f, 0, 10, 20, 47);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -196,8 +196,10 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyWeapon->WeaponFOF = EnemyWeapon;
 
 		CurrentEnemy->Speed				= 0;
-		CurrentEnemy->LegSinValue		= 0; //Object ID? Ovah here, we ain't be needin' any a that stuff, ya hear?
-		CurrentEnemy->TailSinValue      = 2; //Attack wait time in seconds, none of that per frame jazz, yo.
+		  //Object ID? Ovah here, we ain't be needin' any a that stuff, ya hear?
+		CurrentEnemy->LegSinValue		= 0;
+		  //Attack wait time in seconds, none of that per frame jazz, yo.
+		CurrentEnemy->TailSinValue      = (rand() / (float)RAND_MAX) + 1; //Number between 1 and 2
 		CurrentEnemy->isAttacking		= FALSE;
 		CurrentEnemy->EnemyDirection	= LEFT;
 
@@ -298,11 +300,13 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
 		char num[10];
+		int dropWeapon;
 		Vec3 textColor;
 		TextGlyphs *FirstLetter;
 
 		//Give the player thier loot!
-		CurrentPlayer.CurrentPlayerStats.Money += CurrentEnemy->CurrentEnemyStats.Money;
+		CurrentPlayer.CurrentPlayerStats.Money      += CurrentEnemy->CurrentEnemyStats.Money;
+		CurrentPlayer.CurrentPlayerStats.Experience += CurrentEnemy->CurrentEnemyStats.Experience;
 		
 		Vec3Set(&textColor, 1.0f, 1.0f, 0.0f);
 		sprintf(num, "+%d", CurrentEnemy->CurrentEnemyStats.Money);
@@ -324,6 +328,21 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		else
 			CurrentEnemy->EnemyParticleSystem->emitScale = 2.0f;
 		CurrentEnemy->EnemyParticleSystem->emitLife = 1.0f;
+		CurrentEnemy->EnemyParticleSystem->emitThenDestroy = TRUE;
+
+		//Give the player a chance at the enemy's weapon sometimes
+		if (CurrentEnemy->EnemyType == BasicMelee)
+			dropWeapon = rand() % 2;
+		else
+			dropWeapon = 0;
+
+		if (dropWeapon == 1)
+		{
+			Weapon *CurrentWeapon = CreateDroppedWeapon(CurrentEnemy->EnemyWeapon->WeaponType, CurrentEnemy->EnemyWeapon->WeaponRarity, 250, 250, CurrentEnemy->objID, CurrentEnemy->Position.x, CurrentEnemy->Position.y);
+			CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (rand() % 50 - 20) / 4; //A random angle for the dropped weapon
+			CurrentWeapon->WeaponFalling = TRUE;
+		}
+
 		PlayAudio(CurrentEnemy->CurrentEnemySounds.Poof);
 		EnemyPanelNumber[CurrentEnemy->panelId]--;
 		FreeEnemy(CurrentEnemy);
@@ -555,17 +574,17 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 	if (!CurrentEnemy->KnockBack)
 		MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
 
+	//On idle, don't do shooting stuff
+	if (CurrentEnemy->EnemyState == AIIdle)
+		return;
+
 	//Shooting
-	if (!CurrentEnemy->canAttack || CurrentEnemy->EnemyState == AIIdle)
+	if (!CurrentEnemy->canAttack)
 	{
 		//GRIMY H4X OVAH H3RRE
 		if (CurrentEnemy->TailSinValue < 0)
 		{
 			CurrentEnemy->canAttack = TRUE;
-
-			//On idle don't do shooting stuff
-			if (CurrentEnemy->EnemyState == AIIdle)
-				return;
 		}
 
 		//Arrow back yet dog?
@@ -579,13 +598,13 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 	{
 		//Project this right bby gril
 		Projectile *smexyArrow;
-		float projectileSpeed = 1600;
+		float projectileSpeed = 1400;
 		if (CurrentEnemy->EnemySpriteParts.Weapon->FlipX)
 			projectileSpeed *= -1;
 
 		//Don't shoot if we aren't in sight, that is just rude
-		if (CurrentEnemy->Position.x > GetCameraXPosition() + (PANELSIZE + CurrentEnemy->EnemySprite->Width / 2) / 2
-		 || CurrentEnemy->Position.x < GetCameraXPosition() - (PANELSIZE + CurrentEnemy->EnemySprite->Width / 2) / 2)
+		if (CurrentEnemy->Position.x > GetCameraXPosition() + (PANELSIZE + CurrentEnemy->EnemySprite->Width / 4) / 2
+		 || CurrentEnemy->Position.x < GetCameraXPosition() - (PANELSIZE + CurrentEnemy->EnemySprite->Width / 4) / 2)
 			return;
 
 		//NASTY NASTY HACKKKK
@@ -608,7 +627,7 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 
 		//Reset my timerz
 		CurrentEnemy->canAttack = FALSE;
-		CurrentEnemy->TailSinValue = 2;
+		CurrentEnemy->TailSinValue = (rand() / (float)RAND_MAX) + 2; //Number between 2 and 3
 	}
 }
 

@@ -254,9 +254,6 @@
     <ClInclude Include="HeaderFiles\CharacterSelect.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\DevMenu.h">
-      <Filter>Fox Header Files\Fox Level Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\BoundingBox.h">
       <Filter>Fox Header Files\Fox Engine Headers</Filter>
     </ClInclude>
@@ -318,6 +315,9 @@
       <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\YeahGuyBoss.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level.h">
       <Filter>Fox Header Files\Fox Object Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -469,9 +469,6 @@
     <ClCompile Include="SourceFiles\CharacterSelect.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\DevMenu.c">
-      <Filter>Fox Source Files\Fox Level Sources</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\BoundingBox.c">
       <Filter>Fox Source Files\Fox Engine Sources</Filter>
     </ClCompile>
@@ -533,6 +530,9 @@
       <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\YeahGuyBoss.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level.c">
       <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
   </ItemGroup>
