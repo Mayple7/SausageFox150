@@ -39,6 +39,7 @@
 // ---------------------------------------------------------------------------
 // define
 #define PANELSIZE 1920.0f
+//#define 
 
 // ---------------------------------------------------------------------------
 // globals
@@ -46,6 +47,8 @@ static int newID;					// ID number
 static int levelComplete;
 static int PlayerIsAlive;
 static int beginningAnimation;
+static int numEnemies;
+
 TextGlyphs* LevelName;
 HUD* CurrentHUD;
 

@@ -47,7 +47,16 @@ static int levelComplete;
 static int beginningAnimation;
 static int PlayerIsAlive;
 static int numPanels;
-TextGlyphs* LevelName;
+
+Sprite *Arrow1;
+Sprite *Arrow2;
+Sprite *Arrow3;
+Sprite *Arrow4;
+
+static int Arrow1Grow;
+static int Arrow2Grow;
+static int Arrow3Grow;
+static int Arrow4Grow;
 
 EnemySpawner* Spawners[8];
 
@@ -97,10 +106,6 @@ void InitializeLevel6(void)
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 6", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
-
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
@@ -131,6 +136,21 @@ void InitializeLevel6(void)
 	//Background Sound
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 
+	// Arrows
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 0, 200);
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, PANELSIZE, 200);
+	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 2 * PANELSIZE, 200);
+	Arrow4 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 3 * PANELSIZE, 200);
+
+	Arrow1->Visible = FALSE;
+	Arrow2->Visible = FALSE;
+	Arrow3->Visible = FALSE;
+	Arrow4->Visible = FALSE;
+
+	Arrow1Grow = FALSE;
+	Arrow2Grow = TRUE;
+	Arrow3Grow = FALSE;
+	Arrow4Grow = TRUE;
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -227,6 +247,21 @@ void UpdateLevel6(void)
 	PlayAudio(BackSnd);
 	//EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1, 10);
+
+	if(!EnemyPanelNumber[0])
+		Arrow1->Visible = TRUE;
+	if(!EnemyPanelNumber[1])
+		Arrow2->Visible = TRUE;
+	if(!EnemyPanelNumber[2])
+		Arrow3->Visible = TRUE;
+	if(!EnemyPanelNumber[3])
+		Arrow4->Visible = TRUE;
+
+	// Update all the arrows
+	UpdateArrow(Arrow1, &Arrow1Grow);
+	UpdateArrow(Arrow2, &Arrow2Grow);
+	UpdateArrow(Arrow3, &Arrow3Grow);
+	UpdateArrow(Arrow4, &Arrow4Grow);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);

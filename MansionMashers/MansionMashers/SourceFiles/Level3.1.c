@@ -62,7 +62,6 @@ static int levelComplete;
 static int beginningAnimation;
 static int numPanels;
 static int PlayerIsAlive;
-TextGlyphs* LevelName;
 
 Platform *Plat;
 Wall *Wall1;
@@ -70,6 +69,15 @@ Wall *Wall1;
 HUD* CurrentHUD;
 
 Sprite* SecondOverlay[3];
+
+// Arrows
+Sprite *Arrow1;
+Sprite *Arrow2;
+Sprite *Arrow3;
+
+static int Arrow1Grow;
+static int Arrow2Grow;
+static int Arrow3Grow;
 
 static EnemySpawner* Spawners[6];
 static Enemy* TopDeckEnemy[4];
@@ -120,8 +128,6 @@ void InitializeLevel31(void)
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -232,6 +238,19 @@ void InitializeLevel31(void)
 	TopDeckEnemy[2] = CreateEnemy(BasicMelee, EnemyType, newID++, 300 + (2 * PANELSIZE), 110, 2);
 	TopDeckEnemy[3] = CreateEnemy(BasicMelee, EnemyType, newID++, (2 * PANELSIZE), 110, 2);
 
+	// Arrows
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, PANELSIZE, 200);
+	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 2 * PANELSIZE, 200);
+
+	Arrow1->Visible = FALSE;
+	Arrow2->Visible = FALSE;
+	Arrow3->Visible = FALSE;
+
+	Arrow1Grow = FALSE;
+	Arrow2Grow = TRUE;
+	Arrow3Grow = FALSE;
+
 	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
@@ -254,6 +273,17 @@ void UpdateLevel31(void)
 	//EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1 ,10);
 
+	if(!EnemyPanelNumber[0])
+		Arrow1->Visible = TRUE;
+	if(!EnemyPanelNumber[1])
+		Arrow2->Visible = TRUE;
+	if(!EnemyPanelNumber[2])
+		Arrow3->Visible = TRUE;
+
+	// Update all the arrows
+	UpdateArrow(Arrow1, &Arrow1Grow);
+	UpdateArrow(Arrow2, &Arrow2Grow);
+	UpdateArrow(Arrow3, &Arrow3Grow);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);

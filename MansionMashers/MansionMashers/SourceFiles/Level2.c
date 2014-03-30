@@ -48,7 +48,7 @@ static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int enemiesDefeated;
-TextGlyphs* LevelName;
+
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
 
@@ -125,10 +125,6 @@ void InitializeLevel2(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
 	
 	//Bounding Boxes
 	CreateBoundingBoxes();
@@ -259,6 +255,12 @@ void InitializeLevel2(void)
 	Spawners[4] = NULL;
 	//Right
 	Spawners[5] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
+
+	/*
+	for(i = 0; i < PANELAMOUNT; ++i)
+	{
+		numEnemies += EnemyPanelNumber[i];
+	}*/
 
 
 	/////////////////////////////////

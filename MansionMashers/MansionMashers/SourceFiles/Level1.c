@@ -50,8 +50,6 @@ static int beginningAnimiation;
 static int PlayerIsAlive; 
 static int numPanels;
 
-TextGlyphs *LevelName;
-
 static EnemySpawner *Spawners[6]; //Two per panel, Left & Right
 
 Enemy *SetEnemy1;
@@ -116,10 +114,6 @@ void InitializeLevel1(void)
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
-
 	CreatePaperScroll(200);
 
 	/////////////////////////////////
@@ -146,9 +140,13 @@ void InitializeLevel1(void)
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 
 	// Arrows
-	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 200, 1, 1, 0, 200);
-	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 200, 1, 1, PANELSIZE, 200);
-	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 200, 1, 1, 2 * PANELSIZE, 200);
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, PANELSIZE, 200);
+	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 2 * PANELSIZE, 200);
+
+	Arrow1->Visible = FALSE;
+	Arrow2->Visible = FALSE;
+	Arrow3->Visible = FALSE;
 
 	Arrow1Grow = FALSE;
 	Arrow2Grow = TRUE;
@@ -238,6 +236,13 @@ void UpdateLevel1(void)
 	//Handle the special events right off the bat yo
 	EventLevel1();
 	PlayAudio(BackSnd);
+
+	if(!EnemyPanelNumber[0])
+		Arrow1->Visible = TRUE;
+	if(!EnemyPanelNumber[1])
+		Arrow2->Visible = TRUE;
+	if(!EnemyPanelNumber[2])
+		Arrow3->Visible = TRUE;
 
 	// Update all the arrows
 	UpdateArrow(Arrow1, &Arrow1Grow);
