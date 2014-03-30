@@ -1440,6 +1440,9 @@ int LoadPlayer(Player *CurrentPlayer)
 			}
 			CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 
+			if (!strcmp(CurrentPlayer->PlayerWeapon->WeaponName,"Sausage Sausage of sausage"))
+				CurrentPlayer->PlayerWeapon->WeaponSprite->SpriteTexture = LoadTexture("TextureFiles/BattleAxe.png");
+
 			//Success!
 			return 1;
 		}

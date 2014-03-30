@@ -16,8 +16,8 @@ enum GSL
 	GS_Shop3,
 	GS_Level6,
 	GS_YeahGuy,
-	GS_Shop4,
 	GS_Level7,
+	GS_Shop4,
 	GS_Kevin,
 	GS_LevelNUM,
 	GS_Level31,       //Level already accounted for in Level 3 (this is Level 3.1)
