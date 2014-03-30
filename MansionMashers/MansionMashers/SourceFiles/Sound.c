@@ -432,6 +432,7 @@ void InitSoundStruct(FoxSound *snd, int type)
 	snd->Paused = FALSE;
 	snd->Type = type;
 	snd->sndID = 1;
+	snd->hasPlayed = FALSE;
 }
 
 /*************************************************************************/

@@ -112,7 +112,7 @@ void InitializeLevel1(void)
 	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center, Border);
 	ChangeTextVisibility(LevelName);
 
-	CreatePaperScroll(200);
+	//CreatePaperScroll(200);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
