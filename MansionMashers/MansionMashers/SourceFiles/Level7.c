@@ -143,9 +143,12 @@ void InitializeLevel7(void)
 	//Far Left Wall
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, -958, 0);
 	Wall1->WallSprite->Visible = FALSE;
+	Wall1->enemyNotCollidable = TRUE;
+
 	//Far Right Wall
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, -958 + 2 * PANELSIZE, 0);
 	Wall1->WallSprite->Visible = FALSE;
+	Wall1->enemyNotCollidable = TRUE;
 
 	/////////////////////////////////
 	//			Particles		   //
