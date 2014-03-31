@@ -368,7 +368,7 @@ void freeSpriteList(void)
 			FreeFood(&foodList[i]);
 		}
 		//Make sure the sprite exists
-		if (weaponList[i].objID)
+		if (weaponList[i].objID > 0)
 		{
 			//Free the mesh and texture data
 			FreeWeapon(&weaponList[i]);

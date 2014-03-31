@@ -456,10 +456,10 @@ void DestroyPlayer(Player *CurrentPlayer)
 /*************************************************************************/
 void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 {
-	//Placeholder max health formula
-	CurrentPlayerStats->MaxHealth = 50 + CurrentPlayerStats->Strength * 20;
+	// Max health formula
+	CurrentPlayerStats->MaxHealth = 100 + CurrentPlayerStats->Defense * 10;
 	if(CurrentPlayer.PlayerWeapon)
-		CurrentPlayerStats->MaxHealth += CurrentPlayer.PlayerWeapon->BonusStrength * 20;
+		CurrentPlayerStats->MaxHealth += CurrentPlayer.PlayerWeapon->BonusDefense * 10;
 }
 
 /*************************************************************************/
@@ -473,7 +473,7 @@ void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 /*************************************************************************/
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 {
-	//Placeholder move speed formula
+	// Move speed formula
 	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility * 15.0f + 600.0f;
 }
 
@@ -488,7 +488,7 @@ void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 /*************************************************************************/
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 {
-	//Placeholder attack speed formula
+	// Attack speed formula
 	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 2.0f + 8.0f;
 }
 
@@ -503,8 +503,8 @@ void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 /*************************************************************************/
 void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 {
-	//Placeholder damage reduction formula
-	CurrentPlayerStats->DamageReduction = CurrentPlayerStats->Defense * 2.0f / 100.0f;
+	// Damage reduction formula
+	CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / CurrentPlayerStats->Defense) / 2.0f;
 }
 
 /*************************************************************************/
@@ -519,7 +519,7 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 void updateDamage(Player *CurrentPlayer)
 {
 	//Placeholder damage reduction formula
-	CurrentPlayer->CurrentPlayerStats.Damage = 10 + (CurrentPlayer->CurrentPlayerStats.Strength + CurrentPlayer->PlayerWeapon->BonusStrength) * 5;
+	CurrentPlayer->CurrentPlayerStats.Damage = 10 + (CurrentPlayer->CurrentPlayerStats.Strength + CurrentPlayer->PlayerWeapon->BonusStrength) * 2;
 }
 
 /*************************************************************************/
@@ -1478,9 +1478,9 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	CurrentPlayer->BuffHeld[2] = FALSE;
 	CurrentPlayer->BuffHeld[3] = FALSE;
 
-	CurrentPlayer->CurrentPlayerStats.Agility = 0;
-	CurrentPlayer->CurrentPlayerStats.Strength = 0;
-	CurrentPlayer->CurrentPlayerStats.Defense = 0;
+	CurrentPlayer->CurrentPlayerStats.Agility = 1;
+	CurrentPlayer->CurrentPlayerStats.Strength = 1;
+	CurrentPlayer->CurrentPlayerStats.Defense = 1;
 
 	CurrentPlayer->levelClearBitFlags = 0;
 	CurrentPlayer->armUnlock = FALSE;
