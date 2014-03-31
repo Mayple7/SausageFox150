@@ -572,9 +572,16 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 	if (!CurrentEnemy->KnockBack)
 		MoveObject(&CurrentEnemy->Position, CurrentEnemy->EnemyDirection, CurrentEnemy->Speed);
 
-	//On idle, don't do shooting stuff
-	if (CurrentEnemy->EnemyState == AIIdle)
+	//Don't shoot if we are in idle or aren't in sight, that is just rude
+	if (CurrentEnemy->EnemyState == AIIdle || CurrentEnemy->Position.y + 300 < CurrentPlayer.Position.y
+		|| CurrentEnemy->Position.x > GetCameraXPosition() + (PANELSIZE + CurrentEnemy->EnemySprite->Width / 4) / 2
+		|| CurrentEnemy->Position.x < GetCameraXPosition() - (PANELSIZE + CurrentEnemy->EnemySprite->Width / 4) / 2)
+	{
+		//Reverse the shoot cycle if needed
+		if (CurrentEnemy->TailSinValue < 0.8)
+			CurrentEnemy->TailSinValue += GetDeltaTime();
 		return;
+	}
 
 	//Shooting
 	if (!CurrentEnemy->canAttack)
@@ -597,11 +604,6 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 		float projectileSpeed = 1400;
 		if (CurrentEnemy->EnemySpriteParts.Weapon->FlipX)
 			projectileSpeed *= -1;
-
-		//Don't shoot if we aren't in sight, that is just rude
-		if (CurrentEnemy->Position.x > GetCameraXPosition() + (PANELSIZE + CurrentEnemy->EnemySprite->Width / 4) / 2
-		 || CurrentEnemy->Position.x < GetCameraXPosition() - (PANELSIZE + CurrentEnemy->EnemySprite->Width / 4) / 2)
-			return;
 
 		//NASTY NASTY HACKKKK
 		smexyArrow = CreateProjectile("TextureFiles/BallistaArrow.png", 
@@ -674,9 +676,10 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 						continue;
 					if (platformList[i].objID == -1)
 						break;
-					if (CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f && 
-						CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f &&
-						CurrentEnemy->Position.y < platformList[i].Position.y + 40)
+					//Don't jump if you are a ballista  :'[
+					if (CurrentEnemy->EnemyType != BasicRanged && CurrentEnemy->Position.y < platformList[i].Position.y + 40 &&
+						CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f && 
+						CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f)
 					{
 						CurrentEnemy->isJumping			= TRUE;
 						CurrentEnemy->canDropDownTimer	= (int)(2 / GetDeltaTime());
@@ -697,7 +700,7 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 					
 					if (CurrentEnemy->Position.x > wallList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f && 
 						CurrentEnemy->Position.x < wallList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f &&
-						wallList[i].Position.y + CurrentEnemy->EnemyCollider.height * 2 > CurrentEnemy->Position.y - CurrentEnemy->EnemyCollider.height)
+						CurrentEnemy->EnemyType != BasicRanged && wallList[i].Position.y + CurrentEnemy->EnemyCollider.height * 2 > CurrentEnemy->Position.y - CurrentEnemy->EnemyCollider.height)
 					{
 						CurrentEnemy->isJumping			= TRUE;
 						CurrentEnemy->canDropDownTimer	= (int)(2 / GetDeltaTime());
@@ -817,9 +820,9 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 								continue;
 							if (platformList[i].objID == -1)
 								break;
-							if (CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f && 
-								CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f &&
-								CurrentEnemy->Position.y < platformList[i].Position.y + 40)
+							if (CurrentEnemy->EnemyType != BasicRanged && CurrentEnemy->Position.y < platformList[i].Position.y + 40 &&
+								CurrentEnemy->Position.x > platformList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f && 
+								CurrentEnemy->Position.x < platformList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f)
 							{
 								CurrentEnemy->isJumping			= TRUE;
 								CurrentEnemy->canDropDownTimer	= (int)(2.0f / GetDeltaTime());
@@ -835,7 +838,7 @@ void EnemyAIUpdate(Enemy *CurrentEnemy)
 								break;
 							if (CurrentEnemy->Position.x > wallList[i].Position.x - (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == RIGHT ? 1 : 0) / GetDeltaTime()) - 60.0f && 
 								CurrentEnemy->Position.x < wallList[i].Position.x + (CurrentEnemy->Speed * (CurrentEnemy->EnemyDirection == LEFT ? 1 : 0) / GetDeltaTime()) + 60.0f &&
-								wallList[i].Position.y + CurrentEnemy->EnemyCollider.height * 2 > CurrentEnemy->Position.y - CurrentEnemy->EnemyCollider.height)
+								CurrentEnemy->EnemyType != BasicRanged && wallList[i].Position.y + CurrentEnemy->EnemyCollider.height * 2 > CurrentEnemy->Position.y - CurrentEnemy->EnemyCollider.height)
 							{
 								CurrentEnemy->isJumping			= TRUE;
 								CurrentEnemy->canDropDownTimer	= (int)(2 / GetDeltaTime());
