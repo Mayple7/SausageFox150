@@ -95,7 +95,7 @@ void InitializeLevel7(void)
 	spawnTimer = 0;
 	spawnTime = 2.0f;
 	levelTimer = 60.0f;
-	EnemyPanelNumber[0] = 0;
+	ResetEnemyPanelNumber();
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
