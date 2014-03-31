@@ -1,8 +1,7 @@
 #ifndef FOX_PARTICLES
 #define FOX_PARTICLES
 
-#define NUMBER_OF_PARTICLE_SYSTEMS 20
-#define SPRITE_NAME_LENGTH 50
+#define SPRITE_NAME_LENGTH 64
 
 #include "Vector2.h"
 #include "Sprite.h"

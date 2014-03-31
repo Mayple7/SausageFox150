@@ -46,11 +46,21 @@ static int levelComplete;
 static int beginningAnimation;
 static int keysObtained;
 static int goingBack;
+static int counter;
 
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
 
 FoxSound* BackSnd;
+
+TextGlyphs* IntelFoxTxtTwoKeys;
+TextGlyphs* IntelFoxTxtOneKeys;
+TextGlyphs* IntelFoxTxtEnd;
+
+FoxSound* IntelFoxTwoKeys;
+FoxSound* IntelFoxLook;
+FoxSound* IntelFoxOneKey;
+FoxSound* IntelFoxEnd;
 
 Platform* Plat;
 Wall* Wall1;
@@ -95,6 +105,7 @@ void InitializeLevel5(void)
 	beginningAnimation = TRUE;
 	keysObtained = FALSE;
 	goingBack = FALSE;
+	counter = 2 * FRAMERATE;
 	
 
 	// Initialize the player
@@ -102,6 +113,22 @@ void InitializeLevel5(void)
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
+
+	/////////////////////////////////
+	//		Text				   //
+	/////////////////////////////////
+	Vec3Set(&TextTint, 1, 1, 1);
+	IntelFoxTxtTwoKeys = CreateText("You need two keys!", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtTwoKeys, 500);
+	TextProgressiveInit(IntelFoxTxtTwoKeys);
+
+	IntelFoxTxtOneKeys = CreateText("You need one more key!", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtOneKeys, 500);
+	TextProgressiveInit(IntelFoxTxtOneKeys);
+
+	IntelFoxTxtEnd = CreateText("Head Underground!", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtEnd, 500);
+	TextProgressiveInit(IntelFoxTxtEnd);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -128,6 +155,16 @@ void InitializeLevel5(void)
 	CreateBoundingBoxes();
 
 	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
+	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+
+	IntelFoxTwoKeys = CreateSound("Sounds/IntelFoxLvl5TwoKeys.mp3", SmallSnd);
+	IntelFoxLook = CreateSound("Sounds/IntelFoxLvl5Look.mp3", SmallSnd);
+	IntelFoxOneKey = CreateSound("Sounds/IntelFoxLvl5OneKey.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl5End.mp3", SmallSnd);
+
+	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
 
@@ -137,6 +174,11 @@ void InitializeLevel5(void)
 	//Right Blocker Barrier
 	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, 820, 0);
 	RightBarrier->WallSprite->Visible = FALSE;
+
+	/////////////////////////////////
+	//		Objects				   //
+	/////////////////////////////////
+	CreatePaperScroll(0, 150);
 }
 
 /*************************************************************************/
@@ -279,6 +321,44 @@ void EventLevel(void)
 	ParticleSystemUpdate();
 	TreeBackgroundUpdate();
 
+	//Player Has two keys 
+	if(CurrentPlayer.armClear && CurrentPlayer.handClear && !beginningAnimation)
+	{
+		//Print Appropriate text and play certain audio
+		SetUpScrollWithText(IntelFoxTxtEnd, &counter);
+		if(!IntelFoxEnd->hasPlayed)
+		{
+			PlayAudio(IntelFoxEnd);
+			IntelFoxEnd->hasPlayed = TRUE;
+		}
+	}
+	//Player has one key
+	else if((CurrentPlayer.armClear || CurrentPlayer.handClear) && !beginningAnimation)
+	{
+		//Print Appropriate text and play certain audio
+		SetUpScrollWithText(IntelFoxTxtOneKeys, &counter);
+		if(!IntelFoxOneKey->hasPlayed)
+		{
+			PlayAudio(IntelFoxOneKey);
+			IntelFoxOneKey->hasPlayed = TRUE;
+		}
+	}
+	//Player has no keys
+	else if(!beginningAnimation)
+	{
+		//Print Appropriate text and play certain audio
+		SetUpScrollWithText(IntelFoxTxtTwoKeys, &counter);
+		if(!IntelFoxTwoKeys->hasPlayed)
+		{
+			PlayAudio(IntelFoxTwoKeys);
+			IntelFoxTwoKeys->hasPlayed = TRUE;
+		}
+		if(IntelFoxTwoKeys->hasPlayed && !FoxSoundCheckIsPlaying(IntelFoxTwoKeys) && !IntelFoxLook->hasPlayed)
+		{
+			PlayAudio(IntelFoxLook);
+			IntelFoxLook->hasPlayed = TRUE;
+		}
+	}
 
 	//Key Checking
 	if(CurrentPlayer.armClear && CurrentPlayer.handClear && !beginningAnimation)
