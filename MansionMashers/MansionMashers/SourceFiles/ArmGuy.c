@@ -119,9 +119,6 @@ void InitializeArmGuy(void)
 	//			Boss			   //
 	/////////////////////////////////
 	Boss = CreateArmGuyBoss(0, 0, &newID);
-	Boss->JabAttack.collisionDebug = TRUE;
-	Boss->SmashAttack.collisionDebug = TRUE;
-	Boss->SpinAttack.collisionDebug = TRUE;
 
 	/////////////////////////////////
 	//		On Death			   //

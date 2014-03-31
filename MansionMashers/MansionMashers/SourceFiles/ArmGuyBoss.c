@@ -95,14 +95,15 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->ArmGuyParticle = CreateFoxParticleSystem("TextureFiles/ArmGuyParticle.png", CurrentBoss->Position.x, CurrentBoss->Position.y - 260.0f, CurrentBoss->SpinSprite->ZIndex + 1, 0, 5, 0.0f, 90, 110, 1, 1, 90, 0, 750, 0.25f, 0.5f);
 
 	// Armguy colliders
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 530, (*objID)++);
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 430, (*objID)++);
 	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 300, 200, (*objID)++); 
 	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 100, (*objID)++); 
 	CreateCollisionBox(&CurrentBoss->SmashAttack, &CurrentBoss->Position, WeaponEnemy, 800, 200, (*objID)++);
 
 
 	// Sets the initial position of all colliders
-	CurrentBoss->SpinAttack.Position.y -= 2 * CurrentBoss->SpinAttack.height / 3;
+	CurrentBoss->BossCollider.Position.y -= CurrentBoss->BossCollider.height / 8;
+	CurrentBoss->SpinAttack.Position.y -= CurrentBoss->SpinAttack.height / 2;
 	CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - 200;
 	CurrentBoss->JabAttack.Position.y = -40;
 	CurrentBoss->SmashAttack.Position.x = 640;
@@ -147,9 +148,16 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->BodySprite->AnimationActive = FALSE;
 
 			if (CurrentBoss->BodySprite->Position.y < 75.0f)
+			{
 				CurrentBoss->BodySprite->Position.y += 320.0f * GetDeltaTime();
+				CurrentBoss->BossCollider.Position.y += 320.0f * GetDeltaTime();
+			}
 			else
+			{
 				CurrentBoss->BodySprite->Position.y = 75.0f;
+				CurrentBoss->BossCollider.Position.y = 75.0f - CurrentBoss->BossCollider.height / 8;
+			}
+
 			if(CurrentBoss->Position.x > 0)
 			{
 				// Pull arm back
@@ -246,9 +254,15 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			CurrentBoss->ArmGuyParticle->amountTotal = 0;
 
 			if (CurrentBoss->BodySprite->Position.y - 1024.0f * GetDeltaTime() > -200.0f)
+			{
 				CurrentBoss->BodySprite->Position.y -= 1024.0f * GetDeltaTime();
+				CurrentBoss->BossCollider.Position.y -= 1024.0f * GetDeltaTime();
+			}
 			else
+			{
 				CurrentBoss->BodySprite->Position.y = -200.0f;
+				CurrentBoss->BossCollider.Position.y = -200.0f - CurrentBoss->BossCollider.height / 8;
+			}
 
 			CurrentBoss->BodySprite->AnimationActive = TRUE;
 
@@ -314,9 +328,15 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		case Start:
 			//printf("SMASH TIME START\n");
 			if (CurrentBoss->BodySprite->Position.y + 480.0f * GetDeltaTime() < 250.0f)
+			{
 				CurrentBoss->BodySprite->Position.y += 480.0f * GetDeltaTime();
+				CurrentBoss->BossCollider.Position.y += 480.0f * GetDeltaTime();
+			}
 			else
+			{
 				CurrentBoss->BodySprite->Position.y = 250.0f;
+				CurrentBoss->BossCollider.Position.y = 250.0f - CurrentBoss->BossCollider.height / 8;
+			}
 
 			CurrentBoss->ArmSprite->Visible = FALSE;
 			CurrentBoss->ArmSmashSprite->Visible = TRUE;
@@ -350,9 +370,15 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			CurrentBoss->ArmGuyParticle->emitAngle = 90;
 
 			if (CurrentBoss->BodySprite->Position.y - 2048.0f * GetDeltaTime() > -200.0f)
+			{
 				CurrentBoss->BodySprite->Position.y -= 2048.0f * GetDeltaTime();
+				CurrentBoss->BossCollider.Position.y -= 2048.0f * GetDeltaTime();
+			}
 			else
+			{
 				CurrentBoss->BodySprite->Position.y = -200.0f;
+				CurrentBoss->BossCollider.Position.y = -200.0f - CurrentBoss->BossCollider.height / 8;
+			}
 			// Bring down the arm and perhaps the house!
 			CurrentBoss->SmashAttack.Position.y -= 3500 * GetDeltaTime();
 
@@ -381,9 +407,15 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		case End:
 			//printf("SMASH TIME END\n");
 			if (CurrentBoss->BodySprite->Position.y - 960.0f * GetDeltaTime() > -200.0f)
+			{
 				CurrentBoss->BodySprite->Position.y -= 960.0f * GetDeltaTime();
+				CurrentBoss->BossCollider.Position.y -= 960.0f * GetDeltaTime();
+			}
 			else
+			{
 				CurrentBoss->BodySprite->Position.y = -200.0f;
+				CurrentBoss->BossCollider.Position.y = -200.0f - CurrentBoss->BossCollider.height / 8;
+			}
 
 			CurrentBoss->BodySprite->AnimationActive = TRUE;
 
