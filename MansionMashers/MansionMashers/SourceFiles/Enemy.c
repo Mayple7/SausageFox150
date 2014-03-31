@@ -581,15 +581,11 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 	{
 		//GRIMY H4X OVAH H3RRE
 		if (CurrentEnemy->TailSinValue < 0)
-		{
 			CurrentEnemy->canAttack = TRUE;
-		}
 
 		//Arrow back yet dog?
-		if (CurrentEnemy->TailSinValue < 0.5 && !CurrentEnemy->EnemySpriteParts.Weapon->Visible)
-		{
-			CurrentEnemy->EnemySpriteParts.Weapon->Visible = TRUE;
-		}
+		if (CurrentEnemy->TailSinValue < 0.8 && !CurrentEnemy->EnemySpriteParts.Weapon->Visible)
+				CurrentEnemy->EnemySpriteParts.Weapon->Visible = TRUE;
 
 		//Time ticks by
 		CurrentEnemy->TailSinValue -= GetDeltaTime();
@@ -1086,13 +1082,21 @@ void EnemyAnimationBasicRanged(Enemy *Object)
 	//Arrow position
 	if (Object->EnemySprite->FlipX)
 	{
-		Object->EnemyWeapon->Position.x = Object->Position.x - 20 / BALLISTA_DEVISOR;
+		Object->EnemyWeapon->Position.x = Object->Position.x + 12 / BALLISTA_DEVISOR;
 		Object->EnemyWeapon->Position.y = Object->Position.y + 56 / BALLISTA_DEVISOR;
+
+		//Draw back the arrow
+		if (Object->TailSinValue < 0.5)
+			Object->EnemyWeapon->Position.x += 70 - Object->TailSinValue * 140;
 	}
 	else
 	{
-		Object->EnemyWeapon->Position.x = Object->Position.x + 20 / BALLISTA_DEVISOR;
+		Object->EnemyWeapon->Position.x = Object->Position.x - 12 / BALLISTA_DEVISOR;
 		Object->EnemyWeapon->Position.y = Object->Position.y + 56 / BALLISTA_DEVISOR;
+
+		//Draw back the arrow
+		if (Object->TailSinValue < 0.5)
+			Object->EnemyWeapon->Position.x -= 70 - Object->TailSinValue * 140;
 	}
 
 	Object->EnemySpriteParts.Weapon->FlipX = Object->EnemySprite->FlipX;
