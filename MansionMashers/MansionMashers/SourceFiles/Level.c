@@ -24,6 +24,7 @@
 
 static Sprite *HurtOverlay;
 static int lastHealth;
+static int lastDefense;
 static Sprite *GuudJub;
 static float holdTime;
 
@@ -137,14 +138,15 @@ void UpdatePlayerHurt(Player *CurrentPlayer)
 	}
 
 	//Displayer that player damage layer
-	if (lastHealth > CurrentPlayer->CurrentPlayerStats.CurrentHealth && lastHealth > 0)
+	if (lastHealth > CurrentPlayer->CurrentPlayerStats.CurrentHealth && lastHealth > 0 && lastDefense == CurrentPlayer->PlayerWeapon->BonusDefense)
 	{
 		float overlayScalar = 1.0f + 0.18f * ((float)CurrentPlayer->CurrentPlayerStats.CurrentHealth / CurrentPlayer->CurrentPlayerStats.MaxHealth);
 		HurtOverlay->ScaleX = overlayScalar;
 		HurtOverlay->ScaleY = overlayScalar;
 	}
 
-	lastHealth = CurrentPlayer->CurrentPlayerStats.CurrentHealth;
+	lastDefense = CurrentPlayer->PlayerWeapon->BonusDefense; //Player won't get hurt when picking weapon with less defense
+	lastHealth  = CurrentPlayer->CurrentPlayerStats.CurrentHealth;
 }
 
 /*************************************************************************/
