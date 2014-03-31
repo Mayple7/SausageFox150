@@ -155,7 +155,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	Animation(CurrentPlayer);
 
 	InitializePlayerRank(CurrentPlayer);
-	InitializePlayerHurt(CurrentPlayer);
+	if (GetCurrentState() != GS_CharacterSelect && GetCurrentState() != GS_MapLevel)
+		InitializePlayerHurt(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -388,7 +389,8 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	UpdatePlayerRank(CurrentPlayer);
 
 	//Update the player hurt overlay
-	UpdatePlayerHurt(CurrentPlayer);
+	if (GetCurrentState() != GS_CharacterSelect && GetCurrentState() != GS_MapLevel)
+		UpdatePlayerHurt(CurrentPlayer);
 
 	//Brings the player back to the surface if something bad happens
 	if(CurrentPlayer->Position.y < GROUNDLEVEL)

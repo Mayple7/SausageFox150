@@ -389,8 +389,8 @@ void ChangeTextString(TextGlyphs* FirstLetter, char* newString)
 	}
 	if(nextLetter)
 	{
-		prevLetter->NextLetter = NULL;
 		FreeText(nextLetter);
+		prevLetter->NextLetter = NULL;
 	}
 }
 

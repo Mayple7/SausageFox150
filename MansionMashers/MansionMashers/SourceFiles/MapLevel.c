@@ -282,7 +282,6 @@ void UpdateMapLevel(void)
 		SetCameraXPosition(PlayerIcon->Position.x + 300);
 	}
 	MapInfoText->Position.x = GetCameraXPosition();
-	UpdatePlayerHurt(&CurrentPlayer);
 	BoundingBoxUpdate();
 }
 

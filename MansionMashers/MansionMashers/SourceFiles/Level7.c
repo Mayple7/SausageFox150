@@ -229,15 +229,6 @@ void UpdateLevel7(void)
 		}	
 	}
 
-	while(wList->objID != -1)
-	{
-		if(wList->objID > 0 && wList->WeaponFOF == DroppedWeapon)
-		{
-			FreeWeapon(wList);
-		}
-		++wList;
-	}
-
 	// This should be the last line in this function
 	UpdateAllEnemies();
 	UpdateFloatingText();

@@ -331,7 +331,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		CurrentEnemy->EnemyParticleSystem->emitThenDestroy = TRUE;
 
 		//Give the player a chance at the enemy's weapon sometimes
-		if (CurrentEnemy->EnemyType == BasicMelee)
+		if (CurrentEnemy->EnemyType == BasicMelee && GetCurrentState() != GS_Level7) //No weapon drop on the super spawn level
 			dropWeapon = rand() % 2;
 		else
 			dropWeapon = 0;
