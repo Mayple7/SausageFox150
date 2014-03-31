@@ -164,7 +164,11 @@ void FreeEnemy(Enemy *CurrentEnemy)
 		CurrentEnemy->EnemyCollider.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentEnemy->EnemyCollider.DebugMesh);
 		if(CurrentEnemy->EnemyWeapon)
+		{
 			FreeWeapon(CurrentEnemy->EnemyWeapon);
+			CurrentEnemy->EnemyWeapon->WeaponGlyphs = NULL;
+			CurrentEnemy->EnemyWeapon->WeaponStatsGlyphs = NULL;
+		}
 		if (CurrentEnemy->EnemySprite->Created)
 		{
 			FreeSprite(CurrentEnemy->EnemySprite);

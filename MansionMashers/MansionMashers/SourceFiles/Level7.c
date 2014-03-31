@@ -222,16 +222,16 @@ void UpdateLevel7(void)
 		else if(spawnTimer >= spawnTime)
 		{
 			spawnTimer = 0;
-		}
+		}	
+	}
 
-		while(wList->objID != -1)
+	while(wList->objID != -1)
+	{
+		if(wList->objID > 0 && wList->WeaponFOF == DroppedWeapon)
 		{
-			if(wList->objID > 0 && wList->WeaponFOF == DroppedWeapon)
-			{
-				FreeWeapon(wList);
-			}
-			++wList;
+			FreeWeapon(wList);
 		}
+		++wList;
 	}
 
 	// This should be the last line in this function
