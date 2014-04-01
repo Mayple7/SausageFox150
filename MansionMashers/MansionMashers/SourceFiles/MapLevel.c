@@ -282,7 +282,6 @@ void UpdateMapLevel(void)
 		SetCameraXPosition(PlayerIcon->Position.x + 300);
 	}
 	MapInfoText->Position.x = GetCameraXPosition();
-	UpdatePlayerHurt(&CurrentPlayer);
 	BoundingBoxUpdate();
 }
 
@@ -465,13 +464,13 @@ void EventLevel(void)
 			iconPosition = GS_YeahGuy;
 		}
 		//Shop4
-		else if(PointRectCollision(&Shop4->ButtonCollider, &MouseClick) && (GS_Shop4 <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&Shop4->ButtonCollider, &MouseClick) && (GS_Level7 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Shop4);
 			iconPosition = GS_Shop4;
 		}
 		//Level7
-		else if(PointRectCollision(&Level7->ButtonCollider, &MouseClick) && (GS_Shop4 <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&Level7->ButtonCollider, &MouseClick) && (GS_Level7 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Level7);
 			iconPosition = GS_Level7;
@@ -566,108 +565,6 @@ void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 		Vec2Set(NewPosition, -596.4f, -41.4f);
 		break;
 	}
-}
-
-void UpdateProgression(Player *CurrentPlayer)
-{
-	Tutorial->ButtonSprite->Visible = TRUE;
-	Level1->ButtonSprite->Visible = TRUE;
-	Level2->ButtonSprite->Visible = TRUE;
-
-	Shop1->ButtonSprite->Visible = TRUE;
-	Level3->ButtonSprite->Visible = TRUE;
-	Level4->ButtonSprite->Visible = TRUE;
-
-	ArmGuy->ButtonSprite->Visible = TRUE;
-	Shop2->ButtonSprite->Visible = TRUE;
-
-	HandGuy->ButtonSprite->Visible = TRUE;
-	Shop3->ButtonSprite->Visible = TRUE;
-
-	Level5->ButtonSprite->Visible = TRUE;
-	Level6->ButtonSprite->Visible = TRUE;
-	YeahGuy->ButtonSprite->Visible = TRUE;
-
-	Shop4->ButtonSprite->Visible = TRUE;
-	Level7->ButtonSprite->Visible = TRUE;
-	Kevin->ButtonSprite->Visible = TRUE;
-
-	if(!Cheats)
-	{
-		switch(CurrentPlayer->CurrentLevel)
-		{
-		case GS_Kevin:
-			Kevin->ButtonSprite->Visible = FALSE;
-		case GS_Level7:
-		case GS_Shop4:
-			Level7->ButtonSprite->Visible = FALSE;
-			Shop4->ButtonSprite->Visible = FALSE;
-		case GS_YeahGuy:
-			YeahGuy->ButtonSprite->Visible = FALSE;
-		case GS_Level6:
-			Level6->ButtonSprite->Visible = FALSE;
-		case GS_Level5:
-		case GS_ArmGuy:
-		case GS_HandGuy:
-		case GS_Shop2:
-		case GS_Shop3:
-			Level5->ButtonSprite->Visible = FALSE;
-		case GS_Level4:
-		case GS_Level3:
-		case GS_Shop1:
-			Level3->ButtonSprite->Visible = FALSE;
-			Level4->ButtonSprite->Visible = FALSE;
-			Shop1->ButtonSprite->Visible = FALSE;;
-		case GS_Level2:
-			Level2->ButtonSprite->Visible = FALSE;
-		case GS_Level1:
-			Level1->ButtonSprite->Visible = FALSE;
-		case GS_Tutorial:
-			Tutorial->ButtonSprite->Visible = FALSE;
-		}
-		if(CurrentPlayer->armUnlock)
-		{
-			ArmGuy->ButtonSprite->Visible = FALSE;
-			
-			if(CurrentPlayer->armClear)
-			{
-				Shop2->ButtonSprite->Visible = FALSE;
-			}
-		}
-		if(CurrentPlayer->handUnlock)
-		{
-			HandGuy->ButtonSprite->Visible = FALSE;
-			if(CurrentPlayer->handClear)
-			{
-				Shop3->ButtonSprite->Visible = FALSE;
-			}
-		}
-	}
-	else
-	{
-		Tutorial->ButtonSprite->Visible = FALSE;
-		Level1->ButtonSprite->Visible = FALSE;
-		Level2->ButtonSprite->Visible = FALSE;
-
-		Shop1->ButtonSprite->Visible = FALSE;
-		Level3->ButtonSprite->Visible = FALSE;
-		Level4->ButtonSprite->Visible = FALSE;
-
-		ArmGuy->ButtonSprite->Visible = FALSE;
-		Shop2->ButtonSprite->Visible = FALSE;
-
-		HandGuy->ButtonSprite->Visible = FALSE;
-		Shop3->ButtonSprite->Visible = FALSE;
-
-		Level5->ButtonSprite->Visible = FALSE;
-		Level6->ButtonSprite->Visible = FALSE;
-		YeahGuy->ButtonSprite->Visible = FALSE;
-
-		Shop4->ButtonSprite->Visible = FALSE;
-		Level7->ButtonSprite->Visible = FALSE;
-		Kevin->ButtonSprite->Visible = FALSE;
-	}
-
 }
 
 void SetClearFlags(Player *CurrentPlayer)

@@ -283,7 +283,7 @@ Button *AddButton(void)
 	The wall added to the list
 */
 /*************************************************************************/
-Wall* AddWall(void)
+Wall *AddWall(void)
 {
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)
@@ -305,7 +305,7 @@ Wall* AddWall(void)
 	The WeaponShop added to the list
 */
 /*************************************************************************/
-WeaponShop* AddWeaponShop(void)
+WeaponShop *AddWeaponShop(void)
 {
 	int i;
 	for (i = 0; i < COLLIDEAMOUNT; i++)

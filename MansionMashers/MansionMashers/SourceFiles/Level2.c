@@ -48,7 +48,9 @@ static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int enemiesDefeated;
-TextGlyphs* LevelName;
+
+static int enemiesRemaining;
+
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
 
@@ -123,12 +125,6 @@ void InitializeLevel2(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1150, 0);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
-
-	CurrentHUD = CreateHUD(&CurrentPlayer);
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 2", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
 	
 	//Bounding Boxes
 	CreateBoundingBoxes();
@@ -260,6 +256,15 @@ void InitializeLevel2(void)
 	//Right
 	Spawners[5] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
 
+	// Set number of enemies remaining
+	enemiesRemaining = 0;
+	for(i = 0; i < PANELAMOUNT; ++i)
+	{
+		enemiesRemaining += EnemyPanelNumber[i];
+	}
+
+	// Create the HUD
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -279,10 +284,28 @@ void InitializeLevel2(void)
 /*************************************************************************/
 void UpdateLevel2(void)
 {
+	int i, numEnemies = 0;
+
 	EventLevel2();
 	
 	BoundingBoxUpdate();
 	ParticleSystemUpdate();
+
+	// Update remaining enemies
+	for(i = 0; i < PANELAMOUNT; ++i)
+	{
+		numEnemies += EnemyPanelNumber[i];
+	}
+
+	// Update HUD if needed
+	if(numEnemies < enemiesRemaining)
+	{
+		char CharTemp[32];
+
+		enemiesRemaining = numEnemies;
+		sprintf(CharTemp, "Enemies Remaining: %d", enemiesRemaining);
+		ChangeTextString(CurrentHUD->StatusText, CharTemp);
+	}
 
 	if(CurrentPlayer.Position.x > (PANELSIZE * 2 - PANELSIZE / 4))
 	{
@@ -330,7 +353,6 @@ void FreeLevel2(void)
 {
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Level3)
 	{
-		CurrentPlayer.levelClearBitFlags |= 4;
 		CurrentPlayer.CurrentLevel = GS_Level3;
 	}
 	else if(CurrentPlayer.CurrentLevel < GS_Level2)
@@ -338,7 +360,10 @@ void FreeLevel2(void)
 
 	//Only save stats if the level was actually completed
 	if (levelComplete)
+	{
+		CurrentPlayer.levelClearBitFlags |= 4;
 		SavePlayer(&CurrentPlayer);
+	}
 
 	FreeAllLists();
 	FreeHUD(CurrentHUD);

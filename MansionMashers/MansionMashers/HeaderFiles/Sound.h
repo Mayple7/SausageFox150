@@ -34,6 +34,7 @@ typedef struct FoxSound
 	FMOD_BOOL Paused;
 	int Type;
 	int sndID;
+	int hasPlayed;
 } FoxSound;
 
 typedef struct FoxChannels

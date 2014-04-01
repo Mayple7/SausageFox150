@@ -288,7 +288,7 @@ void updateSpriteAnimation(Sprite *CurrentSprite, Vec2 *offset)
 	//Calculate the offset difference between frames
 	Vec2 offsetDiff;
 
-	Vec2Set(&offsetDiff, 1.0f / CurrentSprite->NumWidthFrames, 1.0f / CurrentSprite->NumHeightFrames);
+	Vec2Set(&offsetDiff, CurrentSprite->OffsetX, CurrentSprite->OffsetY);
 	Vec2Zero(offset);
 
 	if(CurrentSprite->AnimationActive && !pause)
@@ -350,7 +350,10 @@ void DrawSprite(Sprite *CurrentSprite)
 		AEGfxSetTransparency(CurrentSprite->Alpha);
 
 	//Update the current frame on the animation
-	updateSpriteAnimation(CurrentSprite, &offset);
+	if(CurrentSprite->NumHeightFrames != 1 || CurrentSprite->NumWidthFrames != 1)
+		updateSpriteAnimation(CurrentSprite, &offset);
+	else
+		Vec2Set(&offset, 1, 1);
 
 	//Draw it like you wanna draw it gurl
 	/*if (GetLoadRatio() < 0.75f)

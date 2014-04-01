@@ -43,6 +43,9 @@ void FreeSprite(Sprite *object)
 		object->Created = 0;
 		if (object->MeshOwner)
 			AEGfxMeshFree(object->SpriteMesh);
+
+		//Set the object back to null
+		object = NULL;
 	}
 }
 
@@ -58,7 +61,7 @@ void FreeSprite(Sprite *object)
 void FreeFood(Food *CurrentFood)
 {
 	//BECAUSE EVERYONE LIKES FREE FOOD
-	if(CurrentFood->objID > -1)
+	if(CurrentFood->objID > 0)
 	{
 		CurrentFood->objID = 0;
 		CurrentFood->FoodCollider.collisionDebug = FALSE;
@@ -80,7 +83,7 @@ void FreeFood(Food *CurrentFood)
 /*************************************************************************/
 void FreePlatform(Platform *CurrentPlatform)
 {
-	if(CurrentPlatform->objID > -1)
+	if(CurrentPlatform->objID > 0)
 	{
 		//Free that platform
 		CurrentPlatform->objID = 0;
@@ -104,12 +107,14 @@ void FreePlatform(Platform *CurrentPlatform)
 void FreeWeapon(Weapon *CurrentWeapon)
 {
 	//Weapon, pronounced: "We-pown"
-	if(CurrentWeapon->objID > -1)
+	if(CurrentWeapon->objID > 0)
 	{
 		CurrentWeapon->objID = 0;
 		FreeMyAlloc(CurrentWeapon->WeaponName);
 		FreeMyAlloc(CurrentWeapon->WeaponStatsString);
+
 		CurrentWeapon->WeaponPickup.collisionDebug = FALSE;
+		FreeSprite(CurrentWeapon->WeaponHoverBackground);
 		AEGfxMeshFree(CurrentWeapon->WeaponPickup.DebugMesh);
 		AEGfxMeshFree(CurrentWeapon->WeaponAttack.DebugMesh);
 
@@ -130,7 +135,7 @@ void FreeWeapon(Weapon *CurrentWeapon)
 void FreeProjectile(Projectile *CurrentProjectile)
 {
 	//Project me babe
-	if(CurrentProjectile->objID > -1)
+	if(CurrentProjectile->objID > 0)
 	{
 		CurrentProjectile->objID = 0;
 		CurrentProjectile->ProjectileAttack.collisionDebug = FALSE;
@@ -159,7 +164,13 @@ void FreeEnemy(Enemy *CurrentEnemy)
 		CurrentEnemy->EnemyCollider.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentEnemy->EnemyCollider.DebugMesh);
 		if(CurrentEnemy->EnemyWeapon)
+		{
+			FreeText(CurrentEnemy->EnemyWeapon->WeaponGlyphs);
+			FreeText(CurrentEnemy->EnemyWeapon->WeaponStatsGlyphs);
+			CurrentEnemy->EnemyWeapon->WeaponGlyphs = NULL;
+			CurrentEnemy->EnemyWeapon->WeaponStatsGlyphs = NULL;
 			FreeWeapon(CurrentEnemy->EnemyWeapon);
+		}
 		if (CurrentEnemy->EnemySprite->Created)
 		{
 			FreeSprite(CurrentEnemy->EnemySprite);
@@ -198,9 +209,8 @@ void FreeFloatingText(TextGlyphs *FirstLetter)
 	}
 	if(floatTextList[i] == FirstLetter)
 	{
-		floatTextList[i] = NULL;
-
 		FreeText(FirstLetter);
+		floatTextList[i] = NULL;
 	}
 }
 
@@ -215,7 +225,7 @@ void FreeFloatingText(TextGlyphs *FirstLetter)
 /*************************************************************************/
 void FreeParticleSystem(ParticleSystem *CurrentSystem)
 {
-	if(CurrentSystem->objID > -1)
+	if(CurrentSystem->objID > 0)
 	{
 		//I'm sure everyone will miss you particle system
 		CurrentSystem->objID = 0;
@@ -233,7 +243,7 @@ void FreeParticleSystem(ParticleSystem *CurrentSystem)
 /*************************************************************************/
 void FreeParticle(Particle *CurrentParticle)
 {
-	if(CurrentParticle->objID > -1)
+	if(CurrentParticle->objID > 0)
 	{
 		//I'm sure everyone will miss you particle
 		CurrentParticle->objID = 0;
@@ -274,10 +284,10 @@ void FreeButton(Button *CurrentButton)
 /*************************************************************************/
 void FreeWall(Wall *CurrentWall)
 {
-	if(CurrentWall->objID > -1)
+	if(CurrentWall->objID > 0)
 	{
 		//Free that platform
-		CurrentWall->objID = -1;
+		CurrentWall->objID = 0;
 		CurrentWall->WallCollider.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentWall->WallCollider.DebugMesh);
 
@@ -363,7 +373,7 @@ void freeSpriteList(void)
 			FreeFood(&foodList[i]);
 		}
 		//Make sure the sprite exists
-		if (weaponList[i].objID)
+		if (weaponList[i].objID > 0)
 		{
 			//Free the mesh and texture data
 			FreeWeapon(&weaponList[i]);

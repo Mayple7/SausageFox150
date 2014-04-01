@@ -62,7 +62,7 @@ static int levelComplete;
 static int beginningAnimation;
 static int numPanels;
 static int PlayerIsAlive;
-TextGlyphs* LevelName;
+static int counter;
 
 Platform *Plat;
 Wall *Wall1;
@@ -71,10 +71,24 @@ HUD* CurrentHUD;
 
 Sprite* SecondOverlay[3];
 
+// Arrows
+Sprite *Arrow1;
+Sprite *Arrow2;
+Sprite *Arrow3;
+
+static int Arrow1Grow;
+static int Arrow2Grow;
+static int Arrow3Grow;
+
 static EnemySpawner* Spawners[6];
 static Enemy* TopDeckEnemy[4];
 
 Sprite* BlackOverlay;
+
+TextGlyphs *IntelFoxTxtStart;
+
+FoxSound* IntelFoxStart;
+FoxSound* IntelFoxEnd;
 
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
@@ -112,6 +126,7 @@ void InitializeLevel31(void)
 	numPanels = 3;
 	PlayerIsAlive = TRUE;
 	ResetEnemyPanelNumber();
+	counter = 2 * FRAMERATE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -119,9 +134,13 @@ void InitializeLevel31(void)
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
+	/////////////////////////////////
+	//		Text				   //
+	/////////////////////////////////
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 3", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
+	IntelFoxTxtStart = CreateText("Mash enemies to continue", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtStart, 500);
+	TextProgressiveInit(IntelFoxTxtStart);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -158,6 +177,12 @@ void InitializeLevel31(void)
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
+
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
+	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl3Mash.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl3End.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -233,6 +258,24 @@ void InitializeLevel31(void)
 	TopDeckEnemy[3] = CreateEnemy(BasicMelee, EnemyType, newID++, (2 * PANELSIZE), 110, 2);
 
 	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	// Arrows
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, PANELSIZE, 200);
+	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 2 * PANELSIZE, 200);
+
+	Arrow1->Visible = FALSE;
+	Arrow2->Visible = FALSE;
+	Arrow3->Visible = FALSE;
+
+	Arrow1Grow = FALSE;
+	Arrow2Grow = TRUE;
+	Arrow3Grow = FALSE;
+
+	CreatePaperScroll(GetCameraXPosition(), 150);
+
+	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
 
@@ -254,6 +297,17 @@ void UpdateLevel31(void)
 	//EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1 ,10);
 
+	if(!EnemyPanelNumber[0])
+		Arrow1->Visible = TRUE;
+	if(!EnemyPanelNumber[1])
+		Arrow2->Visible = TRUE;
+	if(!EnemyPanelNumber[2])
+		Arrow3->Visible = TRUE;
+
+	// Update all the arrows
+	UpdateArrow(Arrow1, &Arrow1Grow);
+	UpdateArrow(Arrow2, &Arrow2Grow);
+	UpdateArrow(Arrow3, &Arrow3Grow);
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -413,6 +467,8 @@ void EventLevel31(void)
 	TreeBackgroundUpdate();
 	UpdateAllEnemies();
 
+	//SetUpScrollWithText(IntelFoxTxtStart, &counter);
+
 	//Logic for upper deck overlays
 	if(CurrentPlayer.Position.y > 105)
 	{
@@ -436,6 +492,23 @@ void EventLevel31(void)
 			}
 		}
 	}
+
+	//Intel Fox Starting Narrative
+	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
+	{
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
+	}
+	
+	if(!EnemyPanelNumber[0] && !EnemyPanelNumber[1] && !EnemyPanelNumber[2])
+	{
+		if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
+		{
+			PlayAudio(IntelFoxEnd);
+			IntelFoxEnd->hasPlayed = TRUE;
+		}
+	}
+
 
 	//If player dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)

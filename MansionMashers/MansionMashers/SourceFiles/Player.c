@@ -155,7 +155,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	Animation(CurrentPlayer);
 
 	InitializePlayerRank(CurrentPlayer);
-	InitializePlayerHurt(CurrentPlayer);
+	if (GetCurrentState() != GS_CharacterSelect && GetCurrentState() != GS_MapLevel)
+		InitializePlayerHurt(CurrentPlayer);
 }
 
 /*************************************************************************/
@@ -174,7 +175,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
-	if (FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) && !CurrentPlayer->isAttacking)
+	if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer->isAttacking)
 	{
 		//Pick a random swing sound to play
 		if (rand() % 2)
@@ -305,18 +306,18 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 	}
 
+	// Drop down when S is pushed
+	if(FoxInput_KeyTriggered('S') && CurrentPlayer->PlayerRigidBody.onGround)
+	{
+		CurrentPlayer->PlayerRigidBody.onGround = FALSE;
+		CurrentPlayer->dropDown = TRUE;
+		CurrentPlayer->dropdownTimer = 0.25f;
+	}
+
 	//Jump when space is pushed or drop down if S is pushed as well
 	if(FoxInput_KeyTriggered(VK_SPACE))
 	{
 		Vec2 velocity;
-		
-		if(FoxInput_KeyDown('S') && CurrentPlayer->PlayerRigidBody.onGround)
-		{
-			CurrentPlayer->PlayerRigidBody.onGround = FALSE;
-			CurrentPlayer->dropDown = TRUE;
-			CurrentPlayer->dropdownTimer = 0.25f;
-		}
-
 		
 		Vec2Set(&velocity, 0.0f, 1080.0f);
 		if(CurrentPlayer->Position.y <= GROUNDLEVEL || CurrentPlayer->PlayerRigidBody.onGround)
@@ -388,7 +389,8 @@ void UpdatePlayerPosition(Player *CurrentPlayer)
 	UpdatePlayerRank(CurrentPlayer);
 
 	//Update the player hurt overlay
-	UpdatePlayerHurt(CurrentPlayer);
+	if (GetCurrentState() != GS_CharacterSelect && GetCurrentState() != GS_MapLevel)
+		UpdatePlayerHurt(CurrentPlayer);
 
 	//Brings the player back to the surface if something bad happens
 	if(CurrentPlayer->Position.y < GROUNDLEVEL)
@@ -456,10 +458,10 @@ void DestroyPlayer(Player *CurrentPlayer)
 /*************************************************************************/
 void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 {
-	//Placeholder max health formula
-	CurrentPlayerStats->MaxHealth = 50 + CurrentPlayerStats->Strength * 20;
+	// Max health formula
+	CurrentPlayerStats->MaxHealth = 100 + CurrentPlayerStats->Defense * 10;
 	if(CurrentPlayer.PlayerWeapon)
-		CurrentPlayerStats->MaxHealth += CurrentPlayer.PlayerWeapon->BonusStrength * 20;
+		CurrentPlayerStats->MaxHealth += CurrentPlayer.PlayerWeapon->BonusDefense * 10;
 }
 
 /*************************************************************************/
@@ -473,7 +475,7 @@ void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 /*************************************************************************/
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 {
-	//Placeholder move speed formula
+	// Move speed formula
 	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility * 15.0f + 600.0f;
 }
 
@@ -488,8 +490,8 @@ void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 /*************************************************************************/
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 {
-	//Placeholder attack speed formula
-	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 5.0f + 12.0f;
+	// Attack speed formula
+	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 2.0f + 8.0f;
 }
 
 /*************************************************************************/
@@ -503,8 +505,8 @@ void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 /*************************************************************************/
 void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 {
-	//Placeholder damage reduction formula
-	CurrentPlayerStats->DamageReduction = CurrentPlayerStats->Defense * 2.0f / 100.0f;
+	// Damage reduction formula
+	CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / CurrentPlayerStats->Defense) / 2.0f;
 }
 
 /*************************************************************************/
@@ -519,7 +521,7 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 void updateDamage(Player *CurrentPlayer)
 {
 	//Placeholder damage reduction formula
-	CurrentPlayer->CurrentPlayerStats.Damage = 10 + (CurrentPlayer->CurrentPlayerStats.Strength + CurrentPlayer->PlayerWeapon->BonusStrength) * 5;
+	CurrentPlayer->CurrentPlayerStats.Damage = 10 + (CurrentPlayer->CurrentPlayerStats.Strength + CurrentPlayer->PlayerWeapon->BonusStrength) * 2;
 }
 
 /*************************************************************************/
@@ -1440,6 +1442,9 @@ int LoadPlayer(Player *CurrentPlayer)
 			}
 			CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 
+			if (!strcmp(CurrentPlayer->PlayerWeapon->WeaponName,"Sausage Sausage of sausage"))
+				CurrentPlayer->PlayerWeapon->WeaponSprite->SpriteTexture = LoadTexture("TextureFiles/BattleAxe.png");
+
 			//Success!
 			return 1;
 		}
@@ -1475,9 +1480,9 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	CurrentPlayer->BuffHeld[2] = FALSE;
 	CurrentPlayer->BuffHeld[3] = FALSE;
 
-	CurrentPlayer->CurrentPlayerStats.Agility = 0;
-	CurrentPlayer->CurrentPlayerStats.Strength = 0;
-	CurrentPlayer->CurrentPlayerStats.Defense = 0;
+	CurrentPlayer->CurrentPlayerStats.Agility = 1;
+	CurrentPlayer->CurrentPlayerStats.Strength = 1;
+	CurrentPlayer->CurrentPlayerStats.Defense = 1;
 
 	CurrentPlayer->levelClearBitFlags = 0;
 	CurrentPlayer->armUnlock = FALSE;

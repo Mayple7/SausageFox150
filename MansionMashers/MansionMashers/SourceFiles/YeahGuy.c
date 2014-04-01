@@ -62,8 +62,6 @@ CollisionBox* GreenBuffCollider;
 Sprite* BlueBuff;
 CollisionBox* BlueBuffCollider;
 
-TextGlyphs* LevelName;
-
 Sprite* DebugCircle;
 
 YeahGuyBoss *Boss;
@@ -94,7 +92,6 @@ void LoadYeahGuy(void)
 /*************************************************************************/
 void InitializeYeahGuy(void)
 {
-	Vec3 TextTint;
 	Vec2 Position;
 	newID = 10;
 	ResetObjectList();
@@ -108,9 +105,6 @@ void InitializeYeahGuy(void)
 	buffsShown = FALSE;
 	buffTimer = 0.0f;
 	playerBuffTimer = 0.0f;
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("YeahGuy Level", 0, 300, 100, TextTint, Center, Border);
 
 	/////////////////////////////////
 	//		Backgrounds			   //

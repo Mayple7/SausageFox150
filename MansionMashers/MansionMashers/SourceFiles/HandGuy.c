@@ -42,7 +42,6 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
 
 Sprite* DebugCircle;
 
@@ -78,7 +77,6 @@ void LoadHandGuy(void)
 void InitializeHandGuy(void)
 {
 	int i;
-	Vec3 TextTint;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -86,10 +84,6 @@ void InitializeHandGuy(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("HandGuy Level", 0, 300, 100, TextTint, Center, Border);
-	TextDisappearInit(LevelName);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -144,7 +138,6 @@ void InitializeHandGuy(void)
 /*************************************************************************/
 void UpdateHandGuy(void)
 {
-	TextProgressiveDisappear(LevelName, 30);
 	EventHandGuy();
 	// This should be the last line in this function
 	UpdateHandGuyBoss(Boss);
@@ -252,10 +245,6 @@ void EventHandGuy(void)
 		InitializePause(&DrawHandGuy);
 		UpdatePause();
 		//TogglePauseSound(BackSnd);
-	}
-	if(FoxInput_KeyTriggered('K'))
-	{
-		TextDisappearEnd(LevelName);
 	}
 
 	if(FoxInput_KeyTriggered('Y'))

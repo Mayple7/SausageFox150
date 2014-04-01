@@ -39,6 +39,7 @@
 // ---------------------------------------------------------------------------
 // define
 #define PANELSIZE 1920.0f
+#define MAXENEMIES 10
 
 // ---------------------------------------------------------------------------
 // globals
@@ -46,7 +47,11 @@ static int newID;					// ID number
 static int levelComplete;
 static int PlayerIsAlive;
 static int beginningAnimation;
-TextGlyphs* LevelName;
+static float spawnTimer;			// Timer for spawning enemies
+static float spawnTime;				// When to spawn more enemies
+
+static float levelTimer;
+
 HUD* CurrentHUD;
 
 Sprite* BlackOverlay;
@@ -87,15 +92,15 @@ void InitializeLevel7(void)
 	PlayerIsAlive = TRUE;
 	levelComplete = FALSE;
 	beginningAnimation = TRUE;
+	spawnTimer = 0;
+	spawnTime = 2.0f;
+	levelTimer = 60.0f;
+	ResetEnemyPanelNumber();
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 	CurrentHUD = CreateHUD(&CurrentPlayer);
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 7", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -139,9 +144,12 @@ void InitializeLevel7(void)
 	//Far Left Wall
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, -958, 0);
 	Wall1->WallSprite->Visible = FALSE;
+	Wall1->enemyNotCollidable = TRUE;
+
 	//Far Right Wall
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, -958 + 2 * PANELSIZE, 0);
 	Wall1->WallSprite->Visible = FALSE;
+	Wall1->enemyNotCollidable = TRUE;
 
 	/////////////////////////////////
 	//			Particles		   //
@@ -170,9 +178,64 @@ void InitializeLevel7(void)
 /*************************************************************************/
 void UpdateLevel7(void)
 {
+	Weapon* wList = weaponList;
+
 	EventLevel();
 	EasyEditPlatform(Plat, 10);
+
+	if(levelTimer > 0)
+	{
+		char charTemp[32];
+		levelTimer -= GetDeltaTime();
+
+		// Update HUD text for time remaining
+		sprintf(charTemp, "Seconds Remaining: %d", (int)levelTimer);
+		ChangeTextString(CurrentHUD->StatusText, charTemp);
+		
+		// Infini-Spawner Logic
+		spawnTimer += GetDeltaTime();
+		if(spawnTimer >= spawnTime && EnemyPanelNumber[0] < MAXENEMIES - 2)
+		{
+			Enemy* CurrentEnemy;
+			int EnemyVer = rand() % 5;
+
+			// 1/5th chance to spawn a ranged enemy
+			if(EnemyVer > 1)
+				EnemyVer = 1;
+			else if(EnemyVer == 0)
+				EnemyVer = 2;
+
+			CurrentEnemy = CreateEnemy(EnemyVer, EnemyType, newID++, GetCameraXPosition() + PANELSIZE / 2, GROUNDLEVEL, 0);
+			CurrentEnemy->HomePos.x = GetCameraXPosition() - PANELSIZE / 2;
+			CurrentEnemy->EnemyState = AIIdle;
+
+			EnemyVer = rand() % 5;
+			// 1/5th chance to spawn a ranged enemy
+			if(EnemyVer > 1)
+				EnemyVer = 1;
+			else if(EnemyVer == 0)
+				EnemyVer = 2;
+
+			CurrentEnemy = CreateEnemy(EnemyVer, EnemyType, newID++, GetCameraXPosition() - PANELSIZE / 2, GROUNDLEVEL, 0);
+			CurrentEnemy->HomePos.x = GetCameraXPosition() + PANELSIZE / 2;
+			CurrentEnemy->EnemyState = AIIdle;
+
+			EnemyPanelNumber[0];
+			spawnTimer = 0;
+		}
+		else if(spawnTimer >= spawnTime)
+		{
+			spawnTimer = 0;
+		}	
+	}
+
 	// This should be the last line in this function
+	UpdateAllEnemies();
+	UpdateFloatingText();
+	ParticleSystemUpdate();
+	BoundingBoxUpdate();
+	UpdateAllProjectiles();
+
 	UpdatePlayerPosition(&CurrentPlayer);
 	UpdateHUDPosition(CurrentHUD);
 	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
@@ -307,12 +370,6 @@ void EventLevel(void)
 	//////////////////////////////////
 	//       EVERYTHING ELSE        //
 	//////////////////////////////////
-	BoundingBoxUpdate();
-	ParticleSystemUpdate();
-	//UpdateAllEnemies();
-	//UpdateFloatingText();
-	//UpdateAllProjectiles();
-
 	//Level Transition
 	BlackOverlay->Position.x = GetCameraXPosition();
 	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)

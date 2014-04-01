@@ -48,10 +48,18 @@ static int beginningAnimation;
 static int PlayerIsAlive;
 static int counter;
 static int enemiesDefeated;
-TextGlyphs *LevelName;
+
+static int enemiesRemaining;
+
+
+
 
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
+
+// Arrows
+Sprite *Arrow1;
+static int Arrow1Grow;
 
 Wall* Wall1;
 Wall* RightBarrier;
@@ -59,7 +67,12 @@ Wall* RightBarrier;
 EnemySpawner* Spawners[8];
 Enemy* PreSpawned;
 
+
+TextGlyphs *IntelFoxTxtStart;
+
 FoxSound* BackSnd;
+FoxSound* IntelFoxStart;
+FoxSound* IntelFoxEnd;
 
 // Tree Background
 Sprite* TreeBackground1[4];
@@ -100,22 +113,20 @@ void InitializeLevel4(void)
 	PlayerIsAlive = TRUE;
 	counter = 2 * FRAMERATE;
 	enemiesDefeated = FALSE;
+	
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1100, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
-	CurrentHUD = CreateHUD(&CurrentPlayer);
-
+	/////////////////////////////////
+	//		Text				   //
+	/////////////////////////////////
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 4", 0, 300, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
+	IntelFoxTxtStart = CreateText("Mash all the enemies", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtStart, 500);
+	TextProgressiveInit(IntelFoxTxtStart);
 
-	LevelName = CreateText("Defeat All Enemies", 0, 150, 100, TextTint, Center, Border);
-	ChangeTextZIndex(LevelName, 500);
-	TextProgressiveInit(LevelName);
-
-	CreatePaperScroll(150);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -144,8 +155,14 @@ void InitializeLevel4(void)
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
 	//Background Sound
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+
+	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl4Start.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl4End.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -191,7 +208,25 @@ void InitializeLevel4(void)
 	//Right
 	Spawners[7] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
 
+	// Set number of enemies remaining
+	enemiesRemaining = 0;
+	for(i = 0; i < PANELAMOUNT; ++i)
+	{
+		enemiesRemaining += EnemyPanelNumber[i];
+	}
+
+	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	// Arrows
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 0);
+	Arrow1->Visible = FALSE;
+	Arrow1Grow = FALSE;
+
+	CreatePaperScroll(GetCameraXPosition(), 150);
 	
+	// Create the HUD
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -207,9 +242,26 @@ void InitializeLevel4(void)
 /*************************************************************************/
 void UpdateLevel4(void)
 {
+	int i, numEnemies = 0;
 
 	EventLevel4();
 	PlayAudio(BackSnd);
+
+	// Update remaining enemies
+	for(i = 0; i < PANELAMOUNT; ++i)
+	{
+		numEnemies += EnemyPanelNumber[i];
+	}
+
+	// Update HUD if needed
+	if(numEnemies < enemiesRemaining)
+	{
+		char CharTemp[32];
+
+		enemiesRemaining = numEnemies;
+		sprintf(CharTemp, "Enemies Remaining: %d", enemiesRemaining);
+		ChangeTextString(CurrentHUD->StatusText, CharTemp);
+	}
 
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
@@ -363,35 +415,30 @@ void EventLevel4(void)
 	UpdateAllEnemies();
 	UpdateFloatingText();
 	UpdateAllProjectiles();
+	UpdateArrow(Arrow1, &Arrow1Grow);
 
-	//Can scroll so scroll
-	if(Scroll == TRUE)
-		ScrollPaperScroll(3);
-	//Scroll is out so roll out that text 
-	//but not if were trying to get rid of text
-	else if(!GetTextToDisappear())
-		TextProgressiveVisible(LevelName, 2);
-	//Time to rescroll and the text is up
-	if(ReScroll == TRUE && !GetTextInProgress())
+	//Intel Fox Starting Narrative
+	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
 	{
-		//wait a bit people need to read that stuff
-		if(counter > 0)
-			counter -= 1;
-		//get rid of that text and scroll
-		else
-		{
-			TextProgressiveDisappear(LevelName, 1);
-			FadeScroll();
-		}
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
 	}
 
+	SetUpScrollWithText(IntelFoxTxtStart, &counter);
 
-	//Check if all enemies are dead & remove right barrier
+	//Check if all enemies are dead & remove right barrier & play sounds & show arrow
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
 	{
 		enemiesDefeated = TRUE;
 		RightBarrier->Position.y = -1080;
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
+		if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
+		{
+			PlayAudio(IntelFoxEnd);
+			IntelFoxEnd->hasPlayed = TRUE;
+		}
+		Arrow1->Visible = TRUE;
+		Arrow1->Position.x = GetCameraXPosition() + 750;
 	}
 
 	//Level Transition

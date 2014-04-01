@@ -50,8 +50,6 @@ static int beginningAnimiation;
 static int PlayerIsAlive; 
 static int numPanels;
 
-TextGlyphs *LevelName;
-
 static EnemySpawner *Spawners[6]; //Two per panel, Left & Right
 
 Enemy *SetEnemy1;
@@ -61,7 +59,11 @@ Platform *Table1;
 
 Wall *Wall1;
 
+TextGlyphs *IntelFoxTxtStart;
+
 FoxSound *BackSnd;
+FoxSound* IntelFoxStart;
+FoxSound* IntelFoxEnd;
 
 Sprite *Arrow1;
 Sprite *Arrow2;
@@ -116,11 +118,13 @@ void InitializeLevel1(void)
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
+	/////////////////////////////////
+	//		Text				   //
+	/////////////////////////////////
 	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("Level 1", 0, 500, 100, TextTint, Center, Border);
-	ChangeTextVisibility(LevelName);
-
-	CreatePaperScroll(200);
+	IntelFoxTxtStart = CreateText("Mash Enemies!", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtStart, 500);
+	TextProgressiveInit(IntelFoxTxtStart);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -142,17 +146,14 @@ void InitializeLevel1(void)
 	//Bounding Boxes
 	CreateBoundingBoxes();
 
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
 	//Background Sound
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 
-	// Arrows
-	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 200, 1, 1, 0, 200);
-	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 200, 1, 1, PANELSIZE, 200);
-	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 200, 1, 1, 2 * PANELSIZE, 200);
-
-	Arrow1Grow = FALSE;
-	Arrow2Grow = TRUE;
-	Arrow3Grow = FALSE;
+	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl4Start.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl4End.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -220,6 +221,23 @@ void InitializeLevel1(void)
 	SetEnemy2->HomePos.x = 2 * PANELSIZE;
 
 	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	// Arrows
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, PANELSIZE, 200);
+	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 2 * PANELSIZE, 200);
+
+	Arrow1->Visible = FALSE;
+	Arrow2->Visible = FALSE;
+	Arrow3->Visible = FALSE;
+
+	Arrow1Grow = FALSE;
+	Arrow2Grow = TRUE;
+	Arrow3Grow = FALSE;
+
+	CreatePaperScroll(GetCameraXPosition(), 150);
+	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
 
@@ -238,6 +256,13 @@ void UpdateLevel1(void)
 	//Handle the special events right off the bat yo
 	EventLevel1();
 	PlayAudio(BackSnd);
+
+	if(!EnemyPanelNumber[0])
+		Arrow1->Visible = TRUE;
+	if(!EnemyPanelNumber[1])
+		Arrow2->Visible = TRUE;
+	if(!EnemyPanelNumber[2])
+		Arrow3->Visible = TRUE;
 
 	// Update all the arrows
 	UpdateArrow(Arrow1, &Arrow1Grow);

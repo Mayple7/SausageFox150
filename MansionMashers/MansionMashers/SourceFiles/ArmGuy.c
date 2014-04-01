@@ -45,7 +45,6 @@
 // globals
 static int newID;					// ID number
 static int levelComplete = FALSE;
-TextGlyphs* LevelName;
 
 ArmGuyBoss *Boss;
 
@@ -76,7 +75,6 @@ void LoadArmGuy(void)
 void InitializeArmGuy(void)
 {
 	int i;
-	Vec3 TextTint;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -84,10 +82,6 @@ void InitializeArmGuy(void)
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
-
-	Vec3Set(&TextTint, 1, 1, 1);
-	LevelName = CreateText("ArmGuy Level", 0, 300, 100, TextTint, Center, Border);
-	TextProgressiveInit(LevelName);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -125,9 +119,6 @@ void InitializeArmGuy(void)
 	//			Boss			   //
 	/////////////////////////////////
 	Boss = CreateArmGuyBoss(0, 0, &newID);
-	Boss->JabAttack.collisionDebug = TRUE;
-	Boss->SmashAttack.collisionDebug = TRUE;
-	Boss->SpinAttack.collisionDebug = TRUE;
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -144,7 +135,6 @@ void InitializeArmGuy(void)
 /*************************************************************************/
 void UpdateArmGuy(void)
 {
-	TextProgressiveVisible(LevelName, 30);
 	EventArmGuy();
 
 	// This should be the last line in this function
@@ -246,10 +236,6 @@ void EventArmGuy(void)
 		InitializePause(&DrawArmGuy);
 		UpdatePause();
 		//TogglePauseSound(BackSnd);
-	}
-	if(FoxInput_KeyTriggered('K'))
-	{
-		TextProgressiveEnd(LevelName);
 	}
 
 	//////////////////////////////////

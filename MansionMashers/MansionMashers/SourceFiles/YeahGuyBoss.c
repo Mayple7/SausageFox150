@@ -804,7 +804,11 @@ static void PlayerDamageResult(int damage)
 	if(Cheats)
 		damageDealt = 0;
 	else
-		damageDealt = damage;
+	{
+		damageDealt = (int)(damage * (1.0f - CurrentPlayer.CurrentPlayerStats.DamageReduction));
+		if(damageDealt == 0)
+			damageDealt = 1;
+	}
 	
 	CurrentPlayer.CurrentPlayerStats.CurrentHealth -= damageDealt;
 	sprintf(num, "-%d", damageDealt);

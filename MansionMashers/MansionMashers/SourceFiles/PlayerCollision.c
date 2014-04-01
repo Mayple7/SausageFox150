@@ -231,7 +231,7 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 	if(Cheats)
 		damageDealt = 0;
 	else
-		damageDealt = CurrentEnemy->CurrentEnemyStats.Damage;
+		damageDealt = (int)(CurrentEnemy->CurrentEnemyStats.Damage * (1.0f - CurrentPlayer->CurrentPlayerStats.DamageReduction));
 	
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
@@ -261,7 +261,11 @@ void PlayerCollideEnemyProjectile(Player* CurrentPlayer, Projectile *CurrentProj
 	if(Cheats)
 		damageDealt = 0;
 	else
-		damageDealt = CurrentProjectile->Damage;
+	{
+		damageDealt = (int)(CurrentProjectile->Damage * (1.0f - CurrentPlayer->CurrentPlayerStats.DamageReduction));
+		if(damageDealt == 0)
+			damageDealt = 1;
+	}
 	
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
