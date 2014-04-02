@@ -105,6 +105,7 @@ typedef struct Player
 	float Speed;
 
 	int isAttacking;
+	int AttackType; //0 = hitting, 1 = projectile
 	int isBlocking;
 
 	float LegSinValue;
