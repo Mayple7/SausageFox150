@@ -135,6 +135,7 @@ void InitializeLevel2(void)
 	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 5, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan0Overlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 5, 1, 1, 1920, 0);
+	CreateSprite("TextureFiles/Lvl1Pan2PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0); 
 	CreateSprite("TextureFiles/OutsideMan2.png", 1920, 1080, 5, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan2Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 5, 1, 1, 1920 * 3, 0);
@@ -186,7 +187,7 @@ void InitializeLevel2(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Hidden Wall for beginning animation
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920, 300.0f, newID++, -1920, -332);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920, 500.0f, newID++, -1920, -432);
 	Wall1->WallSprite->Visible = FALSE;
 	
 	//Stairs
@@ -194,20 +195,13 @@ void InitializeLevel2(void)
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -618, -281);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -675, -266);
-	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -559, -336);
-	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -604, -321);
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -488, -370);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -538, -355);
-	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -408, -420);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -473, -404);
-	Wall1->WallSprite->Visible = FALSE;
+	
 	//Left Bounding Wall
 	LeftBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
 	LeftBarrier->WallSprite->Visible = FALSE;
