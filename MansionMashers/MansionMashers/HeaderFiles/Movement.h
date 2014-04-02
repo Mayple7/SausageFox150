@@ -2,6 +2,10 @@
 #define FOX_MOVEMENT
 
 #include "Vector2.h"
+#include "FoxObjects.h"
+#include "HandGuyBoss.h"
+
+#define BALLISTA_DEVISOR 1.4f
 
 enum Direction{ UP, LEFT, DOWN, RIGHT };
 

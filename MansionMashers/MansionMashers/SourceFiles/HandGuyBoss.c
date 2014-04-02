@@ -28,6 +28,7 @@
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
+#include "../HeaderFiles/Movement.h"
 
 // ---------------------------------------------------------------------------
 // globals
@@ -72,6 +73,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	Vec2Set(&CurrentBoss->Position, 700, -200);
 	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempHandGuy.png", 150, 300, 10, 1, 1, 700, -200);
 	CurrentBoss->BodySprite->FlipX = TRUE;
+	CurrentBoss->BodySprite->Visible = FALSE;
 	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/QuickJab.png", 200, 200, 11, 4, 4, 580, -120);
 	CurrentBoss->JabSprite->FlipX = TRUE;
 	CurrentBoss->JabSprite->AnimationSpeed = 3;
@@ -82,10 +84,11 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->CurrentState = Cooldown;
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = B;
+	CurrentBoss->Speed = 0;
 
 	// Armguy colliders
 	CurrentBoss->ShoutRadius = 600.0f;
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 320, (*objID)++);
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 100, 200, (*objID)++);
 	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 200, (*objID)++); 
 
 	// Sets the initial position of all colliders
@@ -103,7 +106,54 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->QuestionDamage = 10;
 	CurrentBoss->JabDamage = 15;
 
+	// Player Sprites
+	CreateHandGuySprites(CurrentBoss);
+
 	return CurrentBoss;
+}
+
+
+/*************************************************************************/
+/*!
+	\brief
+	Creates the boss's sprites
+
+	\param Object
+	The boss to create
+*/
+/*************************************************************************/
+void CreateHandGuySprites(HandGuyBoss *Object)
+{
+	Object->HandGuySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/HandGuyBody.png", 300.0f, 300.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+
+	Object->HandGuySpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/HandGuyArmUpper.png", 128.0f, 128.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+
+	Object->HandGuySpriteParts.ArmUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmUpper.png", 128.0f, 128.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.ArmUpper2->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->HandGuySpriteParts.ArmLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerIn.png", 128.0f, 128.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.ArmLower2->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->HandGuySpriteParts.LegUpper = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 128.0f, 128.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.LegUpper->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->HandGuySpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 128.0f, 128.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.LegLower->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->HandGuySpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 128.0f, 128.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.LegUpper2->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->HandGuySpriteParts.LegLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 128.0f, 128.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.LegLower2->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->HandGuySpriteParts.Tail = (Sprite *) CreateSpriteNoMesh("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.Tail->SpriteMesh = Object->HandGuySpriteParts.Body->SpriteMesh;
+
+	Object->HandGuySpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3;
+
+	Object->HandGuySpriteParts.ArmLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerOut.png", 128.0f, 128.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.ArmLower->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
+
 }
 
 /*************************************************************************/
@@ -123,6 +173,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 	static int numProjectiles;
 	float projectileAngle;
 	int movementPicker;
+	CurrentBoss->Speed = 0;
 
 	switch(CurrentBoss->CurrentState)
 	{
@@ -133,12 +184,12 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			//printf("JAB TIME START\n");
 			CurrentBoss->dropDown = FALSE;
 			CurrentBoss->cooldownTimer += GetDeltaTime();
-
+			CurrentBoss->Speed = 1000.0f;
 			// Move into damage range
 			if(CurrentBoss->Position.x > CurrentPlayer.Position.x + CurrentBoss->JabAttack.width)
-				CurrentBoss->Position.x -= 1000 * GetDeltaTime();
+				CurrentBoss->Position.x -= CurrentBoss->Speed * GetDeltaTime();
 			else if(CurrentBoss->Position.x < CurrentPlayer.Position.x - CurrentBoss->JabAttack.width)
-				CurrentBoss->Position.x += 1000 * GetDeltaTime();
+				CurrentBoss->Position.x += CurrentBoss->Speed * GetDeltaTime();
 			// Don't attack on the very first frame
 			else if(CurrentBoss->cooldownTimer > GetDeltaTime() * 2 && CollisionRectangles(&CurrentPlayer.PlayerCollider, &CurrentBoss->JabAttack))
 			{
@@ -148,7 +199,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			}
 
 			// Jump up to the platform if needed
-			if((CurrentPlayer.PlayerRigidBody.Velocity.y >= 0 || CurrentPlayer.Position.y > -15) && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4)
+			if((CurrentPlayer.PlayerRigidBody.Velocity.y >= 0 || CurrentPlayer.Position.y > -15) && CurrentBoss->Position.y <= GROUNDLEVEL)
 			{
 				// Set y velocity for jumping
 				Vec2 velocity;
@@ -244,7 +295,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		{
 		case Start:
 			//printf("QUESTION TIME START\n");
-			numProjectiles = 0;
+			CurrentBoss->numProjectiles = 0;
 			projectileAngle = 0;
 			CurrentBoss->InnerState = Attack;
 			break;
@@ -254,11 +305,15 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			// Throws out ? every 0.75s
 			if(CurrentBoss->cooldownTimer >= 0.75f)
 			{
+				CurrentBoss->HandGuySpriteParts.AttackRotationArm = 0;
+				CurrentBoss->HandGuySpriteParts.AttackRotationArmLower = 0;
+				CurrentBoss->HandGuySpriteParts.AttackRotationArm2 = 0;
+				CurrentBoss->HandGuySpriteParts.AttackRotationArmLower2 = 0;
 				// Creates the projectile and aims to in the direction of the player in a cone
 				if(CurrentPlayer.Position.x > CurrentBoss->Position.x)
 				{
 					projectileAngle = 0;
-					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle + (numProjectiles * 12 * FOX_PI / 180.0f));
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle + (CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
 					FreeSprite(CurrentProjectile->ProjectileSprite);
 					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
 					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
@@ -267,18 +322,18 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				else
 				{
 					projectileAngle = FOX_PI;
-					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle - (float)(numProjectiles * 12 * FOX_PI / 180.0f));
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle - (float)(CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
 					FreeSprite(CurrentProjectile->ProjectileSprite);
 					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
 					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
 				}
 
 				CurrentBoss->cooldownTimer = 0.0f;
-				++numProjectiles;
+				++CurrentBoss->numProjectiles;
 			}
 
 			// Change to end once enough projectiles are created
-			if(numProjectiles >= 5)
+			if(CurrentBoss->numProjectiles >= 5)
 			{
 				CurrentBoss->InnerState = End;
 				CurrentBoss->cooldownTimer = 0.0f;
@@ -298,6 +353,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		}
 		break;
 	case Move:
+		
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
@@ -347,24 +403,23 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			CurrentBoss->InnerState = Attack;
 			break;
 		case Attack:
+			CurrentBoss->Speed = 750.0f;
 			//printf("MOVE TIME START\n");
 			switch(CurrentBoss->PositionState)
 			{
 			// Left side
 			case A:
 				CurrentBoss->dropDown = TRUE;
-
 				if(CurrentBoss->Position.x > -775.0f)
-					CurrentBoss->Position.x -= 750 * GetDeltaTime();
+					CurrentBoss->Position.x -= CurrentBoss->Speed * GetDeltaTime();
 				else
 					CurrentBoss->InnerState = End;
 				break;
 			// Right side
 			case B:
 				CurrentBoss->dropDown = TRUE;
-
 				if(CurrentBoss->Position.x < 775.0f)
-					CurrentBoss->Position.x += 750 * GetDeltaTime();
+					CurrentBoss->Position.x += CurrentBoss->Speed * GetDeltaTime();
 				else
 					CurrentBoss->InnerState = End;
 				break;
@@ -374,9 +429,9 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 
 				// Move to the middle
 				if(CurrentBoss->Position.x < -20.0f)
-					CurrentBoss->Position.x += 750 * GetDeltaTime();
+					CurrentBoss->Position.x += CurrentBoss->Speed * GetDeltaTime();
 				else if(CurrentBoss->Position.x > 20.0f)
-					CurrentBoss->Position.x -= 750 * GetDeltaTime();
+					CurrentBoss->Position.x -= CurrentBoss->Speed * GetDeltaTime();
 				else
 					CurrentBoss->InnerState = End;
 				break;
@@ -386,14 +441,14 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 
 				// Move to the middle
 				if(CurrentBoss->Position.x < -20.0f)
-					CurrentBoss->Position.x += 750 * GetDeltaTime();
+					CurrentBoss->Position.x += CurrentBoss->Speed * GetDeltaTime();
 				else if(CurrentBoss->Position.x > 20.0f)
-					CurrentBoss->Position.x -= 750 * GetDeltaTime();
-				else if(CurrentBoss->Position.y > -15 && CurrentBoss->HandGuyRigidBody.onGround)
+					CurrentBoss->Position.x -= CurrentBoss->Speed * GetDeltaTime();
+				else if(CurrentBoss->Position.y > -75 && CurrentBoss->HandGuyRigidBody.onGround)
 					CurrentBoss->InnerState = End;
 
 				// Jump up to the platform if needed
-				if(CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4 && (CurrentBoss->Position.x < 200 && CurrentBoss->Position.x > -200))
+				if(CurrentBoss->Position.y <= GROUNDLEVEL && (CurrentBoss->Position.x < 200 && CurrentBoss->Position.x > -200))
 				{
 					// Set y velocity for jumping
 					Vec2 velocity;
@@ -468,16 +523,21 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		break;
 	}
 
+	if (CurrentBoss->Speed < 0.001f)
+		CurrentBoss->LegSinValue = 0;
+
+	HandGuyAnimation(CurrentBoss);
+
 	// Set acceleration to zero
 	ZeroAcceleration(&CurrentBoss->HandGuyRigidBody);
 
 	//Brings the player back to the surface if something bad happens
-	if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 < GROUNDLEVEL)
+	if(CurrentBoss->Position.y < GROUNDLEVEL)
 	{
-		CurrentBoss->Position.y = GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4;
+		CurrentBoss->Position.y = GROUNDLEVEL;
 	}
 	//Stop vertical velocity and acceleration when the player lands on the floor
-	if(CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 4 <= GROUNDLEVEL || CurrentBoss->HandGuyRigidBody.onGround)
+	if(CurrentBoss->Position.y <= GROUNDLEVEL || CurrentBoss->HandGuyRigidBody.onGround)
 	{
 		Vec2Zero(&CurrentBoss->HandGuyRigidBody.Acceleration);
 		Vec2Zero(&CurrentBoss->HandGuyRigidBody.Velocity);

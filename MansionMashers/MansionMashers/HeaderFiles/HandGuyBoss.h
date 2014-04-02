@@ -1,16 +1,39 @@
-#ifndef FOX_ARMBOSS
-#define FOX_ARMBOSS
+#ifndef FOX_HANDBOSS
+#define FOX_HANDBOSS
 
 #include "Vector2.h"
 #include "RigidBody.h"
 #include "Sprite.h"
 #include "CollisionBox.h"
 #include "Platform.h"
+#include "FoxObjects.h"
+
+
+typedef struct HandGuyParts
+{
+	Sprite *LegUpper;
+	Sprite *LegLower;
+	Sprite *LegUpper2;
+	Sprite *LegLower2;
+	Sprite *Skirt;
+	Sprite *Body;
+	Sprite *Tail;
+	Sprite *ArmUpper;
+	Sprite *ArmLower;
+	Sprite *ArmUpper2;
+	Sprite *ArmLower2;
+	float AttackRotationArm;
+	float AttackRotationArmLower;
+	float AttackRotationArm2;
+	float AttackRotationArmLower2;
+}HandGuyParts;
 
 typedef struct HandGuyBoss
 {
 	Sprite *BodySprite;
 	Sprite *JabSprite;
+	
+	HandGuyParts HandGuySpriteParts;
 
 	int CurrentState;
 	int InnerState;
@@ -32,6 +55,12 @@ typedef struct HandGuyBoss
 	int MaxHealth;
 	int CurrentHealth;
 
+	int numProjectiles;
+
+	float LegSinValue;
+	float TailSinValue;
+
+	float Speed;
 	Vec2 Position;
 }HandGuyBoss;
 
@@ -42,5 +71,7 @@ void DetectHandGuyBossCollision(HandGuyBoss *CurrentBoss);
 void HandGuyBossCollideWeapon(HandGuyBoss *CurrentBoss);
 static void PlayerDamageResult(int damage);
 void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatform);
+void HandGuyAnimation( HandGuyBoss *Object);
+void CreateHandGuySprites(HandGuyBoss *Object);
 
 #endif
