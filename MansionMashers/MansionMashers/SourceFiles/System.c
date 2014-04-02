@@ -1,3 +1,4 @@
+/*****************************************************************************/
 /*
 File:				System.c
 Author:				Juli Gregg (j.gregg)
@@ -10,7 +11,8 @@ Functions:
 Copyright (C) 2014 DigiPen Institute of Technology. 
 Reproduction or disclosure of this file or its contents without the prior 
 written consent of DigiPen Institute of Technology is prohibited. 
-*/ 
+*/
+/*****************************************************************************/
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/FoxEngine.h"
@@ -21,6 +23,12 @@ FMOD_RESULT result;
 int winWidth, winHeight;
 int maxWidth, maxHeight;
 
+/*************************************************************************/
+/*!
+	\brief
+	Function to initialize stuff needed for engine at start
+*/
+/*************************************************************************/
 void FoxSystemInitialize(void)
 {
 	char Buffer[100];
@@ -59,6 +67,7 @@ void FoxSystemInitialize(void)
 	SFXVolume /= 100.0f;
 	BGMVolume /= 100.0f;
 
+	//Initilize sound stuff and FMOD
 	FMODInit();
 	ResetChannelGroupList();
 	ChannelController = CreateChannelGroups();
@@ -68,12 +77,25 @@ void FoxSystemInitialize(void)
 	InitWindow();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Exits system (mostly calls sound system stuff)
+*/
+/*************************************************************************/
 void FoxSystemExit(void)
 {
+	//Free Channel Groups(Effects & Volume) and then Quit Fmod
 	FreeChannelGroupList();
 	FMODQuit();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Sets up window for correct aspect ration
+*/
+/*************************************************************************/
 void InitWindow(void)
 {
 	RECT rect;
