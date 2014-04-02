@@ -42,4 +42,7 @@ void TextDisappearEnd(TextGlyphs* FirstLetter);
 int GetTextInProgress(void);
 int GetTextToDisappear(void);
 
+void CreateComparisonText(Player *CurrentPlayer, Weapon *CurrentWeapon);
+void ComparisonTextUpdate(TextGlyphs* FirstLetter);
+
 #endif

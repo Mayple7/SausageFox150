@@ -705,3 +705,182 @@ int GetTextToDisappear(void)
 {
 	return texttoDisappear;
 }
+
+/*************************************************************************/
+/*!
+	\brief
+	Creates the collision text
+
+	\param CurrentPlayer
+	The player to compare
+
+	\param CurrentWeapon
+	The weapon to compare
+*/
+/*************************************************************************/
+void CreateComparisonText(Player *CurrentPlayer, Weapon *CurrentWeapon)
+{
+	char comparisontString[30];
+	char num[10];
+
+	// Set up string for strength
+	if(CurrentPlayer->PlayerWeapon->BonusStrength < CurrentWeapon->BonusStrength)
+	{
+		strcpy(comparisontString, "+");
+		sprintf(num, "%d", CurrentWeapon->BonusStrength - CurrentPlayer->PlayerWeapon->BonusStrength);
+		strcat(comparisontString, num);
+	}
+	else if(CurrentPlayer->PlayerWeapon->BonusStrength > CurrentWeapon->BonusStrength)
+	{
+		strcpy(comparisontString, "-");
+		sprintf(num, "%d", CurrentPlayer->PlayerWeapon->BonusStrength - CurrentWeapon->BonusStrength);
+		strcat(comparisontString, num);
+	}
+	else
+	{
+		strcpy(comparisontString, "0");
+	}
+
+	// Set up string for agility
+	if(CurrentPlayer->PlayerWeapon->BonusAgility < CurrentWeapon->BonusAgility)
+	{
+		strcat(comparisontString, "str +");
+		sprintf(num, "%d", CurrentWeapon->BonusAgility - CurrentPlayer->PlayerWeapon->BonusAgility);
+		strcat(comparisontString, num);
+	}
+	else if(CurrentPlayer->PlayerWeapon->BonusAgility > CurrentWeapon->BonusAgility)
+	{
+		strcat(comparisontString, "str -");
+		sprintf(num, "%d", CurrentPlayer->PlayerWeapon->BonusAgility - CurrentWeapon->BonusAgility);
+		strcat(comparisontString, num);
+	}
+	else
+	{
+		strcpy(comparisontString, "str 0");
+	}
+
+	// Set up string for defense
+	if(CurrentPlayer->PlayerWeapon->BonusDefense < CurrentWeapon->BonusDefense)
+	{
+		strcat(comparisontString, "agi +");
+		sprintf(num, "%d", CurrentWeapon->BonusDefense - CurrentPlayer->PlayerWeapon->BonusDefense);
+		strcat(comparisontString, num);
+	}
+	else if(CurrentPlayer->PlayerWeapon->BonusDefense > CurrentWeapon->BonusDefense)
+	{
+		strcat(comparisontString, "agi -");
+		sprintf(num, "%d", CurrentPlayer->PlayerWeapon->BonusDefense - CurrentWeapon->BonusDefense);
+		strcat(comparisontString, num);
+	}
+	else
+	{
+		strcat(comparisontString, "agi 0");
+	}
+	
+	// Add on the DEF string segment
+	strcat(comparisontString, "def");
+
+	ChangeTextString(CurrentPlayer->ComparisonGlyphs, comparisontString);
+}
+
+
+/*************************************************************************/
+/*!
+	\brief
+	Updates and colors the comparison text
+*/
+/*************************************************************************/
+void ComparisonTextUpdate(TextGlyphs* FirstLetter)
+{
+	TextGlyphs* nextLetter = FirstLetter;
+	float R, G, B;
+
+	// Check if the strength is an improvement or not
+	if(!nextLetter)
+		return;
+	if(nextLetter->letter == '+')
+	{
+		R = 0.0f;
+		G = 1.0f;
+		B = 0.0f;
+	}
+	else if(nextLetter->letter == '-')
+	{
+		R = 1.0f;
+		G = 0.0f;
+		B = 0.0f;
+	}
+	else
+	{
+		R = 0.0f;
+		G = 0.0f;
+		B = 0.0f;
+	}
+
+	// Updates the color
+	while(nextLetter && nextLetter->letter != 32)
+	{
+		Vec3Set(&nextLetter->Glyph->Tint, R, G, B);
+		nextLetter = nextLetter->NextLetter;
+	}
+	nextLetter = nextLetter->NextLetter;
+
+	// Check if the agility is an improvement or not
+	if(!nextLetter)
+		return;
+	if(nextLetter->letter == '+')
+	{
+		R = 0.0f;
+		G = 1.0f;
+		B = 0.0f;
+	}
+	else if(nextLetter->letter == '-')
+	{
+		R = 1.0f;
+		G = 0.0f;
+		B = 0.0f;
+	}
+	else
+	{
+		R = 0.0f;
+		G = 0.0f;
+		B = 0.0f;
+	}
+
+	// Updates the color
+	while(nextLetter && nextLetter->letter != 32)
+	{
+		Vec3Set(&nextLetter->Glyph->Tint, R, G, B);
+		nextLetter = nextLetter->NextLetter;
+	}
+	nextLetter = nextLetter->NextLetter;
+
+	// Check if the defense is an improvement or not
+	if(!nextLetter)
+		return;
+	if(nextLetter->letter == '+')
+	{
+		R = 0.0f;
+		G = 1.0f;
+		B = 0.0f;
+	}
+	else if(nextLetter->letter == '-')
+	{
+		R = 1.0f;
+		G = 0.0f;
+		B = 0.0f;
+	}
+	else
+	{
+		R = 0.0f;
+		G = 0.0f;
+		B = 0.0f;
+	}
+
+	// Updates the color
+	while(nextLetter && nextLetter->letter != 32)
+	{
+		Vec3Set(&nextLetter->Glyph->Tint, R, G, B);
+		nextLetter = nextLetter->NextLetter;
+	}
+}

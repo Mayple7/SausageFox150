@@ -48,6 +48,7 @@
 /*************************************************************************/
 void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, float xPos, float yPos)
 {
+	Vec3 TextTint;
 	int i, startingBuff;
 
 	for(i = 0; i < COLLIDEAMOUNT; i++)
@@ -125,6 +126,10 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 			CurrentPlayer->BuffSelected = 0;
 		}
 	}
+
+	Vec3Set(&TextTint, 0, 0, 0);
+	CurrentPlayer->ComparisonGlyphs = CreateText("+0 str +0 agi +0 def", 0, 0, 50, TextTint, Center, Plain);
+	ChangeTextZIndex(CurrentPlayer->ComparisonGlyphs, 451);
 
 	CurrentPlayer->PlayerSpriteParts.Weapon = CurrentPlayer->PlayerWeapon->WeaponSprite;
 	
@@ -735,6 +740,7 @@ void DetectPlayerCollision(void)
 
 				TextAllNotVisible(wList->WeaponGlyphs);
 				TextAllNotVisible(wList->WeaponStatsGlyphs);
+				TextAllNotVisible(CurrentPlayer.ComparisonGlyphs);
 				wList->WeaponHoverBackground->Visible = FALSE;
 
 				if(currentDist < closestDropLength)
@@ -784,6 +790,7 @@ void DetectPlayerCollision(void)
 					{
 						TextAllNotVisible(wList->WeaponGlyphs);
 						TextAllNotVisible(wList->WeaponStatsGlyphs);
+						TextAllNotVisible(CurrentPlayer.ComparisonGlyphs);
 						wList->WeaponHoverBackground->Visible = FALSE;
 					}
 				}
@@ -1207,11 +1214,11 @@ int LoadPlayer(Player *CurrentPlayer)
 			statsLen = strlen(CurrentPlayer->PlayerWeapon->WeaponStatsString);
 			if(nameLen >= statsLen)
 			{
-				CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 25.0f, 120, 10, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x, (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f));
+				CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", nameLen * 30.0f, 180, 450, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x, (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f - 2 * CurrentPlayer->PlayerWeapon->WeaponGlyphs->Glyph->Height));
 			}
 			else
 			{
-				CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 25.0f, 120, 10, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x, (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f));
+				CurrentPlayer->PlayerWeapon->WeaponHoverBackground = (Sprite *) CreateSprite("TextureFiles/WeaponHoverBackground.png", statsLen * 30.0f, 180, 450, 1, 1, CurrentPlayer->PlayerWeapon->WeaponPickup.Position.x, (CurrentPlayer->PlayerWeapon->WeaponPickup.Position.y + CurrentPlayer->PlayerWeapon->WeaponPickup.height * 1.5f - 2 * CurrentPlayer->PlayerWeapon->WeaponGlyphs->Glyph->Height));
 			}
 			CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 

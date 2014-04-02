@@ -118,6 +118,8 @@ typedef struct Player
 	
 	enum Direction PlayerDirection;
 
+	struct TextGlyphs* ComparisonGlyphs;
+
 	Vec2 Position;
 	int dropDown;  //Fake Boolean
 

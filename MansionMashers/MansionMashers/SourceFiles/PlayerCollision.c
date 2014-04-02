@@ -104,11 +104,23 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	{
 		TextAllVisible(wList->WeaponGlyphs);
 		wList->WeaponHoverBackground->Visible = TRUE;
+		TextAllVisible(CurrentPlayer->ComparisonGlyphs);
+		CreateComparisonText(CurrentPlayer, wList);
+		ComparisonTextUpdate(CurrentPlayer->ComparisonGlyphs);
+		ChangeTextZIndex(CurrentPlayer->ComparisonGlyphs, 451);
 	}
 	if(!wList->WeaponStatsGlyphs->Glyph->Visible)
 	{
 		TextAllVisible(wList->WeaponStatsGlyphs);
 	}
+
+	Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f - wList->WeaponGlyphs->Glyph->Height);
+	ChangeTextPosition(CurrentPlayer->ComparisonGlyphs, glyphPos, Center);
+	Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f);
+	ChangeTextPosition(wList->WeaponStatsGlyphs, glyphPos, Center);
+	Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f + wList->WeaponGlyphs->Glyph->Height);
+	ChangeTextPosition(wList->WeaponGlyphs, glyphPos, Center);
+
 	//Switch weapons
 	if(AEInputCheckTriggered('E'))
 	{
@@ -166,6 +178,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		if(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs->Glyph->Visible)
 		{
 			TextAllNotVisible(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs);
+			TextAllNotVisible(CurrentPlayer->ComparisonGlyphs);
 		}
 		CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Visible = FALSE;
 		
@@ -197,9 +210,12 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 
 		wList->WeaponHoverBackground->Position.x = wList->WeaponPickup.Position.x;
 		wList->WeaponHoverBackground->Position.y = wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f;
-		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f + wList->WeaponGlyphs->Glyph->Height / 2));
+		wList->WeaponHoverBackground->Height = CurrentPlayer->PlayerWeapon->WeaponHoverBackground->Height;
+
+		// Update the text positions
+		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f + wList->WeaponGlyphs->Glyph->Height));
 		ChangeTextPosition(wList->WeaponGlyphs, glyphPos, Center);
-		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f - wList->WeaponGlyphs->Glyph->Height / 2));
+		Vec2Set(&glyphPos, wList->WeaponPickup.Position.x, (wList->WeaponPickup.Position.y + wList->WeaponPickup.height * 1.5f));
 		ChangeTextPosition(wList->WeaponStatsGlyphs, glyphPos, Center);
 
 		updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
