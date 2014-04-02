@@ -233,6 +233,10 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 	else
 		damageDealt = (int)(CurrentEnemy->CurrentEnemyStats.Damage * (1.0f - CurrentPlayer->CurrentPlayerStats.DamageReduction));
 	
+	// Reduce damage if blocking
+	if(CurrentPlayer->isBlocking)
+		damageDealt /= 2;
+
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
 	sprintf(num, "-%d", damageDealt);
