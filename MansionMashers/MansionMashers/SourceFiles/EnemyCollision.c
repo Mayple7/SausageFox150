@@ -128,6 +128,38 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 /*************************************************************************/
 /*!
 	\brief
+	Handles the collision between an enemy and a projectile
+*/
+/*************************************************************************/
+void EnemyCollidePlayerProjectile(Enemy *CurrentEnemy, Projectile *CurrentProjectile)
+{
+	int damageDealt;
+	char num[10];
+	Vec3 textColor;
+	TextGlyphs *FirstLetter;
+	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
+	
+	// Calculate damage
+	if(Cheats)
+		damageDealt = 9999;
+	else
+		damageDealt = (int)(CurrentProjectile->Damage);
+	if(damageDealt <= 0)
+		damageDealt = 1;
+	
+	CurrentEnemy->CurrentEnemyStats.CurrentHealth -= damageDealt;
+	PlayAudio(CurrentEnemy->CurrentEnemySounds.GetHit1);
+	sprintf(num, "-%d", damageDealt);
+	// Create Floating Combat Text
+	FirstLetter = CreateText(num, (CurrentEnemy->Position.x + rand() % 81 - 40), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2), 80, textColor, Center, Border);
+	AddFloatingText(FirstLetter);
+	ChangeTextVisibility(FirstLetter);
+	ChangeTextZIndex(FirstLetter, 201);
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Handles the collision between a player and platform
 	
 	\param CurrentEnemy

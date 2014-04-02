@@ -878,6 +878,7 @@ void InitializeEnemyStats(Enemy *CurrentEnemy, int maxHP, float movSpeed, float 
 void DetectEnemyCollision(Enemy *CurrentEnemy)
 {
 	Weapon* wList = weaponList;
+	Projectile *bList = projectileList;
 	Platform* pList = platformList;
 	Wall* walls = wallList;
 	int hit = 0;
@@ -890,7 +891,7 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 		{
 			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &wList->WeaponAttack);
 			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, wList->WeaponAttack.collisionID);
-			if(hit && CurrentPlayer.isAttacking)
+			if(hit && CurrentPlayer.isAttacking && CurrentPlayer.AttackType == 0)
 			{
 				// New target, on start collision
 				if(hitPrev < 0)
@@ -912,7 +913,7 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 					EnemyCollideWeapon(CurrentEnemy);
 				}
 			}
-			else if(hitPrev > 0 && !CurrentPlayer.isAttacking)
+			else if(hitPrev > 0 && !CurrentPlayer.isAttacking && CurrentPlayer.AttackType == 0)
 			{
 				CurrentEnemy->CollisionData[hitPrev] = 0;
 			}
@@ -932,6 +933,55 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 			}
 		}
 		wList++;
+	}
+
+	//Projectiles
+	while(bList->objID != -1)
+	{
+		// If the weapon is the enemy's
+		if(bList->objID > 0 && bList->ProjectileFOF == PlayerWeapon)
+		{
+			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &bList->ProjectileAttack);
+			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, bList->ProjectileAttack.collisionID);
+			if(hit)
+			{
+				// New target, on start collision
+				if(hitPrev < 0)
+				{
+					//Damage the enemy
+					EnemyCollidePlayerProjectile(CurrentEnemy, bList);
+					PoofProjectile(bList);
+				}
+				// Found target, hit previous frame, on persistant
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+				}
+				// Found target, did not hit previous frame, on start collision
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					EnemyCollidePlayerProjectile(CurrentEnemy, bList);
+					PoofProjectile(bList);
+				}
+			}
+			else
+			{
+				if(hitPrev < 0 || CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
+				{
+					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
+					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
+				}
+				// Found target, collision ended
+				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
+				{
+				}
+			}
+			if(hitPrev > 0 && bList->ProjectileFOF == PlayerWeapon)
+			{
+				CurrentEnemy->CollisionData[hitPrev] = 0;
+			}
+
+		}
+		bList++;
 	}
 
 	while(pList->objID != -1)

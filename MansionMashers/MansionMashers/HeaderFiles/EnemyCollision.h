@@ -6,5 +6,6 @@
 void EnemyCollidePlatform(Enemy *CurrentEnemy, Platform *CurrentPlatform);
 void EnemyCollideWeapon(Enemy *CurrentEnemy);
 void EnemyCollideWall(Enemy *CurrentEnemy, Wall *CurrentWall);
+void EnemyCollidePlayerProjectile(Enemy *CurrentEnemy, struct Projectile *CurrentProjectile);
 
 #endif

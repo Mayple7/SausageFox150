@@ -191,10 +191,61 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 		//Set the attacking necessaries
 		CurrentPlayer->isAttacking = TRUE;
+		CurrentPlayer->AttackType  = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
+	}
+	else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking)
+	{
+		//Pick a random shoot sound to play
+		/*if (rand() % 2)
+		{
+			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
+				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
+		}
+		else
+		{
+			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
+				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
+		}
+
+		//Set the attacking necessaries
+		CurrentPlayer->isAttacking = TRUE;
+		CurrentPlayer->AttackType  = 1;
+		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
+		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
+		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
+		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
+
+		//Wind of the weapons
+		{
+			Projectile *theWindOfAFox;
+			float projectileSpeed = 1400;
+			if (!CurrentPlayer->PlayerSpriteParts.Weapon->FlipX)
+				projectileSpeed *= -1;
+
+			//NASTY NASTY HACKKKK
+			theWindOfAFox = CreateProjectile("TextureFiles/BallistaArrow.png", 
+										     CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 6, 
+											 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
+										     Arrow, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
+
+			theWindOfAFox->ProjectileFOF = PlayerWeapon;
+
+			if (!theWindOfAFox->ProjectileSprite->FlipX)
+			{
+				theWindOfAFox->ProjectileAttack.Offset.x = theWindOfAFox->ProjectileAttack.width / 3;
+				theWindOfAFox->Position.x += 50;
+			}
+			else
+			{
+				theWindOfAFox->ProjectileAttack.Offset.x = -theWindOfAFox->ProjectileAttack.width / 3;
+				theWindOfAFox->Position.x -= 50;
+			}
+			UpdateCollider(&theWindOfAFox->ProjectileAttack, theWindOfAFox->ProjectileAttack.width / 4, theWindOfAFox->ProjectileAttack.height / 4);
+		}*/
 	}
 
 	if (LookAtMouse)
