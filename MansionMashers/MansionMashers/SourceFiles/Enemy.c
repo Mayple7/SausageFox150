@@ -310,7 +310,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		Vec3Set(&textColor, 1.0f, 1.0f, 0.0f);
 		sprintf(num, "+%d", CurrentEnemy->CurrentEnemyStats.Money);
 		// Create Floating Coin Text
-		FirstLetter = CreateText(num, (CurrentEnemy->Position.x + rand() % 81 - 40), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);
+		FirstLetter = CreateText(num, (CurrentEnemy->Position.x + rand() % 81 - 40), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2.2f), 80, textColor, Center, Border);
 		AddFloatingText(FirstLetter);
 		ChangeTextVisibility(FirstLetter);
 		ChangeTextZIndex(FirstLetter, 201);
