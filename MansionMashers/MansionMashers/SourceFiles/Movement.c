@@ -656,7 +656,7 @@ void HandGuyAnimation(HandGuyBoss *Object)
 	Object->LegSinValue += (Object->Speed * GetDeltaTime()) / 75.0f; 
 
 	Bdy->Position.x = Object->Position.x;
-	Bdy->Position.y = Object->Position.y - ((float)sin(-Object->LegSinValue*2)*5/(LegDistance));
+	Bdy->Position.y = Object->Position.y + (Bdy->Height / 10s) - ((float)sin(-Object->LegSinValue*2)*5/(LegDistance));
 
 	Tail->Position.y = Bdy->Position.y + (Bdy->Height/30);
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
@@ -714,7 +714,7 @@ void HandGuyAnimation(HandGuyBoss *Object)
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
 		}
-		LegUpr->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance));
+		LegUpr->Position.y = Bdy->Position.y;
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = LegLowerDirection;
@@ -725,7 +725,7 @@ void HandGuyAnimation(HandGuyBoss *Object)
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
 		}
-		LegUpr2->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance));
+		LegUpr2->Position.y = Bdy->Position.y;
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
@@ -785,7 +785,7 @@ void HandGuyAnimation(HandGuyBoss *Object)
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*-8/(LegDistance);
 		}
-		LegUpr->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance));
+		LegUpr->Position.y = Bdy->Position.y;
 		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
 		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
 		LegLwr->Rotation = -LegLowerDirection;
@@ -796,7 +796,7 @@ void HandGuyAnimation(HandGuyBoss *Object)
 		{
 			LegUpr2->Position.x += (float)sin(Object->LegSinValue)*8/(LegDistance);
 		}
-		LegUpr2->Position.y = Object->Position.y + ((float)sin(Object->LegSinValue*2)*5/(LegDistance));
+		LegUpr2->Position.y = Bdy->Position.y;
 		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = LegLowerDirection2;
