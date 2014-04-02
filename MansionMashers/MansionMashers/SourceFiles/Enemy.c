@@ -125,7 +125,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 50, (float)(300 + 10 * (rand() % 10)), 15.0f, 0, 10, 10 + rand() % 10, 33);
+		InitializeEnemyStats(CurrentEnemy, 50, (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 10, 10 + rand() % 10, 33);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -179,7 +179,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 80, (float)(150 + 10 * (rand() % 10)), 15.0f, 0, 10, 20 + rand() % 20, 47);
+		InitializeEnemyStats(CurrentEnemy, 80, (float)(150 + 10 * (rand() % 10)), 8.0f, 0, 10, 20 + rand() % 20, 47);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -386,6 +386,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	if(CurrentEnemy->KnockBack)
 	{
 		CurrentEnemy->KnockBackTime--;
+		++CurrentEnemy->canAttackTimer;
 
 		MoveObject(&CurrentEnemy->Position, CurrentEnemy->KnockBackDir, 8.0f);
 

@@ -837,7 +837,7 @@ void DetectPlayerCollision(void)
 		{
 			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &eList->EnemyWeapon->WeaponAttack);
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, eList->EnemyWeapon->WeaponAttack.collisionID);
-			if(hit && eList->isAttacking)
+			if(hit && eList->isAttacking && (eList->EnemySpriteParts.AttackRotationArmLower > FOX_PI / 3 || eList->EnemySpriteParts.AttackRotationArmLower < -FOX_PI / 3))
 			{
 				// New target, on start collision
 				if(hitPrev < 0)
