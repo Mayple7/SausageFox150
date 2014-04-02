@@ -137,6 +137,7 @@ void EnemyCollidePlayerProjectile(Enemy *CurrentEnemy, Projectile *CurrentProjec
 	char num[10];
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
+	Vec2 velocity;
 	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
 	
 	// Calculate damage
@@ -149,6 +150,29 @@ void EnemyCollidePlayerProjectile(Enemy *CurrentEnemy, Projectile *CurrentProjec
 	
 	CurrentEnemy->CurrentEnemyStats.CurrentHealth -= damageDealt;
 	PlayAudio(CurrentEnemy->CurrentEnemySounds.GetHit1);
+
+	if (CurrentEnemy->EnemyType != Dummy)
+	{
+		CurrentEnemy->KnockBack = TRUE;
+		CurrentEnemy->KnockBackTime = (int)(0.25f / GetDeltaTime());
+
+		// Set knockback direction based on the position of the enemy and player
+		if(CurrentEnemy->Position.x >= CurrentPlayer.Position.x)
+		{
+			CurrentEnemy->KnockBackDir = RIGHT;
+		}
+		else
+		{
+			CurrentEnemy->KnockBackDir = LEFT;
+		}
+		
+		Vec2Set(&velocity, 0.0f, 270.0f);
+		if(CurrentEnemy->Position.y <= GROUNDLEVEL)
+			Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL + 0.1f);
+		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
+		ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
+	}
+
 	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
 	FirstLetter = CreateText(num, (CurrentEnemy->Position.x + rand() % 81 - 40), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2), 80, textColor, Center, Border);

@@ -727,7 +727,7 @@ void DetectArmGuyBossCollision(ArmGuyBoss *CurrentBoss)
 		{
 			hit = CollisionRectangles(&CurrentBoss->BossCollider, &wList->WeaponAttack);
 			hitPrev = CurrentBoss->playerHit;
-			if(hit && CurrentPlayer.isAttacking)
+			if(hit && CurrentPlayer.isAttacking && CurrentPlayer.AttackType == 0)
 			{
 				// On start collision
 				if(hitPrev <= 0)
