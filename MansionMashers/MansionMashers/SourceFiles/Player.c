@@ -197,6 +197,15 @@ void InputPlayer(struct Player *CurrentPlayer)
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 	}
 
+	if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
+	{
+		CurrentPlayer->isBlocking = TRUE;
+	}
+	else if(FoxInput_MouseUp(MOUSE_BUTTON_RIGHT) || FoxInput_KeyUp('M') || CurrentPlayer->isAttacking)
+	{
+		CurrentPlayer->isBlocking = FALSE;
+	}
+
 	if (LookAtMouse)
 	{
 		if (camX + (mouseX - PANELSIZE / 2) < CurrentPlayer->Position.x - 20)
@@ -364,6 +373,13 @@ void InputPlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 	CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 #endif
+
+	// Update Speed and such if blocking
+	if(CurrentPlayer->isBlocking)
+	{
+		CurrentPlayer->Speed /= 2;
+	}
+
 	Animation(CurrentPlayer);
 	// Move the direction based on the speed
 	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);
@@ -1068,8 +1084,9 @@ void Animation(Player *Object)
 		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
 		LegLwr2->Rotation = -LegLowerDirection2;
 		
+
 		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
-		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
+		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;	
 		ArmUpr->Position.x = Bdy->Position.x;
 		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);

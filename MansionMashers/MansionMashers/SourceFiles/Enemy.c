@@ -125,7 +125,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 50, (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 10, 10 + rand() % 10, 33);
+		InitializeEnemyStats(CurrentEnemy, 50, (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 20 + 5 * (rand() % GetCurrentState()), 10 + rand() % 10, 33);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
