@@ -68,27 +68,27 @@ char* GetUncommonStart(void)
 	switch(randomName)
 	{
 	case 0:
-		return "Uncommon ";
+		return "Iron ";
 	case 1:
-		return "Uncommon ";
+		return "Heavy ";
 	case 2:
-		return "Uncommon ";
+		return "Swift ";
 	case 3:
-		return "Uncommon ";
+		return "Treasured ";
 	case 4:
-		return "Uncommon ";
+		return "Adequate ";
 	case 5:
-		return "Uncommon ";
+		return "Soldiers ";
 	case 6:
-		return "Uncommon ";
+		return "Guards ";
 	case 7:
-		return "Uncommon ";
+		return "Special ";
 	case 8:
-		return "Uncommon ";
+		return "Sausage ";
 	case 9:
-		return "Uncommon ";
+		return "Sharp ";
 	case 10:
-		return "Uncommon ";
+		return "Quality ";
 	default:
 		return "Uncommon ";
 	}
@@ -101,27 +101,27 @@ char* GetRareStart(void)
 	switch(randomName)
 	{
 	case 0:
-		return "Rare ";
+		return "Epic ";
 	case 1:
-		return "Rare ";
+		return "Legendary ";
 	case 2:
-		return "Rare ";
+		return "Fantastic ";
 	case 3:
-		return "Rare ";
+		return "Sausage ";
 	case 4:
-		return "Rare ";
+		return "Kings ";
 	case 5:
-		return "Rare ";
+		return "Amazing ";
 	case 6:
-		return "Rare ";
+		return "Prestigious ";
 	case 7:
-		return "Rare ";
+		return "Esteemed ";
 	case 8:
-		return "Rare ";
+		return "Renowned ";
 	case 9:
-		return "Rare ";
+		return "Impressive ";
 	case 10:
-		return "Rare ";
+		return "Illustrious ";
 	default:
 		return "Rare ";
 	}
@@ -276,26 +276,26 @@ char* GetCommonEnd(void)
 
 char* GetUncommonEnd(void)
 {
-	int randomName = rand() % NUM_COMMON_END;
+	int randomName = rand() % NUM_UNCOMMON_END;
 
 	switch(randomName)
 	{
 	case 0:
-		return "of uncommon";
+		return "of knights";
 	case 1:
-		return "of uncommon";
+		return "of the legion";
 	case 2:
-		return "of uncommon";
+		return "of the mayor";
 	case 3:
-		return "of uncommon";
+		return "of warriors";
 	case 4:
-		return "of uncommon";
+		return "of the guard";
 	case 5:
-		return "of uncommon";
+		return "of the fox";
 	case 6:
-		return "of uncommon";
+		return "of dogs";
 	case 7:
-		return "of uncommon";
+		return "of intensity";
 	default:
 		return "";
 	}
@@ -303,26 +303,26 @@ char* GetUncommonEnd(void)
 
 char* GetRareEnd(void)
 {
-	int randomName = rand() % NUM_COMMON_END;
+	int randomName = rand() % NUM_RARE_END;
 
 	switch(randomName)
 	{
 	case 0:
-		return "of rare";
+		return "of nobility";
 	case 1:
-		return "of rare";
+		return "of heroes";
 	case 2:
-		return "of rare";
+		return "of champions";
 	case 3:
-		return "of rare";
+		return "of conquorers";
 	case 4:
-		return "of rare";
+		return "of victory";
 	case 5:
-		return "of rare";
+		return "of paladins";
 	case 6:
-		return "of rare";
+		return "of immortality";
 	case 7:
-		return "of rare";
+		return "of the stars";
 	default:
 		return "";
 	}
