@@ -1,3 +1,27 @@
+/*****************************************************************************/
+/*!
+\file				PaperScroll.c
+\author				Juli Gregg (j.gregg)	
+\date				Mar 8, 2014
+
+\brief				Functions
+
+\par				Functions:
+					- CreatePaperScroll
+					- ScrollPaperScroll
+					- RescrollPaperScroll
+					- FadeScroll
+					- ResetScrollObjects
+					- UpdateScrollObjects
+					- SetUpScrollWithText
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
+*/ 
+/*****************************************************************************/
+
 #include "../AEEngine.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxObjects.h"
@@ -8,6 +32,18 @@ static Sprite *TxtScrollRight;
 static Sprite *TxtScrollLeft;
 static Sprite *TxtScrollMiddle;
 
+/*************************************************************************/
+/*!
+	\brief
+	Sets up the scroll objects
+
+	\param posx
+	X Position to set
+
+	\param height
+	Y position to set
+*/
+/*************************************************************************/
 void CreatePaperScroll(float posx, float height)
 {
 
@@ -23,17 +59,28 @@ void CreatePaperScroll(float posx, float height)
 	ReScroll = FALSE;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Scrolls/Expands scroll
+
+	\param Speed
+	Mulitplier to set speed at which scroll expands
+*/
+/*************************************************************************/
 void ScrollPaperScroll(float Speed)
 {
 	TxtScrollMiddle->Visible = TRUE;
 	TxtScrollRight->Visible = TRUE;
 	TxtScrollLeft->Visible = TRUE;
 
+	//Scale and move over scroll
 	if(TxtScrollMiddle->ScaleX < 50)
 	{
 		TxtScrollMiddle->ScaleX += .40f * Speed;
 		TxtScrollRight->Position.x += 10 * Speed;
 	}
+	//When done set bools
 	else
 	{
 		Scroll = FALSE;
@@ -41,14 +88,25 @@ void ScrollPaperScroll(float Speed)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	ReScrolls/UnExpands scroll
+
+	\param Speed
+	Mulitplier to set speed at which scroll recedes
+*/
+/*************************************************************************/
 void ReScrollPaperScroll(float Speed)
 {
+	//Scale and move over objects if needed
 	if(TxtScrollMiddle->ScaleX > 1)
 	{
 		TxtScrollMiddle->ScaleX -= .40f * Speed;
 		TxtScrollRight->Position.x -= 10 * Speed;
 	}
 
+	//At certain point make objects invisible
 	if(TxtScrollMiddle->ScaleX <= 1)
 	{
 		TxtScrollMiddle->Visible = FALSE;
@@ -58,13 +116,29 @@ void ReScrollPaperScroll(float Speed)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Fades scroll out
+*/
+/*************************************************************************/
 void FadeScroll(void)
 {
+	//Decrease alpha each game loop
 	TxtScrollMiddle->Alpha -= .05f;
 	TxtScrollRight->Alpha -= .05f;
 	TxtScrollLeft->Alpha -= .05f;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Resets objects to original states
+
+	\param posX
+	Reset x position to
+*/
+/*************************************************************************/
 void ResetScrollObjects(float posx)
 {
 	TxtScrollMiddle->ScaleX = 1;
@@ -78,6 +152,12 @@ void ResetScrollObjects(float posx)
 	TxtScrollLeft->Position.x = posx - 650;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates scroll objects to move with camera
+*/
+/*************************************************************************/
 void UpdateSrollObjects(void)
 {
 	TxtScrollMiddle->Position.x = (GetCameraXPosition() - 650);
@@ -85,7 +165,18 @@ void UpdateSrollObjects(void)
 	TxtScrollLeft->Position.x = GetCameraXPosition() - 650;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Expands Scroll and places text on top of it
 
+	\param string
+	String to print with text
+
+	\param counter
+	Pointer to a counter for how long until scroll fades
+*/
+/*************************************************************************/
 void SetUpScrollWithText(TextGlyphs* string, int* counter)
 {
 	//Can scroll so scroll

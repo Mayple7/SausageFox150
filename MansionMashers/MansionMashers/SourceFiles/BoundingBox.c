@@ -1,10 +1,25 @@
+/*****************************************************************************/
+/*!
+\file				BoundingBox.h
+\author				Juli Gregg
+\date				Mar 11, 2014
+
+\brief				
+
+\par				Functions:
+\li					
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
+*/ 
+/*****************************************************************************/
+
 #include "../AEEngine.h"
-#include "../HeaderFiles/Level1.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
-#include "../HeaderFiles/GameStateManager.h"
-#include "../HeaderFiles/GameStateList.h"
 
 //Bounding Boxes
 static Sprite *BoundTop;

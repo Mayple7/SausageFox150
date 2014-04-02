@@ -191,10 +191,70 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 		//Set the attacking necessaries
 		CurrentPlayer->isAttacking = TRUE;
+		CurrentPlayer->AttackType  = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
+	}
+	else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking)
+	{
+		//Pick a random shoot sound to play
+		if (rand() % 2)
+		{
+			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
+				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
+		}
+		else
+		{
+			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
+				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
+		}
+
+		//Set the attacking necessaries
+		CurrentPlayer->isAttacking = TRUE;
+		CurrentPlayer->AttackType  = 1;
+		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
+		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
+		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
+		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
+
+		//Wind of the weapons
+		{
+			Projectile *theWindOfAFox;
+			float projectileSpeed = 1400;
+			if (!CurrentPlayer->PlayerSpriteParts.Weapon->FlipX)
+				projectileSpeed *= -1;
+
+			//NASTY NASTY HACKKKK
+			theWindOfAFox = CreateProjectile("TextureFiles/Wind.png", 
+										     CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 2, 
+											 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
+										     Arrow, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
+
+			theWindOfAFox->ProjectileFOF = PlayerWeapon;
+
+			if (!theWindOfAFox->ProjectileSprite->FlipX)
+			{
+				theWindOfAFox->ProjectileAttack.Offset.x = theWindOfAFox->ProjectileAttack.width / 3;
+				theWindOfAFox->Position.x += 50;
+			}
+			else
+			{
+				theWindOfAFox->ProjectileAttack.Offset.x = -theWindOfAFox->ProjectileAttack.width / 3;
+				theWindOfAFox->Position.x -= 50;
+			}
+			UpdateCollider(&theWindOfAFox->ProjectileAttack, theWindOfAFox->ProjectileAttack.width / 4, theWindOfAFox->ProjectileAttack.height / 2);
+		}
+	}
+
+	if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
+	{
+		CurrentPlayer->isBlocking = TRUE;
+	}
+	else if(FoxInput_MouseUp(MOUSE_BUTTON_RIGHT) || FoxInput_KeyUp('M') || CurrentPlayer->isAttacking)
+	{
+		CurrentPlayer->isBlocking = FALSE;
 	}
 
 	if (LookAtMouse)
@@ -364,6 +424,13 @@ void InputPlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 	CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 #endif
+
+	// Update Speed and such if blocking
+	if(CurrentPlayer->isBlocking)
+	{
+		CurrentPlayer->Speed /= 2;
+	}
+
 	Animation(CurrentPlayer);
 	// Move the direction based on the speed
 	MoveObject(&CurrentPlayer->Position, CurrentPlayer->PlayerDirection, CurrentPlayer->Speed);
@@ -786,7 +853,7 @@ void DetectPlayerCollision(void)
 		{
 			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &eList->EnemyWeapon->WeaponAttack);
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, eList->EnemyWeapon->WeaponAttack.collisionID);
-			if(hit && eList->isAttacking)
+			if(hit && eList->isAttacking && (eList->EnemySpriteParts.AttackRotationArmLower > FOX_PI / 3 || eList->EnemySpriteParts.AttackRotationArmLower < -FOX_PI / 3))
 			{
 				// New target, on start collision
 				if(hitPrev < 0)
@@ -930,6 +997,7 @@ void DetectPlayerCollision(void)
 		spawner++;
 	}
 }
+
 
 
 /*************************************************************************/

@@ -47,6 +47,7 @@ static int newID;					// ID number
 static int levelComplete = FALSE;
 
 ArmGuyBoss *Boss;
+HUD* CurrentHUD;
 
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
@@ -83,6 +84,8 @@ void InitializeArmGuy(void)
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
+	CurrentHUD = CreateHUD(&CurrentPlayer);
+
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
@@ -107,6 +110,13 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -400, -170);
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 400, -170);
+
+
+	/////////////////////////////////
+	//		Particles			   //
+	/////////////////////////////////
+	CreateFoxParticleSystem("TextureFiles/ParticlePlatform.png", -400, -145, 200, -1, 3, .15f, 270, 90, .5f, 0, 250, 0, 50.0f, 1.0f, 0.5f);
+	CreateFoxParticleSystem("TextureFiles/ParticlePlatform.png", 400, -145, 200, -1, 3, .15f, 270, 90, .5f, 0, 250, 0, 50.0f, 1.0f, 0.5f);
 
 	/////////////////////////////////
 	//			Walls			   //
@@ -140,6 +150,9 @@ void UpdateArmGuy(void)
 	// This should be the last line in this function
 	UpdateArmGuyBoss(Boss);
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 
 	UpdateFloatingText();
 	ParticleSystemUpdate();

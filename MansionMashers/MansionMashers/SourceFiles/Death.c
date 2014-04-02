@@ -28,6 +28,15 @@ static Button *MainMapButton;
 
 static float confirmTimer;
 
+/*************************************************************************/
+/*!
+	\brief
+	Creates objects for menu when player dies
+
+	\param newID
+	ID for objects with collision
+*/
+/*************************************************************************/
 void CreateDeathConfirmObjects(int *newID)
 {
 	Vec3 TextTint;
@@ -44,6 +53,12 @@ void CreateDeathConfirmObjects(int *newID)
 	confirmTimer = 0;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates objects when player has died 
+*/
+/*************************************************************************/
 void UpdateDeathConfirmObjects(void)
 {
 	int worldX, worldY;

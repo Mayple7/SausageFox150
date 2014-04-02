@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*!
 \file				Level3.c
-\author				Dan Muller (d.muller)
+\author				Juli Gregg (j.gregg)	
 \date				Feb 15, 2034
 
 \brief				Functions for the showcase level

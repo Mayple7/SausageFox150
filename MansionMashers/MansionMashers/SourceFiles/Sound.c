@@ -92,8 +92,10 @@ static FMOD_SYSTEM *FMsystem;
 /*************************************************************************/
 void FMODErrCheck(FMOD_RESULT result)
 {
+	//Printing error messages
 	if(result != FMOD_OK)
 		printf("FMOD Error: (%d) %s\n", result, FMOD_ErrorString(result));
+	//Bool that certain functions use
 	else
 		success = TRUE;
 }
@@ -111,12 +113,15 @@ void FMODInit(void)
 {
 	FMOD_RESULT result;
 
+	//Create system and check if it succeed
 	result = FMOD_System_Create(&FMsystem);
 	FMODErrCheck(result);
 
+	//Initialize system  with number of sounds permitted and check if successful
 	result = FMOD_System_Init(FMsystem, MAX_SOUND_CHANNELS, FMOD_INIT_NORMAL, 0);
 	FMODErrCheck(result);
 
+	//Success message
 	if(success == TRUE)
 	{
 		printf("FMOD CREATED AND INITIALIZED\n");
@@ -146,6 +151,7 @@ FMOD_SYSTEM * GetSoundSystem(void)
 /*************************************************************************/
 void UpdateSoundSystem(void)
 {
+	//Updates system so sounds keep running as they should
 	FMOD_System_Update(FMsystem);
 }
 
@@ -159,11 +165,13 @@ void FMODQuit(void)
 {
 	FMOD_RESULT result;
 
+	//Close and release system with error checking
 	result = FMOD_System_Close(FMsystem);
 	FMODErrCheck(result);
 	result = FMOD_System_Release(FMsystem);
 	FMODErrCheck(result);
 
+	//Success message
 	if(success == TRUE)
 	{
 		printf("FMOD CLOSED AND RELEASED\n");
@@ -186,6 +194,7 @@ void ResetSoundList(void)
 {
 	int i;
 
+	//Make some mem for dem sounds
 	soundList  = (FoxSound *) CallocMyAlloc(MAX_SOUND_CHANNELS, sizeof(FoxSound));
 
 	if(soundList)
@@ -194,7 +203,7 @@ void ResetSoundList(void)
 		{
 			soundList[i].sndID = -1;
 		}
-		printf("Sound List Setup Successful\n");
+		printf("SOUND LIST SETUP MORE SUCCESSFUL\n");
 	}
 	else
 		printf("Sound List Setup Failed\n");
@@ -214,6 +223,7 @@ FoxSound *AddSound(void)
 {
 	int i;
 
+	//add a sound to the soundlist
 	for(i = 0; i < MAX_SOUND_CHANNELS; i++)
 	{
 		if(soundList[i].sndID == 0 || soundList[i].sndID == -1)
@@ -234,6 +244,7 @@ void FreeSoundList(void)
 {
 	int i;
 
+	//free sounds that are in the list
 	for(i = 0; i < MAX_SOUND_CHANNELS; i++)
 	{
 		if(soundList[i].sndID)
@@ -254,6 +265,7 @@ void FreeSoundList(void)
 /*************************************************************************/
 void freeSound(FoxSound * soundObj)
 {
+	//free and releases and indiviudal sound
 	if(soundObj && soundObj->sndID && soundObj->Sound)
 	{
 		soundObj->sndID = 0;
@@ -274,15 +286,18 @@ void ResetChannelGroupList(void)
 {
 	int i;
 
+	//Allocs space for the channel group list
 	channelGroupList = (FoxChannels *) CallocMyAlloc(MAX_CHANNEL_GROUPS, sizeof(FoxChannels));
 	--TotalMemoryAllocs;
+
+	//there be only one
 	if(channelGroupList)
 	{
 		for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
 		{
 			channelGroupList[i].sndID = -1;
 		}
-		printf("Channel List Setup Successful\n");
+		printf("CHANNEL LIST SETUP SUCCESSFUL\n");
 	}
 	else
 		printf("Channel List Setup Failed\n");
@@ -302,6 +317,7 @@ FoxChannels * AddChannelGroups(void)
 {
 	int i;
 
+	//Add channelGroup to dat list
 	for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
 	{
 		if(channelGroupList[i].sndID == 0 || channelGroupList[i].sndID == -1)
@@ -320,6 +336,7 @@ void FreeChannelGroupList(void)
 {
 	int i;
 
+	//free the channel groups in the list
 	for(i = 0; i < MAX_CHANNEL_GROUPS; i++)
 	{
 		if(channelGroupList[i].sndID)
@@ -340,6 +357,7 @@ void FreeChannelGroupList(void)
 /*************************************************************************/
 void freeChannelGroups(FoxChannels * chanGrpObj)
 {
+	//free individual channel group and release it
 	if(chanGrpObj && chanGrpObj->sndID)
 	{
 		chanGrpObj->sndID = 0;
@@ -371,8 +389,10 @@ FoxSound *CreateSound(char *Filename, int type)
 	FMOD_RESULT result;
 	FoxSound *snd = AddSound();
 
+	//Initialize struct
 	InitSoundStruct(snd, type);
 	
+	//Different way to create sound based on size
 	if(type == SmallSnd)
 		result = FMOD_System_CreateSound(FMsystem, Filename, FMOD_DEFAULT, NULL, &snd->Sound);
 	else if(type == LargeSnd)
@@ -401,7 +421,9 @@ FoxSound *CreateSound(char *Filename, int type)
 void CreatePauseSound(FoxSound * snd, char *Filename, int type)
 {
 	FMOD_RESULT result;
+	//Doesn't add a sound to the sound list must free individually
 
+	//Initialize struct
 	InitSoundStruct(snd, type);
 	
 	if(type == SmallSnd)
@@ -426,6 +448,7 @@ void CreatePauseSound(FoxSound * snd, char *Filename, int type)
 /*************************************************************************/
 void InitSoundStruct(FoxSound *snd, int type)
 {
+	//Initialize starting variables for sound struct
 	snd->Sound = 0;
 	snd->Channel = 0;
 	snd->Playing = FALSE;
@@ -447,14 +470,17 @@ void InitSoundStruct(FoxSound *snd, int type)
 void ReleaseSound(FMOD_SOUND *sound)
 {
 	FMOD_RESULT result;
+
+	//release a sound and do some error checking
 	result = FMOD_Sound_Release(sound);
 	FMODErrCheck(result);
 	
-	if(success == TRUE)
+	if(success == FALSE)
 	{
-		printf("SOUND RELEASED\n");
-		success = FALSE;
+		printf("SOUND RELEASE FAILED\n");
 	}
+
+	success = FALSE;
 }
 
 
@@ -475,20 +501,24 @@ void PlayAudio(FoxSound *snd)
 {
 	FMOD_RESULT result;
 	
+	//If there is actually a channel
 	if(snd->Channel)
 	{
+		//Check if sound is playing already and set variable
 		result = FMOD_Channel_IsPlaying(snd->Channel, &snd->Playing);
 		if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN))
 		    FMODErrCheck(result);
 	}
 	
-	
+	//If sound isn't already playing
 	if(snd->Playing == FALSE)
 	{
+		//Play the sound but start paused so we can do some stuff first
 		result = FMOD_System_PlaySound(FMsystem, FMOD_CHANNEL_FREE, snd->Sound, TRUE, &snd->Channel);
 		FMODErrCheck(result);
 		snd->Paused = TRUE;
 	
+		//Add sound to appropriate channel group so we can change the volume later
 		if(snd->Type == SmallSnd)
 		{
 			result = FMOD_Channel_SetChannelGroup(snd->Channel, ChannelController->Effects);
@@ -500,6 +530,7 @@ void PlayAudio(FoxSound *snd)
 			FMODErrCheck(result);
 		}
 
+		//Unpause the sound now we be done
 		TogglePauseSound(snd);
 	}
 
@@ -510,6 +541,7 @@ int FoxSoundCheckIsPlaying(FoxSound *snd)
 {
 	FMOD_RESULT result;
 	
+	//If there is a channel get and set the playing state
 	if(snd->Channel)
 	{
 		result = FMOD_Channel_IsPlaying(snd->Channel, &snd->Playing);
@@ -517,6 +549,7 @@ int FoxSoundCheckIsPlaying(FoxSound *snd)
 		    FMODErrCheck(result);
 	}
 	
+	//return the correct bool for if sound is playing
 	if(snd->Playing)
 	{
 		snd->Playing = TRUE;
@@ -545,12 +578,15 @@ int FoxSoundCheckIsPlaying(FoxSound *snd)
 FoxChannels* CreateChannelGroups(void)
 {
 	FMOD_RESULT result;
+	//add to the list
 	FoxChannels * chnl = AddChannelGroups();
 
+	//initialize struct members
 	chnl->sndID = 1;
 	chnl->EffectsPaused = FALSE;
 	chnl->MusicPaused = FALSE;
 
+	//Create two channel groups one for effects and one for background music
 	result = FMOD_System_CreateChannelGroup(FMsystem, NULL, &chnl->Effects);
 	FMODErrCheck(result);
 
@@ -575,6 +611,7 @@ void ReleaseChannelGroups(FoxChannels *chnl)
 {
 	FMOD_RESULT result;
 
+	//Release both channel groups with error checking
 	result = FMOD_ChannelGroup_Release(chnl->Effects);
 	FMODErrCheck(result);
 	result = FMOD_ChannelGroup_Release(chnl->Music);
@@ -602,6 +639,7 @@ void SetSoundVolume(FoxSound *snd, float volume)
 {
 	FMOD_RESULT result;
 
+	//Sets the volume of an individual sound
 	result = FMOD_Channel_SetVolume(snd->Channel, volume);
 	FMODErrCheck(result);
 
@@ -626,6 +664,7 @@ float GetSoundVolume(FoxSound *snd)
 	FMOD_RESULT result;
 	float volume;
 
+	//Gets the volume of a specific sound
 	result = FMOD_Channel_GetVolume(snd->Channel, &volume);
 	FMODErrCheck(result);
 
@@ -653,6 +692,7 @@ void SetChannelGroupVolume(int type, float volume)
 {
 	FMOD_RESULT result;
 
+	//Sets the volume of a specific channel group (or all)
 	switch (type)
 	{
 		case AllTypes:
@@ -691,6 +731,7 @@ float GetChannelGroupVolume(int type)
 	FMOD_RESULT result;
 	float volume;
 
+	//Get's the channel volume for a specific channel group
 	switch (type)
 	{
 		case EffectType:
@@ -725,8 +766,10 @@ char * VolumetoString(char *string, float volume)
 	int i;
 	int voltemp = (int)volume;
 
+	//Converts and integer volume to a string to be used on text
 	for(i = 0; i <= 4; i++)
 	{
+		//If volume is 100 just set it manually
 		if (voltemp == 100)
 		{
 			string[0] = '1';
@@ -776,12 +819,14 @@ void TogglePauseSound(FoxSound *snd)
 {
 	FMOD_RESULT result;
 
+	//If the sound is unpaused pause it (with error checking)
 	if(snd->Paused == FALSE)
 	{
 		result = FMOD_Channel_SetPaused(snd->Channel, TRUE);
 		FMODErrCheck(result);
 		snd->Paused = TRUE;
 	}
+	//If the sound is paused unpause it (with error checking)
 	else if(snd->Paused == TRUE)
 	{
 		result = FMOD_Channel_SetPaused(snd->Channel, FALSE);
@@ -806,8 +851,10 @@ void TogglePauseChannel(int ChnlType)
 {
 	FMOD_RESULT result;
 
+	//Toggles Pause on entire channels (effects all sounds on this channel)
 	if(ChnlType == EffectType)
 	{
+		//Checking for pause state and either pausing or unpausing it
 		if(ChannelController->EffectsPaused == FALSE)
 		{
 			result = FMOD_ChannelGroup_SetPaused(ChannelController->Effects, TRUE);
@@ -823,6 +870,7 @@ void TogglePauseChannel(int ChnlType)
 	}
 	else if(ChnlType == MusicType)
 	{
+		//Checking for pause state and either pausing or unpausing it
 		if(ChannelController->MusicPaused == FALSE)
 		{
 			result = FMOD_ChannelGroup_SetPaused(ChannelController->Music, TRUE);
