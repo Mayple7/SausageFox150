@@ -124,34 +124,34 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 /*************************************************************************/
 void CreateHandGuySprites(HandGuyBoss *Object)
 {
-	Object->HandGuySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/HandGuyBody.png", 300.0f, 300.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/HandGuyBody.png", 450.0f, 450.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
 
-	Object->HandGuySpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/HandGuyArmUpper.png", 128.0f, 128.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/HandGuyArmUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
 
-	Object->HandGuySpriteParts.ArmUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmUpper.png", 128.0f, 128.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.ArmUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
 	Object->HandGuySpriteParts.ArmUpper2->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->HandGuySpriteParts.ArmLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerIn.png", 128.0f, 128.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.ArmLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerIn.png", 192.0f, 192.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
 	Object->HandGuySpriteParts.ArmLower2->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->HandGuySpriteParts.LegUpper = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 128.0f, 128.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.LegUpper = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
 	Object->HandGuySpriteParts.LegUpper->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->HandGuySpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 128.0f, 128.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
 	Object->HandGuySpriteParts.LegLower->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->HandGuySpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 128.0f, 128.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
 	Object->HandGuySpriteParts.LegUpper2->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->HandGuySpriteParts.LegLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 128.0f, 128.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.LegLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
 	Object->HandGuySpriteParts.LegLower2->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
 
-	Object->HandGuySpriteParts.Tail = (Sprite *) CreateSpriteNoMesh("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.Tail = (Sprite *) CreateSpriteNoMesh("TextureFiles/TailDog.png", 450.0f, 450.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
 	Object->HandGuySpriteParts.Tail->SpriteMesh = Object->HandGuySpriteParts.Body->SpriteMesh;
 
 	Object->HandGuySpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3;
 
-	Object->HandGuySpriteParts.ArmLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerOut.png", 128.0f, 128.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->HandGuySpriteParts.ArmLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerOut.png", 192.0f, 192.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
 	Object->HandGuySpriteParts.ArmLower->SpriteMesh = Object->HandGuySpriteParts.ArmUpper->SpriteMesh;
 
 }
@@ -624,7 +624,7 @@ void DetectHandGuyBossCollision(HandGuyBoss *CurrentBoss)
 		{
 			hit = CollisionRectangles(&CurrentBoss->BossCollider, &wList->WeaponAttack);
 			hitPrev = CurrentBoss->playerHit;
-			if(hit && CurrentPlayer.isAttacking)
+			if(hit && CurrentPlayer.isAttacking && CurrentPlayer.AttackType == 0)
 			{
 				// On start collision
 				if(hitPrev <= 0)
