@@ -200,7 +200,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking)
 	{
 		//Pick a random shoot sound to play
-		/*if (rand() % 2)
+		if (rand() % 2)
 		{
 			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
 				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
@@ -227,8 +227,8 @@ void InputPlayer(struct Player *CurrentPlayer)
 				projectileSpeed *= -1;
 
 			//NASTY NASTY HACKKKK
-			theWindOfAFox = CreateProjectile("TextureFiles/BallistaArrow.png", 
-										     CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 6, 
+			theWindOfAFox = CreateProjectile("TextureFiles/Wind.png", 
+										     CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 2, 
 											 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
 										     Arrow, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
 
@@ -244,8 +244,8 @@ void InputPlayer(struct Player *CurrentPlayer)
 				theWindOfAFox->ProjectileAttack.Offset.x = -theWindOfAFox->ProjectileAttack.width / 3;
 				theWindOfAFox->Position.x -= 50;
 			}
-			UpdateCollider(&theWindOfAFox->ProjectileAttack, theWindOfAFox->ProjectileAttack.width / 4, theWindOfAFox->ProjectileAttack.height / 4);
-		}*/
+			UpdateCollider(&theWindOfAFox->ProjectileAttack, theWindOfAFox->ProjectileAttack.width / 4, theWindOfAFox->ProjectileAttack.height / 2);
+		}
 	}
 
 	if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
