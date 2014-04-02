@@ -656,7 +656,7 @@ void HandGuyAnimation(HandGuyBoss *Object)
 	Object->LegSinValue += (Object->Speed * GetDeltaTime()) / 75.0f; 
 
 	Bdy->Position.x = Object->Position.x;
-	Bdy->Position.y = Object->Position.y + (Bdy->Height / 10s) - ((float)sin(-Object->LegSinValue*2)*5/(LegDistance));
+	Bdy->Position.y = Object->Position.y + (Bdy->Height / 10) - ((float)sin(-Object->LegSinValue*2)*5/(LegDistance));
 
 	Tail->Position.y = Bdy->Position.y + (Bdy->Height/30);
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;

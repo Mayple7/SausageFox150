@@ -135,6 +135,7 @@ void InitializeLevel2(void)
 	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 5, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan0Overlay.png", 1920, 1080, 200, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 5, 1, 1, 1920, 0);
+	CreateSprite("TextureFiles/Lvl1Pan2PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0); 
 	CreateSprite("TextureFiles/OutsideMan2.png", 1920, 1080, 5, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan2Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 5, 1, 1, 1920 * 3, 0);
