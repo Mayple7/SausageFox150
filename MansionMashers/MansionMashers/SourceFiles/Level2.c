@@ -38,6 +38,8 @@
 
 #define BACKGROUND_LENGTH 4
 
+#define GLOW_OVERLAY_NUM 4
+
 // ---------------------------------------------------------------------------
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
@@ -53,6 +55,9 @@ static int enemiesRemaining;
 
 Sprite *TxtScrollRight;
 Sprite *TxtScrollMiddle;
+
+Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
+static int GlowBool;
 
 EnemySpawner* Spawners[6]; //2 Per Panel not including first (can do this because no blocker boxes)
 
@@ -83,6 +88,7 @@ Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
 Sprite* TreeBackground3[BACKGROUND_LENGTH];
 static void TreeBackgroundUpdate(void);
+static void ObjectGlowUpdate();
 
 /*************************************************************************/
 /*!
@@ -113,6 +119,7 @@ void InitializeLevel2(void)
 	PlayerIsAlive = TRUE;
 	enemiesDefeated = FALSE;
 	beginningAnimation = TRUE;
+	GlowBool = TRUE;
 
 	newID = 10;
 	ResetObjectList();
@@ -134,10 +141,17 @@ void InitializeLevel2(void)
 	/////////////////////////////////
 	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 5, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan0Overlay.png", 1920, 1080, 200, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl2Pan1PlatOverlay.png", 1920, 1080, 500, 1, 1, 0, 0);
+	PlatOverlay[0]->Alpha = .1f;
 	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 5, 1, 1, 1920, 0);
-	CreateSprite("TextureFiles/Lvl1Pan2PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0); 
+	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl2Pan2PlatOverlay.png", 1920, 1080, 6, 1, 1, 1920, 0);
+	PlatOverlay[1]->Alpha = .2f;
 	CreateSprite("TextureFiles/OutsideMan2.png", 1920, 1080, 5, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan2Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 2, 0);
+	PlatOverlay[2] = (Sprite*)CreateSprite("TextureFiles/Lvl2Pan3PlatOverlay.png", 1920, 1080, 6, 1, 1, 1920 * 2, 0);
+	PlatOverlay[2]->Alpha = .2f;
+	PlatOverlay[3] = (Sprite*)CreateSprite("TextureFiles/Lvl2Pan3PlatOverlay.png", 1920, 1080, 201, 1, 1, 1920 * 2, 0);
+	PlatOverlay[3]->Alpha = .2f;
 	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 5, 1, 1, 1920 * 3, 0);
 	CreateSprite("TextureFiles/OutsideMan3Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 3, 0);
 
@@ -463,6 +477,7 @@ void EventLevel2(void)
 	UpdateFloatingText();
 	UpdateAllProjectiles();
 	TreeBackgroundUpdate();
+	ObjectGlowUpdate();
 
 	//Switch barrier position for beginning
 	if(beginningAnimation)
@@ -507,4 +522,25 @@ void TreeBackgroundUpdate(void)
 
 	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
+}
+
+void ObjectGlowUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < GLOW_OVERLAY_NUM; i++)
+	{
+		if(GlowBool)
+		{
+			PlatOverlay[i]->Alpha += .005f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM - 1]->Alpha > 0.3f)
+				GlowBool = FALSE;
+		}
+		else 
+		{
+			PlatOverlay[i]->Alpha -= .005f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM -1]->Alpha < 0.05f)
+				GlowBool = TRUE;
+		}
+	}
 }

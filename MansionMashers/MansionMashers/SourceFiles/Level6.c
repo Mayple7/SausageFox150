@@ -40,6 +40,8 @@
 // define
 #define PANELSIZE 1920.0f
 
+#define GLOW_OVERLAY_NUM 4
+
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
@@ -60,6 +62,9 @@ static int Arrow4Grow;
 
 EnemySpawner* Spawners[8];
 
+Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
+static int GlowBool;
+
 FoxSound* BackSnd;
 
 Sprite* BlackOverlay;
@@ -67,6 +72,8 @@ HUD* CurrentHUD;
 
 Platform* Plat;
 Wall* Wall1;
+
+static void ObjectGlowUpdate(void);
 
 /*************************************************************************/
 /*!
@@ -99,6 +106,7 @@ void InitializeLevel6(void)
 	beginningAnimation = TRUE;
 	PlayerIsAlive = TRUE;
 	numPanels = 4;
+	GlowBool = TRUE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -112,15 +120,23 @@ void InitializeLevel6(void)
 	//Panel1
 	CreateSprite("TextureFiles/Level6Pan0.png", 1920, 1080, 5, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/Level6Pan0Overlay.png", 1920, 1080, 300, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl6Pan1PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0);
+	PlatOverlay[0]->Alpha = .1f;
 	//Panel2
 	CreateSprite("TextureFiles/Level6Pan1.png", 1920, 1080, 5, 1, 1, PANELSIZE, 0);
 	CreateSprite("TextureFiles/Level6Pan1Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE, 0);
+	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl6Pan2PlatOverlay.png", 1920, 1080, 6, 1, 1, PANELSIZE, 0);
+	PlatOverlay[1]->Alpha = .1f;
 	//Panel3
 	CreateSprite("TextureFiles/Level6Pan2.png", 1920, 1080, 5, 1, 1, PANELSIZE * 2, 0);
 	CreateSprite("TextureFiles/Level6Pan2Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE * 2, 0);
+	PlatOverlay[2] = (Sprite*)CreateSprite("TextureFiles/Lvl6Pan3PlatOverlay.png", 1920, 1080, 6, 1, 1, PANELSIZE * 2, 0);
+	PlatOverlay[2]->Alpha = .1f;
 	//Panel4
 	CreateSprite("TextureFiles/Level6Pan3.png", 1920, 1080, 5, 1, 1, PANELSIZE * 3, 0);
 	CreateSprite("TextureFiles/Level6Pan3Overlay.png", 1920, 1080, 300, 1, 1, PANELSIZE * 3, 0);
+	PlatOverlay[3] = (Sprite*)CreateSprite("TextureFiles/Lvl6Pan4PlatOverlay.png", 1920, 1080, 6, 1, 1, PANELSIZE * 3, 0);
+	PlatOverlay[3]->Alpha = .1f;
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
@@ -399,6 +415,7 @@ void EventLevel(void)
 	UpdateAllEnemies();
 	UpdateFloatingText();
 	UpdateAllProjectiles();
+	ObjectGlowUpdate();
 
 	//Level Transition
 	BlackOverlay->Position.x = GetCameraXPosition();
@@ -416,5 +433,26 @@ void EventLevel(void)
 		BlackOverlay->Alpha = 0.5f;
 
 		UpdateDeathConfirmObjects();
+	}
+}
+
+void ObjectGlowUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < GLOW_OVERLAY_NUM; i++)
+	{
+		if(GlowBool)
+		{
+			PlatOverlay[i]->Alpha += .01f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM - 1]->Alpha > 0.5f)
+				GlowBool = FALSE;
+		}
+		else 
+		{
+			PlatOverlay[i]->Alpha -= .01f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM -1]->Alpha < 0.1f)
+				GlowBool = TRUE;
+		}
 	}
 }

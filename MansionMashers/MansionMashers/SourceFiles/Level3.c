@@ -56,6 +56,8 @@
 
 #define BACKGROUND_LENGTH 1
 
+#define GLOW_OVERLAY_NUM 1
+
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
@@ -69,6 +71,9 @@ Wall *Wall1;
 
 HUD* CurrentHUD;
 
+Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
+static int GlowBool;
+
 TextGlyphs *IntelFoxTxtStart;
 
 FoxSound* IntelFoxStart;
@@ -77,6 +82,7 @@ Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
 Sprite* TreeBackground3[BACKGROUND_LENGTH];
 static void TreeBackgroundUpdate(void);
+static void ObjectGlowUpdate(void);
 
 /*************************************************************************/
 /*!
@@ -107,6 +113,7 @@ void InitializeLevel3(void)
 	beginningAnimation = TRUE;
 	levelComplete = FALSE;
 	counter = 2 * FRAMERATE;
+	GlowBool = TRUE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -127,6 +134,8 @@ void InitializeLevel3(void)
 	//		Backgrounds			   //
 	/////////////////////////////////
 	CreateSprite("TextureFiles/Level3Pan1.png", 1920, 1080, 5, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan1PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0);
+	PlatOverlay[0]->Alpha = .1f;
 	
 	//Black Overlay
 	Vec3Set(&TextTint, 0, 0, 0);
@@ -337,6 +346,7 @@ void EventLevel3(void)
 	//       EVERYTHING ELSE        //
 	//////////////////////////////////
 	SetUpScrollWithText(IntelFoxTxtStart, &counter);
+	ObjectGlowUpdate();
 
 	//Intel Fox Starting Narrative
 	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
@@ -360,4 +370,25 @@ void TreeBackgroundUpdate(void)
 
 	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
+}
+
+void ObjectGlowUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < GLOW_OVERLAY_NUM; i++)
+	{
+		if(GlowBool)
+		{
+			PlatOverlay[i]->Alpha += .01f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM - 1]->Alpha > 0.7f)
+				GlowBool = FALSE;
+		}
+		else 
+		{
+			PlatOverlay[i]->Alpha -= .01f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM -1]->Alpha < 0.1f)
+				GlowBool = TRUE;
+		}
+	}
 }

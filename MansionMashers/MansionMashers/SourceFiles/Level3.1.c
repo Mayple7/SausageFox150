@@ -55,6 +55,8 @@
 
 #define BACKGROUND_LENGTH 3
 
+#define GLOW_OVERLAY_NUM 6
+
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
@@ -70,6 +72,9 @@ Wall *Wall1;
 HUD* CurrentHUD;
 
 Sprite* SecondOverlay[3];
+
+Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
+static int GlowBool;
 
 // Arrows
 Sprite *Arrow1;
@@ -94,6 +99,7 @@ Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
 Sprite* TreeBackground3[BACKGROUND_LENGTH];
 static void TreeBackgroundUpdate(void);
+static void ObjectGlowUpdate(void);
 
 /*************************************************************************/
 /*!
@@ -118,6 +124,7 @@ void InitializeLevel31(void)
 	Vec3 TextTint;
 	Vec2 SpawnerLocation;
 	int i;
+
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -127,6 +134,7 @@ void InitializeLevel31(void)
 	PlayerIsAlive = TRUE;
 	ResetEnemyPanelNumber();
 	counter = 2 * FRAMERATE;
+	GlowBool = TRUE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -148,12 +156,29 @@ void InitializeLevel31(void)
 	//Panel 1
 	CreateSprite("TextureFiles/Level3Pan2.png", 1920, 1080, 5, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan2PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0);
+	PlatOverlay[0]->Alpha = .1f;
+	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl3PanPlatOverlay2.png", 1920, 1080, 500, 1, 1, 0, 0);
+	PlatOverlay[1]->Alpha = .1f;
+	PlatOverlay[1]->Visible = FALSE;
 	//Panel2
 	CreateSprite("TextureFiles/Level3Pan3.png", 1920, 1080, 5, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, 1920, 0);
+	PlatOverlay[2] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan3PlatOverlay.png", 1920, 1080, 6, 1, 1, 1920, 0);
+	PlatOverlay[2]->Alpha = .1f;
+	PlatOverlay[3] = (Sprite*)CreateSprite("TextureFiles/Lvl3PanPlatOverlay2.png", 1920, 1080, 500, 1, 1, 1920, 0);
+	PlatOverlay[3]->Alpha = .1f;
+	PlatOverlay[3]->Visible = FALSE;
 	//Panel3
 	CreateSprite("TextureFiles/Level3Pan4.png", 1920, 1080, 5, 1, 1, (1920 * 2), 0);
 	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, (1920 * 2), 0);
+	PlatOverlay[4] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan3PlatOverlay.png", 1920, 1080, 6, 1, 1, 1920 * 2, 0);
+	PlatOverlay[4]->Alpha = .1f;
+	PlatOverlay[5] = (Sprite*)CreateSprite("TextureFiles/Lvl3PanPlatOverlay2.png", 1920, 1080, 500, 1, 1, 1920*2, 0);
+	PlatOverlay[5]->Alpha = .1f;
+	PlatOverlay[5]->Visible = FALSE;
+
+
 
 	//Create Upper Deck Overlays
 	for(i = 0; i < 3; i++)
@@ -466,6 +491,7 @@ void EventLevel31(void)
 	UpdateFloatingText();
 	TreeBackgroundUpdate();
 	UpdateAllEnemies();
+	ObjectGlowUpdate();
 
 	//SetUpScrollWithText(IntelFoxTxtStart, &counter);
 
@@ -478,6 +504,9 @@ void EventLevel31(void)
 		{
 			SecondOverlay[i]->Alpha = 0.0f;
 		}
+		PlatOverlay[1]->Visible = FALSE;
+		PlatOverlay[3]->Visible = FALSE;
+		PlatOverlay[5]->Visible = FALSE;
 	}
 	else 
 	{
@@ -491,6 +520,9 @@ void EventLevel31(void)
 				SecondOverlay[i]->Alpha = 1.0f;
 			}
 		}
+		PlatOverlay[1]->Visible = TRUE;
+		PlatOverlay[3]->Visible = TRUE;
+		PlatOverlay[5]->Visible = TRUE;
 	}
 
 	//Intel Fox Starting Narrative
@@ -530,4 +562,25 @@ void TreeBackgroundUpdate(void)
 
 	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
+}
+
+void ObjectGlowUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < GLOW_OVERLAY_NUM; i++)
+	{
+		if(GlowBool)
+		{
+			PlatOverlay[i]->Alpha += .005f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM - 1]->Alpha > 0.6f)
+				GlowBool = FALSE;
+		}
+		else 
+		{
+			PlatOverlay[i]->Alpha -= .005f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM -1]->Alpha < 0.2f)
+				GlowBool = TRUE;
+		}
+	}
 }

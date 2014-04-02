@@ -40,6 +40,7 @@
 // define
 #define PANELSIZE 1920.0f
 #define MAXENEMIES 10
+#define GLOW_OVERLAY_NUM 2
 
 // ---------------------------------------------------------------------------
 // globals
@@ -59,11 +60,15 @@ Sprite* BlackOverlay;
 Platform* Plat;
 Wall* Wall1;
 
+Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
+static int GlowBool;
+
 // Tree Background
 Sprite* TreeBackground1[4];
 Sprite* TreeBackground2[4];
 Sprite* TreeBackground3[4];
 static void TreeBackgroundUpdate(void);
+static void ObjectGlowUpdate(void);
 /*************************************************************************/
 /*!
 	\brief
@@ -86,6 +91,7 @@ void InitializeLevel7(void)
 {
 	Vec3 TextTint;
 	int i;
+
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -96,6 +102,7 @@ void InitializeLevel7(void)
 	spawnTime = 2.0f;
 	levelTimer = 60.0f;
 	ResetEnemyPanelNumber();
+	GlowBool = TRUE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -107,8 +114,12 @@ void InitializeLevel7(void)
 	/////////////////////////////////
 	//Panel1
 	CreateSprite("TextureFiles/Level7Pan0.png", 1920, 1080, 5, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl7Pan1PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0);
+	PlatOverlay[0]->Alpha = .1f;
 	//Panel2
 	CreateSprite("TextureFiles/Level7Pan1.png", 1920, 1080, 5, 1, 1, PANELSIZE, 0);
+	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl7Pan2PlatOverlay.png", 1920, 1080, 6, 1, 1, PANELSIZE, 0);
+	PlatOverlay[1]->Alpha = .1f;
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
@@ -370,6 +381,8 @@ void EventLevel(void)
 	//////////////////////////////////
 	//       EVERYTHING ELSE        //
 	//////////////////////////////////
+	ObjectGlowUpdate();
+
 	//Level Transition
 	BlackOverlay->Position.x = GetCameraXPosition();
 	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
@@ -399,4 +412,25 @@ void TreeBackgroundUpdate(void)
 
 	for(i = 0; i < 4; i++)
 		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
+}
+
+void ObjectGlowUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < GLOW_OVERLAY_NUM; i++)
+	{
+		if(GlowBool)
+		{
+			PlatOverlay[i]->Alpha += .01f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM - 1]->Alpha > 0.4f)
+				GlowBool = FALSE;
+		}
+		else 
+		{
+			PlatOverlay[i]->Alpha -= .01f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM -1]->Alpha < 0.1f)
+				GlowBool = TRUE;
+		}
+	}
 }

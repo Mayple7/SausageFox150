@@ -40,6 +40,8 @@
 // defines
 #define PANELSIZE 1920.0f
 
+#define GLOW_OVERLAY_NUM 2
+
 // ---------------------------------------------------------------------------
 // Libraries
 #pragma comment (lib, "Alpha_Engine.lib")
@@ -61,6 +63,9 @@ Platform *Table1;
 
 Wall *Wall1;
 
+Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
+static int GlowBool;
+
 TextGlyphs *IntelFoxTxtStart;
 
 FoxSound *BackSnd;
@@ -77,6 +82,8 @@ static int Arrow3Grow;
 
 Sprite *BlackOverlay;
 HUD *CurrentHUD;
+
+static void ObjectGlowUpdate(void);
 
 /*************************************************************************/
 /*!
@@ -134,9 +141,13 @@ void InitializeLevel1(void)
 	//Panel 1
 	CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OverlayDoorTorch.png", 1920, 1080, 200, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl1Pan1PlatOverlay.png", 1920, 1080, 500, 1, 1, 0, 0);
+	PlatOverlay[0]->Alpha = .1f;
 	//Panel 2
 	CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 300, 1, 1, 1920, 0);
+	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl1Pan2PlatOverlay.png", 1920, 1080, 500, 1, 1, 1920, 0);
+	PlatOverlay[1]->Alpha = .1f;
 	//Panel 3
 	CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, (1920 * 2), 0);
 	
@@ -408,6 +419,7 @@ void EventLevel1(void)
 	UpdateFloatingText();
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
+	ObjectGlowUpdate();
 
 	//Setting Enemy AI Stuff
 	if(CurrentPlayer.Position.x > (1.5f * PANELSIZE))
@@ -434,3 +446,25 @@ void EventLevel1(void)
 		UpdateDeathConfirmObjects();
 	}
 }
+
+void ObjectGlowUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < GLOW_OVERLAY_NUM; i++)
+	{
+		if(GlowBool)
+		{
+			PlatOverlay[i]->Alpha += .005f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM - 1]->Alpha > 0.3f)
+				GlowBool = FALSE;
+		}
+		else 
+		{
+			PlatOverlay[i]->Alpha -= .005f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM -1]->Alpha < 0.05f)
+				GlowBool = TRUE;
+		}
+	}
+}
+
