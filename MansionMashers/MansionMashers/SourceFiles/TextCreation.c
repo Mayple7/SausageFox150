@@ -275,6 +275,24 @@ void ChangeTextVisibility(TextGlyphs* FirstLetter)
 /*************************************************************************/
 /*!
 	\brief
+	Changes all text to a desired alpha
+*/
+/*************************************************************************/
+void ChangeTextAlpha(TextGlyphs *FirstLetter, float AlphaToChangeTo)
+{
+	TextGlyphs *nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+			nextLetter->Glyph->Alpha = AlphaToChangeTo;
+		nextLetter = nextLetter->NextLetter;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Changes the Zindex of the text string
 	
 	\param FirstLetter
@@ -801,12 +819,12 @@ void ComparisonTextUpdate(TextGlyphs* FirstLetter)
 	if(nextLetter->letter == '+')
 	{
 		R = 0.0f;
-		G = 1.0f;
+		G = 0.7f;
 		B = 0.0f;
 	}
 	else if(nextLetter->letter == '-')
 	{
-		R = 1.0f;
+		R = 0.7f;
 		G = 0.0f;
 		B = 0.0f;
 	}
@@ -831,12 +849,12 @@ void ComparisonTextUpdate(TextGlyphs* FirstLetter)
 	if(nextLetter->letter == '+')
 	{
 		R = 0.0f;
-		G = 1.0f;
+		G = 0.7f;
 		B = 0.0f;
 	}
 	else if(nextLetter->letter == '-')
 	{
-		R = 1.0f;
+		R = 0.7f;
 		G = 0.0f;
 		B = 0.0f;
 	}
@@ -861,12 +879,12 @@ void ComparisonTextUpdate(TextGlyphs* FirstLetter)
 	if(nextLetter->letter == '+')
 	{
 		R = 0.0f;
-		G = 1.0f;
+		G = 0.7f;
 		B = 0.0f;
 	}
 	else if(nextLetter->letter == '-')
 	{
-		R = 1.0f;
+		R = 0.7f;
 		G = 0.0f;
 		B = 0.0f;
 	}

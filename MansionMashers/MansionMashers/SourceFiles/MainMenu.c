@@ -56,6 +56,11 @@ Button* OptionsButton;
 Button* CreditsButton;
 Button* QuitGameButton;
 
+//For those silly goosesese out there
+TextGlyphs *SillyGooseUseMouse;
+float GettingImpatientTimer;    //A counter to give the player a hint (in seconds)
+int   TimerGoingUp;
+
 //Delete save file objects
 Sprite* BlackBackground;
 Sprite* DeleteText;
@@ -224,6 +229,15 @@ void InitializeMainMenu(void)
 	NoButton->ButtonSprite->Visible = FALSE;
 	ExitButton->ButtonSprite->Visible = FALSE;
 
+	//Help out text
+	GettingImpatientTimer = -2;
+	TimerGoingUp = TRUE;
+	Vec3Set(&Tint, 1, 1, 1);
+	SillyGooseUseMouse = CreateText("Use the mouse to select a button!", 0, -480, 100, Tint, Center, Border);
+	ChangeTextZIndex(SillyGooseUseMouse, 600);
+	ChangeTextAlpha(SillyGooseUseMouse, 0);
+	ChangeTextVisibility(SillyGooseUseMouse);
+
 	CreateBoundingBoxes();
 
 	// Set camera to (0,0)
@@ -277,6 +291,21 @@ void UpdateMainMenu(void)
 	if (FoxScrollBottom->Position.y < CreditsButton->ButtonSprite->Position.y)
 	{
 		CreditsButton->ButtonSprite->Visible = TRUE;
+	}
+
+	//Menu navigation help
+	if (TimerGoingUp)
+		GettingImpatientTimer += GetDeltaTime();
+	else
+		GettingImpatientTimer -= GetDeltaTime();
+	if (GettingImpatientTimer > 0)
+	{
+		ChangeTextAlpha(SillyGooseUseMouse, GettingImpatientTimer);
+
+		if (GettingImpatientTimer > 1)
+			TimerGoingUp = FALSE;
+		else if (GettingImpatientTimer < 0.4)
+			TimerGoingUp = TRUE;
 	}
 
 	// REMOVE FOR RELEASE BUILD

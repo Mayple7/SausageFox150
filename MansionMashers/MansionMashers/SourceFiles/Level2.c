@@ -82,6 +82,8 @@ FoxSound* BackSnd;
 FoxSound* IntelFoxStart;
 TextGlyphs* IntelFoxTxtStart;
 
+Sprite* IntelFox;
+
 static int PlayerInSight; // Enemy in watch tower checks for player 
 static int PlayerIsAlive; 
 
@@ -295,6 +297,9 @@ void InitializeLevel2(void)
 
 	// Create Bounding boxes
 	CreateBoundingBoxes();
+
+	IntelFox = (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 4, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -516,6 +521,21 @@ void EventLevel2(void)
 		PlayAudio(IntelFoxStart);
 		IntelFoxStart->hasPlayed = TRUE;
 	}
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(IntelFoxStart))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
 
 	if(!beginningAnimation)
 		SetUpScrollWithText(IntelFoxTxtStart, &counter);

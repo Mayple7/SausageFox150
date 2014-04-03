@@ -39,6 +39,8 @@ void TextDisappearInit(TextGlyphs* FirstLetter);
 void TextProgressiveDisappear(TextGlyphs* FirstLetter, int fadeinSpeed);
 void TextDisappearEnd(TextGlyphs* FirstLetter);
 
+void ChangeTextAlpha(TextGlyphs *FirstLetter, float AlphaToChangeTo);
+
 int GetTextInProgress(void);
 int GetTextToDisappear(void);
 
