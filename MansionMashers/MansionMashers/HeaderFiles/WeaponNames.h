@@ -11,8 +11,8 @@
 #define NUM_SPEAR_SYNONYMS 10
 
 #define NUM_COMMON_END 9
-#define NUM_UNCOMMON_END 9
-#define NUM_RARE_END 9
+#define NUM_UNCOMMON_END 10
+#define NUM_RARE_END 10
 
 char* GetCommonStart(void);
 char* GetUncommonStart(void);

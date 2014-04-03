@@ -97,8 +97,16 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 
 	Vec2Set(&CurrentWeapon->Position, xPos, yPos);
 	CurrentWeapon->WeaponSprite = CreateWeaponSprite(CurrentWeapon->WeaponType, CurrentWeapon->WeaponRarity, xPos, yPos);
+
+	// Special Weapon!!
 	if (!strcmp(CurrentWeapon->WeaponName,"Sausage Sausage of sausage"))
+	{
 		CurrentWeapon->WeaponSprite->SpriteTexture = LoadTexture("TextureFiles/BattleAxe.png");
+		CurrentWeapon->BonusAgility += 12;
+		CurrentWeapon->BonusStrength += 12;
+		CurrentWeapon->BonusDefense += 12;
+	}
+
 	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
 	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
 

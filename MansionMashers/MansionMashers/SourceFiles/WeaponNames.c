@@ -296,6 +296,8 @@ char* GetUncommonEnd(void)
 		return "of dogs";
 	case 7:
 		return "of intensity";
+	case 8:
+		return "of sausage";
 	default:
 		return "";
 	}
@@ -323,6 +325,8 @@ char* GetRareEnd(void)
 		return "of immortality";
 	case 7:
 		return "of the stars";
+	case 8:
+		return "of sausage";
 	default:
 		return "";
 	}

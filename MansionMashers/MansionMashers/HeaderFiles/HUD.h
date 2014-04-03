@@ -9,7 +9,16 @@
 typedef struct HUD
 {
 	Sprite* HUDBackground;
-	Sprite* HUDItem[10];
+	Sprite* HUDItem[4];
+
+	Sprite* HealthBar;
+	Sprite* HealthBarEnd;
+
+	Sprite* AbilityBar;
+	Sprite* AbilityBarEnd;
+
+	Sprite* ExpBar;
+	Sprite* ExpBarEnd;
 
 	struct TextGlyphs *FPSText;
 
