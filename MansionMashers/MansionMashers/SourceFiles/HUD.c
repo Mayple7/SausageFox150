@@ -216,6 +216,7 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 		return;
 
 	//Framerate is probably always changing
+	Vec2Set(&newPosition, (GetCameraXPosition() - 790), 300);
 	newPosition.y -= 48;
 	ChangeTextPosition(CurrentHUD->FPSText, newPosition, Left);
 	sprintf(CharTemp, "%.2f FPS ", FRAMERATE * (1 / (FRAMERATE * GetDeltaTime()))); //If Dt is ever 0 then... well...

@@ -122,7 +122,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	ChangeTextPosition(wList->WeaponGlyphs, glyphPos, Center);
 
 	//Switch weapons
-	if(AEInputCheckTriggered('E'))
+	if(FoxInput_KeyTriggered('E'))
 	{
 		int Shopping = FALSE;
 		float healthRatio = 0;
@@ -246,6 +246,22 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		healthRatio = (float)(CurrentPlayer->CurrentPlayerStats.CurrentHealth) / CurrentPlayer->CurrentPlayerStats.MaxHealth;
 		updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 		CurrentPlayer->CurrentPlayerStats.CurrentHealth = (int)(CurrentPlayer->CurrentPlayerStats.MaxHealth * healthRatio);
+
+		// Make sure the player keeps their buff after the weapon swap
+		if(CurrentPlayer->CurrentPlayerStats.StrengthTimer > 0)
+		{
+			CurrentPlayer->CurrentPlayerStats.Damage = (int)(CurrentPlayer->CurrentPlayerStats.Damage * 2.0f);;
+		}
+		if(CurrentPlayer->CurrentPlayerStats.AgilityTimer > 0)
+		{
+			CurrentPlayer->CurrentPlayerStats.AttackSpeed *= 2.0f;
+		}
+		if(CurrentPlayer->CurrentPlayerStats.DefenseTimer > 0)
+		{
+			CurrentPlayer->CurrentPlayerStats.DamageReduction *= 1.5f;
+		}
+
+
 	}
 }
 
