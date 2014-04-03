@@ -121,6 +121,8 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	}
 	CurrentWeapon->WeaponHoverBackground->Visible = FALSE;
 
+	CurrentWeapon->WeaponParticle = CreateFoxParticleSystem("TextureFiles/ParticlePlatform.png", xPos, yPos, 9, -1, 3, .15f, 270, 0, 0.3f, 0, 110, 100, 50.0f, 1.0f, 0.7f);
+
 	//Start off shopless
 	CurrentWeapon->CurrentShop = NULL;
 	CurrentWeapon->WeaponFalling = FALSE;
@@ -203,7 +205,7 @@ void WeaponOnTheRun(Weapon* CurrentWeapon)
 		Vec2 glyphPos;
 		int hit = 0;
 
-		if (CurrentWeapon->WeaponPickup.Position.y <= (GROUNDLEVEL - 100))
+		if (CurrentWeapon->WeaponPickup.Position.y <= (GROUNDLEVEL - 80))
 		{
 			CurrentWeapon->WeaponFalling = FALSE;
 			return;
@@ -245,6 +247,12 @@ void WeaponOnTheRun(Weapon* CurrentWeapon)
 		ChangeTextPosition(CurrentWeapon->WeaponGlyphs, glyphPos, Center);
 		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f - CurrentWeapon->WeaponGlyphs->Glyph->Height / 2));
 		ChangeTextPosition(CurrentWeapon->WeaponStatsGlyphs, glyphPos, Center);
+
+		if (CurrentWeapon->WeaponParticle)
+		{
+			CurrentWeapon->WeaponParticle->Position.x = CurrentWeapon->WeaponSprite->Position.x;
+			CurrentWeapon->WeaponParticle->Position.y = CurrentWeapon->WeaponSprite->Position.y;
+		}
 	}
 }
 

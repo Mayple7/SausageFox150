@@ -157,6 +157,9 @@ void UpdateShop4(void)
 
 	PlayAudio(BackSnd);
 
+	UpdateAllProjectiles();
+	ParticleSystemUpdate();
+
 	if(levelComplete)
 	{
 		BlackOverlay->Position.x = GetCameraXPosition();

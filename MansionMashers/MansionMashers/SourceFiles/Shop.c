@@ -136,6 +136,7 @@ void CreateWeaponShop(float shopPosX, float shopPosY, int newID, int collisionGr
 	newShop->Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, newID, shopPosX + 50, shopPosY);
 	newShop->Weapon->WeaponSprite->Rotation = FOX_PI / 2;
 	newShop->Weapon->CurrentShop = newShop;
+	FreeParticleSystem(newShop->Weapon->WeaponParticle);
 
 	//Based on the weapon, get the price
 	getWeaponCoin(newShop, weaponRarity);
