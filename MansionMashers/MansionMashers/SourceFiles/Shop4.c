@@ -40,11 +40,17 @@
 // globals
 static int newID;					// ID number
 static int levelComplete;
-static int beginningAnimiation;
+static int beginningAnimation;
 HUD* CurrentHUD;
 Sprite* BlackOverlay;
 
 FoxSound *BackSnd;
+
+static int timer;
+static int timerOn;
+static int prevPlayed;
+
+static int MooseWelcomeSaid;
 
 static int PlayerIsAlive; 
 
@@ -73,7 +79,7 @@ void InitializeShop4(void)
 
 	levelComplete = FALSE;
 	PlayerIsAlive = TRUE;
-	beginningAnimiation = TRUE;
+	beginningAnimation = TRUE;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
@@ -207,6 +213,8 @@ void UnloadShop4(void)
 /*************************************************************************/
 void EventLevel(void)
 {
+	int i;
+
 	/*////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	////////////////////////////////*/
@@ -226,7 +234,7 @@ void EventLevel(void)
 	if(FoxInput_KeyTriggered('I'))
 		RemoveDebugMode();
 
-	if(!beginningAnimiation && !levelComplete)
+	if(!beginningAnimation && !levelComplete)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
@@ -258,7 +266,7 @@ void EventLevel(void)
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -500)
 			{
-				beginningAnimiation = FALSE;
+				beginningAnimation = FALSE;
 			}
 		}
 		//Always animate the player otherwise the sprites get stuck in the middle
@@ -274,8 +282,81 @@ void EventLevel(void)
 		{
 			SetNextState(GS_MapLevel);
 		}
-
 	}
 
 	UpdateFloatingText();
+
+	//Play a random welcome saying
+	if(beginningAnimation == FALSE && !CurrentPlayer.CurrentPlayerSounds.MooseWelcome[0]->hasPlayed && !CurrentPlayer.CurrentPlayerSounds.MooseWelcome[1]->hasPlayed)
+	{
+		int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 2;
+		
+		PlayAudio(CurrentPlayer.CurrentPlayerSounds.MooseWelcome[randNum]);
+		CurrentPlayer.CurrentPlayerSounds.MooseWelcome[randNum]->hasPlayed = TRUE;
+
+		MooseWelcomeSaid = TRUE;
+	}
+
+	CurrentPlayer.CurrentPlayerSounds.MoosePlay = FALSE;
+
+	for(i = 0; i < 5; i++)
+	{
+		if(FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.MooseRandom[i]))
+			CurrentPlayer.CurrentPlayerSounds.MoosePlay = TRUE;
+	}
+	if(FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.MooseWelcome[0]) || FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.MooseWelcome[1])
+    || FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.MoosePurchase[0]) || FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.MoosePurchase[1])
+	|| FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.MooseNotEnoughCoins))
+		CurrentPlayer.CurrentPlayerSounds.MoosePlay = TRUE;
+
+	//Say Random Phrases Randomly
+	if(MooseWelcomeSaid)
+	{
+		//Get RandNum to choose rand Sound and a random time
+		int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 5;
+		int randInstance = ((int)((rand() / (float)RAND_MAX) * 720)) % 360;
+
+		//Randomly go but wait if a phrase was just said
+		if(randInstance > 356 && !timerOn)
+		{
+			//Start timer
+			timerOn = TRUE;
+
+			//If a sound is not playing let's say something
+			if(CurrentPlayer.CurrentPlayerSounds.MoosePlay == FALSE)
+			{
+				//Check if phrase your about to say was just said
+				if(randNum == prevPlayed)
+				{
+					//if it was the same phrase say a differnt one
+					if(randNum == 0)
+					{
+						PlayAudio(CurrentPlayer.CurrentPlayerSounds.MooseRandom[randNum + 1]);
+						prevPlayed = randNum + 1;
+					}
+					else
+					{
+						PlayAudio(CurrentPlayer.CurrentPlayerSounds.MooseRandom[randNum - 1]);
+						prevPlayed = randNum - 1;
+					}
+
+				}
+				//Wasn't the same so just say what you wanna say
+				else
+				{
+					PlayAudio(CurrentPlayer.CurrentPlayerSounds.MooseRandom[randNum]);
+					prevPlayed = randNum;
+				}
+			}
+		}
+	}
+
+	//For Random Phrase Timer (see above)
+	if(timerOn)
+		timer -= 1;
+	if(timer < 0)
+	{
+		timer = 5 * FRAMERATE;
+		timerOn = FALSE;
+	}
 }
