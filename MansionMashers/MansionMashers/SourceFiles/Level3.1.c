@@ -491,6 +491,7 @@ void EventLevel31(void)
 	TreeBackgroundUpdate();
 	UpdateAllEnemies();
 	ObjectGlowUpdate();
+	UpdateAllProjectiles();
 
 	//SetUpScrollWithText(IntelFoxTxtStart, &counter);
 
