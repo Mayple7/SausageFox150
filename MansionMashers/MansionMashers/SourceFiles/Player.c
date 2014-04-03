@@ -263,14 +263,14 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 	}
 
-	if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
+	/*if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
 	{
 		CurrentPlayer->isBlocking = TRUE;
 	}
 	else if(FoxInput_MouseUp(MOUSE_BUTTON_RIGHT) || FoxInput_KeyUp('M') || CurrentPlayer->isAttacking)
 	{
 		CurrentPlayer->isBlocking = FALSE;
-	}
+	}*/
 
 	if (LookAtMouse)
 	{

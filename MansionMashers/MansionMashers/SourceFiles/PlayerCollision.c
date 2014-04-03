@@ -185,6 +185,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 			Shopping = TRUE;
 		}
 
+		//FreeParticleSystem(wList->WeaponParticle);
 		SwapWeapons(CurrentPlayer->PlayerWeapon, wList);
 
 		//Set up the new player weapon sprite
