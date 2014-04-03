@@ -134,7 +134,10 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 			if (wList->CurrentShop->Coin < 0)
 			{
 				if (!Cheats)
+				{
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.MooseNotEnoughCoins);
 					return;
+				}
 
 				//Go positive again...
 				wList->CurrentShop->Coin *= -1;
@@ -156,12 +159,29 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 
 				//YOU WILL NEVER BUY THIS AGAIN, HAHAHAHAHAHA (Until you leave, get more money and then come back)
 				wList->CurrentShop->Coin *= -1;
+
+				if (!CurrentPlayer->CurrentPlayerSounds.MoosePlay)
+				{
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.MooseNotEnoughCoins);
+					CurrentPlayer->CurrentPlayerSounds.MoosePlay = TRUE;
+				}
+
 				return;
 			}
 			
 			//If you aren't cheating, we will take your money
 			if (!Cheats)
 				CurrentPlayer->CurrentPlayerStats.Money -= wList->CurrentShop->Coin;
+
+			if (!CurrentPlayer->CurrentPlayerSounds.MoosePlay)
+			{
+				if (rand() % 2)
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.MoosePurchase[0]);
+				else
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.MoosePurchase[1]);
+
+				CurrentPlayer->CurrentPlayerSounds.MoosePlay = TRUE;
+			}
 			Shopping = TRUE;
 		}
 

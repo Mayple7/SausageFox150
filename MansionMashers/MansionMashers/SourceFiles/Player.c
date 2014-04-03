@@ -150,7 +150,13 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	CurrentPlayer->CurrentPlayerSounds.GetHit1 = CreateSound("Sounds/SwordHit1.wav", SmallSnd);
 	CurrentPlayer->CurrentPlayerSounds.GetHit2 = CreateSound("Sounds/SwordHit2.wav", SmallSnd);
 
+	//Might have to move these into player
+	CurrentPlayer->CurrentPlayerSounds.MoosePurchase[0] = CreateSound("Sounds/MooseQuality.mp3", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.MoosePurchase[1] = CreateSound("Sounds/MooseOhYeah.mp3", SmallSnd);
 
+	CurrentPlayer->CurrentPlayerSounds.MooseNotEnoughCoins = CreateSound("Sounds/MooseNotEnoughCoins.mp3", SmallSnd);
+
+	
 	/*////////////////////////////////
 	//       PLAYER SPRITE          //
 	////////////////////////////////*/
