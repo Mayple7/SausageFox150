@@ -35,6 +35,8 @@ typedef struct Weapon
 	struct TextGlyphs* WeaponGlyphs;
 	struct TextGlyphs* WeaponStatsGlyphs;
 
+	struct ParticleSystem *WeaponParticle;
+
 	CollisionBox WeaponPickup;
 	CollisionBox WeaponAttack;
 
