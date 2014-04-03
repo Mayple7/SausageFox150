@@ -142,7 +142,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	
 	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 
-	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer->CurrentPlayerStats.MaxHealth;
 
 
 	/*////////////////////////////////
@@ -358,9 +358,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 			// Buffs the player's move speed
 			case Heal:
 				if(CurrentPlayer->CurrentPlayerStats.CurrentHealth > CurrentPlayer->CurrentPlayerStats.MaxHealth / 2)
-					CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+					CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer->CurrentPlayerStats.MaxHealth;
 				else
-					CurrentPlayer->CurrentPlayerStats.CurrentHealth += CurrentPlayer->CurrentPlayerStats.MaxHealth / 2;
+					CurrentPlayer->CurrentPlayerStats.CurrentHealth += (float)CurrentPlayer->CurrentPlayerStats.MaxHealth / 2;
 				break;
 			}
 			CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] = FALSE;
@@ -1347,7 +1347,7 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	CurrentPlayer->CurrentPlayerStats.Experience = 0;
 
 	CurrentPlayer->CurrentPlayerStats.Money = 15;
-	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer->CurrentPlayerStats.MaxHealth;
 	CurrentPlayer->CurrentLevel = GS_Tutorial;
 }
 
