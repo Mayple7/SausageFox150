@@ -275,6 +275,24 @@ void ChangeTextVisibility(TextGlyphs* FirstLetter)
 /*************************************************************************/
 /*!
 	\brief
+	Changes all text to a desired alpha
+*/
+/*************************************************************************/
+void ChangeTextAlpha(TextGlyphs *FirstLetter, float AlphaToChangeTo)
+{
+	TextGlyphs *nextLetter = FirstLetter;
+
+	while(nextLetter)
+	{
+		if(nextLetter->Glyph)
+			nextLetter->Glyph->Alpha = AlphaToChangeTo;
+		nextLetter = nextLetter->NextLetter;
+	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Changes the Zindex of the text string
 	
 	\param FirstLetter

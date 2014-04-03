@@ -128,7 +128,19 @@ void InitializeShop2(void)
 	//Bounding Boxes
 	CreateBoundingBoxes();
 
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
 	BackSnd = CreateSound("Sounds/ShopTheme.wav", LargeSnd);
+
+	CurrentPlayer.CurrentPlayerSounds.MooseWelcome[0] = CreateSound("Sounds/MooseWelcome.mp3", SmallSnd);
+	CurrentPlayer.CurrentPlayerSounds.MooseWelcome[1] = CreateSound("Sounds/MooseWelcomeOrNot.mp3", SmallSnd);
+
+	CurrentPlayer.CurrentPlayerSounds.MooseRandom[0] = CreateSound("Sounds/MooseFoxSay.mp3", SmallSnd);
+	CurrentPlayer.CurrentPlayerSounds.MooseRandom[1] = CreateSound("Sounds/MooseGetOut.mp3", SmallSnd);
+	CurrentPlayer.CurrentPlayerSounds.MooseRandom[2] = CreateSound("Sounds/MooseJasonSays.mp3", SmallSnd);
+	CurrentPlayer.CurrentPlayerSounds.MooseRandom[3] = CreateSound("Sounds/MooseWhatBuy.mp3", SmallSnd);
+	CurrentPlayer.CurrentPlayerSounds.MooseRandom[4] = CreateSound("Sounds/MooseWhyHere.mp3", SmallSnd);
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 }
