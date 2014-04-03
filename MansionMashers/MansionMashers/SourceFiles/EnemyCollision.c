@@ -166,11 +166,11 @@ void EnemyCollidePlayerProjectile(Enemy *CurrentEnemy, Projectile *CurrentProjec
 			CurrentEnemy->KnockBackDir = LEFT;
 		}
 		
-		Vec2Set(&velocity, 0.0f, 270.0f);
 		if(CurrentEnemy->Position.y <= GROUNDLEVEL)
 			Vec2Set(&CurrentEnemy->Position, CurrentEnemy->Position.x, GROUNDLEVEL + 0.1f);
 		CurrentEnemy->EnemyRigidBody.onGround = FALSE;
-		ApplyVelocity(&CurrentEnemy->EnemyRigidBody, &velocity);
+		Vec2Set(&CurrentEnemy->EnemyRigidBody.Velocity, 0.0f, 750.0f);
+
 	}
 
 	sprintf(num, "-%d", damageDealt);
@@ -195,7 +195,7 @@ void EnemyCollidePlayerProjectile(Enemy *CurrentEnemy, Projectile *CurrentProjec
 /*************************************************************************/
 void EnemyCollideWall(Enemy *CurrentEnemy, Wall *CurrentWall)
 {
-	if (CurrentWall->enemyNotCollidable)
+	if (CurrentWall->enemyNotCollidable || CurrentEnemy->EnemyType == Dummy)
 		return;
 	else
 	{

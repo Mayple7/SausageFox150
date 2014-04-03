@@ -140,7 +140,8 @@ void FreeProjectile(Projectile *CurrentProjectile)
 		CurrentProjectile->objID = 0;
 		CurrentProjectile->ProjectileAttack.collisionDebug = FALSE;
 		AEGfxMeshFree(CurrentProjectile->ProjectileAttack.DebugMesh);
-
+		if(CurrentProjectile->ProjectileParticleSystem)
+			FreeParticleSystem(CurrentProjectile->ProjectileParticleSystem);
 		if(CurrentProjectile->ProjectileSprite->Created)
 			FreeSprite(CurrentProjectile->ProjectileSprite);
 	}

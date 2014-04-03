@@ -9,7 +9,7 @@
 typedef struct HUD
 {
 	Sprite* HUDBackground;
-	Sprite* HUDItem[6];
+	Sprite* HUDItem[10];
 
 	struct TextGlyphs *FPSText;
 

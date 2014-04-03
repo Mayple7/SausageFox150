@@ -233,9 +233,9 @@ void InputPlayer(struct Player *CurrentPlayer)
 
 			//NASTY NASTY HACKKKK
 			theWindOfAFox = CreateProjectile("TextureFiles/Wind.png", 
-										     CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 2, 
+										     CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 1.5f, 
 											 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
-										     Arrow, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
+										     Wind, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
 
 			theWindOfAFox->ProjectileFOF = PlayerWeapon;
 

@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*!
 \file				HUD.c
-\author				Dan Muller (d.muller)
+\author				Lucas Conlon (l.conlon)
 \date				Feb 26, 2024
 
 \brief				Functions for the heads up display
@@ -128,8 +128,14 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	CurrentHUD->HUDItem[2] = (Sprite *)CreateSprite("TextureFiles/Pizza.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
 	CurrentHUD->HUDItem[3] = (Sprite *)CreateSprite("TextureFiles/Cake.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
 
-	CurrentHUD->HUDItem[4] = (Sprite *)CreateSprite("TextureFiles/HealthBarMid.png", 2, 13, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y + 36);
-	CurrentHUD->HUDItem[5] = (Sprite *)CreateSprite("TextureFiles/HealthBarEnd.png", 5, 11, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y + 36);
+	CurrentHUD->HUDItem[4] = (Sprite *)CreateSprite("TextureFiles/HealthBarMid.png", 2, 22, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y + 28);
+	CurrentHUD->HUDItem[5] = (Sprite *)CreateSprite("TextureFiles/HealthBarEnd.png", 5, 22, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y + 28);
+
+	CurrentHUD->HUDItem[6] = (Sprite *)CreateSprite("TextureFiles/AbilityBarMid.png", 2, 22, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y - 1);
+	CurrentHUD->HUDItem[7] = (Sprite *)CreateSprite("TextureFiles/AbilityBarEnd.png", 5, 22, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y - 1);
+
+	CurrentHUD->HUDItem[8] = (Sprite *)CreateSprite("TextureFiles/ExperienceBarMid.png", 2, 19, 399, 1, 1, GetCameraXPosition() - 401, CurrentHUD->HUDBackground->Position.y - 28);
+	CurrentHUD->HUDItem[9] = (Sprite *)CreateSprite("TextureFiles/ExperienceBarEnd.png", 4, 17, 399, 1, 1, GetCameraXPosition() - 401, CurrentHUD->HUDBackground->Position.y - 28);
 
 	CurrentHUD->HUDItem[0]->Visible = FALSE;
 	CurrentHUD->HUDItem[1]->Visible = FALSE;
@@ -166,14 +172,22 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	//HUD items update position
 	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 735);
 
-	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 800);
-	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 800);
-	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 800);
-	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 800);
+	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 850);
+	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 850);
+	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 850);
+	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 850);
 
-	CurrentHUD->HUDItem[4]->ScaleX = 71.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
-	CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - (2) + (CurrentHUD->HUDItem[4]->ScaleX));
-	CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x + (CurrentHUD->HUDItem[4]->ScaleX * 2));
+	CurrentHUD->HUDItem[4]->ScaleX = 123.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
+	CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - 54.0f + (CurrentHUD->HUDItem[4]->ScaleX));
+	CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x - 52.0f + (CurrentHUD->HUDItem[4]->ScaleX * 2));
+
+	CurrentHUD->HUDItem[6]->ScaleX = 123.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
+	CurrentHUD->HUDItem[6]->Position.x = (CurrentHUD->HUDBackground->Position.x - 54.0f + (CurrentHUD->HUDItem[6]->ScaleX));
+	CurrentHUD->HUDItem[7]->Position.x = (CurrentHUD->HUDBackground->Position.x - 52.0f + (CurrentHUD->HUDItem[6]->ScaleX * 2));
+
+	CurrentHUD->HUDItem[8]->ScaleX = 84.0f * (CurrentPlayer.CurrentPlayerStats.Experience / (float)GetMaxExperience(&CurrentPlayer));
+	CurrentHUD->HUDItem[8]->Position.x = (CurrentHUD->HUDBackground->Position.x - 5.0f + (CurrentHUD->HUDItem[8]->ScaleX));
+	CurrentHUD->HUDItem[9]->Position.x = (CurrentHUD->HUDBackground->Position.x - 3.0f + (CurrentHUD->HUDItem[8]->ScaleX * 2));
 
 	//Coin text update position
 	ChangeTextPosition(CurrentHUD->CoinText, newPosition, Left);
