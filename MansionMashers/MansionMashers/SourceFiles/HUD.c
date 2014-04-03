@@ -181,7 +181,7 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - 54.0f + (CurrentHUD->HUDItem[4]->ScaleX));
 	CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x - 52.0f + (CurrentHUD->HUDItem[4]->ScaleX * 2));
 
-	CurrentHUD->HUDItem[6]->ScaleX = 123.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
+	CurrentHUD->HUDItem[6]->ScaleX = 123.0f * (CurrentPlayer.WindAttackCooldown / (float)CurrentPlayer.WindAttackCooldownMax);
 	CurrentHUD->HUDItem[6]->Position.x = (CurrentHUD->HUDBackground->Position.x - 54.0f + (CurrentHUD->HUDItem[6]->ScaleX));
 	CurrentHUD->HUDItem[7]->Position.x = (CurrentHUD->HUDBackground->Position.x - 52.0f + (CurrentHUD->HUDItem[6]->ScaleX * 2));
 

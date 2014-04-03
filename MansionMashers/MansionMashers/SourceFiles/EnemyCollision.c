@@ -137,7 +137,6 @@ void EnemyCollidePlayerProjectile(Enemy *CurrentEnemy, Projectile *CurrentProjec
 	char num[10];
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
-	Vec2 velocity;
 	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
 	
 	// Calculate damage

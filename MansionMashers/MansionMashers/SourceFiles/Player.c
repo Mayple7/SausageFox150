@@ -79,6 +79,9 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	CurrentPlayer->CurrentPlayerStats.DefenseTimer = 0;
 	CurrentPlayer->CurrentPlayerStats.HasteTimer = 0;
 
+	CurrentPlayer->WindAttackCooldownMax = 100.0f;
+	CurrentPlayer->WindAttackCooldown = 100.0f;
+
 	CurrentPlayer->BuffHeld[0] = FALSE;
 	CurrentPlayer->BuffHeld[1] = FALSE;
 	CurrentPlayer->BuffHeld[2] = FALSE;
@@ -208,7 +211,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 	}
-	else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking)
+	else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking && CurrentPlayer->WindAttackCooldown >= CurrentPlayer->WindAttackCooldownMax)
 	{
 		//Pick a random shoot sound to play
 		if (rand() % 2)
@@ -228,6 +231,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
 		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
+		CurrentPlayer->WindAttackCooldown = 0;
 		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 
 		//Wind of the weapons
@@ -443,6 +447,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 	{
 		CurrentPlayer->Speed /= 2;
 	}
+
+	if (CurrentPlayer->WindAttackCooldown + GetDeltaTime() * 5 * (CurrentPlayer->CurrentPlayerStats.Agility + CurrentPlayer->PlayerWeapon->BonusAgility + 1) < CurrentPlayer->WindAttackCooldownMax)
+		CurrentPlayer->WindAttackCooldown += GetDeltaTime() * 5 * (CurrentPlayer->CurrentPlayerStats.Agility + CurrentPlayer->PlayerWeapon->BonusAgility + 1);
+	else
+		CurrentPlayer->WindAttackCooldown = CurrentPlayer->WindAttackCooldownMax;
 
 	Animation(CurrentPlayer);
 	// Move the direction based on the speed

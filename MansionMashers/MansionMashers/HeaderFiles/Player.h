@@ -115,6 +115,9 @@ typedef struct Player
 	int AttackType; //0 = hitting, 1 = projectile
 	int isBlocking;
 
+	float WindAttackCooldown;
+	float WindAttackCooldownMax;
+
 	float LegSinValue;
 	float TailSinValue;
 
