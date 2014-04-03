@@ -49,7 +49,7 @@ static ParticleSystem *SecondParticle;
 static ParticleSystem *ThirdParticle;
 static ParticleSystem *FourthParticle;
 
-
+FoxSound* TheEndUgh;
 
 static enum Slides { Slide1, Slide2, Slide3, MaxSlides};
 
@@ -97,6 +97,9 @@ void InitializeEP2Screen(void)
 	SecondParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png", -310, 20, 201, -1, 5, 0.01f, 90, 45, 1.0f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
 	ThirdParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png",  195, 20, 201, -1, 5, 0.01f, 90, 45, 1.0f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
 	FourthParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png",  895, 20, 201, -1, 5, 0.01f, 90, 45, 1.0f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
+
+	// The end ughhh
+	TheEndUgh = CreateSound("Sounds/sfx_character_intel.fox_the_end_uughhhh.mp3", SmallSnd);
 }
 
 /*************************************************************************/
@@ -152,7 +155,13 @@ void DrawEP2Screen(void)
 	if(slideTextureNum == Slide3)
 	{
 		Title->Alpha = alpha;
-		//DrawSprite(Title);
+
+		// Plays the end ughhh
+		if(FoxInput_KeyTriggered(VK_RETURN))
+		{
+			PlayAudio(TheEndUgh);
+		}
+
 	}
 	else
 		Title->Alpha = 0.0f;
