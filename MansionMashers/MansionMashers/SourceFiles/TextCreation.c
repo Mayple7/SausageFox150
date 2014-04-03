@@ -720,67 +720,67 @@ int GetTextToDisappear(void)
 /*************************************************************************/
 void CreateComparisonText(Player *CurrentPlayer, Weapon *CurrentWeapon)
 {
-	char comparisontString[30];
+	char comparisonString[30];
 	char num[10];
 
 	// Set up string for strength
 	if(CurrentPlayer->PlayerWeapon->BonusStrength < CurrentWeapon->BonusStrength)
 	{
-		strcpy(comparisontString, "+");
+		strcpy(comparisonString, "+");
 		sprintf(num, "%d", CurrentWeapon->BonusStrength - CurrentPlayer->PlayerWeapon->BonusStrength);
-		strcat(comparisontString, num);
+		strcat(comparisonString, num);
 	}
 	else if(CurrentPlayer->PlayerWeapon->BonusStrength > CurrentWeapon->BonusStrength)
 	{
-		strcpy(comparisontString, "-");
+		strcpy(comparisonString, "-");
 		sprintf(num, "%d", CurrentPlayer->PlayerWeapon->BonusStrength - CurrentWeapon->BonusStrength);
-		strcat(comparisontString, num);
+		strcat(comparisonString, num);
 	}
 	else
 	{
-		strcpy(comparisontString, "0");
+		strcpy(comparisonString, "0");
 	}
 
 	// Set up string for agility
 	if(CurrentPlayer->PlayerWeapon->BonusAgility < CurrentWeapon->BonusAgility)
 	{
-		strcat(comparisontString, "str +");
+		strcat(comparisonString, "str +");
 		sprintf(num, "%d", CurrentWeapon->BonusAgility - CurrentPlayer->PlayerWeapon->BonusAgility);
-		strcat(comparisontString, num);
+		strcat(comparisonString, num);
 	}
 	else if(CurrentPlayer->PlayerWeapon->BonusAgility > CurrentWeapon->BonusAgility)
 	{
-		strcat(comparisontString, "str -");
+		strcat(comparisonString, "str -");
 		sprintf(num, "%d", CurrentPlayer->PlayerWeapon->BonusAgility - CurrentWeapon->BonusAgility);
-		strcat(comparisontString, num);
+		strcat(comparisonString, num);
 	}
 	else
 	{
-		strcpy(comparisontString, "str 0");
+		strcat(comparisonString, "str 0");
 	}
 
 	// Set up string for defense
 	if(CurrentPlayer->PlayerWeapon->BonusDefense < CurrentWeapon->BonusDefense)
 	{
-		strcat(comparisontString, "agi +");
+		strcat(comparisonString, "agi +");
 		sprintf(num, "%d", CurrentWeapon->BonusDefense - CurrentPlayer->PlayerWeapon->BonusDefense);
-		strcat(comparisontString, num);
+		strcat(comparisonString, num);
 	}
 	else if(CurrentPlayer->PlayerWeapon->BonusDefense > CurrentWeapon->BonusDefense)
 	{
-		strcat(comparisontString, "agi -");
+		strcat(comparisonString, "agi -");
 		sprintf(num, "%d", CurrentPlayer->PlayerWeapon->BonusDefense - CurrentWeapon->BonusDefense);
-		strcat(comparisontString, num);
+		strcat(comparisonString, num);
 	}
 	else
 	{
-		strcat(comparisontString, "agi 0");
+		strcat(comparisonString, "agi 0");
 	}
 	
 	// Add on the DEF string segment
-	strcat(comparisontString, "def");
+	strcat(comparisonString, "def");
 
-	ChangeTextString(CurrentPlayer->ComparisonGlyphs, comparisontString);
+	ChangeTextString(CurrentPlayer->ComparisonGlyphs, comparisonString);
 }
 
 

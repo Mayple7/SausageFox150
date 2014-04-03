@@ -9,4 +9,8 @@ void FreeOptions(void);
 void UnloadOptions(void);
 void EventOptions(void);
 
+void BackgroundOptionsAnimation(void);
+void SetOptionsStartLocation(float *xPos, float *yPos, int startNum);
+int RandomNewOptionsTexture(Sprite* CurrentSprite, int prevTexture);
+
 #endif
