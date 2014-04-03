@@ -95,6 +95,8 @@ TextGlyphs *IntelFoxTxtStart;
 FoxSound* IntelFoxStart;
 FoxSound* IntelFoxEnd;
 
+Sprite* IntelFox;
+
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
 Sprite* TreeBackground3[BACKGROUND_LENGTH];
@@ -296,6 +298,9 @@ void InitializeLevel31(void)
 	Arrow1Grow = FALSE;
 	Arrow2Grow = TRUE;
 	Arrow3Grow = FALSE;
+
+	IntelFox = (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 4, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
 
 	CreatePaperScroll(GetCameraXPosition(), 150);
 
@@ -531,6 +536,22 @@ void EventLevel31(void)
 		PlayAudio(IntelFoxStart);
 		IntelFoxStart->hasPlayed = TRUE;
 	}
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(IntelFoxStart) || FoxSoundCheckIsPlaying(IntelFoxEnd))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
+
 	
 	if(!EnemyPanelNumber[0] && !EnemyPanelNumber[1] && !EnemyPanelNumber[2])
 	{
