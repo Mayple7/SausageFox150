@@ -347,6 +347,7 @@ void EventLevel3(void)
 	//////////////////////////////////
 	SetUpScrollWithText(IntelFoxTxtStart, &counter);
 	ObjectGlowUpdate();
+	UpdateAllProjectiles();
 
 	//Intel Fox Starting Narrative
 	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
