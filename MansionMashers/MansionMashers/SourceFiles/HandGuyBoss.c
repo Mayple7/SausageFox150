@@ -251,7 +251,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		{
 		case Start:
 			//printf("SHOUT TIME START\n");
-			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuyShout.png");
+			//CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuyShout.png");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
 			if(CurrentBoss->cooldownTimer > 2.0f)
 				CurrentBoss->InnerState = Attack;
@@ -267,7 +267,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				CurrentBoss->CurrentState = Jab;
 				CurrentBoss->InnerState = Start;
 				CurrentBoss->cooldownTimer = 0.0f;
-				CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
+				//CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
 			}
 			else
 			{
@@ -278,7 +278,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			// Move if the shout doesn't hit
 		case End:
 			//printf("SHOUT TIME END\n");
-			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
+			//CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuy.png");
 
 			CurrentBoss->cooldownTimer += GetDeltaTime();
 			if(CurrentBoss->cooldownTimer > 2.0f)
@@ -313,7 +313,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				if(CurrentPlayer.Position.x > CurrentBoss->Position.x)
 				{
 					projectileAngle = 0;
-					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle + (CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y + 75.0f, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle + (CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
 					FreeSprite(CurrentProjectile->ProjectileSprite);
 					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
 					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
@@ -322,7 +322,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				else
 				{
 					projectileAngle = FOX_PI;
-					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle - (float)(CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y + 75.0f, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle - (float)(CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
 					FreeSprite(CurrentProjectile->ProjectileSprite);
 					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
 					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
