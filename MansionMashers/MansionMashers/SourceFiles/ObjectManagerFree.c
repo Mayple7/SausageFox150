@@ -69,6 +69,8 @@ void FreeFood(Food *CurrentFood)
 
 		if (CurrentFood->FoodSprite->Created)
 			FreeSprite(CurrentFood->FoodSprite);
+
+		FreeParticleSystem(CurrentFood->FoodParticle);
 	}
 }
 

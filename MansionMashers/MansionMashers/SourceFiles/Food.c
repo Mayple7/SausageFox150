@@ -43,21 +43,24 @@ Food* CreateFood(int buffType, float width, float height, float xPos, float yPos
 	switch(buffType)
 	{
 	case Agility:
-		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/Taco.png", width, height, 10, 1, 1, xPos, yPos);
+		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/AgilityBuff.png", width, height, 10, 1, 1, xPos, yPos);
 		break;
 	case Strength:
-		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/Ham.png", width, height, 10, 1, 1, xPos, yPos);
+		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/StrengthBuff.png", width, height, 10, 1, 1, xPos, yPos);
 		break;
 	case Defense:
-		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/Pizza.png", width, height, 10, 1, 1, xPos, yPos);
+		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/DefenseBuff.png", width, height, 10, 1, 1, xPos, yPos);
 		break;
-	case Haste:
-		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/Cake.png", width, height, 10, 1, 1, xPos, yPos);
+	case Heal:
+		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/HealthBuff.png", width, height, 10, 1, 1, xPos, yPos);
 		break;
 	}
 
 	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, FoodType, width, height, objID);
 	CurrentFood->objID = objID;
+
+	CurrentFood->FoodParticle = CreateFoxParticleSystem("TextureFiles/ParticlePlatform.png", xPos, yPos, 9, -1, 3, .15f, 270, 0, .5f, 0, 110, 100, 50.0f, 1.0f, 0.7f);
+
 
 	return CurrentFood;
 }

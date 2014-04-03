@@ -141,12 +141,12 @@ void InitializeLevel1(void)
 	//Panel 1
 	CreateSprite("TextureFiles/FoxMansion2.png", 1920, 1080, 0, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OverlayDoorTorch.png", 1920, 1080, 200, 1, 1, 0, 0);
-	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl1Pan1PlatOverlay.png", 1920, 1080, 500, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl1Pan1PlatOverlay.png", 1920, 1080, 201, 1, 1, 0, 0);
 	PlatOverlay[0]->Alpha = .1f;
 	//Panel 2
 	CreateSprite("TextureFiles/FoxMansionHall1.png", 1920, 1080, 0, 1, 1, 1920, 0);
 	CreateSprite("TextureFiles/OverlayDoor.png", 1920, 1080, 300, 1, 1, 1920, 0);
-	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl1Pan2PlatOverlay.png", 1920, 1080, 500, 1, 1, 1920, 0);
+	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl1Pan2PlatOverlay.png", 1920, 1080, 201, 1, 1, 1920, 0);
 	PlatOverlay[1]->Alpha = .1f;
 	//Panel 3
 	CreateSprite("TextureFiles/FoxMansion1.png", 1920, 1080, 0, 1, 1, (1920 * 2), 0);

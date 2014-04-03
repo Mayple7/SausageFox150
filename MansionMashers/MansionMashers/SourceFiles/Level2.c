@@ -50,6 +50,7 @@ static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int enemiesDefeated;
+static int counter;
 
 static int enemiesRemaining;
 
@@ -63,10 +64,7 @@ EnemySpawner* Spawners[6]; //2 Per Panel not including first (can do this becaus
 
 Enemy* Pan3Enemy;
 
-Food* Ham;
-Food* Taco;
-Food* Pizza;
-Food* Cake;
+Food* Strength1;
 
 Platform *Crate;
 Wall* Wall1;
@@ -76,7 +74,13 @@ Wall* RightBarrier;
 
 HUD* CurrentHUD;
 
-FoxSound *BackSnd;
+// Arrows
+Sprite *Arrow1;
+static int Arrow1Grow;
+
+FoxSound* BackSnd;
+FoxSound* IntelFoxStart;
+TextGlyphs* IntelFoxTxtStart;
 
 static int PlayerInSight; // Enemy in watch tower checks for player 
 static int PlayerIsAlive; 
@@ -120,6 +124,7 @@ void InitializeLevel2(void)
 	enemiesDefeated = FALSE;
 	beginningAnimation = TRUE;
 	GlowBool = TRUE;
+	counter = 2 * FRAMERATE;
 
 	newID = 10;
 	ResetObjectList();
@@ -133,25 +138,34 @@ void InitializeLevel2(void)
 	InitializePlayer(&CurrentPlayer, Mayple, -1150, 0);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 	
-	//Bounding Boxes
-	CreateBoundingBoxes();
+	/////////////////////////////////
+	//		Text				   //
+	/////////////////////////////////
+	Vec3Set(&TextTint, 1, 1, 1);
+	IntelFoxTxtStart = CreateText("Mash all the enemies", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtStart, 500);
+	TextProgressiveInit(IntelFoxTxtStart);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
 	/////////////////////////////////
+	//Panel 1
 	CreateSprite("TextureFiles/OutsideMan0.png", 1920, 1080, 5, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/OutsideMan0Overlay.png", 1920, 1080, 200, 1, 1, 0, 0);
-	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl2Pan1PlatOverlay.png", 1920, 1080, 500, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl2Pan1PlatOverlay.png", 1920, 1080, 201, 1, 1, 0, 0);
 	PlatOverlay[0]->Alpha = .1f;
+	//Panel2
 	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080, 5, 1, 1, 1920, 0);
 	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl2Pan2PlatOverlay.png", 1920, 1080, 6, 1, 1, 1920, 0);
 	PlatOverlay[1]->Alpha = .2f;
+	//Panel2
 	CreateSprite("TextureFiles/OutsideMan2.png", 1920, 1080, 5, 1, 1, 1920 * 2, 0);
 	CreateSprite("TextureFiles/OutsideMan2Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 2, 0);
 	PlatOverlay[2] = (Sprite*)CreateSprite("TextureFiles/Lvl2Pan3PlatOverlay.png", 1920, 1080, 6, 1, 1, 1920 * 2, 0);
 	PlatOverlay[2]->Alpha = .2f;
 	PlatOverlay[3] = (Sprite*)CreateSprite("TextureFiles/Lvl2Pan3PlatOverlay.png", 1920, 1080, 201, 1, 1, 1920 * 2, 0);
 	PlatOverlay[3]->Alpha = .2f;
+	//Panel 3
 	CreateSprite("TextureFiles/OutsideMan3.png", 1920, 1080, 5, 1, 1, 1920 * 3, 0);
 	CreateSprite("TextureFiles/OutsideMan3Overlay.png", 1920, 1080, 200, 1, 1, 1920 * 3, 0);
 
@@ -169,18 +183,11 @@ void InitializeLevel2(void)
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
-
-	//Taco = CreateFood(Agility, 150, 150, -800, 0, newID++);
-	//Ham = CreateFood(Strength, 150, 150, -400, 0, newID++);
-	//Pizza = CreateFood(Defense, 150, 150, 0, 0, newID++);
-	//Cake = CreateFood(Haste, 150, 150, 400, 0, newID++);
-
-	//Test = CreateWall("TextureFiles/BlankPlatform.png", 500, 500, newID++, 0, 0);
-	//Test->WallSprite->Visible = FALSE;
-
-	//CreatePaperScroll(200);
-	
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl2Start.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -271,6 +278,18 @@ void InitializeLevel2(void)
 		enemiesRemaining += EnemyPanelNumber[i];
 	}
 
+	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	// Arrows
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 202, 1, 1, 0, 0);
+	Arrow1->Visible = FALSE;
+	Arrow1Grow = FALSE;
+
+	Strength1 = CreateFood(Strength, 100, 100, PANELSIZE * 2 + 190, 250, newID++);
+
+	CreatePaperScroll(GetCameraXPosition(), 150);
+	
 	// Create the HUD
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
@@ -478,6 +497,7 @@ void EventLevel2(void)
 	UpdateAllProjectiles();
 	TreeBackgroundUpdate();
 	ObjectGlowUpdate();
+	UpdateArrow(Arrow1, &Arrow1Grow);
 
 	//Switch barrier position for beginning
 	if(beginningAnimation)
@@ -485,12 +505,24 @@ void EventLevel2(void)
 	else
 		LeftBarrier->WallCollider.Position.y = 0;
 
+	//Intel Fox Starting Narrative
+	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
+	{
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
+	}
+
+	if(!beginningAnimation)
+		SetUpScrollWithText(IntelFoxTxtStart, &counter);
+
 	//Check if all enemies are dead & remove right barrier
 	if(EnemyPanelNumber[1] <= 0 && EnemyPanelNumber[2] <= 0 && EnemyPanelNumber[3] <= 0)
 	{
 		enemiesDefeated = TRUE;
 		RightBarrier->Position.y = -1080;
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
+		Arrow1->Visible = TRUE;
+		Arrow1->Position.x = GetCameraXPosition() + 750;
 	}
 
 	//Level Transition

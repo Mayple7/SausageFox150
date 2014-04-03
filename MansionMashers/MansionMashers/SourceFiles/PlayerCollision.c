@@ -86,7 +86,7 @@ void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 	case Defense:
 		CurrentPlayer->BuffHeld[2] = TRUE;
 		break;
-	case Haste:
+	case Heal:
 		CurrentPlayer->BuffHeld[3] = TRUE;
 		break;
 	}

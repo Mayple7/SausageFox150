@@ -51,9 +51,6 @@ static int enemiesDefeated;
 
 static int enemiesRemaining;
 
-
-
-
 Sprite* BlackOverlay;
 HUD* CurrentHUD;
 
@@ -67,6 +64,8 @@ Wall* RightBarrier;
 EnemySpawner* Spawners[8];
 Enemy* PreSpawned;
 
+Food* Heal1;
+Food* Defense1;
 
 TextGlyphs *IntelFoxTxtStart;
 
@@ -222,6 +221,9 @@ void InitializeLevel4(void)
 	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 0);
 	Arrow1->Visible = FALSE;
 	Arrow1Grow = FALSE;
+
+	Heal1 = CreateFood(Heal, 100, 100, PANELSIZE * 2, -100, newID++);
+	Defense1 = CreateFood(Defense, 100, 100, PANELSIZE - 500, -100, newID++);
 
 	CreatePaperScroll(GetCameraXPosition(), 150);
 	

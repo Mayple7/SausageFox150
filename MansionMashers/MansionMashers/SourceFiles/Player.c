@@ -346,9 +346,11 @@ void InputPlayer(struct Player *CurrentPlayer)
 				CurrentPlayer->CurrentPlayerStats.DefenseTimer = 10;
 				break;
 			// Buffs the player's move speed
-			case Haste:
-				CurrentPlayer->CurrentPlayerStats.MoveSpeed *= 1.2f;
-				CurrentPlayer->CurrentPlayerStats.HasteTimer = 10;
+			case Heal:
+				if(CurrentPlayer->CurrentPlayerStats.CurrentHealth > CurrentPlayer->CurrentPlayerStats.MaxHealth / 2)
+					CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+				else
+					CurrentPlayer->CurrentPlayerStats.CurrentHealth += CurrentPlayer->CurrentPlayerStats.MaxHealth / 2;
 				break;
 			}
 			CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] = FALSE;
