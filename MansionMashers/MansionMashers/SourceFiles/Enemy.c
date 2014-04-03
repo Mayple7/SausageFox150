@@ -1047,14 +1047,16 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 					CurrentEnemy->CollisionData[-hitPrev] = walls->WallCollider.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
 					EnemyCollideWall(CurrentEnemy, walls);
-					CurrentEnemy->KnockBack = FALSE;
+					if (CurrentEnemy->EnemyType != Dummy)
+						CurrentEnemy->KnockBack = FALSE;
 				}
 				// Found target, hit previous frame, on persistant
 				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 1)
 				{
 					//printf("FOUND PERSISTANT: %i\n", CurrentEnemy.CollisionData[hitPrev]);
 					EnemyCollideWall(CurrentEnemy, walls);
-					CurrentEnemy->KnockBack = FALSE;
+					if (CurrentEnemy->EnemyType != Dummy)
+						CurrentEnemy->KnockBack = FALSE;
 				}
 				// Found target, did not hit previous frame, on start collision
 				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
@@ -1062,7 +1064,8 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 					//printf("FOUND NEW COLLISION: %i\n", CurrentEnemy.CollisionData[hitPrev]);
 					CurrentEnemy->CollisionData[hitPrev] = walls->WallCollider.collisionID * 10 + 1;
 					EnemyCollideWall(CurrentEnemy, walls);
-					CurrentEnemy->KnockBack = FALSE;
+					if (CurrentEnemy->EnemyType != Dummy)
+						CurrentEnemy->KnockBack = FALSE;
 				}
 			}
 			else
