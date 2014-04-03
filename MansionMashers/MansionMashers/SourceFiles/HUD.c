@@ -124,10 +124,10 @@ HUD* CreateHUD(Player* CurrentPlayer)
 		ChangeTextVisibility(CurrentHUD->FPSText);
 
 	//Create the HUD sprites for the buffs
-	CurrentHUD->HUDItem[0] = (Sprite *)CreateSprite("TextureFiles/AgilityBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 548, 345);
-	CurrentHUD->HUDItem[1] = (Sprite *)CreateSprite("TextureFiles/StrengthBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 548, 345);
-	CurrentHUD->HUDItem[2] = (Sprite *)CreateSprite("TextureFiles/DefenseBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 548, 345);
-	CurrentHUD->HUDItem[3] = (Sprite *)CreateSprite("TextureFiles/HealthBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 548, 345);
+	CurrentHUD->HUDItem[0] = (Sprite *)CreateSprite("TextureFiles/AgilityBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 548, 344);
+	CurrentHUD->HUDItem[1] = (Sprite *)CreateSprite("TextureFiles/StrengthBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 548, 344);
+	CurrentHUD->HUDItem[2] = (Sprite *)CreateSprite("TextureFiles/DefenseBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 548, 344);
+	CurrentHUD->HUDItem[3] = (Sprite *)CreateSprite("TextureFiles/HealthBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 548, 344);
 
 	// Create the HUD bars
 	CurrentHUD->HealthBar = (Sprite *)CreateSprite("TextureFiles/HealthBarMid.png", 2, 22, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y + 28);
@@ -175,10 +175,10 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	//HUD items update position
 	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 735);
 
-	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 870);
-	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 870);
-	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 870);
-	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 870);
+	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 884);
+	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 884);
+	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 884);
+	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 884);
 
 	// Maximum width of bar multiplied by the ratio of hp, CD, or exp
 	CurrentHUD->HealthBar->ScaleX = 123.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);

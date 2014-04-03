@@ -374,9 +374,12 @@ void UpdateTutorial(void)
 		CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 800 - 1000);
 		CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 800 - 1000);
 
-		CurrentHUD->HUDItem[4]->ScaleX = 71.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
-		CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - (2) + (CurrentHUD->HUDItem[4]->ScaleX - 1000));
-		CurrentHUD->HUDItem[5]->Position.x = (CurrentHUD->HUDBackground->Position.x + (CurrentHUD->HUDItem[4]->ScaleX * 2) - 1000);
+		CurrentHUD->AbilityBar->Position.x = (GetCameraXPosition() - 800 - 1000);
+		CurrentHUD->AbilityBarEnd->Position.x = (GetCameraXPosition() - 800 - 1000);
+		CurrentHUD->HealthBar->Position.x = (GetCameraXPosition() - 800 - 1000);
+		CurrentHUD->HealthBarEnd->Position.x = (GetCameraXPosition() - 800 - 1000);
+		CurrentHUD->ExpBar->Position.x = (GetCameraXPosition() - 800 - 1000);
+		CurrentHUD->ExpBarEnd->Position.x = (GetCameraXPosition() - 800 - 1000);
 
 		//Coin text update position
 		ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);
