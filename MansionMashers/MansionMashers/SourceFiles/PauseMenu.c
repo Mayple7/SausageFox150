@@ -256,7 +256,7 @@ void FreePause(void)
 	FreeText(SFXText);
 	FreeText(BGMText);
 	FreeText(SFXLabel);
-	FreeText(BGMText);
+	FreeText(BGMLabel);
 
 	FreeMyAlloc(volumestring);
 	//ReleaseSound(BackgroundSnd.Sound);

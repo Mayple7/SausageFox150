@@ -279,6 +279,13 @@ void UpdateMainMenu(void)
 		CreditsButton->ButtonSprite->Visible = TRUE;
 	}
 
+	// REMOVE FOR RELEASE BUILD
+	if(FoxInput_KeyTriggered(VK_HOME))
+	{
+		SetNextState(GS_EPMenu);
+	}
+
+
 	InputHandling();
 	BackgroundAnimation();
 }
