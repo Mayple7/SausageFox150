@@ -293,6 +293,9 @@ void InitializeLevel2(void)
 	// Create the HUD
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
+	// Create Bounding boxes
+	CreateBoundingBoxes();
+
 	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
@@ -353,6 +356,7 @@ void UpdateLevel2(void)
 
 	UpdateHUDPosition(CurrentHUD);
 	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+	BoundingBoxUpdate();
 }
 
 /*************************************************************************/
