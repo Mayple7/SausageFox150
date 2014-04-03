@@ -102,6 +102,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	if (!strcmp(CurrentWeapon->WeaponName,"Sausage Sausage of sausage"))
 	{
 		CurrentWeapon->WeaponSprite->SpriteTexture = LoadTexture("TextureFiles/BattleAxe.png");
+		CurrentWeapon->WeaponType = Axe;
 		CurrentWeapon->BonusAgility += 12;
 		CurrentWeapon->BonusStrength += 12;
 		CurrentWeapon->BonusDefense += 12;
