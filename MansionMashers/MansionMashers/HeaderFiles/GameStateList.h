@@ -29,6 +29,7 @@ enum GSL
 	GS_EP2Slides,
 	GS_CharacterSelect,
 	GS_MapLevel,
+	GS_Credits,
 	GS_Restart,
 	GS_Quit,
 	GS_MAX,

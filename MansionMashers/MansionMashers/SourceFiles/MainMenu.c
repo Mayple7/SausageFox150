@@ -489,7 +489,7 @@ void InputHandling(void)
 		else if(PointRectCollision(&CreditsButton->ButtonCollider, &MouseClick))
 		{
 			// Load Game Function hurrr
-			SetNextState(GS_EPMenu);
+			SetNextState(GS_Credits);
 		}
 		//No one ever wants to quit...
 		else if(PointRectCollision(&QuitGameButton->ButtonCollider, &MouseClick))
