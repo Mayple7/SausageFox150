@@ -59,13 +59,19 @@ Projectile *CreateProjectile(char *texture, float width, float height, float xPo
 	else
 		CurrentProjectile->ProjectileSprite->FlipX = FALSE;
 
+	// Particle System
+	if (CurrentProjectile->ProjectileType == Wind)
+		CurrentProjectile->ProjectileParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentProjectile->Position.x, CurrentProjectile->Position.y, CurrentProjectile->ProjectileSprite->ZIndex + 1, -1, 5, 0.0f, CurrentProjectile->Speed < 0 ? 0 : 180, 90, .5, 1, 20, CurrentProjectile->ProjectileSprite->Height / 1.5f, -150, 0.25f, 0.25f);
+	else
+		CurrentProjectile->ProjectileParticleSystem = 0;
+
 	return CurrentProjectile;
 }
 
 /*************************************************************************/
 /*!
 	\brief
-	No need to have this loop in every level
+	No need to have this loop in every level <- lies actually
 */
 /*************************************************************************/
 void UpdateAllProjectiles(void)
@@ -133,6 +139,9 @@ void UpdateProjectile(Projectile *CurrentProjectile)
 	if (CurrentProjectile->Position.x > GetCameraXPosition() + PANELSIZE || CurrentProjectile->Position.x < GetCameraXPosition() - PANELSIZE
 	 || CurrentProjectile->Position.y > PANELSIZE || CurrentProjectile->Position.y < -PANELSIZE)
 		FreeProjectile(CurrentProjectile);
+
+	if (CurrentProjectile->ProjectileType == Wind)
+		CurrentProjectile->ProjectileParticleSystem->Position.x = CurrentProjectile->Position.x;
 }
 
 /*************************************************************************/
@@ -150,7 +159,6 @@ void PoofProjectile(Projectile *CurrentProjectile)
 	Poof->emitScale = 2.0f;
 	Poof->emitLife = 1.0f;
 	Poof->emitThenDestroy = TRUE;
-
 	//Get rid of the arrow
 	FreeProjectile(CurrentProjectile);
 }

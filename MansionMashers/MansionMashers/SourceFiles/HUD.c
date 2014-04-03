@@ -123,10 +123,10 @@ HUD* CreateHUD(Player* CurrentPlayer)
 		ChangeTextVisibility(CurrentHUD->FPSText);
 
 	//Create the HUD sprites for the items
-	CurrentHUD->HUDItem[0] = (Sprite *)CreateSprite("TextureFiles/Taco.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
-	CurrentHUD->HUDItem[1] = (Sprite *)CreateSprite("TextureFiles/Ham.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
-	CurrentHUD->HUDItem[2] = (Sprite *)CreateSprite("TextureFiles/Pizza.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
-	CurrentHUD->HUDItem[3] = (Sprite *)CreateSprite("TextureFiles/Cake.png", 50, 50, 398, 1, 1, GetCameraXPosition() - 548, 345);
+	CurrentHUD->HUDItem[0] = (Sprite *)CreateSprite("TextureFiles/AgilityBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 598, 345);
+	CurrentHUD->HUDItem[1] = (Sprite *)CreateSprite("TextureFiles/StrengthBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 598, 345);
+	CurrentHUD->HUDItem[2] = (Sprite *)CreateSprite("TextureFiles/DefenseBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 598, 345);
+	CurrentHUD->HUDItem[3] = (Sprite *)CreateSprite("TextureFiles/HealthBuff.png", 70, 70, 401, 1, 1, GetCameraXPosition() - 598, 345);
 
 	CurrentHUD->HUDItem[4] = (Sprite *)CreateSprite("TextureFiles/HealthBarMid.png", 2, 13, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y + 36);
 	CurrentHUD->HUDItem[5] = (Sprite *)CreateSprite("TextureFiles/HealthBarEnd.png", 5, 11, 399, 1, 1, GetCameraXPosition() - 450, CurrentHUD->HUDBackground->Position.y + 36);
@@ -166,10 +166,10 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	//HUD items update position
 	CurrentHUD->HUDBackground->Position.x = (GetCameraXPosition() - 735);
 
-	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 800);
-	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 800);
-	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 800);
-	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 800);
+	CurrentHUD->HUDItem[0]->Position.x = (GetCameraXPosition() - 834);
+	CurrentHUD->HUDItem[1]->Position.x = (GetCameraXPosition() - 834);
+	CurrentHUD->HUDItem[2]->Position.x = (GetCameraXPosition() - 834);
+	CurrentHUD->HUDItem[3]->Position.x = (GetCameraXPosition() - 834);
 
 	CurrentHUD->HUDItem[4]->ScaleX = 71.0f * (CurrentPlayer.CurrentPlayerStats.CurrentHealth / (float)CurrentPlayer.CurrentPlayerStats.MaxHealth);
 	CurrentHUD->HUDItem[4]->Position.x = (CurrentHUD->HUDBackground->Position.x - (2) + (CurrentHUD->HUDItem[4]->ScaleX));

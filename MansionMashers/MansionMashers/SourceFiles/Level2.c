@@ -137,7 +137,7 @@ void InitializeLevel2(void)
 	ResetGatedCamera();
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, -1150, 0);
+	InitializePlayer(&CurrentPlayer, Mayple, -1150, -100);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 	
 	/////////////////////////////////
@@ -468,7 +468,8 @@ void EventLevel2(void)
 			CurrentPlayer.FlipX = TRUE;
 			CurrentPlayer.PlayerDirection = RIGHT;
 			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
-			
+			ZeroVelocity(&CurrentPlayer.PlayerRigidBody);
+			CurrentPlayer.Position.y = -100;
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -850)
 				beginningAnimation = FALSE;
