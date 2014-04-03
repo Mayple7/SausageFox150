@@ -418,6 +418,7 @@ void EventLevel1(void)
 	UpdateAllEnemies();
 	UpdateFloatingText();
 	ParticleSystemUpdate();
+	UpdateAllProjectiles();
 	BoundingBoxUpdate();
 	ObjectGlowUpdate();
 

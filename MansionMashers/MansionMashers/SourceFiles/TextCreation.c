@@ -819,12 +819,12 @@ void ComparisonTextUpdate(TextGlyphs* FirstLetter)
 	if(nextLetter->letter == '+')
 	{
 		R = 0.0f;
-		G = 1.0f;
+		G = 0.7f;
 		B = 0.0f;
 	}
 	else if(nextLetter->letter == '-')
 	{
-		R = 1.0f;
+		R = 0.7f;
 		G = 0.0f;
 		B = 0.0f;
 	}
@@ -849,12 +849,12 @@ void ComparisonTextUpdate(TextGlyphs* FirstLetter)
 	if(nextLetter->letter == '+')
 	{
 		R = 0.0f;
-		G = 1.0f;
+		G = 0.7f;
 		B = 0.0f;
 	}
 	else if(nextLetter->letter == '-')
 	{
-		R = 1.0f;
+		R = 0.7f;
 		G = 0.0f;
 		B = 0.0f;
 	}
@@ -879,12 +879,12 @@ void ComparisonTextUpdate(TextGlyphs* FirstLetter)
 	if(nextLetter->letter == '+')
 	{
 		R = 0.0f;
-		G = 1.0f;
+		G = 0.7f;
 		B = 0.0f;
 	}
 	else if(nextLetter->letter == '-')
 	{
-		R = 1.0f;
+		R = 0.7f;
 		G = 0.0f;
 		B = 0.0f;
 	}
