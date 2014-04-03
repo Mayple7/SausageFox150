@@ -61,7 +61,7 @@ Projectile *CreateProjectile(char *texture, float width, float height, float xPo
 
 	// Particle System
 	if (CurrentProjectile->ProjectileType == Wind)
-		CurrentProjectile->ProjectileParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentProjectile->Position.x, CurrentProjectile->Position.y, CurrentProjectile->ProjectileSprite->ZIndex + 1, -1, 5, 0.0f, CurrentProjectile->Speed < 0 ? 0 : 180, 90, .5, 1, 20, CurrentProjectile->ProjectileSprite->Height / 1.5f, -150, 0.25f, 0.25f);
+		CurrentProjectile->ProjectileParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentProjectile->Position.x, CurrentProjectile->Position.y, CurrentProjectile->ProjectileSprite->ZIndex + 1, -1, 5, 0, CurrentProjectile->Speed < 0.0f ? 0 : 180, 90, 0.5f, 1, 20, (int)(CurrentProjectile->ProjectileSprite->Height / 1.5f), -150, 0.25f, 0.25f);
 	else
 		CurrentProjectile->ProjectileParticleSystem = 0;
 
