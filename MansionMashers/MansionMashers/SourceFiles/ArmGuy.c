@@ -41,6 +41,8 @@
 // Libraries
 #define BACKGROUND_LENGTH 3
 
+#define GLOW_OVERLAY_NUM 1
+
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
@@ -49,11 +51,15 @@ static int levelComplete = FALSE;
 ArmGuyBoss *Boss;
 HUD* CurrentHUD;
 
+Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
+static int GlowBool;
+
+
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
 Sprite* TreeBackground3[BACKGROUND_LENGTH];
 static void TreeBackgroundUpdate(void);
-
+static void ObjectGlowUpdate(void);
 /*************************************************************************/
 /*!
 	\brief
@@ -79,6 +85,7 @@ void InitializeArmGuy(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	GlowBool = TRUE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
@@ -91,6 +98,8 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	//Panel1
 	CreateSprite("TextureFiles/ArmGuyPan.png", 1920, 1080, 5, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/AGPlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0);
+	PlatOverlay[0]->Alpha = .1f;
 
 	//Trees in Background
 	for(i = 0; i < BACKGROUND_LENGTH; i++)
@@ -110,13 +119,6 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -400, -170);
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 400, -170);
-
-
-	/////////////////////////////////
-	//		Particles			   //
-	/////////////////////////////////
-	CreateFoxParticleSystem("TextureFiles/ParticlePlatform.png", -400, -145, 200, -1, 3, .15f, 270, 90, .5f, 0, 250, 0, 50.0f, 1.0f, 0.5f);
-	CreateFoxParticleSystem("TextureFiles/ParticlePlatform.png", 400, -145, 200, -1, 3, .15f, 270, 90, .5f, 0, 250, 0, 50.0f, 1.0f, 0.5f);
 
 	/////////////////////////////////
 	//			Walls			   //
@@ -259,6 +261,7 @@ void EventArmGuy(void)
 	//       EVERYTHING ELSE        //
 	//////////////////////////////////
 	TreeBackgroundUpdate();
+	ObjectGlowUpdate();
 }
 
 void TreeBackgroundUpdate(void)
@@ -270,4 +273,25 @@ void TreeBackgroundUpdate(void)
 
 	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground3[i]->Position.x = (1920.0f * i) + (GetCameraXPosition() / 15.0f);
+}
+
+void ObjectGlowUpdate(void)
+{
+	int i;
+
+	for(i = 0; i < GLOW_OVERLAY_NUM; i++)
+	{
+		if(GlowBool)
+		{
+			PlatOverlay[i]->Alpha += .005f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM - 1]->Alpha > 0.3f)
+				GlowBool = FALSE;
+		}
+		else 
+		{
+			PlatOverlay[i]->Alpha -= .005f;
+			if(PlatOverlay[GLOW_OVERLAY_NUM -1]->Alpha < 0.1f)
+				GlowBool = TRUE;
+		}
+	}
 }

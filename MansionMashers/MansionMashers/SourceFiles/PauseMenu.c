@@ -52,6 +52,9 @@ Button* MainMenuButton;
 TextGlyphs* SFXText;
 TextGlyphs* BGMText;
 
+TextGlyphs* SFXLabel;
+TextGlyphs* BGMLabel;
+
 FoxSound BackgroundSnd;
 
 void (*LevelToDraw)();
@@ -149,6 +152,9 @@ void InitializePause(void (*DrawLevel)())
 		LookAtCheckMark->Visible = FALSE;
 
 	LevelToDraw = DrawLevel;
+
+	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - SFXSliderBack->Width - 140, 200, 100, TextColor, Right, Border);
+	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - BGMSliderBack->Width - 140, 0, 100, TextColor, Right, Border);
 
 	// Check if we pause the map level or not
 	if(GetCurrentState() == GS_MapLevel)
@@ -249,6 +255,9 @@ void FreePause(void)
 
 	FreeText(SFXText);
 	FreeText(BGMText);
+	FreeText(SFXLabel);
+	FreeText(BGMLabel);
+
 	FreeMyAlloc(volumestring);
 	//ReleaseSound(BackgroundSnd.Sound);
 }

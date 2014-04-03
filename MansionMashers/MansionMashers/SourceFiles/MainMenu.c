@@ -279,6 +279,13 @@ void UpdateMainMenu(void)
 		CreditsButton->ButtonSprite->Visible = TRUE;
 	}
 
+	// REMOVE FOR RELEASE BUILD
+	if(FoxInput_KeyTriggered(VK_HOME))
+	{
+		SetNextState(GS_EPMenu);
+	}
+
+
 	InputHandling();
 	BackgroundAnimation();
 }
@@ -489,7 +496,7 @@ void InputHandling(void)
 		else if(PointRectCollision(&CreditsButton->ButtonCollider, &MouseClick))
 		{
 			// Load Game Function hurrr
-			SetNextState(GS_EPMenu);
+			SetNextState(GS_Credits);
 		}
 		//No one ever wants to quit...
 		else if(PointRectCollision(&QuitGameButton->ButtonCollider, &MouseClick))

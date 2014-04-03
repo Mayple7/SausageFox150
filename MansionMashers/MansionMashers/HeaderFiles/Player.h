@@ -44,6 +44,13 @@ typedef struct PlayerSounds
 	FoxSound *GetHit1;
 	FoxSound *GetHit2;
 	FoxSound *YeahBebeGurrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrl;
+
+	//Sounds for buing weapons
+	FoxSound *MooseNotEnoughCoins;
+	FoxSound *MoosePurchase[2];
+	FoxSound *MooseWelcome[2];
+	FoxSound *MooseRandom[5];
+	int MoosePlay;
 }PlayerSounds;
 
 typedef struct PlayerStats

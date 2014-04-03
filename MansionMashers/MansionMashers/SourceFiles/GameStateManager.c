@@ -367,5 +367,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawShop4;
 			GSMPointers.pUnload = UnloadShop4;
 			break;
+		case GS_Credits:
+			GSMPointers.pLoad = LoadCredits;
+			GSMPointers.pInit = InitializeCredits;
+			GSMPointers.pUpdate = UpdateCredits;
+			GSMPointers.pFree = FreeCredits;
+			GSMPointers.pDraw = DrawCredits;
+			GSMPointers.pUnload = UnloadCredits;
+			break;
+
 	}
 }

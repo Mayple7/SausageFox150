@@ -91,12 +91,12 @@ void InitializeEP2Screen(void)
 
 	// Create the slide sprites
 	Title = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	StretchGoals = (Sprite *) CreateSprite("TextureFiles/Slide4.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	Risks = (Sprite *) CreateSprite("TextureFiles/Slide6.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	FirstParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png", -705, 20, 201, -1, 5, 0.01f, 90, 45, 1.5f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
-	SecondParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png", -310, 20, 201, -1, 5, 0.01f, 90, 45, 1.5f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
-	ThirdParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png",  195, 20, 201, -1, 5, 0.01f, 90, 45, 1.5f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
-	FourthParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png",  895, 20, 201, -1, 5, 0.01f, 90, 45, 1.5f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
+	StretchGoals = (Sprite *) CreateSprite("TextureFiles/Goals.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	Risks = (Sprite *) CreateSprite("TextureFiles/Risks.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
+	FirstParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png", -705, 20, 201, -1, 5, 0.01f, 90, 45, 1.0f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
+	SecondParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png", -310, 20, 201, -1, 5, 0.01f, 90, 45, 1.0f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
+	ThirdParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png",  195, 20, 201, -1, 5, 0.01f, 90, 45, 1.0f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
+	FourthParticle	= CreateFoxParticleSystem("TextureFiles/FireParticle.png",  895, 20, 201, -1, 5, 0.01f, 90, 45, 1.0f, -35.0f, 9, 10, 200, 0.25f, 1.0f);
 }
 
 /*************************************************************************/

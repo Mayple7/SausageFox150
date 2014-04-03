@@ -44,10 +44,9 @@ static int slideDir;								//1: Forward, 0: Backward
 static Sprite *IntroSlide;
 static Sprite *Title;
 static Sprite *HighConcept;
-static Sprite *Arch1;
-static Sprite *Arch2;
 
-static enum Slides { Slide1, Slide2, Slide3, Slide4, Slide5, MaxSlides};
+
+static enum Slides { Slide1, Slide2, Slide3, MaxSlides};
 
 // ---------------------------------------------------------------------------
 // Static function protoypes
@@ -90,8 +89,6 @@ void InitializeEP1Screen(void)
 	IntroSlide = (Sprite *) CreateSprite("TextureFiles/Slide1.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 	Title = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 	HighConcept = (Sprite *) CreateSprite("TextureFiles/Slide3.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	Arch1 = (Sprite *) CreateSprite("TextureFiles/Slide5.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
-	Arch2 = (Sprite *) CreateSprite("TextureFiles/Slide5.1.png", 1920.0f, 1080.0f, 0, 1, 1, 0, 0);
 }
 
 /*************************************************************************/
@@ -150,24 +147,6 @@ void DrawEP1Screen(void)
 	}
 	else
 		HighConcept->Alpha = 0.0f;
-
-		//Architect
-	if(slideTextureNum == Slide4)
-	{
-		Arch1->Alpha = alpha;
-		DrawSprite(Arch1);
-	}
-	else
-		Arch1->Alpha = 0.0f;
-
-		//Architect
-	if(slideTextureNum == Slide5)
-	{
-		Arch2->Alpha = alpha;
-		DrawSprite(Arch2);
-	}
-	else
-		Arch2->Alpha = 0.0f;
 
 }
 

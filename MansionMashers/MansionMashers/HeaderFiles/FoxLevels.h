@@ -29,5 +29,6 @@
 #include "../HeaderFiles/Level5.h"
 #include "../HeaderFiles/Level6.h"
 #include "../HeaderFiles/Level7.h"
+#include "../HeaderFiles/Credits.h"
 
 #endif
