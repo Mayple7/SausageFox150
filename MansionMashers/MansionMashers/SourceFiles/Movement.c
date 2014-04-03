@@ -517,23 +517,25 @@ void Animation(Player *Object)
 		// Attacking!
 		if (Object->isAttacking)
 		{
-			if (Object->PlayerWeapon->WeaponType != Spear)
+			if (Object->PlayerWeapon->WeaponType != Spear || (Object->PlayerWeapon->WeaponType == Spear && Object->AttackType == 1))
 			{
 				Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, 0, 0.2f);
 				Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, FOX_PI, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 				Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 				ArmUpr2->Rotation = FOX_PI * 1.5f + 0.5f - Object->PlayerSpriteParts.AttackRotationArm;
 				ArmLwr2->Rotation = ArmUpr2->Rotation - FOX_PI/2 + Object->PlayerSpriteParts.AttackRotationArmLower;
+				Weap->Rotation = ArmLwr2->Rotation;
 				if (Object->PlayerSpriteParts.AttackRotationArm == FOX_PI)
 				Object->isAttacking = FALSE;
 			}
-			else
+			else 
 			{
-				Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, FOX_PI/6, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+				Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, FOX_PI / 2.1f, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 				Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, FOX_PI * 0.9f, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 				Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
-				ArmUpr2->Rotation = FOX_PI - Object->PlayerSpriteParts.AttackRotationArm;
-				ArmLwr2->Rotation = ArmUpr2->Rotation + FOX_PI/2 - Object->PlayerSpriteParts.AttackRotationArmLower;
+				ArmUpr2->Rotation = FOX_PI * 0.75f - Object->PlayerSpriteParts.AttackRotationArm;
+				ArmLwr2->Rotation = ArmUpr2->Rotation - Object->PlayerSpriteParts.AttackRotationArmLower / 2;
+				Weap->Rotation = ArmLwr2->Rotation + Object->PlayerSpriteParts.AttackRotation;
 				if (Object->PlayerSpriteParts.AttackRotationArm == FOX_PI * 0.9f)
 					Object->isAttacking = FALSE;
 			}
@@ -542,8 +544,9 @@ void Animation(Player *Object)
 		{
 			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
 			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
+			Weap->Rotation = ArmLwr2->Rotation;
 		}
-		Weap->Rotation = ArmLwr2->Rotation;
+		
 		ArmUpr2->Position.x = Bdy->Position.x;
 		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
@@ -592,23 +595,25 @@ void Animation(Player *Object)
 		// Attacking!
 		if (Object->isAttacking)
 		{
-			if (Object->PlayerWeapon->WeaponType != Spear)
+			if (Object->PlayerWeapon->WeaponType != Spear || (Object->PlayerWeapon->WeaponType == Spear && Object->AttackType == 1))
 			{
 				Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, FOX_PI/6, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 				Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, FOX_PI, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 				Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 				ArmUpr->Rotation = FOX_PI / 2 - 0.5f + Object->PlayerSpriteParts.AttackRotationArm;
 				ArmLwr->Rotation = ArmUpr->Rotation + FOX_PI/2 - Object->PlayerSpriteParts.AttackRotationArmLower;
+				Weap->Rotation = ArmLwr->Rotation;
 				if (Object->PlayerSpriteParts.AttackRotationArm == FOX_PI)
 					Object->isAttacking = FALSE;
 			}
 			else
 			{
-				Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, FOX_PI/6, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
+				Object->PlayerSpriteParts.AttackRotation = RotateToAngle(Object->PlayerSpriteParts.AttackRotation, FOX_PI / 2.1f, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 				Object->PlayerSpriteParts.AttackRotationArm = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArm, FOX_PI * 0.9f, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
 				Object->PlayerSpriteParts.AttackRotationArmLower = RotateToAngle(Object->PlayerSpriteParts.AttackRotationArmLower, FOX_PI/2, Object->CurrentPlayerStats.AttackSpeed * GetDeltaTime());
-				ArmUpr->Rotation = FOX_PI + Object->PlayerSpriteParts.AttackRotationArm;
-				ArmLwr->Rotation = ArmUpr->Rotation - FOX_PI/2 + Object->PlayerSpriteParts.AttackRotationArmLower;
+				ArmUpr->Rotation = FOX_PI * 1.25f + Object->PlayerSpriteParts.AttackRotationArm;
+				ArmLwr->Rotation = ArmUpr->Rotation + Object->PlayerSpriteParts.AttackRotationArmLower / 2;
+				Weap->Rotation = ArmLwr->Rotation - Object->PlayerSpriteParts.AttackRotation;
 				if (Object->PlayerSpriteParts.AttackRotationArm == FOX_PI * 0.9f)
 					Object->isAttacking = FALSE;
 			}
@@ -617,8 +622,9 @@ void Animation(Player *Object)
 		{
 			ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
 			ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
+			Weap->Rotation = ArmLwr->Rotation;
 		}
-		Weap->Rotation = ArmLwr->Rotation;
+		
 		ArmUpr->Position.x = Bdy->Position.x;
 		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
 		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
