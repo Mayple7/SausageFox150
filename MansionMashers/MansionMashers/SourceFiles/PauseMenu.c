@@ -373,7 +373,12 @@ void EventPause(void)
 
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
-			SetNextState(GS_Restart);
+			//Special Case (Please do not take this out again).
+			if(GetCurrentState() == GS_Level31)
+				SetNextState(GS_Level3);
+			//Otherwise perform normal restart
+			else
+				SetNextState(GS_Restart);
 			pause = FALSE;
 		}
 	}
