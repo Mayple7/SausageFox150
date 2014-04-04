@@ -108,6 +108,8 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		CreateComparisonText(CurrentPlayer, wList);
 		ComparisonTextUpdate(CurrentPlayer->ComparisonGlyphs);
 		ChangeTextZIndex(CurrentPlayer->ComparisonGlyphs, 451);
+		ChangeTextZIndex(wList->WeaponGlyphs, 451);
+		ChangeTextZIndex(wList->WeaponStatsGlyphs, 451);
 	}
 	if(!wList->WeaponStatsGlyphs->Glyph->Visible)
 	{

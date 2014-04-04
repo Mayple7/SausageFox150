@@ -1336,6 +1336,9 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponName);
 	CreateStatsString(CurrentPlayer->PlayerWeapon->WeaponStatsString, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusDefense);
 	
+	ChangeTextZIndex(CurrentPlayer->PlayerWeapon->WeaponGlyphs, 451);
+	ChangeTextZIndex(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs, 451);
+
 	nameLen = strlen(CurrentPlayer->PlayerWeapon->WeaponName);
 	statsLen = strlen(CurrentPlayer->PlayerWeapon->WeaponStatsString);
 	if(nameLen >= statsLen)
