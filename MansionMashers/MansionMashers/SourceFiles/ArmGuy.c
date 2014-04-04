@@ -46,17 +46,18 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
+static int levelComplete;
+static int beginningAnimation;
 
 ArmGuyBoss *Boss;
 HUD* CurrentHUD;
 
-Wall* LeftWall;
 Wall* RightWall;
 
 Sprite* Arrow1;
 static int Arrow1Grow;
 
+Sprite* BlackOverlay;
 Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
 static int GlowBool;
 
@@ -87,15 +88,17 @@ void LoadArmGuy(void)
 /*************************************************************************/
 void InitializeArmGuy(void)
 {
+	Vec3 Tint;
 	int i;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	levelComplete = FALSE;
+	beginningAnimation = TRUE;
 	GlowBool = TRUE;
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1260, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
@@ -126,6 +129,11 @@ void InitializeArmGuy(void)
 	Arrow1->Visible = FALSE;
 	Arrow1Grow = FALSE;
 
+	// Black Overlay
+	Vec3Set(&Tint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = Tint;
+
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
@@ -136,7 +144,7 @@ void InitializeArmGuy(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Create Bounding Walls
-	LeftWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
 	RightWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
 
 	/////////////////////////////////
@@ -163,7 +171,10 @@ void UpdateArmGuy(void)
 
 	// This should be the last line in this function
 	if(!levelComplete)
+	{
 		UpdateArmGuyBoss(Boss);
+	}
+
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	UpdateHUDPosition(CurrentHUD);
@@ -174,17 +185,29 @@ void UpdateArmGuy(void)
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 
+	// When the boss dies
 	if(!levelComplete && Boss->CurrentHealth <= 0)
 	{
 		levelComplete = TRUE;
 		Arrow1->Visible = TRUE;
-		FreeWall(LeftWall);
 		FreeWall(RightWall);
 		FreeArmGuyBoss(Boss);
 	}
+
+	// What to do when the boss is dead
 	if(levelComplete)
 	{
 		UpdateArrow(Arrow1, &Arrow1Grow);
+
+		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width)
+		{
+			BlackOverlay->Position.x = GetCameraXPosition();
+			BlackOverlay->Alpha += 1 * GetDeltaTime();
+			if(BlackOverlay->Alpha > 1)
+			{
+				SetNextState(GS_MapLevel);
+			}
+		}
 	}
 
 }
@@ -261,7 +284,38 @@ void EventArmGuy(void)
 	if(!levelComplete)
 		DetectArmGuyBossCollision(Boss);
 	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
+	if(!beginningAnimation)
+		InputPlayer(&CurrentPlayer);
+	else if(!levelComplete)
+	{
+		// Make sure the boss stays put during the start
+		Boss->cooldownTimer = 0;
+
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = 1;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -800)
+			{
+				beginningAnimation = FALSE;
+			}
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+	
 
 #if defined _DEBUG
 	if(FoxInput_KeyTriggered('U'))
