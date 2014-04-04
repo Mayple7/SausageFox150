@@ -66,6 +66,13 @@ static int GlowBool;
 Sprite* BossHPBar;
 Sprite* BossHPBarBack;
 
+FoxSound* IntelFoxStart;
+FoxSound* IntelFoxEnd;
+
+Sprite* IntelFoxBack;
+Sprite* IntelFox;
+static float IntelFoxValue;
+
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
 Sprite* TreeBackground3[BACKGROUND_LENGTH];
@@ -144,6 +151,12 @@ void InitializeArmGuy(void)
 	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
 
 	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
+	IntelFoxStart = CreateSound("Sounds/IntelFoxBossStart.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxBossDogWellDone.mp3", SmallSnd);
+
+	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
 	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -400, -170);
@@ -155,6 +168,14 @@ void InitializeArmGuy(void)
 	//Create Bounding Walls
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
 	RightWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
+
+	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
 
 	/////////////////////////////////
 	//			Boss			   //
@@ -208,6 +229,13 @@ void UpdateArmGuy(void)
 	{
 		UpdateArrow(Arrow1, &Arrow1Grow);
 
+		if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
+		{
+			PlayAudio(IntelFoxEnd);
+			IntelFoxEnd->hasPlayed = TRUE;
+		}
+
+
 		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width)
 		{
 			BlackOverlay->Position.x = GetCameraXPosition();
@@ -235,7 +263,6 @@ void UpdateArmGuy(void)
 		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentHealth / (float)Boss->MaxHealth));
 	}
 
-	//CurrentHUD->HealthBarEnd->Position.x = (CurrentHUD->HUDBackground->Position.x - 52.0f + (CurrentHUD->HealthBar->ScaleX * 2));
 }
 
 /*************************************************************************/
@@ -370,6 +397,35 @@ void EventArmGuy(void)
 	//////////////////////////////////
 	TreeBackgroundUpdate();
 	ObjectGlowUpdate();
+
+	//Intel Fox Starting Narrative
+	if(!beginningAnimation && !IntelFoxStart->hasPlayed)
+	{
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
+	}
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(IntelFoxStart) || FoxSoundCheckIsPlaying(IntelFoxEnd))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
+	
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
+
 
 	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
