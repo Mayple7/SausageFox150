@@ -244,9 +244,9 @@ void InitializeLevel1(void)
 	//			Objects			   //
 	/////////////////////////////////
 	// Arrows
-	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
-	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, PANELSIZE, 200);
-	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 2 * PANELSIZE, 200);
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 200);
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, PANELSIZE, 200);
+	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 2 * PANELSIZE, 200);
 
 	Arrow1->Visible = FALSE;
 	Arrow2->Visible = FALSE;

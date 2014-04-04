@@ -46,7 +46,9 @@
 // ---------------------------------------------------------------------------
 // globals
 static int newID;					// ID number
-static int levelComplete = FALSE;
+static int levelComplete;
+static int PlayerIsAlive; 
+static int beginningAnimation;
 
 ArmGuyBoss *Boss;
 HUD* CurrentHUD;
@@ -59,6 +61,8 @@ static int Arrow1Grow;
 
 Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
 static int GlowBool;
+
+Sprite *BlackOverlay;
 
 
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
@@ -88,14 +92,17 @@ void LoadArmGuy(void)
 void InitializeArmGuy(void)
 {
 	int i;
+	Vec3 TextTint;
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	levelComplete = FALSE;
 	GlowBool = TRUE;
+	beginningAnimation = TRUE;
+	PlayerIsAlive = TRUE;
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1100, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
@@ -117,6 +124,11 @@ void InitializeArmGuy(void)
 
 	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground7.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
+
+	//Black Overlay
+	Vec3Set(&TextTint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = TextTint;
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
@@ -256,12 +268,6 @@ void EventArmGuy(void)
 	//////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	//////////////////////////////////
-	// Check for any collision and handle the results
-	DetectPlayerCollision();
-	if(!levelComplete)
-		DetectArmGuyBossCollision(Boss);
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
 
 #if defined _DEBUG
 	if(FoxInput_KeyTriggered('U'))
@@ -275,10 +281,55 @@ void EventArmGuy(void)
 #endif
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//TogglePauseSound(BackSnd);
-		InitializePause(&DrawArmGuy);
-		UpdatePause();
-		//TogglePauseSound(BackSnd);
+		if(PlayerIsAlive == TRUE)
+		{
+			InitializePause(&DrawArmGuy);
+			//TogglePauseSound(BackSnd);
+			UpdatePause();
+			//TogglePauseSound(BackSnd);
+		}
+	}
+
+	// Runs if the beginning animation is finished
+	if(!beginningAnimation && !levelComplete)
+	{
+		// Check for any collision and handle the results
+		DetectPlayerCollision();
+		DetectArmGuyBossCollision(Boss);
+		// Handle any input for the current player
+		InputPlayer(&CurrentPlayer);
+		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+	}
+	else if(!levelComplete)
+	{
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = TRUE;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -800)
+				beginningAnimation = FALSE;
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+	else
+	{
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		if(BlackOverlay->Alpha > 1)
+			SetNextState(GS_MapLevel);
 	}
 
 	//////////////////////////////////
@@ -290,6 +341,16 @@ void EventArmGuy(void)
 	//////////////////////////////////
 	TreeBackgroundUpdate();
 	ObjectGlowUpdate();
+
+	//Player Dies
+	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
+	{
+		PlayerIsAlive = FALSE;
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha = 0.5f;
+
+		UpdateDeathConfirmObjects();
+	}
 }
 
 void TreeBackgroundUpdate(void)

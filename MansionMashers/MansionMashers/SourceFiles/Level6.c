@@ -262,10 +262,10 @@ void InitializeLevel6(void)
 	CreatePaperScroll(GetCameraXPosition(), 150);
 
 	// Arrows
-	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 0, 200);
-	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, PANELSIZE, 200);
-	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 2 * PANELSIZE, 200);
-	Arrow4 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 3 * PANELSIZE, 200);
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 390, 1, 1, 0, 200);
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 390, 1, 1, PANELSIZE, 200);
+	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 390, 1, 1, 2 * PANELSIZE, 200);
+	Arrow4 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 390, 1, 1, 3 * PANELSIZE, 200);
 
 	Arrow1->Visible = FALSE;
 	Arrow2->Visible = FALSE;
