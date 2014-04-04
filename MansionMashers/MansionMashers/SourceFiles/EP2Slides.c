@@ -49,6 +49,10 @@ static ParticleSystem *SecondParticle;
 static ParticleSystem *ThirdParticle;
 static ParticleSystem *FourthParticle;
 
+Sprite* IntelFoxBack;
+Sprite* IntelFox;
+static float IntelFoxValue;
+
 FoxSound* TheEndUgh;
 
 static enum Slides { Slide1, Slide2, Slide3, MaxSlides};
@@ -100,6 +104,11 @@ void InitializeEP2Screen(void)
 
 	// The end ughhh
 	TheEndUgh = CreateSound("Sounds/sfx_character_intel.fox_the_end_uughhhh.mp3", SmallSnd);
+
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
 }
 
 /*************************************************************************/
@@ -122,6 +131,27 @@ void UpdateEP2Screen(void)
 		SetNextState(GS_MainMenu);
 	else if(changeLevel == -1)
 		SetNextState(GS_Quit);
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(TheEndUgh))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
+	
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
 }
 
 /*************************************************************************/
