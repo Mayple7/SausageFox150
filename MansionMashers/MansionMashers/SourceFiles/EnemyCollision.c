@@ -119,6 +119,8 @@ void EnemyCollideWeapon(Enemy *CurrentEnemy)
 
 	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
+	if(CurrentPlayer.CurrentPlayerStats.StrengthTimer > 0)
+		Vec3Set(&textColor, 0.0f, 0.9372f, 0.6f);
 	FirstLetter = CreateText(num, (CurrentEnemy->Position.x + rand() % 81 - 40), (CurrentEnemy->Position.y + CurrentEnemy->EnemySprite->Height / 2), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
