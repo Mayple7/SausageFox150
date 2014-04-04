@@ -78,7 +78,9 @@ TextGlyphs *IntelFoxTxtStart;
 
 FoxSound* IntelFoxStart;
 
+Sprite* IntelFoxBack;
 Sprite* IntelFox;
+static float IntelFoxValue;
 
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
@@ -198,9 +200,11 @@ void InitializeLevel3(void)
 	//Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 0);
 	//Arrow1->Visible = FALSE;
 	//Arrow1Grow = FALSE;
-
-	IntelFox = (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 4, 1, 740, 380);
+	
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
 	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
 
 	CreatePaperScroll(GetCameraXPosition(), 150);
 }
@@ -353,6 +357,7 @@ void EventLevel3(void)
 	SetUpScrollWithText(IntelFoxTxtStart, &counter);
 	ObjectGlowUpdate();
 	UpdateAllProjectiles();
+	ParticleSystemUpdate();
 
 	//Intel Fox Starting Narrative
 	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
@@ -375,6 +380,12 @@ void EventLevel3(void)
 
 	//Always update intel foxes position you need him
 	IntelFox->Position.x = GetCameraXPosition() + 740;
+
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
 
 	//Level Complete
 	if(CurrentPlayer.Position.x > (1920 / 2.0f) + CurrentPlayer.PlayerCollider.width)

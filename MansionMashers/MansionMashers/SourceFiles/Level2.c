@@ -82,7 +82,9 @@ FoxSound* BackSnd;
 FoxSound* IntelFoxStart;
 TextGlyphs* IntelFoxTxtStart;
 
+Sprite* IntelFoxBack;
 Sprite* IntelFox;
+static float IntelFoxValue;
 
 static int PlayerInSight; // Enemy in watch tower checks for player 
 static int PlayerIsAlive; 
@@ -298,8 +300,10 @@ void InitializeLevel2(void)
 	// Create Bounding boxes
 	CreateBoundingBoxes();
 
-	IntelFox = (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 4, 1, 740, 380);
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
 	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -536,6 +540,12 @@ void EventLevel2(void)
 
 	//Always update intel foxes position you need him
 	IntelFox->Position.x = GetCameraXPosition() + 740;
+
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
 
 	if(!beginningAnimation)
 		SetUpScrollWithText(IntelFoxTxtStart, &counter);

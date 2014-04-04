@@ -580,7 +580,7 @@ void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 {
 	// Attack speed formula
-	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 2.0f + 8.0f;
+	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 2.0f + CurrentPlayer.PlayerWeapon->BonusAgility * + 8.0f;
 }
 
 /*************************************************************************/
