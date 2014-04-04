@@ -263,15 +263,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 		}
 	}
 
-	/*if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
-	{
-		CurrentPlayer->isBlocking = TRUE;
-	}
-	else if(FoxInput_MouseUp(MOUSE_BUTTON_RIGHT) || FoxInput_KeyUp('M') || CurrentPlayer->isAttacking)
-	{
-		CurrentPlayer->isBlocking = FALSE;
-	}*/
-
 	if (LookAtMouse)
 	{
 		if (camX + (mouseX - PANELSIZE / 2) < CurrentPlayer->Position.x - 20)
@@ -442,12 +433,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 #endif
 
-	// Update Speed and such if blocking
-	if(CurrentPlayer->isBlocking)
-	{
-		CurrentPlayer->Speed /= 2;
-	}
-
 	if (CurrentPlayer->WindAttackCooldown + GetDeltaTime() * 5 * (CurrentPlayer->CurrentPlayerStats.Agility + CurrentPlayer->PlayerWeapon->BonusAgility + 1) < CurrentPlayer->WindAttackCooldownMax)
 		CurrentPlayer->WindAttackCooldown += GetDeltaTime() * 5 * (CurrentPlayer->CurrentPlayerStats.Agility + CurrentPlayer->PlayerWeapon->BonusAgility + 1);
 	else
@@ -565,7 +550,9 @@ void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 {
 	// Move speed formula
-	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility * 15.0f + 600.0f;
+	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility * 15.0f + 500.0f;
+	if(CurrentPlayer.PlayerWeapon)
+		CurrentPlayerStats->MoveSpeed += CurrentPlayer.PlayerWeapon->BonusAgility * 15.0f;
 }
 
 /*************************************************************************/
@@ -580,7 +567,9 @@ void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 {
 	// Attack speed formula
-	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 2.0f + 8.0f;
+	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 0.5f + 8.0f;
+	if(CurrentPlayer.PlayerWeapon)
+		CurrentPlayerStats->AttackSpeed += CurrentPlayer.PlayerWeapon->BonusAgility * 0.5f;
 }
 
 /*************************************************************************/
@@ -595,7 +584,11 @@ void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 {
 	// Damage reduction formula
-	CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / CurrentPlayerStats->Defense) / 2.0f;
+	if(CurrentPlayer.PlayerWeapon)
+		CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / (CurrentPlayerStats->Defense + CurrentPlayer.PlayerWeapon->BonusDefense)) / 2.0f;
+	else
+		CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / CurrentPlayerStats->Defense) / 2.0f;
+	CurrentPlayerStats->DamageReduction /= 2.0f;
 }
 
 /*************************************************************************/
@@ -610,7 +603,9 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 void updateDamage(Player *CurrentPlayer)
 {
 	//Placeholder damage reduction formula
-	CurrentPlayer->CurrentPlayerStats.Damage = 10 + (CurrentPlayer->CurrentPlayerStats.Strength + CurrentPlayer->PlayerWeapon->BonusStrength) * 2;
+	CurrentPlayer->CurrentPlayerStats.Damage = 10 + CurrentPlayer->CurrentPlayerStats.Strength * 2;
+	if(CurrentPlayer->PlayerWeapon)
+		CurrentPlayer->CurrentPlayerStats.Damage += CurrentPlayer->PlayerWeapon->BonusStrength * 2;
 }
 
 /*************************************************************************/

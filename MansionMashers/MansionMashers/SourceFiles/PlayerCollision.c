@@ -281,11 +281,11 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 	if(Cheats)
 		damageDealt = 0;
 	else
-		damageDealt = (int)(CurrentEnemy->CurrentEnemyStats.Damage * (1.0f - CurrentPlayer->CurrentPlayerStats.DamageReduction));
-	
-	// Reduce damage if blocking
-	if(CurrentPlayer->isBlocking)
-		damageDealt /= 2;
+	{
+		damageDealt = (int)(CurrentEnemy->CurrentEnemyStats.Damage * (1 - CurrentPlayer->CurrentPlayerStats.DamageReduction));
+		if(damageDealt == 0)
+			damageDealt = 1;
+	}
 
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
@@ -316,7 +316,7 @@ void PlayerCollideEnemyProjectile(Player* CurrentPlayer, Projectile *CurrentProj
 		damageDealt = 0;
 	else
 	{
-		damageDealt = (int)(CurrentProjectile->Damage * (1.0f - CurrentPlayer->CurrentPlayerStats.DamageReduction));
+		damageDealt = (int)(CurrentProjectile->Damage * (1 - CurrentPlayer->CurrentPlayerStats.DamageReduction));
 		if(damageDealt == 0)
 			damageDealt = 1;
 	}
