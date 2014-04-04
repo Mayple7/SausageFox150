@@ -62,6 +62,10 @@ Sprite* BlackOverlay;
 Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
 static int GlowBool;
 
+//Boss HP Bar
+Sprite* BossHPBar;
+Sprite* BossHPBarBack;
+
 FoxSound* IntelFoxStart;
 FoxSound* IntelFoxEnd;
 
@@ -138,10 +142,19 @@ void InitializeArmGuy(void)
 	//Bounding Boxes
 	CreateBoundingBoxes();
 
+	// Arrow Initialize
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow1->Visible = FALSE;
+	Arrow1Grow = FALSE;
+
 	// Black Overlay
 	Vec3Set(&Tint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = Tint;
+
+	// Boss HP Bar
+	BossHPBar = (Sprite *)CreateSprite("TextureFiles/BossHealthBarMid.png", 1, 44, 399, 1, 1, -200, 450);
+	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
 
 	/////////////////////////////////
 	//		Sounds				   //
@@ -166,11 +179,6 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	//			Objects			   //
 	/////////////////////////////////
-	// Arrow Initialize
-	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 200);
-	Arrow1->Visible = FALSE;
-	Arrow1Grow = FALSE;
-
 	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
 	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
 	IntelFox->Alpha = 0.0f;
@@ -250,6 +258,22 @@ void UpdateArmGuy(void)
 				SetNextState(GS_MapLevel);
 			}
 		}
+
+		BossHPBar->Visible = FALSE;
+
+		if(BossHPBar->Alpha > 0.0f)
+		{
+			BossHPBar->Alpha -= GetDeltaTime() / 2.0f;
+		}
+		else
+			BossHPBar->Alpha = 0;
+
+	}
+	// Boss health bar logic
+	else
+	{
+		BossHPBar->ScaleX = 800.0f * (Boss->CurrentHealth / (float)Boss->MaxHealth);
+		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentHealth / (float)Boss->MaxHealth));
 	}
 
 }
@@ -388,7 +412,7 @@ void EventArmGuy(void)
 	ObjectGlowUpdate();
 
 	//Intel Fox Starting Narrative
-	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
+	if(!beginningAnimation && !IntelFoxStart->hasPlayed)
 	{
 		PlayAudio(IntelFoxStart);
 		IntelFoxStart->hasPlayed = TRUE;
