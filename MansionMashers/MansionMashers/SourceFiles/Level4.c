@@ -361,10 +361,13 @@ void EventLevel4(void)
 
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawLevel4);
-		TogglePauseSound(BackSnd);
-		UpdatePause();
-		TogglePauseSound(BackSnd);
+		if(PlayerIsAlive)
+		{
+			InitializePause(&DrawLevel4);
+			TogglePauseSound(BackSnd);
+			UpdatePause();
+			TogglePauseSound(BackSnd);
+		}
 	}
 
 	// Runs if the beginning animation is finished
