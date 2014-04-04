@@ -184,94 +184,108 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
+	SelectiveInput(CurrentPlayer, 1, 1, 1);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Prevents non-desired inputs from being made.
+*/
+/*************************************************************************/
+void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNow, int attackingNow)
+{
 	int mouseX = FoxInput_GetMousePositionX();
 	float camX = GetCameraXPosition();
 
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
-	if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer->isAttacking)
+	if (attackingNow)
 	{
-		//Pick a random swing sound to play
-		if (rand() % 2)
+		if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer->isAttacking)
 		{
-			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
-				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
-		}
-		else
-		{
-			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
-				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
-		}
-
-		//Set the attacking necessaries
-		CurrentPlayer->isAttacking = TRUE;
-		CurrentPlayer->AttackType  = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
-		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
-	}
-	else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking && CurrentPlayer->WindAttackCooldown >= CurrentPlayer->WindAttackCooldownMax)
-	{
-		//Pick a random shoot sound to play
-		if (rand() % 2)
-		{
-			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
-				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
-		}
-		else
-		{
-			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
-				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
-		}
-
-		//Set the attacking necessaries
-		CurrentPlayer->isAttacking = TRUE;
-		CurrentPlayer->AttackType  = 1;
-		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
-		CurrentPlayer->WindAttackCooldown = 0;
-		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
-
-		//Wind of the weapons
-		{
-			Projectile *theWindOfAFox;
-			float projectileSpeed = 1400;
-			if (!CurrentPlayer->PlayerSpriteParts.Weapon->FlipX)
-				projectileSpeed *= -1;
-
-			//NASTY NASTY HACKKKK
-			theWindOfAFox = CreateProjectile("TextureFiles/Wind.png", 
-										     CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 1.5f, 
-											 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
-										     Wind, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
-
-			theWindOfAFox->ProjectileFOF = PlayerWeapon;
-			theWindOfAFox->ProjectileSprite->ZIndex = 100;
-
-			if (!theWindOfAFox->ProjectileSprite->FlipX)
+			//Pick a random swing sound to play
+			if (rand() % 2)
 			{
-				theWindOfAFox->ProjectileAttack.Offset.x = theWindOfAFox->ProjectileAttack.width / 3;
-				theWindOfAFox->Position.x += 50;
+				if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
 			}
 			else
 			{
-				theWindOfAFox->ProjectileAttack.Offset.x = -theWindOfAFox->ProjectileAttack.width / 3;
-				theWindOfAFox->Position.x -= 50;
+				if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
 			}
-			UpdateCollider(&theWindOfAFox->ProjectileAttack, theWindOfAFox->ProjectileAttack.width / 4, theWindOfAFox->ProjectileAttack.height / 2);
-		}
-	}
 
-	/*if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
-	{
-		CurrentPlayer->isBlocking = TRUE;
+			//Set the attacking necessaries
+			CurrentPlayer->isAttacking = TRUE;
+			CurrentPlayer->AttackType  = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
+			UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
+		}
+		else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking && CurrentPlayer->WindAttackCooldown >= CurrentPlayer->WindAttackCooldownMax)
+		{
+			//Pick a random shoot sound to play
+			if (rand() % 2)
+			{
+				if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
+			}
+			else
+			{
+				if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
+			}
+
+			//Set the attacking necessaries
+			CurrentPlayer->isAttacking = TRUE;
+			CurrentPlayer->AttackType  = 1;
+			CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
+			CurrentPlayer->WindAttackCooldown = 0;
+			UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
+
+			//Wind of the weapons
+			{
+				Projectile *theWindOfAFox;
+				float projectileSpeed = 1400;
+				if (!CurrentPlayer->PlayerSpriteParts.Weapon->FlipX)
+					projectileSpeed *= -1;
+
+				//NASTY NASTY HACKKKK
+				theWindOfAFox = CreateProjectile("TextureFiles/Wind.png", 
+												 CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 1.5f, 
+												 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
+												 Wind, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
+
+				theWindOfAFox->ProjectileFOF = PlayerWeapon;
+				theWindOfAFox->ProjectileSprite->ZIndex = 100;
+
+				if (!theWindOfAFox->ProjectileSprite->FlipX)
+				{
+					theWindOfAFox->ProjectileAttack.Offset.x = theWindOfAFox->ProjectileAttack.width / 3;
+					theWindOfAFox->Position.x += 50;
+				}
+				else
+				{
+					theWindOfAFox->ProjectileAttack.Offset.x = -theWindOfAFox->ProjectileAttack.width / 3;
+					theWindOfAFox->Position.x -= 50;
+				}
+				UpdateCollider(&theWindOfAFox->ProjectileAttack, theWindOfAFox->ProjectileAttack.width / 4, theWindOfAFox->ProjectileAttack.height / 2);
+			}
+		}
+
+		/*if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
+		{
+			CurrentPlayer->isBlocking = TRUE;
+		}
+		else if(FoxInput_MouseUp(MOUSE_BUTTON_RIGHT) || FoxInput_KeyUp('M') || CurrentPlayer->isAttacking)
+		{
+			CurrentPlayer->isBlocking = FALSE;
+		}*/
 	}
-	else if(FoxInput_MouseUp(MOUSE_BUTTON_RIGHT) || FoxInput_KeyUp('M') || CurrentPlayer->isAttacking)
-	{
-		CurrentPlayer->isBlocking = FALSE;
-	}*/
 
 	if (LookAtMouse)
 	{
@@ -385,7 +399,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	}
 
 	// Drop down when S is pushed
-	if(FoxInput_KeyTriggered('S') && CurrentPlayer->PlayerRigidBody.onGround)
+	if(FoxInput_KeyTriggered('S') && CurrentPlayer->PlayerRigidBody.onGround && dropdownNow)
 	{
 		CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 		CurrentPlayer->dropDown = TRUE;
@@ -393,7 +407,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	}
 
 	//Jump when space is pushed or drop down if S is pushed as well
-	if(FoxInput_KeyTriggered(VK_SPACE))
+	if(FoxInput_KeyTriggered(VK_SPACE) && jumpingNow)
 	{
 		Vec2 velocity;
 		

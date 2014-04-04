@@ -227,6 +227,7 @@ void UpdateTutorial(void)
 	EventTutorial();
 
 	ParticleSystemUpdate();
+	UpdateAllProjectiles();
 	BoundingBoxUpdate();
 	
 	PlayAudio(BackSnd);
@@ -381,9 +382,10 @@ void UpdateTutorial(void)
 		CurrentHUD->ExpBar->Position.x = (GetCameraXPosition() - 800 - 1000);
 		CurrentHUD->ExpBarEnd->Position.x = (GetCameraXPosition() - 800 - 1000);
 
-		//Coin text update position
+		//Text update position
 		ChangeTextPosition(CurrentHUD->CoinText, newPosition, Center);
 		ChangeTextPosition(CurrentHUD->FPSText, newPosition, Center);
+		ChangeTextPosition(CurrentHUD->RankText, newPosition, Center);
 	}
 }
 
@@ -451,180 +453,21 @@ void EventTutorial(void)
 		DetectPlayerCollision();
 
 		// Handle any input for the current player [SPECIAL FOR TUTORIAL LEVEL]
-		Animation(&CurrentPlayer);
-		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
-		// Move left if A is pressed
-		if(FoxInput_KeyDown('A'))
+		switch(tutorialDone)
 		{
-			CurrentPlayer.FlipX = 0;
-			CurrentPlayer.PlayerDirection = LEFT;
-			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+		case 0:
+			SelectiveInput(&CurrentPlayer, 0, 0, 0);
+			break;
+		case 1:
+			SelectiveInput(&CurrentPlayer, 1, 0, 0);
+			break;
+		case 2:
+			SelectiveInput(&CurrentPlayer, 1, 1, 0);
+			break;
+		default:
+			SelectiveInput(&CurrentPlayer, 1, 1, 1);
+			break;
 		}
-		// Move right if D is pressed
-		else if(FoxInput_KeyDown('D'))
-		{
-			CurrentPlayer.FlipX = 1;
-			CurrentPlayer.PlayerDirection = RIGHT;
-			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
-		}
-		else
-		{
-			if (!(CurrentPlayer.Position.y > GROUNDLEVEL) && !CurrentPlayer.PlayerRigidBody.onGround)
-			{
-				if (CurrentPlayer.Speed - 48.0f * GetDeltaTime() >= 0.0f)
-				{
-					CurrentPlayer.Speed -= 48.0f * GetDeltaTime();
-				}
-				else
-				{
-					CurrentPlayer.Speed = 0.0f;
-					CurrentPlayer.LegSinValue = 0;
-				}
-			}
-			else
-			{
-				if (CurrentPlayer.Speed - 48.0f * GetDeltaTime() >= 0.0f)
-				{
-					CurrentPlayer.Speed -= 48.0f * GetDeltaTime();
-				}
-				else
-				{
-					CurrentPlayer.Speed = 0.0f;
-					CurrentPlayer.LegSinValue = 0;
-				}
-			}
-		}
-
-		// TUTORIAL PART 1
-		if (tutorialDone > 0)
-		{
-			if(FoxInput_KeyTriggered('S') && CurrentPlayer.PlayerRigidBody.onGround && tutorialDone > 1) //TUTORIAL PART 2
-			{
-				CurrentPlayer.PlayerRigidBody.onGround = FALSE;
-				CurrentPlayer.dropDown = TRUE;
-				CurrentPlayer.dropdownTimer = 0.25f;
-			}
-
-			//Jump when space is pushed or drop down if S is pushed as well
-			if(FoxInput_KeyTriggered(VK_SPACE))
-			{
-				Vec2 velocity;
-
-				Vec2Set(&velocity, 0.0f, 1080.0f);
-				if(CurrentPlayer.Position.y <= GROUNDLEVEL || CurrentPlayer.PlayerRigidBody.onGround)
-				{
-					Vec2Set(&CurrentPlayer.Position, CurrentPlayer.Position.x, CurrentPlayer.Position.y + 300.0f * GetDeltaTime());
-					CurrentPlayer.PlayerRigidBody.onGround = FALSE;
-					ApplyVelocity(&CurrentPlayer.PlayerRigidBody, &velocity);
-				}
-			}
-		}
-		
-		// TUTORIAL PART 3
-		if (tutorialDone > 2)
-		{
-			if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer.isAttacking)
-			{
-				//Pick a random swing sound to play
-				if (rand() % 2)
-				{
-					if (!FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.Swing2))
-						PlayAudio(CurrentPlayer.CurrentPlayerSounds.Swing1);
-				}
-				else
-				{
-					if (!FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.Swing1))
-						PlayAudio(CurrentPlayer.CurrentPlayerSounds.Swing2);
-				}
-
-				//Set the attacking necessaries
-				CurrentPlayer.isAttacking = TRUE;
-				CurrentPlayer.PlayerSpriteParts.AttackRotation = 0;
-				CurrentPlayer.PlayerSpriteParts.AttackRotationArm = 0;
-				CurrentPlayer.PlayerSpriteParts.AttackRotationArmLower = 0;
-				UpdateCollider(&CurrentPlayer.PlayerCollider,CurrentPlayer.PlayerCollider.width, CurrentPlayer.PlayerCollider.height);
-			}
-
-			//Cycle through the buffs
-			if(FoxInput_KeyTriggered('Q'))
-			{
-				//The starting buff so we don't infini-loop
-				int startingBuff = CurrentPlayer.BuffSelected++;
-
-				//Loop back around
-				if(CurrentPlayer.BuffSelected > 3)
-					CurrentPlayer.BuffSelected = 0;
-
-				//Go to the next acquired buff, or stop looping
-				while(!CurrentPlayer.BuffHeld[CurrentPlayer.BuffSelected] && startingBuff != CurrentPlayer.BuffSelected)
-				{
-					CurrentPlayer.BuffSelected++;
-					if(CurrentPlayer.BuffSelected > 3)
-					{
-						CurrentPlayer.BuffSelected = 0;
-					}
-				}
-			}
-
-			//Use the buff
-			if(FoxInput_KeyTriggered('F'))
-			{
-				if(CurrentPlayer.BuffHeld[CurrentPlayer.BuffSelected])
-				{
-					int startingBuff;
-					// Currently going with a 20% increase
-					// Sets the timer for 10 seconds
-					switch(CurrentPlayer.BuffSelected)
-					{
-					// Buffs the player's attack speed
-					case Agility:
-						CurrentPlayer.CurrentPlayerStats.AttackSpeed *= 1.2f;
-						CurrentPlayer.CurrentPlayerStats.AgilityTimer = 10;
-						break;
-					// Buffs the player's damage
-					case Strength:
-						CurrentPlayer.CurrentPlayerStats.Damage = (int)(CurrentPlayer.CurrentPlayerStats.Damage * 1.2f);
-						CurrentPlayer.CurrentPlayerStats.StrengthTimer = 10;
-						break;
-					// Buffs the player's damage reduction
-					case Defense:
-						CurrentPlayer.CurrentPlayerStats.DamageReduction *= 1.2f;
-						CurrentPlayer.CurrentPlayerStats.DefenseTimer = 10;
-						break;
-					// Buffs the player's move speed
-					case Heal:
-						if(CurrentPlayer.CurrentPlayerStats.CurrentHealth > CurrentPlayer.CurrentPlayerStats.MaxHealth / 2)
-							CurrentPlayer.CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer.CurrentPlayerStats.MaxHealth;
-						else
-							CurrentPlayer.CurrentPlayerStats.CurrentHealth += (float)CurrentPlayer.CurrentPlayerStats.MaxHealth / 2;
-						break;
-					}
-					CurrentPlayer.BuffHeld[CurrentPlayer.BuffSelected] = FALSE;
-					//Cycles automatically to the next available buff
-					//The starting buff so we don't infini-loop
-					startingBuff = CurrentPlayer.BuffSelected++;
-					//Loop back around
-					if(CurrentPlayer.BuffSelected > 3)
-						CurrentPlayer.BuffSelected = 0;
-
-					//Go to the next acquired buff, or stop looping
-					while(!CurrentPlayer.BuffHeld[CurrentPlayer.BuffSelected] && startingBuff != CurrentPlayer.BuffSelected)
-					{
-						CurrentPlayer.BuffSelected++;
-						if(CurrentPlayer.BuffSelected > 3)
-						{
-							CurrentPlayer.BuffSelected = 0;
-						}
-					}
-				}
-			}
-		}
-
-		CurrentPlayer.PlayerRigidBody.Acceleration.x = 0;
-		CurrentPlayer.PlayerRigidBody.Acceleration.y = 0;
-
-		// Move the direction based on the speed
-		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 
 		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 	}

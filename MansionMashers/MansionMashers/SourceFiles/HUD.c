@@ -219,7 +219,7 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	Vec2Set(&newPosition, GetCameraXPosition(), CurrentHUD->StatusText->Glyph->Position.y);
 	ChangeTextPosition(CurrentHUD->StatusText, newPosition, Center);
 
-	//Coin text update position
+	//Rank text update position
 	Vec2Set(&newPosition, GetCameraXPosition() - 758, 342);
 	ChangeTextPosition(CurrentHUD->RankText, newPosition, Center);
 

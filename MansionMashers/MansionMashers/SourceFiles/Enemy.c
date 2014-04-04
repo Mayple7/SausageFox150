@@ -101,7 +101,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
-		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 29);
+		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 104);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
 
@@ -125,7 +125,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->dropDown					= FALSE;
 
 		// Random numbers with the current state thing will make the enemies harder as the levels progress
-		InitializeEnemyStats(CurrentEnemy, 50 + 5 * (rand() % GetCurrentState()), (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 20 + 3 * (rand() % GetCurrentState()), 10 + rand() % 10, 33);
+		InitializeEnemyStats(CurrentEnemy, 50 + 5 * (rand() % GetCurrentState()), (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 20 + 3 * (rand() % GetCurrentState()), 10 + rand() % 10, 53);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -179,7 +179,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 80 + 10 * (rand() % GetCurrentState()), (float)(150 + 10 * (rand() % 10)), 8.0f, 0, 30 + 3 * (rand() % GetCurrentState()), 20 + rand() % 20, 47);
+		InitializeEnemyStats(CurrentEnemy, 80 + 10 * (rand() % GetCurrentState()), (float)(150 + 10 * (rand() % 10)), 8.0f, 0, 30 + 3 * (rand() % GetCurrentState()), 20 + rand() % 20, 67);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
