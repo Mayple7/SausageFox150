@@ -63,7 +63,7 @@ typedef struct PlayerStats
 
 	//Non-Modifiable Stats
 	int MaxHealth;
-	int CurrentHealth;
+	float CurrentHealth;
 	float MoveSpeed;
 	float AttackSpeed;
 	float DamageReduction;

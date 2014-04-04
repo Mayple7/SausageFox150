@@ -594,9 +594,9 @@ void EventTutorial(void)
 					// Buffs the player's move speed
 					case Heal:
 						if(CurrentPlayer.CurrentPlayerStats.CurrentHealth > CurrentPlayer.CurrentPlayerStats.MaxHealth / 2)
-							CurrentPlayer.CurrentPlayerStats.CurrentHealth = CurrentPlayer.CurrentPlayerStats.MaxHealth;
+							CurrentPlayer.CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer.CurrentPlayerStats.MaxHealth;
 						else
-							CurrentPlayer.CurrentPlayerStats.CurrentHealth += CurrentPlayer.CurrentPlayerStats.MaxHealth / 2;
+							CurrentPlayer.CurrentPlayerStats.CurrentHealth += (float)CurrentPlayer.CurrentPlayerStats.MaxHealth / 2;
 						break;
 					}
 					CurrentPlayer.BuffHeld[CurrentPlayer.BuffSelected] = FALSE;

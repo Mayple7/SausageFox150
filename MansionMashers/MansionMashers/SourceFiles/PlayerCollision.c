@@ -209,7 +209,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		wList->WeaponSprite->ZIndex = (unsigned short)50;
 		wList->WeaponFOF = DroppedWeapon;
 		
-		wList->WeaponSprite->Rotation = FOX_PI / 4;
+		wList->WeaponSprite->Rotation = FOX_PI / 2 + (float)(rand() % 5 - 2) / 10;;
 		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
 
 		//If it is a shop we like it straight, oh ja
@@ -245,8 +245,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 		healthRatio = (float)(CurrentPlayer->CurrentPlayerStats.CurrentHealth) / CurrentPlayer->CurrentPlayerStats.MaxHealth;
 		updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
-		CurrentPlayer->CurrentPlayerStats.CurrentHealth = (int)(CurrentPlayer->CurrentPlayerStats.MaxHealth * healthRatio);
-
+		CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)ceil(CurrentPlayer->CurrentPlayerStats.MaxHealth * healthRatio);
 		// Make sure the player keeps their buff after the weapon swap
 		if(CurrentPlayer->CurrentPlayerStats.StrengthTimer > 0)
 		{
@@ -260,8 +259,6 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		{
 			CurrentPlayer->CurrentPlayerStats.DamageReduction *= 1.5f;
 		}
-
-
 	}
 }
 

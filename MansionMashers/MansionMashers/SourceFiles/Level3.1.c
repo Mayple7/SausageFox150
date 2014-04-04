@@ -174,7 +174,7 @@ void InitializeLevel31(void)
 	//Panel3
 	CreateSprite("TextureFiles/Level3Pan4.png", 1920, 1080, 5, 1, 1, (1920 * 2), 0);
 	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, (1920 * 2), 0);
-	PlatOverlay[4] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan3PlatOverlay.png", 1920, 1080, 6, 1, 1, 1920 * 2, 0);
+	PlatOverlay[4] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan4PlatOverlay.png", 1920, 1080, 6, 1, 1, 1920 * 2, 0);
 	PlatOverlay[4]->Alpha = .1f;
 	PlatOverlay[5] = (Sprite*)CreateSprite("TextureFiles/Lvl3PanPlatOverlay2.png", 1920, 1080, 402, 1, 1, 1920*2, 0);
 	PlatOverlay[5]->Alpha = .1f;
@@ -229,6 +229,14 @@ void InitializeLevel31(void)
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1920.0f, 100.0f, newID++, 1920, -20);
 	Plat->PlatformSprite->Visible = FALSE;
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1920.0f, 100.0f, newID++, (1920 * 2), -20);
+	Plat->PlatformSprite->Visible = FALSE;
+
+	//Middle Platforms
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 150, -255);
+	Plat->PlatformSprite->Visible = FALSE;
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 2350, -255);
+	Plat->PlatformSprite->Visible = FALSE;
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 150 + PANELSIZE * 2, -255);
 	Plat->PlatformSprite->Visible = FALSE;
 
 	/////////////////////////////////
@@ -323,7 +331,7 @@ void UpdateLevel31(void)
 {
 	EventLevel31();
 
-	//EasyEditPlatform(Plat, 10);
+	EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1 ,10);
 
 	if(!EnemyPanelNumber[0])

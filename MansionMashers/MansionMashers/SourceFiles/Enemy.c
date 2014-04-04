@@ -339,7 +339,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		if (dropWeapon == 1)
 		{
 			Weapon *CurrentWeapon = CreateDroppedWeapon(CurrentEnemy->EnemyWeapon->WeaponType, CurrentEnemy->EnemyWeapon->WeaponRarity, 250, 250, CurrentEnemy->objID, CurrentEnemy->Position.x, CurrentEnemy->Position.y);
-			CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (rand() % 50 - 20) / 4; //A random angle for the dropped weapon
+			CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (float)(rand() % 5 - 2) / 10; //A random angle for the dropped weapon
 			CurrentWeapon->WeaponFalling = TRUE;
 		}
 
