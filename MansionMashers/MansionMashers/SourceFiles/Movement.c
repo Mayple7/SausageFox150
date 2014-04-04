@@ -764,7 +764,7 @@ void HandGuyAnimation(HandGuyBoss *Object)
 		
 		
 		// Attacking! -----------------------------------------------------------------------------------------
-		if (Object->CurrentState == Question && Object->InnerState == Attack && Object->cooldownTimer >= 0.5f)
+		if (Object->QuestionAttackAnimation)
 		{
 			Object->HandGuySpriteParts.AttackRotationArm = RotateToAngle(Object->HandGuySpriteParts.AttackRotationArm, FOX_PI * 0.9f, 15.0f * GetDeltaTime());
 			Object->HandGuySpriteParts.AttackRotationArmLower = RotateToAngle(Object->HandGuySpriteParts.AttackRotationArmLower, FOX_PI / 2, 15.0f * GetDeltaTime());
@@ -777,6 +777,10 @@ void HandGuyAnimation(HandGuyBoss *Object)
 			ArmLwr2->Rotation = ArmUpr2->Rotation - FOX_PI / 2 + Object->HandGuySpriteParts.AttackRotationArmLower2;
 			ArmUpr->Rotation = -FOX_PI / 12 + Object->HandGuySpriteParts.AttackRotationArm / 6 - (Object->numProjectiles * 12 * FOX_PI / 180.0f);
 			ArmLwr->Rotation = ArmUpr->Rotation - FOX_PI / 2 + Object->HandGuySpriteParts.AttackRotationArmLower;
+
+			if (Object->HandGuySpriteParts.AttackRotationArm2 == FOX_PI * 0.9f)
+				Object->QuestionAttackAnimation = FALSE;
+
 		}
 		else
 		{
@@ -784,6 +788,12 @@ void HandGuyAnimation(HandGuyBoss *Object)
 			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
 			ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
 			ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
+
+			if (Object->JabSprite->Visible)
+			{
+				ArmUpr2->Rotation = -FOX_PI / 12;
+				ArmUpr->Rotation = -FOX_PI / 12;
+			}
 		}
 		// -----------------------------------------------------------------------------------------
 
@@ -835,7 +845,7 @@ void HandGuyAnimation(HandGuyBoss *Object)
 		
 		
 		// Attacking! -----------------------------------------------------------------------------------------
-		if (Object->CurrentState == Question && Object->InnerState == Attack && Object->cooldownTimer >= 0.5f)
+		if (Object->QuestionAttackAnimation)
 		{
 			Object->HandGuySpriteParts.AttackRotationArm = RotateToAngle(Object->HandGuySpriteParts.AttackRotationArm, FOX_PI * 0.9f, 15.0f * GetDeltaTime());
 			Object->HandGuySpriteParts.AttackRotationArmLower = RotateToAngle(Object->HandGuySpriteParts.AttackRotationArmLower, FOX_PI / 2, 15.0f * GetDeltaTime());
@@ -849,6 +859,9 @@ void HandGuyAnimation(HandGuyBoss *Object)
 			ArmLwr2->Rotation = ArmUpr2->Rotation + FOX_PI / 2 - Object->HandGuySpriteParts.AttackRotationArmLower2;
 			ArmUpr->Rotation = FOX_PI / 12 - Object->HandGuySpriteParts.AttackRotationArm / 6 + (Object->numProjectiles * 12 * FOX_PI / 180.0f);
 			ArmLwr->Rotation = ArmUpr->Rotation + FOX_PI / 2 - Object->HandGuySpriteParts.AttackRotationArmLower;
+
+			if (Object->HandGuySpriteParts.AttackRotationArm2 == FOX_PI * 0.9f)
+				Object->QuestionAttackAnimation = FALSE;
 		}
 		else
 		{
@@ -856,6 +869,12 @@ void HandGuyAnimation(HandGuyBoss *Object)
 			ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
 			ArmUpr2->Rotation = LegUpperDirection/1.5f - 1.5f;
 			ArmLwr2->Rotation = ArmUpr2->Rotation + 1.25f + LegUpperDirection/2.0f;
+
+			if (Object->JabSprite->Visible)
+			{
+				ArmUpr2->Rotation = FOX_PI / 12;
+				ArmUpr->Rotation = FOX_PI / 12;
+			}
 		}
 		// -----------------------------------------------------------------------------------------
 
