@@ -91,6 +91,8 @@ typedef struct Enemy
 	Vec2 HomePos;
 	enum AIState EnemyState;
 
+	float HitByProjectileTimer; // timer for not letting the enemy get hit multiple times by the projectiles
+
 	enum Direction EnemyDirection;
 	Sprite *EnemySprite;
 	RigidBody EnemyRigidBody;
