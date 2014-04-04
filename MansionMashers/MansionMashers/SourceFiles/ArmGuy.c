@@ -65,9 +65,15 @@ static int GlowBool;
 FoxSound* IntelFoxStart;
 FoxSound* IntelFoxEnd;
 
+FoxSound* ArmGuyDie;
+
 Sprite* IntelFoxBack;
 Sprite* IntelFox;
 static float IntelFoxValue;
+
+static int timer;
+static int timerOn;
+static int prevPlayed;
 
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
@@ -142,6 +148,7 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	IntelFoxStart = CreateSound("Sounds/IntelFoxBossStart.mp3", SmallSnd);
 	IntelFoxEnd = CreateSound("Sounds/IntelFoxBossDogWellDone.mp3", SmallSnd);
+	ArmGuyDie = CreateSound("Sounds/ArmGuyDie.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -220,6 +227,12 @@ void UpdateArmGuy(void)
 	if(levelComplete)
 	{
 		UpdateArrow(Arrow1, &Arrow1Grow);
+
+		/*if(!ArmGuyDie->hasPlayed && PlayerIsAlive)
+		{
+			PlayAudio(ArmGuyDie);
+			ArmGuyDie->hasPlayed = TRUE;
+		}*/
 
 		if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
 		{
@@ -412,6 +425,7 @@ void EventArmGuy(void)
 
 		UpdateDeathConfirmObjects();
 	}
+
 }
 
 void TreeBackgroundUpdate(void)
@@ -445,3 +459,57 @@ void ObjectGlowUpdate(void)
 		}
 	}
 }
+
+/* Still working on this I don't think I can get it in for beta
+void UpdateArmGuySounds(void)
+{
+	//Get RandNum to choose rand Sound and a random time
+	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 3;
+	int randInstance = ((int)((rand() / (float)RAND_MAX) * 720)) % 360;
+
+
+	//Randomly go but wait if a phrase was just said
+	if(randInstance > 356 && !timerOn)
+	{
+		//Start timer
+		timerOn = TRUE;
+
+		//If a sound is not playing let's say something
+		if(Boss->ArmGuySoundsPlay == FALSE)
+		{
+			//Check if phrase your about to say was just said
+			if(randNum == prevPlayed)
+			{
+				//if it was the same phrase say a differnt one
+				if(randNum == 0)
+				{
+					PlayAudio(Boss->ArmGuyPhrase[randNum + 1]);
+					prevPlayed = randNum + 1;
+				}
+				else
+				{
+					PlayAudio(Boss->ArmGuyPhrase[randNum - 1]);
+					prevPlayed = randNum - 1;
+				}
+
+			}
+			//Wasn't the same so just say what you wanna say
+			else
+			{
+				PlayAudio(Boss->ArmGuyPhrase[randNum]);
+				prevPlayed = randNum;
+			}
+		}
+	}
+
+	//For Random Phrase Timer (see above)
+	if(timerOn)
+		timer -= 1;
+	if(timer < 0)
+	{
+		timer = 5 * FRAMERATE;
+		timerOn = FALSE;
+	}
+
+}*/
+

@@ -5,6 +5,7 @@
 #include "RigidBody.h"
 #include "Sprite.h"
 #include "CollisionBox.h"
+#include "Sound.h"
 
 typedef struct ArmGuyBoss
 {
@@ -31,6 +32,12 @@ typedef struct ArmGuyBoss
 
 	int MaxHealth;
 	int CurrentHealth;
+
+	FoxSound* ArmGuyHit[4];
+	FoxSound* ArmGuyPhrase[3];
+	FoxSound* ArmGuyPhraseSmash;
+	int ArmGuySoundsPlay;
+
 
 	Vec2 Position;
 }ArmGuyBoss;

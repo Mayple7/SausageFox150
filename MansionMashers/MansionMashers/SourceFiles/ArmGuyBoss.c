@@ -115,6 +115,21 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->JabDamage = 30;
 	CurrentBoss->SmashDamage = 25;
 
+	//Sounds
+	//Hit Sounds
+	CurrentBoss->ArmGuyHit[0] = CreateSound("Sounds/ArmGuyHit1.mp3", SmallSnd);
+	CurrentBoss->ArmGuyHit[1] = CreateSound("Sounds/ArmGuyHit2.mp3", SmallSnd);
+	CurrentBoss->ArmGuyHit[2] = CreateSound("Sounds/ArmGuyHit3.mp3", SmallSnd);
+	CurrentBoss->ArmGuyHit[3] = CreateSound("Sounds/ArmGuyHit4.mp3", SmallSnd);
+	//Phrases
+	CurrentBoss->ArmGuyPhrase[0] = CreateSound("Sounds/ArmGuyPhrase1.mp3", SmallSnd);
+	CurrentBoss->ArmGuyPhrase[1] = CreateSound("Sounds/ArmGuyPhrase2.mp3", SmallSnd);
+	CurrentBoss->ArmGuyPhrase[3] = CreateSound("Sounds/ArmGuyPhrase3.mp3", SmallSnd);
+	//Smash
+	CurrentBoss->ArmGuyPhraseSmash = CreateSound("Sounds/ArmGuyPhraseSmash.mp3", SmallSnd);
+
+	CurrentBoss->ArmGuySoundsPlay = FALSE;
+
 	return CurrentBoss;
 }
 
@@ -363,6 +378,8 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			break;
 		case Attack:
 			//printf("SMASH TIME ATTACK\n");
+			PlayAudio(CurrentBoss->ArmGuyPhraseSmash);
+			
 			CurrentBoss->ArmGuyParticle->amountTotal = -1;
 			CurrentBoss->ArmGuyParticle->emitAmount = 15;
 			CurrentBoss->ArmGuyParticle->emitDisplacementX = 500;
@@ -845,6 +862,7 @@ void PlayerDamageResult(int damage)
 /*************************************************************************/
 void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
 {
+	int i;
 	FreeParticleSystem(CurrentBoss->ArmGuyParticle);
 	FreeSprite(CurrentBoss->ArmJabSprite);
 	FreeSprite(CurrentBoss->ArmSmashSprite);
@@ -852,6 +870,17 @@ void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
 	FreeSprite(CurrentBoss->BodySprite);
 	FreeSprite(CurrentBoss->OffArmSprite);
 	FreeSprite(CurrentBoss->SpinSprite);
+	
+	for(i = 0; i < 4; i++)
+	{
+		freeSound(CurrentBoss->ArmGuyHit[i]);
+	}
+	for(i = 0; i < 3; i++)
+	{
+		freeSound(CurrentBoss->ArmGuyPhrase[i]);
+	}
+	freeSound(CurrentBoss->ArmGuyPhraseSmash);
+
 	FreeMyAlloc(CurrentBoss);
 }
 
