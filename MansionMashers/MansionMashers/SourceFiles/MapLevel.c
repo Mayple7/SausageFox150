@@ -180,6 +180,8 @@ void InitializeMapLevel(void)
 	{
 		iconPosition = GS_Kevin;
 	}
+	if(iconPosition == GS_Level31)
+		iconPosition = GS_Level3;
 
 	//Create the large sprites
 	HazeBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
