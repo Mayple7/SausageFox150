@@ -342,17 +342,17 @@ void InputPlayer(struct Player *CurrentPlayer)
 			{
 			// Buffs the player's attack speed
 			case Agility:
-				CurrentPlayer->CurrentPlayerStats.AttackSpeed *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.AttackSpeed *= 2.0f;
 				CurrentPlayer->CurrentPlayerStats.AgilityTimer = 10;
 				break;
 			// Buffs the player's damage
 			case Strength:
-				CurrentPlayer->CurrentPlayerStats.Damage = (int)(CurrentPlayer->CurrentPlayerStats.Damage * 1.2f);
+				CurrentPlayer->CurrentPlayerStats.Damage = (int)(CurrentPlayer->CurrentPlayerStats.Damage * 2.0f);
 				CurrentPlayer->CurrentPlayerStats.StrengthTimer = 10;
 				break;
 			// Buffs the player's damage reduction
 			case Defense:
-				CurrentPlayer->CurrentPlayerStats.DamageReduction *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.DamageReduction *= 1.5f;
 				CurrentPlayer->CurrentPlayerStats.DefenseTimer = 10;
 				break;
 			// Buffs the player's move speed
@@ -771,24 +771,17 @@ void DetectPlayerCollision(void)
 				{
 					CurrentPlayer.CollisionData[-hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
-
-					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
-					updateDamage(&CurrentPlayer);
 				}
 				// Found target, hit previous frame, on persistant
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
 				{
 					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
-					updateDamage(&CurrentPlayer);
 				}
 				// Found target, did not hit previous frame, on start collision
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
-					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
-					updateDamage(&CurrentPlayer);
 				}
 			}
 			else
@@ -1133,7 +1126,7 @@ void SavePlayer(Player *CurrentPlayer)
 	// Ugly code that puts all needed info into one string
 	sprintf(string, "Level: %d\nLevelBitFlags: %d\nRank: %d\nXP: %d\nArmUnlock: %d\nHandUnlock: %d\nArmClear: %d\nHandClear: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
 		CurrentPlayer->CurrentLevel, CurrentPlayer->levelClearBitFlags, CurrentPlayer->CurrentPlayerStats.Rank, CurrentPlayer->CurrentPlayerStats.Experience, CurrentPlayer->armUnlock, CurrentPlayer->handUnlock, CurrentPlayer->armClear, CurrentPlayer->handClear, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
-		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
+		CurrentPlayer->CurrentPlayerStats.Money, (int)CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
 	//Opens the file for writing

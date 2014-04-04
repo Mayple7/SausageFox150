@@ -114,9 +114,6 @@ void InitializeMapLevel(void)
 	Vec3Set(&Tint, 0.0f, 0.5f, 0.0f);
 	newID = 10;
 
-	//Icon position is what level we just came from
-	iconPosition = GetPreviousState();
-
 	//Reset me captain
 	ResetObjectList();
 	ResetCamera();
@@ -132,11 +129,57 @@ void InitializeMapLevel(void)
 	else
 		CurrentPlayer.CurrentLevel = GS_Tutorial;
 
-	//If not coming from a level set to the player's latest level
-	if(iconPosition > GS_LevelNUM)
+	//Icon position is what level we just came from
+	iconPosition = GetPreviousState();
+
+	// If coming from a menu, set the player to the latest level
+	if(iconPosition > GS_LevelNUM && iconPosition != GS_Level31)
 		iconPosition = CurrentPlayer.CurrentLevel;
-	else if(iconPosition == CurrentPlayer.CurrentLevel - 1)
-		iconPosition = CurrentPlayer.CurrentLevel;
+	// Set the player's icon position to the next level if applicable (sorry long if statement :( )
+	else if(iconPosition == GS_Tutorial && CurrentPlayer.CurrentLevel > GS_Tutorial)
+	{
+		iconPosition = GS_Level1;
+	}
+	else if(iconPosition == GS_Level1 && CurrentPlayer.CurrentLevel > GS_Level1)
+	{
+		iconPosition = GS_Level2;
+	}
+	else if(iconPosition == GS_Level2 && CurrentPlayer.CurrentLevel > GS_Level2)
+	{
+		iconPosition = GS_Level3;
+	}
+	else if((iconPosition == GS_Level31 || iconPosition == GS_Level3) && CurrentPlayer.armUnlock)
+	{
+		iconPosition = GS_ArmGuy;
+	}
+	else if(iconPosition == GS_Level4 && CurrentPlayer.handUnlock)
+	{
+		iconPosition = GS_HandGuy;
+	}
+	else if(iconPosition == GS_ArmGuy && CurrentPlayer.armClear)
+	{
+		iconPosition = GS_Shop2;
+	}
+	else if(iconPosition == GS_HandGuy && CurrentPlayer.handClear)
+	{
+		iconPosition = GS_Shop3;
+	}
+	else if(iconPosition == GS_Level5 && CurrentPlayer.CurrentLevel >= GS_Level6)
+	{
+		iconPosition = GS_Level6;
+	}
+	else if(iconPosition == GS_Level6 && CurrentPlayer.CurrentLevel > GS_Level6)
+	{
+		iconPosition = GS_YeahGuy;
+	}
+	else if(iconPosition == GS_YeahGuy && CurrentPlayer.CurrentLevel > GS_YeahGuy)
+	{
+		iconPosition = GS_Level7;
+	}
+	else if(iconPosition == GS_Level7 && CurrentPlayer.CurrentLevel > GS_Level7)
+	{
+		iconPosition = GS_Kevin;
+	}
 
 	//Create the large sprites
 	HazeBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
