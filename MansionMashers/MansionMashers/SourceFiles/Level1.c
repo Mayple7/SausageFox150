@@ -70,7 +70,7 @@ TextGlyphs *IntelFoxTxtStart;
 
 FoxSound *BackSnd;
 FoxSound* IntelFoxStart;
-FoxSound* IntelFoxEnd;
+
 
 Sprite *Arrow1;
 Sprite *Arrow2;
@@ -166,7 +166,6 @@ void InitializeLevel1(void)
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 
 	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl4Start.mp3", SmallSnd);
-	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl4End.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -436,6 +435,7 @@ void EventLevel1(void)
 		SetEnemy1->EnemyState = AINone;
 		SetEnemy2->EnemyState = AINone;
 	}
+
 
 	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
