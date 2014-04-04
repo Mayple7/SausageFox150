@@ -91,6 +91,7 @@ void InitializeArmGuy(void)
 	newID = 10;
 	ResetObjectList();
 	ResetCamera();
+	levelComplete = FALSE;
 	GlowBool = TRUE;
 
 	// Initialize the player
@@ -224,9 +225,11 @@ void FreeArmGuy(void)
 		CurrentPlayer.armClear = TRUE;
 		SavePlayer(&CurrentPlayer);
 	}
+	else
+		FreeArmGuyBoss(Boss);
 
 	FreeAllLists();
-	FreeMyAlloc(Boss);
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -255,10 +258,12 @@ void EventArmGuy(void)
 	//////////////////////////////////
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
-	DetectArmGuyBossCollision(Boss);
+	if(!levelComplete)
+		DetectArmGuyBossCollision(Boss);
 	// Handle any input for the current player
 	InputPlayer(&CurrentPlayer);
 
+#if defined _DEBUG
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
@@ -267,6 +272,7 @@ void EventArmGuy(void)
 	{
 		RemoveDebugMode();
 	}
+#endif
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		//TogglePauseSound(BackSnd);
