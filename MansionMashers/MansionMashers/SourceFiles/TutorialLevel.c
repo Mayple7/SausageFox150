@@ -56,6 +56,7 @@ Sprite *Seclude3;
 Sprite *Seclude4;
 
 TextGlyphs *TutorialText;
+TextGlyphs *TutorialTextra; //For extra stuff
 
 Weapon *StarterAxe;
 Weapon *StarterSword;
@@ -156,6 +157,10 @@ void InitializeTutorial(void)
 	TutorialText = CreateText("Use A,D to move Left,Right.", -300, 200, 100, Tint, Center, Border);
 	ChangeTextZIndex(TutorialText, 801);
 	ChangeTextVisibility(TutorialText);
+
+	TutorialTextra = CreateText("Extra Text.", -300, -2000, 100, Tint, Center, Border);
+	ChangeTextZIndex(TutorialTextra, 801);
+	ChangeTextVisibility(TutorialTextra);
 
 	//Sound volume
 	SetChannelGroupVolume(EffectType, SFXVolume);
@@ -305,6 +310,11 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Use Left Mouse or N to Fight!");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+
+		Vec2Set(&newPosition, 1920 * 2, 220);
+		ChangeTextString(TutorialTextra, "Right Mouse or M to Wind Attack.");
+		ChangeTextPosition(TutorialTextra, newPosition, Center);
+		ChangeTextZIndex(TutorialTextra, 801);
 	}
 	else if (tutorialDone < 5 && StrawDummy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
@@ -315,6 +325,9 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Go Right to Continue.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+
+		Vec2Set(&newPosition, 1920 * 2, -2000);
+		ChangeTextPosition(TutorialTextra, newPosition, Center);
 	}
 
 	//Make the bars slide away naturally
