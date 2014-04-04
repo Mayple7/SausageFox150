@@ -441,11 +441,14 @@ void EventLevel31(void)
 
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawLevel31);
-		//TogglePauseSound(&BackgroundSnd);
-		//SetNextState(GS_MainMenu);
-		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		if(PlayerIsAlive == TRUE)
+		{
+			InitializePause(&DrawLevel31);
+			//TogglePauseSound(&BackgroundSnd);
+			//SetNextState(GS_MainMenu);
+			UpdatePause();
+			//TogglePauseSound(&BackgroundSnd);
+		}
 	}	
 
 	// Runs if the beginning animation is finished
@@ -581,10 +584,11 @@ void EventLevel31(void)
 	}
 
 
-	//If player dies
+	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
 		PlayerIsAlive = FALSE;
+		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha = 0.5f;
 
 		UpdateDeathConfirmObjects();

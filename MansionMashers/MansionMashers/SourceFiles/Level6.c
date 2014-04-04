@@ -358,10 +358,13 @@ void EventLevel(void)
 	}
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawLevel6);
-		TogglePauseSound(BackSnd);
-		UpdatePause();
-		TogglePauseSound(BackSnd);
+		if(PlayerIsAlive)
+		{
+			InitializePause(&DrawLevel6);
+			TogglePauseSound(BackSnd);
+			UpdatePause();
+			TogglePauseSound(BackSnd);
+		}
 	}
 
 
