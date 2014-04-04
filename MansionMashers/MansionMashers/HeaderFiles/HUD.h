@@ -24,7 +24,9 @@ typedef struct HUD
 
 	struct TextGlyphs *StatusText;
 	struct TextGlyphs *CoinText;
+	struct TextGlyphs *RankText;
 	int currentHUDCoinValue;
+	int currentHUDRankValue;
 }HUD;
 
 HUD* CreateHUD(Player* CurrentPlayer);

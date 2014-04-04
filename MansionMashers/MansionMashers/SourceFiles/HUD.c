@@ -115,6 +115,14 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	ChangeTextZIndex(CurrentHUD->CoinText, 400);
 	ChangeTextVisibility(CurrentHUD->CoinText);
 
+	//Text for Rank Number
+	Vec3Set(&TextTint, 0.6f, 0.0f, 0.6f);
+	CurrentHUD->currentHUDRankValue = CurrentPlayer->CurrentPlayerStats.Rank;
+	sprintf(CharTemp, "%i", CurrentHUD->currentHUDRankValue);
+	CurrentHUD->RankText = CreateText(CharTemp, 448, 192, 48, TextTint, Left, Border);
+	ChangeTextZIndex(CurrentHUD->RankText, 401);
+	ChangeTextVisibility(CurrentHUD->RankText);
+
 	//Text for FPS
 	Vec3Set(&TextTint, 1.0f, 0.2f, 0.5f);
 	sprintf(CharTemp, "%.2f FPS ", FRAMERATE * (1 / (FRAMERATE * GetDeltaTime())));
@@ -211,12 +219,25 @@ void UpdateHUDPosition(HUD* CurrentHUD)
 	Vec2Set(&newPosition, GetCameraXPosition(), CurrentHUD->StatusText->Glyph->Position.y);
 	ChangeTextPosition(CurrentHUD->StatusText, newPosition, Center);
 
+	//Coin text update position
+	Vec2Set(&newPosition, GetCameraXPosition() - 758, 342);
+	ChangeTextPosition(CurrentHUD->RankText, newPosition, Center);
+
+	//Rank update
+	if (CurrentHUD->currentHUDRankValue != CurrentPlayer.CurrentPlayerStats.Rank)
+	{
+		CurrentHUD->currentHUDRankValue = CurrentPlayer.CurrentPlayerStats.Rank;
+		sprintf(CharTemp, "%i", CurrentHUD->currentHUDRankValue);
+		ChangeTextString(CurrentHUD->RankText, CharTemp);
+		ChangeTextZIndex(CurrentHUD->RankText, 401);
+	}
+	
 	//Only show debug stuff on the HUD if debug is active
 	if (!DebugHUD)
 		return;
 
 	//Framerate is probably always changing
-	newPosition.y -= 48;
+	Vec2Set(&newPosition, (GetCameraXPosition() - 790), 300 - 48);
 	ChangeTextPosition(CurrentHUD->FPSText, newPosition, Left);
 	sprintf(CharTemp, "%.2f FPS ", FRAMERATE * (1 / (FRAMERATE * GetDeltaTime()))); //If Dt is ever 0 then... well...
 	ChangeTextString(CurrentHUD->FPSText, CharTemp);
