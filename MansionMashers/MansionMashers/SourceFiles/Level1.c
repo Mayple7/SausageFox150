@@ -50,9 +50,10 @@
 // globals
 static int newID;					// ID number
 static int levelComplete;
-static int beginningAnimiation;
+static int beginningAnimation;
 static int PlayerIsAlive; 
 static int numPanels;
+static int counter;
 
 static EnemySpawner *Spawners[6]; //Two per panel, Left & Right
 
@@ -66,11 +67,16 @@ Wall *Wall1;
 Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
 static int GlowBool;
 
-TextGlyphs *IntelFoxTxtStart;
+TextGlyphs *RandomFoxTxt;
 
 FoxSound *BackSnd;
-FoxSound* IntelFoxStart;
-FoxSound* IntelFoxEnd;
+FoxSound* RandomFox;
+
+//Random Fox = Intel Fox for level 1
+Sprite* IntelFoxBack;
+Sprite* IntelFox;
+static float IntelFoxValue;
+
 
 Sprite *Arrow1;
 Sprite *Arrow2;
@@ -109,7 +115,7 @@ void InitializeLevel1(void)
 	Vec3 TextTint;
 	Vec2 SpawnerLocation;
 
-	beginningAnimiation = TRUE;
+	beginningAnimation = TRUE;
 	levelComplete = FALSE;
 	PlayerIsAlive = TRUE;
 	numPanels = 3;
@@ -117,6 +123,7 @@ void InitializeLevel1(void)
 	ResetObjectList();
 	ResetCamera();
 	ResetEnemyPanelNumber();
+	counter = 2 * FRAMERATE;
 
 	//Set the camera so it currently isn't gated
 	ResetGatedCamera();
@@ -127,13 +134,14 @@ void InitializeLevel1(void)
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
+
 	/////////////////////////////////
 	//		Text				   //
 	/////////////////////////////////
 	Vec3Set(&TextTint, 1, 1, 1);
-	IntelFoxTxtStart = CreateText("Mash Enemies!", 0, 150, 100, TextTint, Center, Border);
-	ChangeTextZIndex(IntelFoxTxtStart, 500);
-	TextProgressiveInit(IntelFoxTxtStart);
+	RandomFoxTxt = CreateText("Mash all the enemies", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(RandomFoxTxt, 500);
+	TextProgressiveInit(RandomFoxTxt);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -165,8 +173,7 @@ void InitializeLevel1(void)
 	//Background Sound
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 
-	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl4Start.mp3", SmallSnd);
-	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl4End.mp3", SmallSnd);
+	RandomFox = CreateSound("Sounds/RandomFoxLvl1.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -248,6 +255,11 @@ void InitializeLevel1(void)
 	Arrow1Grow = FALSE;
 	Arrow2Grow = TRUE;
 	Arrow3Grow = FALSE;
+
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/RandomFox.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
 
 	CreatePaperScroll(GetCameraXPosition(), 150);
 	/////////////////////////////////
@@ -365,7 +377,7 @@ void EventLevel1(void)
 		RemoveDebugMode();
 
 	// Runs if the beginning animation is finished
-	if(!beginningAnimiation && !levelComplete)
+	if(!beginningAnimation && !levelComplete)
 	{
 		// Check for any collision and handle the results
 		DetectPlayerCollision();
@@ -390,7 +402,7 @@ void EventLevel1(void)
 			
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -800)
-				beginningAnimiation = FALSE;
+				beginningAnimation = FALSE;
 		}
 		//Always animate the player otherwise the sprites get stuck in the middle
 		Animation(&CurrentPlayer);
@@ -436,6 +448,37 @@ void EventLevel1(void)
 		SetEnemy1->EnemyState = AINone;
 		SetEnemy2->EnemyState = AINone;
 	}
+
+	//Random Fox Starting Narrative
+	if(beginningAnimation == FALSE && !RandomFox->hasPlayed)
+	{
+		PlayAudio(RandomFox);
+		RandomFox->hasPlayed = TRUE;
+	}
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(RandomFox))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
+
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
+
+	SetUpScrollWithText(RandomFoxTxt, &counter);
+
 
 	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)

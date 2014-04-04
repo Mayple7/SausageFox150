@@ -51,6 +51,12 @@ static int levelComplete = FALSE;
 ArmGuyBoss *Boss;
 HUD* CurrentHUD;
 
+Wall* LeftWall;
+Wall* RightWall;
+
+Sprite* Arrow1;
+static int Arrow1Grow;
+
 Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
 static int GlowBool;
 
@@ -114,6 +120,11 @@ void InitializeArmGuy(void)
 	//Bounding Boxes
 	CreateBoundingBoxes();
 
+	// Arrow Initialize
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow1->Visible = FALSE;
+	Arrow1Grow = FALSE;
+
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
@@ -124,8 +135,8 @@ void InitializeArmGuy(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Create Bounding Walls
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
+	LeftWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
+	RightWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
 
 	/////////////////////////////////
 	//			Boss			   //
@@ -150,7 +161,8 @@ void UpdateArmGuy(void)
 	EventArmGuy();
 
 	// This should be the last line in this function
-	UpdateArmGuyBoss(Boss);
+	if(!levelComplete)
+		UpdateArmGuyBoss(Boss);
 	UpdatePlayerPosition(&CurrentPlayer);
 
 	UpdateHUDPosition(CurrentHUD);
@@ -161,11 +173,19 @@ void UpdateArmGuy(void)
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 
-	if(Boss->CurrentHealth <= 0)
+	if(!levelComplete && Boss->CurrentHealth <= 0)
 	{
 		levelComplete = TRUE;
-		SetNextState(GS_MapLevel);
+		Arrow1->Visible = TRUE;
+		FreeWall(LeftWall);
+		FreeWall(RightWall);
+		FreeArmGuyBoss(Boss);
 	}
+	if(levelComplete)
+	{
+		UpdateArrow(Arrow1, &Arrow1Grow);
+	}
+
 }
 
 /*************************************************************************/
@@ -206,6 +226,7 @@ void FreeArmGuy(void)
 	}
 
 	FreeAllLists();
+	FreeMyAlloc(Boss);
 }
 
 /*************************************************************************/

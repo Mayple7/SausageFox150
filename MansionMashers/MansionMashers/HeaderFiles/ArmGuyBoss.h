@@ -41,5 +41,6 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss);
 void DetectArmGuyBossCollision(ArmGuyBoss *CurrentBoss);
 void ArmGuyBossCollideWeapon(ArmGuyBoss *CurrentBoss);
 static void PlayerDamageResult(int damage);
+void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss);
 
 #endif

@@ -80,6 +80,11 @@ static int Arrow1Grow;
 
 FoxSound* BackSnd;
 FoxSound* IntelFoxStart;
+FoxSound* IntelFoxBuff;
+static int IFSayBuff;
+FoxSound* IntelFoxPlat;
+static int IFSayPlat;
+FoxSound* IntelFoxEnd;
 TextGlyphs* IntelFoxTxtStart;
 
 Sprite* IntelFoxBack;
@@ -129,6 +134,8 @@ void InitializeLevel2(void)
 	beginningAnimation = TRUE;
 	GlowBool = TRUE;
 	counter = 2 * FRAMERATE;
+	IFSayBuff = FALSE;
+	IFSayPlat = FALSE;
 
 	newID = 10;
 	ResetObjectList();
@@ -192,6 +199,10 @@ void InitializeLevel2(void)
 	/////////////////////////////////
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl2Start.mp3", SmallSnd);
+	IntelFoxPlat = CreateSound("Sounds/IntelFoxLvl2Plat.mp3", SmallSnd);
+	IntelFoxBuff = CreateSound("Sounds/IntelFoxLvl2Buff.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl2End.mp3", SmallSnd);
+
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -527,7 +538,8 @@ void EventLevel2(void)
 	}
 
 	//When sound is play show Intel Fox in da corner
-	if(FoxSoundCheckIsPlaying(IntelFoxStart))
+	if(FoxSoundCheckIsPlaying(IntelFoxStart) || FoxSoundCheckIsPlaying(IntelFoxPlat) 
+		|| FoxSoundCheckIsPlaying(IntelFoxBuff) || FoxSoundCheckIsPlaying(IntelFoxEnd))
 	{
 		if(IntelFox->Alpha < 1)
 			IntelFox->Alpha += 3 * GetDeltaTime();
@@ -547,6 +559,31 @@ void EventLevel2(void)
 	IntelFoxBack->Position = IntelFox->Position;
 	IntelFoxBack->Alpha = IntelFox->Alpha;
 
+	//Set bool to play these sounds
+	if(CurrentPlayer.Position.x >= (PANELSIZE - 350) && !IFSayPlat)
+		IFSayPlat = TRUE;
+	
+	if(CurrentPlayer.Position.x >= (PANELSIZE * 2 - 300) && !IFSayBuff)
+		IFSayBuff = TRUE;
+
+	//Check other sounds aren't playing 
+	if(!FoxSoundCheckIsPlaying(IntelFoxStart) && !FoxSoundCheckIsPlaying(IntelFoxEnd))
+	{
+		//Play stuff about platforms
+		if(!FoxSoundCheckIsPlaying(IntelFoxBuff) && IFSayPlat && !IntelFoxPlat->hasPlayed)
+		{
+			PlayAudio(IntelFoxPlat);
+			IntelFoxPlat->hasPlayed = TRUE;
+		}
+		//Play stuff about Buffs
+		if(!FoxSoundCheckIsPlaying(IntelFoxPlat) && IFSayBuff && !IntelFoxBuff->hasPlayed)
+		{
+			PlayAudio(IntelFoxBuff);
+			IntelFoxBuff->hasPlayed = TRUE;
+		}
+	}
+
+
 	if(!beginningAnimation)
 		SetUpScrollWithText(IntelFoxTxtStart, &counter);
 
@@ -558,6 +595,11 @@ void EventLevel2(void)
 		UpdateCollisionPosition(&RightBarrier->WallCollider, &RightBarrier->Position);
 		Arrow1->Visible = TRUE;
 		Arrow1->Position.x = GetCameraXPosition() + 750;
+		if(!IntelFoxEnd->hasPlayed)
+		{
+			PlayAudio(IntelFoxEnd);
+			IntelFoxEnd->hasPlayed = TRUE;
+		}
 	}
 
 	//Level Transition
