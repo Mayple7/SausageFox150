@@ -230,10 +230,10 @@ void InitializeMainMenu(void)
 	ExitButton->ButtonSprite->Visible = FALSE;
 
 	//Help out text
-	GettingImpatientTimer = -2;
+	GettingImpatientTimer = -2.5;
 	TimerGoingUp = TRUE;
 	Vec3Set(&Tint, 1, 1, 1);
-	SillyGooseUseMouse = CreateText("Use the mouse to select a button!", 0, -480, 100, Tint, Center, Border);
+	SillyGooseUseMouse = CreateText("Use the mouse to navigate the menu!", 0, -480, 100, Tint, Center, Border);
 	ChangeTextZIndex(SillyGooseUseMouse, 600);
 	ChangeTextAlpha(SillyGooseUseMouse, 0);
 	ChangeTextVisibility(SillyGooseUseMouse);
