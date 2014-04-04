@@ -157,6 +157,7 @@ void UpdateArmGuy(void)
 	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 
 	UpdateFloatingText();
+	UpdateAllProjectiles();
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 

@@ -122,7 +122,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 	ChangeTextPosition(wList->WeaponGlyphs, glyphPos, Center);
 
 	//Switch weapons
-	if(AEInputCheckTriggered('E'))
+	if(FoxInput_KeyTriggered('E'))
 	{
 		int Shopping = FALSE;
 		float healthRatio = 0;
@@ -209,7 +209,7 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		wList->WeaponSprite->ZIndex = (unsigned short)50;
 		wList->WeaponFOF = DroppedWeapon;
 		
-		wList->WeaponSprite->Rotation = FOX_PI / 4;
+		wList->WeaponSprite->Rotation = FOX_PI / 2 + (float)(rand() % 5 - 2) / 10;;
 		wList->WeaponSprite->Position = wList->WeaponPickup.Position;
 
 		//If it is a shop we like it straight, oh ja
@@ -245,7 +245,20 @@ void PlayerCollideWeaponDrop(Player *CurrentPlayer, Weapon *wList)
 		updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 		healthRatio = (float)(CurrentPlayer->CurrentPlayerStats.CurrentHealth) / CurrentPlayer->CurrentPlayerStats.MaxHealth;
 		updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
-		CurrentPlayer->CurrentPlayerStats.CurrentHealth = (int)(CurrentPlayer->CurrentPlayerStats.MaxHealth * healthRatio);
+		CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)ceil(CurrentPlayer->CurrentPlayerStats.MaxHealth * healthRatio);
+		// Make sure the player keeps their buff after the weapon swap
+		if(CurrentPlayer->CurrentPlayerStats.StrengthTimer > 0)
+		{
+			CurrentPlayer->CurrentPlayerStats.Damage = (int)(CurrentPlayer->CurrentPlayerStats.Damage * 2.0f);;
+		}
+		if(CurrentPlayer->CurrentPlayerStats.AgilityTimer > 0)
+		{
+			CurrentPlayer->CurrentPlayerStats.AttackSpeed *= 2.0f;
+		}
+		if(CurrentPlayer->CurrentPlayerStats.DefenseTimer > 0)
+		{
+			CurrentPlayer->CurrentPlayerStats.DamageReduction *= 1.5f;
+		}
 	}
 }
 
@@ -268,11 +281,11 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 	if(Cheats)
 		damageDealt = 0;
 	else
-		damageDealt = (int)(CurrentEnemy->CurrentEnemyStats.Damage * (1.0f - CurrentPlayer->CurrentPlayerStats.DamageReduction));
-	
-	// Reduce damage if blocking
-	if(CurrentPlayer->isBlocking)
-		damageDealt /= 2;
+	{
+		damageDealt = (int)(CurrentEnemy->CurrentEnemyStats.Damage * (1 - CurrentPlayer->CurrentPlayerStats.DamageReduction));
+		if(damageDealt == 0)
+			damageDealt = 1;
+	}
 
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
@@ -303,7 +316,7 @@ void PlayerCollideEnemyProjectile(Player* CurrentPlayer, Projectile *CurrentProj
 		damageDealt = 0;
 	else
 	{
-		damageDealt = (int)(CurrentProjectile->Damage * (1.0f - CurrentPlayer->CurrentPlayerStats.DamageReduction));
+		damageDealt = (int)(CurrentProjectile->Damage * (1 - CurrentPlayer->CurrentPlayerStats.DamageReduction));
 		if(damageDealt == 0)
 			damageDealt = 1;
 	}

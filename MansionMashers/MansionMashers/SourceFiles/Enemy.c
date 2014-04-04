@@ -125,7 +125,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->dropDown					= FALSE;
 
 		// Random numbers with the current state thing will make the enemies harder as the levels progress
-		InitializeEnemyStats(CurrentEnemy, 50 + 10 * (rand() % GetCurrentState()), (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 20 + 5 * (rand() % GetCurrentState()), 10 + rand() % 10, 33);
+		InitializeEnemyStats(CurrentEnemy, 60 + 5 * (rand() % GetCurrentState()), (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 30 + 5 * (rand() % GetCurrentState()), 10 + rand() % 10, 33);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -339,7 +339,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		if (dropWeapon == 1)
 		{
 			Weapon *CurrentWeapon = CreateDroppedWeapon(CurrentEnemy->EnemyWeapon->WeaponType, CurrentEnemy->EnemyWeapon->WeaponRarity, 250, 250, CurrentEnemy->objID, CurrentEnemy->Position.x, CurrentEnemy->Position.y);
-			CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (rand() % 50 - 20) / 4; //A random angle for the dropped weapon
+			CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (float)(rand() % 5 - 2) / 10; //A random angle for the dropped weapon
 			CurrentWeapon->WeaponFalling = TRUE;
 		}
 

@@ -116,6 +116,9 @@ void UpdateKevin(void)
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
+	UpdateAllProjectiles();
+	ParticleSystemUpdate();
+
 	UpdateHUDPosition(CurrentHUD);
 	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 }
