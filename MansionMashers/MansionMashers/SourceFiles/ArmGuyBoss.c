@@ -111,9 +111,9 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID)
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->cooldownTimer = 0;
-	CurrentBoss->SpinDamage = 10;
-	CurrentBoss->JabDamage = 10;
-	CurrentBoss->SmashDamage = 20;
+	CurrentBoss->SpinDamage = 30;
+	CurrentBoss->JabDamage = 30;
+	CurrentBoss->SmashDamage = 25;
 
 	return CurrentBoss;
 }
