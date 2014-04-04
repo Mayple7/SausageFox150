@@ -791,6 +791,8 @@ void ArmGuyBossCollideWeapon(ArmGuyBoss *CurrentBoss)
 	CurrentBoss->CurrentHealth -= damageDealt;
 	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
+	if(CurrentPlayer.CurrentPlayerStats.StrengthTimer > 0)
+		Vec3Set(&textColor, 0.0f, 0.9372f, 0.6f);
 	FirstLetter = CreateText(num, (CurrentBoss->Position.x + rand() % 81 - 40), (CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);

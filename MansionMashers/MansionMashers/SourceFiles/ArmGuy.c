@@ -62,6 +62,9 @@ Sprite* BlackOverlay;
 Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
 static int GlowBool;
 
+//Boss HP Bar
+Sprite* BossHPBar;
+Sprite* BossHPBarBack;
 
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
@@ -135,6 +138,10 @@ void InitializeArmGuy(void)
 	Vec3Set(&Tint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = Tint;
+
+	// Boss HP Bar
+	BossHPBar = (Sprite *)CreateSprite("TextureFiles/BossHealthBarMid.png", 1, 44, 399, 1, 1, -200, 450);
+	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -210,8 +217,25 @@ void UpdateArmGuy(void)
 				SetNextState(GS_MapLevel);
 			}
 		}
+
+		BossHPBar->Visible = FALSE;
+
+		if(BossHPBar->Alpha > 0.0f)
+		{
+			BossHPBar->Alpha -= GetDeltaTime() / 2.0f;
+		}
+		else
+			BossHPBar->Alpha = 0;
+
+	}
+	// Boss health bar logic
+	else
+	{
+		BossHPBar->ScaleX = 800.0f * (Boss->CurrentHealth / (float)Boss->MaxHealth);
+		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentHealth / (float)Boss->MaxHealth));
 	}
 
+	//CurrentHUD->HealthBarEnd->Position.x = (CurrentHUD->HUDBackground->Position.x - 52.0f + (CurrentHUD->HealthBar->ScaleX * 2));
 }
 
 /*************************************************************************/
