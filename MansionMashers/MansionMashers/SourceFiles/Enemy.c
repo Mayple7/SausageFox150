@@ -127,6 +127,10 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		// Random numbers with the current state thing will make the enemies harder as the levels progress
 		InitializeEnemyStats(CurrentEnemy, 50 + 5 * (rand() % GetCurrentState()), (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 20 + 3 * (rand() % GetCurrentState()), 10 + rand() % 10, 53);
 
+		// Special state for level 3.1
+		if(GetCurrentState() == GS_Level31)
+			CurrentEnemy->CurrentEnemyStats.Damage = 20 + 3 * (rand() % 4);
+
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 100, 200, objID);
