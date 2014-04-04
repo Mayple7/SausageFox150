@@ -47,6 +47,7 @@
 // globals
 static int newID;					// ID number
 static int levelComplete;
+static int PlayerIsAlive; 
 static int beginningAnimation;
 
 ArmGuyBoss *Boss;
@@ -94,8 +95,9 @@ void InitializeArmGuy(void)
 	ResetObjectList();
 	ResetCamera();
 	levelComplete = FALSE;
-	beginningAnimation = TRUE;
 	GlowBool = TRUE;
+	beginningAnimation = TRUE;
+	PlayerIsAlive = TRUE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1260, -220);
@@ -300,7 +302,7 @@ void EventArmGuy(void)
 		else
 		{
 			BlackOverlay->Alpha = 0.0f;
-			CurrentPlayer.FlipX = 1;
+			CurrentPlayer.FlipX = TRUE;
 			CurrentPlayer.PlayerDirection = RIGHT;
 			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
 			
@@ -344,6 +346,16 @@ void EventArmGuy(void)
 	//////////////////////////////////
 	TreeBackgroundUpdate();
 	ObjectGlowUpdate();
+
+	//Player Dies
+	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
+	{
+		PlayerIsAlive = FALSE;
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha = 0.5f;
+
+		UpdateDeathConfirmObjects();
+	}
 }
 
 void TreeBackgroundUpdate(void)
