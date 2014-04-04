@@ -191,6 +191,9 @@ void UpdateLevel5(void)
 {
 	EventLevel();
 
+	ParticleSystemUpdate();
+	UpdateAllProjectiles();
+
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 

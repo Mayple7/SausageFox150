@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*!
 \file				TutorialLevel.c
-\author				Dan Muller (d.muller)
+\author				Kaden Nugent (kaden.n)
 \date				Jan 31, 2014
 
 \brief				Functions for the tutorial level

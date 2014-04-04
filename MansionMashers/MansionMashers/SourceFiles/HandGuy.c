@@ -162,7 +162,6 @@ void UpdateHandGuy(void)
 		levelComplete = TRUE;
 		SetNextState(GS_MapLevel);
 	}
-
 }
 
 /*************************************************************************/

@@ -248,6 +248,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 										     Wind, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
 
 			theWindOfAFox->ProjectileFOF = PlayerWeapon;
+			theWindOfAFox->ProjectileSprite->ZIndex = 100;
 
 			if (!theWindOfAFox->ProjectileSprite->FlipX)
 			{
