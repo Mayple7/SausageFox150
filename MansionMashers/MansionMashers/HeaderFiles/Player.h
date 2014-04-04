@@ -63,7 +63,7 @@ typedef struct PlayerStats
 
 	//Non-Modifiable Stats
 	int MaxHealth;
-	int CurrentHealth;
+	float CurrentHealth;
 	float MoveSpeed;
 	float AttackSpeed;
 	float DamageReduction;
@@ -113,7 +113,6 @@ typedef struct Player
 
 	int isAttacking;
 	int AttackType; //0 = hitting, 1 = projectile
-	int isBlocking;
 
 	float WindAttackCooldown;
 	float WindAttackCooldownMax;
@@ -143,6 +142,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void DestroyPlayer(Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
+void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNow, int attackingNow);
 void DetectPlayerCollision(void);
 void Animation(Player *Object);
 void CreatePlayerSprites(Player *Player);

@@ -74,7 +74,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempHandGuy.png", 150, 300, 10, 1, 1, 700, -200);
 	CurrentBoss->BodySprite->FlipX = TRUE;
 	CurrentBoss->BodySprite->Visible = FALSE;
-	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/QuickJab.png", 200, 200, 11, 4, 4, 580, -120);
+	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/QuickJab.png", 100, 100, 11, 4, 4, 580, -120);
 	CurrentBoss->JabSprite->FlipX = TRUE;
 	CurrentBoss->JabSprite->AnimationSpeed = 3;
 	CurrentBoss->JabSprite->Visible = FALSE;
@@ -85,6 +85,9 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = B;
 	CurrentBoss->Speed = 0;
+
+	// Animation Bool
+	CurrentBoss->QuestionAttackAnimation = FALSE;
 
 	// Armguy colliders
 	CurrentBoss->ShoutRadius = 600.0f;
@@ -303,17 +306,28 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			//printf("QUESTION TIME START\n");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
 			// Throws out ? every 0.75s
+
+			if(CurrentBoss->cooldownTimer >= 0.7f)
+			{
+				if (CurrentBoss->QuestionAttackAnimation == FALSE)
+				{
+					CurrentBoss->HandGuySpriteParts.AttackRotationArm = 0;
+					CurrentBoss->HandGuySpriteParts.AttackRotationArmLower = 0;
+					CurrentBoss->HandGuySpriteParts.AttackRotationArm2 = 0;
+					CurrentBoss->HandGuySpriteParts.AttackRotationArmLower2 = 0;
+				}
+				CurrentBoss->QuestionAttackAnimation = TRUE;
+				
+			}
+			
 			if(CurrentBoss->cooldownTimer >= 0.75f)
 			{
-				CurrentBoss->HandGuySpriteParts.AttackRotationArm = 0;
-				CurrentBoss->HandGuySpriteParts.AttackRotationArmLower = 0;
-				CurrentBoss->HandGuySpriteParts.AttackRotationArm2 = 0;
-				CurrentBoss->HandGuySpriteParts.AttackRotationArmLower2 = 0;
+				
 				// Creates the projectile and aims to in the direction of the player in a cone
 				if(CurrentPlayer.Position.x > CurrentBoss->Position.x)
 				{
 					projectileAngle = 0;
-					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y + 75.0f, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle + (CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->HandGuySpriteParts.ArmLower->Position.x, CurrentBoss->HandGuySpriteParts.ArmLower->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 750, projectileAngle + (CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
 					FreeSprite(CurrentProjectile->ProjectileSprite);
 					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
 					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
@@ -322,7 +336,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				else
 				{
 					projectileAngle = FOX_PI;
-					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->Position.x, CurrentBoss->Position.y + 75.0f, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 500, projectileAngle - (float)(CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->HandGuySpriteParts.ArmLower->Position.x, CurrentBoss->HandGuySpriteParts.ArmLower->Position.y, Arrow, WeaponEnemy, projectileID++, CurrentBoss->QuestionDamage, 750, projectileAngle - (float)(CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
 					FreeSprite(CurrentProjectile->ProjectileSprite);
 					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
 					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
@@ -561,7 +575,10 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 
 	CurrentBoss->BodySprite->Position = CurrentBoss->Position;
 	CurrentBoss->JabAttack.Position.y = CurrentBoss->Position.y;
-	CurrentBoss->JabSprite->Position.y = CurrentBoss->Position.y;
+	CurrentBoss->JabSprite->Position.y = CurrentBoss->Position.y + 180.0f;
+
+	CurrentBoss->HandGuySpriteParts.ArmLower->Visible  = !CurrentBoss->JabSprite->Visible;
+	CurrentBoss->HandGuySpriteParts.ArmLower2->Visible = !CurrentBoss->JabSprite->Visible;
 
 	if(CurrentPlayer.Position.x > CurrentBoss->Position.x)
 	{

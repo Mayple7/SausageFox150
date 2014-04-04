@@ -240,6 +240,7 @@ void UpdateYeahGuy(void)
 	BoundingBoxUpdate();
 
 	UpdateAllProjectiles();
+	ParticleSystemUpdate();
 
 	if(Boss->CurrentState == 1 && Boss->InnerState != 2)
 	{

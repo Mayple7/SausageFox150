@@ -101,7 +101,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
-		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 29);
+		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 104);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
 
@@ -125,7 +125,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->dropDown					= FALSE;
 
 		// Random numbers with the current state thing will make the enemies harder as the levels progress
-		InitializeEnemyStats(CurrentEnemy, 50 + 10 * (rand() % GetCurrentState()), (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 20 + 5 * (rand() % GetCurrentState()), 10 + rand() % 10, 33);
+		InitializeEnemyStats(CurrentEnemy, 50 + 5 * (rand() % GetCurrentState()), (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 20 + 3 * (rand() % GetCurrentState()), 10 + rand() % 10, 53);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -179,7 +179,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		CurrentEnemy->EnemyRigidBody.onGround	= FALSE;
 		CurrentEnemy->dropDown					= FALSE;
 
-		InitializeEnemyStats(CurrentEnemy, 80 + 10 * (rand() % GetCurrentState()), (float)(150 + 10 * (rand() % 10)), 8.0f, 0, 30 + 3 * (rand() % GetCurrentState()), 20 + rand() % 20, 47);
+		InitializeEnemyStats(CurrentEnemy, 80 + 10 * (rand() % GetCurrentState()), (float)(150 + 10 * (rand() % 10)), 8.0f, 0, 30 + 3 * (rand() % GetCurrentState()), 20 + rand() % 20, 67);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
@@ -297,6 +297,9 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	CurrentEnemy->EnemyParticleSystem->Position.x = CurrentEnemy->Position.x;
 	CurrentEnemy->EnemyParticleSystem->Position.y = CurrentEnemy->Position.y;
 
+	if (CurrentEnemy->HitByProjectileTimer > 0)
+		CurrentEnemy->HitByProjectileTimer -= GetDeltaTime();
+	
 	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
 		char num[10];
@@ -339,7 +342,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 		if (dropWeapon == 1)
 		{
 			Weapon *CurrentWeapon = CreateDroppedWeapon(CurrentEnemy->EnemyWeapon->WeaponType, CurrentEnemy->EnemyWeapon->WeaponRarity, 250, 250, CurrentEnemy->objID, CurrentEnemy->Position.x, CurrentEnemy->Position.y);
-			CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (rand() % 50 - 20) / 4; //A random angle for the dropped weapon
+			CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (float)(rand() % 5 - 2) / 10; //A random angle for the dropped weapon
 			CurrentWeapon->WeaponFalling = TRUE;
 		}
 
@@ -944,13 +947,14 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 		{
 			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &bList->ProjectileAttack);
 			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, bList->ProjectileAttack.collisionID);
+
 			if(hit)
 			{
 				// New target, on start collision
 				if(hitPrev < 0)
 				{
 					//Damage the enemy
-					if (CurrentEnemy->KnockBack == FALSE)
+					if (CurrentEnemy->HitByProjectileTimer <= 0)
 						EnemyCollidePlayerProjectile(CurrentEnemy, bList);
 					//PoofProjectile(bList);
 				}
@@ -961,7 +965,7 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 				// Found target, did not hit previous frame, on start collision
 				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
 				{
-					if (CurrentEnemy->KnockBack == FALSE)
+					if (CurrentEnemy->HitByProjectileTimer <= 0)
 						EnemyCollidePlayerProjectile(CurrentEnemy, bList);
 					//PoofProjectile(bList);
 				}

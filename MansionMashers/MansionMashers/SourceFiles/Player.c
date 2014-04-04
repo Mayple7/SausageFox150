@@ -142,7 +142,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	
 	updateMaxHealth(&CurrentPlayer->CurrentPlayerStats);
 
-	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer->CurrentPlayerStats.MaxHealth;
 
 
 	/*////////////////////////////////
@@ -184,94 +184,108 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
+	SelectiveInput(CurrentPlayer, 1, 1, 1);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Prevents non-desired inputs from being made.
+*/
+/*************************************************************************/
+void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNow, int attackingNow)
+{
 	int mouseX = FoxInput_GetMousePositionX();
 	float camX = GetCameraXPosition();
 
 	UpdateCollisionPosition(&CurrentPlayer->PlayerWeapon->WeaponAttack, &CurrentPlayer->PlayerWeapon->WeaponAttackPosition);
 
-	if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer->isAttacking)
+	if (attackingNow)
 	{
-		//Pick a random swing sound to play
-		if (rand() % 2)
+		if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer->isAttacking)
 		{
-			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
-				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
-		}
-		else
-		{
-			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
-				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
-		}
-
-		//Set the attacking necessaries
-		CurrentPlayer->isAttacking = TRUE;
-		CurrentPlayer->AttackType  = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
-		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
-	}
-	else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking && CurrentPlayer->WindAttackCooldown >= CurrentPlayer->WindAttackCooldownMax)
-	{
-		//Pick a random shoot sound to play
-		if (rand() % 2)
-		{
-			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
-				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
-		}
-		else
-		{
-			if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
-				PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
-		}
-
-		//Set the attacking necessaries
-		CurrentPlayer->isAttacking = TRUE;
-		CurrentPlayer->AttackType  = 1;
-		CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
-		CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
-		CurrentPlayer->WindAttackCooldown = 0;
-		UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
-
-		//Wind of the weapons
-		{
-			Projectile *theWindOfAFox;
-			float projectileSpeed = 1400;
-			if (!CurrentPlayer->PlayerSpriteParts.Weapon->FlipX)
-				projectileSpeed *= -1;
-
-			//NASTY NASTY HACKKKK
-			theWindOfAFox = CreateProjectile("TextureFiles/Wind.png", 
-										     CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 1.5f, 
-											 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
-										     Wind, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
-
-			theWindOfAFox->ProjectileFOF = PlayerWeapon;
-
-			if (!theWindOfAFox->ProjectileSprite->FlipX)
+			//Pick a random swing sound to play
+			if (rand() % 2)
 			{
-				theWindOfAFox->ProjectileAttack.Offset.x = theWindOfAFox->ProjectileAttack.width / 3;
-				theWindOfAFox->Position.x += 50;
+				if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
 			}
 			else
 			{
-				theWindOfAFox->ProjectileAttack.Offset.x = -theWindOfAFox->ProjectileAttack.width / 3;
-				theWindOfAFox->Position.x -= 50;
+				if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
 			}
-			UpdateCollider(&theWindOfAFox->ProjectileAttack, theWindOfAFox->ProjectileAttack.width / 4, theWindOfAFox->ProjectileAttack.height / 2);
+
+			//Set the attacking necessaries
+			CurrentPlayer->isAttacking = TRUE;
+			CurrentPlayer->AttackType  = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
+			UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 		}
-	}
+		else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking && CurrentPlayer->WindAttackCooldown >= CurrentPlayer->WindAttackCooldownMax)
+		{
+			//Pick a random shoot sound to play
+			if (rand() % 2)
+			{
+				if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing2))
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing1);
+			}
+			else
+			{
+				if (!FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.Swing1))
+					PlayAudio(CurrentPlayer->CurrentPlayerSounds.Swing2);
+			}
 
-	/*if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
-	{
-		CurrentPlayer->isBlocking = TRUE;
-	}
-	else if(FoxInput_MouseUp(MOUSE_BUTTON_RIGHT) || FoxInput_KeyUp('M') || CurrentPlayer->isAttacking)
-	{
-		CurrentPlayer->isBlocking = FALSE;
-	}*/
+			//Set the attacking necessaries
+			CurrentPlayer->isAttacking = TRUE;
+			CurrentPlayer->AttackType  = 1;
+			CurrentPlayer->PlayerSpriteParts.AttackRotation = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotationArm = 0;
+			CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
+			CurrentPlayer->WindAttackCooldown = 0;
+			UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 
+			//Wind of the weapons
+			{
+				Projectile *theWindOfAFox;
+				float projectileSpeed = 1400;
+				if (!CurrentPlayer->PlayerSpriteParts.Weapon->FlipX)
+					projectileSpeed *= -1;
+
+				//NASTY NASTY HACKKKK
+				theWindOfAFox = CreateProjectile("TextureFiles/Wind.png", 
+												 CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 1.5f, 
+												 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
+												 Wind, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
+
+				theWindOfAFox->ProjectileFOF = PlayerWeapon;
+				theWindOfAFox->ProjectileSprite->ZIndex = 100;
+
+				if (!theWindOfAFox->ProjectileSprite->FlipX)
+				{
+					theWindOfAFox->ProjectileAttack.Offset.x = theWindOfAFox->ProjectileAttack.width / 3;
+					theWindOfAFox->Position.x += 50;
+				}
+				else
+				{
+					theWindOfAFox->ProjectileAttack.Offset.x = -theWindOfAFox->ProjectileAttack.width / 3;
+					theWindOfAFox->Position.x -= 50;
+				}
+				UpdateCollider(&theWindOfAFox->ProjectileAttack, theWindOfAFox->ProjectileAttack.width / 4, theWindOfAFox->ProjectileAttack.height / 2);
+			}
+		}
+
+		/*if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
+		{
+			CurrentPlayer->isBlocking = TRUE;
+		}
+		else if(FoxInput_MouseUp(MOUSE_BUTTON_RIGHT) || FoxInput_KeyUp('M') || CurrentPlayer->isAttacking)
+		{
+			CurrentPlayer->isBlocking = FALSE;
+		}*/
+	}
 	if (LookAtMouse)
 	{
 		if (camX + (mouseX - PANELSIZE / 2) < CurrentPlayer->Position.x - 20)
@@ -342,25 +356,25 @@ void InputPlayer(struct Player *CurrentPlayer)
 			{
 			// Buffs the player's attack speed
 			case Agility:
-				CurrentPlayer->CurrentPlayerStats.AttackSpeed *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.AttackSpeed *= 2.0f;
 				CurrentPlayer->CurrentPlayerStats.AgilityTimer = 10;
 				break;
 			// Buffs the player's damage
 			case Strength:
-				CurrentPlayer->CurrentPlayerStats.Damage = (int)(CurrentPlayer->CurrentPlayerStats.Damage * 1.2f);
+				CurrentPlayer->CurrentPlayerStats.Damage = (int)(CurrentPlayer->CurrentPlayerStats.Damage * 2.0f);
 				CurrentPlayer->CurrentPlayerStats.StrengthTimer = 10;
 				break;
 			// Buffs the player's damage reduction
 			case Defense:
-				CurrentPlayer->CurrentPlayerStats.DamageReduction *= 1.2f;
+				CurrentPlayer->CurrentPlayerStats.DamageReduction *= 1.5f;
 				CurrentPlayer->CurrentPlayerStats.DefenseTimer = 10;
 				break;
 			// Buffs the player's move speed
 			case Heal:
 				if(CurrentPlayer->CurrentPlayerStats.CurrentHealth > CurrentPlayer->CurrentPlayerStats.MaxHealth / 2)
-					CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+					CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer->CurrentPlayerStats.MaxHealth;
 				else
-					CurrentPlayer->CurrentPlayerStats.CurrentHealth += CurrentPlayer->CurrentPlayerStats.MaxHealth / 2;
+					CurrentPlayer->CurrentPlayerStats.CurrentHealth += (float)CurrentPlayer->CurrentPlayerStats.MaxHealth / 2;
 				break;
 			}
 			CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected] = FALSE;
@@ -384,7 +398,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	}
 
 	// Drop down when S is pushed
-	if(FoxInput_KeyTriggered('S') && CurrentPlayer->PlayerRigidBody.onGround)
+	if(FoxInput_KeyTriggered('S') && CurrentPlayer->PlayerRigidBody.onGround && dropdownNow)
 	{
 		CurrentPlayer->PlayerRigidBody.onGround = FALSE;
 		CurrentPlayer->dropDown = TRUE;
@@ -392,7 +406,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	}
 
 	//Jump when space is pushed or drop down if S is pushed as well
-	if(FoxInput_KeyTriggered(VK_SPACE))
+	if(FoxInput_KeyTriggered(VK_SPACE) && jumpingNow)
 	{
 		Vec2 velocity;
 		
@@ -441,12 +455,6 @@ void InputPlayer(struct Player *CurrentPlayer)
 	CurrentPlayer->PlayerRigidBody.Acceleration.x = 0;
 	CurrentPlayer->PlayerRigidBody.Acceleration.y = 0;
 #endif
-
-	// Update Speed and such if blocking
-	if(CurrentPlayer->isBlocking)
-	{
-		CurrentPlayer->Speed /= 2;
-	}
 
 	if (CurrentPlayer->WindAttackCooldown + GetDeltaTime() * 5 * (CurrentPlayer->CurrentPlayerStats.Agility + CurrentPlayer->PlayerWeapon->BonusAgility + 1) < CurrentPlayer->WindAttackCooldownMax)
 		CurrentPlayer->WindAttackCooldown += GetDeltaTime() * 5 * (CurrentPlayer->CurrentPlayerStats.Agility + CurrentPlayer->PlayerWeapon->BonusAgility + 1);
@@ -565,7 +573,9 @@ void updateMaxHealth(PlayerStats *CurrentPlayerStats)
 void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 {
 	// Move speed formula
-	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility * 15.0f + 600.0f;
+	CurrentPlayerStats->MoveSpeed = CurrentPlayerStats->Agility * 15.0f + 500.0f;
+	if(CurrentPlayer.PlayerWeapon)
+		CurrentPlayerStats->MoveSpeed += CurrentPlayer.PlayerWeapon->BonusAgility * 15.0f;
 }
 
 /*************************************************************************/
@@ -580,7 +590,9 @@ void updateMoveSpeed(PlayerStats *CurrentPlayerStats)
 void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 {
 	// Attack speed formula
-	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 2.0f + 8.0f;
+	CurrentPlayerStats->AttackSpeed = CurrentPlayerStats->Agility * 0.5f + 8.0f;
+	if(CurrentPlayer.PlayerWeapon)
+		CurrentPlayerStats->AttackSpeed += CurrentPlayer.PlayerWeapon->BonusAgility * 0.5f;
 }
 
 /*************************************************************************/
@@ -595,7 +607,11 @@ void updateAttackSpeed(PlayerStats *CurrentPlayerStats)
 void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 {
 	// Damage reduction formula
-	CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / CurrentPlayerStats->Defense) / 2.0f;
+	if(CurrentPlayer.PlayerWeapon)
+		CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / (CurrentPlayerStats->Defense + CurrentPlayer.PlayerWeapon->BonusDefense)) / 2.0f;
+	else
+		CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / CurrentPlayerStats->Defense) / 2.0f;
+	CurrentPlayerStats->DamageReduction /= 2.0f;
 }
 
 /*************************************************************************/
@@ -610,7 +626,9 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 void updateDamage(Player *CurrentPlayer)
 {
 	//Placeholder damage reduction formula
-	CurrentPlayer->CurrentPlayerStats.Damage = 10 + (CurrentPlayer->CurrentPlayerStats.Strength + CurrentPlayer->PlayerWeapon->BonusStrength) * 2;
+	CurrentPlayer->CurrentPlayerStats.Damage = 10 + CurrentPlayer->CurrentPlayerStats.Strength * 2;
+	if(CurrentPlayer->PlayerWeapon)
+		CurrentPlayer->CurrentPlayerStats.Damage += CurrentPlayer->PlayerWeapon->BonusStrength * 2;
 }
 
 /*************************************************************************/
@@ -771,24 +789,17 @@ void DetectPlayerCollision(void)
 				{
 					CurrentPlayer.CollisionData[-hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
 					//printf("NOT FOUND: %i\n", -hitPrev);
-
-					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
-					updateDamage(&CurrentPlayer);
 				}
 				// Found target, hit previous frame, on persistant
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
 				{
 					//printf("FOUND PERSISTANT: %i\n", CurrentPlayer.CollisionData[hitPrev]);
-					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
-					updateDamage(&CurrentPlayer);
 				}
 				// Found target, did not hit previous frame, on start collision
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					//printf("FOUND NEW COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = wList->WeaponPickup.collisionID * 10 + 1;
-					//PlayerCollideWeaponDrop(&CurrentPlayer, wList);
-					updateDamage(&CurrentPlayer);
 				}
 			}
 			else
@@ -1133,7 +1144,7 @@ void SavePlayer(Player *CurrentPlayer)
 	// Ugly code that puts all needed info into one string
 	sprintf(string, "Level: %d\nLevelBitFlags: %d\nRank: %d\nXP: %d\nArmUnlock: %d\nHandUnlock: %d\nArmClear: %d\nHandClear: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
 		CurrentPlayer->CurrentLevel, CurrentPlayer->levelClearBitFlags, CurrentPlayer->CurrentPlayerStats.Rank, CurrentPlayer->CurrentPlayerStats.Experience, CurrentPlayer->armUnlock, CurrentPlayer->handUnlock, CurrentPlayer->armClear, CurrentPlayer->handClear, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
-		CurrentPlayer->CurrentPlayerStats.Money, CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
+		CurrentPlayer->CurrentPlayerStats.Money, (int)CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
 	//Opens the file for writing
@@ -1325,6 +1336,9 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponGlyphs, CurrentPlayer->PlayerWeapon->WeaponName);
 	CreateStatsString(CurrentPlayer->PlayerWeapon->WeaponStatsString, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusDefense);
 	
+	ChangeTextZIndex(CurrentPlayer->PlayerWeapon->WeaponGlyphs, 451);
+	ChangeTextZIndex(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs, 451);
+
 	nameLen = strlen(CurrentPlayer->PlayerWeapon->WeaponName);
 	statsLen = strlen(CurrentPlayer->PlayerWeapon->WeaponStatsString);
 	if(nameLen >= statsLen)
@@ -1347,7 +1361,7 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	CurrentPlayer->CurrentPlayerStats.Experience = 0;
 
 	CurrentPlayer->CurrentPlayerStats.Money = 15;
-	CurrentPlayer->CurrentPlayerStats.CurrentHealth = CurrentPlayer->CurrentPlayerStats.MaxHealth;
+	CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer->CurrentPlayerStats.MaxHealth;
 	CurrentPlayer->CurrentLevel = GS_Tutorial;
 }
 
