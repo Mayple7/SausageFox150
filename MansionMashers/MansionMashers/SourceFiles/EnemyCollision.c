@@ -149,6 +149,8 @@ void EnemyCollidePlayerProjectile(Enemy *CurrentEnemy, Projectile *CurrentProjec
 	
 	CurrentEnemy->CurrentEnemyStats.CurrentHealth -= damageDealt;
 	PlayAudio(CurrentEnemy->CurrentEnemySounds.GetHit1);
+	if (CurrentEnemy->HitByProjectileTimer <= 0)
+		CurrentEnemy->HitByProjectileTimer = 0.5f;
 
 	if (CurrentEnemy->EnemyType != Dummy)
 	{

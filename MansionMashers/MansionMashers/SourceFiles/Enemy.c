@@ -297,6 +297,9 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	CurrentEnemy->EnemyParticleSystem->Position.x = CurrentEnemy->Position.x;
 	CurrentEnemy->EnemyParticleSystem->Position.y = CurrentEnemy->Position.y;
 
+	if (CurrentEnemy->HitByProjectileTimer > 0)
+		CurrentEnemy->HitByProjectileTimer -= GetDeltaTime();
+	
 	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
 		char num[10];
@@ -944,13 +947,14 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 		{
 			hit = CollisionRectangles(&CurrentEnemy->EnemyCollider, &bList->ProjectileAttack);
 			hitPrev = searchHitArray(CurrentEnemy->CollisionData, COLLIDEAMOUNT, bList->ProjectileAttack.collisionID);
+
 			if(hit)
 			{
 				// New target, on start collision
 				if(hitPrev < 0)
 				{
 					//Damage the enemy
-					if (CurrentEnemy->KnockBack == FALSE)
+					if (CurrentEnemy->HitByProjectileTimer <= 0)
 						EnemyCollidePlayerProjectile(CurrentEnemy, bList);
 					//PoofProjectile(bList);
 				}
@@ -961,7 +965,7 @@ void DetectEnemyCollision(Enemy *CurrentEnemy)
 				// Found target, did not hit previous frame, on start collision
 				else if(CurrentEnemy->CollisionData[hitPrev] % 10 == 0)
 				{
-					if (CurrentEnemy->KnockBack == FALSE)
+					if (CurrentEnemy->HitByProjectileTimer <= 0)
 						EnemyCollidePlayerProjectile(CurrentEnemy, bList);
 					//PoofProjectile(bList);
 				}
