@@ -62,6 +62,10 @@ FoxSound* IntelFoxLook;
 FoxSound* IntelFoxOneKey;
 FoxSound* IntelFoxEnd;
 
+Sprite* IntelFoxBack;
+Sprite* IntelFox;
+static float IntelFoxValue;
+
 Platform* Plat;
 Wall* Wall1;
 
@@ -178,6 +182,11 @@ void InitializeLevel5(void)
 	/////////////////////////////////
 	//		Objects				   //
 	/////////////////////////////////
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
+
 	CreatePaperScroll(0, 150);
 }
 
@@ -362,6 +371,28 @@ void EventLevel(void)
 			IntelFoxLook->hasPlayed = TRUE;
 		}
 	}
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(IntelFoxTwoKeys) || FoxSoundCheckIsPlaying(IntelFoxEnd)
+		|| FoxSoundCheckIsPlaying(IntelFoxOneKey) || FoxSoundCheckIsPlaying(IntelFoxLook))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
+
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
 
 	//Key Checking
 	if(CurrentPlayer.armClear && CurrentPlayer.handClear && !beginningAnimation)
