@@ -49,6 +49,7 @@ static int levelComplete;
 static int beginningAnimation;
 static int PlayerIsAlive;
 static int numPanels;
+static int counter;
 
 Sprite *Arrow1;
 Sprite *Arrow2;
@@ -61,6 +62,15 @@ static int Arrow3Grow;
 static int Arrow4Grow;
 
 EnemySpawner* Spawners[8];
+
+FoxSound* IntelFoxStart;
+FoxSound* IntelFoxEnd;
+
+TextGlyphs* IntelFoxTxtStart;
+
+Sprite* IntelFoxBack;
+Sprite* IntelFox;
+static float IntelFoxValue;
 
 Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
 static int GlowBool;
@@ -107,12 +117,21 @@ void InitializeLevel6(void)
 	PlayerIsAlive = TRUE;
 	numPanels = 4;
 	GlowBool = TRUE;
+	counter = 2 * FRAMERATE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
+
+	/////////////////////////////////
+	//		Text				   //
+	/////////////////////////////////
+	Vec3Set(&TextTint, 1, 1, 1);
+	IntelFoxTxtStart = CreateText("Mash all the enemies", 0, 150, 100, TextTint, Center, Border);
+	ChangeTextZIndex(IntelFoxTxtStart, 500);
+	TextProgressiveInit(IntelFoxTxtStart);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -149,24 +168,6 @@ void InitializeLevel6(void)
 	//Blocker Boxes
 	CreateBlockerBoxes(&newID);
 
-	//Background Sound
-	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
-
-	// Arrows
-	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 0, 200);
-	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, PANELSIZE, 200);
-	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 2 * PANELSIZE, 200);
-	Arrow4 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 3 * PANELSIZE, 200);
-
-	Arrow1->Visible = FALSE;
-	Arrow2->Visible = FALSE;
-	Arrow3->Visible = FALSE;
-	Arrow4->Visible = FALSE;
-
-	Arrow1Grow = FALSE;
-	Arrow2Grow = TRUE;
-	Arrow3Grow = FALSE;
-	Arrow4Grow = TRUE;
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -196,6 +197,12 @@ void InitializeLevel6(void)
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 4960, -285);
 	Plat->PlatformSprite->Visible = FALSE;
 
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
+	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl6Start.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl6End.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//			Walls			   //
@@ -244,6 +251,31 @@ void InitializeLevel6(void)
 	//Right
 	Spawners[7] = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
 
+	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
+
+	CreatePaperScroll(GetCameraXPosition(), 150);
+
+	// Arrows
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 0, 200);
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, PANELSIZE, 200);
+	Arrow3 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 2 * PANELSIZE, 200);
+	Arrow4 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 390, 1, 1, 3 * PANELSIZE, 200);
+
+	Arrow1->Visible = FALSE;
+	Arrow2->Visible = FALSE;
+	Arrow3->Visible = FALSE;
+	Arrow4->Visible = FALSE;
+
+	Arrow1Grow = FALSE;
+	Arrow2Grow = TRUE;
+	Arrow3Grow = FALSE;
+	Arrow4Grow = TRUE;
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -419,6 +451,42 @@ void EventLevel(void)
 	UpdateFloatingText();
 	UpdateAllProjectiles();
 	ObjectGlowUpdate();
+
+	//Intel Fox Starting Narrative
+	if(beginningAnimation == FALSE && !IntelFoxStart->hasPlayed)
+	{
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
+	}
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(IntelFoxStart) || FoxSoundCheckIsPlaying(IntelFoxEnd))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
+
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
+
+	SetUpScrollWithText(IntelFoxTxtStart, &counter);
+
+	if(!EnemyPanelNumber[0] && !EnemyPanelNumber[1] && !EnemyPanelNumber[2] && !EnemyPanelNumber[3] && !IntelFoxEnd->hasPlayed)
+	{
+		PlayAudio(IntelFoxEnd);
+		IntelFoxEnd->hasPlayed = TRUE;
+	}
 
 	//Level Transition
 	BlackOverlay->Position.x = GetCameraXPosition();
