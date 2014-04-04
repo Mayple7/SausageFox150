@@ -71,6 +71,8 @@ FoxSound* IntelFoxEnd;
 
 FoxSound* ArmGuyDie;
 
+FoxSound* BackSnd;
+
 Sprite* IntelFoxBack;
 Sprite* IntelFox;
 static float IntelFoxValue;
@@ -159,6 +161,8 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	//		Sounds				   //
 	/////////////////////////////////
+	BackSnd = CreateSound("Sounds/BossMusic.wav", LargeSnd);
+
 	IntelFoxStart = CreateSound("Sounds/IntelFoxBossStart.mp3", SmallSnd);
 	IntelFoxEnd = CreateSound("Sounds/IntelFoxBossDogWellDone.mp3", SmallSnd);
 	ArmGuyDie = CreateSound("Sounds/ArmGuyDie.mp3", SmallSnd);
@@ -205,6 +209,7 @@ void InitializeArmGuy(void)
 void UpdateArmGuy(void)
 {
 	EventArmGuy();
+	PlayAudio(BackSnd);
 
 	// This should be the last line in this function
 	if(!levelComplete)
@@ -395,10 +400,10 @@ void EventArmGuy(void)
 #endif
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//TogglePauseSound(BackSnd);
+		TogglePauseSound(BackSnd);
 		InitializePause(&DrawArmGuy);
 		UpdatePause();
-		//TogglePauseSound(BackSnd);
+		TogglePauseSound(BackSnd);
 	}
 
 	//////////////////////////////////
@@ -443,6 +448,7 @@ void EventArmGuy(void)
 	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
+		freeSound(BackSnd);
 		PlayerIsAlive = FALSE;
 		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha = 0.5f;

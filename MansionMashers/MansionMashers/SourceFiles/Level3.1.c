@@ -81,6 +81,9 @@ Sprite *Arrow1;
 Sprite *Arrow2;
 Sprite *Arrow3;
 
+Food* Strength1;
+Food* Heal1;
+
 static int Arrow1Grow;
 static int Arrow2Grow;
 static int Arrow3Grow;
@@ -315,6 +318,10 @@ void InitializeLevel31(void)
 	IntelFoxValue	= 0.0f;
 
 	CreatePaperScroll(GetCameraXPosition(), 150);
+
+	Strength1 = CreateFood(Strength, 100, 100, 150, -120, newID++);
+	Heal1 = CreateFood(Heal, 100, 100, 2350, -120, newID++);
+
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -587,6 +594,7 @@ void EventLevel31(void)
 	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
+		//freeSound(BackSnd);
 		PlayerIsAlive = FALSE;
 		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha = 0.5f;

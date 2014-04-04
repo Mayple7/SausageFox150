@@ -615,6 +615,7 @@ void EventLevel2(void)
 	//If player dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
+		freeSound(BackSnd);
 		PlayerIsAlive = FALSE;
 		BlackOverlay->Alpha = 0.5f;
 

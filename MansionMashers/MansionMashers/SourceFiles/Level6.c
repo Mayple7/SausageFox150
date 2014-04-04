@@ -75,6 +75,9 @@ static float IntelFoxValue;
 Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
 static int GlowBool;
 
+Food* Agility1;
+Food* Heal1;
+
 FoxSound* BackSnd;
 
 Sprite* BlackOverlay;
@@ -276,6 +279,9 @@ void InitializeLevel6(void)
 	Arrow2Grow = TRUE;
 	Arrow3Grow = FALSE;
 	Arrow4Grow = TRUE;
+
+	Agility1 = CreateFood(Agility, 100, 100, 150, -120, newID++);
+	Heal1 = CreateFood(Heal, 100, 100, PANELSIZE * 2 + 500, -120, newID++);
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -500,6 +506,7 @@ void EventLevel(void)
 	//If player dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
+		freeSound(BackSnd);
 		PlayerIsAlive = FALSE;
 		BlackOverlay->Alpha = 0.5f;
 

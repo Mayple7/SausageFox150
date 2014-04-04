@@ -25,6 +25,7 @@
 static Sprite *DeathConfirm;
 static Button *RestartButton;
 static Button *MainMapButton;
+static FoxSound *DeathSnd;
 
 static float confirmTimer;
 
@@ -50,6 +51,8 @@ void CreateDeathConfirmObjects(int *newID)
 	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f, (*newID)++);
 	RestartButton->ButtonSprite->ZIndex = 4022;
 
+	DeathSnd = CreateSound("Sounds/DeathMusic.wav", LargeSnd);
+
 	confirmTimer = 0;
 }
 
@@ -63,6 +66,8 @@ void UpdateDeathConfirmObjects(void)
 {
 	int worldX, worldY;
 	Vec2 MouseClick;
+	
+	PlayAudio(DeathSnd);
 
 	if(confirmTimer < 1.0f)
 	{
