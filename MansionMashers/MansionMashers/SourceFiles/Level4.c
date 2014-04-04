@@ -69,7 +69,9 @@ Food* Defense1;
 
 TextGlyphs *IntelFoxTxtStart;
 
+Sprite* IntelFoxBack;
 Sprite* IntelFox;
+static float IntelFoxValue;
 
 FoxSound* BackSnd;
 FoxSound* IntelFoxStart;
@@ -229,9 +231,10 @@ void InitializeLevel4(void)
 
 	CreatePaperScroll(GetCameraXPosition(), 150);
 	
-	//What would we do without intel fox?
-	IntelFox = (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 4, 1, 740, 380);
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
 	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
 
 	// Create the HUD
 	CurrentHUD = CreateHUD(&CurrentPlayer);
@@ -446,6 +449,12 @@ void EventLevel4(void)
 
 	//Always update intel foxes position you need him
 	IntelFox->Position.x = GetCameraXPosition() + 740;
+
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
 
 	SetUpScrollWithText(IntelFoxTxtStart, &counter);
 

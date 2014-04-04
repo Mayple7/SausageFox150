@@ -59,6 +59,7 @@ typedef struct HandGuyBoss
 
 	float LegSinValue;
 	float TailSinValue;
+	int QuestionAttackAnimation; // bool for animation
 
 	float Speed;
 	Vec2 Position;

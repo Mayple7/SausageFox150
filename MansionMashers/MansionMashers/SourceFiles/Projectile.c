@@ -141,7 +141,10 @@ void UpdateProjectile(Projectile *CurrentProjectile)
 		FreeProjectile(CurrentProjectile);
 
 	if (CurrentProjectile->ProjectileType == Wind)
+	{
 		CurrentProjectile->ProjectileParticleSystem->Position.x = CurrentProjectile->Position.x;
+		CurrentProjectile->ProjectileSprite->Rotation = sinf(CurrentProjectile->Position.x / 100.0f) / 5.0f;
+	}
 }
 
 /*************************************************************************/
