@@ -91,7 +91,8 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID)
 
 	// Armguy colliders
 	CurrentBoss->ShoutRadius = 600.0f;
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 100, 200, (*objID)++);
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 100, 300, (*objID)++);
+	CurrentBoss->BossCollider.Offset.y = CurrentBoss->BossCollider.height / 4;
 	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 200, (*objID)++); 
 
 	// Sets the initial position of all colliders
@@ -202,7 +203,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			}
 
 			// Jump up to the platform if needed
-			if((CurrentPlayer.PlayerRigidBody.Velocity.y >= 0 || CurrentPlayer.Position.y > -15) && CurrentBoss->Position.y <= GROUNDLEVEL)
+			if((CurrentPlayer.PlayerRigidBody.Velocity.y >= 0 && CurrentPlayer.Position.y > GROUNDLEVEL) && CurrentBoss->Position.y <= GROUNDLEVEL)
 			{
 				// Set y velocity for jumping
 				Vec2 velocity;
@@ -458,7 +459,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 					CurrentBoss->Position.x += CurrentBoss->Speed * GetDeltaTime();
 				else if(CurrentBoss->Position.x > 20.0f)
 					CurrentBoss->Position.x -= CurrentBoss->Speed * GetDeltaTime();
-				else if(CurrentBoss->Position.y > -75 && CurrentBoss->HandGuyRigidBody.onGround)
+				else if(CurrentBoss->Position.y > -100 && CurrentBoss->HandGuyRigidBody.onGround)
 					CurrentBoss->InnerState = End;
 
 				// Jump up to the platform if needed

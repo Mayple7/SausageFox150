@@ -608,10 +608,12 @@ void updateDamageReduction(PlayerStats *CurrentPlayerStats)
 {
 	// Damage reduction formula
 	if(CurrentPlayer.PlayerWeapon)
-		CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / (CurrentPlayerStats->Defense + CurrentPlayer.PlayerWeapon->BonusDefense)) / 2.0f;
+		CurrentPlayerStats->DamageReduction = (1.0f - (3.0f / (CurrentPlayerStats->Defense + CurrentPlayer.PlayerWeapon->BonusDefense))) / 2.0f;
 	else
-		CurrentPlayerStats->DamageReduction = 1.0f - (1.0f / CurrentPlayerStats->Defense) / 2.0f;
-	CurrentPlayerStats->DamageReduction /= 2.0f;
+		CurrentPlayerStats->DamageReduction = (1.0f - (3.0f / CurrentPlayerStats->Defense)) / 2.0f;
+	
+	if(CurrentPlayerStats->DamageReduction < 0)
+		CurrentPlayerStats->DamageReduction = 0.0f;
 }
 
 /*************************************************************************/
