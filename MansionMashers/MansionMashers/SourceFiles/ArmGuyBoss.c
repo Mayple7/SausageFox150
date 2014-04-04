@@ -833,3 +833,24 @@ void PlayerDamageResult(int damage)
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);
 }
+
+/*************************************************************************/
+/*!
+	\brief
+	Deals player damage resolution
+	
+	\param CurrentBoss
+	Pointer to the current boss
+*/
+/*************************************************************************/
+void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
+{
+	FreeParticleSystem(CurrentBoss->ArmGuyParticle);
+	FreeSprite(CurrentBoss->ArmJabSprite);
+	FreeSprite(CurrentBoss->ArmSmashSprite);
+	FreeSprite(CurrentBoss->ArmSprite);
+	FreeSprite(CurrentBoss->BodySprite);
+	FreeSprite(CurrentBoss->OffArmSprite);
+	FreeSprite(CurrentBoss->SpinSprite);
+}
+
