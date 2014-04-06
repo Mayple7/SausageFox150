@@ -220,6 +220,8 @@ void InitializeTutorial(void)
 	DummyBlock = CreateWall("TextureFiles/BlankPlatform.png", StrawDummy->EnemySprite->Width / 2, StrawDummy->EnemySprite->Height / 2, 
 				            StrawDummy->Position.x, StrawDummy->Position.y - 40);
 	DummyBlock->WallSprite->Visible = FALSE;
+
+	CreateUpgradeScreenObjects();
 }
  
 void UpdateTutorial(void)
@@ -483,7 +485,7 @@ void EventTutorial(void)
 		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 	}
 	else
-		fadeToEnd();
+		LevelCompletion();
 
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -499,12 +501,4 @@ void EventTutorial(void)
 		UpdateEnemy(StrawDummy);
 
 	UpdateFloatingText();
-}
-
-void fadeToEnd(void)
-{
-	BlackOverlay->Position.x = GetCameraXPosition();
-	BlackOverlay->Alpha += 1 * GetDeltaTime();
-	if(BlackOverlay->Alpha > 1)
-		SetNextState(GS_MapLevel);
 }

@@ -327,7 +327,7 @@ void InitializeLevel31(void)
 
 	///Last thing in initialize
 	CreateDeathConfirmObjects();
-
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -446,7 +446,7 @@ void EventLevel31(void)
 
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		if(PlayerIsAlive == TRUE)
+		if(PlayerIsAlive && !levelComplete)
 		{
 			InitializePause(&DrawLevel31);
 			//TogglePauseSound(&BackgroundSnd);
@@ -490,14 +490,7 @@ void EventLevel31(void)
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
 	else
-	{
-		BlackOverlay->Position.x = GetCameraXPosition();
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
-	}
-
-
+		LevelCompletion();
 
 	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //

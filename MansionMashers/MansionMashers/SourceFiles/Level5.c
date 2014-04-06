@@ -186,6 +186,8 @@ void InitializeLevel5(void)
 	IntelFoxValue	= 0.0f;
 
 	CreatePaperScroll(0, 150);
+
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -319,6 +321,8 @@ void EventLevel(void)
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
+	else
+		LevelCompletion();
 
 	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -404,9 +408,6 @@ void EventLevel(void)
 	if(CurrentPlayer.Position.x >= 720 + CurrentPlayer.PlayerCollider.width / 2 && keysObtained)
 	{
 		levelComplete = TRUE;
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
 	}
 	//Level Transition if not complete
 	if(CurrentPlayer.Position.x <= -PANELSIZE /2 - CurrentPlayer.PlayerCollider.width / 2 && !beginningAnimation)

@@ -320,8 +320,7 @@ void InitializeLevel2(void)
 
 	///Last thing in initialize
 	CreateDeathConfirmObjects();
-
-
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -444,7 +443,7 @@ void EventLevel2(void)
 	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		if(PlayerIsAlive == TRUE)
+		if(PlayerIsAlive && !levelComplete)
 		{
 			InitializePause(&DrawLevel2);
 			TogglePauseSound(BackSnd);
@@ -494,6 +493,8 @@ void EventLevel2(void)
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
+	else
+		LevelCompletion();
 
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -605,9 +606,6 @@ void EventLevel2(void)
 	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && enemiesDefeated)
 	{
 		levelComplete = TRUE;
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
 	}
 
 	//If player dies

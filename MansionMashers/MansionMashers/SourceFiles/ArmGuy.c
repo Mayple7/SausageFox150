@@ -196,6 +196,7 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	CreateDeathConfirmObjects();
 
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -254,12 +255,7 @@ void UpdateArmGuy(void)
 
 		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width)
 		{
-			BlackOverlay->Position.x = GetCameraXPosition();
-			BlackOverlay->Alpha += 1 * GetDeltaTime();
-			if(BlackOverlay->Alpha > 1)
-			{
-				SetNextState(GS_MapLevel);
-			}
+			LevelCompletion();
 		}
 
 		BossHPBar->Visible = FALSE;

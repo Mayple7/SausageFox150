@@ -330,7 +330,7 @@ void FreeLevel1(void)
 
 	//Only save stats if the level was actually completed
 	if (levelComplete)
-		LevelCompletion(&CurrentPlayer);
+		SavePlayer(&CurrentPlayer);
 
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
@@ -362,7 +362,7 @@ void EventLevel1(void)
 	//////////////////////////////////
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		if(PlayerIsAlive == TRUE && BlackOverlay->Alpha < 0.5)
+		if(PlayerIsAlive && !levelComplete)
 		{
 			InitializePause(&DrawLevel1);
 			TogglePauseSound(BackSnd);
@@ -409,26 +409,7 @@ void EventLevel1(void)
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
 	else
-	{
-		BlackOverlay->Position.x = GetCameraXPosition();
-
-		if (BlackOverlay->Alpha > 0.7 && levelComplete)
-		{
-			//Allow player to upgrade their player if upgrades are available
-			if (UpgradeComplete)
-			{
-				//Continue onto the map
-				if (BlackOverlay->Alpha > 1)
-					SetNextState(GS_MapLevel);
-				else
-					BlackOverlay->Alpha += GetDeltaTime();
-			}
-			else if (!UpgradeComplete)
-				UpdateUpgradeScreenObjects();
-		}
-		else
-			BlackOverlay->Alpha += GetDeltaTime();
-	}
+		LevelCompletion();
 
 	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //

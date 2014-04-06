@@ -24,7 +24,8 @@
 
 #define UPGRADE_MAX 8
 
-static Sprite *HurtOverlay;
+static Sprite *IndiOverlay; //Just for fun
+static Sprite *HurtOverlay; //Warns the player they've been hit
 static float lastHealth;
 static int lastDefense;
 static Sprite *GuudJub;
@@ -39,6 +40,9 @@ enum PopUp { PopUp_Rise, PopUp_Hold, PopUp_Fall };
 static TextGlyphs *UpgradesName;
 static TextGlyphs *UpgradesLeft;
 static Button *MainMapButton;
+
+static Sprite *BlackOverlay;
+static Sprite *WhiteOverlay;
 
 static Button *UpgradeButton1;
 static Button *UpgradeButton2;
@@ -76,7 +80,7 @@ int GetObjectID(void)
 void CreateUpgradeScreenObjects(void)
 {
 	float camX = GetCameraXPosition();
-	Vec3 TextColor;
+	Vec3 NewTint;
 
 	lastUpgrades      = -1;
 	UpgradeComplete   = FALSE;
@@ -84,16 +88,26 @@ void CreateUpgradeScreenObjects(void)
 	allUpgradesFull   = FALSE;
 
 	//Title
-	Vec3Set(&TextColor, 1, 1, 1);
-	UpgradesName = CreateText("swug", 0, -2000, 140, TextColor, Center, Border);
+	Vec3Set(&NewTint, 1, 1, 1);
+	UpgradesName = CreateText("Upgrades Available!", 0, -2000, 140, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradesName);
 	ChangeTextZIndex(UpgradesName, 4002);
 
 	//Upgrades remaining
-	Vec3Set(&TextColor, 0.6f, 0.0f, 0.6f);
-	UpgradesLeft = CreateText("Sweg", 0, -2000, 100, TextColor, Center, Border);
+	Vec3Set(&NewTint, 0.6f, 0.0f, 0.6f);
+	UpgradesLeft = CreateText("Sweg", 0, -2000, 100, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradesLeft);
 	ChangeTextZIndex(UpgradesLeft, 4002);
+
+	//Overlays
+	Vec3Set(&NewTint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4010, 1, 1, 0, 0);
+	BlackOverlay->Tint = NewTint;
+	BlackOverlay->Alpha = 0;
+	Vec3Set(&NewTint, 0.9f, 0.9f, 0.9f);
+	WhiteOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	WhiteOverlay->Tint = NewTint;
+	WhiteOverlay->Alpha = 0;
 
 	//Upgrade buttons, all 3 (Not really sure why Agility is in the middle, but that is how the rest of the game is)
 	UpgradeButton1 = CreateButton("TextureFiles/UpgradeButton.png", 545 + camX, -2000, 347, 146); //Strength
@@ -114,16 +128,17 @@ void CreateUpgradeScreenObjects(void)
 	UpgradeBarColor3 = (Sprite *) CreateSprite("TextureFiles/UpgradeBarColor.png", 816, 85, 4001, 1, 1, 0, -2000);
 
 	//How many upgrades have been used for each skill type
-	Vec3Set(&TextColor, 0.6f, 0.0f, 0.6f);
-	UpgradeAmount1 = CreateText("Swog", 0, -2000, 120, TextColor, Center, Border);
+	Vec3Set(&NewTint, 0.6f, 0.0f, 0.6f);
+
+	UpgradeAmount1 = CreateText("Swog", 0, -2000, 120, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradeAmount1);
 	ChangeTextZIndex(UpgradeAmount1, 4002);
-	Vec3Set(&TextColor, 0.6f, 0.0f, 0.6f);
-	UpgradeAmount2 = CreateText("Swag", 0, -2000, 120, TextColor, Center, Border);
+
+	UpgradeAmount2 = CreateText("Swug", 0, -2000, 120, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradeAmount2);
 	ChangeTextZIndex(UpgradeAmount2, 4002);
-	Vec3Set(&TextColor, 0.6f, 0.0f, 0.6f);
-	UpgradeAmount3 = CreateText("Swyg", 0, -2000, 120, TextColor, Center, Border);
+
+	UpgradeAmount3 = CreateText("Swyg", 0, -2000, 120, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradeAmount3);
 	ChangeTextZIndex(UpgradeAmount3, 4002);
 
@@ -164,8 +179,6 @@ void UpdateUpgradeScreenObjects(void)
 	}
 
 	//Title
-	Vec2Set(&NewPosition, camX, 480);
-	ChangeTextPosition(UpgradesName, NewPosition, Center);
 	if (CurrentPlayer.CurrentPlayerStats.Strength >= UPGRADE_MAX
 	 && CurrentPlayer.CurrentPlayerStats.Agility >= UPGRADE_MAX
 	 && CurrentPlayer.CurrentPlayerStats.Defense >= UPGRADE_MAX
@@ -176,10 +189,10 @@ void UpdateUpgradeScreenObjects(void)
 		ChangeTextString(UpgradesName, "All Upgrades Complete!");
 		ChangeTextZIndex(UpgradesName, 4002);
 	}
+	Vec2Set(&NewPosition, camX, 480);
+	ChangeTextPosition(UpgradesName, NewPosition, Center);
 
 	//Upgrades remaining
-	Vec2Set(&NewPosition, camX, 400);
-	ChangeTextPosition(UpgradesLeft, NewPosition, Center);
 	if (lastUpgrades != CurrentPlayer.CurrentPlayerStats.Upgrades)
 	{
 		//Do some flavor text warnings for differnt UP amounts
@@ -195,6 +208,8 @@ void UpdateUpgradeScreenObjects(void)
 		ChangeTextZIndex(UpgradesLeft, 4002);
 		lastUpgrades = CurrentPlayer.CurrentPlayerStats.Upgrades;
 	}
+	Vec2Set(&NewPosition, camX, 400);
+	ChangeTextPosition(UpgradesLeft, NewPosition, Center);
 
 	//Upgrade buttons, all 3
 	UpdateButtonPosition(UpgradeButton1, 545 + camX, 200);
@@ -215,36 +230,39 @@ void UpdateUpgradeScreenObjects(void)
 	//Upgrade bar colors
 	//Str --
 	UpgradeBarColor1->Position.x = camX - 61 - 52.0f * (UPGRADE_MAX - CurrentPlayer.CurrentPlayerStats.Strength);
-	UpgradeBarColor1->Position.y = 200 - 1;
+	UpgradeBarColor1->Position.y = 200;
 	UpgradeBarColor1->ScaleX     = 1.0f * ((float)CurrentPlayer.CurrentPlayerStats.Strength / UPGRADE_MAX);
+	UpgradeBarColor1->ScaleY     = 1.1f;
 	//Agi --
 	UpgradeBarColor2->Position.x = camX - 61 - 52.0f * (UPGRADE_MAX - CurrentPlayer.CurrentPlayerStats.Agility);
-	UpgradeBarColor2->Position.y = 0 - 1;
+	UpgradeBarColor2->Position.y = 0;
 	UpgradeBarColor2->ScaleX     = 1.0f * ((float)CurrentPlayer.CurrentPlayerStats.Agility / UPGRADE_MAX);
+	UpgradeBarColor2->ScaleY     = 1.1f;
 	//Def --
 	UpgradeBarColor3->Position.x = camX - 61 - 52.0f * (UPGRADE_MAX - CurrentPlayer.CurrentPlayerStats.Defense);
-	UpgradeBarColor3->Position.y = -200 - 1;
+	UpgradeBarColor3->Position.y = -200;
 	UpgradeBarColor3->ScaleX     = 1.0f * ((float)CurrentPlayer.CurrentPlayerStats.Defense / UPGRADE_MAX);
+	UpgradeBarColor3->ScaleY     = 1.1f;
 
 	//Upgrades used placement
 	//Str --
-	Vec2Set(&NewPosition, camX - 590, 200);
-	ChangeTextPosition(UpgradeAmount1, NewPosition, Center);
 	sprintf(CharTemp, "%i", CurrentPlayer.CurrentPlayerStats.Strength);
 	ChangeTextString(UpgradeAmount1, CharTemp);
 	ChangeTextZIndex(UpgradeAmount1, 4002);
+	Vec2Set(&NewPosition, camX - 590, 200);
+	ChangeTextPosition(UpgradeAmount1, NewPosition, Center);
 	//Agi --
-	Vec2Set(&NewPosition, camX - 590, 0);
-	ChangeTextPosition(UpgradeAmount2, NewPosition, Center);
 	sprintf(CharTemp, "%i", CurrentPlayer.CurrentPlayerStats.Agility);
 	ChangeTextString(UpgradeAmount2, CharTemp);
 	ChangeTextZIndex(UpgradeAmount2, 4002);
+	Vec2Set(&NewPosition, camX - 590, 0);
+	ChangeTextPosition(UpgradeAmount2, NewPosition, Center);
 	//Def --
-	Vec2Set(&NewPosition, camX - 590, -200);
-	ChangeTextPosition(UpgradeAmount3, NewPosition, Center);
 	sprintf(CharTemp, "%i", CurrentPlayer.CurrentPlayerStats.Defense);
 	ChangeTextString(UpgradeAmount3, CharTemp);
 	ChangeTextZIndex(UpgradeAmount3, 4002);
+	Vec2Set(&NewPosition, camX - 590, -200);
+	ChangeTextPosition(UpgradeAmount3, NewPosition, Center);
 
 	//Done upgrading button
 	UpdateButtonPosition(MainMapButton, 400 + camX, -400);
@@ -259,8 +277,8 @@ void UpdateUpgradeScreenObjects(void)
 			CurrentPlayer.CurrentPlayerStats.Upgrades--;
 			CurrentPlayer.CurrentPlayerStats.Strength++;
 		}
-		UpgradeButton1->ButtonSprite->ScaleX = 1.2f;
-		UpgradeButton1->ButtonSprite->ScaleY = 1.2f;
+		UpgradeButton1->ButtonSprite->ScaleX = 1.15f;
+		UpgradeButton1->ButtonSprite->ScaleY = 1.15f;
 	}
 	else
 	{
@@ -276,8 +294,8 @@ void UpdateUpgradeScreenObjects(void)
 			CurrentPlayer.CurrentPlayerStats.Upgrades--;
 			CurrentPlayer.CurrentPlayerStats.Agility++;
 		}
-		UpgradeButton2->ButtonSprite->ScaleX = 1.2f;
-		UpgradeButton2->ButtonSprite->ScaleY = 1.2f;
+		UpgradeButton2->ButtonSprite->ScaleX = 1.15f;
+		UpgradeButton2->ButtonSprite->ScaleY = 1.15f;
 	}
 	else
 	{
@@ -293,8 +311,8 @@ void UpdateUpgradeScreenObjects(void)
 			CurrentPlayer.CurrentPlayerStats.Upgrades--;
 			CurrentPlayer.CurrentPlayerStats.Defense++;
 		}
-		UpgradeButton3->ButtonSprite->ScaleX = 1.2f;
-		UpgradeButton3->ButtonSprite->ScaleY = 1.2f;
+		UpgradeButton3->ButtonSprite->ScaleX = 1.15f;
+		UpgradeButton3->ButtonSprite->ScaleY = 1.15f;
 	}
 	else
 	{
@@ -327,9 +345,16 @@ void UpdateUpgradeScreenObjects(void)
 /*************************************************************************/
 void InitializePlayerHurt(Player *CurrentPlayer)
 {
+	IndiOverlay = (Sprite *) CreateSprite("TextureFiles/HurtOverlay.png", 1920, 1080, 1401, 1, 1, 0, 0);
+	IndiOverlay->Tint.x = 0;
+	IndiOverlay->Tint.y = 0;
+	IndiOverlay->Tint.z = 0;
+	IndiOverlay->ScaleX = 3.0f;
+	IndiOverlay->ScaleY = 6.0f;
+
 	HurtOverlay = (Sprite *) CreateSprite("TextureFiles/HurtOverlay.png", 1920, 1080, 1400, 1, 1, 0, 0);
-	HurtOverlay->ScaleX = 5.0f;
-	HurtOverlay->ScaleY = 5.0f;
+	HurtOverlay->ScaleX = 6.0f;
+	HurtOverlay->ScaleY = 6.0f;
 }
 
 /*************************************************************************/
@@ -340,9 +365,11 @@ void InitializePlayerHurt(Player *CurrentPlayer)
 /*************************************************************************/
 void UpdatePlayerHurt(Player *CurrentPlayer)
 {
+	IndiOverlay->Position.x = GetCameraXPosition();
+
 	HurtOverlay->Position.x = GetCameraXPosition();
 
-	if (HurtOverlay->ScaleX < 5.0f)
+	if (HurtOverlay->ScaleX < 6.0f)
 	{
 		HurtOverlay->ScaleX += 2 * GetDeltaTime();
 		HurtOverlay->ScaleY += 2 * GetDeltaTime();
@@ -442,7 +469,25 @@ int GetMaxExperience(Player *CurrentPlayer)
 	Runs all needed tasks when a level is successfully completed
 */
 /*************************************************************************/
-void LevelCompletion(Player *CurrentPlayer)
+void LevelCompletion(void)
 {
-	SavePlayer(CurrentPlayer);
+	WhiteOverlay->Position.x = GetCameraXPosition();
+	BlackOverlay->Position.x = GetCameraXPosition();
+
+	if (WhiteOverlay->Alpha > 1)
+	{
+		//Allow player to upgrade their player if upgrades are available
+		if (UpgradeComplete)
+		{
+			//Continue onto the map
+			if (BlackOverlay->Alpha > 1)
+				SetNextState(GS_MapLevel);
+			else
+				BlackOverlay->Alpha += GetDeltaTime();
+		}
+		else if (!UpgradeComplete)
+			UpdateUpgradeScreenObjects();
+	}
+	else
+		WhiteOverlay->Alpha += GetDeltaTime();
 }

@@ -168,6 +168,7 @@ void InitializeYeahGuy(void)
 	/////////////////////////////////
 	CreateDeathConfirmObjects();
 
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -251,9 +252,10 @@ void UpdateYeahGuy(void)
 	if(!Boss->redHead && !Boss->greenHead && !Boss->blueHead)
 	{
 		levelComplete = TRUE;
-		SetNextState(GS_MapLevel);
 	}
 
+	if (levelComplete)
+		LevelCompletion();
 }
 
 /*************************************************************************/
