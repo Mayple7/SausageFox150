@@ -153,13 +153,13 @@ void InitializeYeahGuy(void)
 	BlueBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
 
 	RedBuff = (Sprite *)CreateSprite("TextureFiles/RedBuff.png", 200, 200, 8, 1, 1, 0, 0);
-	CreateCollisionBox(RedBuffCollider, &Position, FoodType, 200, 200);
+	CreateCollisionBox(RedBuffCollider, &Position, FoodType, 200, 200, GetObjectID());
 
 	GreenBuff = (Sprite *)CreateSprite("TextureFiles/GreenBuff.png", 200, 200, 8, 1, 1, 0, 0);
-	CreateCollisionBox(GreenBuffCollider, &Position, FoodType, 200, 200);
+	CreateCollisionBox(GreenBuffCollider, &Position, FoodType, 200, 200, GetObjectID());
 
 	BlueBuff = (Sprite *)CreateSprite("TextureFiles/BlueBuff.png", 200, 200, 8, 1, 1, 0, 0);
-	CreateCollisionBox(BlueBuffCollider, &Position, FoodType, 200, 200);
+	CreateCollisionBox(BlueBuffCollider, &Position, FoodType, 200, 200, GetObjectID());
 
 	HideBuffs();
 

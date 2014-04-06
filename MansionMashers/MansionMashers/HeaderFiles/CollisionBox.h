@@ -36,7 +36,7 @@ typedef struct CollisionBox
 
 }CollisionBox;
 
-void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGroup, float width, float height);
+void CreateCollisionBox(CollisionBox *newBox, Vec2 *newPosition, int collisionGroup, float width, float height, int objectID);
 void UpdateCollisionPosition(CollisionBox *Collider, Vec2 *newPosition);
 void UpdateCollider(CollisionBox *Collider, float width, float height);
 void displayCollisionDebug(CollisionBox *Collider);

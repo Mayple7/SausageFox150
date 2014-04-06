@@ -50,7 +50,7 @@ EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, f
 	CurrentSpawner->spawnSide = spawnSide;
 
 	//Create the spawner collision box
-	CreateCollisionBox(&CurrentSpawner->SpawnerCollider, &spawnerPosition, SpawnerType, width, height);
+	CreateCollisionBox(&CurrentSpawner->SpawnerCollider, &spawnerPosition, SpawnerType, width, height, GetObjectID());
 
 	//Create the enemies and set them offscreen and AINone
 	for(i = 0; i < numEnemies; ++i)

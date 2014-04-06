@@ -48,8 +48,8 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	ChangeTextZIndex(CurrentWeapon->WeaponStatsGlyphs, 451);
 
 	CurrentWeapon->WeaponSprite = (Sprite *) CreateSprite(weaponTexture, 256, 256, 22, 1, 1, 0, 0);
-	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height);
-	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, height / 4, height / 4);
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, CurrentWeapon->objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, height / 4, height / 4, CurrentWeapon->objID);
 	CurrentWeapon->WeaponLength = 80.0f;
 
 	nameLen = strlen(CurrentWeapon->WeaponName);
@@ -108,8 +108,8 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 		CurrentWeapon->BonusDefense += 12;
 	}
 
-	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height);
-	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2);
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, CurrentWeapon->objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, CurrentWeapon->objID);
 
 	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f + 25, 50, TextTint, Center, Plain);
 	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);

@@ -89,7 +89,7 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->PositionState = E;
 
 	// Armguy colliders
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 320);
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 320, GetObjectID());
 
 	// Physics stuff
 	InitializeRigidBody(&CurrentBoss->YeahGuyRigidBody, FALSE, 150, 300);

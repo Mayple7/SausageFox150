@@ -228,8 +228,8 @@ void UpdateUpgradeScreenObjects(void)
 void InitializePlayerHurt(Player *CurrentPlayer)
 {
 	HurtOverlay = (Sprite *) CreateSprite("TextureFiles/HurtOverlay.png", 1920, 1080, 1400, 1, 1, 0, 0);
-	HurtOverlay->ScaleX = 1.4f;
-	HurtOverlay->ScaleY = 1.4f;
+	HurtOverlay->ScaleX = 5.0f;
+	HurtOverlay->ScaleY = 5.0f;
 }
 
 /*************************************************************************/
@@ -242,16 +242,16 @@ void UpdatePlayerHurt(Player *CurrentPlayer)
 {
 	HurtOverlay->Position.x = GetCameraXPosition();
 
-	if (HurtOverlay->ScaleX < 1.4f)
+	if (HurtOverlay->ScaleX < 5.0f)
 	{
-		HurtOverlay->ScaleX += GetDeltaTime();
-		HurtOverlay->ScaleY += GetDeltaTime();
+		HurtOverlay->ScaleX += 2 * GetDeltaTime();
+		HurtOverlay->ScaleY += 2 * GetDeltaTime();
 	}
 
 	//Displayer that player damage layer
 	if (lastHealth > CurrentPlayer->CurrentPlayerStats.CurrentHealth && lastHealth > 0 && lastDefense == CurrentPlayer->PlayerWeapon->BonusDefense)
 	{
-		float overlayScalar = 1.0f + 0.18f * ((float)CurrentPlayer->CurrentPlayerStats.CurrentHealth / CurrentPlayer->CurrentPlayerStats.MaxHealth);
+		float overlayScalar = 1.0f + 1.5f * ((float)CurrentPlayer->CurrentPlayerStats.CurrentHealth / CurrentPlayer->CurrentPlayerStats.MaxHealth);
 		HurtOverlay->ScaleX = overlayScalar;
 		HurtOverlay->ScaleY = overlayScalar;
 	}

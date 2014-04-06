@@ -42,7 +42,7 @@ Wall* CreateWall(char* textureName, float width, float height, float xPos, float
 	Vec2Set(&CurrentWall->Position, xPos, yPos);
 	CurrentWall->WallSprite = (Sprite *) CreateSprite(textureName, width, height, 4, 1, 1, xPos, yPos);
 
-	CreateCollisionBox(&CurrentWall->WallCollider, &ColliderPos, WallType, width, height);
+	CreateCollisionBox(&CurrentWall->WallCollider, &ColliderPos, WallType, width, height, GetObjectID());
 	CurrentWall->objID = GetObjectID();
 	InitializeRigidBody(&CurrentWall->WallRigidBody, TRUE, width, height);
 

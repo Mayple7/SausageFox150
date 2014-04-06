@@ -51,7 +51,7 @@ Projectile *CreateProjectile(char *texture, float width, float height, float xPo
 	CurrentProjectile->Position.y = yPos;
 
 	CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite(texture, width, height, 36, 1, 1, xPos, yPos);
-	CreateCollisionBox(&CurrentProjectile->ProjectileAttack, &CurrentProjectile->Position, collisionGroup, width, height);
+	CreateCollisionBox(&CurrentProjectile->ProjectileAttack, &CurrentProjectile->Position, collisionGroup, width, height, GetObjectID());
 
 	//It will go backwards if the speed is negative
 	if (CurrentProjectile->Speed < 0)

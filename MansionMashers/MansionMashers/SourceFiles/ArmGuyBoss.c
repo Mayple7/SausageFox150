@@ -95,10 +95,10 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos)
 	CurrentBoss->ArmGuyParticle = CreateFoxParticleSystem("TextureFiles/ArmGuyParticle.png", CurrentBoss->Position.x, CurrentBoss->Position.y - 260.0f, CurrentBoss->SpinSprite->ZIndex + 1, 0, 5, 0.0f, 90, 110, 1, 1, 90, 0, 750, 0.25f, 0.5f);
 
 	// Armguy colliders
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 430);
-	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 300, 200); 
-	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 100); 
-	CreateCollisionBox(&CurrentBoss->SmashAttack, &CurrentBoss->Position, WeaponEnemy, 800, 200);
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 430, GetObjectID());
+	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 300, 200, GetObjectID()); 
+	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 100, GetObjectID()); 
+	CreateCollisionBox(&CurrentBoss->SmashAttack, &CurrentBoss->Position, WeaponEnemy, 800, 200, GetObjectID());
 
 
 	// Sets the initial position of all colliders

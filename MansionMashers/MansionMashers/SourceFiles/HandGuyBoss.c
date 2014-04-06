@@ -91,9 +91,9 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 
 	// Armguy colliders
 	CurrentBoss->ShoutRadius = 600.0f;
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 100, 300);
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 100, 300, GetObjectID());
 	CurrentBoss->BossCollider.Offset.y = CurrentBoss->BossCollider.height / 4;
-	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 200); 
+	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 200, GetObjectID()); 
 
 	// Sets the initial position of all colliders
 	CurrentBoss->JabAttack.Position.x = CurrentBoss->Position.x - CurrentBoss->JabAttack.width / 2;

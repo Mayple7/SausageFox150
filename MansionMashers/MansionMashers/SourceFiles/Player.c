@@ -92,7 +92,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//      PLAYER COLLISION        //
 	////////////////////////////////*/
-	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT);
+	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, GetObjectID());
 	CurrentPlayer->PlayerCollider.Offset.y = 20;
 	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20;
 	UpdateCollider(&CurrentPlayer->PlayerCollider, CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
@@ -171,6 +171,9 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	InitializePlayerRank(CurrentPlayer);
 	if (GetCurrentState() != GS_CharacterSelect && GetCurrentState() != GS_MapLevel)
 		InitializePlayerHurt(CurrentPlayer);
+
+	//Only the player goes under an ID of 10
+	ObjectID = 10;
 }
 
 /*************************************************************************/
