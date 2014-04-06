@@ -362,7 +362,7 @@ void EventLevel1(void)
 	//////////////////////////////////
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		if(PlayerIsAlive == TRUE)
+		if(PlayerIsAlive == TRUE && BlackOverlay->Alpha < 0.5)
 		{
 			InitializePause(&DrawLevel1);
 			TogglePauseSound(BackSnd);
