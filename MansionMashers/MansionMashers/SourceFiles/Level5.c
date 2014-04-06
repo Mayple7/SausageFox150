@@ -41,7 +41,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int keysObtained;
@@ -100,7 +99,6 @@ void InitializeLevel5(void)
 {
 	Vec3 TextTint;
 	int i;
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	ResetEnemyPanelNumber();
@@ -176,7 +174,7 @@ void InitializeLevel5(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Right Blocker Barrier
-	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, 820, 0);
+	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, 820, 0);
 	RightBarrier->WallSprite->Visible = FALSE;
 
 	/////////////////////////////////

@@ -43,7 +43,7 @@ typedef struct ArmGuyBoss
 }ArmGuyBoss;
 
 void LoadArmGuyBoss(void);
-ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos, int *objID);
+ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos);
 void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss);
 void DetectArmGuyBossCollision(ArmGuyBoss *CurrentBoss);
 void ArmGuyBossCollideWeapon(ArmGuyBoss *CurrentBoss);

@@ -75,8 +75,6 @@ TextGlyphs* BGMLabel;
 float SFXSliderPos, BGMSliderPos;
 static char* volumestring;
 
-static int newID;
-
 /*************************************************************************/
 /*!
 	\brief
@@ -115,7 +113,6 @@ void InitializeOptions(void)
 {
 	Vec3 TextColor;
 	float xPos, yPos;
-	newID = 10;
 
 	ResetObjectList();
 
@@ -166,12 +163,12 @@ void InitializeOptions(void)
 	BGMSliderPos = -BGMSliderGuide->Width / 2 + BGMSliderGuide->Width * BGMVolume;
 
 	//Create the slider buttons
-	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 200, 80, 80, newID++);
+	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 200, 80, 80);
 	SFXSlider->ButtonSprite->ZIndex = 502;
 	SFXSlider->ButtonCollider.width *= 3;
 	SFXSlider->ButtonCollider.height = SFXSliderBack->Height;
 
-	BGMSlider = CreateButton("TextureFiles/fox_head.png", BGMSliderPos, 0, 80, 80, newID++);
+	BGMSlider = CreateButton("TextureFiles/fox_head.png", BGMSliderPos, 0, 80, 80);
 	BGMSlider->ButtonSprite->ZIndex = 502;
 	BGMSlider->ButtonCollider.width *= 3;
 	BGMSlider->ButtonCollider.height = BGMSliderBack->Height;
@@ -202,11 +199,11 @@ void InitializeOptions(void)
 	TextAllVisible(BGMLabel);
 
 	// Create the back button and cheats objects
-	BackButton = CreateButton("TextureFiles/BackButton.png", 0, -400, 300, 112.5f, newID++);
+	BackButton = CreateButton("TextureFiles/BackButton.png", 0, -400, 300, 112.5f);
 
 	//Cheats check mark
 	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 4000, 1, 1, 180, -150);
-	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -250, -150, 100, 100, newID++);
+	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -250, -150, 100, 100);
 	CheatsButton->ButtonSprite->ZIndex = 4000;
 	UpdateCollider(&CheatsButton->ButtonCollider, 800, CheatsButton->ButtonCollider.height);
 	CheatsButton->ButtonCollider.Position.x = 100;
@@ -214,7 +211,7 @@ void InitializeOptions(void)
 
 	//Look at mouse check mark
 	EnableLookAt = (Sprite *) CreateSprite("TextureFiles/FaceMouse.png", 592, 106.4f, 4000, 1, 1, 180, -280);
-	LookAtButton = CreateButton("TextureFiles/CheckBox.png", -250, -280, 100, 100, newID++);
+	LookAtButton = CreateButton("TextureFiles/CheckBox.png", -250, -280, 100, 100);
 	LookAtButton->ButtonSprite->ZIndex = 4000;
 	UpdateCollider(&LookAtButton->ButtonCollider, 800, LookAtButton->ButtonCollider.height);
 	LookAtButton->ButtonCollider.Position.x = 100;

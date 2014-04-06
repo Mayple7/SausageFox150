@@ -92,7 +92,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//      PLAYER COLLISION        //
 	////////////////////////////////*/
-	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, 1);
+	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT);
 	CurrentPlayer->PlayerCollider.Offset.y = 20;
 	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20;
 	UpdateCollider(&CurrentPlayer->PlayerCollider, CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
@@ -112,7 +112,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//    PLAYER WEAPON & STATS     //
 	////////////////////////////////*/
-	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, 2);
+	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256);
 
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
@@ -258,7 +258,7 @@ void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNo
 				theWindOfAFox = CreateProjectile("TextureFiles/Wind.png", 
 												 CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 1.5f, 
 												 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
-												 Wind, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
+												 Wind, WeaponFriendly, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
 
 				theWindOfAFox->ProjectileFOF = PlayerWeapon;
 				theWindOfAFox->ProjectileSprite->ZIndex = 100;

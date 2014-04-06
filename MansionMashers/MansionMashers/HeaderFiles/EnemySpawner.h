@@ -10,7 +10,7 @@ typedef struct EnemySpawner
 	CollisionBox SpawnerCollider;
 
 	int objID;
-	struct Enemy** EnemyArray;
+	struct Enemy **EnemyArray;
 	int numEnemies;
 	int enemyType;
 
@@ -19,7 +19,7 @@ typedef struct EnemySpawner
 
 }EnemySpawner;
 
-EnemySpawner* CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int* objID, int panelId);
-int SpawnEnemies(EnemySpawner* CurrentSpawner);
+EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int panelId);
+int SpawnEnemies(EnemySpawner *CurrentSpawner);
 
 #endif

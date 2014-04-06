@@ -38,7 +38,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 HUD* CurrentHUD;
@@ -80,7 +79,6 @@ void InitializeShop4(void)
 	levelComplete = FALSE;
 	PlayerIsAlive = TRUE;
 	beginningAnimation = TRUE;
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
@@ -90,26 +88,26 @@ void InitializeShop4(void)
 
 	// First shop plackard
 	if(randNum > 98)
-		CreateWeaponShop(-400, -140, newID++, randType, Sausage);
+		CreateWeaponShop(-400, -140, randType, Sausage);
 	else if(randNum > 85)
-		CreateWeaponShop(-400, -140, newID++, randType, Rare);
+		CreateWeaponShop(-400, -140, randType, Rare);
 	else if(randNum > 50)
-		CreateWeaponShop(-400, -140, newID++, randType, Uncommon);
+		CreateWeaponShop(-400, -140, randType, Uncommon);
 	else
-		CreateWeaponShop(-400, -140, newID++, randType, Common);
+		CreateWeaponShop(-400, -140, randType, Common);
 	
 	randNum = (int)((rand() / (float)RAND_MAX) * 50 + 50);
 	randType = (int)((rand() / (float)RAND_MAX) * FoxWeapon);
 
 	// Second shop plackard
 	if(randNum > 98)
-		CreateWeaponShop(600, -140, newID++, randType, Sausage);
+		CreateWeaponShop(600, -140, randType, Sausage);
 	else if(randNum > 85)
-		CreateWeaponShop(600, -140, newID++, randType, Rare);
+		CreateWeaponShop(600, -140, randType, Rare);
 	else if(randNum > 50)
-		CreateWeaponShop(600, -140, newID++, randType, Uncommon);
+		CreateWeaponShop(600, -140, randType, Uncommon);
 	else
-		CreateWeaponShop(600, -140, newID++, randType, Common);
+		CreateWeaponShop(600, -140, randType, Common);
 
 	
 

@@ -171,6 +171,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 #ifndef _DEBUG
 		RemoveDebugMode();
 #endif
+
+		ObjectID = 0; //Start the object IDs
 		
 		while(GetCurrentState() == GetNextState())
 		{

@@ -63,7 +63,6 @@ void CreateUpgradeScreenObjects(void)
 	float camX = GetCameraXPosition();
 	Vec3 TextColor;
 
-	ObjectID = 10;
 	lastUpgrades = -1;
 	UpgradeComplete = FALSE;
 	UpgradesToUpgrade = FALSE;
@@ -80,15 +79,15 @@ void CreateUpgradeScreenObjects(void)
 	ChangeTextZIndex(UpgradesLeft, 4002);
 
 	//Upgrade buttons, all 3
-	UpgradeButton1 = CreateButton("TextureFiles/GinkoHead.png", 400 + camX, -2000, 200, 200, GetObjectID()); //Strength
+	UpgradeButton1 = CreateButton("TextureFiles/GinkoHead.png", 400 + camX, -2000, 200, 200); //Strength
 	UpgradeButton1->ButtonSprite->ZIndex = 4002;
-	UpgradeButton2 = CreateButton("TextureFiles/KayaHead.png", 400 + camX, -2000, 200, 200, GetObjectID()); //Defense
+	UpgradeButton2 = CreateButton("TextureFiles/KayaHead.png", 400 + camX, -2000, 200, 200); //Defense
 	UpgradeButton2->ButtonSprite->ZIndex = 4002;
-	UpgradeButton3 = CreateButton("TextureFiles/HollyHead.png", 400 + camX, -2000, 200, 200, GetObjectID()); //Agility
+	UpgradeButton3 = CreateButton("TextureFiles/HollyHead.png", 400 + camX, -2000, 200, 200); //Agility
 	UpgradeButton3->ButtonSprite->ZIndex = 4002;
 
 	//Done upgrading button
-	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", 400 + camX, -2000, 300, 112.5f, GetObjectID());
+	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", 400 + camX, -2000, 300, 112.5f);
 	MainMapButton->ButtonSprite->ZIndex = 4002;
 }
 

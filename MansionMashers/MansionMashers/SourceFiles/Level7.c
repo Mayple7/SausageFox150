@@ -44,7 +44,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete;
 static int PlayerIsAlive;
 static int beginningAnimation;
@@ -92,7 +91,6 @@ void InitializeLevel7(void)
 	Vec3 TextTint;
 	int i;
 
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	PlayerIsAlive = TRUE;
@@ -143,22 +141,22 @@ void InitializeLevel7(void)
 	//		Platforms			   //
 	/////////////////////////////////
 	//Panel1
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1000.0f, 100.0f, newID++, -460, -225);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1000.0f, 100.0f, -460, -225);
 	Plat->PlatformSprite->Visible = FALSE;
 	//Panel2
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1000.0f, 100.0f, newID++, 2380, -245);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 1000.0f, 100.0f, 2380, -245);
 	Plat->PlatformSprite->Visible = FALSE;
 
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
 	//Far Left Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, -958, 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, -958, 0);
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1->enemyNotCollidable = TRUE;
 
 	//Far Right Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, -958 + 2 * PANELSIZE, 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, -958 + 2 * PANELSIZE, 0);
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1->enemyNotCollidable = TRUE;
 
@@ -178,7 +176,7 @@ void InitializeLevel7(void)
 	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
-	CreateDeathConfirmObjects(&newID);
+	CreateDeathConfirmObjects();
 }
 
 /*************************************************************************/
@@ -216,7 +214,7 @@ void UpdateLevel7(void)
 			else if(EnemyVer == 0)
 				EnemyVer = 2;
 
-			CurrentEnemy = CreateEnemy(EnemyVer, EnemyType, newID++, GetCameraXPosition() + PANELSIZE / 2, GROUNDLEVEL, 0);
+			CurrentEnemy = CreateEnemy(EnemyVer, EnemyType, GetCameraXPosition() + PANELSIZE / 2, GROUNDLEVEL, 0);
 			CurrentEnemy->HomePos.x = GetCameraXPosition() - PANELSIZE / 2;
 			CurrentEnemy->EnemyState = AIIdle;
 
@@ -227,7 +225,7 @@ void UpdateLevel7(void)
 			else if(EnemyVer == 0)
 				EnemyVer = 2;
 
-			CurrentEnemy = CreateEnemy(EnemyVer, EnemyType, newID++, GetCameraXPosition() - PANELSIZE / 2, GROUNDLEVEL, 0);
+			CurrentEnemy = CreateEnemy(EnemyVer, EnemyType, GetCameraXPosition() - PANELSIZE / 2, GROUNDLEVEL, 0);
 			CurrentEnemy->HomePos.x = GetCameraXPosition() + PANELSIZE / 2;
 			CurrentEnemy->EnemyState = AIIdle;
 

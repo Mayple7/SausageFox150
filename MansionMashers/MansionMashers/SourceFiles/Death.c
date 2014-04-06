@@ -33,22 +33,19 @@ static float confirmTimer;
 /*!
 	\brief
 	Creates objects for menu when player dies
-
-	\param newID
-	ID for objects with collision
 */
 /*************************************************************************/
-void CreateDeathConfirmObjects(int *newID)
+void CreateDeathConfirmObjects(void)
 {
 	Vec3 TextTint;
 
 	Vec3Set(&TextTint, 0, 0, 0);
 	DeathConfirm = (Sprite *) CreateSprite("TextureFiles/DeathConfirm.png", 639, 204, 4020, 1, 1, -1920, 100);
 
-	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", -1920, -130, 300, 112.5f, (*newID)++);
+	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", -1920, -130, 300, 112.5f);
 	MainMapButton->ButtonSprite->ZIndex = 4021;
 
-	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f, (*newID)++);
+	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f);
 	RestartButton->ButtonSprite->ZIndex = 4022;
 
 	DeathSnd = CreateSound("Sounds/DeathMusic.wav", LargeSnd);

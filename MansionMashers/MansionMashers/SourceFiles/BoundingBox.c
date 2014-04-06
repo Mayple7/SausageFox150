@@ -76,18 +76,15 @@ void BoundingBoxUpdate(void)
 /*!
 	\brief
 	Creates sprite for the blocker boxes
-
-	\param newID
-	ID for collision objects
 */
 /*************************************************************************/
-void CreateBlockerBoxes(int *newID)
+void CreateBlockerBoxes()
 {
 	// Bounding Box Walls
-	BBWallLeft = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, (*newID)++, 0, 0);
+	BBWallLeft = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, 0, 0);
 	BBWallLeft->WallSprite->Visible = FALSE;
 	BBWallLeft->enemyNotCollidable = TRUE;
-	BBWallRight = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, (*newID)++, 0, 0);
+	BBWallRight = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, 0, 0);
 	BBWallRight->WallSprite->Visible = FALSE;
 	BBWallRight->enemyNotCollidable = TRUE;
 }

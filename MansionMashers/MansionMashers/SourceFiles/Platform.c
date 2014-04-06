@@ -32,7 +32,7 @@
 	A pointer to the platform to be initialized
 */
 /*************************************************************************/
-Platform* CreatePlatform(char* textureName, int collisionGroup, float width, float height, int newID, float xPos, float yPos)
+Platform* CreatePlatform(char* textureName, int collisionGroup, float width, float height, float xPos, float yPos)
 {
 	Platform *CurrentPlatform = AddPlatform();
 	Vec2 ColliderPos;
@@ -41,8 +41,8 @@ Platform* CreatePlatform(char* textureName, int collisionGroup, float width, flo
 	Vec2Set(&CurrentPlatform->Position, xPos, yPos);
 	CurrentPlatform->PlatformSprite = (Sprite *) CreateSprite(textureName, width, height, 4, 1, 1, xPos, yPos);
 
-	CreateCollisionBox(&CurrentPlatform->PlatformCollider, &ColliderPos, collisionGroup, width, height, newID);
-	CurrentPlatform->objID = newID;
+	CreateCollisionBox(&CurrentPlatform->PlatformCollider, &ColliderPos, collisionGroup, width, height);
+	CurrentPlatform->objID = GetObjectID();
 	InitializeRigidBody(&CurrentPlatform->PlatformRigidBody, TRUE, 400, 100);
 
 	return CurrentPlatform;

@@ -15,7 +15,7 @@ typedef struct Button
 
 }Button;
 
-Button *CreateButton(char* texture, float xPos, float yPos, float width, float height, int objID);
+Button *CreateButton(char* texture, float xPos, float yPos, float width, float height);
 void UpdateButtonPosition(Button *CurrentButton, float PosX, float PosY);
 
 #endif

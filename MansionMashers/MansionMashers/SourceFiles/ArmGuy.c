@@ -45,7 +45,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete;
 static int PlayerIsAlive; 
 static int beginningAnimation;
@@ -109,7 +108,6 @@ void InitializeArmGuy(void)
 {
 	Vec3 Tint;
 	int i;
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	levelComplete = FALSE;
@@ -170,15 +168,15 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
-	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -400, -170);
-	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 400, -170);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, -400, -170);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, 400, -170);
 
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
 	//Create Bounding Walls
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
-	RightWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, -1160, 0);
+	RightWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, 1160, 0);
 
 	/////////////////////////////////
 	//			Objects			   //
@@ -191,12 +189,12 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	//			Boss			   //
 	/////////////////////////////////
-	Boss = CreateArmGuyBoss(0, 0, &newID);
+	Boss = CreateArmGuyBoss(0, 0);
 
 	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
-	CreateDeathConfirmObjects(&newID);
+	CreateDeathConfirmObjects();
 
 }
 

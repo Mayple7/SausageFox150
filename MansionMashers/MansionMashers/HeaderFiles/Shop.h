@@ -22,6 +22,6 @@ typedef struct WeaponShop
 
 void getWeaponCoin(WeaponShop *newShop, int weaponRarity);
 void getItemTextName(WeaponShop *newShop, int collisionGroup, Vec3 TextTint, float shopPosX, float shopPosY, int weaponRarity);
-void CreateWeaponShop(float shopPosX, float shopPosY, int newID, int collisionGroup, int weaponRarity);
+void CreateWeaponShop(float shopPosX, float shopPosY, int collisionGroup, int weaponRarity);
 
 #endif

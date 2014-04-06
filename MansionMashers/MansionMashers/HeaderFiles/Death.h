@@ -1,7 +1,7 @@
 #ifndef FOX_DEATH
 #define FOX_DEATH
 
-void CreateDeathConfirmObjects(int* newID);
+void CreateDeathConfirmObjects(void);
 void UpdateDeathConfirmObjects(void);
 
 
