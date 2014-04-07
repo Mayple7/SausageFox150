@@ -774,14 +774,15 @@ void DetectPlayerCollision(void)
 			//Continue with your collision venture
 			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &wList->WeaponPickup);
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, wList->WeaponPickup.collisionID);
+			
+			TextAllNotVisible(wList->WeaponGlyphs);
+			TextAllNotVisible(wList->WeaponStatsGlyphs);
+			TextAllNotVisible(CurrentPlayer.ComparisonGlyphs);
+			wList->WeaponHoverBackground->Visible = FALSE;
+
 			if(hit)
 			{
 				float currentDist = Vec2SquareDistance(&CurrentPlayer.Position, &wList->WeaponPickup.Position);
-
-				TextAllNotVisible(wList->WeaponGlyphs);
-				TextAllNotVisible(wList->WeaponStatsGlyphs);
-				TextAllNotVisible(CurrentPlayer.ComparisonGlyphs);
-				wList->WeaponHoverBackground->Visible = FALSE;
 
 				if(currentDist < closestDropLength)
 				{
@@ -819,13 +820,6 @@ void DetectPlayerCollision(void)
 				{
 					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = 0;
-					if(wList->WeaponGlyphs->Glyph->Visible)
-					{
-						TextAllNotVisible(wList->WeaponGlyphs);
-						TextAllNotVisible(wList->WeaponStatsGlyphs);
-						TextAllNotVisible(CurrentPlayer.ComparisonGlyphs);
-						wList->WeaponHoverBackground->Visible = FALSE;
-					}
 				}
 			}
 		}

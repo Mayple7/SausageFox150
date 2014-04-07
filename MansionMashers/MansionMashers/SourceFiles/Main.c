@@ -192,10 +192,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 				FoxInput_GetWorldPosition(&worldX, &worldY);
 				printf("%f, %f\n", (worldX) / GetLoadRatio(), (worldY) / GetLoadRatio());
 			}
-			if(FoxInput_KeyTriggered('M'))
-			{
-				SetNextState(GS_MapLevel);
-			}
 
 #endif
 
