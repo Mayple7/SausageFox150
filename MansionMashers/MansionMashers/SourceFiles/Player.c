@@ -1365,6 +1365,7 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 
 	CurrentPlayer->CurrentPlayerStats.Rank = 1;
 	CurrentPlayer->CurrentPlayerStats.Experience = 0;
+	CurrentPlayer->CurrentPlayerStats.Upgrades = 0;
 
 	CurrentPlayer->CurrentPlayerStats.Money = 15;
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer->CurrentPlayerStats.MaxHealth;
