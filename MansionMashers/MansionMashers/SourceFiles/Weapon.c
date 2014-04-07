@@ -252,10 +252,12 @@ void WeaponOnTheRun(Weapon* CurrentWeapon)
 		CurrentWeapon->WeaponPickup.Position = CurrentWeapon->WeaponSprite->Position;
 		CurrentWeapon->WeaponHoverBackground->Position.x = CurrentWeapon->WeaponPickup.Position.x;
 		CurrentWeapon->WeaponHoverBackground->Position.y = CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f;
-		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f + CurrentWeapon->WeaponGlyphs->Glyph->Height / 2));
-		ChangeTextPosition(CurrentWeapon->WeaponGlyphs, glyphPos, Center);
-		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f - CurrentWeapon->WeaponGlyphs->Glyph->Height / 2));
+		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f - CurrentWeapon->WeaponGlyphs->Glyph->Height);
+		ChangeTextPosition(CurrentPlayer.ComparisonGlyphs, glyphPos, Center);
+		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f);
 		ChangeTextPosition(CurrentWeapon->WeaponStatsGlyphs, glyphPos, Center);
+		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f + CurrentWeapon->WeaponGlyphs->Glyph->Height);
+		ChangeTextPosition(CurrentWeapon->WeaponGlyphs, glyphPos, Center);
 
 		if (CurrentWeapon->WeaponParticle)
 		{
