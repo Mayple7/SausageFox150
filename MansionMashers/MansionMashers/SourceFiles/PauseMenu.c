@@ -62,8 +62,6 @@ void (*LevelToDraw)();
 float SFXSliderPos, BGMSliderPos;
 static char* volumestring;
 
-static int newID;
-
 void InitializePause(void (*DrawLevel)())
 {
 	float camX;
@@ -78,8 +76,6 @@ void InitializePause(void (*DrawLevel)())
 	volumestring[2] = '0';
 	volumestring[3] = (char)'%%';
 	volumestring[4] = '\0';
-
-	newID = 10;
 
 	camX = GetCameraXPosition();
 	//printf("%f\n", camX);
@@ -102,12 +98,12 @@ void InitializePause(void (*DrawLevel)())
 	SFXSliderPos = SFXSliderGuide->Position.x - SFXSliderGuide->Width / 2 + SFXSliderGuide->Width * SFXVolume;
 	BGMSliderPos = BGMSliderGuide->Position.x - BGMSliderGuide->Width / 2 + BGMSliderGuide->Width * BGMVolume;
 
-	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 200, 80, 80, newID++);
+	SFXSlider = CreateButton("TextureFiles/fox_head.png", SFXSliderPos, 200, 80, 80);
 	SFXSlider->ButtonSprite->ZIndex = 4002;
 	SFXSlider->ButtonCollider.width *= 3;
 	SFXSlider->ButtonCollider.height = SFXSliderBack->Height;
 
-	BGMSlider = CreateButton("TextureFiles/fox_head.png", BGMSliderPos, 0, 80, 80, newID++);
+	BGMSlider = CreateButton("TextureFiles/fox_head.png", BGMSliderPos, 0, 80, 80);
 	BGMSlider->ButtonSprite->ZIndex = 4002;
 	BGMSlider->ButtonCollider.width *= 3;
 	BGMSlider->ButtonCollider.height = BGMSliderBack->Height;
@@ -131,7 +127,7 @@ void InitializePause(void (*DrawLevel)())
 
 	//Cheats check mark
 	EnableCheats = (Sprite *) CreateSprite("TextureFiles/EnableCheats.png", 592, 106.4f, 4000, 1, 1, 180 + camX, -150);
-	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -250 + camX, -150, 100, 100, newID++);
+	CheatsButton = CreateButton("TextureFiles/CheckBox.png", -250 + camX, -150, 100, 100);
 	CheatsButton->ButtonSprite->ZIndex = 4000;
 	UpdateCollider(&CheatsButton->ButtonCollider, 800, CheatsButton->ButtonCollider.height);
 	CheatsButton->ButtonCollider.Position.x = camX + 100;
@@ -142,7 +138,7 @@ void InitializePause(void (*DrawLevel)())
 
 	//Look at mouse check mark
 	EnableLookAt = (Sprite *) CreateSprite("TextureFiles/FaceMouse.png", 592, 106.4f, 4000, 1, 1, 180 + camX, -280);
-	LookAtButton = CreateButton("TextureFiles/CheckBox.png", -250 + camX, -280, 100, 100, newID++);
+	LookAtButton = CreateButton("TextureFiles/CheckBox.png", -250 + camX, -280, 100, 100);
 	LookAtButton->ButtonSprite->ZIndex = 4000;
 	UpdateCollider(&LookAtButton->ButtonCollider, 800, LookAtButton->ButtonCollider.height);
 	LookAtButton->ButtonCollider.Position.x = camX + 100;
@@ -159,15 +155,15 @@ void InitializePause(void (*DrawLevel)())
 	// Check if we pause the map level or not
 	if(GetCurrentState() == GS_MapLevel)
 	{
-		ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -250 + camX, -400, 300, 112.5f, newID++);
-		MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250 + camX, -400, 300, 112.5f, newID++);
+		ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -250 + camX, -400, 300, 112.5f);
+		MainMenuButton = CreateButton("TextureFiles/MainMenuButton.png", 250 + camX, -400, 300, 112.5f);
 	}
 	else
 	{
-		ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -400 + camX, -400, 300, 112.5f, newID++);
-		RestartButton = CreateButton("TextureFiles/RestartButton.png", camX, -400, 300, 112.5f, newID++);	
+		ResumeButton = CreateButton("TextureFiles/ResumeButton.png", -400 + camX, -400, 300, 112.5f);
+		RestartButton = CreateButton("TextureFiles/RestartButton.png", camX, -400, 300, 112.5f);	
 		RestartButton->ButtonSprite->ZIndex = 4002;
-		MainMenuButton = CreateButton("TextureFiles/GoToMapButton.png", 400 + camX, -400, 300, 112.5f, newID++);
+		MainMenuButton = CreateButton("TextureFiles/GoToMapButton.png", 400 + camX, -400, 300, 112.5f);
 	}
 
 	ResumeButton->ButtonSprite->ZIndex = 4002;

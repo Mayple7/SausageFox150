@@ -16,6 +16,7 @@ int searchHitArray(int *Array, int length, int target)
 		else if((Array[i] == 0 || Array[i] == -1) && openSlot == length)
 		{
 			openSlot = i;
+			break;
 		}
 	}
 	

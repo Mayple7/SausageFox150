@@ -14,7 +14,7 @@ typedef struct Platform
 	int objID;
 }Platform;
 
-Platform* CreatePlatform(char* textureName, int collisionGroup, float width, float height, int objID, float xPos, float yPos);
+Platform* CreatePlatform(char* textureName, int collisionGroup, float width, float height, float xPos, float yPos);
 void UpdatePlatformPosition(Platform* CurrentPlatform, float x, float y);
 
 #endif

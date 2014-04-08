@@ -46,7 +46,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int enemiesDefeated;
@@ -137,7 +136,6 @@ void InitializeLevel2(void)
 	IFSayBuff = FALSE;
 	IFSayPlat = FALSE;
 
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	ResetEnemyPanelNumber();
@@ -208,14 +206,14 @@ void InitializeLevel2(void)
 	//		Platforms			   //
 	/////////////////////////////////
 	//Panel2
-	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 2050, -340);
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, 2050, -340);
 	Crate->PlatformSprite->Visible = FALSE;
-	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, newID++, 2170, -350);
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 100.0f, 2170, -350);
 	Crate->PlatformSprite->Visible = FALSE;
 	//Panel3
-	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 3640, -240);
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, 3640, -240);
 	Crate->PlatformSprite->Visible = FALSE;
-	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 90.0f, 100.0f, newID++, 3765, -210);
+	Crate = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 90.0f, 100.0f, 3765, -210);
 	Crate->PlatformSprite->Visible = FALSE;
 
 
@@ -223,41 +221,41 @@ void InitializeLevel2(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Hidden Wall for beginning animation
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920, 500.0f, newID++, -1920, -432);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920, 500.0f, -1920, -432);
 	Wall1->WallSprite->Visible = FALSE;
 	
 	//Stairs
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 450.0f, 100.0f, newID++, -869, -232);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 450.0f, 100.0f, -869, -232);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -618, -281);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -618, -281);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -559, -336);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -559, -336);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -488, -370);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -488, -370);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -408, -420);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -408, -420);
 	Wall1->WallSprite->Visible = FALSE;
 	
 	//Left Bounding Wall
-	LeftBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
+	LeftBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, -958, 0);
 	LeftBarrier->WallSprite->Visible = FALSE;
 	//Stone Door
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 540.0f, newID++, 810, 140);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 540.0f, 810, 140);
 	Wall1->WallSprite->Visible = FALSE;
 	//Door Hang Over
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, newID++, -903, 226);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -903, 226);
 	Wall1->WallSprite->Visible = FALSE;
 	//Top of Watch Tower
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, 4020, 370);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, 4020, 370);
 	Wall1->WallSprite->Visible = FALSE;
 	//Bottom of Watch Tower
-	WTBot = CreateWall("TextureFiles/BlankPlatform.png", 260.0f, 65.0f, newID++, 4025, 22);
+	WTBot = CreateWall("TextureFiles/BlankPlatform.png", 260.0f, 65.0f, 4025, 22);
 	WTBot->WallSprite->Visible = FALSE;
 	//Top of Forest Door
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 250.0f, newID++, 6630, 2);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 250.0f, 6630, 2);
 	Wall1->WallSprite->Visible = FALSE;
 	//Right Bounding Wall
-	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, 6630, 0);
+	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, 6630, 0);
 	RightBarrier->WallSprite->Visible = FALSE;
 
 	/////////////////////////////////
@@ -266,25 +264,25 @@ void InitializeLevel2(void)
 	//Panel2
 	Vec2Set(&SpawnerLocation, PANELSIZE + PANELSIZE / 4, 0);
 	//Left
-	Spawners[0] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	Spawners[0] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, 1);
 	//Right
-	Spawners[1] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+	Spawners[1] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 1);
 
 	//Panel3
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 2), 0);
 	//Left
-	Spawners[2] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	Spawners[2] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, 2);
 	//Right
-	Spawners[3] = CreateEnemySpawner(1, BasicRanged, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	Spawners[3] = CreateEnemySpawner(1, BasicRanged, TRUE, 100, 1080, SpawnerLocation, 2);
 	//PreSpawned
-	Pan3Enemy = CreateEnemy(BasicMelee, EnemyType, newID++, WTBot->Position.x, 300, 2);
+	Pan3Enemy = CreateEnemy(BasicMelee, EnemyType, WTBot->Position.x, 300, 2);
 
 	//Panel4
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 3 - PANELSIZE / 4), 0);
 	//Left
 	Spawners[4] = NULL;
 	//Right
-	Spawners[5] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
+	Spawners[5] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 3);
 
 	// Set number of enemies remaining
 	enemiesRemaining = 0;
@@ -301,7 +299,7 @@ void InitializeLevel2(void)
 	Arrow1->Visible = FALSE;
 	Arrow1Grow = FALSE;
 
-	Strength1 = CreateFood(Strength, 100, 100, PANELSIZE * 2 + 190, 250, newID++);
+	Strength1 = CreateFood(Strength, 100, 100, PANELSIZE * 2 + 190, 250);
 
 	CreatePaperScroll(GetCameraXPosition(), 150);
 	
@@ -321,9 +319,8 @@ void InitializeLevel2(void)
 	/////////////////////////////////
 
 	///Last thing in initialize
-	CreateDeathConfirmObjects(&newID);
-
-
+	CreateDeathConfirmObjects();
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -446,7 +443,7 @@ void EventLevel2(void)
 	////////////////////////////////*/
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		if(PlayerIsAlive == TRUE)
+		if(PlayerIsAlive && !levelComplete)
 		{
 			InitializePause(&DrawLevel2);
 			TogglePauseSound(BackSnd);
@@ -496,6 +493,8 @@ void EventLevel2(void)
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
+	else
+		LevelCompletion();
 
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -607,9 +606,6 @@ void EventLevel2(void)
 	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && enemiesDefeated)
 	{
 		levelComplete = TRUE;
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
 	}
 
 	//If player dies

@@ -73,7 +73,6 @@ enum Buttons { EP1But, EP2But, TutBut, QuitBut};
 static int selectedButton;								//0: EP1, 1: EP2, 2: tutorial, 3: quit
 static int deleteSave; // If true, dialogue box to delete save is up
 static int exitGame;
-static int newID;
 static int canLoad;
 
 //All those static ints for the animation
@@ -140,7 +139,6 @@ void InitializeMainMenu(void)
 	firstTextureNum = MAX_TEXTURES + 1;
 	secondTextureNum = MAX_TEXTURES + 1;
 
-	newID = 10;
 	// Reset the object list
 	ResetObjectList();
 	deleteSave = FALSE;
@@ -186,11 +184,11 @@ void InitializeMainMenu(void)
 	DogScrollBottom = (Sprite *) CreateSprite("TextureFiles/ScrollBottom.png", 447, 44, 9, 1, 1,  300, 60);
 
 	//Menu buttons
-	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -130, 394, 394, newID++);
-	LoadGameButton = CreateButton("TextureFiles/LoadGameButton.png", -290, -8, 439, 170, newID++);
-	OptionsButton = CreateButton("TextureFiles/OptionsButton.png", 290, -8, 439, 170, newID++);
-	CreditsButton = CreateButton("TextureFiles/CreditsButton.png", -290, -270, 439, 170, newID++);
-	QuitGameButton = CreateButton("TextureFiles/QuitGameButton.png", 290, -270, 439, 170, newID++);
+	NewGameButton = CreateButton("TextureFiles/NewGameButton.png", 0, -130, 394, 394);
+	LoadGameButton = CreateButton("TextureFiles/LoadGameButton.png", -290, -8, 439, 170);
+	OptionsButton = CreateButton("TextureFiles/OptionsButton.png", 290, -8, 439, 170);
+	CreditsButton = CreateButton("TextureFiles/CreditsButton.png", -290, -270, 439, 170);
+	QuitGameButton = CreateButton("TextureFiles/QuitGameButton.png", 290, -270, 439, 170);
 
 	//Update button Z index
 	NewGameButton->ButtonSprite->ZIndex = 10;
@@ -210,15 +208,15 @@ void InitializeMainMenu(void)
 	BlackBackground->Tint = Tint;
 	BlackBackground->Alpha = 0.5f;
 	DeleteText = (Sprite *) CreateSprite("TextureFiles/DeleteText.png", 651, 334, 500, 1, 1, 0, 100);
-	YesButton = CreateButton("TextureFiles/DeleteButton.png", -300, -200, 400, 150, newID++);
+	YesButton = CreateButton("TextureFiles/DeleteButton.png", -300, -200, 400, 150);
 	YesButton->ButtonSprite->ZIndex = 500;
-	NoButton = CreateButton("TextureFiles/BackButton.png", 300, -200, 400, 150, newID++);
+	NoButton = CreateButton("TextureFiles/BackButton.png", 300, -200, 400, 150);
 	NoButton->ButtonSprite->ZIndex = 500;
 
 	//Exit Game Confirmation
 	Vec3Set(&Tint, 0, 0, 0);
 	ExitConfirm = (Sprite *) CreateSprite("TextureFiles/ExitConfirm.png", 639, 204, 500, 1, 1, 0, 100);
-	ExitButton = CreateButton("TextureFiles/ExitButton.png", -300, -200, 400, 150, newID++);
+	ExitButton = CreateButton("TextureFiles/ExitButton.png", -300, -200, 400, 150);
 	ExitButton->ButtonSprite->ZIndex = 500;
 
 	//Should not be visible at the start

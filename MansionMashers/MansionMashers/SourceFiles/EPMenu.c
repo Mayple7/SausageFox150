@@ -25,7 +25,6 @@ Button* NoButton;
 enum Buttons { EP1But, EP2But, TutBut, QuitBut};
 int selectedEPButton;								//0: EP1, 1: EP2, 2: tutorial, 3: quit
 static int deleteSave; // If true, dialogue box to delete save is up
-static int newID;
 
 /*************************************************************************/
 /*!
@@ -42,7 +41,6 @@ void LoadEPMenu(void)
 void InitializeEPMenu(void)
 {
 	Vec3 Tint;
-	newID = 10;
 	// Reset the object list
 	ResetObjectList();
 
@@ -51,16 +49,16 @@ void InitializeEPMenu(void)
 	GameLogo = (Sprite *) CreateSprite("TextureFiles/MansionMashersLogo.png", 1920.0f, 1080.0f, 1, 1, 1, 0, 0);
 
 	// Create the start button
-	EP1Button = CreateButton("TextureFiles/EP1_button.png", -500, 300, 300.0f, 100.0f, newID++);
+	EP1Button = CreateButton("TextureFiles/EP1_button.png", -500, 300, 300.0f, 100.0f);
 
 	// Create the start button
-	EP2Button = CreateButton("TextureFiles/EP2_button.png",  500, 300, 300.0f, 100.0f, newID++);
+	EP2Button = CreateButton("TextureFiles/EP2_button.png",  500, 300, 300.0f, 100.0f);
 
 	// Creates the showcase button
-	TutorialButton = CreateButton("TextureFiles/tutorial_button.png", -500, -300, 300.0f, 100.0f, newID++);
+	TutorialButton = CreateButton("TextureFiles/tutorial_button.png", -500, -300, 300.0f, 100.0f);
 	
 	// Creates the exit button
-	QuitButton = CreateButton("TextureFiles/quit_button.png", 500, -300, 300.0f, 100.0f, newID++);
+	QuitButton = CreateButton("TextureFiles/quit_button.png", 500, -300, 300.0f, 100.0f);
 
 	// Creates the selector button - set to default position of the start button
 	Selector = (Sprite *) CreateSprite("TextureFiles/Selector.png", EP1Button->ButtonSprite->Width * 1.1f, EP1Button->ButtonSprite->Height * 1.2f, 2, 1, 1, 100, 0);
@@ -70,9 +68,9 @@ void InitializeEPMenu(void)
 	BlackBackground->Tint = Tint;
 	BlackBackground->Alpha = 0.5f;
 	DeleteText = (Sprite *) CreateSprite("TextureFiles/DeleteText.png", 651, 334, 500, 1, 1, 0, 100);
-	YesButton = CreateButton("TextureFiles/DeleteButton.png", -300, -200, 400, 150, newID++);
+	YesButton = CreateButton("TextureFiles/DeleteButton.png", -300, -200, 400, 150);
 	YesButton->ButtonSprite->ZIndex = 500;
-	NoButton = CreateButton("TextureFiles/BackButton.png", 300, -200, 400, 150, newID++);
+	NoButton = CreateButton("TextureFiles/BackButton.png", 300, -200, 400, 150);
 	NoButton->ButtonSprite->ZIndex = 500;
 
 	BlackBackground->Visible = FALSE;

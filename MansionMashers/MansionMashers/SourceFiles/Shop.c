@@ -123,7 +123,7 @@ void getItemTextName(WeaponShop *newShop, int collisionGroup, Vec3 TextTint, flo
 	Creates a Weapon Shop from given variables
 */
 /*************************************************************************/
-void CreateWeaponShop(float shopPosX, float shopPosY, int newID, int collisionGroup, int weaponRarity)
+void CreateWeaponShop(float shopPosX, float shopPosY, int collisionGroup, int weaponRarity)
 {
 	Vec3 TextTint;
 	WeaponShop *newShop = AddWeaponShop();
@@ -133,7 +133,7 @@ void CreateWeaponShop(float shopPosX, float shopPosY, int newID, int collisionGr
 	newShop->ShopTextSprite = (Sprite *) CreateSprite("TextureFiles/WoodSignText.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
 
 	//Weapon
-	newShop->Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, newID, shopPosX + 50, shopPosY);
+	newShop->Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, shopPosX + 50, shopPosY);
 	newShop->Weapon->WeaponSprite->Rotation = FOX_PI / 2;
 	newShop->Weapon->CurrentShop = newShop;
 	FreeParticleSystem(newShop->Weapon->WeaponParticle);

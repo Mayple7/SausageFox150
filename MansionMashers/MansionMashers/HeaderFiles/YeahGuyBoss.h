@@ -42,7 +42,7 @@ typedef struct YeahGuyBoss
 }YeahGuyBoss;
 
 void LoadYeahGuyBoss(void);
-YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos, int *objID);
+YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos);
 void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss);
 void DetectYeahGuyBossCollision(YeahGuyBoss *CurrentBoss, int CurrentBuff);
 void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff);

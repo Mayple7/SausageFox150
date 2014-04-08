@@ -39,8 +39,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
-
 
 static int iconPosition;
 
@@ -112,7 +110,6 @@ void InitializeMapLevel(void)
 
 	//Set the grass color for the background
 	Vec3Set(&Tint, 0.0f, 0.5f, 0.0f);
-	newID = 10;
 
 	//Reset me captain
 	ResetObjectList();
@@ -206,27 +203,27 @@ void InitializeMapLevel(void)
 		break;
 	}
 
-	Tutorial = CreateButton("TextureFiles/RedX.png", -652.52f, -233.28f, 175, 75, newID++);
-	Level1 = CreateButton("TextureFiles/RedX.png", -432.86f, -221.43f, 175, 75, newID++);
-	Level2 = CreateButton("TextureFiles/RedX.png", -113.06f, -120.21f, 175, 75, newID++);
+	Tutorial = CreateButton("TextureFiles/RedX.png", -652.52f, -233.28f, 175, 75);
+	Level1 = CreateButton("TextureFiles/RedX.png", -432.86f, -221.43f, 175, 75);
+	Level2 = CreateButton("TextureFiles/RedX.png", -113.06f, -120.21f, 175, 75);
 
-	Shop1 = CreateButton("TextureFiles/RedX.png", -211.05f, 97.29f, 175, 75, newID++);
-	Level3 = CreateButton("TextureFiles/RedX.png", 114.14f, -273.12f, 175, 75, newID++);
-	Level4 = CreateButton("TextureFiles/RedX.png", 122.75f, 236.19f, 175, 75, newID++);
+	Shop1 = CreateButton("TextureFiles/RedX.png", -211.05f, 97.29f, 175, 75);
+	Level3 = CreateButton("TextureFiles/RedX.png", 114.14f, -273.12f, 175, 75);
+	Level4 = CreateButton("TextureFiles/RedX.png", 122.75f, 236.19f, 175, 75);
 
-	ArmGuy = CreateButton("TextureFiles/RedX.png", 388.71f, -235.43f, 175, 75, newID++);
-	Shop2 = CreateButton("TextureFiles/RedX.png", 627.76f, -258.04f, 175, 75, newID++);
+	ArmGuy = CreateButton("TextureFiles/RedX.png", 388.71f, -235.43f, 175, 75);
+	Shop2 = CreateButton("TextureFiles/RedX.png", 627.76f, -258.04f, 175, 75);
 
-	HandGuy = CreateButton("TextureFiles/RedX.png", 386.56f, 184.51f, 175, 75, newID++);
-	Shop3 = CreateButton("TextureFiles/RedX.png", 606.22f, 186.66f, 175, 75, newID++);
+	HandGuy = CreateButton("TextureFiles/RedX.png", 386.56f, 184.51f, 175, 75);
+	Shop3 = CreateButton("TextureFiles/RedX.png", 606.22f, 186.66f, 175, 75);
 
-	Level5 = CreateButton("TextureFiles/RedX.png", 400.56f, 5.77f, 175, 75, newID++);
-	Level6 = CreateButton("TextureFiles/RedX.png", 658.98f, -28.69f, 175, 75, newID++);
-	YeahGuy = CreateButton("TextureFiles/RedX.png", 1064.93f, -86.83f, 175, 75, newID++);
+	Level5 = CreateButton("TextureFiles/RedX.png", 400.56f, 5.77f, 175, 75);
+	Level6 = CreateButton("TextureFiles/RedX.png", 658.98f, -28.69f, 175, 75);
+	YeahGuy = CreateButton("TextureFiles/RedX.png", 1064.93f, -86.83f, 175, 75);
 
-	Shop4 = CreateButton("TextureFiles/RedX.png", 1106.91f, 155.44f, 175, 75, newID++);
-	Level7 = CreateButton("TextureFiles/RedX.png", 1324.43f, -121.29f, 175, 75, newID++);
-	Kevin = CreateButton("TextureFiles/RedX.png", 1582.85f, -139.60f, 175, 75, newID++);
+	Shop4 = CreateButton("TextureFiles/RedX.png", 1106.91f, 155.44f, 175, 75);
+	Level7 = CreateButton("TextureFiles/RedX.png", 1324.43f, -121.29f, 175, 75);
+	Kevin = CreateButton("TextureFiles/RedX.png", 1582.85f, -139.60f, 175, 75);
 
 	Tutorial->ButtonSprite->Visible = FALSE;
 	Level1->ButtonSprite->Visible = FALSE;

@@ -60,7 +60,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int counter;
@@ -110,7 +109,6 @@ void InitializeLevel3(void)
 {
 	int i;
 	Vec3 TextTint;
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	ResetGatedCamera();
@@ -166,9 +164,9 @@ void InitializeLevel3(void)
 	//		Platforms			   //
 	/////////////////////////////////
 	//Panel1
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 170.0f, 100.0f, newID++, 270, -250);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 170.0f, 100.0f, 270, -250);
 	Plat->PlatformSprite->Visible = FALSE;
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, newID++, 560, -30);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 150.0f, 100.0f, 560, -30);
 	Plat->PlatformSprite->Visible = FALSE;
 
 
@@ -176,19 +174,19 @@ void InitializeLevel3(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Ceiling
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, newID++, 930, 590);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, 930, 590);
 	Wall1->WallSprite->Visible = FALSE;
 	//Bounding Walls
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -958, 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, -958, 0);
 	Wall1->WallSprite->Visible = FALSE;
-	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 750.0f, newID++, 958, -170);
+	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 750.0f, 958, -170);
 	Wall1->WallSprite->Visible = FALSE;
 	//Final Platform (needs to have wall properties
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 250.0f, 780.0f, newID++, 880, -105);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 250.0f, 780.0f, 880, -105);
 	Wall1->WallSprite->Visible = FALSE;
 
 	//Temporary Bounding Wall until rock pile is finalized
-	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, newID++, 800, -340);
+	//Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 780.0f, 800, -340);
 	Wall1->WallSprite->Visible = FALSE;
 
 	

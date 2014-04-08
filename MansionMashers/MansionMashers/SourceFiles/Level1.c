@@ -48,7 +48,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int PlayerIsAlive; 
@@ -119,7 +118,6 @@ void InitializeLevel1(void)
 	levelComplete = FALSE;
 	PlayerIsAlive = TRUE;
 	numPanels = 3;
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	ResetEnemyPanelNumber();
@@ -178,33 +176,33 @@ void InitializeLevel1(void)
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -628, -285);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, -628, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, -288, -285);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, -288, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 68, -285);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, 68, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, newID++, 450, -285);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 100.0f, 40.0f, 450, -285);
 	Table1->PlatformSprite->Visible = FALSE;
 
-	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 290.0f, 40.0f, newID++, 1774, -255);
+	Table1 = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 290.0f, 40.0f, 1774, -255);
 	Table1->PlatformSprite->Visible = FALSE;
 	
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 865, 130);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, 865, 130);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -900, 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, -900, 0);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, newID++, 2785, 130);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, 2785, 130);
 	Wall1->WallSprite->Visible = FALSE;
 	
 	// Blocker Box Walls
-	CreateBlockerBoxes(&newID);	
+	CreateBlockerBoxes();	
 
 	/////////////////////////////////
 	//			Particles		   //
@@ -221,22 +219,22 @@ void InitializeLevel1(void)
 	//First Spawner Left (none so set to null
 	Spawners[0] = NULL;
 	//First Spawner Right
-	Spawners[1] = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
+	Spawners[1] = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 0);
 
 	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
 	//2nd Spawner Left
-	Spawners[2] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	Spawners[2] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, 1);
 	//2nd Spawner Right
-	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 1);
 
 	Vec2Set(&SpawnerLocation, 1.90f * PANELSIZE, 0);
 	//3rd Spawner Left
-	Spawners[4] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	Spawners[4] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, 2);
 	//3rd Spawner Right
-	Spawners[5] = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	Spawners[5] = CreateEnemySpawner(1, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 2);
 
-	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
-	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, newID++, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
+	SetEnemy1 = CreateEnemy(BasicMelee, EnemyType, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
+	SetEnemy2 = CreateEnemy(BasicMelee, EnemyType, 2.25f * PANELSIZE, GROUNDLEVEL, 2);
 	SetEnemy1->HomePos.x = 2 * PANELSIZE;
 	SetEnemy2->HomePos.x = 2 * PANELSIZE;
 
@@ -267,7 +265,8 @@ void InitializeLevel1(void)
 	/////////////////////////////////
 
 	///Last thing in initialize
-	CreateDeathConfirmObjects(&newID);
+	CreateDeathConfirmObjects();
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -331,7 +330,7 @@ void FreeLevel1(void)
 
 	//Only save stats if the level was actually completed
 	if (levelComplete)
-		LevelCompletion(&CurrentPlayer);
+		SavePlayer(&CurrentPlayer);
 
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
@@ -363,7 +362,7 @@ void EventLevel1(void)
 	//////////////////////////////////
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		if(PlayerIsAlive == TRUE)
+		if(PlayerIsAlive && !levelComplete)
 		{
 			InitializePause(&DrawLevel1);
 			TogglePauseSound(BackSnd);
@@ -390,7 +389,7 @@ void EventLevel1(void)
 		// Fade in the level
 		if(BlackOverlay->Alpha > 0)
 		{
-			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+			BlackOverlay->Alpha -= GetDeltaTime();
 		}
 		// Makes the player walk into view
 		else
@@ -410,12 +409,7 @@ void EventLevel1(void)
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
 	else
-	{
-		BlackOverlay->Position.x = GetCameraXPosition();
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
-	}
+		LevelCompletion();
 
 	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //

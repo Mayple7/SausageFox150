@@ -15,7 +15,7 @@ typedef struct Wall
 	int objID;
 }Wall;
 
-Wall* CreateWall(char* textureName, float width, float height, int objID, float xPos, float yPos);
+Wall* CreateWall(char* textureName, float width, float height, float xPos, float yPos);
 void UpdateWallPosition(Wall* CurrentWall, float x, float y);
 
 #endif

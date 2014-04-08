@@ -37,7 +37,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete = FALSE;
 TextGlyphs* LevelName;
 
@@ -63,7 +62,6 @@ void InitializeLevel(void)
 {
 	Vec3 TextTint;
 
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 

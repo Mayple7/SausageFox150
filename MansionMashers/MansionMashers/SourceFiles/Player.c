@@ -92,7 +92,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//      PLAYER COLLISION        //
 	////////////////////////////////*/
-	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, 1);
+	CreateCollisionBox(&CurrentPlayer->PlayerCollider, &CurrentPlayer->Position, PlayerType, PLAYER_WIDTH, PLAYER_HEIGHT, GetObjectID());
 	CurrentPlayer->PlayerCollider.Offset.y = 20;
 	CurrentPlayer->PlayerCollider.width = CurrentPlayer->PlayerCollider.width - 20;
 	UpdateCollider(&CurrentPlayer->PlayerCollider, CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
@@ -112,7 +112,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//    PLAYER WEAPON & STATS     //
 	////////////////////////////////*/
-	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256, 2);
+	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256);
 
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
@@ -171,6 +171,9 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	InitializePlayerRank(CurrentPlayer);
 	if (GetCurrentState() != GS_CharacterSelect && GetCurrentState() != GS_MapLevel)
 		InitializePlayerHurt(CurrentPlayer);
+
+	//Only the player goes under an ID of 10
+	ObjectID = 10;
 }
 
 /*************************************************************************/
@@ -258,7 +261,7 @@ void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNo
 				theWindOfAFox = CreateProjectile("TextureFiles/Wind.png", 
 												 CurrentPlayer->PlayerSpriteParts.Weapon->Width / 2, CurrentPlayer->PlayerSpriteParts.Weapon->Height / 1.5f, 
 												 CurrentPlayer->PlayerSpriteParts.Body->Position.x, CurrentPlayer->PlayerSpriteParts.Body->Position.y + 30, 
-												 Wind, WeaponFriendly, 80000 + (int)CurrentPlayer->LegSinValue, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
+												 Wind, WeaponFriendly, (int)(CurrentPlayer->CurrentPlayerStats.Damage / 2), projectileSpeed, 0);
 
 				theWindOfAFox->ProjectileFOF = PlayerWeapon;
 				theWindOfAFox->ProjectileSprite->ZIndex = 100;
@@ -771,14 +774,15 @@ void DetectPlayerCollision(void)
 			//Continue with your collision venture
 			hit = CollisionRectangles(&CurrentPlayer.PlayerCollider, &wList->WeaponPickup);
 			hitPrev = searchHitArray(CurrentPlayer.CollisionData, COLLIDEAMOUNT, wList->WeaponPickup.collisionID);
+			
+			TextAllNotVisible(wList->WeaponGlyphs);
+			TextAllNotVisible(wList->WeaponStatsGlyphs);
+			TextAllNotVisible(CurrentPlayer.ComparisonGlyphs);
+			wList->WeaponHoverBackground->Visible = FALSE;
+
 			if(hit)
 			{
 				float currentDist = Vec2SquareDistance(&CurrentPlayer.Position, &wList->WeaponPickup.Position);
-
-				TextAllNotVisible(wList->WeaponGlyphs);
-				TextAllNotVisible(wList->WeaponStatsGlyphs);
-				TextAllNotVisible(CurrentPlayer.ComparisonGlyphs);
-				wList->WeaponHoverBackground->Visible = FALSE;
 
 				if(currentDist < closestDropLength)
 				{
@@ -816,13 +820,6 @@ void DetectPlayerCollision(void)
 				{
 					//printf("END COLLISION: %i\n", CurrentPlayer.CollisionData[hitPrev]);
 					CurrentPlayer.CollisionData[hitPrev] = 0;
-					if(wList->WeaponGlyphs->Glyph->Visible)
-					{
-						TextAllNotVisible(wList->WeaponGlyphs);
-						TextAllNotVisible(wList->WeaponStatsGlyphs);
-						TextAllNotVisible(CurrentPlayer.ComparisonGlyphs);
-						wList->WeaponHoverBackground->Visible = FALSE;
-					}
 				}
 			}
 		}
@@ -1144,8 +1141,8 @@ void SavePlayer(Player *CurrentPlayer)
 		BuffValue = BuffValue | 0x8;
 
 	// Ugly code that puts all needed info into one string
-	sprintf(string, "Level: %d\nLevelBitFlags: %d\nRank: %d\nXP: %d\nArmUnlock: %d\nHandUnlock: %d\nArmClear: %d\nHandClear: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
-		CurrentPlayer->CurrentLevel, CurrentPlayer->levelClearBitFlags, CurrentPlayer->CurrentPlayerStats.Rank, CurrentPlayer->CurrentPlayerStats.Experience, CurrentPlayer->armUnlock, CurrentPlayer->handUnlock, CurrentPlayer->armClear, CurrentPlayer->handClear, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
+	sprintf(string, "Level: %d\nLevelBitFlags: %d\nRank: %d\nXP: %d\nUpgrades: %d\nArmUnlock: %d\nHandUnlock: %d\nArmClear: %d\nHandClear: %d\nPrincess: %d\nBuffHeld: %d\nAgility: %d\nStrength: %d\nDefense: %d\nMoney: %d\nCurrentHealth: %d\nWeaponRarity: %d\nWeaponType: %d\nWeaponAgility: %d\nWeaponStrength: %d\nWeaponDefense: %d\n%s",
+		CurrentPlayer->CurrentLevel, CurrentPlayer->levelClearBitFlags, CurrentPlayer->CurrentPlayerStats.Rank, CurrentPlayer->CurrentPlayerStats.Experience, CurrentPlayer->CurrentPlayerStats.Upgrades, CurrentPlayer->armUnlock, CurrentPlayer->handUnlock, CurrentPlayer->armClear, CurrentPlayer->handClear, CurrentPlayer->Princess, BuffValue, CurrentPlayer->CurrentPlayerStats.Agility, CurrentPlayer->CurrentPlayerStats.Strength, CurrentPlayer->CurrentPlayerStats.Defense, 
 		CurrentPlayer->CurrentPlayerStats.Money, (int)CurrentPlayer->CurrentPlayerStats.CurrentHealth, CurrentPlayer->PlayerWeapon->WeaponRarity, CurrentPlayer->PlayerWeapon->WeaponType,
 		CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 	
@@ -1185,14 +1182,15 @@ int LoadPlayer(Player *CurrentPlayer)
 	{
 		//Ugly code which should read the file if its in the correct format
 		int num = 0;
-		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
-			&CurrentPlayer->CurrentLevel, &CurrentPlayer->levelClearBitFlags, &CurrentPlayer->CurrentPlayerStats.Rank, &CurrentPlayer->CurrentPlayerStats.Experience, &CurrentPlayer->armUnlock, &CurrentPlayer->handUnlock, &CurrentPlayer->armClear, &CurrentPlayer->handClear, &CurrentPlayer->Princess, &BuffValue, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
+		num = fscanf(fp, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %[^\n]",
+			&CurrentPlayer->CurrentLevel, &CurrentPlayer->levelClearBitFlags, &CurrentPlayer->CurrentPlayerStats.Rank, &CurrentPlayer->CurrentPlayerStats.Experience, &CurrentPlayer->CurrentPlayerStats.Upgrades,
+			&CurrentPlayer->armUnlock, &CurrentPlayer->handUnlock, &CurrentPlayer->armClear, &CurrentPlayer->handClear, &CurrentPlayer->Princess, &BuffValue, &CurrentPlayer->CurrentPlayerStats.Agility, &CurrentPlayer->CurrentPlayerStats.Strength, &CurrentPlayer->CurrentPlayerStats.Defense, 
 			&CurrentPlayer->CurrentPlayerStats.Money, &CurrentPlayer->CurrentPlayerStats.CurrentHealth, &CurrentPlayer->PlayerWeapon->WeaponRarity, &CurrentPlayer->PlayerWeapon->WeaponType,
 			&CurrentPlayer->PlayerWeapon->BonusAgility, &CurrentPlayer->PlayerWeapon->BonusStrength, &CurrentPlayer->PlayerWeapon->BonusDefense, CurrentPlayer->PlayerWeapon->WeaponName);
 		fclose(fp);
 
 		//If all the data was read successfully
-		if(num == 21)
+		if(num == 22)
 		{
 			//Update all the other required player data
 			int nameLen, statsLen;
@@ -1361,6 +1359,7 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 
 	CurrentPlayer->CurrentPlayerStats.Rank = 1;
 	CurrentPlayer->CurrentPlayerStats.Experience = 0;
+	CurrentPlayer->CurrentPlayerStats.Upgrades = 0;
 
 	CurrentPlayer->CurrentPlayerStats.Money = 15;
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth = (float)CurrentPlayer->CurrentPlayerStats.MaxHealth;

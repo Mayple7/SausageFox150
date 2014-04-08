@@ -171,6 +171,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 #ifndef _DEBUG
 		RemoveDebugMode();
 #endif
+
+		ObjectID = 0; //Start the object IDs
 		
 		while(GetCurrentState() == GetNextState())
 		{
@@ -189,10 +191,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 				int worldX, worldY;
 				FoxInput_GetWorldPosition(&worldX, &worldY);
 				printf("%f, %f\n", (worldX) / GetLoadRatio(), (worldY) / GetLoadRatio());
-			}
-			if(FoxInput_KeyTriggered('M'))
-			{
-				SetNextState(GS_MapLevel);
 			}
 
 #endif

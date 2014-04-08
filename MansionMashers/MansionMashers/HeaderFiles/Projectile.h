@@ -23,7 +23,7 @@ typedef struct Projectile
 	struct ParticleSystem *ProjectileParticleSystem;
 }Projectile;
 
-Projectile *CreateProjectile(char *texture, float width, float height, float xPos, float yPos, enum ProjectileType type, enum collisionGroup collisionGroup, int objID, int damage, float speed, float direction);
+Projectile *CreateProjectile(char *texture, float width, float height, float xPos, float yPos, enum ProjectileType type, enum collisionGroup collisionGroup, int damage, float speed, float direction);
 void UpdateProjectile(Projectile *CurrentProjectile);
 void UpdateAllProjectiles(void);
 void PoofProjectile(Projectile *CurrentProjectile);

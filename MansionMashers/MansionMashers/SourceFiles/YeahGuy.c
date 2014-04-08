@@ -38,7 +38,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete = FALSE;
 static int CurrentBuff;
 float buffTimer;
@@ -93,7 +92,6 @@ void LoadYeahGuy(void)
 void InitializeYeahGuy(void)
 {
 	Vec2 Position;
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
@@ -118,21 +116,21 @@ void InitializeYeahGuy(void)
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
-	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, -550, -170);
-	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 550, -170);
-	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, newID++, 0, 100);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, -550, -170);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, 550, -170);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, 0, 100);
 
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
 	//Create bounding walls
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, -1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, 1160, 0);
 
 	/////////////////////////////////
 	//			Boss			   //
 	/////////////////////////////////
-	Boss = CreateYeahGuyBoss(0, 0, &newID);
+	Boss = CreateYeahGuyBoss(0, 0);
 	Boss->BossCollider.collisionDebug = TRUE;
 
 	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->YeahAOERadius * 2, Boss->YeahAOERadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
@@ -155,21 +153,22 @@ void InitializeYeahGuy(void)
 	BlueBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
 
 	RedBuff = (Sprite *)CreateSprite("TextureFiles/RedBuff.png", 200, 200, 8, 1, 1, 0, 0);
-	CreateCollisionBox(RedBuffCollider, &Position, FoodType, 200, 200, newID++);
+	CreateCollisionBox(RedBuffCollider, &Position, FoodType, 200, 200, GetObjectID());
 
 	GreenBuff = (Sprite *)CreateSprite("TextureFiles/GreenBuff.png", 200, 200, 8, 1, 1, 0, 0);
-	CreateCollisionBox(GreenBuffCollider, &Position, FoodType, 200, 200, newID++);
+	CreateCollisionBox(GreenBuffCollider, &Position, FoodType, 200, 200, GetObjectID());
 
 	BlueBuff = (Sprite *)CreateSprite("TextureFiles/BlueBuff.png", 200, 200, 8, 1, 1, 0, 0);
-	CreateCollisionBox(BlueBuffCollider, &Position, FoodType, 200, 200, newID++);
+	CreateCollisionBox(BlueBuffCollider, &Position, FoodType, 200, 200, GetObjectID());
 
 	HideBuffs();
 
 	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
-	CreateDeathConfirmObjects(&newID);
+	CreateDeathConfirmObjects();
 
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -253,9 +252,10 @@ void UpdateYeahGuy(void)
 	if(!Boss->redHead && !Boss->greenHead && !Boss->blueHead)
 	{
 		levelComplete = TRUE;
-		SetNextState(GS_MapLevel);
 	}
 
+	if (levelComplete)
+		LevelCompletion();
 }
 
 /*************************************************************************/

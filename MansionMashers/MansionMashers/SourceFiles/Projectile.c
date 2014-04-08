@@ -32,12 +32,12 @@
 	Functions sort of like a weapon
 */
 /*************************************************************************/
-Projectile *CreateProjectile(char *texture, float width, float height, float xPos, float yPos, enum ProjectileType type, enum collisionGroup collisionGroup, int objID, int damage, float speed, float angle)
+Projectile *CreateProjectile(char *texture, float width, float height, float xPos, float yPos, enum ProjectileType type, enum collisionGroup collisionGroup, int damage, float speed, float angle)
 {
 	Projectile *CurrentProjectile = AddProjectile();
 
 	CurrentProjectile->ProjectileFOF = EnemyWeapon; // Friend or Foe tag
-	CurrentProjectile->objID = objID;
+	CurrentProjectile->objID = GetObjectID();
 	CurrentProjectile->ProjectileType = type;
 
 	if (angle < 0)
@@ -51,7 +51,7 @@ Projectile *CreateProjectile(char *texture, float width, float height, float xPo
 	CurrentProjectile->Position.y = yPos;
 
 	CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite(texture, width, height, 36, 1, 1, xPos, yPos);
-	CreateCollisionBox(&CurrentProjectile->ProjectileAttack, &CurrentProjectile->Position, collisionGroup, width, height, objID);
+	CreateCollisionBox(&CurrentProjectile->ProjectileAttack, &CurrentProjectile->Position, collisionGroup, width, height, GetObjectID());
 
 	//It will go backwards if the speed is negative
 	if (CurrentProjectile->Speed < 0)

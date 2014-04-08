@@ -18,7 +18,7 @@ typedef struct Food
 	struct ParticleSystem *FoodParticle;
 }Food;
 
-Food* CreateFood(int foodType, float width, float height, float xPos, float yPos, int objID);
+Food *CreateFood(int foodType, float width, float height, float xPos, float yPos);
 void UpdateFoodPosition(Food *CurrentFood, float x, float y);
 
 #endif

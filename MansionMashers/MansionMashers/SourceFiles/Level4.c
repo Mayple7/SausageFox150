@@ -42,7 +42,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int PlayerIsAlive;
@@ -106,7 +105,6 @@ void InitializeLevel4(void)
 	Vec3 TextTint;
 	Vec2 SpawnerLocation;
 	int i;
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	ResetEnemyPanelNumber();
@@ -175,10 +173,10 @@ void InitializeLevel4(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Right Bounding Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, -(PANELSIZE / 2), 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, -(PANELSIZE / 2), 0);
 	Wall1->WallSprite->Visible = FALSE;
 	//Right Bounding Wall
-	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, newID++, 6630, 0);
+	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080, 6630, 0);
 	RightBarrier->WallSprite->Visible = FALSE;
 
 	/////////////////////////////////
@@ -187,29 +185,29 @@ void InitializeLevel4(void)
 	//Panel1
 	Vec2Set(&SpawnerLocation, -(PANELSIZE / 4), 0);
 	//Left
-	Spawners[0] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 0);
+	Spawners[0] = CreateEnemySpawner(1, BasicMelee, FALSE, 100, 1080, SpawnerLocation, 0);
 	//Right
-	Spawners[1] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 0);
+	Spawners[1] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 0);
 	//Panel2
-	PreSpawned = CreateEnemy(BasicRanged, EnemyType, newID++, PANELSIZE, 0, 1);
+	PreSpawned = CreateEnemy(BasicRanged, EnemyType, PANELSIZE, 0, 1);
 	Vec2Set(&SpawnerLocation, PANELSIZE, 0);
 	//Left
-	Spawners[2] = CreateEnemySpawner(2, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 1);
+	Spawners[2] = CreateEnemySpawner(2, BasicMelee, FALSE, 100, 1080, SpawnerLocation, 1);
 	//Right
-	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 1);
+	Spawners[3] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 1);
 	//Panel3
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 2), 0);
 	//Left
-	Spawners[4] = CreateEnemySpawner(2, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 2);
+	Spawners[4] = CreateEnemySpawner(2, BasicMelee, FALSE, 100, 1080, SpawnerLocation, 2);
 	//Right
-	Spawners[5] = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 2);
+	Spawners[5] = CreateEnemySpawner(3, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 2);
 	//Panel4
-	PreSpawned = CreateEnemy(BasicRanged, EnemyType, newID++, PANELSIZE * 3, 0, 3);
+	PreSpawned = CreateEnemy(BasicRanged, EnemyType, PANELSIZE * 3, 0, 3);
 	Vec2Set(&SpawnerLocation, (PANELSIZE * 3), 0);
 	//Left
-	Spawners[6] = CreateEnemySpawner(3, BasicMelee, FALSE, 100, 1080, SpawnerLocation, &newID, 3);
+	Spawners[6] = CreateEnemySpawner(3, BasicMelee, FALSE, 100, 1080, SpawnerLocation, 3);
 	//Right
-	Spawners[7] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, &newID, 3);
+	Spawners[7] = CreateEnemySpawner(2, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 3);
 
 	// Set number of enemies remaining
 	enemiesRemaining = 0;
@@ -226,8 +224,8 @@ void InitializeLevel4(void)
 	Arrow1->Visible = FALSE;
 	Arrow1Grow = FALSE;
 
-	Heal1 = CreateFood(Heal, 100, 100, PANELSIZE * 2, -100, newID++);
-	Defense1 = CreateFood(Defense, 100, 100, PANELSIZE - 500, -100, newID++);
+	Heal1 = CreateFood(Heal, 100, 100, PANELSIZE * 2, -100);
+	Defense1 = CreateFood(Defense, 100, 100, PANELSIZE - 500, -100);
 
 	CreatePaperScroll(GetCameraXPosition(), 150);
 	
@@ -242,7 +240,9 @@ void InitializeLevel4(void)
 	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
-	CreateDeathConfirmObjects(&newID);
+	CreateDeathConfirmObjects();
+
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -361,7 +361,7 @@ void EventLevel4(void)
 
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		if(PlayerIsAlive)
+		if(PlayerIsAlive && !levelComplete)
 		{
 			InitializePause(&DrawLevel4);
 			TogglePauseSound(BackSnd);
@@ -403,6 +403,8 @@ void EventLevel4(void)
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
+	else
+		LevelCompletion();
 
 	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -481,9 +483,6 @@ void EventLevel4(void)
 	if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && enemiesDefeated)
 	{
 		levelComplete = TRUE;
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
 	}
 
 	//If player dies

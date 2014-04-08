@@ -66,7 +66,7 @@ typedef struct HandGuyBoss
 }HandGuyBoss;
 
 void LoadHandGuyBoss(void);
-HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos, int *objID);
+HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos);
 void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss);
 void DetectHandGuyBossCollision(HandGuyBoss *CurrentBoss);
 void HandGuyBossCollideWeapon(HandGuyBoss *CurrentBoss);

@@ -69,7 +69,6 @@ Wall *IronDoor;
 Wall *DummyBlock;
 
 static int tutorialDone; // Keeps track of how much of the tutorial has been completed (Not a bool)
-static int newID;
 static int levelComplete;
 static int numPanels;
 
@@ -85,7 +84,6 @@ void InitializeTutorial(void)
 	levelComplete = FALSE;
 	tutorialDone = 0;
 	numPanels = 3;			//Kaden Update this if you add more panels -- what is a panel?
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	ResetEnemyPanelNumber();
@@ -112,31 +110,31 @@ void InitializeTutorial(void)
 	GameLogo->Alpha = 0;
 
 	//Invisible walls
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, newID++, -900, 0);
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, -900, 0);
 	WallTemp->WallSprite->Visible = FALSE;
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 240.0f, 500.0f, newID++, 840, 200);
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 240.0f, 500.0f, 840, 200);
 	WallTemp->WallSprite->Visible = FALSE;
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 240.0f, 500.0f, newID++, 840 + 1920, 200);
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 240.0f, 500.0f, 840 + 1920, 200);
 	WallTemp->WallSprite->Visible = FALSE;
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 240.0f, 500.0f, newID++, 840 + 1920 * 2, 200);
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 240.0f, 500.0f, 840 + 1920 * 2, 200);
 	WallTemp->WallSprite->Visible = FALSE;
 
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, newID++, 800, 280);            //Above arch, room 1
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, 800, 280);            //Above arch, room 1
 	WallTemp->WallSprite->Visible = FALSE;
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, newID++, 800 + 1920, 280);     //Above arch, room 2
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, 800 + 1920, 280);     //Above arch, room 2
 	WallTemp->WallSprite->Visible = FALSE;
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, newID++, 800 + 1920 * 2, 280); //Above arch, room 3
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, 800 + 1920 * 2, 280); //Above arch, room 3
 	WallTemp->WallSprite->Visible = FALSE;
 
 	//The great iron door
-	IronDoor = CreateWall("TextureFiles/IronDoor.png", PANELSIZE, 1080, newID++, PANELSIZE * 2, 0);
+	IronDoor = CreateWall("TextureFiles/IronDoor.png", PANELSIZE, 1080, PANELSIZE * 2, 0);
 	IronDoor->WallSprite->ZIndex = 80;
 	UpdateCollider(&IronDoor->WallCollider, 200, 380);
 	IronDoor->WallCollider.Offset.x = 870;
 	IronDoor->WallCollider.Offset.y = -230;
 
 	// Bounding Box Walls
-	CreateBlockerBoxes(&newID);
+	CreateBlockerBoxes();
 
 	// Seclusion overlay for the player to focus on things in the tutorial
 	Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 600, 800, 1, 1, 0, 240); //Top
@@ -174,12 +172,12 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	Shelf = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 480, 60, newID++, 500, 20);
+	Shelf = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 480, 60, 500, 20);
 	Shelf->PlatformSprite->Visible = FALSE;
 
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 500.0f, newID++, 220, -180); //Tall
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 500.0f, 220, -180); //Tall
 	WallTemp->WallSprite->Visible = FALSE;
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 350.0f, newID++, 50, -350); //Short
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 350.0f, 50, -350); //Short
 	WallTemp->WallSprite->Visible = FALSE;
 
 	/*////////////////////////////////
@@ -189,22 +187,22 @@ void InitializeTutorial(void)
 	DoorOverlay = (Sprite *) CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, 1920.0f, 0);
 
 	//Create the shelf sprite and initialize to be collidable
-	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, newID++, 160 + 1920.0f, -156);
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, 160 + 1920.0f, -156);
 	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f);
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height * 3 / 8;
 
-	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, newID++, -40 + 1920.0f, -240);
+	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, -40 + 1920.0f, -240);
 	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f);
 
-	BouncyBed = CreatePlatform("TextureFiles/BlankPlatform.png", BounceType, 360.0f, 100.0f, newID++, -580 + 1920.0f, -320);
+	BouncyBed = CreatePlatform("TextureFiles/BlankPlatform.png", BounceType, 360.0f, 100.0f, -580 + 1920.0f, -320);
 	BouncyBed->PlatformSprite->Visible = FALSE;
 	BouncyBed->PlatformRigidBody.Restitution = 2.2f;
 
-	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, newID++, -550 + 1920.0f, -270);
+	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, -550 + 1920.0f, -270);
 	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;
 
-	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, newID++, 160 + 1920.0f, 0);
+	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, 160 + 1920.0f, 0);
 	StarterSword->WeaponSprite->Rotation = FOX_PI /4;
 
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + 1920.0f, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
@@ -218,10 +216,12 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + 1920.0f * 2, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f * 2, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	StrawDummy = CreateEnemy(Dummy, EnemyType, newID++, 240 + 1920.0f * 2, -250, 2);
+	StrawDummy = CreateEnemy(Dummy, EnemyType, 240 + 1920.0f * 2, -250, 2);
 	DummyBlock = CreateWall("TextureFiles/BlankPlatform.png", StrawDummy->EnemySprite->Width / 2, StrawDummy->EnemySprite->Height / 2, 
-				            newID++, StrawDummy->Position.x, StrawDummy->Position.y - 40);
+				            StrawDummy->Position.x, StrawDummy->Position.y - 40);
 	DummyBlock->WallSprite->Visible = FALSE;
+
+	CreateUpgradeScreenObjects();
 }
  
 void UpdateTutorial(void)
@@ -485,7 +485,7 @@ void EventTutorial(void)
 		UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 	}
 	else
-		fadeToEnd();
+		LevelCompletion();
 
 	/*////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -501,12 +501,4 @@ void EventTutorial(void)
 		UpdateEnemy(StrawDummy);
 
 	UpdateFloatingText();
-}
-
-void fadeToEnd(void)
-{
-	BlackOverlay->Position.x = GetCameraXPosition();
-	BlackOverlay->Alpha += 1 * GetDeltaTime();
-	if(BlackOverlay->Alpha > 1)
-		SetNextState(GS_MapLevel);
 }

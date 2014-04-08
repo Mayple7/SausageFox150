@@ -41,7 +41,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete;
 static int beginningAnimation;
 static int keysObtained;
@@ -100,7 +99,6 @@ void InitializeLevel5(void)
 {
 	Vec3 TextTint;
 	int i;
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 	ResetEnemyPanelNumber();
@@ -176,7 +174,7 @@ void InitializeLevel5(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Right Blocker Barrier
-	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, newID++, 820, 0);
+	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, 820, 0);
 	RightBarrier->WallSprite->Visible = FALSE;
 
 	/////////////////////////////////
@@ -188,6 +186,8 @@ void InitializeLevel5(void)
 	IntelFoxValue	= 0.0f;
 
 	CreatePaperScroll(0, 150);
+
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -321,6 +321,8 @@ void EventLevel(void)
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
+	else
+		LevelCompletion();
 
 	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //
@@ -406,9 +408,6 @@ void EventLevel(void)
 	if(CurrentPlayer.Position.x >= 720 + CurrentPlayer.PlayerCollider.width / 2 && keysObtained)
 	{
 		levelComplete = TRUE;
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
 	}
 	//Level Transition if not complete
 	if(CurrentPlayer.Position.x <= -PANELSIZE /2 - CurrentPlayer.PlayerCollider.width / 2 && !beginningAnimation)

@@ -21,14 +21,14 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/WeaponNames.h"
 
-Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int weaponRarity, int collisionGroup, float width, float height, int objID)
+Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int weaponRarity, int collisionGroup, float width, float height)
 {
 	Weapon *CurrentWeapon = AddWeapon();
 	Vec3 TextTint;
 	int nameLen, statsLen;
 	Vec3Set(&TextTint, 0, 0, 0);
 	CurrentWeapon->WeaponFOF = PlayerWeapon; // Friend or Foe tag
-	CurrentWeapon->objID = objID;
+	CurrentWeapon->objID = GetObjectID();
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
 	CurrentWeapon->WeaponName = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
@@ -48,8 +48,8 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	ChangeTextZIndex(CurrentWeapon->WeaponStatsGlyphs, 451);
 
 	CurrentWeapon->WeaponSprite = (Sprite *) CreateSprite(weaponTexture, 256, 256, 22, 1, 1, 0, 0);
-	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
-	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, height / 4, height / 4, objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, CurrentWeapon->objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, collisionGroup, height / 4, height / 4, CurrentWeapon->objID);
 	CurrentWeapon->WeaponLength = 80.0f;
 
 	nameLen = strlen(CurrentWeapon->WeaponName);
@@ -71,7 +71,7 @@ Weapon* CreateWeapon(char* weaponName, char* weaponTexture, int weaponType, int 
 	return CurrentWeapon;
 }
 
-Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float height, int objID, float xPos, float yPos)
+Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float height, float xPos, float yPos)
 {
 	Weapon *CurrentWeapon = AddWeapon();
 	Vec2 ColliderPos;
@@ -81,7 +81,7 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 	Vec3Set(&TextTint, 0, 0, 0);
 
 	CurrentWeapon->WeaponFOF = DroppedWeapon; // Friend or Foe tag
-	CurrentWeapon->objID = objID;
+	CurrentWeapon->objID = GetObjectID();
 	CurrentWeapon->WeaponRarity = weaponRarity;
 	CurrentWeapon->WeaponType = weaponType;
 	CurrentWeapon->WeaponName = (char *) CallocMyAlloc(MAX_NAME_LENGTH, sizeof(char));
@@ -108,8 +108,8 @@ Weapon* CreateDroppedWeapon(int weaponType, int weaponRarity, float width, float
 		CurrentWeapon->BonusDefense += 12;
 	}
 
-	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, objID);
-	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponPickup, &CurrentWeapon->Position, WeaponDrop, width / 2, height, CurrentWeapon->objID);
+	CreateCollisionBox(&CurrentWeapon->WeaponAttack, &CurrentWeapon->Position, WeaponDrop, width / 3, height / 2, CurrentWeapon->objID);
 
 	CurrentWeapon->WeaponGlyphs = CreateText(CurrentWeapon->WeaponName, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f + 25, 50, TextTint, Center, Plain);
 	CreateStatsString(CurrentWeapon->WeaponStatsString, CurrentWeapon->BonusStrength, CurrentWeapon->BonusAgility, CurrentWeapon->BonusDefense);
@@ -252,10 +252,12 @@ void WeaponOnTheRun(Weapon* CurrentWeapon)
 		CurrentWeapon->WeaponPickup.Position = CurrentWeapon->WeaponSprite->Position;
 		CurrentWeapon->WeaponHoverBackground->Position.x = CurrentWeapon->WeaponPickup.Position.x;
 		CurrentWeapon->WeaponHoverBackground->Position.y = CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f;
-		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f + CurrentWeapon->WeaponGlyphs->Glyph->Height / 2));
-		ChangeTextPosition(CurrentWeapon->WeaponGlyphs, glyphPos, Center);
-		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, (CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f - CurrentWeapon->WeaponGlyphs->Glyph->Height / 2));
+		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f - CurrentWeapon->WeaponGlyphs->Glyph->Height);
+		ChangeTextPosition(CurrentPlayer.ComparisonGlyphs, glyphPos, Center);
+		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f);
 		ChangeTextPosition(CurrentWeapon->WeaponStatsGlyphs, glyphPos, Center);
+		Vec2Set(&glyphPos, CurrentWeapon->WeaponPickup.Position.x, CurrentWeapon->WeaponPickup.Position.y + CurrentWeapon->WeaponPickup.height * 1.5f + CurrentWeapon->WeaponGlyphs->Glyph->Height);
+		ChangeTextPosition(CurrentWeapon->WeaponGlyphs, glyphPos, Center);
 
 		if (CurrentWeapon->WeaponParticle)
 		{

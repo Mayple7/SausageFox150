@@ -64,7 +64,7 @@ void LoadYeahGuyBoss(void)
 	Pointer to the enemy object
 */
 /*************************************************************************/
-YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos, int *objID)
+YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 {
 	YeahGuyBoss *CurrentBoss = (YeahGuyBoss *) CallocMyAlloc(1, sizeof(YeahGuyBoss));
 
@@ -89,7 +89,7 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos, int *objID)
 	CurrentBoss->PositionState = E;
 
 	// Armguy colliders
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 320, (*objID)++);
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 320, GetObjectID());
 
 	// Physics stuff
 	InitializeRigidBody(&CurrentBoss->YeahGuyRigidBody, FALSE, 150, 300);
@@ -199,7 +199,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			//printf("QUESTION TIME START\n");
 			// Change boss sprite to attacking
 			projectileAngle = (float)atan2(CurrentPlayer.Position.y - CurrentBoss->Position.y, CurrentPlayer.Position.x - CurrentBoss->Position.x);
-			CurrentProjectile = CreateProjectile("TextureFiles/YeahProjectile.png", 210, 90, CurrentBoss->Position.x, CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2, Arrow, WeaponEnemy, projectileID++, CurrentBoss->YeahProjectileDamage, 800, projectileAngle);
+			CurrentProjectile = CreateProjectile("TextureFiles/YeahProjectile.png", 210, 90, CurrentBoss->Position.x, CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2, Arrow, WeaponEnemy, CurrentBoss->YeahProjectileDamage, 800, projectileAngle);
 
 			// Select the correct texture depending on which direction attacking
 			if(CurrentBoss->Position.x > CurrentPlayer.Position.x)

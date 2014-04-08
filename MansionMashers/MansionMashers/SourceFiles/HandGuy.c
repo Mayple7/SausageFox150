@@ -40,7 +40,6 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int newID;					// ID number
 static int levelComplete = FALSE;
 
 Sprite* DebugCircle;
@@ -77,7 +76,6 @@ void LoadHandGuy(void)
 void InitializeHandGuy(void)
 {
 	int i;
-	newID = 10;
 	ResetObjectList();
 	ResetCamera();
 
@@ -106,19 +104,19 @@ void InitializeHandGuy(void)
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
-	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 400, 50, newID++, 0, -195);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 400, 50, 0, -195);
 	Plat->PlatformSprite->Visible = FALSE;
 
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, -1160, 0);
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, newID++, 1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, -1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, 1160, 0);
 
 	/////////////////////////////////
 	//			Boss			   //
 	/////////////////////////////////
-	Boss = CreateHandGuyBoss(0, 0, &newID);
+	Boss = CreateHandGuyBoss(0, 0);
 
 	Boss->BossCollider.collisionDebug = TRUE;
 
@@ -128,7 +126,7 @@ void InitializeHandGuy(void)
 	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
-	CreateDeathConfirmObjects(&newID);
+	CreateDeathConfirmObjects();
 
 }
 
@@ -251,7 +249,7 @@ void EventHandGuy(void)
 
 	if(FoxInput_KeyTriggered('Y'))
 	{
-		CreateProjectile("TextureFiles/HandGauy.png", 100, 100, 780, -300, Arrow, WeaponEnemy, newID++, 10, -400, 0);
+		CreateProjectile("TextureFiles/HandGauy.png", 100, 100, 780, -300, Arrow, WeaponEnemy, 10, -400, 0);
 	}
 
 	TreeBackgroundUpdate();

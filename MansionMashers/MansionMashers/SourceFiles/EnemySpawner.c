@@ -36,7 +36,7 @@
 	A pointer to the player to be initialized
 */
 /*************************************************************************/
-EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int *objID, int panelId)
+EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, float width, float height, Vec2 spawnerPosition, int panelId)
 {
 	//Adds spawner to object manager
 	EnemySpawner *CurrentSpawner = AddSpawner();
@@ -46,23 +46,20 @@ EnemySpawner *CreateEnemySpawner(int numEnemies, int enemyType, int spawnSide, f
 	CurrentSpawner->EnemyArray = (Enemy **) CallocMyAlloc(numEnemies, sizeof(Enemy *));
 	CurrentSpawner->enemyType = enemyType;
 	CurrentSpawner->numEnemies = numEnemies;
-	CurrentSpawner->objID = *objID;
+	CurrentSpawner->objID = GetObjectID();
 	CurrentSpawner->spawnSide = spawnSide;
 
 	//Create the spawner collision box
-	CreateCollisionBox(&CurrentSpawner->SpawnerCollider, &spawnerPosition, SpawnerType, width, height, *objID);
+	CreateCollisionBox(&CurrentSpawner->SpawnerCollider, &spawnerPosition, SpawnerType, width, height, GetObjectID());
 
 	//Create the enemies and set them offscreen and AINone
 	for(i = 0; i < numEnemies; ++i)
 	{
-		CurrentSpawner->EnemyArray[i] = CreateEnemy(CurrentSpawner->enemyType, EnemyType, CurrentSpawner->objID + i + 1, 
+		CurrentSpawner->EnemyArray[i] = CreateEnemy(CurrentSpawner->enemyType, EnemyType, 
 								                    CurrentSpawner->SpawnerCollider.Position.x + i * 200, -10000, panelId);
 		CurrentSpawner->EnemyArray[i]->HomePos = CurrentSpawner->SpawnerCollider.Position;
 		CurrentSpawner->EnemyArray[i]->EnemyState = AINone;
 	}
-
-	//Increment the objID by the number of enemies
-	*objID += numEnemies + 1;
 
 	return CurrentSpawner;
 }

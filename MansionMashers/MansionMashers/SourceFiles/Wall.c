@@ -32,7 +32,7 @@
 	A pointer to the Wall to be initialized
 */
 /*************************************************************************/
-Wall* CreateWall(char* textureName, float width, float height, int newID, float xPos, float yPos)
+Wall* CreateWall(char* textureName, float width, float height, float xPos, float yPos)
 {
 	Wall *CurrentWall = AddWall();
 	Vec2 ColliderPos;
@@ -42,8 +42,8 @@ Wall* CreateWall(char* textureName, float width, float height, int newID, float 
 	Vec2Set(&CurrentWall->Position, xPos, yPos);
 	CurrentWall->WallSprite = (Sprite *) CreateSprite(textureName, width, height, 4, 1, 1, xPos, yPos);
 
-	CreateCollisionBox(&CurrentWall->WallCollider, &ColliderPos, WallType, width, height, newID);
-	CurrentWall->objID = newID;
+	CreateCollisionBox(&CurrentWall->WallCollider, &ColliderPos, WallType, width, height, GetObjectID());
+	CurrentWall->objID = GetObjectID();
 	InitializeRigidBody(&CurrentWall->WallRigidBody, TRUE, width, height);
 
 	return CurrentWall;

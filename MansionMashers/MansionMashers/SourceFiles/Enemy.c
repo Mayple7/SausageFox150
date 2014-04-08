@@ -72,7 +72,7 @@ void LoadEnemy(int enemyType)
 	A pointer to the enemy object to be initialized
 */
 /*************************************************************************/
-Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, float yPos, int panelId)
+Enemy *CreateEnemy(int enemyType, int collisionGroup, float xPos, float yPos, int panelId)
 {
 	float width, height;
 	Vec2 position;
@@ -95,7 +95,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		height = 373.0f;
 		Vec2Set(&CurrentEnemy->Position, xPos, yPos);
 		CurrentEnemy->EnemyType = enemyType;
-		CurrentEnemy->objID = objID;
+		CurrentEnemy->objID = GetObjectID();
 		//Creates the enemy sprite
 		CurrentEnemy->EnemySprite = (Sprite *) CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
 		
@@ -105,7 +105,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
 
-		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, height / 2, objID);
+		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &position, EnemyType, width / 2, height / 2, GetObjectID());
 		CurrentEnemy->EnemyCollider.Offset.y = -CurrentEnemy->EnemyCollider.height / 6;
 
 		break;
@@ -114,7 +114,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		height = 373.0f;
 		Vec2Set(&CurrentEnemy->Position, xPos, yPos);
 		CurrentEnemy->EnemyType = enemyType;
-		CurrentEnemy->objID = objID;
+		CurrentEnemy->objID = GetObjectID();
 
 		//Creates the enemy sprite
 		CurrentEnemy->EnemySprite = (Sprite *) CreateSprite("TextureFiles/StrawDummy.png", width, height, 8, 1, 1, xPos, yPos);
@@ -127,14 +127,19 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		// Random numbers with the current state thing will make the enemies harder as the levels progress
 		InitializeEnemyStats(CurrentEnemy, 50 + 5 * (rand() % GetCurrentState()), (float)(300 + 10 * (rand() % 10)), 8.0f, 0, 20 + 3 * (rand() % GetCurrentState()), 10 + rand() % 10, 53);
 
+		// Special state for level 3.1
+		if(GetCurrentState() == GS_Level31)
+			CurrentEnemy->CurrentEnemyStats.Damage = 20 + 3 * (rand() % 4);
+
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
-		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 100, 200, objID);
+		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 100, 200, GetObjectID());
 		CurrentEnemy->EnemyCollider.Offset.y = 20;
 		CurrentEnemy->EnemyCollider.width = CurrentEnemy->EnemyCollider.width - 20;
 		UpdateCollider(&CurrentEnemy->EnemyCollider, CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
 
-		CurrentEnemy->EnemyWeapon = CreateWeapon("Random Weapon", "TextureFiles/BattleAxe.png", (int)rand() % 4, Common, WeaponEnemy, 256, 256, objID++);
+		//Make weapon the same rarity as the player's current weapon, gives chance for a upgrade
+		CurrentEnemy->EnemyWeapon = CreateWeapon("Random Weapon", "TextureFiles/BattleAxe.png", (int)rand() % 4, CurrentPlayer.PlayerWeapon->WeaponRarity, WeaponEnemy, 256, 256);
 		CurrentEnemy->EnemyWeapon->WeaponSprite->Created = 0;
 		CreateWeaponName(&CurrentEnemy->EnemyWeapon->WeaponName, CurrentEnemy->EnemyWeapon->WeaponType, CurrentEnemy->EnemyWeapon->WeaponRarity);
 		CreateWeaponStats(CurrentEnemy->EnemyWeapon->WeaponType, CurrentEnemy->EnemyWeapon->WeaponRarity, &CurrentEnemy->EnemyWeapon->BonusStrength, &CurrentEnemy->EnemyWeapon->BonusAgility, &CurrentEnemy->EnemyWeapon->BonusDefense);
@@ -170,7 +175,7 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 		height = 400.0f / BALLISTA_DEVISOR;
 		Vec2Set(&CurrentEnemy->Position, xPos, yPos);
 		CurrentEnemy->EnemyType = enemyType;
-		CurrentEnemy->objID = objID;
+		CurrentEnemy->objID = GetObjectID();
 
 		//Creates the enemy sprite
 		CurrentEnemy->EnemySprite = (Sprite *) CreateSprite("TextureFiles/Ballista.png", width, height, 8, 1, 1, xPos, yPos);
@@ -183,12 +188,12 @@ Enemy* CreateEnemy(int enemyType, int collisionGroup, int objID, float xPos, flo
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
-		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 500 / BALLISTA_DEVISOR, 200 / BALLISTA_DEVISOR, objID);
+		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 500 / BALLISTA_DEVISOR, 200 / BALLISTA_DEVISOR, GetObjectID());
 		CurrentEnemy->EnemyCollider.Offset.y = -40 / BALLISTA_DEVISOR;
 		CurrentEnemy->EnemyCollider.width = CurrentEnemy->EnemyCollider.width - 60 * BALLISTA_DEVISOR;
 		UpdateCollider(&CurrentEnemy->EnemyCollider, CurrentEnemy->EnemyCollider.width, CurrentEnemy->EnemyCollider.height);
 
-		CurrentEnemy->EnemyWeapon = CreateWeapon("Ballista Arrow You Cannot Have", "TextureFiles/BallistaArrow.png", FoxWeapon, Common, WeaponEnemy, 360 / BALLISTA_DEVISOR, 100 / BALLISTA_DEVISOR, objID++);
+		CurrentEnemy->EnemyWeapon = CreateWeapon("Ballista Arrow You Cannot Have", "TextureFiles/BallistaArrow.png", FoxWeapon, Common, WeaponEnemy, 360 / BALLISTA_DEVISOR, 100 / BALLISTA_DEVISOR);
 		CurrentEnemy->EnemyWeapon->WeaponSprite->Width = 360 / BALLISTA_DEVISOR;
 		CurrentEnemy->EnemyWeapon->WeaponSprite->Height = 100 / BALLISTA_DEVISOR;
 		UpdateMesh(CurrentEnemy->EnemyWeapon->WeaponSprite);
@@ -341,9 +346,30 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 
 		if (dropWeapon == 1)
 		{
-			Weapon *CurrentWeapon = CreateDroppedWeapon(CurrentEnemy->EnemyWeapon->WeaponType, CurrentEnemy->EnemyWeapon->WeaponRarity, 250, 250, CurrentEnemy->objID, CurrentEnemy->Position.x, CurrentEnemy->Position.y);
-			CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (float)(rand() % 5 - 2) / 10; //A random angle for the dropped weapon
-			CurrentWeapon->WeaponFalling = TRUE;
+			Weapon *wList = weaponList;
+			float currDist = 100000;
+
+			//Search for the weapon closest
+			while(wList->objID != -1)
+			{
+				if(wList->objID > 0 && wList->WeaponFOF == DroppedWeapon)
+				{
+					float nextDist = (CurrentEnemy->Position.x - wList->WeaponPickup.Position.x) * (CurrentEnemy->Position.x - wList->WeaponPickup.Position.x);
+
+					if (nextDist < currDist)
+						currDist = nextDist;
+				}
+
+				wList++;
+			}
+
+			//Only place a weapon if no others are near
+			if (currDist > 20000)
+			{
+				Weapon *CurrentWeapon = CreateDroppedWeapon(CurrentEnemy->EnemyWeapon->WeaponType, CurrentEnemy->EnemyWeapon->WeaponRarity, 250, 250, CurrentEnemy->Position.x, CurrentEnemy->Position.y);
+				CurrentWeapon->WeaponSprite->Rotation = FOX_PI / 2 + (float)(rand() % 5 - 2) / 10; //A random angle for the dropped weapon
+				CurrentWeapon->WeaponFalling = TRUE;
+			}
 		}
 
 		PlayAudio(CurrentEnemy->CurrentEnemySounds.Poof);
@@ -613,7 +639,7 @@ void EnemyBasicRangedUpdate(Enemy *CurrentEnemy)
 		smexyArrow = CreateProjectile("TextureFiles/BallistaArrow.png", 
 									  CurrentEnemy->EnemySpriteParts.Weapon->Width, CurrentEnemy->EnemySpriteParts.Weapon->Height, 
 									  CurrentEnemy->EnemySpriteParts.Weapon->Position.x, CurrentEnemy->EnemySpriteParts.Weapon->Position.y, 
-									  Arrow, WeaponEnemy, (CurrentEnemy->objID + 100) * 8 + (int)CurrentEnemy->LegSinValue++, 10, projectileSpeed, 0);
+									  Arrow, WeaponEnemy, 10, projectileSpeed, 0);
 
 		if (smexyArrow->ProjectileSprite->FlipX)
 			smexyArrow->ProjectileAttack.Offset.x = -smexyArrow->ProjectileAttack.width / 3;

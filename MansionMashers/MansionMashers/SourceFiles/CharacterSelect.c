@@ -28,7 +28,6 @@ Sprite* GinkoSelected;
 Sprite* KayaSelected;
 Sprite* HollySelected;
 
-static int newID;
 static int selected;
 
 void LoadCharacterSelect(void)
@@ -54,7 +53,6 @@ void InitializeCharacterSelect(void)
 	CharacterKaya = (Player *)CallocMyAlloc(1, sizeof(Player));
 
 	selected = Mayple;
-	newID = 10;
 	ResetObjectList();
 	Vec3Set(&Tint, 0.475f, 0.463f, 0.311f);
 
@@ -71,13 +69,13 @@ void InitializeCharacterSelect(void)
 	HollySelected = (Sprite *) CreateSprite("TextureFiles/HollySelect.png", 1920, 1080, 2, 1, 1, 0, 0);
 	HollySelected->Alpha = 0.0f;
 
-	MaypleButton = CreateButton("TextureFiles/BlankPlatform.png", -712, -62, 405.0f, 724.0f, newID++);
+	MaypleButton = CreateButton("TextureFiles/BlankPlatform.png", -712, -62, 405.0f, 724.0f);
 	MaypleButton->ButtonSprite->Visible = FALSE;
-	GinkoButton = CreateButton("TextureFiles/BlankPlatform.png", -235, -62, 405.0f, 724.0f, newID++);
+	GinkoButton = CreateButton("TextureFiles/BlankPlatform.png", -235, -62, 405.0f, 724.0f);
 	GinkoButton->ButtonSprite->Visible = FALSE;
-	KayaButton = CreateButton("TextureFiles/BlankPlatform.png", 235, -62, 405.0f, 724.0f, newID++);
+	KayaButton = CreateButton("TextureFiles/BlankPlatform.png", 235, -62, 405.0f, 724.0f);
 	KayaButton->ButtonSprite->Visible = FALSE;
-	HollyButton = CreateButton("TextureFiles/BlankPlatform.png", 712, -62, 405.0f, 724.0f, newID++);
+	HollyButton = CreateButton("TextureFiles/BlankPlatform.png", 712, -62, 405.0f, 724.0f);
 	HollyButton->ButtonSprite->Visible = FALSE;
 
 	//Bounding Boxes
