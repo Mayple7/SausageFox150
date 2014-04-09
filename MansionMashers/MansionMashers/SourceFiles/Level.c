@@ -489,5 +489,5 @@ void LevelCompletion(void)
 			UpdateUpgradeScreenObjects();
 	}
 	else
-		WhiteOverlay->Alpha += GetDeltaTime();
+		WhiteOverlay->Alpha += 2 * GetDeltaTime();
 }

@@ -212,7 +212,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		*/
 		printf("\nMEMORY NOT FREED: %i \n\n", TotalMemoryAllocs - TotalMemoryFrees);
 		if (!(TotalMemoryAllocs - TotalMemoryFrees))
-			AE_ASSERT_MESG(":: MEMORY LEAKS: PLEASE GET A BUCKET AND MOP ::");
+			printf(":: MEMORY LEAKS: PLEASE GET A BUCKET AND MOP ::");
 		printf("----------------A NEW DAY----------------\n\n");
 		
 		SetPreviousState(GetCurrentState());
