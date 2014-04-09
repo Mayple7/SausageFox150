@@ -34,7 +34,7 @@ typedef struct ArmGuyBoss
 	int CurrentHealth;
 
 	FoxSound* ArmGuyHit[4];
-	FoxSound* ArmGuyPhrase[3];
+	FoxSound* ArmGuyPhrase[4];
 	FoxSound* ArmGuyPhraseSmash;
 	int ArmGuySoundsPlay;
 

@@ -124,7 +124,9 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos)
 	//Phrases
 	CurrentBoss->ArmGuyPhrase[0] = CreateSound("Sounds/ArmGuyPhrase1.mp3", SmallSnd);
 	CurrentBoss->ArmGuyPhrase[1] = CreateSound("Sounds/ArmGuyPhrase2.mp3", SmallSnd);
-	CurrentBoss->ArmGuyPhrase[3] = CreateSound("Sounds/ArmGuyPhrase3.mp3", SmallSnd);
+	CurrentBoss->ArmGuyPhrase[2] = CreateSound("Sounds/ArmGuyPhrase3.mp3", SmallSnd);
+	CurrentBoss->ArmGuyPhrase[3] = CreateSound("Sounds/ArmGuyPhrase4.mp3", SmallSnd);
+
 	//Smash
 	CurrentBoss->ArmGuyPhraseSmash = CreateSound("Sounds/ArmGuyPhraseSmash.mp3", SmallSnd);
 
@@ -378,7 +380,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			break;
 		case Attack:
 			//printf("SMASH TIME ATTACK\n");
-			PlayAudio(CurrentBoss->ArmGuyPhraseSmash);
+
+			//Play Audio
+			if(!CurrentBoss->ArmGuySoundsPlay)
+				PlayAudio(CurrentBoss->ArmGuyPhraseSmash);
 			
 			CurrentBoss->ArmGuyParticle->amountTotal = -1;
 			CurrentBoss->ArmGuyParticle->emitAmount = 15;
@@ -795,6 +800,13 @@ void ArmGuyBossCollideWeapon(ArmGuyBoss *CurrentBoss)
 {
 	int damageDealt;
 	char num[10];
+
+	//bool for sounds
+	int SoundIsPlaying = FALSE;
+	int i;
+	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 4;
+
+
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
 	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
@@ -814,6 +826,22 @@ void ArmGuyBossCollideWeapon(ArmGuyBoss *CurrentBoss)
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);
+
+
+	//Voice Hit Reponse
+	for(i = 0; i < 4; i++)
+	{
+		if(FoxSoundCheckIsPlaying(CurrentBoss->ArmGuyHit[i]))
+			SoundIsPlaying = TRUE;
+		if(FoxSoundCheckIsPlaying(CurrentBoss->ArmGuyPhrase[i]))
+			SoundIsPlaying = TRUE;
+	}
+
+	if(FoxSoundCheckIsPlaying(CurrentBoss->ArmGuyPhraseSmash))
+		SoundIsPlaying = TRUE;
+
+	if(!SoundIsPlaying)
+		PlayAudio(CurrentBoss->ArmGuyHit[randNum]);
 }
 
 /*************************************************************************/
@@ -829,6 +857,12 @@ void PlayerDamageResult(int damage)
 {
 	int damageDealt;
 	char num[10];
+
+	//bool for sounds
+	int SoundIsPlaying = FALSE;
+	int i;
+	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 4;
+
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
 	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
@@ -845,6 +879,16 @@ void PlayerDamageResult(int damage)
 	
 	CurrentPlayer.CurrentPlayerStats.CurrentHealth -= damageDealt;
 	sprintf(num, "-%d", damageDealt);
+
+	//Voice Hit Reponse
+	for(i = 0; i < 5; i++)
+	{
+		if(FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.VoiceHit[i]))
+			SoundIsPlaying = TRUE;
+	}
+
+	if(!SoundIsPlaying)
+		PlayAudio(CurrentPlayer.CurrentPlayerSounds.VoiceHit[randNum]);
 
 	// Create Floating Combat Text
 	FirstLetter = CreateText(num, (CurrentPlayer.Position.x + rand() % 81 - 40), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);
@@ -864,7 +908,6 @@ void PlayerDamageResult(int damage)
 /*************************************************************************/
 void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
 {
-	int i;
 	FreeParticleSystem(CurrentBoss->ArmGuyParticle);
 	FreeSprite(CurrentBoss->ArmJabSprite);
 	FreeSprite(CurrentBoss->ArmSmashSprite);
@@ -872,17 +915,6 @@ void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
 	FreeSprite(CurrentBoss->BodySprite);
 	FreeSprite(CurrentBoss->OffArmSprite);
 	FreeSprite(CurrentBoss->SpinSprite);
-	
-	for(i = 0; i < 4; i++)
-	{
-		freeSound(CurrentBoss->ArmGuyHit[i]);
-	}
-	for(i = 0; i < 3; i++)
-	{
-		freeSound(CurrentBoss->ArmGuyPhrase[i]);
-	}
-	freeSound(CurrentBoss->ArmGuyPhraseSmash);
 
-	FreeMyAlloc(CurrentBoss);
 }
 

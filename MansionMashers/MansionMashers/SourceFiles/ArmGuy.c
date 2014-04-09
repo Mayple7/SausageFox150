@@ -315,6 +315,9 @@ void FreeArmGuy(void)
 	}
 	else
 		FreeArmGuyBoss(Boss);
+	
+	//Free here because of issue with sounds
+	FreeMyAlloc(Boss);
 
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
@@ -341,6 +344,7 @@ void UnloadArmGuy(void)
 /*************************************************************************/
 void EventArmGuy(void)
 {
+	int i;
 	//////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	//////////////////////////////////
@@ -394,10 +398,13 @@ void EventArmGuy(void)
 #endif
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		TogglePauseSound(BackSnd);
-		InitializePause(&DrawArmGuy);
-		UpdatePause();
-		TogglePauseSound(BackSnd);
+		if(PlayerIsAlive)
+		{
+			TogglePauseSound(BackSnd);
+			InitializePause(&DrawArmGuy);
+			UpdatePause();
+			TogglePauseSound(BackSnd);
+		}
 	}
 
 	//////////////////////////////////
@@ -450,6 +457,72 @@ void EventArmGuy(void)
 		UpdateDeathConfirmObjects();
 	}
 
+	
+	if(Boss->CurrentHealth > 0)
+	{
+		//Check if the boss is already saying something
+		Boss->ArmGuySoundsPlay = FALSE;
+		for(i = 0; i < 4; i++)
+		{
+			if(FoxSoundCheckIsPlaying(Boss->ArmGuyHit[i]))
+				Boss->ArmGuySoundsPlay = TRUE;
+			if(FoxSoundCheckIsPlaying(Boss->ArmGuyPhrase[i]))
+				Boss->ArmGuySoundsPlay = TRUE;
+		}
+
+		//Say Random Phrases Randomly when not beginning animation, intel fox talking, or smashing
+		if(!beginningAnimation && !FoxSoundCheckIsPlaying(IntelFoxStart) 
+			&& !FoxSoundCheckIsPlaying(IntelFoxEnd) && !FoxSoundCheckIsPlaying(Boss->ArmGuyPhraseSmash))
+		{
+			//Get RandNum to choose rand Sound and a random time
+			int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 4;
+			int randInstance = ((int)((rand() / (float)RAND_MAX) * 720)) % 360;
+
+			//Randomly go but wait if a phrase was just said
+			if(randInstance > 356 && !timerOn)
+			{
+				//Start timer
+				timerOn = TRUE;
+
+				//If a sound is not playing let's say something
+				if(Boss->ArmGuySoundsPlay == FALSE)
+				{
+					//Check if phrase your about to say was just said
+					if(randNum == prevPlayed)
+					{
+						//if it was the same phrase say a differnt one
+						if(randNum == 0)
+						{
+							PlayAudio(Boss->ArmGuyPhrase[randNum + 1]);
+							prevPlayed = randNum + 1;
+						}
+						else
+						{
+							PlayAudio(Boss->ArmGuyPhrase[randNum - 1]);
+							prevPlayed = randNum - 1;
+						}
+
+					}
+					//Wasn't the same so just say what you wanna say
+					else
+					{
+						PlayAudio(Boss->ArmGuyPhrase[randNum]);
+						prevPlayed = randNum;
+					}
+				}
+			}
+		}
+	}
+
+	//For Random Phrase Timer (see above)
+	if(timerOn)
+		timer -= 1;
+	if(timer < 0)
+	{
+		timer = 5 * FRAMERATE;
+		timerOn = FALSE;
+	}
+
 }
 
 void TreeBackgroundUpdate(void)
@@ -484,56 +557,4 @@ void ObjectGlowUpdate(void)
 	}
 }
 
-/* Still working on this I don't think I can get it in for beta
-void UpdateArmGuySounds(void)
-{
-	//Get RandNum to choose rand Sound and a random time
-	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 3;
-	int randInstance = ((int)((rand() / (float)RAND_MAX) * 720)) % 360;
-
-
-	//Randomly go but wait if a phrase was just said
-	if(randInstance > 356 && !timerOn)
-	{
-		//Start timer
-		timerOn = TRUE;
-
-		//If a sound is not playing let's say something
-		if(Boss->ArmGuySoundsPlay == FALSE)
-		{
-			//Check if phrase your about to say was just said
-			if(randNum == prevPlayed)
-			{
-				//if it was the same phrase say a differnt one
-				if(randNum == 0)
-				{
-					PlayAudio(Boss->ArmGuyPhrase[randNum + 1]);
-					prevPlayed = randNum + 1;
-				}
-				else
-				{
-					PlayAudio(Boss->ArmGuyPhrase[randNum - 1]);
-					prevPlayed = randNum - 1;
-				}
-
-			}
-			//Wasn't the same so just say what you wanna say
-			else
-			{
-				PlayAudio(Boss->ArmGuyPhrase[randNum]);
-				prevPlayed = randNum;
-			}
-		}
-	}
-
-	//For Random Phrase Timer (see above)
-	if(timerOn)
-		timer -= 1;
-	if(timer < 0)
-	{
-		timer = 5 * FRAMERATE;
-		timerOn = FALSE;
-	}
-
-}*/
 

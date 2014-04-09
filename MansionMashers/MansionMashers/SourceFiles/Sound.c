@@ -541,6 +541,9 @@ int FoxSoundCheckIsPlaying(FoxSound *snd)
 {
 	FMOD_RESULT result;
 	
+	if(!snd)
+		return 0;
+
 	//If there is a channel get and set the playing state
 	if(snd->Channel)
 	{
