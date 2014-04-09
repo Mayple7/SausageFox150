@@ -43,7 +43,9 @@ typedef struct PlayerSounds
 	//Character sounds
 	FoxSound *GetHit1;
 	FoxSound *GetHit2;
-	FoxSound *YeahBebeGurrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrl;
+
+	//Character Voice Sounds
+	FoxSound *VoiceHit[5];
 
 	//Sounds for buing weapons
 	FoxSound *MooseNotEnoughCoins;

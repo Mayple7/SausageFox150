@@ -153,12 +153,43 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	CurrentPlayer->CurrentPlayerSounds.GetHit1 = CreateSound("Sounds/SwordHit1.wav", SmallSnd);
 	CurrentPlayer->CurrentPlayerSounds.GetHit2 = CreateSound("Sounds/SwordHit2.wav", SmallSnd);
 
-	//Might have to move these into player
+	//Moose Purchase Sounds
 	CurrentPlayer->CurrentPlayerSounds.MoosePurchase[0] = CreateSound("Sounds/MooseQuality.mp3", SmallSnd);
 	CurrentPlayer->CurrentPlayerSounds.MoosePurchase[1] = CreateSound("Sounds/MooseOhYeah.mp3", SmallSnd);
-
 	CurrentPlayer->CurrentPlayerSounds.MooseNotEnoughCoins = CreateSound("Sounds/MooseNotEnoughCoins.mp3", SmallSnd);
 
+	//AudioHit Sounds (specific to each character)
+	switch (CurrentPlayer->Princess)
+	{
+	case Mayple:
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[0] = CreateSound("Sounds/MaypleHit1.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[1] = CreateSound("Sounds/MaypleHit2.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[2] = CreateSound("Sounds/MaypleHit3.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[3] = CreateSound("Sounds/MaypleHit4.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[4] = CreateSound("Sounds/MaypleHit5.mp3", SmallSnd);
+		break;
+	case Ginko:
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[0] = CreateSound("Sounds/GinkoHit1.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[1] = CreateSound("Sounds/GinkoHit2.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[2] = CreateSound("Sounds/GinkoHit3.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[3] = CreateSound("Sounds/GinkoHit4.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[4] = CreateSound("Sounds/GinkoHit5.mp3", SmallSnd);
+		break;
+	case Kaya:
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[0] = CreateSound("Sounds/KayaHit1.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[1] = CreateSound("Sounds/KayaHit2.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[2] = CreateSound("Sounds/KayaHit3.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[3] = CreateSound("Sounds/KayaHit4.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[4] = CreateSound("Sounds/KayaHit5.mp3", SmallSnd);
+		break;
+	case Holly:
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[0] = CreateSound("Sounds/HollyHit1.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[1] = CreateSound("Sounds/HollyHit2.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[2] = CreateSound("Sounds/HollyHit3.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[3] = CreateSound("Sounds/HollyHit4.mp3", SmallSnd);
+		CurrentPlayer->CurrentPlayerSounds.VoiceHit[4] = CreateSound("Sounds/HollyHit5.mp3", SmallSnd);
+		break;
+	}
 	
 	/*////////////////////////////////
 	//       PLAYER SPRITE          //
