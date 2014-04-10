@@ -38,7 +38,7 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int levelComplete = FALSE;
+static int levelComplete;
 static int CurrentBuff;
 float buffTimer;
 float playerBuffTimer;
@@ -60,6 +60,8 @@ CollisionBox* GreenBuffCollider;
 
 Sprite* BlueBuff;
 CollisionBox* BlueBuffCollider;
+
+Platform* Plat;
 
 Sprite* DebugCircle;
 
@@ -94,6 +96,7 @@ void InitializeYeahGuy(void)
 	Vec2 Position;
 	ResetObjectList();
 	ResetCamera();
+	levelComplete = FALSE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
@@ -108,7 +111,8 @@ void InitializeYeahGuy(void)
 	//		Backgrounds			   //
 	/////////////////////////////////
 	//Panel1
-	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/YeahGuyBG.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/TreeBackground4.png", 1920, 1080, 0, 1, 1, 0, 0);
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
@@ -116,9 +120,13 @@ void InitializeYeahGuy(void)
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
-	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, -550, -170);
-	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, 550, -170);
-	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, 0, 100);
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, -550, -170);
+	Plat->PlatformSprite->Visible = FALSE;
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, 550, -170);
+	Plat->PlatformSprite->Visible = FALSE;
+	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, 0, 100);
+	Plat->PlatformSprite->Visible = FALSE;
+
 
 	/////////////////////////////////
 	//			Walls			   //
