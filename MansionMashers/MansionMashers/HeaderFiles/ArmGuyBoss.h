@@ -33,10 +33,10 @@ typedef struct ArmGuyBoss
 	int MaxHealth;
 	int CurrentHealth;
 
-	FoxSound* ArmGuyHit[4];
-	FoxSound* ArmGuyPhrase[4];
-	FoxSound* ArmGuyPhraseSmash;
-	int ArmGuySoundsPlay;
+	FoxSound* ArmGuyHit[4];			//When boss gets hit
+	FoxSound* ArmGuyPhrase[4];		//To taunt player
+	FoxSound* ArmGuyPhraseSmash;	//Saying for smash attacj
+	int ArmGuySoundsPlay;			//Bool for if sounds are playing
 
 
 	Vec2 Position;

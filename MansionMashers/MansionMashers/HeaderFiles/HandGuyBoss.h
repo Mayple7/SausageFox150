@@ -55,6 +55,11 @@ typedef struct HandGuyBoss
 	int MaxHealth;
 	int CurrentHealth;
 
+	FoxSound* HandGuyHit[6];
+	FoxSound* HandGuyPhrase;
+	FoxSound* HandGuyYell;
+	int HandGuySoundsPlay;
+
 	int numProjectiles;
 
 	float LegSinValue;

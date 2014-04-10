@@ -327,6 +327,12 @@ void PlayerCollideEnemyProjectile(Player* CurrentPlayer, Projectile *CurrentProj
 {
 	int damageDealt;
 	char num[10];
+
+	//bool for sounds
+	int SoundIsPlaying = FALSE;
+	int i;
+	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 4;
+
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
 	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
@@ -343,6 +349,17 @@ void PlayerCollideEnemyProjectile(Player* CurrentPlayer, Projectile *CurrentProj
 	
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
+
+	//Voice Hit Reponse
+	for(i = 0; i < 5; i++)
+	{
+		if(FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.VoiceHit[i]))
+			SoundIsPlaying = TRUE;
+	}
+
+	if(!SoundIsPlaying)
+		PlayAudio(CurrentPlayer->CurrentPlayerSounds.VoiceHit[randNum]);
+
 	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
 	FirstLetter = CreateText(num, (CurrentPlayer->Position.x + rand() % 81 - 40), (CurrentPlayer->Position.y + CurrentPlayer->PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);

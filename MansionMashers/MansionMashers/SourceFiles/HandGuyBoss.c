@@ -113,6 +113,18 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 	// Player Sprites
 	CreateHandGuySprites(CurrentBoss);
 
+	//Sounds
+	CurrentBoss->HandGuyHit[0] = CreateSound("Sounds/HandGuyHit1.mp3", SmallSnd);
+	CurrentBoss->HandGuyHit[1] = CreateSound("Sounds/HandGuyHit2.mp3", SmallSnd);
+	CurrentBoss->HandGuyHit[2] = CreateSound("Sounds/HandGuyHit3.mp3", SmallSnd);
+	CurrentBoss->HandGuyHit[3] = CreateSound("Sounds/HandGuyHit4.mp3", SmallSnd);
+	CurrentBoss->HandGuyHit[4] = CreateSound("Sounds/HandGuyHit5.mp3", SmallSnd);
+	CurrentBoss->HandGuyHit[5] = CreateSound("Sounds/HandGuyHit6.mp3", SmallSnd);
+
+	CurrentBoss->HandGuyPhrase = CreateSound("Sounds/HandGuyPhrase.mp3", SmallSnd);
+	CurrentBoss->HandGuyYell = CreateSound("Sounds/HandGuyYell.mp3", SmallSnd);
+	CurrentBoss->HandGuySoundsPlay = FALSE;
+
 	return CurrentBoss;
 }
 
@@ -254,6 +266,11 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
+			if(!CurrentBoss->HandGuySoundsPlay && !CurrentBoss->HandGuyYell->hasPlayed)
+			{
+				CurrentBoss->HandGuyYell->hasPlayed = TRUE;
+				PlayAudio(CurrentBoss->HandGuyYell);
+			}
 			//printf("SHOUT TIME START\n");
 			//CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuyShout.png");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
@@ -262,6 +279,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			break;
 		case Attack:
 			//printf("SHOUT TIME ATTACK\n");
+			CurrentBoss->HandGuyYell->hasPlayed = FALSE;
 			if(RectCircleCollision(&CurrentBoss->Position, CurrentBoss->ShoutRadius, &CurrentPlayer.PlayerCollider))
 			{
 				// If attack hits, daze player and switch to the jab
@@ -693,6 +711,13 @@ void HandGuyBossCollideWeapon(HandGuyBoss *CurrentBoss)
 {
 	int damageDealt;
 	char num[10];
+	
+	//bool for sounds
+	int SoundIsPlaying = FALSE;
+	int i;
+	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 6;
+
+
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
 	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
@@ -710,6 +735,19 @@ void HandGuyBossCollideWeapon(HandGuyBoss *CurrentBoss)
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);
+
+	//Voice Hit Reponse
+	//Sound overlap checking
+	for(i = 0; i < 6; i++)
+	{
+		if(FoxSoundCheckIsPlaying(CurrentBoss->HandGuyHit[i]))
+			SoundIsPlaying = TRUE;
+	}
+	if(FoxSoundCheckIsPlaying(CurrentBoss->HandGuyYell) || FoxSoundCheckIsPlaying(CurrentBoss->HandGuyPhrase))
+		SoundIsPlaying = TRUE;
+
+	if(!SoundIsPlaying)
+		PlayAudio(CurrentBoss->HandGuyHit[randNum]);
 }
 
 /*************************************************************************/
@@ -725,6 +763,12 @@ void PlayerDamageResult(int damage)
 {
 	int damageDealt;
 	char num[10];
+
+	//bool for sounds
+	int SoundIsPlaying = FALSE;
+	int i;
+	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 4;
+
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
 	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
@@ -741,6 +785,16 @@ void PlayerDamageResult(int damage)
 	
 	CurrentPlayer.CurrentPlayerStats.CurrentHealth -= damageDealt;
 	sprintf(num, "-%d", damageDealt);
+
+	//Voice Hit Reponse
+	for(i = 0; i < 5; i++)
+	{
+		if(FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.VoiceHit[i]))
+			SoundIsPlaying = TRUE;
+	}
+
+	if(!SoundIsPlaying)
+		PlayAudio(CurrentPlayer.CurrentPlayerSounds.VoiceHit[randNum]);
 
 	// Create Floating Combat Text
 	FirstLetter = CreateText(num, (CurrentPlayer.Position.x + rand() % 81 - 40), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);
@@ -781,3 +835,4 @@ void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatfor
 		}
 	}
 }
+

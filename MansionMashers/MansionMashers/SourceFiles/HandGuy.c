@@ -48,6 +48,10 @@ Platform* Plat;
 
 HandGuyBoss *Boss;
 
+static int timer;
+static int timerOn;
+static int prevPlayed;
+
 // Tree Background
 Sprite* TreeBackground1[4];
 Sprite* TreeBackground2[4];
@@ -78,6 +82,7 @@ void InitializeHandGuy(void)
 	int i;
 	ResetObjectList();
 	ResetCamera();
+	timer = 10 * FRAMERATE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
@@ -201,6 +206,9 @@ void FreeHandGuy(void)
 		SavePlayer(&CurrentPlayer);
 	}
 
+	//Gotta free that boss sometime
+	FreeMyAlloc(Boss);
+
 	FreeAllLists();
 }
 
@@ -225,6 +233,7 @@ void UnloadHandGuy(void)
 /*************************************************************************/
 void EventHandGuy(void)
 {
+	int i;
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	DetectHandGuyBossCollision(Boss);
@@ -247,12 +256,49 @@ void EventHandGuy(void)
 		//TogglePauseSound(BackSnd);
 	}
 
-	if(FoxInput_KeyTriggered('Y'))
+	TreeBackgroundUpdate();
+
+	if(Boss->CurrentHealth > 0)
 	{
-		CreateProjectile("TextureFiles/HandGauy.png", 100, 100, 780, -300, Arrow, WeaponEnemy, 10, -400, 0);
+		//Check if the boss is already saying something
+		Boss->HandGuySoundsPlay = FALSE;
+		for(i = 0; i < 6; i++)
+		{
+			if(FoxSoundCheckIsPlaying(Boss->HandGuyHit[i]))
+				Boss->HandGuySoundsPlay = TRUE;
+		}
+		if(FoxSoundCheckIsPlaying(Boss->HandGuyYell) || FoxSoundCheckIsPlaying(Boss->HandGuyPhrase))
+			Boss->HandGuySoundsPlay = TRUE;
+
+		//Say Phrase Randomly when not beginning animation, intel fox talking, or smashing
+		if(/*!beginningAnimation && !FoxSoundCheckIsPlaying(IntelFoxStart) 
+			&& !FoxSoundCheckIsPlaying(IntelFoxEnd) &&*/ !FoxSoundCheckIsPlaying(Boss->HandGuyYell))
+		{
+			//Get RandNum to choose rand Sound and a random time
+			int randInstance = ((int)((rand() / (float)RAND_MAX) * 720)) % 540;
+
+			//Randomly go but wait if a phrase was just said
+			if(randInstance > 536 && !timerOn)
+			{
+				//Start timer
+				timerOn = TRUE;
+
+				//If a sound is not playing let's say something
+				if(Boss->HandGuySoundsPlay == FALSE)
+					PlayAudio(Boss->HandGuyPhrase);		
+			}
+		}
 	}
 
-	TreeBackgroundUpdate();
+	//For Random Phrase Timer (see above)
+	if(timerOn)
+		timer -= 1;
+	if(timer < 0)
+	{
+		timer = 10 * FRAMERATE;
+		timerOn = FALSE;
+	}
+
 
 }
 

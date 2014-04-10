@@ -114,6 +114,7 @@ void InitializeArmGuy(void)
 	GlowBool = TRUE;
 	beginningAnimation = TRUE;
 	PlayerIsAlive = TRUE;
+	timer = 5 * FRAMERATE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1260, -220);
