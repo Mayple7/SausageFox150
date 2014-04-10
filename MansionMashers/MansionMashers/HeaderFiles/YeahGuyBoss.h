@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "CollisionBox.h"
 #include "Platform.h"
+#include "Sound.h"
 
 typedef struct YeahGuyBoss
 {
@@ -37,6 +38,12 @@ typedef struct YeahGuyBoss
 	int CurrentBlueHealth;
 
 	int numHeads;
+
+	FoxSound* YeahGuyHit[2];		//When boss gets hit
+	FoxSound* YeahGuyPhrase[2];		//To taunt player
+	FoxSound* YeahGuyYell;			//Saying for large attack
+	FoxSound* YeahGuyDie;			//When a head dies
+	int YeahGuySoundsPlay;			//bool
 
 	Vec2 Position;
 }YeahGuyBoss;

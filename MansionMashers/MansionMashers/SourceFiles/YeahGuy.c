@@ -49,6 +49,13 @@ int redHead;
 int greenHead;
 int blueHead;
 
+static int timer;
+static int timerOn;
+static int prevPlayed;
+static int DieSound1;
+static int DieSound2;
+static int DieSound3;
+
 Sprite* CurrentBuffSprite;
 
 // Buff Sprites and Collision boxes
@@ -97,6 +104,11 @@ void InitializeYeahGuy(void)
 	ResetObjectList();
 	ResetCamera();
 	levelComplete = FALSE;
+
+	timer = 10 * FRAMERATE;
+	DieSound1 = FALSE;
+	DieSound2 = FALSE;
+	DieSound3 = FALSE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
@@ -304,6 +316,9 @@ void FreeYeahGuy(void)
 	if (levelComplete)
 		SavePlayer(&CurrentPlayer);
 
+	//Yeah Guy is finally free
+	FreeMyAlloc(Boss);
+
 	FreeAllLists();
 }
 
@@ -328,6 +343,7 @@ void UnloadYeahGuy(void)
 /*************************************************************************/
 void EventYeahGuy(void)
 {
+	int i;
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	DetectYeahGuyBossCollision(Boss, CurrentBuff);
@@ -348,6 +364,94 @@ void EventYeahGuy(void)
 		//TogglePauseSound(&BackSnd);
 		UpdatePause();
 		//TogglePauseSound(&BackSnd);
+	}
+
+
+	//Check if the boss is already saying something
+	Boss->YeahGuySoundsPlay = FALSE;
+	for(i = 0; i < 2; i++)
+	{
+		if(FoxSoundCheckIsPlaying(Boss->YeahGuyHit[i]))
+			Boss->YeahGuySoundsPlay = TRUE;
+		if(FoxSoundCheckIsPlaying(Boss->YeahGuyPhrase[i]))
+			Boss->YeahGuySoundsPlay = TRUE;
+	}
+	if(FoxSoundCheckIsPlaying(Boss->YeahGuyYell) || FoxSoundCheckIsPlaying(Boss->YeahGuyDie))
+		Boss->YeahGuySoundsPlay = TRUE;
+
+	//Play sound if boss died
+	if(Boss->CurrentBlueHealth <= 0 && !DieSound1 && !Boss->YeahGuySoundsPlay)
+	{
+		DieSound1 = TRUE;
+		PlayAudio(Boss->YeahGuyDie);
+	}
+	if(Boss->CurrentGreenHealth <= 0 && !DieSound2 && !Boss->YeahGuySoundsPlay)
+	{
+		DieSound2 = TRUE;
+		PlayAudio(Boss->YeahGuyDie);
+	}
+	if(Boss->CurrentRedHealth <= 0 && !DieSound3 && !Boss->YeahGuySoundsPlay)
+	{
+		DieSound3 = TRUE;
+		PlayAudio(Boss->YeahGuyDie);
+	}
+
+
+	if(Boss->CurrentBlueHealth > 0 || Boss->CurrentGreenHealth > 0 || Boss->CurrentRedHealth > 0)
+	{
+
+		//Say Random Phrases Randomly when not beginning animation, intel fox talking, or smashing
+		if(/*!beginningAnimation && !FoxSoundCheckIsPlaying(IntelFoxStart) 
+			&& !FoxSoundCheckIsPlaying(IntelFoxEnd) &&*/ !FoxSoundCheckIsPlaying(Boss->YeahGuyYell)
+			&& !FoxSoundCheckIsPlaying(Boss->YeahGuyDie))
+		{
+			//Get RandNum to choose rand Sound and a random time
+			int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 2;
+			int randInstance = ((int)((rand() / (float)RAND_MAX) * 1920)) % 1080;
+
+			//Randomly go but wait if a phrase was just said
+			if(randInstance > 1074 && !timerOn)
+			{
+				//Start timer
+				timerOn = TRUE;
+
+				//If a sound is not playing let's say something
+				if(Boss->YeahGuySoundsPlay == FALSE)
+				{
+					//Check if phrase your about to say was just said
+					if(randNum == prevPlayed)
+					{
+						//if it was the same phrase say a differnt one
+						if(randNum == 0)
+						{
+							PlayAudio(Boss->YeahGuyPhrase[randNum + 1]);
+							prevPlayed = randNum + 1;
+						}
+						else
+						{
+							PlayAudio(Boss->YeahGuyPhrase[randNum - 1]);
+							prevPlayed = randNum - 1;
+						}
+
+					}
+					//Wasn't the same so just say what you wanna say
+					else
+					{
+						PlayAudio(Boss->YeahGuyPhrase[randNum]);
+						prevPlayed = randNum;
+					}
+				}
+			}
+		}
+	}
+
+	//For Random Phrase Timer (see above)
+	if(timerOn)
+		timer -= 1;
+	if(timer < 0)
+	{
+		timer = 10 * FRAMERATE;
+		timerOn = FALSE;
 	}
 }
 

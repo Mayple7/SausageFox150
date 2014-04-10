@@ -7,6 +7,7 @@
 #include "CollisionBox.h"
 #include "Platform.h"
 #include "FoxObjects.h"
+#include "Sound.h"
 
 
 typedef struct HandGuyParts

@@ -106,6 +106,17 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 
 	CurrentBoss->YeahProjectileDamage = 20;
 
+	//Sounds
+	CurrentBoss->YeahGuyHit[0] = CreateSound("Sounds/YeahGuyHit1.mp3", SmallSnd);
+	CurrentBoss->YeahGuyHit[1] = CreateSound("Sounds/YeahGuyHit2.mp3", SmallSnd);
+	CurrentBoss->YeahGuyPhrase[0] = CreateSound("Sounds/YeahGuyPhrase1.mp3", SmallSnd);
+	CurrentBoss->YeahGuyPhrase[1] = CreateSound("Sounds/YeahGuyPhrase2.mp3", SmallSnd);
+	CurrentBoss->YeahGuyYell = CreateSound("Sounds/YeahGuyYell.mp3", SmallSnd);
+	CurrentBoss->YeahGuyDie = CreateSound("Sounds/YeahGuyDie.mp3", SmallSnd);
+	CurrentBoss->YeahGuySoundsPlay = FALSE;
+	
+
+
 	return CurrentBoss;
 }
 
@@ -164,6 +175,11 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
+			if(!CurrentBoss->YeahGuySoundsPlay && !CurrentBoss->YeahGuyYell->hasPlayed)
+			{
+				CurrentBoss->YeahGuyYell->hasPlayed = TRUE;
+				PlayAudio(CurrentBoss->YeahGuyYell);
+			}
 			//printf("AOE TIME START\n");
 			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempYeahGuyShout.png");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
@@ -171,6 +187,7 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 				CurrentBoss->InnerState = Attack;
 			break;
 		case Attack:
+			CurrentBoss->YeahGuyYell->hasPlayed = FALSE;
 			//printf("AOE TIME ATTACK\n");
 			if(RectCircleCollision(&CurrentBoss->Position, CurrentBoss->YeahAOERadius, &CurrentPlayer.PlayerCollider))
 			{
@@ -755,6 +772,12 @@ void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff)
 {
 	int damageDealt;
 	char num[10];
+
+	//bool for sounds
+	int SoundIsPlaying = FALSE;
+	int i;
+	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 2;
+
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
 	Vec3Set(&textColor, 1.0f, 1.0f, 1.0f);
@@ -781,6 +804,21 @@ void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff)
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);
+
+	//Voice Hit Reponse
+	for(i = 0; i < 2; i++)
+	{
+		if(FoxSoundCheckIsPlaying(CurrentBoss->YeahGuyHit[i]))
+			SoundIsPlaying = TRUE;
+		if(FoxSoundCheckIsPlaying(CurrentBoss->YeahGuyPhrase[i]))
+			SoundIsPlaying = TRUE;
+	}
+
+	if(FoxSoundCheckIsPlaying(CurrentBoss->YeahGuyYell) || FoxSoundCheckIsPlaying(CurrentBoss->YeahGuyDie))
+		SoundIsPlaying = TRUE;
+
+	if(!SoundIsPlaying)
+		PlayAudio(CurrentBoss->YeahGuyHit[randNum]);
 }
 
 /*************************************************************************/
@@ -796,6 +834,12 @@ static void PlayerDamageResult(int damage)
 {
 	int damageDealt;
 	char num[10];
+
+	//bool for sounds
+	int SoundIsPlaying = FALSE;
+	int i;
+	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 4;
+
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
 	Vec3Set(&textColor, 1.0f, 0.0f, 0.0f);
@@ -813,11 +857,23 @@ static void PlayerDamageResult(int damage)
 	CurrentPlayer.CurrentPlayerStats.CurrentHealth -= damageDealt;
 	sprintf(num, "-%d", damageDealt);
 
+	//Voice Hit Reponse
+	for(i = 0; i < 5; i++)
+	{
+		if(FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.VoiceHit[i]))
+			SoundIsPlaying = TRUE;
+	}
+
+	if(!SoundIsPlaying)
+		PlayAudio(CurrentPlayer.CurrentPlayerSounds.VoiceHit[randNum]);
+
 	// Create Floating Combat Text
 	FirstLetter = CreateText(num, (CurrentPlayer.Position.x + rand() % 81 - 40), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);
+
+
 }
 
 /*************************************************************************/
