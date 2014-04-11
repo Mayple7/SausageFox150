@@ -39,15 +39,11 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int levelComplete = FALSE;
-
-// ---------------------------------------------------------------------------
-// globals
 static int levelComplete;
 static int PlayerIsAlive; 
 static int beginningAnimation;
 
-Kevin *Boss;
+//Kevin *Boss;
 HUD* CurrentHUD;
 
 Sprite* BlackOverlay;
@@ -85,7 +81,7 @@ void LoadKevin(void)
 void InitializeKevin(void)
 {
 	Vec3 Tint;
-	int i;
+	//int i;
 	ResetObjectList();
 	ResetCamera();
 	levelComplete = FALSE;
@@ -176,6 +172,7 @@ void UpdateKevin(void)
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 
+	/*
 	// When the boss dies
 	if(!levelComplete && Boss->CurrentHealth <= 0)
 	{
@@ -190,7 +187,7 @@ void UpdateKevin(void)
 		{
 			PlayAudio(ArmGuyDie);
 			ArmGuyDie->hasPlayed = TRUE;
-		}*/
+		}
 
 		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width)
 		{
@@ -212,7 +209,7 @@ void UpdateKevin(void)
 	{
 		BossHPBar->ScaleX = 800.0f * (Boss->CurrentHealth / (float)Boss->MaxHealth);
 		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentHealth / (float)Boss->MaxHealth));
-	}
+	} */
 }
 
 /*************************************************************************/
