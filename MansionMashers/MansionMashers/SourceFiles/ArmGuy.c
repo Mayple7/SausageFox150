@@ -288,7 +288,6 @@ void DrawArmGuy(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
-	//DrawHUD(&HUDList);
 	DrawCollisionList();
 	
 }
