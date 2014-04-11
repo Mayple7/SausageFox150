@@ -379,6 +379,8 @@ void UpdatePlayerHurt(Player *CurrentPlayer)
 	if (lastHealth > CurrentPlayer->CurrentPlayerStats.CurrentHealth && lastHealth > 0 && lastDefense == CurrentPlayer->PlayerWeapon->BonusDefense)
 	{
 		float overlayScalar = 1.0f + 1.5f * ((float)CurrentPlayer->CurrentPlayerStats.CurrentHealth / CurrentPlayer->CurrentPlayerStats.MaxHealth);
+		if (overlayScalar < 1)
+			overlayScalar = 1.0f;
 		HurtOverlay->ScaleX = overlayScalar;
 		HurtOverlay->ScaleY = overlayScalar;
 	}

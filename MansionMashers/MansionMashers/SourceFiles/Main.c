@@ -210,9 +210,10 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			No algorythm here, just checking how many times the 
 			functions are called for freeing and allocing.
 		*/
-		printf("\nMEMORY NOT FREED: %i \n\n", TotalMemoryAllocs - TotalMemoryFrees);
-		if (!(TotalMemoryAllocs - TotalMemoryFrees))
-			printf(":: MEMORY LEAKS: PLEASE GET A BUCKET AND MOP ::");
+		TotalMemoryAllocs -= TotalMemoryFrees;
+		printf("\nMEMORY NOT FREED: %i \n\n", TotalMemoryAllocs);
+		if (TotalMemoryAllocs)
+			printf(":: MEMORY LEAKS: PLEASE GET A BUCKET AND MOP ::\n\n");
 		printf("----------------A NEW DAY----------------\n\n");
 		
 		SetPreviousState(GetCurrentState());
