@@ -110,11 +110,11 @@ void CreateUpgradeScreenObjects(void)
 	WhiteOverlay->Alpha = 0;
 
 	//Upgrade buttons, all 3 (Not really sure why Agility is in the middle, but that is how the rest of the game is)
-	UpgradeButton1 = CreateButton("TextureFiles/UpgradeButton.png", 545 + camX, -2000, 347, 146); //Strength
+	UpgradeButton1 = CreateButton("TextureFiles/UpgradeButtonStr.png", 545 + camX, -2000, 347, 146); //Strength
 	UpgradeButton1->ButtonSprite->ZIndex = 4002;
-	UpgradeButton2 = CreateButton("TextureFiles/UpgradeButton.png", 545 + camX, -2000, 347, 146); //Agility
+	UpgradeButton2 = CreateButton("TextureFiles/UpgradeButtonAgi.png", 545 + camX, -2000, 347, 146); //Agility
 	UpgradeButton2->ButtonSprite->ZIndex = 4002;
-	UpgradeButton3 = CreateButton("TextureFiles/UpgradeButton.png", 545 + camX, -2000, 347, 146); //Defense
+	UpgradeButton3 = CreateButton("TextureFiles/UpgradeButtonDef.png", 545 + camX, -2000, 347, 146); //Defense
 	UpgradeButton3->ButtonSprite->ZIndex = 4002;
 
 	//Upgrade bars
