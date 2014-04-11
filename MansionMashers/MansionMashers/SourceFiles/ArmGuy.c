@@ -209,7 +209,9 @@ void InitializeArmGuy(void)
 void UpdateArmGuy(void)
 {
 	EventArmGuy();
-	PlayAudio(BackSnd);
+	
+	if(PlayerIsAlive)
+		PlayAudio(BackSnd);
 
 	// This should be the last line in this function
 	if(!levelComplete)

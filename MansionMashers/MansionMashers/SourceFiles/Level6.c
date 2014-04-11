@@ -298,7 +298,9 @@ void InitializeLevel6(void)
 void UpdateLevel6(void)
 {
 	EventLevel();
-	PlayAudio(BackSnd);
+
+	if(PlayerIsAlive)
+		PlayAudio(BackSnd);
 	//EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1, 10);
 

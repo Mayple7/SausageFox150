@@ -365,7 +365,8 @@ void UpdateLevel2(void)
 	else if(PlayerInSight == FALSE)
 		Pan3Enemy->EnemyState = AINone;
 
-	PlayAudio(BackSnd);
+	if(PlayerIsAlive)
+		PlayAudio(BackSnd);
 	//ScrollPaperScroll(1);
 
 	// This should be the last line in this function

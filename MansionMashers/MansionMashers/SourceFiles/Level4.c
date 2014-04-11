@@ -256,7 +256,9 @@ void UpdateLevel4(void)
 	int i, numEnemies = 0;
 
 	EventLevel4();
-	PlayAudio(BackSnd);
+	
+	if(PlayerIsAlive)
+		PlayAudio(BackSnd);
 
 	// Update remaining enemies
 	for(i = 0; i < PANELAMOUNT; ++i)
