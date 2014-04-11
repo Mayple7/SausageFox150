@@ -30,6 +30,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+#include "../HeaderFiles/BoundingBox.h"
 
 
 // ---------------------------------------------------------------------------
@@ -40,14 +41,28 @@
 // globals
 static int levelComplete = FALSE;
 
-Platform *Shelf;
-Platform *Shelf2;
-Platform *Shelf3;
-Platform *Shelf4;
+// ---------------------------------------------------------------------------
+// globals
+static int levelComplete;
+static int PlayerIsAlive; 
+static int beginningAnimation;
+
+Kevin *Boss;
+HUD* CurrentHUD;
+
+Sprite* BlackOverlay;
+//Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
+static int GlowBool;
+
+//Boss HP Bar
+Sprite* BossHPBar;
+Sprite* BossHPBarBack;
+
+//static int prevPlayed;
+
+Sprite* Background;
 
 HUD *CurrentHUD;
-
-EnemySpawner *FirstSpawner;
 
 /*************************************************************************/
 /*!
@@ -69,36 +84,70 @@ void LoadKevin(void)
 /*************************************************************************/
 void InitializeKevin(void)
 {
-	Vec2 SpawnerLocation;
-
+	Vec3 Tint;
+	int i;
 	ResetObjectList();
 	ResetCamera();
+	levelComplete = FALSE;
+	beginningAnimation = TRUE;
+	PlayerIsAlive = TRUE;
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, -400, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1260, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
-	Shelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, 280, -280);
-	Shelf->PlatformCollider.Offset.y = 5 * Shelf->PlatformSprite->Height / 16;
-	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.2f); 
+	/////////////////////////////////
+	//		Backgrounds			   //
+	/////////////////////////////////
+	//Panel1
+	CreateSprite("TextureFiles/ArmGuyBackground.png", 1920, 1080, 1, 1, 1, 0, 0);
 
-	Shelf2 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, 100, -100);
-	Shelf2->PlatformCollider.Offset.y = 5 * Shelf2->PlatformSprite->Height / 16;
-	UpdateCollider(&Shelf2->PlatformCollider, Shelf2->PlatformCollider.width, Shelf2->PlatformCollider.height * 0.2f); 
+	//Bounding Boxes
+	CreateBoundingBoxes();
 
-	Shelf3 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, -80, -100);
-	Shelf3->PlatformCollider.Offset.y = 5 * Shelf3->PlatformSprite->Height / 16;
-	UpdateCollider(&Shelf3->PlatformCollider, Shelf3->PlatformCollider.width, Shelf3->PlatformCollider.height * 0.2f); 
+	// Black Overlay
+	Vec3Set(&Tint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = Tint;
 
-	Shelf4 = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, -260, -280);
-	Shelf4->PlatformCollider.Offset.y = 5 * Shelf4->PlatformSprite->Height / 16;
-	UpdateCollider(&Shelf4->PlatformCollider, Shelf4->PlatformCollider.width, Shelf4->PlatformCollider.height * 0.2f); 
+	// Boss HP Bar
+	BossHPBar = (Sprite *)CreateSprite("TextureFiles/BossHealthBarMid.png", 1, 44, 399, 1, 1, -200, 450);
+	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
 
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
 
-	Vec2Set(&SpawnerLocation, -200, 0);
-	FirstSpawner = CreateEnemySpawner(20, BasicMelee, TRUE, 100, 1080, SpawnerLocation, 0);
+	/////////////////////////////////
+	//		Platforms			   //
+	/////////////////////////////////
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, -400, -170);
+	CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, 400, -170);
+
+	/////////////////////////////////
+	//			Walls			   //
+	/////////////////////////////////
+	//Create Bounding Walls
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, -1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, 1160, 0);
+
+	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+
+	/////////////////////////////////
+	//			Boss			   //
+	/////////////////////////////////
+	//Boss = CreateArmGuyBoss(0, 0);
+
+	/////////////////////////////////
+	//		On Death			   //
+	/////////////////////////////////
+	CreateDeathConfirmObjects();
+
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -111,14 +160,59 @@ void UpdateKevin(void)
 {
 	EventKevin();
 
+	if(!levelComplete)
+	{
+		//UpdateKevinBoss(Boss);
+	}
+
 	// This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
-	UpdateAllProjectiles();
-	ParticleSystemUpdate();
-
 	UpdateHUDPosition(CurrentHUD);
 	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+
+	UpdateFloatingText();
+	UpdateAllProjectiles();
+	ParticleSystemUpdate();
+	BoundingBoxUpdate();
+
+	// When the boss dies
+	if(!levelComplete && Boss->CurrentHealth <= 0)
+	{
+		levelComplete = TRUE;
+		//FreeKevinBoss(Boss);
+	}
+
+	// What to do when the boss is dead
+	if(levelComplete)
+	{
+		/*if(!ArmGuyDie->hasPlayed && PlayerIsAlive)
+		{
+			PlayAudio(ArmGuyDie);
+			ArmGuyDie->hasPlayed = TRUE;
+		}*/
+
+		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width)
+		{
+			LevelCompletion();
+		}
+
+		BossHPBar->Visible = FALSE;
+
+		if(BossHPBar->Alpha > 0.0f)
+		{
+			BossHPBar->Alpha -= GetDeltaTime() / 2.0f;
+		}
+		else
+			BossHPBar->Alpha = 0;
+
+	}
+	// Boss health bar logic
+	else
+	{
+		BossHPBar->ScaleX = 800.0f * (Boss->CurrentHealth / (float)Boss->MaxHealth);
+		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentHealth / (float)Boss->MaxHealth));
+	}
 }
 
 /*************************************************************************/
@@ -131,7 +225,6 @@ void DrawKevin(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
-	//DrawHUD(&HUDList);
 	DrawCollisionList();
 }
 
