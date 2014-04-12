@@ -30,5 +30,7 @@
 #include "../HeaderFiles/Level6.h"
 #include "../HeaderFiles/Level7.h"
 #include "../HeaderFiles/Credits.h"
+#include "../HeaderFiles/Narr1.h"
+
 
 #endif

@@ -509,7 +509,12 @@ void LevelCompletion(void)
 		{
 			//Continue onto the map
 			if (BlackOverlay->Alpha > 1)
-				SetNextState(GS_MapLevel);
+			{
+				if(GetCurrentState() == GS_Level1)
+					SetNextState(GS_Narr1);
+				else
+					SetNextState(GS_MapLevel);
+			}
 			else
 				BlackOverlay->Alpha += GetDeltaTime();
 		}

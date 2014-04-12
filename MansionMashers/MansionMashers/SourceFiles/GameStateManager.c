@@ -375,6 +375,14 @@ void GSMUpdate(int CurState)
 			GSMPointers.pDraw = DrawCredits;
 			GSMPointers.pUnload = UnloadCredits;
 			break;
+		case GS_Narr1:
+			GSMPointers.pLoad = LoadNarr1;
+			GSMPointers.pInit = InitializeNarr1;
+			GSMPointers.pUpdate = UpdateNarr1;
+			GSMPointers.pFree = FreeNarr1;
+			GSMPointers.pDraw = DrawNarr1;
+			GSMPointers.pUnload = UnloadNarr1;
+			break;
 
 	}
 }

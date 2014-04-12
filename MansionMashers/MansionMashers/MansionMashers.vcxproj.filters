@@ -323,6 +323,9 @@
     <ClInclude Include="HeaderFiles\Credits.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Narr1.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -539,6 +542,9 @@
       <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Credits.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Narr1.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
     </ClCompile>
   </ItemGroup>

@@ -132,6 +132,7 @@
     <ClInclude Include="HeaderFiles\Matrix3.h" />
     <ClInclude Include="HeaderFiles\MemoryManager.h" />
     <ClInclude Include="HeaderFiles\Movement.h" />
+    <ClInclude Include="HeaderFiles\Narr1.h" />
     <ClInclude Include="HeaderFiles\ObjectManager.h" />
     <ClInclude Include="HeaderFiles\OptionsMenu.h" />
     <ClInclude Include="HeaderFiles\PaperScroll.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="SourceFiles\Matrix3.c" />
     <ClCompile Include="SourceFiles\MemoryManager.c" />
     <ClCompile Include="SourceFiles\Movement.c" />
+    <ClCompile Include="SourceFiles\Narr1.c" />
     <ClCompile Include="SourceFiles\ObjectManagerFree.c" />
     <ClCompile Include="SourceFiles\ObjectManagerMake.c" />
     <ClCompile Include="SourceFiles\OptionsMenu.c" />

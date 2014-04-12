@@ -46,6 +46,10 @@ static int beginningAnimation;
 
 Sprite* BlackOverlay;
 
+Sprite* Skip;
+float SkipTimer;
+static int TimerGoingUp;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -86,6 +90,11 @@ void InitializeCredits(void)
 	Vec3Set(&TextTint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
+
+	SkipTimer = -2.5;
+	TimerGoingUp = TRUE;
+	Skip = (Sprite *)CreateSprite("TextureFiles/Skip.png", 1920, 1080, 600, 1, 1, 0, 0);
+	Skip->Alpha = -2.5;
 }
 
 /*************************************************************************/
@@ -147,7 +156,7 @@ void EventLevel(void)
 	//		Input				//
 	//////////////////////////////
 	
-	if(FoxInput_KeyTriggered(VK_ESCAPE))
+	if(FoxInput_KeyTriggered(VK_SPACE))
 	{
 		SetNextState(GS_MainMenu);
 	}
@@ -173,6 +182,7 @@ void EventLevel(void)
 	//		Everything Else		//
 	//////////////////////////////
 	BoundingBoxUpdate();
+	ParticleSystemUpdate();
 	
 	if(beginningAnimation)
 	{
@@ -192,4 +202,21 @@ void EventLevel(void)
 		if(BlackOverlay->Alpha > 1)
 			SetNextState(GS_MainMenu);
 	}
+
+	if (TimerGoingUp)
+		SkipTimer += GetDeltaTime();
+	else
+		SkipTimer -= GetDeltaTime();
+	if (SkipTimer > 0)
+	{
+		Skip->Alpha = SkipTimer;
+
+		if (SkipTimer > 1)
+			TimerGoingUp = FALSE;
+		else if (SkipTimer < 0.4)
+			TimerGoingUp = TRUE;
+	}
+
+	Skip->Position.x = GetCameraXPosition();
+	
 }

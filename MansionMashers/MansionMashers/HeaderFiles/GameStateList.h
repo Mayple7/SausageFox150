@@ -30,6 +30,7 @@ enum GSL
 	GS_CharacterSelect,
 	GS_MapLevel,
 	GS_Credits,
+	GS_Narr1,
 	GS_Restart,
 	GS_Quit,
 	GS_MAX,

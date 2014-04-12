@@ -236,7 +236,7 @@ void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNo
 
 	if (attackingNow)
 	{
-		if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer->isAttacking)
+		if ((FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT) || FoxInput_KeyTriggered('N')) && !CurrentPlayer->isAttacking) 
 		{
 			//Pick a random swing sound to play
 			if (rand() % 2)
