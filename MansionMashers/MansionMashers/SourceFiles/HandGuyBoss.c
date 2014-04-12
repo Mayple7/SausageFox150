@@ -50,8 +50,7 @@ static enum PositionState { A, B, C, D };
 /*************************************************************************/
 void LoadHandGuyBoss(void)
 {
-	LoadTexture("TextureFiles/TempHandGuy.png");
-	LoadTexture("TextureFiles/TempHandGuyShout.png");
+
 	LoadTexture("TextureFiles/QuickJab.png");
 	LoadTexture("TextureFiles/DebugCircle.png");
 }
@@ -71,7 +70,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 
 	//Initialize boss struct
 	Vec2Set(&CurrentBoss->Position, 700, -200);
-	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempHandGuy.png", 150, 300, 10, 1, 1, 700, -200);
+	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 150, 300, 10, 1, 1, 700, -200);
 	CurrentBoss->BodySprite->FlipX = TRUE;
 	CurrentBoss->BodySprite->Visible = FALSE;
 	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/QuickJab.png", 100, 100, 11, 4, 4, 580, -120);
