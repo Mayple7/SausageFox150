@@ -94,7 +94,7 @@ void CreateUpgradeScreenObjects(void)
 	ChangeTextZIndex(UpgradesName, 4002);
 
 	//Upgrades remaining
-	Vec3Set(&NewTint, 0.6f, 0.0f, 0.6f);
+	Vec3Set(&NewTint, 0.32f, 0.11f, 0.47f);
 	UpgradesLeft = CreateText("Sweg", 0, -2000, 100, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradesLeft);
 	ChangeTextZIndex(UpgradesLeft, 4002);
@@ -128,7 +128,7 @@ void CreateUpgradeScreenObjects(void)
 	UpgradeBarColor3 = (Sprite *) CreateSprite("TextureFiles/UpgradeBarColor.png", 816, 85, 4001, 1, 1, 0, -2000);
 
 	//How many upgrades have been used for each skill type
-	Vec3Set(&NewTint, 0.6f, 0.0f, 0.6f);
+	Vec3Set(&NewTint, 0.32f, 0.11f, 0.47f);
 
 	UpgradeAmount1 = CreateText("Swog", 0, -2000, 120, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradeAmount1);
@@ -189,7 +189,7 @@ void UpdateUpgradeScreenObjects(void)
 		ChangeTextString(UpgradesName, "All Upgrades Complete!");
 		ChangeTextZIndex(UpgradesName, 4002);
 	}
-	Vec2Set(&NewPosition, camX, 480);
+	Vec2Set(&NewPosition, camX, 470);
 	ChangeTextPosition(UpgradesName, NewPosition, Center);
 
 	//Upgrades remaining
@@ -208,7 +208,7 @@ void UpdateUpgradeScreenObjects(void)
 		ChangeTextZIndex(UpgradesLeft, 4002);
 		lastUpgrades = CurrentPlayer.CurrentPlayerStats.Upgrades;
 	}
-	Vec2Set(&NewPosition, camX, 400);
+	Vec2Set(&NewPosition, camX, 380);
 	ChangeTextPosition(UpgradesLeft, NewPosition, Center);
 
 	//Upgrade buttons, all 3
@@ -272,63 +272,89 @@ void UpdateUpgradeScreenObjects(void)
 	if (CurrentPlayer.CurrentPlayerStats.Upgrades > 0 && PointRectCollision(&UpgradeButton1->ButtonCollider, &MouseClick)
 	 && CurrentPlayer.CurrentPlayerStats.Strength < UPGRADE_MAX)
 	{
+		UpgradeButton1->ButtonSprite->ScaleX = 1.12f;
+		UpgradeButton1->ButtonSprite->ScaleY = 1.12f;
+
+		//Make the button react
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
 			CurrentPlayer.CurrentPlayerStats.Upgrades--;
 			CurrentPlayer.CurrentPlayerStats.Strength++;
+
+			UpgradeButton1->ButtonSprite->ScaleX = 1.16f;
+			UpgradeButton1->ButtonSprite->ScaleY = 1.16f;
 		}
-		UpgradeButton1->ButtonSprite->ScaleX = 1.15f;
-		UpgradeButton1->ButtonSprite->ScaleY = 1.15f;
 	}
 	else
 	{
-		UpgradeButton1->ButtonSprite->ScaleX = 1.0f;
-		UpgradeButton1->ButtonSprite->ScaleY = 1.0f;
+		if (UpgradeButton1->ButtonSprite->ScaleX > 1.0f)
+		{
+			UpgradeButton1->ButtonSprite->ScaleX -= GetDeltaTime() * 2;
+			UpgradeButton1->ButtonSprite->ScaleY -= GetDeltaTime() * 2;
+		}
 	}
 	//AGILITY (No up allowed if maxed)
 	if (CurrentPlayer.CurrentPlayerStats.Upgrades > 0 && PointRectCollision(&UpgradeButton2->ButtonCollider, &MouseClick)
 	 && CurrentPlayer.CurrentPlayerStats.Agility < UPGRADE_MAX)
 	{
+		UpgradeButton2->ButtonSprite->ScaleX = 1.12f;
+		UpgradeButton2->ButtonSprite->ScaleY = 1.12f;
+
+		//Make the button react
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
 			CurrentPlayer.CurrentPlayerStats.Upgrades--;
 			CurrentPlayer.CurrentPlayerStats.Agility++;
+
+			UpgradeButton2->ButtonSprite->ScaleX = 1.16f;
+			UpgradeButton2->ButtonSprite->ScaleY = 1.16f;
 		}
-		UpgradeButton2->ButtonSprite->ScaleX = 1.15f;
-		UpgradeButton2->ButtonSprite->ScaleY = 1.15f;
 	}
 	else
 	{
-		UpgradeButton2->ButtonSprite->ScaleX = 1.0f;
-		UpgradeButton2->ButtonSprite->ScaleY = 1.0f;
+		if (UpgradeButton2->ButtonSprite->ScaleX > 1.0f)
+		{
+			UpgradeButton2->ButtonSprite->ScaleX -= GetDeltaTime() * 2;
+			UpgradeButton2->ButtonSprite->ScaleY -= GetDeltaTime() * 2;
+		}
 	}
 	//DEFENSE (No up allowed if maxed)
 	if (CurrentPlayer.CurrentPlayerStats.Upgrades > 0 && PointRectCollision(&UpgradeButton3->ButtonCollider, &MouseClick)
 	 && CurrentPlayer.CurrentPlayerStats.Defense < UPGRADE_MAX)
 	{
+		UpgradeButton3->ButtonSprite->ScaleX = 1.12f;
+		UpgradeButton3->ButtonSprite->ScaleY = 1.12f;
+
+		//Make the button react
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
 			CurrentPlayer.CurrentPlayerStats.Upgrades--;
 			CurrentPlayer.CurrentPlayerStats.Defense++;
+
+			UpgradeButton3->ButtonSprite->ScaleX = 1.16f;
+			UpgradeButton3->ButtonSprite->ScaleY = 1.16f;
 		}
-		UpgradeButton3->ButtonSprite->ScaleX = 1.15f;
-		UpgradeButton3->ButtonSprite->ScaleY = 1.15f;
 	}
 	else
 	{
-		UpgradeButton3->ButtonSprite->ScaleX = 1.0f;
-		UpgradeButton3->ButtonSprite->ScaleY = 1.0f;
+		if (UpgradeButton3->ButtonSprite->ScaleX > 1.0f)
+		{
+			UpgradeButton3->ButtonSprite->ScaleX -= GetDeltaTime() * 2;
+			UpgradeButton3->ButtonSprite->ScaleY -= GetDeltaTime() * 2;
+		}
 	}
 
 	//MAIN MENU
 	if(PointRectCollision(&MainMapButton->ButtonCollider, &MouseClick))
 	{
+		MainMapButton->ButtonSprite->ScaleX = 1.2f;
+		MainMapButton->ButtonSprite->ScaleY = 1.2f;
+
+		//Make the button react
 		if(FoxInput_MouseTriggered(MOUSE_BUTTON_LEFT))
 		{
 			UpgradeComplete = TRUE;
 		}
-		MainMapButton->ButtonSprite->ScaleX = 1.2f;
-		MainMapButton->ButtonSprite->ScaleY = 1.2f;
 	}
 	else
 	{

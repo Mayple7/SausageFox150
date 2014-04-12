@@ -237,11 +237,6 @@ void UpdateTutorial(void)
 	
 	PlayAudio(BackSnd);
 
-	if(FoxInput_KeyTriggered('J'))
-	{
-		FreeEnemy(StrawDummy);
-	}
-
 	//This should be the last line in this function
 	UpdatePlayerPosition(&CurrentPlayer);
 
@@ -361,14 +356,7 @@ void UpdateTutorial(void)
 	//If the dummy exists, prevent the player from moving past
 	if(StrawDummy->objID > 0)
 	{
-		/*if(CurrentPlayer.PlayerCollider.Position.x + CurrentPlayer.PlayerCollider.width / 2 > StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2)
-		{
-			CurrentPlayer.Position.x = (StrawDummy->Position.x - StrawDummy->EnemyCollider.width / 2) - (CurrentPlayer.PlayerCollider.width / 2) - 1;
-		}
-		else if(CurrentPlayer.PlayerCollider.Position.x - CurrentPlayer.PlayerCollider.width / 2 < -7 * TutorialBackground->Width / 16)
-		{
-			CurrentPlayer.Position.x = (-7 * TutorialBackground->Width / 16) + (CurrentPlayer.PlayerCollider.width / 2) + 1;
-		}*/
+		//Do nothing
 	}
 	else
 		FreeWall(DummyBlock);

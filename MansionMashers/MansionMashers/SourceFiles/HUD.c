@@ -116,10 +116,10 @@ HUD* CreateHUD(Player* CurrentPlayer)
 	ChangeTextVisibility(CurrentHUD->CoinText);
 
 	//Text for Rank Number
-	Vec3Set(&TextTint, 0.6f, 0.0f, 0.6f);
+	Vec3Set(&TextTint, 0.62f, 0.11f, 0.67f);
 	CurrentHUD->currentHUDRankValue = CurrentPlayer->CurrentPlayerStats.Rank;
 	sprintf(CharTemp, "%i", CurrentHUD->currentHUDRankValue);
-	CurrentHUD->RankText = CreateText(CharTemp, 448, 192, 48, TextTint, Left, Border);
+	CurrentHUD->RankText = CreateText(CharTemp, 448, 192, 56, TextTint, Left, Border);
 	ChangeTextZIndex(CurrentHUD->RankText, 401);
 	ChangeTextVisibility(CurrentHUD->RankText);
 
