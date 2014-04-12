@@ -279,7 +279,8 @@ void UpdateLevel1(void)
 {
 	//Handle the special events right off the bat yo
 	EventLevel1();
-	PlayAudio(BackSnd);
+	if(PlayerIsAlive)
+		PlayAudio(BackSnd);
 
 	if(!EnemyPanelNumber[0])
 		Arrow1->Visible = TRUE;

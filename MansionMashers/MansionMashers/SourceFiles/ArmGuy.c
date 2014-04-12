@@ -209,7 +209,9 @@ void InitializeArmGuy(void)
 void UpdateArmGuy(void)
 {
 	EventArmGuy();
-	PlayAudio(BackSnd);
+	
+	if(PlayerIsAlive)
+		PlayAudio(BackSnd);
 
 	// This should be the last line in this function
 	if(!levelComplete)
@@ -288,7 +290,6 @@ void DrawArmGuy(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
-	//DrawHUD(&HUDList);
 	DrawCollisionList();
 	
 }
