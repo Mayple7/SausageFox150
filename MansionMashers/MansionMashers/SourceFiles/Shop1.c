@@ -91,29 +91,30 @@ void InitializeShop1(void)
 
 	// First shop plackard
 	if(randNum > 98)
-		CreateWeaponShop(-400, -140, randType, Sausage);
+		CreateWeaponShop(-400, -1040, randType, Sausage);
 	else if(randNum > 85)
-		CreateWeaponShop(-400, -140, randType, Rare);
+		CreateWeaponShop(-400, -1040, randType, Rare);
 	else if(randNum > 50)
-		CreateWeaponShop(-400, -140, randType, Uncommon);
+		CreateWeaponShop(-400, -1040, randType, Uncommon);
 	else
-		CreateWeaponShop(-400, -140, randType, Common);
+		CreateWeaponShop(-400, -1040, randType, Common);
 	
 	randNum = (int)((rand() / (float)RAND_MAX) * 60);
 	randType = (int)((rand() / (float)RAND_MAX) * FoxWeapon);
 
 	// Second shop plackard
 	if(randNum > 98)
-		CreateWeaponShop(600, -140, randType, Sausage);
+		CreateWeaponShop(600, -1040, randType, Sausage);
 	else if(randNum > 85)
-		CreateWeaponShop(600, -140, randType, Rare);
+		CreateWeaponShop(600, -1040, randType, Rare);
 	else if(randNum > 50)
-		CreateWeaponShop(600, -140, randType, Uncommon);
+		CreateWeaponShop(600, -1040, randType, Uncommon);
 	else
-		CreateWeaponShop(600, -140, randType, Common);
+		CreateWeaponShop(600, -1040, randType, Common);
 
 
-	CreateSprite("TextureFiles/LevelGrassGround.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);
+	//DRAMATIC MOOSE IS DRAMATIC
+	CreateSprite("TextureFiles/BlankPlatform.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);
 
 	CreateSprite("TextureFiles/ShopKeeper.png", 350.0f, 350.0f, 20, 1, 1, 0, -250);
 

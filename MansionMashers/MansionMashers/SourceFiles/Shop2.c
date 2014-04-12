@@ -24,7 +24,7 @@
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/Shop1.h"
+#include "../HeaderFiles/Shop2.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
@@ -74,7 +74,7 @@ void LoadShop2(void)
 void InitializeShop2(void)
 {
 	Vec3 Tint;
-	int randNum, randType;
+	int randNum, randType, randTypeNew;
 
 	levelComplete = FALSE;
 	PlayerIsAlive = TRUE;
@@ -88,16 +88,20 @@ void InitializeShop2(void)
 
 	// First shop plackard
 	if(randNum > 98)
-		CreateWeaponShop(-400, -140, randType, Sausage);
+		CreateWeaponShop(-480, -140, randType, Sausage);
 	else if(randNum > 85)
-		CreateWeaponShop(-400, -140, randType, Rare);
+		CreateWeaponShop(-480, -140, randType, Rare);
 	else if(randNum > 50)
-		CreateWeaponShop(-400, -140, randType, Uncommon);
+		CreateWeaponShop(-480, -140, randType, Uncommon);
 	else
-		CreateWeaponShop(-400, -140, randType, Common);
+		CreateWeaponShop(-480, -140, randType, Common);
 	
+	//Get a different second weapon (Different rarity doesn't count)
 	randNum = (int)((rand() / (float)RAND_MAX) * 70 + 30);
-	randType = (int)((rand() / (float)RAND_MAX) * FoxWeapon);
+	do
+		randTypeNew = (int)((rand() / (float)RAND_MAX) * FoxWeapon);
+	while (randTypeNew == randType);
+	randType  = randTypeNew;
 
 	// Second shop plackard
 	if(randNum > 98)
@@ -109,11 +113,14 @@ void InitializeShop2(void)
 	else
 		CreateWeaponShop(600, -140, randType, Common);
 
-	
+	//"TREE BACKGROUND" LET'S NAME THINGS EVEN MORE CRYPTIC PLEASE
+	CreateSprite("TextureFiles/TreeBackground1.png", 1920, 1080, 2, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/TreeBackground2.png", 1920, 1080, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 0, 0);
 
-	CreateSprite("TextureFiles/LevelGrassGround.png", 5760.0f, 1080.0f, 1, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080.0f, 5, 1, 1, 0, 0);
 
-	CreateSprite("TextureFiles/ShopKeeper.png", 350.0f, 350.0f, 20, 1, 1, 0, -250);
+	CreateSprite("TextureFiles/ShopKeeper.png", 350.0f, 350.0f, 20, 1, 1, -80, -260);
 
 	Vec3Set(&Tint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
@@ -235,7 +242,7 @@ void EventLevel(void)
 	{
 		if(PlayerIsAlive == TRUE)
 		{
-			InitializePause(&DrawShop1);
+			InitializePause(&DrawShop2);
 			TogglePauseSound(BackSnd);
 			//SetNextState(GS_MainMenu);
 			UpdatePause();

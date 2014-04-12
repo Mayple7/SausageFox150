@@ -129,8 +129,8 @@ void CreateWeaponShop(float shopPosX, float shopPosY, int collisionGroup, int we
 	WeaponShop *newShop = AddWeaponShop();
 	
 	//Sign
-	newShop->ShopSprite     = (Sprite *) CreateSprite("TextureFiles/WoodSign.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
-	newShop->ShopTextSprite = (Sprite *) CreateSprite("TextureFiles/WoodSignText.png", 512, 512, 5, 1, 1, shopPosX, shopPosY);
+	newShop->ShopSprite     = (Sprite *) CreateSprite("TextureFiles/WoodSign.png", 512, 512, 10, 1, 1, shopPosX, shopPosY);
+	newShop->ShopTextSprite = (Sprite *) CreateSprite("TextureFiles/WoodSignText.png", 512, 512, 10, 1, 1, shopPosX, shopPosY);
 
 	//Weapon
 	newShop->Weapon = CreateDroppedWeapon(collisionGroup, weaponRarity, 250, 250, shopPosX + 50, shopPosY);
