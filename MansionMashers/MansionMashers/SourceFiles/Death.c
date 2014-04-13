@@ -26,6 +26,8 @@ static Sprite *DeathConfirm;
 static Button *RestartButton;
 static Button *MainMapButton;
 static FoxSound *DeathSnd;
+static Sprite *DeathMessage[2];
+static int randNum;
 
 static float confirmTimer;
 
@@ -49,6 +51,11 @@ void CreateDeathConfirmObjects(void)
 	RestartButton->ButtonSprite->ZIndex = 4022;
 
 	DeathSnd = CreateSound("Sounds/DeathMusic.wav", LargeSnd);
+
+	DeathMessage[0] = (Sprite *)CreateSprite("TextureFiles/DeathMessage1.png", 1920, 1080, 4020, 1, 1, -1920, 0);
+	DeathMessage[1] = (Sprite *)CreateSprite("TextureFiles/DeathMessage2.png", 1920, 1080, 4020, 1, 1, -1920, 0);
+
+	randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 2;
 
 	confirmTimer = 0;
 }
@@ -91,6 +98,8 @@ void UpdateDeathConfirmObjects(void)
 	UpdateCollisionPosition(&MainMapButton->ButtonCollider, &MainMapButton->ButtonSprite->Position);
 
 	DeathConfirm->Position.x = GetCameraXPosition();
+
+	DeathMessage[randNum]->Position.x = GetCameraXPosition();
 
 	if(PointRectCollision(&RestartButton->ButtonCollider, &MouseClick))
 	{

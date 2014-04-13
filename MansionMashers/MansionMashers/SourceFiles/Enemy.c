@@ -306,7 +306,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	if (CurrentEnemy->HitByProjectileTimer > 0)
 		CurrentEnemy->HitByProjectileTimer -= GetDeltaTime();
 	
-	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
+	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0 && GetCurrentState() != GS_Level7)
 	{
 		char num[10];
 		int dropWeapon;

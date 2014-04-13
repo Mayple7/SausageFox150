@@ -50,8 +50,7 @@ static enum PositionState { A, B, C, D };
 /*************************************************************************/
 void LoadHandGuyBoss(void)
 {
-	LoadTexture("TextureFiles/TempHandGuy.png");
-	LoadTexture("TextureFiles/TempHandGuyShout.png");
+
 	LoadTexture("TextureFiles/QuickJab.png");
 	LoadTexture("TextureFiles/DebugCircle.png");
 }
@@ -71,13 +70,14 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 
 	//Initialize boss struct
 	Vec2Set(&CurrentBoss->Position, 700, -200);
-	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempHandGuy.png", 150, 300, 10, 1, 1, 700, -200);
+	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 150, 300, 10, 1, 1, 700, -200);
 	CurrentBoss->BodySprite->FlipX = TRUE;
 	CurrentBoss->BodySprite->Visible = FALSE;
 	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/QuickJab.png", 100, 100, 11, 4, 4, 580, -120);
 	CurrentBoss->JabSprite->FlipX = TRUE;
 	CurrentBoss->JabSprite->AnimationSpeed = 3;
 	CurrentBoss->JabSprite->Visible = FALSE;
+
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
@@ -834,5 +834,29 @@ void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatfor
 				CurrentBoss->HandGuyRigidBody.onGround = TRUE;
 		}
 	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Deals player damage resolution
+	
+	\param CurrentBoss
+	Pointer to the current boss
+*/
+/*************************************************************************/
+void FreeHandGuyBoss(HandGuyBoss* CurrentBoss)
+{	
+	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.LegLower);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper2);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.LegLower2);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.Skirt);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.Body);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.Tail);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmUpper);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmLower);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmUpper2);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmLower2);
 }
 

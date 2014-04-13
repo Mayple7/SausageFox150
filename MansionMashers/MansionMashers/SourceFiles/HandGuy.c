@@ -40,13 +40,26 @@
 
 // ---------------------------------------------------------------------------
 // globals
-static int levelComplete = FALSE;
+static int levelComplete;
+static int PlayerIsAlive; 
+static int beginningAnimation;
 
 Sprite* DebugCircle;
+Sprite* BlackOverlay;
 
 Platform* Plat;
 
 HandGuyBoss *Boss;
+HUD* CurrentHUD;
+
+Wall* RightWall;
+
+//Boss HP Bar
+Sprite* BossHPBar;
+Sprite* BossHPBarBack;
+
+Sprite* Arrow1;
+static int Arrow1Grow;
 
 static int timer;
 static int timerOn;
@@ -79,14 +92,20 @@ void LoadHandGuy(void)
 /*************************************************************************/
 void InitializeHandGuy(void)
 {
+	Vec3 Tint;
 	int i;
 	ResetObjectList();
 	ResetCamera();
+	levelComplete = FALSE;
+	beginningAnimation = TRUE;
+	PlayerIsAlive = TRUE;
 	timer = 10 * FRAMERATE;
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1260, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	/////////////////////////////////
 	//		Backgrounds			   //
@@ -103,8 +122,22 @@ void InitializeHandGuy(void)
 	for(i = 0; i < 4; i++)
 		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
 
+	// Arrow Initialize
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow1->Visible = FALSE;
+	Arrow1Grow = FALSE;
+
 	//Bounding Boxes
 	CreateBoundingBoxes();
+
+	// Black Overlay
+	Vec3Set(&Tint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = Tint;
+
+	// Boss HP Bar
+	BossHPBar = (Sprite *)CreateSprite("TextureFiles/BossHealthBarMid.png", 1, 44, 399, 1, 1, -200, 450);
+	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -115,15 +148,14 @@ void InitializeHandGuy(void)
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
+	//Create Bounding Walls
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, -1160, 0);
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, 1160, 0);
+	RightWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, 1160, 0);
 
 	/////////////////////////////////
 	//			Boss			   //
 	/////////////////////////////////
 	Boss = CreateHandGuyBoss(0, 0);
-
-	Boss->BossCollider.collisionDebug = TRUE;
 
 	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->ShoutRadius * 2, Boss->ShoutRadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
 	DebugCircle->Visible = FALSE;
@@ -133,6 +165,7 @@ void InitializeHandGuy(void)
 	/////////////////////////////////
 	CreateDeathConfirmObjects();
 
+	CreateUpgradeScreenObjects();
 }
 
 /*************************************************************************/
@@ -144,17 +177,25 @@ void InitializeHandGuy(void)
 void UpdateHandGuy(void)
 {
 	EventHandGuy();
+
 	// This should be the last line in this function
-	UpdateHandGuyBoss(Boss);
+	if(!levelComplete)
+	{
+		UpdateHandGuyBoss(Boss);
+	}
+	
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 
 	UpdateFloatingText();
 	BoundingBoxUpdate();
-
 	UpdateAllProjectiles();
 	ParticleSystemUpdate();
 
-	if(Boss->CurrentState == 1 && Boss->InnerState != 2)
+	// Shows the hit circle for handguy - should change this for final
+	if(!levelComplete && Boss->CurrentState == 1 && Boss->InnerState != 2)
 	{
 		DebugCircle->Visible = TRUE;
 		DebugCircle->Position = Boss->Position;
@@ -162,10 +203,40 @@ void UpdateHandGuy(void)
 	else
 		DebugCircle->Visible = FALSE;
 
-	if(Boss->CurrentHealth <= 0)
+	// When the boss dies
+	if(!levelComplete && Boss->CurrentHealth <= 0)
 	{
 		levelComplete = TRUE;
-		SetNextState(GS_MapLevel);
+		Arrow1->Visible = TRUE;
+		FreeWall(RightWall);
+		FreeHandGuyBoss(Boss);
+	}
+
+	// What to do when the boss is dead
+	if(levelComplete)
+	{
+		UpdateArrow(Arrow1, &Arrow1Grow);
+
+		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width)
+		{
+			LevelCompletion();
+		}
+
+		BossHPBar->Visible = FALSE;
+
+		if(BossHPBar->Alpha > 0.0f)
+		{
+			BossHPBar->Alpha -= GetDeltaTime() / 2.0f;
+		}
+		else
+			BossHPBar->Alpha = 0;
+
+	}
+	// Boss health bar logic
+	else
+	{
+		BossHPBar->ScaleX = 800.0f * (Boss->CurrentHealth / (float)Boss->MaxHealth);
+		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentHealth / (float)Boss->MaxHealth));
 	}
 }
 
@@ -179,8 +250,6 @@ void DrawHandGuy(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
-	displayCollisionDebug(&Boss->BossCollider);
-	//DrawHUD(&HUDList);
 	DrawCollisionList();
 }
 
@@ -205,11 +274,14 @@ void FreeHandGuy(void)
 		CurrentPlayer.handClear = TRUE;
 		SavePlayer(&CurrentPlayer);
 	}
+	else
+		FreeHandGuyBoss(Boss);
 
 	//Gotta free that boss sometime
 	FreeMyAlloc(Boss);
 
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -234,12 +306,47 @@ void UnloadHandGuy(void)
 void EventHandGuy(void)
 {
 	int i;
+	
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
-	DetectHandGuyBossCollision(Boss);
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
+	if(!levelComplete)
+		DetectHandGuyBossCollision(Boss);
 
+	// Handle any input for the current player
+	if(!beginningAnimation)
+		InputPlayer(&CurrentPlayer);
+	else if(!levelComplete)
+	{
+		// Make sure the boss stays put during the start
+		Boss->cooldownTimer = 0;
+
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = TRUE;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -800)
+			{
+				beginningAnimation = FALSE;
+			}
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+
+
+#if defined _DEBUG
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
@@ -248,15 +355,31 @@ void EventHandGuy(void)
 	{
 		RemoveDebugMode();
 	}
+#endif
+
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		//TogglePauseSound(BackSnd);
-		InitializePause(&DrawHandGuy);
-		UpdatePause();
-		//TogglePauseSound(BackSnd);
+		if(PlayerIsAlive)
+		{
+			//TogglePauseSound(BackSnd);
+			InitializePause(&DrawHandGuy);
+			UpdatePause();
+			//TogglePauseSound(BackSnd);
+		}
 	}
 
 	TreeBackgroundUpdate();
+
+	//Player Dies
+	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
+	{
+		//freeSound(BackSnd);
+		PlayerIsAlive = FALSE;
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha = 0.5f;
+
+		UpdateDeathConfirmObjects();
+	}
 
 	if(Boss->CurrentHealth > 0)
 	{
