@@ -77,6 +77,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 	CurrentBoss->JabSprite->FlipX = TRUE;
 	CurrentBoss->JabSprite->AnimationSpeed = 3;
 	CurrentBoss->JabSprite->Visible = FALSE;
+
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
@@ -833,5 +834,29 @@ void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatfor
 				CurrentBoss->HandGuyRigidBody.onGround = TRUE;
 		}
 	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Deals player damage resolution
+	
+	\param CurrentBoss
+	Pointer to the current boss
+*/
+/*************************************************************************/
+void FreeHandGuyBoss(HandGuyBoss* CurrentBoss)
+{	
+	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.LegLower);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper2);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.LegLower2);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.Skirt);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.Body);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.Tail);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmUpper);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmLower);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmUpper2);
+	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmLower2);
 }
 

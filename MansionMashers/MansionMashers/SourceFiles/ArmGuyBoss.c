@@ -900,7 +900,7 @@ void PlayerDamageResult(int damage)
 /*************************************************************************/
 /*!
 	\brief
-	Deals player damage resolution
+	Frees all the boss sprites etc
 	
 	\param CurrentBoss
 	Pointer to the current boss
@@ -915,6 +915,5 @@ void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
 	FreeSprite(CurrentBoss->BodySprite);
 	FreeSprite(CurrentBoss->OffArmSprite);
 	FreeSprite(CurrentBoss->SpinSprite);
-
 }
 

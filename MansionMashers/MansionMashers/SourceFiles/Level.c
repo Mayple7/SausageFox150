@@ -60,6 +60,9 @@ static TextGlyphs *UpgradeAmount1;
 static TextGlyphs *UpgradeAmount2;
 static TextGlyphs *UpgradeAmount3;
 
+static Sprite* HazeBackground;
+static ParticleSystem* SystemOne;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -87,17 +90,23 @@ void CreateUpgradeScreenObjects(void)
 	UpgradesToUpgrade = FALSE;
 	allUpgradesFull   = FALSE;
 
+	//Particle Background
+	HazeBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 4000, 1, 1, 480, -200);
+	HazeBackground->Alpha = 0;
+	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, -2000, 4001, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
+	SystemOne->FadeIn = TRUE;
+
 	//Title
 	Vec3Set(&NewTint, 1, 1, 1);
 	UpgradesName = CreateText("Upgrades Available!", 0, -2000, 140, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradesName);
-	ChangeTextZIndex(UpgradesName, 4002);
+	ChangeTextZIndex(UpgradesName, 4003);
 
 	//Upgrades remaining
 	Vec3Set(&NewTint, 0.32f, 0.11f, 0.47f);
 	UpgradesLeft = CreateText("Sweg", 0, -2000, 100, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradesLeft);
-	ChangeTextZIndex(UpgradesLeft, 4002);
+	ChangeTextZIndex(UpgradesLeft, 4003);
 
 	//Overlays
 	Vec3Set(&NewTint, 0, 0, 0);
@@ -105,46 +114,46 @@ void CreateUpgradeScreenObjects(void)
 	BlackOverlay->Tint = NewTint;
 	BlackOverlay->Alpha = 0;
 	Vec3Set(&NewTint, 0.9f, 0.9f, 0.9f);
-	WhiteOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	WhiteOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 3999, 1, 1, 0, 0);
 	WhiteOverlay->Tint = NewTint;
 	WhiteOverlay->Alpha = 0;
 
 	//Upgrade buttons, all 3 (Not really sure why Agility is in the middle, but that is how the rest of the game is)
 	UpgradeButton1 = CreateButton("TextureFiles/UpgradeButtonStr.png", 545 + camX, -2000, 347, 146); //Strength
-	UpgradeButton1->ButtonSprite->ZIndex = 4002;
+	UpgradeButton1->ButtonSprite->ZIndex = 4003;
 	UpgradeButton2 = CreateButton("TextureFiles/UpgradeButtonAgi.png", 545 + camX, -2000, 347, 146); //Agility
-	UpgradeButton2->ButtonSprite->ZIndex = 4002;
+	UpgradeButton2->ButtonSprite->ZIndex = 4003;
 	UpgradeButton3 = CreateButton("TextureFiles/UpgradeButtonDef.png", 545 + camX, -2000, 347, 146); //Defense
-	UpgradeButton3->ButtonSprite->ZIndex = 4002;
+	UpgradeButton3->ButtonSprite->ZIndex = 4003;
 
 	//Upgrade bars
-	UpgradeBar1 = (Sprite *) CreateSprite("TextureFiles/UpgradeBar.png", 1920, 1080, 4002, 1, 1, 0, -2000);
-	UpgradeBar2 = (Sprite *) CreateSprite("TextureFiles/UpgradeBar.png", 1920, 1080, 4002, 1, 1, 0, -2000);
-	UpgradeBar3 = (Sprite *) CreateSprite("TextureFiles/UpgradeBar.png", 1920, 1080, 4002, 1, 1, 0, -2000);
+	UpgradeBar1 = (Sprite *) CreateSprite("TextureFiles/UpgradeBar.png", 1920, 1080, 4003, 1, 1, 0, -2000);
+	UpgradeBar2 = (Sprite *) CreateSprite("TextureFiles/UpgradeBar.png", 1920, 1080, 4003, 1, 1, 0, -2000);
+	UpgradeBar3 = (Sprite *) CreateSprite("TextureFiles/UpgradeBar.png", 1920, 1080, 4003, 1, 1, 0, -2000);
 
 	//Upgrade bar colors
-	UpgradeBarColor1 = (Sprite *) CreateSprite("TextureFiles/UpgradeBarColor.png", 816, 85, 4001, 1, 1, 0, -2000);
-	UpgradeBarColor2 = (Sprite *) CreateSprite("TextureFiles/UpgradeBarColor.png", 816, 85, 4001, 1, 1, 0, -2000);
-	UpgradeBarColor3 = (Sprite *) CreateSprite("TextureFiles/UpgradeBarColor.png", 816, 85, 4001, 1, 1, 0, -2000);
+	UpgradeBarColor1 = (Sprite *) CreateSprite("TextureFiles/UpgradeBarColor.png", 816, 85, 4002, 1, 1, 0, -2000);
+	UpgradeBarColor2 = (Sprite *) CreateSprite("TextureFiles/UpgradeBarColor.png", 816, 85, 4002, 1, 1, 0, -2000);
+	UpgradeBarColor3 = (Sprite *) CreateSprite("TextureFiles/UpgradeBarColor.png", 816, 85, 4002, 1, 1, 0, -2000);
 
 	//How many upgrades have been used for each skill type
 	Vec3Set(&NewTint, 0.32f, 0.11f, 0.47f);
 
 	UpgradeAmount1 = CreateText("Swog", 0, -2000, 120, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradeAmount1);
-	ChangeTextZIndex(UpgradeAmount1, 4002);
+	ChangeTextZIndex(UpgradeAmount1, 4004);
 
 	UpgradeAmount2 = CreateText("Swug", 0, -2000, 120, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradeAmount2);
-	ChangeTextZIndex(UpgradeAmount2, 4002);
+	ChangeTextZIndex(UpgradeAmount2, 4004);
 
 	UpgradeAmount3 = CreateText("Swyg", 0, -2000, 120, NewTint, Center, Border);
 	ChangeTextVisibility(UpgradeAmount3);
-	ChangeTextZIndex(UpgradeAmount3, 4002);
+	ChangeTextZIndex(UpgradeAmount3, 4004);
 
 	//Done upgrading button
 	MainMapButton = CreateButton("TextureFiles/GoToMapButton.png", 400 + camX, -2000, 300, 112.5f);
-	MainMapButton->ButtonSprite->ZIndex = 4002;
+	MainMapButton->ButtonSprite->ZIndex = 4003;
 }
 
 /*************************************************************************/
@@ -164,6 +173,9 @@ void UpdateUpgradeScreenObjects(void)
 
 	FoxInput_GetWorldPosition(&worldX, &worldY);
 	Vec2Set(&MouseClick, (float)worldX, (float)worldY);
+
+	//Update the particles
+	ParticleSystemUpdate();
 
 	//Check if there are upgrades
 	if (!UpgradesToUpgrade)
@@ -187,7 +199,7 @@ void UpdateUpgradeScreenObjects(void)
 		//If no more upgrades remain, let them know
 		allUpgradesFull = TRUE;
 		ChangeTextString(UpgradesName, "All Upgrades Complete!");
-		ChangeTextZIndex(UpgradesName, 4002);
+		ChangeTextZIndex(UpgradesName, 4003);
 	}
 	Vec2Set(&NewPosition, camX, 470);
 	ChangeTextPosition(UpgradesName, NewPosition, Center);
@@ -205,7 +217,7 @@ void UpdateUpgradeScreenObjects(void)
 		else
 			sprintf(CharTemp, "%i Points to Spend!", CurrentPlayer.CurrentPlayerStats.Upgrades);
 		ChangeTextString(UpgradesLeft, CharTemp);
-		ChangeTextZIndex(UpgradesLeft, 4002);
+		ChangeTextZIndex(UpgradesLeft, 4003);
 		lastUpgrades = CurrentPlayer.CurrentPlayerStats.Upgrades;
 	}
 	Vec2Set(&NewPosition, camX, 380);
@@ -226,6 +238,18 @@ void UpdateUpgradeScreenObjects(void)
 	UpgradeBar2->Position.y = 0;
 	UpgradeBar3->Position.x = camX;
 	UpgradeBar3->Position.y = -200;
+
+	//Particle / Haze back
+	HazeBackground->Position.x = camX + 480;
+	HazeBackground->Position.y = 0;
+	SystemOne->Position.y = 0;
+	SystemOne->Position.x = camX;
+	SystemOne->amountTotal = -1;
+
+	if (HazeBackground->Alpha < 1)
+		HazeBackground->Alpha += 2 * GetDeltaTime();
+	else
+		HazeBackground->Alpha = 1;
 
 	//Upgrade bar colors
 	//Str --
@@ -248,19 +272,19 @@ void UpdateUpgradeScreenObjects(void)
 	//Str --
 	sprintf(CharTemp, "%i", CurrentPlayer.CurrentPlayerStats.Strength);
 	ChangeTextString(UpgradeAmount1, CharTemp);
-	ChangeTextZIndex(UpgradeAmount1, 4002);
+	ChangeTextZIndex(UpgradeAmount1, 4003);
 	Vec2Set(&NewPosition, camX - 590, 200);
 	ChangeTextPosition(UpgradeAmount1, NewPosition, Center);
 	//Agi --
 	sprintf(CharTemp, "%i", CurrentPlayer.CurrentPlayerStats.Agility);
 	ChangeTextString(UpgradeAmount2, CharTemp);
-	ChangeTextZIndex(UpgradeAmount2, 4002);
+	ChangeTextZIndex(UpgradeAmount2, 4003);
 	Vec2Set(&NewPosition, camX - 590, 0);
 	ChangeTextPosition(UpgradeAmount2, NewPosition, Center);
 	//Def --
 	sprintf(CharTemp, "%i", CurrentPlayer.CurrentPlayerStats.Defense);
 	ChangeTextString(UpgradeAmount3, CharTemp);
-	ChangeTextZIndex(UpgradeAmount3, 4002);
+	ChangeTextZIndex(UpgradeAmount3, 4003);
 	Vec2Set(&NewPosition, camX - 590, -200);
 	ChangeTextPosition(UpgradeAmount3, NewPosition, Center);
 
@@ -523,4 +547,25 @@ void LevelCompletion(void)
 	}
 	else
 		WhiteOverlay->Alpha += 2 * GetDeltaTime();
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Runs all needed tasks when Kevin is defeated
+*/
+/*************************************************************************/
+void GameCompletion(void)
+{
+	BlackOverlay->Position.x = GetCameraXPosition();
+
+	//Continue onto the map
+	if (BlackOverlay->Alpha > 1)
+	{
+		// Change to narrative
+		SetNextState(GS_Credits);
+	}
+	else
+		BlackOverlay->Alpha += GetDeltaTime() / 3;
+
 }

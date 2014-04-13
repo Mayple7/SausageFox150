@@ -136,7 +136,7 @@ void InitializeLevel3(void)
 	//		Backgrounds			   //
 	/////////////////////////////////
 	CreateSprite("TextureFiles/Level3Pan1.png", 1920, 1080, 5, 1, 1, 0, 0);
-	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan1PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan0PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0);
 	PlatOverlay[0]->Alpha = .1f;
 	
 	//Black Overlay
@@ -340,7 +340,7 @@ void EventLevel3(void)
 	else
 	{
 		BlackOverlay->Position.x = GetCameraXPosition();
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
+		BlackOverlay->Alpha += 2 * GetDeltaTime();
 		if(BlackOverlay->Alpha > 1)
 			SetNextState(GS_Level31);
 	}

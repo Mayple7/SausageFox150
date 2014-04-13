@@ -55,5 +55,6 @@ void DetectYeahGuyBossCollision(YeahGuyBoss *CurrentBoss, int CurrentBuff);
 void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff);
 static void PlayerDamageResult(int damage);
 void YeahGuyPlatformCollision(YeahGuyBoss* CurrentBoss, Platform* CurrentPlatform);
+void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss);
 
 #endif

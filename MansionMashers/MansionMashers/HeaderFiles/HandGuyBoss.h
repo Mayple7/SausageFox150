@@ -80,5 +80,6 @@ static void PlayerDamageResult(int damage);
 void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatform);
 void HandGuyAnimation( HandGuyBoss *Object);
 void CreateHandGuySprites(HandGuyBoss *Object);
+void FreeHandGuyBoss(HandGuyBoss* CurrentBoss);
 
 #endif

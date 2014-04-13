@@ -152,6 +152,7 @@ Enemy *CreateEnemy(int enemyType, int collisionGroup, float xPos, float yPos, in
 		CurrentEnemy->LegSinValue		= 0;
 		CurrentEnemy->isAttacking		= FALSE;
 		CurrentEnemy->EnemyDirection	= LEFT;
+		CurrentEnemy->TailSinValue		= rand();
 
 		CurrentEnemy->isMoveRight		= FALSE;
 		CurrentEnemy->isMoveLeft		= FALSE;
@@ -305,7 +306,7 @@ void UpdateEnemy(Enemy *CurrentEnemy)
 	if (CurrentEnemy->HitByProjectileTimer > 0)
 		CurrentEnemy->HitByProjectileTimer -= GetDeltaTime();
 	
-	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
+	if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0 && GetCurrentState() != GS_Level7)
 	{
 		char num[10];
 		int dropWeapon;
@@ -1136,6 +1137,10 @@ void CreateEnemySprites(Enemy *Object)
 	Object->EnemySpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
 	Object->EnemySpriteParts.LegLower->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
+	Object->EnemySpriteParts.Tail = (Sprite *) CreateSprite("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
+
+	Object->EnemySpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3;
+
 	Object->EnemySpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/LegUpperDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
 	Object->EnemySpriteParts.LegUpper2->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;
 
@@ -1146,10 +1151,6 @@ void CreateEnemySprites(Enemy *Object)
 
 	Object->EnemySpriteParts.BlinkTimer = 0;
 
-	Object->EnemySpriteParts.Tail = (Sprite *) CreateSpriteNoMesh("TextureFiles/TailDog.png", 300.0f, 300.0f, Object->EnemySprite->ZIndex, 1, 1, 0, 0);
-	Object->EnemySpriteParts.Tail->SpriteMesh = Object->EnemySpriteParts.Body->SpriteMesh;
-
-	Object->EnemySpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3;
 
 	Object->EnemySpriteParts.ArmLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/ArmLowerDog.png", 128.0f, 128.0f, Object->EnemySprite->ZIndex + 2, 1, 1, 0, 0);
 	Object->EnemySpriteParts.ArmLower->SpriteMesh = Object->EnemySpriteParts.ArmUpper->SpriteMesh;

@@ -160,10 +160,10 @@ void InitializeLevel31(void)
 	/////////////////////////////////
 	//Panel 1
 	CreateSprite("TextureFiles/Level3Pan2.png", 1920, 1080, 5, 1, 1, 0, 0);
-	CreateSprite("TextureFiles/Level3Pan2Overlay.png", 1920, 1080, 401, 1, 1, 0, 0);
-	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan2PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0);
+	CreateSprite("TextureFiles/Level3PanOverlay.png", 1920, 1080, 401, 1, 1, 0, 0);
+	PlatOverlay[0] = (Sprite*)CreateSprite("TextureFiles/Lvl3Pan1PlatOverlay.png", 1920, 1080, 6, 1, 1, 0, 0);
 	PlatOverlay[0]->Alpha = .1f;
-	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl3PanPlatOverlay2.png", 1920, 1080, 402, 1, 1, 0, 0);
+	PlatOverlay[1] = (Sprite*)CreateSprite("TextureFiles/Lvl3PanPlatOverlay1.png", 1920, 1080, 402, 1, 1, 0, 0);
 	PlatOverlay[1]->Alpha = .1f;
 	PlatOverlay[1]->Visible = FALSE;
 	//Panel2
@@ -185,10 +185,12 @@ void InitializeLevel31(void)
 
 
 	//Create Upper Deck Overlays
-	for(i = 0; i < 3; i++)
+	for(i = 1; i < 3; i++)
 	{
 		SecondOverlay[i] = (Sprite *)CreateSprite("TextureFiles/Level3Pan2Overlay2.png", 1920, 1080, 400, 1, 1, (1920.0f * i), 0);
 	}
+
+	SecondOverlay[0] = (Sprite *)CreateSprite("TextureFiles/Level3Pan1Overlay2.png", 1920, 1080, 400, 1, 1, 0, 0);
 
 	for(i = 0; i < BACKGROUND_LENGTH; i++)
 		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground5.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
