@@ -70,7 +70,8 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 
 	//Initialize boss struct
 	Vec2Set(&CurrentBoss->Position, 580, 0);
-	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempYeahGuy.png", 225, 300, 10, 1, 1, 580, 0);
+	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 225, 300, 10, 1, 1, 580, 0);
+	CurrentBoss->BodySprite->Visible = FALSE;
 	CurrentBoss->BodySprite->FlipX = TRUE;
 
 	CurrentBoss->playerHit = 0;
@@ -82,6 +83,12 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->redHead = TRUE;
 	CurrentBoss->greenHead = TRUE;
 	CurrentBoss->blueHead = TRUE;
+
+	// Sprites
+	CreateYeahGuySprites(CurrentBoss);
+	CurrentBoss->LegSinValue  = 0;
+	CurrentBoss->TailSinValue = 0;
+	CurrentBoss->Speed		  = 0;
 
 	// Default starting states
 	CurrentBoss->CurrentState = Pound;
@@ -118,6 +125,49 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 
 
 	return CurrentBoss;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Creates the boss's sprites
+
+	\param Object
+	The boss to create
+*/
+/*************************************************************************/
+void CreateYeahGuySprites(YeahGuyBoss *Object)
+{
+	Object->YeahGuySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/HandGuyBody.png", 450.0f, 450.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+
+	Object->YeahGuySpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/HandGuyArmUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+
+	Object->YeahGuySpriteParts.ArmUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.ArmUpper2->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->YeahGuySpriteParts.ArmLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerIn.png", 192.0f, 192.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.ArmLower2->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->YeahGuySpriteParts.LegUpper = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.LegUpper->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->YeahGuySpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.LegLower->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->YeahGuySpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.LegUpper2->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->YeahGuySpriteParts.LegLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.LegLower2->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+
+	Object->YeahGuySpriteParts.Tail = (Sprite *) CreateSpriteNoMesh("TextureFiles/TailDog.png", 450.0f, 450.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.Tail->SpriteMesh = Object->YeahGuySpriteParts.Body->SpriteMesh;
+
+	Object->YeahGuySpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3;
+
+	Object->YeahGuySpriteParts.ArmLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerOut.png", 192.0f, 192.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.ArmLower->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+
 }
 
 /*************************************************************************/
@@ -623,6 +673,14 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		}
 		break;
 	}
+
+	CurrentBoss->Speed = (float)fabs(CurrentBoss->YeahGuyRigidBody.Velocity.x);
+
+	if (CurrentBoss->Speed < 0.001f)
+		CurrentBoss->LegSinValue = 0;
+
+	// Do the animation!
+	YeahGuyAnimation(CurrentBoss);
 
 	// Set acceleration to zero
 	ZeroAcceleration(&CurrentBoss->YeahGuyRigidBody);
