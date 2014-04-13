@@ -160,7 +160,7 @@ void InitializeLevel4(void)
 	//		Sounds				   //
 	/////////////////////////////////
 	//Background Sound
-	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/MMBGMusic.mp3", LargeSnd);
 
 	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl4Start.mp3", SmallSnd);
 	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl4End.mp3", SmallSnd);
