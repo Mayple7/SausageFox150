@@ -39,6 +39,8 @@
 // ---------------------------------------------------------------------------
 // globals
 static int levelComplete;
+static int PlayerIsAlive;
+static int beginningAnimation;
 static int CurrentBuff;
 float buffTimer;
 float playerBuffTimer;
@@ -57,6 +59,18 @@ static int DieSound2;
 static int DieSound3;
 
 Sprite* CurrentBuffSprite;
+
+HUD* CurrentHUD;
+
+Wall* RightWall;
+
+Sprite* BlackOverlay;
+Sprite* Arrow1;
+static int Arrow1Grow;
+
+//Boss HP Bar
+Sprite* BossHPBar;
+Sprite* BossHPBarBack;
 
 // Buff Sprites and Collision boxes
 Sprite* RedBuff;
@@ -100,19 +114,25 @@ void LoadYeahGuy(void)
 /*************************************************************************/
 void InitializeYeahGuy(void)
 {
+	Vec3 Tint;
 	Vec2 Position;
 	ResetObjectList();
 	ResetCamera();
 	levelComplete = FALSE;
+	beginningAnimation = TRUE;
+	PlayerIsAlive = TRUE;
 
+	// I have no idea what this timer is used for!!!!!!!!!!!!!!! BAD CODE NAME OWOEIFJWEOIFWEHG
 	timer = 10 * FRAMERATE;
 	DieSound1 = FALSE;
 	DieSound2 = FALSE;
 	DieSound3 = FALSE;
 
 	// Initialize the player
-	InitializePlayer(&CurrentPlayer, Mayple, 0, -220);
+	InitializePlayer(&CurrentPlayer, Mayple, -1260, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentHUD = CreateHUD(&CurrentPlayer);
 
 	CurrentBuff = None;
 	buffsShown = FALSE;
@@ -128,6 +148,20 @@ void InitializeYeahGuy(void)
 
 	//Bounding Boxes
 	CreateBoundingBoxes();
+
+	// Arrow Initialize
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow1->Visible = FALSE;
+	Arrow1Grow = FALSE;
+
+	// Black Overlay
+	Vec3Set(&Tint, 0, 0, 0);
+	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
+	BlackOverlay->Tint = Tint;
+
+	// Boss HP Bar
+	BossHPBar = (Sprite *)CreateSprite("TextureFiles/BossHealthBarMid.png", 1, 44, 399, 1, 1, -200, 450);
+	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -145,13 +179,12 @@ void InitializeYeahGuy(void)
 	/////////////////////////////////
 	//Create bounding walls
 	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, -1160, 0);
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, 1160, 0);
+	RightWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, 1160, 0);
 
 	/////////////////////////////////
 	//			Boss			   //
 	/////////////////////////////////
 	Boss = CreateYeahGuyBoss(0, 0);
-	Boss->BossCollider.collisionDebug = TRUE;
 
 	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->YeahAOERadius * 2, Boss->YeahAOERadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
 	DebugCircle->Visible = FALSE;
@@ -211,14 +244,19 @@ void UpdateYeahGuy(void)
 	else
 	{
 		CurrentBuffSprite->Visible = TRUE;
-		if(CurrentBuff == Red)
+		if(CurrentBuff == Red && redHead)
 			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/RedBuff.png");
-		else if(CurrentBuff == Green)
+		else if(CurrentBuff == Red && !redHead)
+			CurrentBuff = None;
+		else if(CurrentBuff == Green && greenHead)
 			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/GreenBuff.png");
-		else if(CurrentBuff == Blue)
+		else if(CurrentBuff == Green && !greenHead)
+			CurrentBuff = None;
+		else if(CurrentBuff == Blue && blueHead)
 			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/BlueBuff.png");
+		else if(CurrentBuff == Blue && !blueHead)
+			CurrentBuff = None;
 	}
-
 
 	UpdatePlayerBuff();
 
@@ -248,20 +286,32 @@ void UpdateYeahGuy(void)
 		UpdateMesh(DebugCircle);
 	}
 
-	printf("%f\n", DebugCircle->Width);
-
 	EventYeahGuy();
 	// This should be the last line in this function
-	UpdateYeahGuyBoss(Boss);
+	if(!levelComplete)
+	{
+		UpdateYeahGuyBoss(Boss);
+	}
 	UpdatePlayerPosition(&CurrentPlayer);
+
+	UpdateHUDPosition(CurrentHUD);
+	UpdateHUDItems(CurrentHUD, &CurrentPlayer);
 
 	UpdateFloatingText();
 	BoundingBoxUpdate();
-
 	UpdateAllProjectiles();
 	ParticleSystemUpdate();
 
-	if(Boss->CurrentState == 1 && Boss->InnerState != 2)
+	// When the boss dies
+	if(!levelComplete && !Boss->redHead && !Boss->greenHead && !Boss->blueHead)
+	{
+		levelComplete = TRUE;
+		Arrow1->Visible = TRUE;
+		FreeWall(RightWall);
+		FreeYeahGuyBoss(Boss);
+	}
+
+	if(!levelComplete && Boss->CurrentState == 1 && Boss->InnerState != 2)
 	{
 		DebugCircle->Visible = TRUE;
 		DebugCircle->Position = Boss->Position;
@@ -269,13 +319,32 @@ void UpdateYeahGuy(void)
 	else
 		DebugCircle->Visible = FALSE;
 
-	if(!Boss->redHead && !Boss->greenHead && !Boss->blueHead)
+	// What to do when the boss is dead
+	if(levelComplete)
 	{
-		levelComplete = TRUE;
-	}
+		UpdateArrow(Arrow1, &Arrow1Grow);
 
-	if (levelComplete)
-		LevelCompletion();
+		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width)
+		{
+			LevelCompletion();
+		}
+
+		BossHPBar->Visible = FALSE;
+
+		if(BossHPBar->Alpha > 0.0f)
+		{
+			BossHPBar->Alpha -= GetDeltaTime() / 2.0f;
+		}
+		else
+			BossHPBar->Alpha = 0;
+
+	}
+	// Boss health bar logic
+	else
+	{
+		BossHPBar->ScaleX = 800.0f * (Boss->CurrentRedHealth / (float)Boss->MaxHealth);
+		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentRedHealth / (float)Boss->MaxHealth));
+	}
 }
 
 /*************************************************************************/
@@ -288,7 +357,6 @@ void DrawYeahGuy(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
-	//DrawHUD(&HUDList);
 	DrawCollisionList();
 }
 
@@ -315,11 +383,14 @@ void FreeYeahGuy(void)
 	//Only save stats if the level was actually completed
 	if (levelComplete)
 		SavePlayer(&CurrentPlayer);
+	else
+		FreeYeahGuyBoss(Boss);
 
 	//Yeah Guy is finally free
 	FreeMyAlloc(Boss);
 
 	FreeAllLists();
+	FreeHUD(CurrentHUD);
 }
 
 /*************************************************************************/
@@ -344,12 +415,46 @@ void UnloadYeahGuy(void)
 void EventYeahGuy(void)
 {
 	int i;
+
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
-	DetectYeahGuyBossCollision(Boss, CurrentBuff);
-	// Handle any input for the current player
-	InputPlayer(&CurrentPlayer);
+	if(!levelComplete)
+		DetectYeahGuyBossCollision(Boss, CurrentBuff);
 
+	// Handle any input for the current player
+	if(!beginningAnimation)
+		InputPlayer(&CurrentPlayer);
+	else if(!levelComplete)
+	{
+		// Make sure the boss stays put during the start
+		Boss->cooldownTimer = 0;
+
+		// Fade in the level
+		if(BlackOverlay->Alpha > 0)
+		{
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+		}
+		// Makes the player walk into view
+		else
+		{
+			BlackOverlay->Alpha = 0.0f;
+			CurrentPlayer.FlipX = TRUE;
+			CurrentPlayer.PlayerDirection = RIGHT;
+			CurrentPlayer.Speed = CurrentPlayer.CurrentPlayerStats.MoveSpeed * GetDeltaTime();
+			
+			// Threshold to give control back to the player
+			if(CurrentPlayer.Position.x > -800)
+			{
+				beginningAnimation = FALSE;
+			}
+		}
+		//Always animate the player otherwise the sprites get stuck in the middle
+		Animation(&CurrentPlayer);
+		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
+		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
+	}
+
+#if defined _DEBUG
 	if(FoxInput_KeyTriggered('U'))
 	{
 		SetDebugMode();
@@ -358,14 +463,29 @@ void EventYeahGuy(void)
 	{
 		RemoveDebugMode();
 	}
+#endif
+
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
-		InitializePause(&DrawYeahGuy);
-		//TogglePauseSound(&BackSnd);
-		UpdatePause();
-		//TogglePauseSound(&BackSnd);
+		if(PlayerIsAlive)
+		{
+			//TogglePauseSound(BackSnd);
+			InitializePause(&DrawYeahGuy);
+			UpdatePause();
+			//TogglePauseSound(BackSnd);
+		}
 	}
 
+	//Player Dies
+	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
+	{
+		//freeSound(BackSnd);
+		PlayerIsAlive = FALSE;
+		BlackOverlay->Position.x = GetCameraXPosition();
+		BlackOverlay->Alpha = 0.5f;
+
+		UpdateDeathConfirmObjects();
+	}
 
 	//Check if the boss is already saying something
 	Boss->YeahGuySoundsPlay = FALSE;

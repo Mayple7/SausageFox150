@@ -9,6 +9,7 @@ void InitializePlayerRank(Player *CurrentPlayer);
 void UpdatePlayerRank(Player *CurrentPlayer);
 int GetMaxExperience(Player *CurrentPlayer);
 void LevelCompletion(void);
+void GameCompletion(void);
 
 int GetObjectID(void);
 

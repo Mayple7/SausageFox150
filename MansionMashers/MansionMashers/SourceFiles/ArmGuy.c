@@ -46,7 +46,7 @@
 // ---------------------------------------------------------------------------
 // globals
 static int levelComplete;
-static int PlayerIsAlive; 
+static int PlayerIsAlive;
 static int beginningAnimation;
 
 ArmGuyBoss *Boss;

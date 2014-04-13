@@ -84,7 +84,7 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->blueHead = TRUE;
 
 	// Default starting states
-	CurrentBoss->CurrentState = Pound;
+	CurrentBoss->CurrentState = Cooldown;
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = E;
 
@@ -916,4 +916,19 @@ void YeahGuyPlatformCollision(YeahGuyBoss* CurrentBoss, Platform* CurrentPlatfor
 				CurrentBoss->YeahGuyRigidBody.onGround = TRUE;
 		}
 	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees all the boss sprites etc
+	
+	\param CurrentBoss
+	Pointer to the current boss
+*/
+/*************************************************************************/
+void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss)
+{
+	// Once Luke makes the art we can do something with this ^_^
+	// FREES ALL THE THINGS!!!!
 }

@@ -524,3 +524,24 @@ void LevelCompletion(void)
 	else
 		WhiteOverlay->Alpha += 2 * GetDeltaTime();
 }
+
+/*************************************************************************/
+/*!
+	\brief
+	Runs all needed tasks when Kevin is defeated
+*/
+/*************************************************************************/
+void GameCompletion(void)
+{
+	BlackOverlay->Position.x = GetCameraXPosition();
+
+	//Continue onto the map
+	if (BlackOverlay->Alpha > 1)
+	{
+		// Change to narrative
+		SetNextState(GS_Credits);
+	}
+	else
+		BlackOverlay->Alpha += GetDeltaTime() / 3;
+
+}
