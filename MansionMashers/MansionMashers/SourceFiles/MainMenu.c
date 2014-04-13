@@ -88,6 +88,7 @@ static int fadeOut;
 
 static int prevFrame;
 
+
 /*************************************************************************/
 /*!
 	\brief
@@ -240,6 +241,10 @@ void InitializeMainMenu(void)
 
 	// Set camera to (0,0)
 	ResetCamera();
+
+	//Basically don't remake the sound because we only went to the options menu and came back
+	if(!MenuBackSnd.Channel)
+		CreatePauseSound(&MenuBackSnd, "Sounds/MenuTheme.wav", LargeSnd);
 }
 /*************************************************************************/
 /*!
@@ -249,6 +254,8 @@ void InitializeMainMenu(void)
 /*************************************************************************/
 void UpdateMainMenu(void)
 {
+	PlayAudio(&MenuBackSnd);
+
 	//Handle input and run background animation
 	if (DogScroll->CurrentFrame == 17)
 	{
@@ -337,6 +344,10 @@ void DrawMainMenu(void)
 /*************************************************************************/
 void FreeMainMenu(void)
 {
+	//Keep the sound playing if were only going to the options menu
+	if(GetNextState() != GS_Options)
+		ReleaseSound(MenuBackSnd.Sound);
+	
 	// Freeing the objects and textures
 	FreeAllLists();
 }

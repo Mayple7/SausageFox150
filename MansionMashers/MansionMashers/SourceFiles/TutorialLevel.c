@@ -43,7 +43,7 @@
 HUD *CurrentHUD;
 
 Food *HealthPickup;
-Food *StrengthPickup;
+Food *AgilPickup;
 
 Sprite *TutorialBackground;
 Platform *Shelf;
@@ -84,6 +84,7 @@ static int numPanels;
 void LoadTutorial(void)
 {
 	CreateTextureList();
+	LoadEnemy(Dummy);
 }
 
 void InitializeTutorial(void)
@@ -98,7 +99,7 @@ void InitializeTutorial(void)
 	ResetCamera();
 	ResetEnemyPanelNumber();
 
-	BackSnd = CreateSound("Sounds/MMBGMusic.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/TutorialTheme.wav", LargeSnd);
 	GettingImpatientTimer = 0;
 	TimerGoingUp = TRUE;
 
@@ -160,6 +161,15 @@ void InitializeTutorial(void)
 		}
 		IronDoor[i]->WallSprite->ZIndex = 80;
 	}
+
+	//1 dummy in both panel 3 and panel 4
+	StrawDummy = CreateEnemy(Dummy, EnemyType, 240 + PANELSIZE * 2, -250, 2);
+	DummyBlock = CreateWall("TextureFiles/BlankPlatform.png", StrawDummy->EnemySprite->Width / 2, StrawDummy->EnemySprite->Height / 2, 
+				            StrawDummy->Position.x, StrawDummy->Position.y - 40);
+	DummyBlock->WallSprite->Visible = FALSE;
+
+	StrawDummy2 = CreateEnemy(Dummy, EnemyType, 440 + PANELSIZE * 3, -250, 3);
+	StrawDummy2->CurrentEnemyStats.CurrentHealth = 10;
 
 	// Bounding Box Walls
 	CreateBlockerBoxes();
@@ -244,11 +254,6 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + PANELSIZE * 2, -110, 10, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + PANELSIZE * 2, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	StrawDummy = CreateEnemy(Dummy, EnemyType, 240 + PANELSIZE * 2, -250, 2);
-	DummyBlock = CreateWall("TextureFiles/BlankPlatform.png", StrawDummy->EnemySprite->Width / 2, StrawDummy->EnemySprite->Height / 2, 
-				            StrawDummy->Position.x, StrawDummy->Position.y - 40);
-	DummyBlock->WallSprite->Visible = FALSE;
-
 	/*////////////////////////////////
 	//         PANEL FOUR           //
 	////////////////////////////////*/
@@ -256,9 +261,6 @@ void InitializeTutorial(void)
 	CreateSprite("TextureFiles/TutorialPanel4Door.png", 1920, 1080, 200, 1, 1, PANELSIZE * 3, 0);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + PANELSIZE * 3, -110, 10, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + PANELSIZE * 3, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
-
-	StrawDummy2 = CreateEnemy(Dummy, EnemyType, 440 + PANELSIZE * 3, -250, 3);
-	StrawDummy2->CurrentEnemyStats.CurrentHealth = 10;
 
 	/*////////////////////////////////
 	//         PANEL FIVE           //
@@ -269,7 +271,7 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + PANELSIZE * 4, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	HealthPickup = CreateFood(Heal, 100, 100, PANELSIZE * 4 + 144, -180);
-	StrengthPickup = CreateFood(Strength, 100, 100, PANELSIZE * 4 - 144, -260);
+	AgilPickup = CreateFood(Agility, 100, 100, PANELSIZE * 4 - 144, -260);
 
 	/////////////////////////////////
 	//		  WIN AND LOSE		   //
@@ -380,7 +382,7 @@ void UpdateTutorial(void)
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 	}
-	else if (tutorialDone < 8 && HealthPickup->objID <= 0 && StrengthPickup->objID <= 0)
+	else if (tutorialDone < 8 && HealthPickup->objID <= 0 && AgilPickup->objID <= 0)
 	{
 		tutorialDone = 8;
 
@@ -396,7 +398,8 @@ void UpdateTutorial(void)
 		ChangeTextZIndex(TutorialTextra, 801);
 	}
 	else if (tutorialDone < 9 && CurrentPlayer.PlayerCollider.Position.x > (PANELSIZE / 2) * 8
-		  && CurrentPlayer.CurrentPlayerStats.CurrentHealth == CurrentPlayer.CurrentPlayerStats.MaxHealth)
+		  && CurrentPlayer.CurrentPlayerStats.CurrentHealth == CurrentPlayer.CurrentPlayerStats.MaxHealth
+		  && HealthPickup->objID <= 0 && AgilPickup->objID <= 0)
 	{
 		tutorialDone = 9;
 

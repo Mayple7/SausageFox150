@@ -50,6 +50,8 @@ Sprite* Skip;
 float SkipTimer;
 static int TimerGoingUp;
 
+FoxSound* BackSnd;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -95,6 +97,8 @@ void InitializeCredits(void)
 	TimerGoingUp = TRUE;
 	Skip = (Sprite *)CreateSprite("TextureFiles/Skip.png", 1920, 1080, 600, 1, 1, 0, 0);
 	Skip->Alpha = -2.5;
+
+	BackSnd = CreateSound("Sounds/CreditTheme.wav", LargeSnd);
 }
 
 /*************************************************************************/
@@ -106,6 +110,7 @@ void InitializeCredits(void)
 void UpdateCredits(void)
 {
 	EventLevel();
+	PlayAudio(BackSnd);
 }
 
 /*************************************************************************/

@@ -24,8 +24,10 @@
 //#include "../HeaderFiles/Sound.h"
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/OptionsMenu.h"
+#include "../HeaderFiles/MainMenu.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/BoundingBox.h"
+
 
 #define MAX_TEXTURES 14
 
@@ -243,6 +245,8 @@ void UpdateOptions(void)
 
 	EventOptions();
 
+	PlayAudio(&MenuBackSnd);
+
 	BackgroundOptionsAnimation();
 }
 
@@ -266,6 +270,7 @@ void DrawOptions(void)
 /*************************************************************************/
 void FreeOptions(void)
 {
+	FreeMyAlloc(volumestring);
 	SaveSettings();
 	FreeAllLists();
 }

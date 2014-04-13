@@ -97,6 +97,8 @@ void LoadLevel3(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
+	LoadEnemy(BasicMelee);
+	LoadEnemy(BasicRanged);
 }
 
 /*************************************************************************/
@@ -160,6 +162,8 @@ void InitializeLevel3(void)
 	/////////////////////////////////
 	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl3Start.mp3", SmallSnd);
 
+	CreatePauseSound(&Level3BackSnd, "Sounds/MMBGMusic.mp3", LargeSnd);
+
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
@@ -216,6 +220,7 @@ void InitializeLevel3(void)
 void UpdateLevel3(void)
 {
 	EventLevel3();
+	PlayAudio(&Level3BackSnd);
 
 	EasyEditWall(Wall1, 10);
 
@@ -255,6 +260,9 @@ void FreeLevel3(void)
 	//Only save stats if the level was actually completed
 	if (levelComplete)
 		SavePlayer(&CurrentPlayer);
+
+	if(GetNextState() != GS_Level31)
+		ReleaseSound(Level3BackSnd.Sound);
 
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
@@ -298,10 +306,10 @@ void EventLevel3(void)
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawLevel3);
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(&Level3BackSnd);
 		//SetNextState(GS_MainMenu);
 		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(&Level3BackSnd);
 	}	
 
 	// Runs if the beginning animation is finished

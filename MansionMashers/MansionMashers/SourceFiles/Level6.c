@@ -97,6 +97,8 @@ void LoadLevel6(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
+	LoadEnemy(BasicMelee);
+	LoadEnemy(BasicRanged);
 }
 
 /*************************************************************************/
