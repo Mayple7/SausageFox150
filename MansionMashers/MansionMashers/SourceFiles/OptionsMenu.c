@@ -270,6 +270,7 @@ void DrawOptions(void)
 /*************************************************************************/
 void FreeOptions(void)
 {
+	FreeMyAlloc(volumestring);
 	SaveSettings();
 	FreeAllLists();
 }
