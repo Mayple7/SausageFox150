@@ -8,9 +8,31 @@
 #include "Platform.h"
 #include "Sound.h"
 
+typedef struct YeahGuyParts
+{
+	Sprite *LegUpper;
+	Sprite *LegLower;
+	Sprite *LegUpper2;
+	Sprite *LegLower2;
+	Sprite *Skirt;
+	Sprite *Body;
+	Sprite *HeadBlue;
+	Sprite *HeadRed;
+	Sprite *HeadGreen;
+	Sprite *Tail;
+	float AttackRotationArm;
+	float AttackRotationArmLower;
+	float AttackRotationArm2;
+	float AttackRotationArmLower2;
+}YeahGuyParts;
+
 typedef struct YeahGuyBoss
 {
 	Sprite *BodySprite;
+
+	YeahGuyParts YeahGuySpriteParts;
+	float LegSinValue;
+	float TailSinValue;
 
 	int CurrentState;
 	int InnerState;
@@ -19,6 +41,8 @@ typedef struct YeahGuyBoss
 	int redHead;
 	int greenHead;
 	int blueHead;
+
+	float Speed;
 
 	CollisionBox BossCollider;
 	RigidBody YeahGuyRigidBody;
@@ -55,6 +79,8 @@ void DetectYeahGuyBossCollision(YeahGuyBoss *CurrentBoss, int CurrentBuff);
 void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff);
 static void PlayerDamageResult(int damage);
 void YeahGuyPlatformCollision(YeahGuyBoss* CurrentBoss, Platform* CurrentPlatform);
+void CreateYeahGuySprites(YeahGuyBoss *Object);
 void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss);
+void YeahGuyAnimation(YeahGuyBoss *Object);
 
 #endif
