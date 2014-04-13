@@ -30,7 +30,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/EasyEdit.h"
+#include "../HeaderFiles/KevinBoss.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -52,6 +52,7 @@ static float spawnTime;				// When to spawn more enemies
 
 static float levelTimer;
 
+KevinBoss *Boss;
 HUD* CurrentHUD;
 
 Sprite* BlackOverlay;
@@ -88,6 +89,7 @@ void LoadLevel7(void)
 /*************************************************************************/
 void InitializeLevel7(void)
 {
+	Enemy* CurrentEnemy;
 	Vec3 TextTint;
 	int i;
 
@@ -97,7 +99,7 @@ void InitializeLevel7(void)
 	levelComplete = FALSE;
 	beginningAnimation = TRUE;
 	spawnTimer = 0;
-	spawnTime = 2.0f;
+	spawnTime = 8.0f;
 	levelTimer = 60.0f;
 	ResetEnemyPanelNumber();
 	GlowBool = TRUE;
@@ -172,6 +174,19 @@ void InitializeLevel7(void)
 	/////////////////////////////////
 	//		Spawners			   //
 	/////////////////////////////////
+	Boss = CreateKevinBoss(0, 0);
+	Boss->BossCollider.collisionDebug = TRUE;
+
+	// Creates all the enemies
+	while(EnemyPanelNumber[0] < 8)
+	{
+		CurrentEnemy = CreateEnemy(1, EnemyType, 0, GROUNDLEVEL - 5000, 0);
+		CurrentEnemy->EnemyState = AINone;
+	}
+	CurrentEnemy = CreateEnemy(2, EnemyType, 0, GROUNDLEVEL - 5000, 0);
+	CurrentEnemy->EnemyState = AINone;
+	CurrentEnemy = CreateEnemy(2, EnemyType, 0, GROUNDLEVEL - 5000, 0);
+	CurrentEnemy->EnemyState = AINone;
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -192,56 +207,68 @@ void UpdateLevel7(void)
 	Weapon* wList = weaponList;
 
 	EventLevel();
-	EasyEditPlatform(Plat, 10);
 
-	if(levelTimer > 0)
+	// This should be the last line in this function
+	if(!levelComplete)
 	{
-		char charTemp[32];
-		levelTimer -= GetDeltaTime();
+		UpdateKevinBoss(Boss);
 
-		// Update HUD text for time remaining
-		sprintf(charTemp, "Seconds Remaining: %d", (int)levelTimer);
-		ChangeTextString(CurrentHUD->StatusText, charTemp);
-		
 		// Infini-Spawner Logic
 		spawnTimer += GetDeltaTime();
-		if(spawnTimer >= spawnTime && EnemyPanelNumber[0] < MAXENEMIES - 2)
+		if(spawnTimer >= spawnTime)
 		{
-			Enemy* CurrentEnemy;
-			int EnemyVer = rand() % 5;
+			Enemy* CurrentEnemy = enemyList;
+			int newSpawns = 0;
 
-			// 1/5th chance to spawn a ranged enemy
-			if(EnemyVer > 1)
-				EnemyVer = 1;
-			else if(EnemyVer == 0)
-				EnemyVer = 2;
-
-			CurrentEnemy = CreateEnemy(EnemyVer, EnemyType, GetCameraXPosition() + PANELSIZE / 2, GROUNDLEVEL, 0);
-			CurrentEnemy->HomePos.x = GetCameraXPosition() - PANELSIZE / 2;
-			CurrentEnemy->EnemyState = AIIdle;
-
-			EnemyVer = rand() % 5;
-			// 1/5th chance to spawn a ranged enemy
-			if(EnemyVer > 1)
-				EnemyVer = 1;
-			else if(EnemyVer == 0)
-				EnemyVer = 2;
-
-			CurrentEnemy = CreateEnemy(EnemyVer, EnemyType, GetCameraXPosition() - PANELSIZE / 2, GROUNDLEVEL, 0);
-			CurrentEnemy->HomePos.x = GetCameraXPosition() + PANELSIZE / 2;
-			CurrentEnemy->EnemyState = AIIdle;
-
-			EnemyPanelNumber[0];
+			// Loop through all the enemies for new spawns
+			while(CurrentEnemy->objID != -1)
+			{
+				if(CurrentEnemy->objID > 0 && (newSpawns < 2 || CurrentEnemy->EnemyType == BasicRanged) && CurrentEnemy->EnemyState == AINone)
+				{
+					CurrentEnemy->EnemyState = AIIdle;
+					if(newSpawns == 1 || newSpawns == 3)
+						CurrentEnemy->Position.x = GetCameraXPosition() - PANELSIZE / 2 - 300.0f;
+					else
+						CurrentEnemy->Position.x = GetCameraXPosition() + PANELSIZE / 2 + 300.0f;
+					CurrentEnemy->Position.y = GROUNDLEVEL;
+					CurrentEnemy->HomePos.x = CurrentPlayer.Position.x;
+					CurrentEnemy->HomePos.y = 0;
+					CurrentEnemy->CurrentEnemyStats.CurrentHealth = CurrentEnemy->CurrentEnemyStats.MaxHealth;
+					++newSpawns;
+				}
+				else if(CurrentEnemy->objID > 0)
+				{
+					UpdateEnemy(CurrentEnemy);
+				}
+				++CurrentEnemy;
+			}
 			spawnTimer = 0;
 		}
-		else if(spawnTimer >= spawnTime)
+		else
 		{
-			spawnTimer = 0;
-		}	
+			Enemy* CurrentEnemy = enemyList;
+
+			// Loop through all the enemies for new spawns
+			while(CurrentEnemy->objID != -1)
+			{
+				if(CurrentEnemy->objID > 0)
+				{
+					UpdateEnemy(CurrentEnemy);
+
+					if(CurrentEnemy->CurrentEnemyStats.CurrentHealth <= 0)
+					{
+						CurrentEnemy->EnemyState = AINone;
+						CurrentEnemy->Position.y = -5000;
+
+					}
+				}
+				++CurrentEnemy;
+			}
+		}
 	}
 
 	// This should be the last line in this function
-	UpdateAllEnemies();
+	//UpdateAllEnemies();
 	UpdateFloatingText();
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
@@ -262,7 +289,7 @@ void DrawLevel7(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
-	//DrawHUD(&HUDList);
+	displayCollisionDebug(&Boss->BossCollider);
 	DrawCollisionList();
 }
 
@@ -310,38 +337,19 @@ void UnloadLevel7(void)
 */
 /*************************************************************************/
 void EventLevel(void)
-{
-	//////////////////////////////////
-	//   INPUT & COLLISION FIRST    //
-	//////////////////////////////////
-	if(FoxInput_KeyTriggered('U'))
-		SetDebugMode();
-	
-	if(FoxInput_KeyTriggered('I'))
-		RemoveDebugMode();
-
-	if(FoxInput_KeyTriggered(VK_ESCAPE))
+{	
+	if(!levelComplete && !beginningAnimation)
 	{
-		if(PlayerIsAlive && !levelComplete)
-		{
-			InitializePause(&DrawLevel7);
-			//TogglePauseSound(BackSnd);
-			UpdatePause();
-			//TogglePauseSound(BackSnd);
-		}
-	}
-
-	// Runs if the beginning animation is finished
-	if(!beginningAnimation && !levelComplete)
-	{
-		// Check for any collision and handle the results
-		DetectPlayerCollision();
-		// Handle any input for the current player
+		DetectKevinBossCollision(Boss);
+	// Handle any input for the current player
 		InputPlayer(&CurrentPlayer);
-		//UpdateHUDItems(CurrentHUD, &CurrentPlayer);
+		DetectPlayerCollision();
 	}
 	else if(!levelComplete)
 	{
+		// Make sure the boss stays put during the start
+		Boss->cooldownTimer = 0;
+
 		// Fade in the level
 		if(BlackOverlay->Alpha > 0)
 		{
@@ -357,7 +365,9 @@ void EventLevel(void)
 			
 			// Threshold to give control back to the player
 			if(CurrentPlayer.Position.x > -800)
+			{
 				beginningAnimation = FALSE;
+			}
 		}
 		//Always animate the player otherwise the sprites get stuck in the middle
 		Animation(&CurrentPlayer);
@@ -383,29 +393,48 @@ void EventLevel(void)
 			SetCamera(&CurrentPlayer.Position, 250);
 	}
 
+
+#if defined _DEBUG
+	if(FoxInput_KeyTriggered('U'))
+	{
+		SetDebugMode();
+	}
+	if(FoxInput_KeyTriggered('I'))
+	{
+		RemoveDebugMode();
+	}
+#endif
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
+	{
+		if(PlayerIsAlive)
+		{
+			//TogglePauseSound(BackSnd);
+			InitializePause(&DrawLevel7);
+			UpdatePause();
+			//TogglePauseSound(BackSnd);
+		}
+	}
+
+	//////////////////////////////////
+	//    CAMERA POSITION SECOND    //
+	//////////////////////////////////
+
 	//////////////////////////////////
 	//       EVERYTHING ELSE        //
 	//////////////////////////////////
+	TreeBackgroundUpdate();
 	ObjectGlowUpdate();
 
-	//Level Transition
-	BlackOverlay->Position.x = GetCameraXPosition();
-	/*if(CurrentPlayer.Position.x >= (PANELSIZE * 3 + PANELSIZE / 2) && levelComplete)
-	{
-		BlackOverlay->Alpha += 1 * GetDeltaTime();
-		if(BlackOverlay->Alpha > 1)
-			SetNextState(GS_MapLevel);
-	}*/
-
-	//If player dies
+	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
+		//freeSound(BackSnd);
 		PlayerIsAlive = FALSE;
+		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha = 0.5f;
 
 		UpdateDeathConfirmObjects();
 	}
-
 }
 
 void TreeBackgroundUpdate(void)

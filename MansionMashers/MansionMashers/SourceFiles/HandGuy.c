@@ -123,8 +123,6 @@ void InitializeHandGuy(void)
 	/////////////////////////////////
 	Boss = CreateHandGuyBoss(0, 0);
 
-	Boss->BossCollider.collisionDebug = TRUE;
-
 	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->ShoutRadius * 2, Boss->ShoutRadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
 	DebugCircle->Visible = FALSE;
 
@@ -179,8 +177,6 @@ void DrawHandGuy(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
-	displayCollisionDebug(&Boss->BossCollider);
-	//DrawHUD(&HUDList);
 	DrawCollisionList();
 }
 

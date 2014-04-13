@@ -915,6 +915,5 @@ void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
 	FreeSprite(CurrentBoss->BodySprite);
 	FreeSprite(CurrentBoss->OffArmSprite);
 	FreeSprite(CurrentBoss->SpinSprite);
-
 }
 

@@ -77,6 +77,7 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 	CurrentBoss->JabSprite->FlipX = TRUE;
 	CurrentBoss->JabSprite->AnimationSpeed = 3;
 	CurrentBoss->JabSprite->Visible = FALSE;
+
 	CurrentBoss->playerHit = 0;
 	CurrentBoss->MaxHealth = 1000;
 	CurrentBoss->CurrentHealth = 1000;
