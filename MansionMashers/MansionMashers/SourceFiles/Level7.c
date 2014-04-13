@@ -374,10 +374,11 @@ void EventLevel(void)
 {	
 	if(!levelComplete && !beginningAnimation)
 	{
+		DetectPlayerCollision();
 		DetectKevinBossCollision(Boss);
 	// Handle any input for the current player
 		InputPlayer(&CurrentPlayer);
-		DetectPlayerCollision();
+		
 	}
 	else if(!levelComplete)
 	{

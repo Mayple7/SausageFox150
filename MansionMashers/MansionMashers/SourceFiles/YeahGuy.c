@@ -50,6 +50,7 @@ int buffsShown;
 int redHead;
 int greenHead;
 int blueHead;
+int moveBars;
 
 static int timer;
 static int timerOn;
@@ -69,8 +70,14 @@ Sprite* Arrow1;
 static int Arrow1Grow;
 
 //Boss HP Bar
-Sprite* BossHPBar;
-Sprite* BossHPBarBack;
+Sprite* BossHPBarRed;
+Sprite* BossHPBarBackRed;
+
+Sprite* BossHPBarGreen;
+Sprite* BossHPBarBackGreen;
+
+Sprite* BossHPBarBlue;
+Sprite* BossHPBarBackBlue;
 
 // Buff Sprites and Collision boxes
 Sprite* RedBuff;
@@ -160,8 +167,14 @@ void InitializeYeahGuy(void)
 	BlackOverlay->Tint = Tint;
 
 	// Boss HP Bar
-	BossHPBar = (Sprite *)CreateSprite("TextureFiles/BossHealthBarMid.png", 1, 44, 399, 1, 1, -200, 450);
-	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
+	BossHPBarRed = (Sprite *)CreateSprite("TextureFiles/BossRedHealthBarMid.png", 1, 22, 399, 1, 1, -200, 470);
+	BossHPBarBackRed = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 398, 1, 1, 0, 470);
+
+	BossHPBarGreen = (Sprite *)CreateSprite("TextureFiles/BossGreenHealthBarMid.png", 1, 22, 399, 1, 1, -200, 430);
+	BossHPBarBackGreen = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 398, 1, 1, 0, 430);
+
+	BossHPBarBlue = (Sprite *)CreateSprite("TextureFiles/BossBlueHealthBarMid.png", 1, 22, 399, 1, 1, -200, 390);
+	BossHPBarBackBlue = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 398, 1, 1, 0, 390);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -247,18 +260,30 @@ void UpdateYeahGuy(void)
 		if(CurrentBuff == Red && redHead)
 			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/RedBuff.png");
 		else if(CurrentBuff == Red && !redHead)
+		{
+			moveBars = TRUE;
 			CurrentBuff = None;
+		}
 		else if(CurrentBuff == Green && greenHead)
 			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/GreenBuff.png");
 		else if(CurrentBuff == Green && !greenHead)
+		{
+			moveBars = TRUE;
 			CurrentBuff = None;
+		}
 		else if(CurrentBuff == Blue && blueHead)
 			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/BlueBuff.png");
 		else if(CurrentBuff == Blue && !blueHead)
+		{
+			moveBars = TRUE;
 			CurrentBuff = None;
+		}
 	}
 
 	UpdatePlayerBuff();
+
+	if(moveBars)
+		MoveHPBars();
 
 	// Update all buffs if needed
 	if(buffTimer >= 10.0f)
@@ -329,21 +354,35 @@ void UpdateYeahGuy(void)
 			LevelCompletion();
 		}
 
-		BossHPBar->Visible = FALSE;
+		BossHPBarRed->Visible = FALSE;
+		BossHPBarGreen->Visible = FALSE;
+		BossHPBarBlue->Visible = FALSE;
 
-		if(BossHPBar->Alpha > 0.0f)
+		if(BossHPBarRed->Alpha > 0.0f)
 		{
-			BossHPBar->Alpha -= GetDeltaTime() / 2.0f;
+			BossHPBarRed->Alpha -= GetDeltaTime() / 2.0f;
+			BossHPBarGreen->Alpha -= GetDeltaTime() / 2.0f;
+			BossHPBarBlue->Alpha -= GetDeltaTime() / 2.0f;
 		}
 		else
-			BossHPBar->Alpha = 0;
+		{
+			BossHPBarRed->Alpha = 0;
+			BossHPBarGreen->Alpha = 0;
+			BossHPBarBlue->Alpha = 0;
+		}
 
 	}
 	// Boss health bar logic
 	else
 	{
-		BossHPBar->ScaleX = 800.0f * (Boss->CurrentRedHealth / (float)Boss->MaxHealth);
-		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentRedHealth / (float)Boss->MaxHealth));
+		BossHPBarRed->ScaleX = 800.0f * (Boss->CurrentRedHealth / (float)Boss->MaxHealth);
+		BossHPBarRed->Position.x = -400.0f * (1 - (Boss->CurrentRedHealth / (float)Boss->MaxHealth));
+
+		BossHPBarGreen->ScaleX = 800.0f * (Boss->CurrentGreenHealth / (float)Boss->MaxHealth);
+		BossHPBarGreen->Position.x = -400.0f * (1 - (Boss->CurrentGreenHealth / (float)Boss->MaxHealth));
+
+		BossHPBarBlue->ScaleX = 800.0f * (Boss->CurrentBlueHealth / (float)Boss->MaxHealth);
+		BossHPBarBlue->Position.x = -400.0f * (1 - (Boss->CurrentBlueHealth / (float)Boss->MaxHealth));
 	}
 }
 
@@ -790,5 +829,15 @@ void UpdatePlayerBuff(void)
 		HideBuffs();
 		buffTimer = 0.0f;
 	}
+}
 
+void MoveHPBars(void)
+{
+	int redFade = FALSE;
+	int greenFade = FALSE;
+	int blueFade = FALSE;
+
+	if(!redHead)
+		//Do nothing lol
+		redFade = TRUE;
 }
