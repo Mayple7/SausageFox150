@@ -55,6 +55,10 @@ static float levelTimer;
 KevinBoss *Boss;
 HUD* CurrentHUD;
 
+//Boss HP Bar
+Sprite* BossHPBar;
+Sprite* BossHPBarBack;
+
 Sprite* BlackOverlay;
 
 Platform* Plat;
@@ -129,6 +133,10 @@ void InitializeLevel7(void)
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
 	BlackOverlay->Tint = TextTint;
 
+	// Boss HP Bar
+	BossHPBar = (Sprite *)CreateSprite("TextureFiles/BossHealthBarMid.png", 1, 44, 399, 1, 1, -200, 450);
+	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
+
 	//Tree Backgrounds
 	for(i = 0; i < 4; i++)
 		TreeBackground1[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground1.png", 1920, 1080, 2, 1, 1, 1920.0f * i, 0);
@@ -175,7 +183,6 @@ void InitializeLevel7(void)
 	//		Spawners			   //
 	/////////////////////////////////
 	Boss = CreateKevinBoss(0, 0);
-	Boss->BossCollider.collisionDebug = TRUE;
 
 	// Creates all the enemies
 	while(EnemyPanelNumber[0] < 8)
@@ -267,6 +274,39 @@ void UpdateLevel7(void)
 		}
 	}
 
+	// When the boss dies
+	if(!levelComplete && Boss->CurrentHealth <= 0)
+	{
+		levelComplete = TRUE;
+		FreeKevinBoss(Boss);
+	}
+
+	// What to do when the boss is dead
+	if(levelComplete)
+	{
+		if(CurrentPlayer.Position.x > (PANELSIZE / 2) + CurrentPlayer.PlayerCollider.width + PANELSIZE)
+		{
+			LevelCompletion();
+		}
+
+		BossHPBar->Visible = FALSE;
+
+		if(BossHPBar->Alpha > 0.0f)
+		{
+			BossHPBar->Alpha -= GetDeltaTime() / 2.0f;
+		}
+		else
+			BossHPBar->Alpha = 0;
+
+	}
+	// Boss health bar logic
+	else
+	{
+		BossHPBar->ScaleX = 800.0f * (Boss->CurrentHealth / (float)Boss->MaxHealth);
+		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentHealth / (float)Boss->MaxHealth)) + GetCameraXPosition();
+		BossHPBarBack->Position.x = GetCameraXPosition();
+	}
+
 	// This should be the last line in this function
 	//UpdateAllEnemies();
 	UpdateFloatingText();
@@ -289,7 +329,6 @@ void DrawLevel7(void)
 {
 	// Draws the object list and sets the camera to the correct location
 	DrawObjectList();
-	displayCollisionDebug(&Boss->BossCollider);
 	DrawCollisionList();
 }
 

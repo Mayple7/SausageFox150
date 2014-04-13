@@ -270,7 +270,7 @@ void UpdateKevinBoss(KevinBoss *CurrentBoss)
 		break;
 	}
 
-		// Jump up to the platform if needed
+		// Jump Kevin Jump
 	if(CurrentBoss->KevinRigidBody.Velocity.y >= 0 && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 3 && CurrentBoss->CurrentState != Jab)
 	{
 		// Set y velocity for jumping
