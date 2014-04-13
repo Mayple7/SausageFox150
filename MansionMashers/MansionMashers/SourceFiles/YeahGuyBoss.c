@@ -939,4 +939,5 @@ void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss)
 {
 	// Once Luke makes the art we can do something with this ^_^
 	// FREES ALL THE THINGS!!!!
+	FreeSprite(CurrentBoss->BodySprite);
 }

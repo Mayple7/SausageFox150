@@ -282,7 +282,7 @@ void UpdateYeahGuy(void)
 
 	UpdatePlayerBuff();
 
-	if(moveBars)
+	if(levelComplete || moveBars)
 		MoveHPBars();
 
 	// Update all buffs if needed
@@ -357,20 +357,6 @@ void UpdateYeahGuy(void)
 		BossHPBarRed->Visible = FALSE;
 		BossHPBarGreen->Visible = FALSE;
 		BossHPBarBlue->Visible = FALSE;
-
-		if(BossHPBarRed->Alpha > 0.0f)
-		{
-			BossHPBarRed->Alpha -= GetDeltaTime() / 2.0f;
-			BossHPBarGreen->Alpha -= GetDeltaTime() / 2.0f;
-			BossHPBarBlue->Alpha -= GetDeltaTime() / 2.0f;
-		}
-		else
-		{
-			BossHPBarRed->Alpha = 0;
-			BossHPBarGreen->Alpha = 0;
-			BossHPBarBlue->Alpha = 0;
-		}
-
 	}
 	// Boss health bar logic
 	else
@@ -614,6 +600,12 @@ void EventYeahGuy(void)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Shows all the buffs in a random location
+*/
+/*************************************************************************/
 void ShowBuffs(void)
 {
 	int buffLocations = rand() % 6;
@@ -773,6 +765,12 @@ void ShowBuffs(void)
 		HideBuffs();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Hides all the buffs and moves the colliders away
+*/
+/*************************************************************************/
 void HideBuffs(void)
 {
 	// Moves everything down below
@@ -791,6 +789,12 @@ void HideBuffs(void)
 	buffsShown = FALSE;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates the player's buff
+*/
+/*************************************************************************/
 void UpdatePlayerBuff(void)
 {
 	// If a buff is already active ignore
@@ -831,13 +835,118 @@ void UpdatePlayerBuff(void)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Moves and fades any bars that need to when a head dies
+*/
+/*************************************************************************/
 void MoveHPBars(void)
 {
+	// Fake bools for fade
 	int redFade = FALSE;
 	int greenFade = FALSE;
 	int blueFade = FALSE;
 
-	if(!redHead)
-		//Do nothing lol
+	// Fake bools for movement
+	int movementDone = FALSE;
+
+	// Red bar has completed movement
+	if(!redHead && BossHPBarRed->Alpha <= 0)
+	{
+		BossHPBarRed->Alpha = 0;
+		BossHPBarBackRed->Alpha = 0;
 		redFade = TRUE;
+	}
+
+	// Green bar has completed movement
+	if(!greenHead && BossHPBarGreen->Alpha <= 0)
+	{
+		BossHPBarGreen->Alpha = 0;
+		BossHPBarBackGreen->Alpha = 0;
+		greenFade = TRUE;
+	}
+
+	// Blue bar has completed movement
+	if(!blueHead && BossHPBarBlue->Alpha <= 0)
+	{
+		BossHPBarBlue->Alpha = 0;
+		BossHPBarBackBlue->Alpha = 0;
+		blueFade = TRUE;
+	}
+
+	// Incoming huge if statement!!!!!
+	// Fade out any and all hp bars if needed
+	if(!redHead && BossHPBarRed->Alpha > 0)
+	{
+		BossHPBarRed->Alpha -= GetDeltaTime();
+		BossHPBarBackRed->Alpha -= GetDeltaTime();
+	}
+	if(!greenHead && BossHPBarGreen->Alpha > 0)
+	{
+		BossHPBarGreen->Alpha -= GetDeltaTime();
+		BossHPBarBackGreen->Alpha -= GetDeltaTime();
+	}
+	if(!blueHead && BossHPBarBlue->Alpha > 0)
+	{
+		BossHPBarBlue->Alpha -= GetDeltaTime();
+		BossHPBarBackBlue->Alpha -= GetDeltaTime();
+	}
+
+	// Red is dead
+	if(!redHead)
+	{
+		// Green and Red are dead
+		if(!greenHead && BossHPBarBlue->Position.y < BossHPBarRed->Position.y)
+		{
+			BossHPBarBlue->Position.y += 40 * GetDeltaTime() * 2;
+			BossHPBarBackBlue->Position.y += 40 * GetDeltaTime() * 2;
+		}
+		// Blue bar movement is done
+		else if(!greenHead)
+		{
+			movementDone = TRUE;
+		}
+		// Only Red or Red and blue are dead
+		else if(BossHPBarGreen->Position.y < BossHPBarRed->Position.y)
+		{
+			// Move blue and green bars
+			BossHPBarBlue->Position.y += 40 * GetDeltaTime() * 2;
+			BossHPBarBackBlue->Position.y += 40 * GetDeltaTime() * 2;
+
+			BossHPBarGreen->Position.y += 40 * GetDeltaTime() * 2;
+			BossHPBarBackGreen->Position.y += 40 * GetDeltaTime() * 2;
+		}
+		// All movement should be done
+		else
+		{
+			movementDone = TRUE;
+		}
+	}
+	// Red is alive
+	else
+	{
+		// Only green is dead
+		if(!greenHead && BossHPBarBlue->Position.y < BossHPBarGreen->Position.y)
+		{
+			BossHPBarBlue->Position.y += 40 * GetDeltaTime() * 2;
+			BossHPBarBackBlue->Position.y += 40 * GetDeltaTime() * 2;
+		}
+		// Movement for blue is done
+		else if(!greenHead)
+		{
+			movementDone = TRUE;
+		}
+		// Green and red are alive, don't need to move anything
+		else
+		{
+			movementDone = TRUE;
+		}
+	}
+
+	// All fade and movement is completed
+	if(redFade + greenFade + blueFade == 3 && movementDone)
+	{
+		moveBars = FALSE;
+	}
 }
