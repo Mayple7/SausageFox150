@@ -155,7 +155,7 @@ void InitializeTutorial(void)
 		else
 		{
 			IronDoor[i] = CreateWall("TextureFiles/TutorialGrate.png", PANELSIZE, 1080, PANELSIZE * 2 + PANELSIZE * i, -100);
-			UpdateCollider(&IronDoor[i]->WallCollider, 280, 580);
+			UpdateCollider(&IronDoor[i]->WallCollider, 300, 580);
 			IronDoor[i]->WallCollider.Offset.x = 60;
 			IronDoor[i]->WallCollider.Offset.y = -130;
 		}
@@ -259,6 +259,7 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + PANELSIZE * 3, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	StrawDummy2 = CreateEnemy(Dummy, EnemyType, 440 + PANELSIZE * 3, -250, 3);
+	StrawDummy2->CurrentEnemyStats.CurrentHealth = 10;
 
 	/*////////////////////////////////
 	//         PANEL FIVE           //
@@ -268,8 +269,8 @@ void InitializeTutorial(void)
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + PANELSIZE * 4, -110, 10, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + PANELSIZE * 4, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	HealthPickup = CreateFood(Heal, 100, 100, PANELSIZE * 4 + 144, -200);
-	StrengthPickup = CreateFood(Strength, 100, 100, PANELSIZE * 4 - 144, -200);
+	HealthPickup = CreateFood(Heal, 100, 100, PANELSIZE * 4 + 144, -180);
+	StrengthPickup = CreateFood(Strength, 100, 100, PANELSIZE * 4 - 144, -260);
 
 	/////////////////////////////////
 	//		  WIN AND LOSE		   //
