@@ -159,7 +159,7 @@ void InitializeLevel5(void)
 	/////////////////////////////////
 	//		Sounds				   //
 	/////////////////////////////////
-	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/MMBGMusic.mp3", LargeSnd);
 
 	IntelFoxTwoKeys = CreateSound("Sounds/IntelFoxLvl5TwoKeys.mp3", SmallSnd);
 	IntelFoxLook = CreateSound("Sounds/IntelFoxLvl5Look.mp3", SmallSnd);
