@@ -201,7 +201,7 @@ void InitializeLevel6(void)
 	/////////////////////////////////
 	//		Sounds				   //
 	/////////////////////////////////
-	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/MMBGMusic.mp3", LargeSnd);
 	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl6Start.mp3", SmallSnd);
 	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl6End.mp3", SmallSnd);
 

@@ -88,7 +88,7 @@ void InitializeTutorial(void)
 	ResetCamera();
 	ResetEnemyPanelNumber();
 
-	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/MMBGMusic.mp3", LargeSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
 
 	//Set the camera so it currently isn't gated

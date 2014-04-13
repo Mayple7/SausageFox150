@@ -169,7 +169,7 @@ void InitializeLevel1(void)
 	//		Sounds				   //
 	/////////////////////////////////
 	//Background Sound
-	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/MMBGMusic.mp3", LargeSnd);
 
 	RandomFox = CreateSound("Sounds/RandomFoxLvl1.mp3", SmallSnd);
 
