@@ -34,9 +34,10 @@
 static int LogicTimer = 0;
 static int playerHit = FALSE;
 
-static enum YeahGuyState { Cooldown, AOE, ProjectYeah, Pound, Vault };
 static enum InnerState {Start, Attack, End };
 static enum PositionState { A, B, C, D, E };
+static enum HeadColor {RedHead, GreenHead, BlueHead };
+static enum YeahGuyState { Cooldown, AOE, ProjectYeah, Pound, Vault };
 
 /*************************************************************************/
 /*!
@@ -53,6 +54,12 @@ void LoadYeahGuyBoss(void)
 	LoadTexture("TextureFiles/YeahProjectileBack.png");
 	LoadTexture("TextureFiles/TempYeahGuy.png");
 	LoadTexture("TextureFiles/TempYeahGuyShout.png");
+	LoadTexture("TextureFiles/YeahGuyBody.png");
+	LoadTexture("TextureFiles/YeahGuyRedHead.png");
+	LoadTexture("TextureFiles/YeahGuyBlueHead.png");
+	LoadTexture("TextureFiles/YeahGuyGreenHead.png");
+	LoadTexture("TextureFiles/YeahGuyLegLower.png");
+	LoadTexture("TextureFiles/YeahGuyLegUpper.png");
 }
 
 /*************************************************************************/
@@ -113,6 +120,8 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 
 	CurrentBoss->YeahProjectileDamage = 20;
 
+	CurrentBoss->HeadAttacking = RedHead;
+
 	//Sounds
 	CurrentBoss->YeahGuyHit[0] = CreateSound("Sounds/YeahGuyHit1.mp3", SmallSnd);
 	CurrentBoss->YeahGuyHit[1] = CreateSound("Sounds/YeahGuyHit2.mp3", SmallSnd);
@@ -139,12 +148,12 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 void CreateYeahGuySprites(YeahGuyBoss *Object)
 {
 	Object->YeahGuySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/YeahGuyBody.png", 450.0f, 450.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.HeadRed = (Sprite *) CreateSpriteNoMesh("TextureFiles/YeahGuyRedHead.png", 450.0f, 450.0f, Object->BodySprite->ZIndex + 1, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.HeadRed->SpriteMesh = Object->YeahGuySpriteParts.Body->SpriteMesh;
-	Object->YeahGuySpriteParts.HeadBlue = (Sprite *) CreateSpriteNoMesh("TextureFiles/YeahGuyBlueHead.png", 450.0f, 450.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.HeadBlue->SpriteMesh = Object->YeahGuySpriteParts.Body->SpriteMesh;
-	Object->YeahGuySpriteParts.HeadGreen = (Sprite *) CreateSpriteNoMesh("TextureFiles/YeahGuyGreenHead.png", 450.0f, 450.0f, Object->BodySprite->ZIndex + 3, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.HeadGreen->SpriteMesh = Object->YeahGuySpriteParts.Body->SpriteMesh;
+	Object->YeahGuySpriteParts.HeadRed = (Sprite *) CreateSprite("TextureFiles/YeahGuyRedHead.png", 450.0f, 450.0f, Object->BodySprite->ZIndex + 1, 2, 1, 0, 0);
+	Object->YeahGuySpriteParts.HeadRed->AnimationActive = FALSE;
+	Object->YeahGuySpriteParts.HeadBlue = (Sprite *) CreateSprite("TextureFiles/YeahGuyBlueHead.png", 450.0f, 450.0f, Object->BodySprite->ZIndex + 2, 2, 1, 0, 0);
+	Object->YeahGuySpriteParts.HeadBlue->AnimationActive = FALSE;
+	Object->YeahGuySpriteParts.HeadGreen = (Sprite *) CreateSprite("TextureFiles/YeahGuyGreenHead.png", 450.0f, 450.0f, Object->BodySprite->ZIndex + 3, 2, 1, 0, 0);
+	Object->YeahGuySpriteParts.HeadGreen->AnimationActive = FALSE;
 
 	Object->YeahGuySpriteParts.LegUpper = (Sprite *) CreateSprite("TextureFiles/YeahGuyLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
 
@@ -267,6 +276,42 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			{
 				CurrentProjectile->ProjectileSprite->SpriteTexture = LoadTexture("TextureFiles/YeahProjectileBack.png");
 			}
+
+			switch(numProjectiles)
+			{
+				case 0:
+					if (!CurrentBoss->greenHead)
+					{
+						CurrentBoss->HeadAttacking = BlueHead;
+						break;
+					}
+					if (!CurrentBoss->blueHead && !CurrentBoss->greenHead)
+					{
+						CurrentBoss->HeadAttacking = RedHead;
+						break;
+					}
+					CurrentBoss->HeadAttacking = GreenHead;
+					break;
+				case 1:
+					if (!CurrentBoss->greenHead)
+					{
+						CurrentBoss->HeadAttacking = RedHead;
+						break;
+					}
+					if (!CurrentBoss->blueHead)
+					{
+						CurrentBoss->HeadAttacking = RedHead;
+						break;
+					}
+					CurrentBoss->HeadAttacking = BlueHead;
+					break;
+				case 2:
+					CurrentBoss->HeadAttacking = RedHead;
+					break;
+
+			}
+
+
 			++numProjectiles;
 			CurrentBoss->InnerState = Attack;
 			break;
@@ -994,4 +1039,13 @@ void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss)
 	// Once Luke makes the art we can do something with this ^_^
 	// FREES ALL THE THINGS!!!!
 	FreeSprite(CurrentBoss->BodySprite);
+	FreeSprite(CurrentBoss->YeahGuySpriteParts.Body);
+	FreeSprite(CurrentBoss->YeahGuySpriteParts.HeadBlue);
+	FreeSprite(CurrentBoss->YeahGuySpriteParts.HeadGreen);
+	FreeSprite(CurrentBoss->YeahGuySpriteParts.HeadRed);
+	FreeSprite(CurrentBoss->YeahGuySpriteParts.LegLower);
+	FreeSprite(CurrentBoss->YeahGuySpriteParts.LegLower2);
+	FreeSprite(CurrentBoss->YeahGuySpriteParts.LegUpper);
+	FreeSprite(CurrentBoss->YeahGuySpriteParts.LegUpper2);
+	FreeSprite(CurrentBoss->YeahGuySpriteParts.Tail);
 }

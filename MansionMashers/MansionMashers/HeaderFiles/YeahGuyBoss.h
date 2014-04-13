@@ -14,7 +14,6 @@ typedef struct YeahGuyParts
 	Sprite *LegLower;
 	Sprite *LegUpper2;
 	Sprite *LegLower2;
-	Sprite *Skirt;
 	Sprite *Body;
 	Sprite *HeadBlue;
 	Sprite *HeadRed;
@@ -41,6 +40,8 @@ typedef struct YeahGuyBoss
 	int redHead;
 	int greenHead;
 	int blueHead;
+
+	enum HeadColor HeadAttacking;
 
 	float Speed;
 
