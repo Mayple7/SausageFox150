@@ -38,13 +38,19 @@
 
 #define PANELSIZE 1920.0f
 
+#define IRONDOORS 3
+
 HUD *CurrentHUD;
+
+Food *HealthPickup;
+Food *StrengthPickup;
 
 Sprite *TutorialBackground;
 Platform *Shelf;
 Platform *ShortShelf;
 Platform *BouncyBed;
 Enemy *StrawDummy;
+Enemy *StrawDummy2;
 
 Sprite *DoorOverlay;
 Sprite *BlackOverlay;
@@ -65,8 +71,11 @@ FoxSound *BackSnd;
 FoxSound *GongSnd;
 
 Wall *WallTemp;
-Wall *IronDoor;
+Wall *IronDoor[IRONDOORS];
 Wall *DummyBlock;
+
+float GettingImpatientTimer;    //A counter to give the player a hint (in seconds)
+int   TimerGoingUp;
 
 static int tutorialDone; // Keeps track of how much of the tutorial has been completed (Not a bool)
 static int levelComplete;
@@ -79,14 +88,19 @@ void LoadTutorial(void)
 
 void InitializeTutorial(void)
 {
+	int i;
 	Vec3 Tint = { 0, 0, 0 };
 
 	levelComplete = FALSE;
 	tutorialDone = 0;
-	numPanels = 3;			//Kaden Update this if you add more panels -- what is a panel?
+	numPanels = 5;			//Kaden Update this if you add more panels -- what is a panel?
 	ResetObjectList();
 	ResetCamera();
 	ResetEnemyPanelNumber();
+
+	
+	GettingImpatientTimer = 0;
+	TimerGoingUp = TRUE;
 
 	BackSnd = CreateSound("Sounds/Temp.mp3", LargeSnd);
 	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
@@ -95,6 +109,8 @@ void InitializeTutorial(void)
 	ResetGatedCamera();
 
 	InitializePlayer(&CurrentPlayer, Ginko, -700.0f, GROUNDLEVEL + 1);
+
+	CurrentPlayer.CurrentPlayerStats.CurrentHealth -= 40;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
@@ -126,12 +142,25 @@ void InitializeTutorial(void)
 	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 320.0f, 340.0f, 800 + 1920 * 2, 280); //Above arch, room 3
 	WallTemp->WallSprite->Visible = FALSE;
 
-	//The great iron door
-	IronDoor = CreateWall("TextureFiles/IronDoor.png", PANELSIZE, 1080, PANELSIZE * 2, 0);
-	IronDoor->WallSprite->ZIndex = 80;
-	UpdateCollider(&IronDoor->WallCollider, 200, 380);
-	IronDoor->WallCollider.Offset.x = 870;
-	IronDoor->WallCollider.Offset.y = -230;
+	//The great iron doors
+	for (i = 0; i < IRONDOORS; ++i)
+	{
+		if (i != 1)
+		{
+			IronDoor[i] = CreateWall("TextureFiles/IronDoor.png", PANELSIZE, 1080, PANELSIZE * 2 + PANELSIZE * i, 0);
+			UpdateCollider(&IronDoor[i]->WallCollider, 200, 580);
+			IronDoor[i]->WallCollider.Offset.x = 870;
+			IronDoor[i]->WallCollider.Offset.y = -130;
+		}
+		else
+		{
+			IronDoor[i] = CreateWall("TextureFiles/TutorialGrate.png", PANELSIZE, 1080, PANELSIZE * 2 + PANELSIZE * i, -100);
+			UpdateCollider(&IronDoor[i]->WallCollider, 280, 580);
+			IronDoor[i]->WallCollider.Offset.x = 60;
+			IronDoor[i]->WallCollider.Offset.y = -130;
+		}
+		IronDoor[i]->WallSprite->ZIndex = 80;
+	}
 
 	// Bounding Box Walls
 	CreateBlockerBoxes();
@@ -169,8 +198,8 @@ void InitializeTutorial(void)
 	////////////////////////////////*/
 	CreateSprite("TextureFiles/TutorialPanel1.png", 1920, 1080, 0, 1, 1, 0, 0);
 	CreateSprite("TextureFiles/TutorialPanel1Door.png", 1920, 1080, 200, 1, 1, 0, 0);
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640, -110, 10, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	Shelf = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 480, 60, 500, 20);
 	Shelf->PlatformSprite->Visible = FALSE;
@@ -183,50 +212,76 @@ void InitializeTutorial(void)
 	/*////////////////////////////////
 	//          PANEL TWO           //
 	////////////////////////////////*/
-	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/TutorialPanel2.png", 1920, 1080, 0, 1, 1, 1920.0f, 0);
-	DoorOverlay = (Sprite *) CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, 1920.0f, 0);
+	TutorialBackground = (Sprite *) CreateSprite("TextureFiles/TutorialPanel2.png", 1920, 1080, 0, 1, 1, PANELSIZE, 0);
+	DoorOverlay = (Sprite *) CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, PANELSIZE, 0);
 
 	//Create the shelf sprite and initialize to be collidable
-	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, 160 + 1920.0f, -156);
+	Shelf = CreatePlatform("TextureFiles/Shelf.png", PlatformType, 184.5f, 367.5, 160 + PANELSIZE, -156);
 	UpdateCollider(&Shelf->PlatformCollider, Shelf->PlatformCollider.width, Shelf->PlatformCollider.height * 0.16f);
 	Shelf->PlatformCollider.Offset.y = Shelf->PlatformSprite->Height * 3 / 8;
 
-	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, -40 + 1920.0f, -240);
+	ShortShelf = CreatePlatform("TextureFiles/ShortShelf.png", PlatformType, 184.5f, 198.75f, -40 + PANELSIZE, -240);
 	ShortShelf->PlatformCollider.Offset.y = 5 * ShortShelf->PlatformSprite->Height / 16;
 	UpdateCollider(&ShortShelf->PlatformCollider, ShortShelf->PlatformCollider.width, ShortShelf->PlatformCollider.height * 0.2f);
 
-	BouncyBed = CreatePlatform("TextureFiles/BlankPlatform.png", BounceType, 360.0f, 100.0f, -580 + 1920.0f, -320);
+	BouncyBed = CreatePlatform("TextureFiles/BlankPlatform.png", BounceType, 360.0f, 100.0f, -580 + PANELSIZE, -320);
 	BouncyBed->PlatformSprite->Visible = FALSE;
 	BouncyBed->PlatformRigidBody.Restitution = 2.2f;
 
-	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, -550 + 1920.0f, -270);
+	StarterAxe = CreateDroppedWeapon(Axe, Common, 256, 256, -550 + PANELSIZE, -270);
 	StarterAxe->WeaponSprite->Rotation = (float)-FOX_PI / 3;
 
-	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, 160 + 1920.0f, 0);
+	StarterSword = CreateDroppedWeapon(Sword, Common, 250, 250, 160 + PANELSIZE, 0);
 	StarterSword->WeaponSprite->Rotation = FOX_PI /4;
 
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + 1920.0f, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + PANELSIZE, -110, 10, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + PANELSIZE, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
 	/*////////////////////////////////
 	//         PANEL THREE          //
 	////////////////////////////////*/
-	CreateSprite("TextureFiles/TutorialPanel3.png", 1920, 1080, 0, 1, 1, 1920.0f * 2, 0);
-	CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, 1920.0f * 2, 0);
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + 1920.0f * 2, -110, 10, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
-	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + 1920.0f * 2, -270, 201, -1, 5, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateSprite("TextureFiles/TutorialPanel3.png", 1920, 1080, 0, 1, 1, PANELSIZE * 2, 0);
+	CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, PANELSIZE * 2, 0);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + PANELSIZE * 2, -110, 10, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + PANELSIZE * 2, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
 
-	StrawDummy = CreateEnemy(Dummy, EnemyType, 240 + 1920.0f * 2, -250, 2);
+	StrawDummy = CreateEnemy(Dummy, EnemyType, 240 + PANELSIZE * 2, -250, 2);
 	DummyBlock = CreateWall("TextureFiles/BlankPlatform.png", StrawDummy->EnemySprite->Width / 2, StrawDummy->EnemySprite->Height / 2, 
 				            StrawDummy->Position.x, StrawDummy->Position.y - 40);
 	DummyBlock->WallSprite->Visible = FALSE;
 
+	/*////////////////////////////////
+	//         PANEL FOUR           //
+	////////////////////////////////*/
+	CreateSprite("TextureFiles/TutorialPanel4.png", 1920, 1080, 0, 1, 1, PANELSIZE * 3, 0);
+	CreateSprite("TextureFiles/TutorialPanel4Door.png", 1920, 1080, 200, 1, 1, PANELSIZE * 3, 0);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + PANELSIZE * 3, -110, 10, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + PANELSIZE * 3, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+
+	StrawDummy2 = CreateEnemy(Dummy, EnemyType, 440 + PANELSIZE * 3, -250, 3);
+
+	/*////////////////////////////////
+	//         PANEL FIVE           //
+	////////////////////////////////*/
+	CreateSprite("TextureFiles/TutorialPanel3.png", 1920, 1080, 0, 1, 1, PANELSIZE * 4, 0);
+	CreateSprite("TextureFiles/TutorialPanelDoor.png", 1920, 1080, 200, 1, 1, PANELSIZE * 4, 0);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 640 + PANELSIZE * 4, -110, 10, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+	CreateFoxParticleSystem("TextureFiles/FireParticle.png", 810 + PANELSIZE * 4, -270, 201, -1, 3, 0.01f, 90, 45, 0.5f, -30.0f, 9, 10, 200, 0.25f, 1.0f);
+
+	HealthPickup = CreateFood(Heal, 100, 100, PANELSIZE * 4 + 144, -200);
+	StrengthPickup = CreateFood(Strength, 100, 100, PANELSIZE * 4 - 144, -200);
+
+	/////////////////////////////////
+	//		  WIN AND LOSE		   //
+	/////////////////////////////////
+	CreateDeathConfirmObjects();
 	CreateUpgradeScreenObjects();
 }
  
 void UpdateTutorial(void)
 {
 	Vec2 newPosition;
+	int i;
 
 	//Handle the special events right off the bat yo
 	EventTutorial();
@@ -266,11 +321,6 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Use SPACE to Jump.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
-
-		//Seclude1 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 600, 800, 1, 1, 0, 240); //Top
-		//Seclude2 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 100, 800, 1, 1, 0, -490); //Bottom
-		//Seclude3 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 100, 380, 800, 1, 1, -960, -250); //Left
-		//Seclude4 = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1200, 380, 800, 1, 1, 360, -250); //Right
 	}
 	else if (tutorialDone < 2 && CurrentPlayer.PlayerCollider.Position.x > 150)
 	{
@@ -286,7 +336,7 @@ void UpdateTutorial(void)
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 	}
-	else if (tutorialDone < 3 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2))
+	else if (tutorialDone < 3 && CurrentPlayer.PlayerCollider.Position.x > (PANELSIZE / 2))
 	{
 		tutorialDone = 3;
 
@@ -296,33 +346,84 @@ void UpdateTutorial(void)
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 	}
-	else if (tutorialDone < 4 && CurrentPlayer.PlayerCollider.Position.x > (1920.0f / 2) * 3)
+	else if (tutorialDone < 4 && CurrentPlayer.PlayerCollider.Position.x > (PANELSIZE / 2) * 3)
 	{
 		tutorialDone = 4;
 
 		//Text
-		Vec2Set(&newPosition, 1920 * 2, 300);
+		Vec2Set(&newPosition, 1920 * 2, 220);
 		ChangeTextString(TutorialText, "Use Left Mouse or N to Fight!");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
-
-		Vec2Set(&newPosition, 1920 * 2, 220);
-		ChangeTextString(TutorialTextra, "Right Mouse or M to Wind Attack.");
-		ChangeTextPosition(TutorialTextra, newPosition, Center);
-		ChangeTextZIndex(TutorialTextra, 801);
 	}
 	else if (tutorialDone < 5 && StrawDummy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
 		tutorialDone = 5;
+	}
+	else if (tutorialDone < 6 && CurrentPlayer.PlayerCollider.Position.x > (PANELSIZE / 2) * 5)
+	{
+		tutorialDone = 6;
 
 		//Text
-		Vec2Set(&newPosition, 1920 * 2, 200);
+		Vec2Set(&newPosition, 1920 * 3, 220);
+		ChangeTextString(TutorialText, "Right Mouse or M to Wind Attack.");
+		ChangeTextPosition(TutorialText, newPosition, Center);
+		ChangeTextZIndex(TutorialText, 801);
+	}
+	else if (tutorialDone < 7 && StrawDummy2->CurrentEnemyStats.CurrentHealth <= 0)
+	{
+		tutorialDone = 7;
+
+		//Text
+		Vec2Set(&newPosition, 1920 * 4, 220);
+		ChangeTextString(TutorialText, "Grab the 2 buffs!");
+		ChangeTextPosition(TutorialText, newPosition, Center);
+		ChangeTextZIndex(TutorialText, 801);
+	}
+	else if (tutorialDone < 8 && HealthPickup->objID <= 0 && StrengthPickup->objID <= 0)
+	{
+		tutorialDone = 8;
+
+		//Text
+		Vec2Set(&newPosition, 1920 * 4, 300);
+		ChangeTextString(TutorialText, "Q to switch buffs.");
+		ChangeTextPosition(TutorialText, newPosition, Center);
+		ChangeTextZIndex(TutorialText, 801);
+
+		Vec2Set(&newPosition, 1920 * 4, 220);
+		ChangeTextString(TutorialTextra, "Use buffs with F! Heal yourself!");
+		ChangeTextPosition(TutorialTextra, newPosition, Center);
+		ChangeTextZIndex(TutorialTextra, 801);
+	}
+	else if (tutorialDone < 9 && CurrentPlayer.PlayerCollider.Position.x > (PANELSIZE / 2) * 8
+		  && CurrentPlayer.CurrentPlayerStats.CurrentHealth == CurrentPlayer.CurrentPlayerStats.MaxHealth)
+	{
+		tutorialDone = 9;
+
+		//Text
+		Vec2Set(&newPosition, 1920 * 4, 200);
 		ChangeTextString(TutorialText, "Go Right to Continue.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
 
-		Vec2Set(&newPosition, 1920 * 2, -2000);
+		Vec2Set(&newPosition, 1920 * 4, -2000);
 		ChangeTextPosition(TutorialTextra, newPosition, Center);
+	}
+
+	//Navigation help
+	if (TimerGoingUp)
+		GettingImpatientTimer += GetDeltaTime();
+	else
+		GettingImpatientTimer -= GetDeltaTime();
+	if (GettingImpatientTimer > 0)
+	{
+		ChangeTextAlpha(TutorialText, GettingImpatientTimer);
+		ChangeTextAlpha(TutorialTextra, GettingImpatientTimer);
+
+		if (GettingImpatientTimer > 1)
+			TimerGoingUp = FALSE;
+		else if (GettingImpatientTimer < 0.4)
+			TimerGoingUp = TRUE;
 	}
 
 	//Make the bars slide away naturally
@@ -350,8 +451,15 @@ void UpdateTutorial(void)
 			Seclude4->Visible = FALSE;
 		}
 	}
-	else if (tutorialDone > 4 && IronDoor->Position.y < 300)
-		UpdateWallPosition(IronDoor, IronDoor->Position.x, IronDoor->Position.y + 160 * GetDeltaTime());
+	else 
+	{
+		//Make the doors rise when needed
+		for (i = 0; i < IRONDOORS; ++i)
+		{
+			if (tutorialDone > 4 + i * 2 && IronDoor[i]->Position.y < 300)
+				UpdateWallPosition(IronDoor[i], IronDoor[i]->Position.x, IronDoor[i]->Position.y + 160 * GetDeltaTime());
+		}
+	}
 
 	//If the dummy exists, prevent the player from moving past
 	if(StrawDummy->objID > 0)
@@ -359,7 +467,12 @@ void UpdateTutorial(void)
 		//Do nothing
 	}
 	else
-		FreeWall(DummyBlock);
+	{
+		UpdateWallPosition(DummyBlock, StrawDummy2->Position.x, DummyBlock->Position.y);
+
+		if (StrawDummy2->objID <= 0)
+			FreeWall(DummyBlock);
+	}
 
 	if (tutorialDone > 2)
 		UpdateHUDPosition(CurrentHUD);
@@ -457,16 +570,21 @@ void EventTutorial(void)
 		switch(tutorialDone)
 		{
 		case 0:
-			SelectiveInput(&CurrentPlayer, 0, 0, 0);
+			SelectiveInput(&CurrentPlayer, 0, 0, 0, 0);
 			break;
 		case 1:
-			SelectiveInput(&CurrentPlayer, 1, 0, 0);
+			SelectiveInput(&CurrentPlayer, 1, 0, 0, 0);
 			break;
 		case 2:
-			SelectiveInput(&CurrentPlayer, 1, 1, 0);
+		case 3:
+			SelectiveInput(&CurrentPlayer, 1, 1, 0, 0);
+			break;
+		case 4:
+		case 5:
+			SelectiveInput(&CurrentPlayer, 1, 1, 1, 0);
 			break;
 		default:
-			SelectiveInput(&CurrentPlayer, 1, 1, 1);
+			SelectiveInput(&CurrentPlayer, 1, 1, 1, 1);
 			break;
 		}
 
@@ -485,8 +603,7 @@ void EventTutorial(void)
 	/*////////////////////////////////
 	//       EVERYTHING ELSE        //
 	////////////////////////////////*/
-	if(StrawDummy->objID > 0)
-		UpdateEnemy(StrawDummy);
+	UpdateAllEnemies();
 
 	UpdateFloatingText();
 }

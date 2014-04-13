@@ -12,6 +12,9 @@ typedef struct Sprite
 	//Created (BOOL 1 or 0 only)
 	int Created;
 
+	//Sprite ID
+	int SprID;
+
 	//Collision Group
 	int isHUD;
 
