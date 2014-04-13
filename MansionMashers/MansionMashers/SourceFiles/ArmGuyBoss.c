@@ -126,6 +126,13 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos)
 	CurrentBoss->ArmGuyPhrase[1] = CreateSound("Sounds/ArmGuyPhrase2.mp3", SmallSnd);
 	CurrentBoss->ArmGuyPhrase[2] = CreateSound("Sounds/ArmGuyPhrase3.mp3", SmallSnd);
 	CurrentBoss->ArmGuyPhrase[3] = CreateSound("Sounds/ArmGuyPhrase4.mp3", SmallSnd);
+	//SFX
+	CurrentBoss->JumpSFX = CreateSound("Sounds/AGJump.wav", SmallSnd);
+	CurrentBoss->PunchSFX = CreateSound("Sounds/AGPunch.wav", SmallSnd);
+	CurrentBoss->SmashSFX = CreateSound("Sounds/AGSmash.wav", SmallSnd);
+	CurrentBoss->SpinSFX = CreateSound("Sounds/AGSpin.wav", SmallSnd);
+	CurrentBoss->Spin2SFX = CreateSound("Sounds/AGSpin2.wav", SmallSnd);
+	CurrentBoss->SwooshSFX = CreateSound("Sounds/AGSwoosh.wav", SmallSnd);
 
 	//Smash
 	CurrentBoss->ArmGuyPhraseSmash = CreateSound("Sounds/ArmGuyPhraseSmash.mp3", SmallSnd);
@@ -207,6 +214,9 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		case Attack:
 			//printf("JAB TIME ATTACK\n");
 			// Boss is on the right
+			if(!CurrentBoss->PunchSFX->hasPlayed)
+				PlayAudio(CurrentBoss->PunchSFX);
+
 			CurrentBoss->ArmGuyParticle->amountTotal = -1;
 			CurrentBoss->ArmGuyParticle->emitAmount = 5;
 			CurrentBoss->ArmGuyParticle->emitDisplacementX = 90;
@@ -266,6 +276,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			}
 			break;
 		case End:
+			CurrentBoss->PunchSFX->hasPlayed = FALSE;
 			//printf("JAB TIME END\n");
 			// Reset the player hit fake bool
 			CurrentBoss->ArmGuyParticle->amountTotal = 0;
@@ -343,6 +354,8 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
+			if(!CurrentBoss->JumpSFX->hasPlayed)
+				PlayAudio(CurrentBoss->JumpSFX);
 			//printf("SMASH TIME START\n");
 			if (CurrentBoss->BodySprite->Position.y + 480.0f * GetDeltaTime() < 250.0f)
 			{
@@ -381,9 +394,13 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		case Attack:
 			//printf("SMASH TIME ATTACK\n");
 
+			CurrentBoss->JumpSFX->hasPlayed = FALSE;
 			//Play Audio
 			if(!CurrentBoss->ArmGuySoundsPlay)
 				PlayAudio(CurrentBoss->ArmGuyPhraseSmash);
+
+			if(!CurrentBoss->SwooshSFX->hasPlayed)
+				PlayAudio(CurrentBoss->SwooshSFX);
 			
 			CurrentBoss->ArmGuyParticle->amountTotal = -1;
 			CurrentBoss->ArmGuyParticle->emitAmount = 15;
@@ -427,6 +444,11 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			}
 			break;
 		case End:
+			if(!CurrentBoss->SmashSFX->hasPlayed)
+				PlayAudio(CurrentBoss->SmashSFX);
+			CurrentBoss->SwooshSFX->hasPlayed = FALSE;
+			
+
 			//printf("SMASH TIME END\n");
 			if (CurrentBoss->BodySprite->Position.y - 960.0f * GetDeltaTime() > -200.0f)
 			{
@@ -464,6 +486,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				
 			}
 			break;
+			CurrentBoss->SmashSFX->hasPlayed = FALSE;
 		}
 		break;
 	case Spin:
@@ -473,7 +496,9 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 		switch(CurrentBoss->InnerState)
 		{
 		case Start:
-
+			if(CurrentBoss->SpinSFX->Paused)
+				TogglePauseSound(CurrentBoss->SpinSFX);
+			PlayAudio(CurrentBoss->SpinSFX);
 			if (CurrentBoss->Position.x < 0)
 				CurrentBoss->SpinSprite->FlipX = FALSE;
 			else
@@ -506,6 +531,7 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 			}
 			break;
 		case SpinR:
+			PlayAudio(CurrentBoss->Spin2SFX);
 			// Spin to the right
 			CurrentBoss->Position.x += 1800 * GetDeltaTime();
 			CurrentBoss->BodySprite->Position.x += 1800 * GetDeltaTime();
@@ -532,9 +558,11 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->BossCollider.Position.x = 700;
 				CurrentBoss->InnerState = End;
 				CurrentBoss->cooldownTimer = 0;
+				
 			}
 			break;
 		case SpinL:
+			PlayAudio(CurrentBoss->Spin2SFX);
 			// Spin to the left
 			CurrentBoss->Position.x -= 1800 * GetDeltaTime();
 			CurrentBoss->BodySprite->Position.x -= 1800 * GetDeltaTime();
@@ -561,9 +589,11 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->BossCollider.Position.x = -700;
 				CurrentBoss->InnerState = End;
 				CurrentBoss->cooldownTimer = 0;
+				
 			}
 			break;
 		case End:
+			
 			CurrentBoss->cooldownTimer += GetDeltaTime();
 			if(CurrentBoss->cooldownTimer > 0.5f && CurrentBoss->Position.x > 0)
 			{
@@ -600,8 +630,13 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 				CurrentBoss->cooldownTimer = 0;
 				playerHit = FALSE;
 			}
+
+			if(!CurrentBoss->SpinSFX->Paused)
+					TogglePauseSound(CurrentBoss->SpinSFX);
+			
 			break;
 		}
+		
 		break;
 	case Cooldown:
 		//printf("CD TIME\n");

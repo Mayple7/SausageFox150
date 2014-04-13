@@ -38,6 +38,13 @@ typedef struct ArmGuyBoss
 	FoxSound* ArmGuyPhraseSmash;	//Saying for smash attacj
 	int ArmGuySoundsPlay;			//Bool for if sounds are playing
 
+	FoxSound* JumpSFX;
+	FoxSound* PunchSFX;
+	FoxSound* SmashSFX;
+	FoxSound* SpinSFX;
+	FoxSound* Spin2SFX;
+	FoxSound* SwooshSFX;
+
 
 	Vec2 Position;
 }ArmGuyBoss;

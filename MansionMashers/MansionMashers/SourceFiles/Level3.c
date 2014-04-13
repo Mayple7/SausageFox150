@@ -304,10 +304,10 @@ void EventLevel3(void)
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawLevel3);
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(&Level3BackSnd);
 		//SetNextState(GS_MainMenu);
 		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(&Level3BackSnd);
 	}	
 
 	// Runs if the beginning animation is finished

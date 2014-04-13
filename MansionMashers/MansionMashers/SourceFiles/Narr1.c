@@ -64,6 +64,8 @@ static int timerOn;
 TextGlyphs* Skip;
 float SkipTimer;
 
+FoxSound* BackSnd;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -136,7 +138,7 @@ void InitializeNarr1(void)
 
 	KingFox = CreateSound("Sounds/KingFoxSpeech.mp3", SmallSnd);
 
-
+	BackSnd = CreateSound("Sounds/Narr1MusicCut.mp3", LargeSnd);
 
 
 	/////////////////////////////////
@@ -180,7 +182,11 @@ void UpdateNarr1(void)
 {
 	//Handle the special events right off the bat yo
 	EventNarr1();
-
+	if(!BackSnd->hasPlayed)
+	{
+		BackSnd->hasPlayed = TRUE;
+		PlayAudio(BackSnd);
+	}
 }
 
 /*************************************************************************/
