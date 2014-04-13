@@ -37,12 +37,14 @@
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/Level3.1.h"
+#include "../HeaderFiles/Level3.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
 #include "../HeaderFiles/EasyEdit.h"
+
 
 
 // ---------------------------------------------------------------------------
@@ -251,6 +253,9 @@ void InitializeLevel31(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, 0, 590);
 	Wall1->WallSprite->Visible = FALSE;
 
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, -958, 0);
+	Wall1->WallSprite->Visible = FALSE;
+
 	//Top Cicle Blockers
 	//Panel 1
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 100.0f, -880, -20);
@@ -342,6 +347,8 @@ void UpdateLevel31(void)
 {
 	EventLevel31();
 
+	PlayAudio(&Level3BackSnd);
+
 	EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1 ,10);
 
@@ -406,6 +413,9 @@ void FreeLevel31(void)
 	//Only save stats if the level was actually completed
 	if (levelComplete)
 		SavePlayer(&CurrentPlayer);
+
+	//Manually free
+	freeSound(&Level3BackSnd);
 
 	FreeAllLists();
 	FreeHUD(CurrentHUD);

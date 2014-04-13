@@ -211,7 +211,6 @@ void UpdatePause(void)
 		EndFoxFrame();
 		AESysFrameEnd();
 	}
-	TogglePauseSound(&BackgroundSnd);
 	SaveSettings();
 	FreePause();
 }
@@ -255,7 +254,7 @@ void FreePause(void)
 	FreeText(BGMLabel);
 
 	FreeMyAlloc(volumestring);
-	//ReleaseSound(BackgroundSnd.Sound);
+	ReleaseSound(BackgroundSnd.Sound); //Keep this here otherwise sound exists foreverrrrrrrr
 }
 
 void EventPause(void)

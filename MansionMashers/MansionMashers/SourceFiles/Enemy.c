@@ -152,7 +152,7 @@ Enemy *CreateEnemy(int enemyType, int collisionGroup, float xPos, float yPos, in
 		CurrentEnemy->LegSinValue		= 0;
 		CurrentEnemy->isAttacking		= FALSE;
 		CurrentEnemy->EnemyDirection	= LEFT;
-		CurrentEnemy->TailSinValue		= rand();
+		CurrentEnemy->TailSinValue		= (float)rand();
 
 		CurrentEnemy->isMoveRight		= FALSE;
 		CurrentEnemy->isMoveLeft		= FALSE;

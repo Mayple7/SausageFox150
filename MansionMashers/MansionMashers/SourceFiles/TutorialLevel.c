@@ -99,7 +99,7 @@ void InitializeTutorial(void)
 	ResetCamera();
 	ResetEnemyPanelNumber();
 
-	BackSnd = CreateSound("Sounds/MMBGMusic.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/TutorialTheme.wav", LargeSnd);
 	GettingImpatientTimer = 0;
 	TimerGoingUp = TRUE;
 

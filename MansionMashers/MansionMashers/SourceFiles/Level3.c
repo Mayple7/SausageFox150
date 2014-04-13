@@ -162,6 +162,8 @@ void InitializeLevel3(void)
 	/////////////////////////////////
 	IntelFoxStart = CreateSound("Sounds/IntelFoxLvl3Start.mp3", SmallSnd);
 
+	CreatePauseSound(&Level3BackSnd, "Sounds/MMBGMusic.mp3", LargeSnd);
+
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
@@ -218,6 +220,7 @@ void InitializeLevel3(void)
 void UpdateLevel3(void)
 {
 	EventLevel3();
+	PlayAudio(&Level3BackSnd);
 
 	EasyEditWall(Wall1, 10);
 
@@ -257,6 +260,9 @@ void FreeLevel3(void)
 	//Only save stats if the level was actually completed
 	if (levelComplete)
 		SavePlayer(&CurrentPlayer);
+
+	if(GetNextState() != GS_Level31)
+		ReleaseSound(Level3BackSnd.Sound);
 
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
