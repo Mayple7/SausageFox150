@@ -144,7 +144,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 void UpdatePlayerPosition(struct Player *CurrentPlayer);
 void DestroyPlayer(Player *CurrentPlayer);
 void InputPlayer(struct Player *CurrentPlayer);
-void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNow, int attackingNow);
+	//It's my input and I want it now!
+void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNow, int attackingNow, int windNow);
 void DetectPlayerCollision(void);
 void Animation(Player *Object);
 void CreatePlayerSprites(Player *Player);

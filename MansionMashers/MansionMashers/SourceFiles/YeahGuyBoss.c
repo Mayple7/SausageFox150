@@ -672,14 +672,22 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		CurrentBoss->BodySprite->FlipX = TRUE;
 	}
 
+	// Booleans for if head is alive
 	if(CurrentBoss->CurrentRedHealth <= 0)
+	{
+		CurrentBoss->CurrentRedHealth = 0;
 		CurrentBoss->redHead = FALSE;
+	}
 	if(CurrentBoss->CurrentGreenHealth <= 0)
+	{
+		CurrentBoss->CurrentGreenHealth = 0;
 		CurrentBoss->greenHead = FALSE;
+	}
 	if(CurrentBoss->CurrentBlueHealth <= 0)
+	{
+		CurrentBoss->CurrentBlueHealth = 0;
 		CurrentBoss->blueHead = FALSE;
-	//Check if boss is dead
-	//Give ability to end the level
+	}
 }
 
 /*************************************************************************/
@@ -931,4 +939,5 @@ void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss)
 {
 	// Once Luke makes the art we can do something with this ^_^
 	// FREES ALL THE THINGS!!!!
+	FreeSprite(CurrentBoss->BodySprite);
 }

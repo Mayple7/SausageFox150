@@ -12,5 +12,6 @@ void EventYeahGuy(void);
 void ShowBuffs(void);
 void HideBuffs(void);
 void UpdatePlayerBuff(void);
+void MoveHPBars(void);
 
 #endif

@@ -50,6 +50,7 @@ int buffsShown;
 int redHead;
 int greenHead;
 int blueHead;
+int moveBars;
 
 static int timer;
 static int timerOn;
@@ -69,8 +70,14 @@ Sprite* Arrow1;
 static int Arrow1Grow;
 
 //Boss HP Bar
-Sprite* BossHPBar;
-Sprite* BossHPBarBack;
+Sprite* BossHPBarRed;
+Sprite* BossHPBarBackRed;
+
+Sprite* BossHPBarGreen;
+Sprite* BossHPBarBackGreen;
+
+Sprite* BossHPBarBlue;
+Sprite* BossHPBarBackBlue;
 
 // Buff Sprites and Collision boxes
 Sprite* RedBuff;
@@ -160,8 +167,14 @@ void InitializeYeahGuy(void)
 	BlackOverlay->Tint = Tint;
 
 	// Boss HP Bar
-	BossHPBar = (Sprite *)CreateSprite("TextureFiles/BossHealthBarMid.png", 1, 44, 399, 1, 1, -200, 450);
-	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
+	BossHPBarRed = (Sprite *)CreateSprite("TextureFiles/BossRedHealthBarMid.png", 1, 22, 399, 1, 1, -200, 470);
+	BossHPBarBackRed = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 398, 1, 1, 0, 470);
+
+	BossHPBarGreen = (Sprite *)CreateSprite("TextureFiles/BossGreenHealthBarMid.png", 1, 22, 399, 1, 1, -200, 430);
+	BossHPBarBackGreen = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 398, 1, 1, 0, 430);
+
+	BossHPBarBlue = (Sprite *)CreateSprite("TextureFiles/BossBlueHealthBarMid.png", 1, 22, 399, 1, 1, -200, 390);
+	BossHPBarBackBlue = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 398, 1, 1, 0, 390);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -247,18 +260,30 @@ void UpdateYeahGuy(void)
 		if(CurrentBuff == Red && redHead)
 			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/RedBuff.png");
 		else if(CurrentBuff == Red && !redHead)
+		{
+			moveBars = TRUE;
 			CurrentBuff = None;
+		}
 		else if(CurrentBuff == Green && greenHead)
 			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/GreenBuff.png");
 		else if(CurrentBuff == Green && !greenHead)
+		{
+			moveBars = TRUE;
 			CurrentBuff = None;
+		}
 		else if(CurrentBuff == Blue && blueHead)
 			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/BlueBuff.png");
 		else if(CurrentBuff == Blue && !blueHead)
+		{
+			moveBars = TRUE;
 			CurrentBuff = None;
+		}
 	}
 
 	UpdatePlayerBuff();
+
+	if(levelComplete || moveBars)
+		MoveHPBars();
 
 	// Update all buffs if needed
 	if(buffTimer >= 10.0f)
@@ -329,21 +354,21 @@ void UpdateYeahGuy(void)
 			LevelCompletion();
 		}
 
-		BossHPBar->Visible = FALSE;
-
-		if(BossHPBar->Alpha > 0.0f)
-		{
-			BossHPBar->Alpha -= GetDeltaTime() / 2.0f;
-		}
-		else
-			BossHPBar->Alpha = 0;
-
+		BossHPBarRed->Visible = FALSE;
+		BossHPBarGreen->Visible = FALSE;
+		BossHPBarBlue->Visible = FALSE;
 	}
 	// Boss health bar logic
 	else
 	{
-		BossHPBar->ScaleX = 800.0f * (Boss->CurrentRedHealth / (float)Boss->MaxHealth);
-		BossHPBar->Position.x = -400.0f * (1 - (Boss->CurrentRedHealth / (float)Boss->MaxHealth));
+		BossHPBarRed->ScaleX = 800.0f * (Boss->CurrentRedHealth / (float)Boss->MaxHealth);
+		BossHPBarRed->Position.x = -400.0f * (1 - (Boss->CurrentRedHealth / (float)Boss->MaxHealth));
+
+		BossHPBarGreen->ScaleX = 800.0f * (Boss->CurrentGreenHealth / (float)Boss->MaxHealth);
+		BossHPBarGreen->Position.x = -400.0f * (1 - (Boss->CurrentGreenHealth / (float)Boss->MaxHealth));
+
+		BossHPBarBlue->ScaleX = 800.0f * (Boss->CurrentBlueHealth / (float)Boss->MaxHealth);
+		BossHPBarBlue->Position.x = -400.0f * (1 - (Boss->CurrentBlueHealth / (float)Boss->MaxHealth));
 	}
 }
 
@@ -575,6 +600,12 @@ void EventYeahGuy(void)
 	}
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Shows all the buffs in a random location
+*/
+/*************************************************************************/
 void ShowBuffs(void)
 {
 	int buffLocations = rand() % 6;
@@ -734,6 +765,12 @@ void ShowBuffs(void)
 		HideBuffs();
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Hides all the buffs and moves the colliders away
+*/
+/*************************************************************************/
 void HideBuffs(void)
 {
 	// Moves everything down below
@@ -752,6 +789,12 @@ void HideBuffs(void)
 	buffsShown = FALSE;
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Updates the player's buff
+*/
+/*************************************************************************/
 void UpdatePlayerBuff(void)
 {
 	// If a buff is already active ignore
@@ -790,5 +833,120 @@ void UpdatePlayerBuff(void)
 		HideBuffs();
 		buffTimer = 0.0f;
 	}
+}
 
+/*************************************************************************/
+/*!
+	\brief
+	Moves and fades any bars that need to when a head dies
+*/
+/*************************************************************************/
+void MoveHPBars(void)
+{
+	// Fake bools for fade
+	int redFade = FALSE;
+	int greenFade = FALSE;
+	int blueFade = FALSE;
+
+	// Fake bools for movement
+	int movementDone = FALSE;
+
+	// Red bar has completed movement
+	if(!redHead && BossHPBarRed->Alpha <= 0)
+	{
+		BossHPBarRed->Alpha = 0;
+		BossHPBarBackRed->Alpha = 0;
+		redFade = TRUE;
+	}
+
+	// Green bar has completed movement
+	if(!greenHead && BossHPBarGreen->Alpha <= 0)
+	{
+		BossHPBarGreen->Alpha = 0;
+		BossHPBarBackGreen->Alpha = 0;
+		greenFade = TRUE;
+	}
+
+	// Blue bar has completed movement
+	if(!blueHead && BossHPBarBlue->Alpha <= 0)
+	{
+		BossHPBarBlue->Alpha = 0;
+		BossHPBarBackBlue->Alpha = 0;
+		blueFade = TRUE;
+	}
+
+	// Incoming huge if statement!!!!!
+	// Fade out any and all hp bars if needed
+	if(!redHead && BossHPBarRed->Alpha > 0)
+	{
+		BossHPBarRed->Alpha -= GetDeltaTime();
+		BossHPBarBackRed->Alpha -= GetDeltaTime();
+	}
+	if(!greenHead && BossHPBarGreen->Alpha > 0)
+	{
+		BossHPBarGreen->Alpha -= GetDeltaTime();
+		BossHPBarBackGreen->Alpha -= GetDeltaTime();
+	}
+	if(!blueHead && BossHPBarBlue->Alpha > 0)
+	{
+		BossHPBarBlue->Alpha -= GetDeltaTime();
+		BossHPBarBackBlue->Alpha -= GetDeltaTime();
+	}
+
+	// Red is dead
+	if(!redHead)
+	{
+		// Green and Red are dead
+		if(!greenHead && BossHPBarBlue->Position.y < BossHPBarRed->Position.y)
+		{
+			BossHPBarBlue->Position.y += 40 * GetDeltaTime() * 2;
+			BossHPBarBackBlue->Position.y += 40 * GetDeltaTime() * 2;
+		}
+		// Blue bar movement is done
+		else if(!greenHead)
+		{
+			movementDone = TRUE;
+		}
+		// Only Red or Red and blue are dead
+		else if(BossHPBarGreen->Position.y < BossHPBarRed->Position.y)
+		{
+			// Move blue and green bars
+			BossHPBarBlue->Position.y += 40 * GetDeltaTime() * 2;
+			BossHPBarBackBlue->Position.y += 40 * GetDeltaTime() * 2;
+
+			BossHPBarGreen->Position.y += 40 * GetDeltaTime() * 2;
+			BossHPBarBackGreen->Position.y += 40 * GetDeltaTime() * 2;
+		}
+		// All movement should be done
+		else
+		{
+			movementDone = TRUE;
+		}
+	}
+	// Red is alive
+	else
+	{
+		// Only green is dead
+		if(!greenHead && BossHPBarBlue->Position.y < BossHPBarGreen->Position.y)
+		{
+			BossHPBarBlue->Position.y += 40 * GetDeltaTime() * 2;
+			BossHPBarBackBlue->Position.y += 40 * GetDeltaTime() * 2;
+		}
+		// Movement for blue is done
+		else if(!greenHead)
+		{
+			movementDone = TRUE;
+		}
+		// Green and red are alive, don't need to move anything
+		else
+		{
+			movementDone = TRUE;
+		}
+	}
+
+	// All fade and movement is completed
+	if(redFade + greenFade + blueFade == 3 && movementDone)
+	{
+		moveBars = FALSE;
+	}
 }
