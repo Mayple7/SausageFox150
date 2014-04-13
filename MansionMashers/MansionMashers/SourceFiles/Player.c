@@ -218,7 +218,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 /*************************************************************************/
 void InputPlayer(struct Player *CurrentPlayer)
 {
-	SelectiveInput(CurrentPlayer, 1, 1, 1);
+	SelectiveInput(CurrentPlayer, 1, 1, 1, 1);
 }
 
 /*************************************************************************/
@@ -227,7 +227,7 @@ void InputPlayer(struct Player *CurrentPlayer)
 	Prevents non-desired inputs from being made.
 */
 /*************************************************************************/
-void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNow, int attackingNow)
+void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNow, int attackingNow, int windNow)
 {
 	int mouseX = FoxInput_GetMousePositionX();
 	float camX = GetCameraXPosition();
@@ -258,7 +258,7 @@ void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNo
 			CurrentPlayer->PlayerSpriteParts.AttackRotationArmLower = 0;
 			UpdateCollider(&CurrentPlayer->PlayerCollider,CurrentPlayer->PlayerCollider.width, CurrentPlayer->PlayerCollider.height);
 		}
-		else if ((FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking && CurrentPlayer->WindAttackCooldown >= CurrentPlayer->WindAttackCooldownMax)
+		else if (windNow && (FoxInput_MouseTriggered(MOUSE_BUTTON_RIGHT) || FoxInput_KeyTriggered('M')) && !CurrentPlayer->isAttacking && CurrentPlayer->WindAttackCooldown >= CurrentPlayer->WindAttackCooldownMax)
 		{
 			//Pick a random shoot sound to play
 			if (rand() % 2)
@@ -310,15 +310,6 @@ void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNo
 				UpdateCollider(&theWindOfAFox->ProjectileAttack, theWindOfAFox->ProjectileAttack.width / 4, theWindOfAFox->ProjectileAttack.height / 2);
 			}
 		}
-
-		/*if ((FoxInput_MouseDown(MOUSE_BUTTON_RIGHT) || FoxInput_KeyDown('M')) && !CurrentPlayer->isAttacking)
-		{
-			CurrentPlayer->isBlocking = TRUE;
-		}
-		else if(FoxInput_MouseUp(MOUSE_BUTTON_RIGHT) || FoxInput_KeyUp('M') || CurrentPlayer->isAttacking)
-		{
-			CurrentPlayer->isBlocking = FALSE;
-		}*/
 	}
 	if (LookAtMouse)
 	{

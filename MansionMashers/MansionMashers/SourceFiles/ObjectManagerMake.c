@@ -44,6 +44,8 @@ Sprite *AddObject(void)
 		//Find a sprite that is empty
 		if (drawList[i].Created != 1)
 		{
+			//The location within the draw list
+			drawList[i].SprID = i;
 			return &drawList[i];
 		}
 	}

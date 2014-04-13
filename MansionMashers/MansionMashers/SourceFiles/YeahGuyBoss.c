@@ -91,7 +91,7 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->Speed		  = 0;
 
 	// Default starting states
-	CurrentBoss->CurrentState = Pound;
+	CurrentBoss->CurrentState = Cooldown;
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = E;
 
@@ -730,14 +730,22 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		CurrentBoss->BodySprite->FlipX = TRUE;
 	}
 
+	// Booleans for if head is alive
 	if(CurrentBoss->CurrentRedHealth <= 0)
+	{
+		CurrentBoss->CurrentRedHealth = 0;
 		CurrentBoss->redHead = FALSE;
+	}
 	if(CurrentBoss->CurrentGreenHealth <= 0)
+	{
+		CurrentBoss->CurrentGreenHealth = 0;
 		CurrentBoss->greenHead = FALSE;
+	}
 	if(CurrentBoss->CurrentBlueHealth <= 0)
+	{
+		CurrentBoss->CurrentBlueHealth = 0;
 		CurrentBoss->blueHead = FALSE;
-	//Check if boss is dead
-	//Give ability to end the level
+	}
 }
 
 /*************************************************************************/
@@ -974,4 +982,20 @@ void YeahGuyPlatformCollision(YeahGuyBoss* CurrentBoss, Platform* CurrentPlatfor
 				CurrentBoss->YeahGuyRigidBody.onGround = TRUE;
 		}
 	}
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Frees all the boss sprites etc
+	
+	\param CurrentBoss
+	Pointer to the current boss
+*/
+/*************************************************************************/
+void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss)
+{
+	// Once Luke makes the art we can do something with this ^_^
+	// FREES ALL THE THINGS!!!!
+	FreeSprite(CurrentBoss->BodySprite);
 }

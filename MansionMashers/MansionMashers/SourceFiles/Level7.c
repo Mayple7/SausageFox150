@@ -284,11 +284,6 @@ void UpdateLevel7(void)
 	// What to do when the boss is dead
 	if(levelComplete)
 	{
-		if(CurrentPlayer.Position.x > (PANELSIZE / 2) + CurrentPlayer.PlayerCollider.width + PANELSIZE)
-		{
-			LevelCompletion();
-		}
-
 		BossHPBar->Visible = FALSE;
 
 		if(BossHPBar->Alpha > 0.0f)
@@ -379,10 +374,11 @@ void EventLevel(void)
 {	
 	if(!levelComplete && !beginningAnimation)
 	{
+		DetectPlayerCollision();
 		DetectKevinBossCollision(Boss);
 	// Handle any input for the current player
 		InputPlayer(&CurrentPlayer);
-		DetectPlayerCollision();
+		
 	}
 	else if(!levelComplete)
 	{
@@ -414,7 +410,7 @@ void EventLevel(void)
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
 	else
-		LevelCompletion();
+		GameCompletion();
 
 	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //

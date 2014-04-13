@@ -101,7 +101,7 @@ Enemy *CreateEnemy(int enemyType, int collisionGroup, float xPos, float yPos, in
 		
 		InitializeRigidBody(&CurrentEnemy->EnemyRigidBody, TRUE, width, height);
 
-		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 104);
+		InitializeEnemyStats(CurrentEnemy, 50, 0, 0, 0, 0, 5, 61);
 
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/StrawParticle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 1, 0, 5, 0.0f, 270, 90, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
 

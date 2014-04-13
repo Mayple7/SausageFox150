@@ -81,6 +81,7 @@ void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff);
 static void PlayerDamageResult(int damage);
 void YeahGuyPlatformCollision(YeahGuyBoss* CurrentBoss, Platform* CurrentPlatform);
 void CreateYeahGuySprites(YeahGuyBoss *Object);
+void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss);
 void YeahGuyAnimation(YeahGuyBoss *Object);
 
 #endif
