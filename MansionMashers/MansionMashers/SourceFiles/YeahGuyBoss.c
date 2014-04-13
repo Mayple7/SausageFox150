@@ -138,35 +138,29 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 /*************************************************************************/
 void CreateYeahGuySprites(YeahGuyBoss *Object)
 {
-	Object->YeahGuySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/HandGuyBody.png", 450.0f, 450.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/YeahGuyBody.png", 450.0f, 450.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.HeadRed = (Sprite *) CreateSpriteNoMesh("TextureFiles/YeahGuyRedHead.png", 450.0f, 450.0f, Object->BodySprite->ZIndex + 1, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.HeadRed->SpriteMesh = Object->YeahGuySpriteParts.Body->SpriteMesh;
+	Object->YeahGuySpriteParts.HeadBlue = (Sprite *) CreateSpriteNoMesh("TextureFiles/YeahGuyBlueHead.png", 450.0f, 450.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.HeadBlue->SpriteMesh = Object->YeahGuySpriteParts.Body->SpriteMesh;
+	Object->YeahGuySpriteParts.HeadGreen = (Sprite *) CreateSpriteNoMesh("TextureFiles/YeahGuyGreenHead.png", 450.0f, 450.0f, Object->BodySprite->ZIndex + 3, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.HeadGreen->SpriteMesh = Object->YeahGuySpriteParts.Body->SpriteMesh;
 
-	Object->YeahGuySpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/HandGuyArmUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.LegUpper = (Sprite *) CreateSprite("TextureFiles/YeahGuyLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
 
-	Object->YeahGuySpriteParts.ArmUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.ArmUpper2->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+	Object->YeahGuySpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/YeahGuyLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.LegLower->SpriteMesh = Object->YeahGuySpriteParts.LegUpper->SpriteMesh;
 
-	Object->YeahGuySpriteParts.ArmLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerIn.png", 192.0f, 192.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.ArmLower2->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+	Object->YeahGuySpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/YeahGuyLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.LegUpper2->SpriteMesh = Object->YeahGuySpriteParts.LegUpper->SpriteMesh;
 
-	Object->YeahGuySpriteParts.LegUpper = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.LegUpper->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
-
-	Object->YeahGuySpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.LegLower->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
-
-	Object->YeahGuySpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.LegUpper2->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
-
-	Object->YeahGuySpriteParts.LegLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.LegLower2->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
+	Object->YeahGuySpriteParts.LegLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/YeahGuyLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->YeahGuySpriteParts.LegLower2->SpriteMesh = Object->YeahGuySpriteParts.LegUpper->SpriteMesh;
 
 	Object->YeahGuySpriteParts.Tail = (Sprite *) CreateSpriteNoMesh("TextureFiles/TailDog.png", 450.0f, 450.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
 	Object->YeahGuySpriteParts.Tail->SpriteMesh = Object->YeahGuySpriteParts.Body->SpriteMesh;
 
 	Object->YeahGuySpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3;
-
-	Object->YeahGuySpriteParts.ArmLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/HandGuyArmLowerOut.png", 192.0f, 192.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
-	Object->YeahGuySpriteParts.ArmLower->SpriteMesh = Object->YeahGuySpriteParts.ArmUpper->SpriteMesh;
 
 }
 
@@ -674,8 +668,10 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		break;
 	}
 
+	// Speed for the animation
 	CurrentBoss->Speed = (float)fabs(CurrentBoss->YeahGuyRigidBody.Velocity.x);
 
+	// Sthap!
 	if (CurrentBoss->Speed < 0.001f)
 		CurrentBoss->LegSinValue = 0;
 

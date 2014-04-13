@@ -914,17 +914,20 @@ void YeahGuyAnimation(YeahGuyBoss *Object)
 	Sprite *LegUpr2 = Object->YeahGuySpriteParts.LegUpper2;
 	Sprite *LegLwr = Object->YeahGuySpriteParts.LegLower;
 	Sprite *LegLwr2 = Object->YeahGuySpriteParts.LegLower2;
-	Sprite *ArmUpr = Object->YeahGuySpriteParts.ArmUpper;
-	Sprite *ArmUpr2 = Object->YeahGuySpriteParts.ArmUpper2;
-	Sprite *ArmLwr = Object->YeahGuySpriteParts.ArmLower;
-	Sprite *ArmLwr2 = Object->YeahGuySpriteParts.ArmLower2;
 	Sprite *Bdy = Object->YeahGuySpriteParts.Body;
 	Sprite *Tail = Object->YeahGuySpriteParts.Tail;
+	Sprite *Red = Object->YeahGuySpriteParts.HeadRed;
+	Sprite *Blue = Object->YeahGuySpriteParts.HeadBlue;
+	Sprite *Green = Object->YeahGuySpriteParts.HeadGreen;
 
 	Object->LegSinValue += (Object->Speed * GetDeltaTime()) / 75.0f; 
 
 	Bdy->Position.x = Object->Position.x;
 	Bdy->Position.y = Object->Position.y - 75.0f + (Bdy->Height / 10) - ((float)sin(-Object->LegSinValue*2)*5/(LegDistance));
+
+	Red->Position = Bdy->Position;
+	Green->Position = Bdy->Position;
+	Blue->Position = Bdy->Position;
 
 	Tail->Position.y = Bdy->Position.y + (Bdy->Height/30);
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
@@ -967,10 +970,9 @@ void YeahGuyAnimation(YeahGuyBoss *Object)
 	LegLwr2->FlipX = !Object->BodySprite->FlipX;
 	Bdy->FlipX = !Object->BodySprite->FlipX;
 	Tail->FlipX = !Object->BodySprite->FlipX;
-	ArmUpr->FlipX = !Object->BodySprite->FlipX;
-	ArmLwr->FlipX = !Object->BodySprite->FlipX;
-	ArmUpr2->FlipX = !Object->BodySprite->FlipX;
-	ArmLwr2->FlipX = !Object->BodySprite->FlipX;
+	Red->FlipX = !Object->BodySprite->FlipX;
+	Green->FlipX = !Object->BodySprite->FlipX;
+	Blue->FlipX = !Object->BodySprite->FlipX;
 
 	if (Object->BodySprite->FlipX != FALSE)
 	{
@@ -1009,41 +1011,9 @@ void YeahGuyAnimation(YeahGuyBoss *Object)
 				Object->YeahGuySpriteParts.AttackRotationArm2 = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArm2, FOX_PI * 0.9f, 15.0f * GetDeltaTime());
 				Object->YeahGuySpriteParts.AttackRotationArmLower2 = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArmLower2, FOX_PI / 2, 15.0f * GetDeltaTime());
 			}
-			ArmUpr2->Rotation = -FOX_PI / 12 + Object->YeahGuySpriteParts.AttackRotationArm2 / 6;
-			ArmLwr2->Rotation = ArmUpr2->Rotation - FOX_PI / 2 + Object->YeahGuySpriteParts.AttackRotationArmLower2;
-			ArmUpr->Rotation = -FOX_PI / 12 + Object->YeahGuySpriteParts.AttackRotationArm / 6;
-			ArmLwr->Rotation = ArmUpr->Rotation - FOX_PI / 2 + Object->YeahGuySpriteParts.AttackRotationArmLower;
-
-		}
-		else
-		{
-			ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
-			ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
-			ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
-			ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
-
 		}
 		// -----------------------------------------------------------------------------------------
 
-		ArmUpr2->Position.x = Bdy->Position.x;
-		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
-		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
-		ArmLwr2->Position.y = ArmUpr2->Position.y - (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
-		
-		ArmUpr->Position.x = Bdy->Position.x;
-		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
-		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
-		ArmLwr->Position.y = ArmUpr->Position.y - (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
-		
-		if ((Object->Speed * GetDeltaTime()) < 0.6f * GetDeltaTime())
-		{
-			if (!(Object->CurrentState == Question && Object->InnerState == Attack && Object->cooldownTimer >= 0.5f))
-			{
-				ArmLwr->Rotation = ArmUpr->Rotation - 0.2f;
-				ArmLwr2->Rotation = ArmUpr2->Rotation - 0.5f;
-			}
-		}
-		
 	}
 	else
 	{
@@ -1083,42 +1053,9 @@ void YeahGuyAnimation(YeahGuyBoss *Object)
 				Object->YeahGuySpriteParts.AttackRotationArmLower2 = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArmLower2, FOX_PI / 2, 15.0f * GetDeltaTime());
 			}
 
-			ArmUpr2->Rotation = FOX_PI / 12 - Object->YeahGuySpriteParts.AttackRotationArm2 / 6;
-			ArmLwr2->Rotation = ArmUpr2->Rotation + FOX_PI / 2 - Object->YeahGuySpriteParts.AttackRotationArmLower2;
-			ArmUpr->Rotation = FOX_PI / 12 - Object->YeahGuySpriteParts.AttackRotationArm / 6;
-			ArmLwr->Rotation = ArmUpr->Rotation + FOX_PI / 2 - Object->YeahGuySpriteParts.AttackRotationArmLower;
-
-		}
-		else
-		{
-			ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
-			ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
-			ArmUpr2->Rotation = LegUpperDirection/1.5f - 1.5f;
-			ArmLwr2->Rotation = ArmUpr2->Rotation + 1.25f + LegUpperDirection/2.0f;
 
 		}
 		// -----------------------------------------------------------------------------------------
-
-		ArmUpr->Position.x = Bdy->Position.x;
-		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
-		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
-		ArmLwr->Position.y = ArmUpr->Position.y + (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
-
-		
-		ArmUpr2->Position.x = Bdy->Position.x;
-		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
-		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
-		ArmLwr2->Position.y = ArmUpr2->Position.y + (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
-
-		
-		if ((Object->Speed * GetDeltaTime()) < 0.6f * GetDeltaTime())
-		{
-			if (!(Object->CurrentState == Question && Object->InnerState == Attack && Object->cooldownTimer >= 0.5f))
-			{
-				ArmLwr->Rotation = ArmUpr->Rotation + 0.5f;
-				ArmLwr2->Rotation = ArmUpr2->Rotation + 0.2f;
-			}
-		}
 
 	}
 

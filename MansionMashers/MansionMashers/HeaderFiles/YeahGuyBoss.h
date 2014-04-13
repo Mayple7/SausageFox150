@@ -16,11 +16,10 @@ typedef struct YeahGuyParts
 	Sprite *LegLower2;
 	Sprite *Skirt;
 	Sprite *Body;
+	Sprite *HeadBlue;
+	Sprite *HeadRed;
+	Sprite *HeadGreen;
 	Sprite *Tail;
-	Sprite *ArmUpper;
-	Sprite *ArmLower;
-	Sprite *ArmUpper2;
-	Sprite *ArmLower2;
 	float AttackRotationArm;
 	float AttackRotationArmLower;
 	float AttackRotationArm2;
