@@ -143,6 +143,8 @@ void EnemyAnimation(Enemy *Object)
 		}
 	}
 
+	Object->TailSinValue += GetDeltaTime() * 5;
+
 	Bdy->Position.x = Object->Position.x;
 	Bdy->Position.y = Object->Position.y - ((float)sin(-Object->LegSinValue*2)*5/(LegDistance));
 	Skrt->Position = Bdy->Position;
@@ -152,19 +154,6 @@ void EnemyAnimation(Enemy *Object)
 		Skrt->CurrentFrame = 3;
 	Tail->Position.y = Bdy->Position.y + (Bdy->Height/30);
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
-
-	if (Object->Speed > 90.0f * GetDeltaTime())
-	{
-		Tail->SpriteTexture = LoadTexture("TextureFiles/TailDog.png");
-		Object->TailSinValue += 6.0f * GetDeltaTime();
-		Object->EnemySpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3 * FRAMERATE / 60;
-	}
-	else
-	{
-		Tail->SpriteTexture = LoadTexture("TextureFiles/TailDog.png");
-		Object->TailSinValue = 0;
-		Object->EnemySpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
-	}
 
 	if (Object->EnemyRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
 	{
@@ -365,7 +354,7 @@ void EnemyAnimation(Enemy *Object)
 
 	Object->EnemyWeapon->WeaponAttackPosition.x = Weap->Position.x + (cosf(Weap->Rotation + FOX_PI / 2) * Object->EnemyWeapon->WeaponLength);
 	Object->EnemyWeapon->WeaponAttackPosition.y = Weap->Position.y + (sinf(Weap->Rotation + FOX_PI / 2) * Object->EnemyWeapon->WeaponLength);
-
+	
 	//*************************************************************************************************
 }
 
@@ -404,6 +393,7 @@ void Animation(Player *Object)
 	Sprite *Weap = Object->PlayerSpriteParts.Weapon;
 	Sprite *Tail = Object->PlayerSpriteParts.Tail;
 
+	
 	Object->LegSinValue += (Object->Speed) / 75.0f; 
 
 	Object->PlayerSpriteParts.BlinkTimer += 1;
@@ -697,13 +687,13 @@ void HandGuyAnimation(HandGuyBoss *Object)
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailDog.png");
 		Object->TailSinValue += 6.0f * GetDeltaTime();
-		Object->HandGuySpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3 * FRAMERATE / 60;
+		Object->HandGuySpriteParts.Tail->AnimationSpeed = (Object->Speed)/2 + 3;
 	}
 	else
 	{
 		Tail->SpriteTexture = LoadTexture("TextureFiles/TailDog.png");
 		Object->TailSinValue = 0;
-		Object->HandGuySpriteParts.Tail->AnimationSpeed = 4 * FRAMERATE / 60;
+		Object->HandGuySpriteParts.Tail->AnimationSpeed = 4;
 	}
 
 	if (Object->HandGuyRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)

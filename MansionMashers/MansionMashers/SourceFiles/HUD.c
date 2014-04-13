@@ -74,13 +74,6 @@ HUD* CreateHUD(Player* CurrentPlayer)
 		ChangeTextZIndex(CurrentHUD->StatusText, 400);
 		TextAllVisible(CurrentHUD->StatusText);
 	}
-	else if(GetCurrentState() == GS_Level7)
-	{
-		sprintf(CharTemp, "Seconds Remaining: %d", 60);
-		CurrentHUD->StatusText = CreateText(CharTemp, 0, 400, 100, TextTint, Center, Border);
-		ChangeTextZIndex(CurrentHUD->StatusText, 400);
-		TextAllVisible(CurrentHUD->StatusText);
-	}
 	else
 	{
 		sprintf(CharTemp, "Should never see me ^_^");

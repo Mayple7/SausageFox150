@@ -326,6 +326,9 @@
     <ClInclude Include="HeaderFiles\Narr1.h">
       <Filter>Fox Header Files\Fox Level Headers</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\KevinBoss.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Vector2.c">
@@ -546,6 +549,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\Narr1.c">
       <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\KevinBoss.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -46,7 +46,7 @@
 // ---------------------------------------------------------------------------
 // globals
 static int levelComplete;
-static int PlayerIsAlive; 
+static int PlayerIsAlive;
 static int beginningAnimation;
 
 ArmGuyBoss *Boss;
@@ -350,10 +350,12 @@ void EventArmGuy(void)
 	//////////////////////////////////
 	//   INPUT & COLLISION FIRST    //
 	//////////////////////////////////
+
 	// Check for any collision and handle the results
 	DetectPlayerCollision();
 	if(!levelComplete)
 		DetectArmGuyBossCollision(Boss);
+
 	// Handle any input for the current player
 	if(!beginningAnimation)
 		InputPlayer(&CurrentPlayer);
@@ -386,7 +388,6 @@ void EventArmGuy(void)
 		UpdateCollisionPosition(&CurrentPlayer.PlayerWeapon->WeaponAttack, &CurrentPlayer.PlayerWeapon->WeaponAttackPosition);
 		MoveObject(&CurrentPlayer.Position, CurrentPlayer.PlayerDirection, CurrentPlayer.Speed);
 	}
-	
 
 #if defined _DEBUG
 	if(FoxInput_KeyTriggered('U'))
@@ -398,6 +399,7 @@ void EventArmGuy(void)
 		RemoveDebugMode();
 	}
 #endif
+
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		if(PlayerIsAlive)
@@ -408,10 +410,6 @@ void EventArmGuy(void)
 			TogglePauseSound(BackSnd);
 		}
 	}
-
-	//////////////////////////////////
-	//    CAMERA POSITION SECOND    //
-	//////////////////////////////////
 
 	//////////////////////////////////
 	//       EVERYTHING ELSE        //
