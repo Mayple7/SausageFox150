@@ -70,7 +70,7 @@ void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform)
 
 void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 {
-	if(!CurrentPlayer->BuffHeld[0] && !CurrentPlayer->BuffHeld[1] && !CurrentPlayer->BuffHeld[2] && !CurrentPlayer->BuffHeld[3])
+	if(!CurrentPlayer->BuffHeld[0] && !CurrentPlayer->BuffHeld[1] && !CurrentPlayer->BuffHeld[2] && !CurrentPlayer->BuffHeld[3] && CurrentFood->FoodType != Key)
 	{
 		CurrentPlayer->BuffSelected = CurrentFood->FoodType;
 	}

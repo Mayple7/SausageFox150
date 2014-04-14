@@ -48,6 +48,7 @@
 static int levelComplete;
 static int PlayerIsAlive;
 static int beginningAnimation;
+static int KeyAcquired;
 
 ArmGuyBoss *Boss;
 HUD* CurrentHUD;
@@ -71,6 +72,8 @@ FoxSound* IntelFoxEnd;
 FoxSound* ArmGuyDie;
 
 FoxSound* BackSnd;
+
+Food* AGKey;
 
 Sprite* IntelFoxBack;
 Sprite* IntelFox;
@@ -115,6 +118,7 @@ void InitializeArmGuy(void)
 	beginningAnimation = TRUE;
 	PlayerIsAlive = TRUE;
 	timer = 5 * FRAMERATE;
+	KeyAcquired = FALSE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1260, -220);
@@ -187,6 +191,8 @@ void InitializeArmGuy(void)
 	IntelFox->Alpha = 0.0f;
 	IntelFoxValue	= 0.0f;
 
+	AGKey = CreateFood(Key, 80, 120, 450, 1100);
+
 	/////////////////////////////////
 	//			Boss			   //
 	/////////////////////////////////
@@ -229,13 +235,23 @@ void UpdateArmGuy(void)
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 
+	if(Boss->CurrentHealth <= 0 && AGKey->FoodSprite->Position.y > (GROUNDLEVEL + AGKey->FoodSprite->Height / 2))
+	{
+		if(!KeyAcquired)
+			FreeArmGuyBoss(Boss);
+		AGKey->FoodSprite->Position.y -= 650 * GetDeltaTime();
+		AGKey->FoodCollider.Position.y -= 650 * GetDeltaTime();
+		AGKey->FoodParticle->Position.y -= 650 * GetDeltaTime();
+		KeyAcquired = TRUE;
+	}
+
 	// When the boss dies
-	if(!levelComplete && Boss->CurrentHealth <= 0)
+	if(!levelComplete && KeyAcquired)
 	{
 		levelComplete = TRUE;
 		Arrow1->Visible = TRUE;
 		FreeWall(RightWall);
-		FreeArmGuyBoss(Boss);
+		
 	}
 
 	// What to do when the boss is dead

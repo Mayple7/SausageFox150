@@ -54,10 +54,14 @@ Food *CreateFood(int buffType, float width, float height, float xPos, float yPos
 	case Heal:
 		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/HealthBuff.png", width, height, 10, 1, 1, xPos, yPos);
 		break;
+	case Key:
+		CurrentFood->FoodSprite = (Sprite *) CreateSprite("TextureFiles/Key.png", width, height, 10, 1, 1, xPos, yPos);
+		break;
 	}
 
 	CreateCollisionBox(&CurrentFood->FoodCollider, &CurrentFood->Position, FoodType, width, height, GetObjectID());
 	CurrentFood->objID = GetObjectID();
+
 
 	CurrentFood->FoodParticle = CreateFoxParticleSystem("TextureFiles/ParticlePlatform.png", xPos, yPos, 9, -1, 3, .15f, 270, 0, .5f, 0, 110, 100, 50.0f, 1.0f, 0.7f);
 
