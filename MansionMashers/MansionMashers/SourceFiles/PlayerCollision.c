@@ -96,6 +96,11 @@ void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 			CurrentPlayer->Key2 = TRUE;
 	}
 
+	if(CurrentFood->FoodType == Key)
+		PlayAudio(CurrentPlayer->CurrentPlayerSounds.KeyPickUp);
+	else
+		PlayAudio(CurrentPlayer->CurrentPlayerSounds.BuffPickUp);
+
 	printf("YUM YUM YUM YUM  DELICIOUSO\n");
 	FreeFood(CurrentFood);
 }

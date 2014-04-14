@@ -106,9 +106,9 @@ void LoadYeahGuy(void)
 	//Allocate space for a large texture
 	CreateTextureList();
 
-	LoadTexture("TextureFiles/RedBuff.png");
-	LoadTexture("TextureFiles/GreenBuff.png");
-	LoadTexture("TextureFiles/BlueBuff.png");
+	LoadTexture("TextureFiles/YGBuffRed.png");
+	LoadTexture("TextureFiles/YGBuffGreen.png");
+	LoadTexture("TextureFiles/YGBuffBlue.png");
 
 	LoadYeahGuyBoss();
 }
@@ -157,7 +157,7 @@ void InitializeYeahGuy(void)
 	CreateBoundingBoxes();
 
 	// Arrow Initialize
-	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 300);
 	Arrow1->Visible = FALSE;
 	Arrow1Grow = FALSE;
 
@@ -215,13 +215,13 @@ void InitializeYeahGuy(void)
 	GreenBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
 	BlueBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
 
-	RedBuff = (Sprite *)CreateSprite("TextureFiles/RedBuff.png", 200, 200, 8, 1, 1, 0, 0);
+	RedBuff = (Sprite *)CreateSprite("TextureFiles/YGBuffRed.png", 200, 200, 8, 1, 1, 0, 0);
 	CreateCollisionBox(RedBuffCollider, &Position, FoodType, 200, 200, GetObjectID());
 
-	GreenBuff = (Sprite *)CreateSprite("TextureFiles/GreenBuff.png", 200, 200, 8, 1, 1, 0, 0);
+	GreenBuff = (Sprite *)CreateSprite("TextureFiles/YGBuffGreen.png", 200, 200, 8, 1, 1, 0, 0);
 	CreateCollisionBox(GreenBuffCollider, &Position, FoodType, 200, 200, GetObjectID());
 
-	BlueBuff = (Sprite *)CreateSprite("TextureFiles/BlueBuff.png", 200, 200, 8, 1, 1, 0, 0);
+	BlueBuff = (Sprite *)CreateSprite("TextureFiles/YGBuffBlue.png", 200, 200, 8, 1, 1, 0, 0);
 	CreateCollisionBox(BlueBuffCollider, &Position, FoodType, 200, 200, GetObjectID());
 
 	HideBuffs();
