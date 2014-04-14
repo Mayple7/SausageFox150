@@ -52,6 +52,9 @@ static int TimerGoingUp;
 
 FoxSound* BackSnd;
 
+ParticleSystem* SystemOne;
+Sprite* HazeBackground;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -99,6 +102,10 @@ void InitializeCredits(void)
 	Skip->Alpha = -2.5;
 
 	BackSnd = CreateSound("Sounds/CreditTheme.wav", LargeSnd);
+
+	HazeBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
+	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
+	SystemOne->FadeIn = TRUE;
 }
 
 /*************************************************************************/
@@ -111,6 +118,8 @@ void UpdateCredits(void)
 {
 	EventLevel();
 	PlayAudio(BackSnd);
+	SystemOne->Position.x = GetCameraXPosition();
+	HazeBackground->Position.x = GetCameraXPosition();
 }
 
 /*************************************************************************/
