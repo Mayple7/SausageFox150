@@ -49,6 +49,7 @@ ParticleSystem *CreateFoxParticleSystem(char *particleTexture, float posX, float
 	CurrentSystem->ZIndex = ZIndex;
 	CurrentSystem->ParticleStartAlpha = StartAlpha;
 	CurrentSystem->FadeIn = FALSE;
+	CurrentSystem->RandomVelocity = TRUE;
 	CurrentSystem->emitThenDestroy = FALSE;
 	return CurrentSystem;
 }
@@ -156,7 +157,7 @@ void ParticleSystemUpdate(void)
 
 						float diff;
 
-						diff = (float)((int)lastRandomNumber % 100) / 100.0f + 0.5f;
+						diff = particleSystemList[i].RandomVelocity ? (float)((rand() / (float)RAND_MAX) * 100) / 100.0f + 0.5f : 1;
 
 						vel.x = particleSystemList[i].emitVelocity * diff;
 						vel.y = 0;
@@ -168,18 +169,17 @@ void ParticleSystemUpdate(void)
 						if (particleSystemList[i].emitDisplacementY == 0)
 							particleSystemList[i].emitDisplacementY++;
 
-						lastRandomNumber = rand();
-						Vec2RotateDegrees(&vel, particleSystemList[i].emitAngle + ((float)((lastRandomNumber / (float)RAND_MAX) * particleSystemList[i].emitAngleRandom - (particleSystemList[i].emitAngleRandom/2))));
+						Vec2RotateDegrees(&vel, particleSystemList[i].emitAngle + ((float)((rand() / (float)RAND_MAX) * particleSystemList[i].emitAngleRandom - (particleSystemList[i].emitAngleRandom/2))));
 
 						CreateFoxParticle(	particleSystemList[i].ParticleSprite, 
 											particleSystemList[i].emitMesh,
-											particleSystemList[i].Position.x + ((float)((lastRandomNumber / (float)RAND_MAX) * particleSystemList[i].emitDisplacementX - (particleSystemList[i].emitDisplacementX/2))),
-											particleSystemList[i].Position.y + ((float)((lastRandomNumber / (float)RAND_MAX) * particleSystemList[i].emitDisplacementY - (particleSystemList[i].emitDisplacementY/2))), 
+											particleSystemList[i].Position.x + ((float)((rand() / (float)RAND_MAX) * particleSystemList[i].emitDisplacementX - (particleSystemList[i].emitDisplacementX/2))),
+											particleSystemList[i].Position.y + ((float)((rand() / (float)RAND_MAX) * particleSystemList[i].emitDisplacementY - (particleSystemList[i].emitDisplacementY/2))), 
 											particleSystemList[i].ZIndex,
 											vel.x,
 											vel.y, 
 											particleSystemList[i].emitLife, 
-											particleSystemList[i].emitScale * (1 + (float)((lastRandomNumber / (float)RAND_MAX) * 50) / 100.0f - 0.25f),
+											particleSystemList[i].emitScale * (1 + (float)((rand() / (float)RAND_MAX) * 50) / 100.0f - 0.25f),
 											particleSystemList[i].emitScaleSpeed,
 											particleSystemList[i].ParticleStartAlpha,
 											particleSystemList[i].FadeIn);

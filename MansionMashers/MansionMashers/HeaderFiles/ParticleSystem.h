@@ -45,6 +45,8 @@ typedef struct ParticleSystem
 	int FadeIn;
 	int emitThenDestroy;		    //Destroy when finished emitting
 
+	int RandomVelocity;
+
 }ParticleSystem;
 
 typedef struct Particle

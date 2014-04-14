@@ -91,8 +91,6 @@ CollisionBox* BlueBuffCollider;
 
 Platform* Plat;
 
-Sprite* DebugCircle;
-
 YeahGuyBoss *Boss;
 
 static enum BossBuff { None, Red, Green, Blue };
@@ -111,6 +109,8 @@ void LoadYeahGuy(void)
 	LoadTexture("TextureFiles/RedBuff.png");
 	LoadTexture("TextureFiles/GreenBuff.png");
 	LoadTexture("TextureFiles/BlueBuff.png");
+
+	LoadYeahGuyBoss();
 }
 
 /*************************************************************************/
@@ -198,9 +198,6 @@ void InitializeYeahGuy(void)
 	//			Boss			   //
 	/////////////////////////////////
 	Boss = CreateYeahGuyBoss(0, 0);
-
-	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->YeahAOERadius * 2, Boss->YeahAOERadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
-	DebugCircle->Visible = FALSE;
 
 	redHead = TRUE;
 	greenHead = TRUE;
@@ -304,13 +301,6 @@ void UpdateYeahGuy(void)
 	if(!blueHead)
 		BlueBuff->Visible = FALSE;
 
-	DebugCircle->Width = Boss->YeahAOERadius * 2;
-	if(DebugCircle->Height > DebugCircle->Width)
-	{
-		DebugCircle->Height = Boss->YeahAOERadius * 2;
-		UpdateMesh(DebugCircle);
-	}
-
 	EventYeahGuy();
 	// This should be the last line in this function
 	if(!levelComplete)
@@ -335,14 +325,6 @@ void UpdateYeahGuy(void)
 		FreeWall(RightWall);
 		FreeYeahGuyBoss(Boss);
 	}
-
-	if(!levelComplete && Boss->CurrentState == 1 && Boss->InnerState != 2)
-	{
-		DebugCircle->Visible = TRUE;
-		DebugCircle->Position = Boss->Position;
-	}
-	else
-		DebugCircle->Visible = FALSE;
 
 	// What to do when the boss is dead
 	if(levelComplete)
