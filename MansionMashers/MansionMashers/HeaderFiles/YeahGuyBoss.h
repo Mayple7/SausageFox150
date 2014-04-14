@@ -68,8 +68,7 @@ typedef struct YeahGuyBoss
 
 	int numHeads;
 
-	FoxSound* YeahGuyHit[2];		//When boss gets hit
-	FoxSound* YeahGuyPhrase[2];		//To taunt player
+	FoxSound* YeahGuyHit[4];		//When boss gets hit
 	FoxSound* YeahGuyYell;			//Saying for large attack
 	FoxSound* YeahGuyDie;			//When a head dies
 	int YeahGuySoundsPlay;			//bool

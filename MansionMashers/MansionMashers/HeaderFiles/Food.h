@@ -6,7 +6,7 @@
 #include "CollisionBox.h"
 #include "ParticleSystem.h"
 
-enum StatsGained {Agility, Strength, Defense, Heal};
+enum StatsGained {Agility, Strength, Defense, Heal, Key};
 
 typedef struct Food
 {
@@ -16,6 +16,7 @@ typedef struct Food
 	int objID;
 	int FoodType;
 	struct ParticleSystem *FoodParticle;
+	int KeyBool;
 }Food;
 
 Food *CreateFood(int foodType, float width, float height, float xPos, float yPos);

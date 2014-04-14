@@ -70,7 +70,7 @@ void PlayerCollidePlatform(Player *CurrentPlayer, Platform *CurrentPlatform)
 
 void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 {
-	if(!CurrentPlayer->BuffHeld[0] && !CurrentPlayer->BuffHeld[1] && !CurrentPlayer->BuffHeld[2] && !CurrentPlayer->BuffHeld[3])
+	if(!CurrentPlayer->BuffHeld[0] && !CurrentPlayer->BuffHeld[1] && !CurrentPlayer->BuffHeld[2] && !CurrentPlayer->BuffHeld[3] && CurrentFood->FoodType != Key)
 	{
 		CurrentPlayer->BuffSelected = CurrentFood->FoodType;
 	}
@@ -89,6 +89,11 @@ void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 	case Heal:
 		CurrentPlayer->BuffHeld[3] = TRUE;
 		break;
+	case Key:
+		if(GetCurrentState() == GS_ArmGuy)
+			CurrentPlayer->Key1 = TRUE;
+		else if(GetCurrentState() == GS_HandGuy)
+			CurrentPlayer->Key2 = TRUE;
 	}
 
 	printf("YUM YUM YUM YUM  DELICIOUSO\n");

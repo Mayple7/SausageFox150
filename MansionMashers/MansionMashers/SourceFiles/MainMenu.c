@@ -243,7 +243,7 @@ void InitializeMainMenu(void)
 	ResetCamera();
 
 	//Basically don't remake the sound because we only went to the options menu and came back
-	if(!MenuBackSnd.Channel)
+	if(GetPreviousState() != GS_Options)
 		CreatePauseSound(&MenuBackSnd, "Sounds/MenuTheme.wav", LargeSnd);
 }
 /*************************************************************************/
