@@ -132,11 +132,11 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->YeahGuySoundsPlay = FALSE;
 	
 	// ParticleSystems
-	CurrentBoss->DamageParticle		= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex + 1,	0,	5,	0.0f,	270,	90,		1.0f,	-5.0f,	25,	24,	50,		2.0f,	1.0f);
-	CurrentBoss->PoundParticle[0]	= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, GROUNDLEVEL - 75.0f,		CurrentBoss->BodySprite->ZIndex + 1,	0,	5,	0.0f,	175,	10,		1.0f,	-5.0f,	25,	5,	750,	2.0f,	0.5f);
-	CurrentBoss->PoundParticle[1]	= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, GROUNDLEVEL - 75.0f,		CurrentBoss->BodySprite->ZIndex + 1,	0,	5,	0.0f,	5,		10,		1.0f,	-5.0f,	25,	5,	750,	2.0f,	0.5f);
-	CurrentBoss->AOEParticle		= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex + 1,	0,	5,	0.0f,	270,	360,	1.0f,	-5.0f,	25,	24,	50,		2.0f,	1.0f);
-
+	CurrentBoss->DamageParticle		= CreateFoxParticleSystem("TextureFiles/Particle.png",			CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex + 1,	0,	5,		0.0f,	270,	90,		1.0f,	-5.0f,	100,	250,	50,		2.0f,	0.5f);
+	CurrentBoss->PoundParticle[0]	= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, GROUNDLEVEL - 75.0f,		CurrentBoss->BodySprite->ZIndex + 1,	0,	5,		0.0f,	175,	10,		1.0f,	-5.0f,	25,		5,		750,	2.0f,	0.5f);
+	CurrentBoss->PoundParticle[1]	= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, GROUNDLEVEL - 75.0f,		CurrentBoss->BodySprite->ZIndex + 1,	0,	5,		0.0f,	5,		10,		1.0f,	-5.0f,	25,		5,		750,	2.0f,	0.5f);
+	CurrentBoss->AOEParticle		= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle2.png",	CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex - 5,	0,	100,	0.15f,	0,		360,	1.0f,	-5.0f,	25,		24,		2050,	0.3f,	1.0f);
+	CurrentBoss->AOEParticle->RandomVelocity = FALSE;
 
 
 	return CurrentBoss;
@@ -240,14 +240,17 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 				PlayAudio(CurrentBoss->YeahGuyYell);
 			}
 			//printf("AOE TIME START\n");
-			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempYeahGuyShout.png");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
+
 			if(CurrentBoss->cooldownTimer > 2.0f)
 				CurrentBoss->InnerState = Attack;
 			break;
 		case Attack:
 			CurrentBoss->YeahGuyYell->hasPlayed = FALSE;
 			//printf("AOE TIME ATTACK\n");
+			CurrentBoss->AOEParticle->amountTotal = 100;
+			CurrentBoss->AOEParticle->emitVelocity = 1333 + CurrentBoss->numHeads * 333.33333f;
+
 			if(RectCircleCollision(&CurrentBoss->Position, CurrentBoss->YeahAOERadius, &CurrentPlayer.PlayerCollider))
 			{
 				// If attack hits, daze player and switch to the jab
@@ -260,8 +263,6 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			break;
 		case End:
 			//printf("AOE TIME END\n");
-			CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempYeahGuy.png");
-
 			CurrentBoss->cooldownTimer = 0.0f;
 			CurrentBoss->CurrentState = Cooldown;
 			CurrentBoss->InnerState = Start;
@@ -423,7 +424,6 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 
 				CurrentBoss->PoundParticle[0]->amountTotal = 25;
 				CurrentBoss->PoundParticle[1]->amountTotal = 25;
-
 
 				// Check if the ground pound hit the player
 				if(CollisionRectangles(&CurrentBoss->BossCollider, &CurrentPlayer.PlayerCollider) || CurrentPlayer.Position.y <= GROUNDLEVEL)
@@ -671,7 +671,11 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			case A:
 				// 33$ chance to go to a new location
 				if(movementPicker == 1)
+				{
 					CurrentBoss->CurrentState = AOE;
+					CurrentBoss->AOEParticle->amountTotal = -1;
+					CurrentBoss->AOEParticle->emitVelocity = 250;
+				}
 				else if(movementPicker == 2)
 					CurrentBoss->CurrentState = ProjectYeah;
 				else
@@ -680,7 +684,11 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			case B:
 				// 33$ chance to go to a new location
 				if(movementPicker == 1)
+				{
 					CurrentBoss->CurrentState = AOE;
+					CurrentBoss->AOEParticle->amountTotal = -1;
+					CurrentBoss->AOEParticle->emitVelocity = 250;
+				}
 				else if(movementPicker == 2)
 					CurrentBoss->CurrentState = ProjectYeah;
 				else
@@ -689,7 +697,11 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			case C:
 				// 33$ chance to go to a new location
 				if(movementPicker == 1)
+				{
 					CurrentBoss->CurrentState = AOE;
+					CurrentBoss->AOEParticle->amountTotal = -1;
+					CurrentBoss->AOEParticle->emitVelocity = 250;
+				}
 				else if(movementPicker == 2)
 					CurrentBoss->CurrentState = ProjectYeah;
 				else
@@ -698,7 +710,11 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			case D:
 				// 33$ chance to go to a new location
 				if(movementPicker == 1)
+				{
 					CurrentBoss->CurrentState = AOE;
+					CurrentBoss->AOEParticle->amountTotal = -1;
+					CurrentBoss->AOEParticle->emitVelocity = 250;
+				}
 				else if(movementPicker == 2)
 					CurrentBoss->CurrentState = ProjectYeah;
 				else
@@ -707,7 +723,11 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			case E:
 				// 33$ chance to go to a new location
 				if(movementPicker == 1)
+				{
 					CurrentBoss->CurrentState = AOE;
+					CurrentBoss->AOEParticle->amountTotal = -1;
+					CurrentBoss->AOEParticle->emitVelocity = 250;
+				}
 				else if(movementPicker == 2)
 					CurrentBoss->CurrentState = ProjectYeah;
 				else
@@ -726,6 +746,11 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 	// Particle Placement Update
 	CurrentBoss->PoundParticle[0]->Position.x = CurrentBoss->Position.x - 25;
 	CurrentBoss->PoundParticle[1]->Position.x = CurrentBoss->Position.x + 25;
+	
+	CurrentBoss->AOEParticle->Position.x = CurrentBoss->Position.x;
+	CurrentBoss->AOEParticle->Position.y = CurrentBoss->Position.y + 100.0f;
+
+	CurrentBoss->DamageParticle->Position = CurrentBoss->Position;
 
 	// Speed for the animation
 	CurrentBoss->Speed = (float)fabs(CurrentBoss->YeahGuyRigidBody.Velocity.x);
@@ -786,20 +811,23 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 	}
 
 	// Booleans for if head is alive
-	if(CurrentBoss->CurrentRedHealth <= 0)
+	if(CurrentBoss->CurrentRedHealth <= 0 && CurrentBoss->redHead)
 	{
 		CurrentBoss->CurrentRedHealth = 0;
 		CurrentBoss->redHead = FALSE;
+		PoofHead(CurrentBoss->YeahGuySpriteParts.HeadRed);
 	}
-	if(CurrentBoss->CurrentGreenHealth <= 0)
+	if(CurrentBoss->CurrentGreenHealth <= 0 && CurrentBoss->greenHead)
 	{
 		CurrentBoss->CurrentGreenHealth = 0;
 		CurrentBoss->greenHead = FALSE;
+		PoofHead(CurrentBoss->YeahGuySpriteParts.HeadGreen);
 	}
-	if(CurrentBoss->CurrentBlueHealth <= 0)
+	if(CurrentBoss->CurrentBlueHealth <= 0 && CurrentBoss->blueHead)
 	{
 		CurrentBoss->CurrentBlueHealth = 0;
 		CurrentBoss->blueHead = FALSE;
+		PoofHead(CurrentBoss->YeahGuySpriteParts.HeadBlue);
 	}
 }
 
@@ -909,6 +937,9 @@ void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff)
 	else
 		damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
+	// Particles
+	CurrentBoss->DamageParticle->amountTotal += 5;
+
 	// Deal damage to the specific head
 	if(CurrentBoss->redHead && CurrentBuff == 1)
 		CurrentBoss->CurrentRedHealth -= damageDealt * 2;
@@ -1052,6 +1083,8 @@ void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss)
 {
 	// Once Luke makes the art we can do something with this ^_^
 	// FREES ALL THE THINGS!!!!
+	PoofSelf(CurrentBoss->BodySprite);
+
 	FreeSprite(CurrentBoss->BodySprite);
 	FreeSprite(CurrentBoss->YeahGuySpriteParts.Body);
 	FreeSprite(CurrentBoss->YeahGuySpriteParts.HeadBlue);
@@ -1062,4 +1095,38 @@ void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss)
 	FreeSprite(CurrentBoss->YeahGuySpriteParts.LegUpper);
 	FreeSprite(CurrentBoss->YeahGuySpriteParts.LegUpper2);
 	FreeSprite(CurrentBoss->YeahGuySpriteParts.Tail);
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Removes the Head in a fashionable way, really fashionable... wow
+*/
+/*************************************************************************/
+void PoofHead(Sprite *Head)
+{
+	//Poof the head away
+	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Head->Position.x, Head->Position.y + 150.0f, Head->ZIndex + 5, 20, 20, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 1.0f);
+	Poof->emitDisplacementX = 50;
+	Poof->emitDisplacementY = 50;
+	Poof->emitScale = 1.5f;
+	Poof->emitLife = 1.0f;
+	Poof->emitThenDestroy = TRUE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Removes the Boss in a fashionable way
+*/
+/*************************************************************************/
+void PoofSelf(Sprite *Boss)
+{
+	//Poof the self away
+	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Boss->Position.x, Boss->Position.y, Boss->ZIndex + 6, 40, 40, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
+	Poof->emitDisplacementX = 200;
+	Poof->emitDisplacementY = 200;
+	Poof->emitScale = 1.5f;
+	Poof->emitLife = 2.0f;
+	Poof->emitThenDestroy = TRUE;
 }

@@ -87,5 +87,7 @@ void YeahGuyPlatformCollision(YeahGuyBoss* CurrentBoss, Platform* CurrentPlatfor
 void CreateYeahGuySprites(YeahGuyBoss *Object);
 void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss);
 void YeahGuyAnimation(YeahGuyBoss *Object);
+void PoofSelf(Sprite *Boss);
+void PoofHead(Sprite *Head);
 
 #endif
