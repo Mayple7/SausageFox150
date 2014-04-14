@@ -121,7 +121,7 @@ void InitializeShop4(void)
 	CreateSprite("TextureFiles/OutsideMan1.png", 1920, 1080.0f, 5, 1, 1, 0, 0);
 
 
-	CreateSprite("TextureFiles/ShopKeeper.png", 350.0f, 350.0f, 20, 1, 1, -80, -268);
+	CreateSprite("TextureFiles/ShopKeeper.png", 350.0f, 350.0f, 20, 1, 1, -80, -260);
 
 	Vec3Set(&Tint, 0, 0, 0);
 	BlackOverlay = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 4000, 1, 1, 0, 0);
