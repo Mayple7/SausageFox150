@@ -2,13 +2,13 @@
 #define FOX_OBJECTS
 
 //Create object list
-#define OBJECTAMOUNT 2000
+#define OBJECTAMOUNT 4000
 //Create collide list
 #define COLLIDEAMOUNT (OBJECTAMOUNT / 5)
 //Create particle system
-#define PARTICLESYSTEMAMOUNT 60
+#define PARTICLESYSTEMAMOUNT 120
 //Create particle list
-#define PARTICLEAMOUNT 1200 //FUN FACT: If there are all 60 particle systems, with 20 paticles each, that is the max
+#define PARTICLEAMOUNT 2400 //FUN FACT: If there are all 120 particle systems, with 20 paticles each, that is the max
 //Number of buttons
 #define BUTTONAMOUNT 50
 //Number of floating text
