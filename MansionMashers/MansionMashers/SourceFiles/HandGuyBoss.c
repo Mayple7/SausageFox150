@@ -847,11 +847,12 @@ void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatfor
 /*************************************************************************/
 void FreeHandGuyBoss(HandGuyBoss* CurrentBoss)
 {	
+	PoofSelf(CurrentBoss->BodySprite);
+
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegLower);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper2);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegLower2);
-	FreeSprite(CurrentBoss->HandGuySpriteParts.Skirt);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.Body);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.Tail);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmUpper);
@@ -860,3 +861,19 @@ void FreeHandGuyBoss(HandGuyBoss* CurrentBoss)
 	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmLower2);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Removes the Boss in a fashionable way
+*/
+/*************************************************************************/
+static void PoofSelf(Sprite *Boss)
+{
+	//Poof the self away
+	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Boss->Position.x, Boss->Position.y, Boss->ZIndex + 6, 40, 40, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
+	Poof->emitDisplacementX = 200;
+	Poof->emitDisplacementY = 200;
+	Poof->emitScale = 1.5f;
+	Poof->emitLife = 2.0f;
+	Poof->emitThenDestroy = TRUE;
+}
