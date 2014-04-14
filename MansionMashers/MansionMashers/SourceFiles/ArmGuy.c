@@ -48,7 +48,7 @@
 static int levelComplete;
 static int PlayerIsAlive;
 static int beginningAnimation;
-static int KeyAcquired;
+static int KeyDropped;
 
 ArmGuyBoss *Boss;
 HUD* CurrentHUD;
@@ -82,6 +82,10 @@ static float IntelFoxValue;
 static int timer;
 static int timerOn;
 static int prevPlayed;
+
+FoxSound* WinTheme;
+
+FoxSound* KeySFX;
 
 Sprite* TreeBackground1[BACKGROUND_LENGTH];
 Sprite* TreeBackground2[BACKGROUND_LENGTH];
@@ -118,11 +122,14 @@ void InitializeArmGuy(void)
 	beginningAnimation = TRUE;
 	PlayerIsAlive = TRUE;
 	timer = 5 * FRAMERATE;
-	KeyAcquired = FALSE;
+	KeyDropped = FALSE;
+
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1260, -220);
 	CurrentPlayer.PlayerCollider.Position = CurrentPlayer.Position;
+
+	CurrentPlayer.Key1 = FALSE;
 
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 
@@ -148,7 +155,7 @@ void InitializeArmGuy(void)
 	CreateBoundingBoxes();
 
 	// Arrow Initialize
-	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 200);
 	Arrow1->Visible = FALSE;
 	Arrow1Grow = FALSE;
 
@@ -165,10 +172,11 @@ void InitializeArmGuy(void)
 	//		Sounds				   //
 	/////////////////////////////////
 	BackSnd = CreateSound("Sounds/BossMusic.wav", LargeSnd);
+	WinTheme = CreateSound("Sounds/CreditTheme.wav", LargeSnd);
+	KeySFX = CreateSound("Sounds/KeyDrop.mp3", SmallSnd);
 
 	IntelFoxStart = CreateSound("Sounds/IntelFoxBossStart.mp3", SmallSnd);
 	IntelFoxEnd = CreateSound("Sounds/IntelFoxBossDogWellDone.mp3", SmallSnd);
-	ArmGuyDie = CreateSound("Sounds/ArmGuyDie.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -191,7 +199,7 @@ void InitializeArmGuy(void)
 	IntelFox->Alpha = 0.0f;
 	IntelFoxValue	= 0.0f;
 
-	AGKey = CreateFood(Key, 80, 120, 450, 1100);
+	AGKey = CreateFood(Key, 80, 120, 0, 1100);
 
 	/////////////////////////////////
 	//			Boss			   //
@@ -216,11 +224,13 @@ void UpdateArmGuy(void)
 {
 	EventArmGuy();
 	
-	if(PlayerIsAlive)
+	if(PlayerIsAlive && !KeyDropped)
 		PlayAudio(BackSnd);
+	else if(PlayerIsAlive)
+		PlayAudio(WinTheme);
 
 	// This should be the last line in this function
-	if(!levelComplete)
+	if(!levelComplete && !KeyDropped)
 	{
 		UpdateArmGuyBoss(Boss);
 	}
@@ -235,23 +245,37 @@ void UpdateArmGuy(void)
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 
+	//When the boss dies
 	if(Boss->CurrentHealth <= 0 && AGKey->FoodSprite->Position.y > (GROUNDLEVEL + AGKey->FoodSprite->Height / 2))
 	{
-		if(!KeyAcquired)
+		if(!KeyDropped)
+		{
 			FreeArmGuyBoss(Boss);
+			freeSound(BackSnd);
+		}
 		AGKey->FoodSprite->Position.y -= 650 * GetDeltaTime();
 		AGKey->FoodCollider.Position.y -= 650 * GetDeltaTime();
 		AGKey->FoodParticle->Position.y -= 650 * GetDeltaTime();
-		KeyAcquired = TRUE;
+		KeyDropped = TRUE;
+		if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
+		{
+			PlayAudio(IntelFoxEnd);
+			IntelFoxEnd->hasPlayed = TRUE;
+		}
 	}
 
-	// When the boss dies
-	if(!levelComplete && KeyAcquired)
+	if(AGKey->FoodSprite->Position.y < 500 && !KeySFX->hasPlayed)
+	{
+		KeySFX->hasPlayed = TRUE;
+		PlayAudio(KeySFX);
+	}
+
+	// When the key is achieved
+	if(!levelComplete && CurrentPlayer.Key1)
 	{
 		levelComplete = TRUE;
 		Arrow1->Visible = TRUE;
 		FreeWall(RightWall);
-		
 	}
 
 	// What to do when the boss is dead
@@ -259,24 +283,14 @@ void UpdateArmGuy(void)
 	{
 		UpdateArrow(Arrow1, &Arrow1Grow);
 
-		/*if(!ArmGuyDie->hasPlayed && PlayerIsAlive)
-		{
-			PlayAudio(ArmGuyDie);
-			ArmGuyDie->hasPlayed = TRUE;
-		}*/
-
-		if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
-		{
-			PlayAudio(IntelFoxEnd);
-			IntelFoxEnd->hasPlayed = TRUE;
-		}
-
-
 		if(CurrentPlayer.Position.x > (1920.0f / 2) + CurrentPlayer.PlayerCollider.width)
 		{
 			LevelCompletion();
 		}
+	}
 
+	if(KeyDropped)
+	{
 		BossHPBar->Visible = FALSE;
 
 		if(BossHPBar->Alpha > 0.0f)

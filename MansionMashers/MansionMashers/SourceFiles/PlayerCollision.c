@@ -89,6 +89,11 @@ void PlayerCollideFood(Player *CurrentPlayer, Food *CurrentFood)
 	case Heal:
 		CurrentPlayer->BuffHeld[3] = TRUE;
 		break;
+	case Key:
+		if(GetCurrentState() == GS_ArmGuy)
+			CurrentPlayer->Key1 = TRUE;
+		else if(GetCurrentState() == GS_HandGuy)
+			CurrentPlayer->Key2 = TRUE;
 	}
 
 	printf("YUM YUM YUM YUM  DELICIOUSO\n");

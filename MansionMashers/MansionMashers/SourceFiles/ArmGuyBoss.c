@@ -950,9 +950,10 @@ void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
 	FreeSprite(CurrentBoss->BodySprite);
 	FreeSprite(CurrentBoss->OffArmSprite);
 	FreeSprite(CurrentBoss->SpinSprite);
+
 	freeSound(CurrentBoss->Spin2SFX);
-	freeSound(CurrentBoss->SpinSFX);
-	freeSound(CurrentBoss->SmashSFX);
+	TogglePauseSound(CurrentBoss->SpinSFX);
+	TogglePauseSound(CurrentBoss->SmashSFX);
 	freeSound(CurrentBoss->SwooshSFX);
 	freeSound(CurrentBoss->JumpSFX);
 	freeSound(CurrentBoss->PunchSFX);

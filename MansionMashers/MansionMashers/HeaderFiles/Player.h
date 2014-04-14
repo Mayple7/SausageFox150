@@ -134,6 +134,9 @@ typedef struct Player
 	struct ParticleSystem* BuffParticles[3];
 	struct ParticleSystem* YGBuffParticles[3];
 
+	int Key1; //bools for me and you
+	int Key2;
+
 	Vec2 Position;
 	int dropDown;  //Fake Boolean
 
