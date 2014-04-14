@@ -278,6 +278,8 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 			projectileAngle = (float)atan2(CurrentPlayer.Position.y - CurrentBoss->Position.y, CurrentPlayer.Position.x - CurrentBoss->Position.x);
 			CurrentProjectile = CreateProjectile("TextureFiles/YeahProjectile.png", 210, 90, CurrentBoss->Position.x, CurrentBoss->Position.y + CurrentBoss->BodySprite->Height / 2, Arrow, WeaponEnemy, CurrentBoss->YeahProjectileDamage, 800, projectileAngle);
 
+			PlayAudio(CurrentBoss->YeahGuyHit[(int)((rand() / (float)RAND_MAX) * 3.5)]);
+
 			// Select the correct texture depending on which direction attacking
 			if(CurrentBoss->Position.x > CurrentPlayer.Position.x)
 			{
