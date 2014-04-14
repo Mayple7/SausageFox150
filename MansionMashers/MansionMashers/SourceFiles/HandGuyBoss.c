@@ -122,6 +122,9 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 	CurrentBoss->HandGuyHit[5] = CreateSound("Sounds/HandGuyHit6.mp3", SmallSnd);
 
 	CurrentBoss->HandGuyPhrase = CreateSound("Sounds/HandGuyPhrase.mp3", SmallSnd);
+	CurrentBoss->PunchSFX = CreateSound("Sounds/HGPunch.mp3", SmallSnd);
+	CurrentBoss->SwooshSFX = CreateSound("Sounds/HGSwoosh.mp3", SmallSnd);
+
 	CurrentBoss->HandGuyYell = CreateSound("Sounds/HandGuyYell.mp3", SmallSnd);
 	CurrentBoss->HandGuySoundsPlay = FALSE;
 
@@ -283,6 +286,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			if(RectCircleCollision(&CurrentBoss->Position, CurrentBoss->ShoutRadius, &CurrentPlayer.PlayerCollider))
 			{
 				// If attack hits, daze player and switch to the jab
+				PlayAudio(CurrentBoss->PunchSFX);
 				PlayerDamageResult(CurrentBoss->ShoutDamage);
 				CurrentPlayer.CurrentPlayerStats.MoveSpeed /= 3.0f;
 				CurrentPlayer.CurrentPlayerStats.HasteTimer = 2;
@@ -325,7 +329,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 			//printf("QUESTION TIME START\n");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
 			// Throws out ? every 0.75s
-
+			
 			if(CurrentBoss->cooldownTimer >= 0.7f)
 			{
 				if (CurrentBoss->QuestionAttackAnimation == FALSE)
@@ -336,6 +340,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 					CurrentBoss->HandGuySpriteParts.AttackRotationArmLower2 = 0;
 				}
 				CurrentBoss->QuestionAttackAnimation = TRUE;
+				PlayAudio(CurrentBoss->SwooshSFX);
 				
 			}
 			
@@ -594,7 +599,7 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 
 	CurrentBoss->BodySprite->Position = CurrentBoss->Position;
 	CurrentBoss->JabAttack.Position.y = CurrentBoss->Position.y;
-	CurrentBoss->JabSprite->Position.y = CurrentBoss->Position.y + 180.0f;
+	CurrentBoss->JabSprite->Position.y = CurrentBoss->Position.y + 130.0f;
 
 	CurrentBoss->HandGuySpriteParts.ArmLower->Visible  = !CurrentBoss->JabSprite->Visible;
 	CurrentBoss->HandGuySpriteParts.ArmLower2->Visible = !CurrentBoss->JabSprite->Visible;

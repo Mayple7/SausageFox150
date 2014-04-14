@@ -230,7 +230,7 @@ void UpdateArmGuy(void)
 		PlayAudio(WinTheme);
 
 	// This should be the last line in this function
-	if(!levelComplete && !KeyDropped)
+	if(!levelComplete && !KeyDropped && Boss->CurrentHealth > 0)
 	{
 		UpdateArmGuyBoss(Boss);
 	}

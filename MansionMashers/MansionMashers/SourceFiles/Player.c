@@ -191,6 +191,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 		break;
 	}
 
+	CurrentPlayer->CurrentPlayerSounds.BuffPickUp = CreateSound("Sounds/BuffPickUp.wav", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.KeyPickUp = CreateSound("Sounds/KeyPickUp.wav", SmallSnd);
 
 	
 	/*////////////////////////////////
