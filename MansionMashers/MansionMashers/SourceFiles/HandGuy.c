@@ -65,6 +65,12 @@ static int timer;
 static int timerOn;
 static int prevPlayed;
 
+FoxSound* BackSnd;
+Food* AGKey;
+FoxSound* WinTheme;
+FoxSound* KeySFX;
+static int KeyDropped;
+
 // Tree Background
 Sprite* TreeBackground1[4];
 Sprite* TreeBackground2[4];
@@ -100,6 +106,8 @@ void InitializeHandGuy(void)
 	beginningAnimation = TRUE;
 	PlayerIsAlive = TRUE;
 	timer = 10 * FRAMERATE;
+	KeyDropped = FALSE;
+	CurrentPlayer.Key2 = FALSE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1260, -220);
@@ -123,7 +131,7 @@ void InitializeHandGuy(void)
 		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
 
 	// Arrow Initialize
-	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 250, 235, 90, 1, 1, 0, 200);
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 180, 165, 90, 1, 1, 0, 200);
 	Arrow1->Visible = FALSE;
 	Arrow1Grow = FALSE;
 
@@ -138,6 +146,13 @@ void InitializeHandGuy(void)
 	// Boss HP Bar
 	BossHPBar = (Sprite *)CreateSprite("TextureFiles/BossHealthBarMid.png", 1, 44, 399, 1, 1, -200, 450);
 	BossHPBarBack = (Sprite *)CreateSprite("TextureFiles/BossHealthBarBack.png", 820, 64, 398, 1, 1, 0, 450);
+
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
+	BackSnd = CreateSound("Sounds/BossMusic.wav", LargeSnd);
+	WinTheme = CreateSound("Sounds/CreditTheme.wav", LargeSnd);
+	KeySFX = CreateSound("Sounds/KeyDrop.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -161,6 +176,12 @@ void InitializeHandGuy(void)
 	DebugCircle->Visible = FALSE;
 
 	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	AGKey = CreateFood(Key, 80, 120, 0, 1100);
+
+
+	/////////////////////////////////
 	//		On Death			   //
 	/////////////////////////////////
 	CreateDeathConfirmObjects();
@@ -178,8 +199,13 @@ void UpdateHandGuy(void)
 {
 	EventHandGuy();
 
+	if(PlayerIsAlive && !KeyDropped)
+		PlayAudio(BackSnd);
+	else if(PlayerIsAlive)
+		PlayAudio(WinTheme);
+
 	// This should be the last line in this function
-	if(!levelComplete)
+	if(!levelComplete && !KeyDropped)
 	{
 		UpdateHandGuyBoss(Boss);
 	}
@@ -203,13 +229,37 @@ void UpdateHandGuy(void)
 	else
 		DebugCircle->Visible = FALSE;
 
-	// When the boss dies
-	if(!levelComplete && Boss->CurrentHealth <= 0)
+	//When the boss dies
+	if(Boss->CurrentHealth <= 0 && AGKey->FoodSprite->Position.y > (GROUNDLEVEL + AGKey->FoodSprite->Height / 2))
+	{
+		if(!KeyDropped)
+		{
+			FreeHandGuyBoss(Boss);
+			freeSound(BackSnd);
+		}
+		AGKey->FoodSprite->Position.y -= 650 * GetDeltaTime();
+		AGKey->FoodCollider.Position.y -= 650 * GetDeltaTime();
+		AGKey->FoodParticle->Position.y -= 650 * GetDeltaTime();
+		KeyDropped = TRUE;
+		//if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
+		//{
+		//	PlayAudio(IntelFoxEnd);
+		//	IntelFoxEnd->hasPlayed = TRUE;
+		//}
+	}
+
+	if(AGKey->FoodSprite->Position.y < 500 && !KeySFX->hasPlayed)
+	{
+		KeySFX->hasPlayed = TRUE;
+		PlayAudio(KeySFX);
+	}
+
+	// When the key is achieved
+	if(!levelComplete && CurrentPlayer.Key2)
 	{
 		levelComplete = TRUE;
 		Arrow1->Visible = TRUE;
 		FreeWall(RightWall);
-		FreeHandGuyBoss(Boss);
 	}
 
 	// What to do when the boss is dead
@@ -221,7 +271,10 @@ void UpdateHandGuy(void)
 		{
 			LevelCompletion();
 		}
+	}
 
+	if(KeyDropped)
+	{
 		BossHPBar->Visible = FALSE;
 
 		if(BossHPBar->Alpha > 0.0f)

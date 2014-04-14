@@ -49,6 +49,12 @@ static int timer;
 static int timerOn;
 static int prevPlayed;
 
+Sprite* Arrow1;
+Sprite* Arrow2;
+static int Arrow1Grow;
+static int Arrow2Grow;
+
+
 static int MooseWelcomeSaid;
 
 static int PlayerIsAlive; 
@@ -147,6 +153,15 @@ void InitializeShop2(void)
 	CurrentPlayer.CurrentPlayerSounds.MooseRandom[3] = CreateSound("Sounds/MooseWhatBuy.mp3", SmallSnd);
 	CurrentPlayer.CurrentPlayerSounds.MooseRandom[4] = CreateSound("Sounds/MooseWhyHere.mp3", SmallSnd);
 
+	// Arrow Initialize
+	Arrow1 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 100, 85, 90, 1, 1, 830, 180);
+	Arrow1Grow = TRUE;
+
+	// Arrow Initialize
+	Arrow2 = (Sprite *)CreateSprite("TextureFiles/Arrow.png", 100, 85, 90, 1, 1, -830, 180);
+	Arrow2Grow = TRUE;
+	Arrow2->FlipX = TRUE;
+
 	CurrentHUD = CreateHUD(&CurrentPlayer);
 }
 
@@ -161,6 +176,8 @@ void UpdateShop2(void)
 	EventLevel();
 
 	PlayAudio(BackSnd);
+	UpdateArrow(Arrow1, &Arrow1Grow);
+	UpdateArrow(Arrow2, &Arrow2Grow);
 
 	UpdateAllProjectiles();
 	ParticleSystemUpdate();
