@@ -125,8 +125,8 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	//Sounds
 	CurrentBoss->YeahGuyHit[0] = CreateSound("Sounds/YeahGuyHit1.mp3", SmallSnd);
 	CurrentBoss->YeahGuyHit[1] = CreateSound("Sounds/YeahGuyHit2.mp3", SmallSnd);
-	CurrentBoss->YeahGuyPhrase[0] = CreateSound("Sounds/YeahGuyPhrase1.mp3", SmallSnd);
-	CurrentBoss->YeahGuyPhrase[1] = CreateSound("Sounds/YeahGuyPhrase2.mp3", SmallSnd);
+	CurrentBoss->YeahGuyHit[2] = CreateSound("Sounds/YeahGuyPhrase1.mp3", SmallSnd);
+	CurrentBoss->YeahGuyHit[3] = CreateSound("Sounds/YeahGuyPhrase2.mp3", SmallSnd);
 	CurrentBoss->YeahGuyYell = CreateSound("Sounds/YeahGuyYell.mp3", SmallSnd);
 	CurrentBoss->YeahGuyDie = CreateSound("Sounds/YeahGuyDie.mp3", SmallSnd);
 	CurrentBoss->YeahGuySoundsPlay = FALSE;
@@ -897,7 +897,7 @@ void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff)
 	//bool for sounds
 	int SoundIsPlaying = FALSE;
 	int i;
-	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 2;
+	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 4;
 
 	Vec3 textColor;
 	TextGlyphs *FirstLetter;
@@ -927,11 +927,9 @@ void YeahGuyBossCollideWeapon(YeahGuyBoss *CurrentBoss, int CurrentBuff)
 	ChangeTextZIndex(FirstLetter, 201);
 
 	//Voice Hit Reponse
-	for(i = 0; i < 2; i++)
+	for(i = 0; i < 4; i++)
 	{
 		if(FoxSoundCheckIsPlaying(CurrentBoss->YeahGuyHit[i]))
-			SoundIsPlaying = TRUE;
-		if(FoxSoundCheckIsPlaying(CurrentBoss->YeahGuyPhrase[i]))
 			SoundIsPlaying = TRUE;
 	}
 

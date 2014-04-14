@@ -514,11 +514,9 @@ void EventYeahGuy(void)
 
 	//Check if the boss is already saying something
 	Boss->YeahGuySoundsPlay = FALSE;
-	for(i = 0; i < 2; i++)
+	for(i = 0; i < 4; i++)
 	{
 		if(FoxSoundCheckIsPlaying(Boss->YeahGuyHit[i]))
-			Boss->YeahGuySoundsPlay = TRUE;
-		if(FoxSoundCheckIsPlaying(Boss->YeahGuyPhrase[i]))
 			Boss->YeahGuySoundsPlay = TRUE;
 	}
 	if(FoxSoundCheckIsPlaying(Boss->YeahGuyYell) || FoxSoundCheckIsPlaying(Boss->YeahGuyDie))
@@ -539,64 +537,6 @@ void EventYeahGuy(void)
 	{
 		DieSound3 = TRUE;
 		PlayAudio(Boss->YeahGuyDie);
-	}
-
-
-	if(Boss->CurrentBlueHealth > 0 || Boss->CurrentGreenHealth > 0 || Boss->CurrentRedHealth > 0)
-	{
-
-		//Say Random Phrases Randomly when not beginning animation, intel fox talking, or smashing
-		if(/*!beginningAnimation && !FoxSoundCheckIsPlaying(IntelFoxStart) 
-			&& !FoxSoundCheckIsPlaying(IntelFoxEnd) &&*/ !FoxSoundCheckIsPlaying(Boss->YeahGuyYell)
-			&& !FoxSoundCheckIsPlaying(Boss->YeahGuyDie))
-		{
-			//Get RandNum to choose rand Sound and a random time
-			int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 2;
-			int randInstance = ((int)((rand() / (float)RAND_MAX) * 1920)) % 1080;
-
-			//Randomly go but wait if a phrase was just said
-			if(randInstance > 1074 && !timerOn)
-			{
-				//Start timer
-				timerOn = TRUE;
-
-				//If a sound is not playing let's say something
-				if(Boss->YeahGuySoundsPlay == FALSE)
-				{
-					//Check if phrase your about to say was just said
-					if(randNum == prevPlayed)
-					{
-						//if it was the same phrase say a differnt one
-						if(randNum == 0)
-						{
-							PlayAudio(Boss->YeahGuyPhrase[randNum + 1]);
-							prevPlayed = randNum + 1;
-						}
-						else
-						{
-							PlayAudio(Boss->YeahGuyPhrase[randNum - 1]);
-							prevPlayed = randNum - 1;
-						}
-
-					}
-					//Wasn't the same so just say what you wanna say
-					else
-					{
-						PlayAudio(Boss->YeahGuyPhrase[randNum]);
-						prevPlayed = randNum;
-					}
-				}
-			}
-		}
-	}
-
-	//For Random Phrase Timer (see above)
-	if(timerOn)
-		timer -= 1;
-	if(timer < 0)
-	{
-		timer = 10 * FRAMERATE;
-		timerOn = FALSE;
 	}
 }
 
