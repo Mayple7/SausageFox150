@@ -132,7 +132,7 @@ void InitializeShop1(void)
 	/////////////////////////////////
 	//		Sounds				   //
 	/////////////////////////////////
-	BackSnd = CreateSound("Sounds/ShopTheme.wav", LargeSnd);
+	BackSnd = CreateSound("Sounds/ShopTheme.mp3", LargeSnd);
 
 	CurrentPlayer.CurrentPlayerSounds.MooseWelcome[0] = CreateSound("Sounds/MooseWelcome.mp3", SmallSnd);
 	CurrentPlayer.CurrentPlayerSounds.MooseWelcome[1] = CreateSound("Sounds/MooseWelcomeOrNot.mp3", SmallSnd);

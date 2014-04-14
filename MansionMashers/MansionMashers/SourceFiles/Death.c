@@ -50,7 +50,7 @@ void CreateDeathConfirmObjects(void)
 	RestartButton = CreateButton("TextureFiles/RestartButton.png", -1920, -130, 300, 112.5f);
 	RestartButton->ButtonSprite->ZIndex = 4022;
 
-	DeathSnd = CreateSound("Sounds/DeathMusic.wav", LargeSnd);
+	DeathSnd = CreateSound("Sounds/DeathMusic.mp3", LargeSnd);
 
 	DeathMessage[0] = (Sprite *)CreateSprite("TextureFiles/DeathMessage1.png", 1920, 1080, 4020, 1, 1, -1920, 0);
 	DeathMessage[1] = (Sprite *)CreateSprite("TextureFiles/DeathMessage2.png", 1920, 1080, 4020, 1, 1, -1920, 0);

@@ -99,11 +99,11 @@ void InitializeTutorial(void)
 	ResetCamera();
 	ResetEnemyPanelNumber();
 
-	BackSnd = CreateSound("Sounds/TutorialTheme.wav", LargeSnd);
+	BackSnd = CreateSound("Sounds/TutorialTheme.mp3", LargeSnd);
 	GettingImpatientTimer = 0;
 	TimerGoingUp = TRUE;
 
-	GongSnd = CreateSound("Sounds/GongHit.wav", SmallSnd);
+	GongSnd = CreateSound("Sounds/GongHit.mp3", SmallSnd);
 
 	//Set the camera so it currently isn't gated
 	ResetGatedCamera();

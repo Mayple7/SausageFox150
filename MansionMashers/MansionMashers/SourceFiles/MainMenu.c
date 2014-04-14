@@ -244,7 +244,7 @@ void InitializeMainMenu(void)
 
 	//Basically don't remake the sound because we only went to the options menu and came back
 	if(GetPreviousState() != GS_Options)
-		CreatePauseSound(&MenuBackSnd, "Sounds/MenuTheme.wav", LargeSnd);
+		CreatePauseSound(&MenuBackSnd, "Sounds/MenuTheme.mp3", LargeSnd);
 }
 /*************************************************************************/
 /*!

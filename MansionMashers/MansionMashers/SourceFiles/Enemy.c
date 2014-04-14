@@ -233,11 +233,11 @@ Enemy *CreateEnemy(int enemyType, int collisionGroup, float xPos, float yPos, in
 		break;
 	}
 
-	CurrentEnemy->CurrentEnemySounds.Poof = CreateSound(rand() % 2 ? "Sounds/Poof1.wav" : "Sounds/Poof2.wav", SmallSnd);
-	CurrentEnemy->CurrentEnemySounds.GetHit1 = CreateSound("Sounds/SwordHit1.wav", SmallSnd);
-	CurrentEnemy->CurrentEnemySounds.GetHit2 = CreateSound("Sounds/SwordHit2.wav", SmallSnd);
-	CurrentEnemy->CurrentEnemySounds.Swing1 = CreateSound("Sounds/SwordSwing1.wav", SmallSnd);
-	CurrentEnemy->CurrentEnemySounds.Swing2 = CreateSound("Sounds/SwordSwing2.wav", SmallSnd);
+	CurrentEnemy->CurrentEnemySounds.Poof = CreateSound(rand() % 2 ? "Sounds/Poof1.mp3" : "Sounds/Poof2.mp3", SmallSnd);
+	CurrentEnemy->CurrentEnemySounds.GetHit1 = CreateSound("Sounds/SwordHit1.mp3", SmallSnd);
+	CurrentEnemy->CurrentEnemySounds.GetHit2 = CreateSound("Sounds/SwordHit2.mp3", SmallSnd);
+	CurrentEnemy->CurrentEnemySounds.Swing1 = CreateSound("Sounds/SwordSwing1.mp3", SmallSnd);
+	CurrentEnemy->CurrentEnemySounds.Swing2 = CreateSound("Sounds/SwordSwing2.mp3", SmallSnd);
 
 	return CurrentEnemy;
 }

@@ -101,7 +101,7 @@ void InitializeCredits(void)
 	Skip = (Sprite *)CreateSprite("TextureFiles/Skip.png", 1920, 1080, 600, 1, 1, 0, 0);
 	Skip->Alpha = -2.5;
 
-	BackSnd = CreateSound("Sounds/CreditTheme.wav", LargeSnd);
+	BackSnd = CreateSound("Sounds/CreditTheme.mp3", LargeSnd);
 
 	HazeBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
 	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);

@@ -67,7 +67,7 @@ void InitializePause(void (*DrawLevel)())
 	float camX;
 	Vec3 TextColor;
 	
-	CreatePauseSound(&BackgroundSnd, "Sounds/ShopTheme.wav", LargeSnd);
+	CreatePauseSound(&BackgroundSnd, "Sounds/ShopTheme.mp3", LargeSnd);
 
 	volumestring = (char *)MallocMyAlloc(5, sizeof(char));
 

@@ -305,7 +305,7 @@ void InitializeMapLevel(void)
 	SetClearFlags(&CurrentPlayer);
 	MapInfoText->Position.x = GetCameraXPosition();
 
-	BackSnd = CreateSound("Sounds/MenuTheme.wav", LargeSnd);
+	BackSnd = CreateSound("Sounds/MenuTheme.mp3", LargeSnd);
 }
 
 /*************************************************************************/

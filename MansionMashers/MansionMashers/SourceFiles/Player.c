@@ -148,10 +148,10 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//       PLAYER SOUNDS          //
 	////////////////////////////////*/
-	CurrentPlayer->CurrentPlayerSounds.Swing1 = CreateSound("Sounds/SwordSwing1.wav", SmallSnd);
-	CurrentPlayer->CurrentPlayerSounds.Swing2 = CreateSound("Sounds/SwordSwing2.wav", SmallSnd);
-	CurrentPlayer->CurrentPlayerSounds.GetHit1 = CreateSound("Sounds/SwordHit1.wav", SmallSnd);
-	CurrentPlayer->CurrentPlayerSounds.GetHit2 = CreateSound("Sounds/SwordHit2.wav", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.Swing1 = CreateSound("Sounds/SwordSwing1.mp3", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.Swing2 = CreateSound("Sounds/SwordSwing2.mp3", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.GetHit1 = CreateSound("Sounds/SwordHit1.mp3", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.GetHit2 = CreateSound("Sounds/SwordHit2.mp3", SmallSnd);
 
 	//Moose Purchase Sounds
 	CurrentPlayer->CurrentPlayerSounds.MoosePurchase[0] = CreateSound("Sounds/MooseQuality.mp3", SmallSnd);
@@ -191,8 +191,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 		break;
 	}
 
-	CurrentPlayer->CurrentPlayerSounds.BuffPickUp = CreateSound("Sounds/BuffPickUp.wav", SmallSnd);
-	CurrentPlayer->CurrentPlayerSounds.KeyPickUp = CreateSound("Sounds/KeyPickUp.wav", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.BuffPickUp = CreateSound("Sounds/BuffPickUp.mp3", SmallSnd);
+	CurrentPlayer->CurrentPlayerSounds.KeyPickUp = CreateSound("Sounds/KeyPickUp.mp3", SmallSnd);
 
 	
 	/*////////////////////////////////

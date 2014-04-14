@@ -127,12 +127,12 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos)
 	CurrentBoss->ArmGuyPhrase[2] = CreateSound("Sounds/ArmGuyPhrase3.mp3", SmallSnd);
 	CurrentBoss->ArmGuyPhrase[3] = CreateSound("Sounds/ArmGuyPhrase4.mp3", SmallSnd);
 	//SFX
-	CurrentBoss->JumpSFX = CreateSound("Sounds/AGJump.wav", SmallSnd);
-	CurrentBoss->PunchSFX = CreateSound("Sounds/AGPunch.wav", SmallSnd);
-	CurrentBoss->SmashSFX = CreateSound("Sounds/AGSmash.wav", SmallSnd);
-	CurrentBoss->SpinSFX = CreateSound("Sounds/AGSpin.wav", SmallSnd);
-	CurrentBoss->Spin2SFX = CreateSound("Sounds/AGSpin2.wav", SmallSnd);
-	CurrentBoss->SwooshSFX = CreateSound("Sounds/AGSwoosh.wav", SmallSnd);
+	CurrentBoss->JumpSFX = CreateSound("Sounds/AGJump.mp3", SmallSnd);
+	CurrentBoss->PunchSFX = CreateSound("Sounds/AGPunch.mp3", SmallSnd);
+	CurrentBoss->SmashSFX = CreateSound("Sounds/AGSmash.mp3", SmallSnd);
+	CurrentBoss->SpinSFX = CreateSound("Sounds/AGSpin.mp3", SmallSnd);
+	CurrentBoss->Spin2SFX = CreateSound("Sounds/AGSpin2.mp3", SmallSnd);
+	CurrentBoss->SwooshSFX = CreateSound("Sounds/AGSwoosh.mp3", SmallSnd);
 
 	//Smash
 	CurrentBoss->ArmGuyPhraseSmash = CreateSound("Sounds/ArmGuyPhraseSmash.mp3", SmallSnd);

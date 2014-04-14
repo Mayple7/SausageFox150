@@ -131,7 +131,7 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->YeahGuyDie = CreateSound("Sounds/YeahGuyDie.mp3", SmallSnd);
 	CurrentBoss->YeahGuySoundsPlay = FALSE;
 
-	CurrentBoss->SmashSFX = CreateSound("Sounds/YGSmash.wav", SmallSnd);
+	CurrentBoss->SmashSFX = CreateSound("Sounds/YGSmash.mp3", SmallSnd);
 	
 	// ParticleSystems
 	CurrentBoss->DamageParticle		= CreateFoxParticleSystem("TextureFiles/Particle.png",			CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex + 1,	0,	5,		0.0f,	270,	90,		1.0f,	-5.0f,	100,	250,	50,		2.0f,	0.5f);

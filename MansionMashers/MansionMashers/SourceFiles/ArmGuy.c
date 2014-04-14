@@ -171,8 +171,8 @@ void InitializeArmGuy(void)
 	/////////////////////////////////
 	//		Sounds				   //
 	/////////////////////////////////
-	BackSnd = CreateSound("Sounds/BossMusic.wav", LargeSnd);
-	WinTheme = CreateSound("Sounds/CreditTheme.wav", LargeSnd);
+	BackSnd = CreateSound("Sounds/BossMusic.mp3", LargeSnd);
+	WinTheme = CreateSound("Sounds/CreditTheme.mp3", LargeSnd);
 	KeySFX = CreateSound("Sounds/KeyDrop.mp3", SmallSnd);
 
 	IntelFoxStart = CreateSound("Sounds/IntelFoxBossStart.mp3", SmallSnd);
