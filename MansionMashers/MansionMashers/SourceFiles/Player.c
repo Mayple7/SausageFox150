@@ -1332,10 +1332,6 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 	CurrentPlayer->BuffHeld[2] = FALSE;
 	CurrentPlayer->BuffHeld[3] = FALSE;
 
-	CurrentPlayer->CurrentPlayerStats.Agility = 1;
-	CurrentPlayer->CurrentPlayerStats.Strength = 1;
-	CurrentPlayer->CurrentPlayerStats.Defense = 1;
-
 	CurrentPlayer->levelClearBitFlags = 0;
 	CurrentPlayer->armUnlock = FALSE;
 	CurrentPlayer->handUnlock = FALSE;
@@ -1350,24 +1346,40 @@ void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess)
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Mayples Toy Sword");
 		CurrentPlayer->PlayerWeapon->WeaponType = Sword;
+
+		CurrentPlayer->CurrentPlayerStats.Agility = 1;
+		CurrentPlayer->CurrentPlayerStats.Strength = 1;
+		CurrentPlayer->CurrentPlayerStats.Defense = 1;
 		break;
 	case Ginko:
 		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Ginkos Toy Axe");
 		CurrentPlayer->PlayerWeapon->WeaponType = Axe;
+
+		CurrentPlayer->CurrentPlayerStats.Agility = 1;
+		CurrentPlayer->CurrentPlayerStats.Strength = 2;
+		CurrentPlayer->CurrentPlayerStats.Defense = 0;
 		break;
 	case Kaya:
 		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Kayas Toy Hammer");
 		CurrentPlayer->PlayerWeapon->WeaponType = Hammer;
+
+		CurrentPlayer->CurrentPlayerStats.Agility = 0;
+		CurrentPlayer->CurrentPlayerStats.Strength = 1;
+		CurrentPlayer->CurrentPlayerStats.Defense = 2;
 		break;
 	case Holly:
 		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
 		CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, 0, 0);
 		CurrentPlayer->PlayerWeapon->WeaponName = strcpy(CurrentPlayer->PlayerWeapon->WeaponName, "Hollys Toy Spear");
 		CurrentPlayer->PlayerWeapon->WeaponType = Spear;
+
+		CurrentPlayer->CurrentPlayerStats.Agility = 2;
+		CurrentPlayer->CurrentPlayerStats.Strength = 0;
+		CurrentPlayer->CurrentPlayerStats.Defense = 1;
 		break;
 	default:
 		FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
