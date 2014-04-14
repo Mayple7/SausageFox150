@@ -71,6 +71,7 @@ typedef struct YeahGuyBoss
 	FoxSound* YeahGuyHit[4];		//When boss gets hit
 	FoxSound* YeahGuyYell;			//Saying for large attack
 	FoxSound* YeahGuyDie;			//When a head dies
+	FoxSound* SmashSFX;
 	int YeahGuySoundsPlay;			//bool
 
 	Vec2 Position;
