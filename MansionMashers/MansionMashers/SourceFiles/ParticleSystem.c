@@ -169,17 +169,17 @@ void ParticleSystemUpdate(void)
 							particleSystemList[i].emitDisplacementY++;
 
 						lastRandomNumber = rand();
-						Vec2RotateDegrees(&vel, particleSystemList[i].emitAngle + ((float)((int)lastRandomNumber % particleSystemList[i].emitAngleRandom - (particleSystemList[i].emitAngleRandom/2))));
+						Vec2RotateDegrees(&vel, particleSystemList[i].emitAngle + ((float)((lastRandomNumber / (float)RAND_MAX) * particleSystemList[i].emitAngleRandom - (particleSystemList[i].emitAngleRandom/2))));
 
 						CreateFoxParticle(	particleSystemList[i].ParticleSprite, 
 											particleSystemList[i].emitMesh,
-											particleSystemList[i].Position.x + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementX - (particleSystemList[i].emitDisplacementX/2))),
-											particleSystemList[i].Position.y + ((float)((int)lastRandomNumber % particleSystemList[i].emitDisplacementY - (particleSystemList[i].emitDisplacementY/2))), 
+											particleSystemList[i].Position.x + ((float)((lastRandomNumber / (float)RAND_MAX) * particleSystemList[i].emitDisplacementX - (particleSystemList[i].emitDisplacementX/2))),
+											particleSystemList[i].Position.y + ((float)((lastRandomNumber / (float)RAND_MAX) * particleSystemList[i].emitDisplacementY - (particleSystemList[i].emitDisplacementY/2))), 
 											particleSystemList[i].ZIndex,
 											vel.x,
 											vel.y, 
 											particleSystemList[i].emitLife, 
-											particleSystemList[i].emitScale * (1 + (float)((int)lastRandomNumber % 50) / 100.0f - 0.25f),
+											particleSystemList[i].emitScale * (1 + (float)((lastRandomNumber / (float)RAND_MAX) * 50) / 100.0f - 0.25f),
 											particleSystemList[i].emitScaleSpeed,
 											particleSystemList[i].ParticleStartAlpha,
 											particleSystemList[i].FadeIn);
