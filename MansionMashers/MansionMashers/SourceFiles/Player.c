@@ -190,6 +190,8 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 		CurrentPlayer->CurrentPlayerSounds.VoiceHit[4] = CreateSound("Sounds/HollyHit5.mp3", SmallSnd);
 		break;
 	}
+
+
 	
 	/*////////////////////////////////
 	//       PLAYER SPRITE          //
@@ -202,6 +204,17 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	InitializePlayerRank(CurrentPlayer);
 	if (GetCurrentState() != GS_CharacterSelect && GetCurrentState() != GS_MapLevel)
 		InitializePlayerHurt(CurrentPlayer);
+
+	//////////////////////////////////
+	//       PLAYER SOUNDS          //
+	//////////////////////////////////
+	CurrentPlayer->BuffParticles[0] = CreateFoxParticleSystem("TextureFiles/BuffPartGreen.png", 0, 0, CurrentPlayer->Zindex - 10, 0, 20, 0.1f, 90, 20, 1, 1, 100, 200, 200, 0.25f, 1.0f);
+	CurrentPlayer->BuffParticles[0]->FadeIn = TRUE;
+	CurrentPlayer->BuffParticles[1] = CreateFoxParticleSystem("TextureFiles/BuffPartBlue.png", 0, 0, CurrentPlayer->Zindex - 10, 0, 20, 0.1f, 90, 20, 1, 1, 100, 200, 200, 0.25f, 1.0f);
+	CurrentPlayer->BuffParticles[1]->FadeIn = TRUE;
+	CurrentPlayer->BuffParticles[2] = CreateFoxParticleSystem("TextureFiles/BuffPartOrange.png", 0, 0, CurrentPlayer->Zindex - 10, 0, 20, 0.1f, 90, 20, 1, 1, 100, 200, 200, 0.25f, 1.0f);
+	CurrentPlayer->BuffParticles[2]->FadeIn = TRUE;
+
 
 	//Only the player goes under an ID of 10
 	ObjectID = 10;
@@ -1393,28 +1406,37 @@ void UpdateBuffTimers(Player* CurrentPlayer)
 	//Update buff timers
 	if(CurrentPlayer->CurrentPlayerStats.AgilityTimer > 0)
 	{
+		CurrentPlayer->BuffParticles[1]->Position = CurrentPlayer->Position;
+		CurrentPlayer->BuffParticles[1]->amountTotal = -1;
 		CurrentPlayer->CurrentPlayerStats.AgilityTimer -= GetDeltaTime();
 	}
 	else
 	{
+		CurrentPlayer->BuffParticles[1]->amountTotal = 0;
 		updateAttackSpeed(&CurrentPlayer->CurrentPlayerStats);
 	}
 	//Update buff timers
 	if(CurrentPlayer->CurrentPlayerStats.StrengthTimer > 0)
 	{
+		CurrentPlayer->BuffParticles[0]->Position = CurrentPlayer->Position;
+		CurrentPlayer->BuffParticles[0]->amountTotal = -1;
 		CurrentPlayer->CurrentPlayerStats.StrengthTimer -= GetDeltaTime();
 	}
 	else
 	{
 		updateDamage(CurrentPlayer);
+		CurrentPlayer->BuffParticles[0]->amountTotal = 0;
 	}
 	//Update buff timers
 	if(CurrentPlayer->CurrentPlayerStats.DefenseTimer > 0)
 	{
+		CurrentPlayer->BuffParticles[2]->Position = CurrentPlayer->Position;
+		CurrentPlayer->BuffParticles[2]->amountTotal = -1;
 		CurrentPlayer->CurrentPlayerStats.DefenseTimer -= GetDeltaTime();
 	}
 	else
 	{
+		CurrentPlayer->BuffParticles[2]->amountTotal = 0;
 		updateDamageReduction(&CurrentPlayer->CurrentPlayerStats);
 	}
 	//Update buff timers
