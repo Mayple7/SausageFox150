@@ -131,6 +131,9 @@ typedef struct Player
 
 	struct TextGlyphs* ComparisonGlyphs;
 
+	struct ParticleSystem* BuffParticles[3];
+	struct ParticleSystem* YGBuffParticles[3];
+
 	Vec2 Position;
 	int dropDown;  //Fake Boolean
 

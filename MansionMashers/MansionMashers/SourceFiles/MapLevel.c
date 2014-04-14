@@ -72,6 +72,8 @@ Button* Shop4;
 Button* Level7;
 Button* Kevin;
 
+FoxSound* BackSnd;
+
 /*
 	1		GS_Tutorial,
 	2		GS_Level1,
@@ -302,6 +304,8 @@ void InitializeMapLevel(void)
 	GetNewIconPosition(&PlayerIcon->Position, iconPosition);
 	SetClearFlags(&CurrentPlayer);
 	MapInfoText->Position.x = GetCameraXPosition();
+
+	BackSnd = CreateSound("Sounds/MenuTheme.wav", LargeSnd);
 }
 
 /*************************************************************************/
@@ -313,6 +317,7 @@ void InitializeMapLevel(void)
 void UpdateMapLevel(void)
 {
 	EventLevel();
+	PlayAudio(BackSnd);
 
 	//Camera movement based on icon movement
 	if(PlayerIcon->Position.x > GetCameraXPosition() + 300 )
@@ -408,14 +413,14 @@ void EventLevel(void)
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawMapLevel);
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(BackSnd);
 		UpdatePause();
 		if(Cheats)
 			FadeOverlay->Visible = FALSE;
 		else
 			FadeOverlay->Visible = TRUE;
 
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(BackSnd);
 	}
 
 	// Go into the level the icon is on

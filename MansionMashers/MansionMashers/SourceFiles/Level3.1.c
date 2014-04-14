@@ -347,7 +347,8 @@ void UpdateLevel31(void)
 {
 	EventLevel31();
 
-	PlayAudio(&Level3BackSnd);
+	if(PlayerIsAlive)
+		PlayAudio(&Level3BackSnd);
 
 	EasyEditPlatform(Plat, 10);
 	//EasyEditWall(Wall1 ,10);
@@ -461,10 +462,10 @@ void EventLevel31(void)
 		if(PlayerIsAlive && !levelComplete)
 		{
 			InitializePause(&DrawLevel31);
-			//TogglePauseSound(&BackgroundSnd);
+			TogglePauseSound(&Level3BackSnd);
 			//SetNextState(GS_MainMenu);
 			UpdatePause();
-			//TogglePauseSound(&BackgroundSnd);
+			TogglePauseSound(&Level3BackSnd);
 		}
 	}	
 
@@ -597,7 +598,7 @@ void EventLevel31(void)
 	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
-		//freeSound(BackSnd);
+		freeSound(&Level3BackSnd);
 		PlayerIsAlive = FALSE;
 		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha = 0.5f;

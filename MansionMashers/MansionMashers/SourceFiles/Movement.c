@@ -24,7 +24,9 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/HandGuyBoss.h"
 
-static enum HandGuyState { Cooldown, Shout, Question, Jab, Move };
+static enum HeadColor {RedHead, GreenHead, BlueHead };
+static enum YeahGuyState { CooldownYeah, AOE, ProjectYeah, Pound, Vault };
+static enum HandGuyState { CooldownHand, Shout, Question, Jab, Move };
 static enum InnerState { Start, Attack, End };
 
 /*************************************************************************/
@@ -929,6 +931,10 @@ void YeahGuyAnimation(YeahGuyBoss *Object)
 	Green->Position = Bdy->Position;
 	Blue->Position = Bdy->Position;
 
+	Red->Visible = Object->redHead;
+	Green->Visible = Object->greenHead;
+	Blue->Visible = Object->blueHead;
+
 	Tail->Position.y = Bdy->Position.y + (Bdy->Height/30);
 	Tail->Rotation = (float)sin(Object->TailSinValue*1.25f)/4;
 
@@ -1002,15 +1008,43 @@ void YeahGuyAnimation(YeahGuyBoss *Object)
 		
 		
 		// Attacking! -----------------------------------------------------------------------------------------
-		if (0)
+		if (Object->CurrentState == ProjectYeah && (Object->InnerState == Attack || Object->InnerState == Start))
 		{
-			Object->YeahGuySpriteParts.AttackRotationArm = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArm, FOX_PI * 0.9f, 15.0f * GetDeltaTime());
-			Object->YeahGuySpriteParts.AttackRotationArmLower = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArmLower, FOX_PI / 2, 15.0f * GetDeltaTime());
-			if (fabs(Object->YeahGuySpriteParts.AttackRotationArm) > FOX_PI / 1.5f)
+			if (Object->HeadAttacking == RedHead)
 			{
-				Object->YeahGuySpriteParts.AttackRotationArm2 = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArm2, FOX_PI * 0.9f, 15.0f * GetDeltaTime());
-				Object->YeahGuySpriteParts.AttackRotationArmLower2 = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArmLower2, FOX_PI / 2, 15.0f * GetDeltaTime());
+				Object->YeahGuySpriteParts.HeadRed->CurrentFrame = 1;
+				Object->YeahGuySpriteParts.HeadRed->Position.x -= (1 - (Object->cooldownTimer > 0 ? Object->cooldownTimer : 0)) * 15;
 			}
+			else
+				Object->YeahGuySpriteParts.HeadRed->CurrentFrame = 0;
+
+			if (Object->HeadAttacking == GreenHead)
+			{
+				Object->YeahGuySpriteParts.HeadGreen->CurrentFrame = 1;
+				Object->YeahGuySpriteParts.HeadGreen->Position.x -= (1 - (Object->cooldownTimer > 0 ? Object->cooldownTimer : 0)) * 15;
+			}
+			else
+				Object->YeahGuySpriteParts.HeadGreen->CurrentFrame = 0;
+
+			if (Object->HeadAttacking == BlueHead)
+			{
+				Object->YeahGuySpriteParts.HeadBlue->CurrentFrame = 1;
+				Object->YeahGuySpriteParts.HeadBlue->Position.x -= (1 - (Object->cooldownTimer > 0 ? Object->cooldownTimer : 0)) * 15;
+			}
+			else
+				Object->YeahGuySpriteParts.HeadBlue->CurrentFrame = 0;
+		}
+		else if (Object->CurrentState == AOE)
+		{
+			Object->YeahGuySpriteParts.HeadRed->CurrentFrame = 1;
+			Object->YeahGuySpriteParts.HeadGreen->CurrentFrame = 1;
+			Object->YeahGuySpriteParts.HeadBlue->CurrentFrame = 1;
+		}
+		else
+		{
+			Object->YeahGuySpriteParts.HeadRed->CurrentFrame = 0;
+			Object->YeahGuySpriteParts.HeadGreen->CurrentFrame = 0;
+			Object->YeahGuySpriteParts.HeadBlue->CurrentFrame = 0;
 		}
 		// -----------------------------------------------------------------------------------------
 
@@ -1043,17 +1077,43 @@ void YeahGuyAnimation(YeahGuyBoss *Object)
 		
 		
 		// Attacking! -----------------------------------------------------------------------------------------
-		if (0)
+		if (Object->CurrentState == ProjectYeah && (Object->InnerState == Attack || Object->InnerState == Start))
 		{
-			Object->YeahGuySpriteParts.AttackRotationArm = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArm, FOX_PI * 0.9f, 15.0f * GetDeltaTime());
-			Object->YeahGuySpriteParts.AttackRotationArmLower = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArmLower, FOX_PI / 2, 15.0f * GetDeltaTime());
-			if (fabs(Object->YeahGuySpriteParts.AttackRotationArm) > FOX_PI / 1.5f)
+			if (Object->HeadAttacking == RedHead)
 			{
-				Object->YeahGuySpriteParts.AttackRotationArm2 = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArm2, FOX_PI * 0.9f, 15.0f * GetDeltaTime());
-				Object->YeahGuySpriteParts.AttackRotationArmLower2 = RotateToAngle(Object->YeahGuySpriteParts.AttackRotationArmLower2, FOX_PI / 2, 15.0f * GetDeltaTime());
+				Object->YeahGuySpriteParts.HeadRed->CurrentFrame = 1;
+				Object->YeahGuySpriteParts.HeadRed->Position.x += (1 - (Object->cooldownTimer > 0 ? Object->cooldownTimer : 0)) * 15;
 			}
+			else
+				Object->YeahGuySpriteParts.HeadRed->CurrentFrame = 0;
 
+			if (Object->HeadAttacking == GreenHead)
+			{
+				Object->YeahGuySpriteParts.HeadGreen->CurrentFrame = 1;
+				Object->YeahGuySpriteParts.HeadGreen->Position.x += (1 - (Object->cooldownTimer > 0 ? Object->cooldownTimer : 0)) * 15;
+			}
+			else
+				Object->YeahGuySpriteParts.HeadGreen->CurrentFrame = 0;
 
+			if (Object->HeadAttacking == BlueHead)
+			{
+				Object->YeahGuySpriteParts.HeadBlue->CurrentFrame = 1;
+				Object->YeahGuySpriteParts.HeadBlue->Position.x += (1 - (Object->cooldownTimer > 0 ? Object->cooldownTimer : 0)) * 15;
+			}
+			else
+				Object->YeahGuySpriteParts.HeadBlue->CurrentFrame = 0;
+		}
+		else if (Object->CurrentState == AOE)
+		{
+			Object->YeahGuySpriteParts.HeadRed->CurrentFrame = 1;
+			Object->YeahGuySpriteParts.HeadGreen->CurrentFrame = 1;
+			Object->YeahGuySpriteParts.HeadBlue->CurrentFrame = 1;
+		}
+		else
+		{
+			Object->YeahGuySpriteParts.HeadRed->CurrentFrame = 0;
+			Object->YeahGuySpriteParts.HeadGreen->CurrentFrame = 0;
+			Object->YeahGuySpriteParts.HeadBlue->CurrentFrame = 0;
 		}
 		// -----------------------------------------------------------------------------------------
 
