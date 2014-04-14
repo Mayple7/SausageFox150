@@ -323,6 +323,7 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Use SPACE to Jump.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+		TextAllVisible(TutorialText);
 	}
 	else if (tutorialDone < 2 && CurrentPlayer.PlayerCollider.Position.x > 150)
 	{
@@ -337,6 +338,7 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Use S to Fall Through.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+		TextAllVisible(TutorialText);
 	}
 	else if (tutorialDone < 3 && CurrentPlayer.PlayerCollider.Position.x > (PANELSIZE / 2))
 	{
@@ -347,6 +349,7 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Use E to Change Weapons.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+		TextAllVisible(TutorialText);
 	}
 	else if (tutorialDone < 4 && CurrentPlayer.PlayerCollider.Position.x > (PANELSIZE / 2) * 3)
 	{
@@ -357,6 +360,7 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Use Left Mouse or N to Fight!");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+		TextAllVisible(TutorialText);
 	}
 	else if (tutorialDone < 5 && StrawDummy->CurrentEnemyStats.CurrentHealth <= 0)
 	{
@@ -371,6 +375,7 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Right Mouse or M to Wind Attack.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+		TextAllVisible(TutorialText);
 	}
 	else if (tutorialDone < 7 && StrawDummy2->CurrentEnemyStats.CurrentHealth <= 0)
 	{
@@ -381,6 +386,7 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Grab the 2 buffs!");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+		TextAllVisible(TutorialText);
 	}
 	else if (tutorialDone < 8 && HealthPickup->objID <= 0 && AgilPickup->objID <= 0)
 	{
@@ -391,11 +397,13 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Q to switch buffs.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+		TextAllVisible(TutorialText);
 
 		Vec2Set(&newPosition, 1920 * 4, 220);
 		ChangeTextString(TutorialTextra, "Use buffs with F! Heal yourself!");
 		ChangeTextPosition(TutorialTextra, newPosition, Center);
 		ChangeTextZIndex(TutorialTextra, 801);
+		TextAllVisible(TutorialText);
 	}
 	else if (tutorialDone < 9 && CurrentPlayer.PlayerCollider.Position.x > (PANELSIZE / 2) * 8
 		  && CurrentPlayer.CurrentPlayerStats.CurrentHealth == CurrentPlayer.CurrentPlayerStats.MaxHealth
@@ -408,6 +416,7 @@ void UpdateTutorial(void)
 		ChangeTextString(TutorialText, "Go Right to Continue.");
 		ChangeTextPosition(TutorialText, newPosition, Center);
 		ChangeTextZIndex(TutorialText, 801);
+		TextAllVisible(TutorialText);
 
 		Vec2Set(&newPosition, 1920 * 4, -2000);
 		ChangeTextPosition(TutorialTextra, newPosition, Center);
@@ -465,16 +474,22 @@ void UpdateTutorial(void)
 	}
 
 	//If the dummy exists, prevent the player from moving past
-	if(StrawDummy->objID > 0)
+	if(DummyBlock)
 	{
-		//Do nothing
-	}
-	else
-	{
-		UpdateWallPosition(DummyBlock, StrawDummy2->Position.x, DummyBlock->Position.y);
+		if(StrawDummy->objID > 0)
+		{
+			//Do nothing
+		}
+		else
+		{
+			UpdateWallPosition(DummyBlock, StrawDummy2->Position.x, DummyBlock->Position.y);
 
-		if (StrawDummy2->objID <= 0)
-			FreeWall(DummyBlock);
+			if (StrawDummy2->objID <= 0)
+			{
+				FreeWall(DummyBlock);
+				DummyBlock = NULL;
+			}
+		}
 	}
 
 	if (tutorialDone > 2)
