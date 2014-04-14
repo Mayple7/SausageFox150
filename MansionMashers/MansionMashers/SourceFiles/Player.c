@@ -215,6 +215,13 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	CurrentPlayer->BuffParticles[2] = CreateFoxParticleSystem("TextureFiles/BuffPartOrange.png", 0, 0, CurrentPlayer->Zindex - 10, 0, 20, 0.1f, 90, 20, 1, 1, 100, 200, 200, 0.25f, 1.0f);
 	CurrentPlayer->BuffParticles[2]->FadeIn = TRUE;
 
+	CurrentPlayer->YGBuffParticles[0] = CreateFoxParticleSystem("TextureFiles/YGPartGreen.png", 0, 0, CurrentPlayer->Zindex - 10, 0, 20, 0.1f, 90, 20, 1, 1, 100, 200, 200, 0.25f, 1.0f);
+	CurrentPlayer->YGBuffParticles[0]->FadeIn = TRUE;
+	CurrentPlayer->YGBuffParticles[1] = CreateFoxParticleSystem("TextureFiles/YGPartBlue.png", 0, 0, CurrentPlayer->Zindex - 10, 0, 20, 0.1f, 90, 20, 1, 1, 100, 200, 200, 0.25f, 1.0f);
+	CurrentPlayer->YGBuffParticles[1]->FadeIn = TRUE;
+	CurrentPlayer->YGBuffParticles[2] = CreateFoxParticleSystem("TextureFiles/YGPartRed.png", 0, 0, CurrentPlayer->Zindex - 10, 0, 20, 0.1f, 90, 20, 1, 1, 100, 200, 200, 0.25f, 1.0f);
+	CurrentPlayer->YGBuffParticles[2]->FadeIn = TRUE;
+
 
 	//Only the player goes under an ID of 10
 	ObjectID = 10;

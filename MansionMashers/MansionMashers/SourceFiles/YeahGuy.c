@@ -800,13 +800,26 @@ void UpdatePlayerBuff(void)
 	// If a buff is already active ignore
 	if(CurrentBuff != None)
 	{
+		int i;
+
 		playerBuffTimer += GetDeltaTime();
+
+		if(CurrentBuff == Green)
+			i = 0;
+		else if(CurrentBuff == Blue)
+			i = 1;
+		else if(CurrentBuff == Red)
+			i = 2;
+
+		CurrentPlayer.YGBuffParticles[i]->Position = CurrentPlayer.Position;
+		CurrentPlayer.YGBuffParticles[i]->amountTotal = -1;
 
 		// Buff time is up
 		if(playerBuffTimer >= 10)
 		{
 			CurrentBuff = None;
 			playerBuffTimer = 0.0f;
+
 		}
 	}
 	// If there is a redHead, check collision with red buff
@@ -832,6 +845,13 @@ void UpdatePlayerBuff(void)
 		playerBuffTimer = 0.0f;
 		HideBuffs();
 		buffTimer = 0.0f;
+	}
+
+	if(CurrentBuff == None)
+	{
+		CurrentPlayer.YGBuffParticles[0]->amountTotal = 0;
+		CurrentPlayer.YGBuffParticles[1]->amountTotal = 0;
+		CurrentPlayer.YGBuffParticles[2]->amountTotal = 0;
 	}
 }
 
