@@ -16,7 +16,6 @@ typedef struct HandGuyParts
 	Sprite *LegLower;
 	Sprite *LegUpper2;
 	Sprite *LegLower2;
-	Sprite *Skirt;
 	Sprite *Body;
 	Sprite *Tail;
 	Sprite *ArmUpper;
@@ -85,5 +84,6 @@ void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatfor
 void HandGuyAnimation( HandGuyBoss *Object);
 void CreateHandGuySprites(HandGuyBoss *Object);
 void FreeHandGuyBoss(HandGuyBoss* CurrentBoss);
+void PoofSelf(Sprite *Boss);
 
 #endif

@@ -69,10 +69,10 @@ KevinBoss* CreateKevinBoss(float xPos, float yPos)
 	Vec2Set(&CurrentBoss->Position, 700, -200);
 
 	Vec2Set(&CurrentBoss->Position, 700, -200);
-	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/TempKevin.png", 477, 360, 20, 1, 1, 700, -200);
+	CurrentBoss->BodySprite = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 477, 360, 20, 1, 1, 700, -200);
 	CurrentBoss->BodySprite->FlipX = TRUE;
-	CurrentBoss->BodySprite->Visible = TRUE;
-	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/QuickJab.png", 100, 100, 21, 4, 4, 580, -120);
+	CurrentBoss->BodySprite->Visible = FALSE;
+	CurrentBoss->JabSprite = (Sprite *) CreateSprite("TextureFiles/KevinQuickJab.png", 64, 64, 21, 4, 4, 580, -120);
 	CurrentBoss->JabSprite->FlipX = TRUE;
 	CurrentBoss->JabSprite->AnimationSpeed = 3;
 	CurrentBoss->JabSprite->Visible = FALSE;
@@ -84,8 +84,11 @@ KevinBoss* CreateKevinBoss(float xPos, float yPos)
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = B;
 
+	CurrentBoss->jumpTimer = 0.0f;
+
 	// Kevin colliders
-	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 477, 360, GetObjectID()); 
+	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 100, 300, GetObjectID());
+	CurrentBoss->BossCollider.Offset.y = CurrentBoss->BossCollider.height / 4;
 	CreateCollisionBox(&CurrentBoss->JabAttack, &CurrentBoss->Position, WeaponEnemy, 200, 100, GetObjectID()); 
 
 
@@ -101,6 +104,10 @@ KevinBoss* CreateKevinBoss(float xPos, float yPos)
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->cooldownTimer = 0;
 	CurrentBoss->JabDamage = 30;
+
+	// All the sprites
+	CreateKevinSprites(CurrentBoss);
+	CurrentBoss->LegSinValue = 0;
 
 	return CurrentBoss;
 }
@@ -271,29 +278,34 @@ void UpdateKevinBoss(KevinBoss *CurrentBoss)
 	}
 
 		// Jump Kevin Jump
-	if(CurrentBoss->KevinRigidBody.Velocity.y >= 0 && CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 3 && CurrentBoss->CurrentState != Jab)
+	if(CurrentBoss->KevinRigidBody.Velocity.y >= 0 && CurrentBoss->Position.y <= GROUNDLEVEL && CurrentBoss->CurrentState != Jab && CurrentBoss->jumpTimer >= 0.5f)
 	{
 		// Set y velocity for jumping
 		Vec2 velocity;
 		CurrentBoss->Position.y += 3;
 		Vec2Set(&velocity, 0.0f, 800.0f);
 		ApplyVelocity(&CurrentBoss->KevinRigidBody, &velocity);
+		CurrentBoss->jumpTimer = 0;
 	}
 	
+	// Animation
+	KevinAnimation(CurrentBoss);
+
 	// Set acceleration to zero
 	ZeroAcceleration(&CurrentBoss->KevinRigidBody);
 
 	//Brings the player back to the surface if something bad happens
-	if(CurrentBoss->Position.y < GROUNDLEVEL + CurrentBoss->BodySprite->Height / 3)
+	if(CurrentBoss->Position.y < GROUNDLEVEL)
 	{
-		CurrentBoss->Position.y = GROUNDLEVEL + CurrentBoss->BodySprite->Height / 3;
+		CurrentBoss->Position.y = GROUNDLEVEL;
 	}
 	//Stop vertical velocity and acceleration when the player lands on the floor
-	if(CurrentBoss->Position.y <= GROUNDLEVEL + CurrentBoss->BodySprite->Height / 3 || CurrentBoss->KevinRigidBody.onGround)
+	if(CurrentBoss->Position.y <= GROUNDLEVEL || CurrentBoss->KevinRigidBody.onGround)
 	{
 		Vec2Zero(&CurrentBoss->KevinRigidBody.Acceleration);
 		Vec2Zero(&CurrentBoss->KevinRigidBody.Velocity);
 		ZeroGravity(&CurrentBoss->KevinRigidBody);
+		CurrentBoss->jumpTimer += GetDeltaTime();
 	}
 	//Set gravity if not on floor or on a platform
 	else
@@ -314,6 +326,8 @@ void UpdateKevinBoss(KevinBoss *CurrentBoss)
 	CurrentBoss->KevinRigidBody.onGround = FALSE;
 
 	CurrentBoss->JabAttack.Position.y = CurrentBoss->Position.y - CurrentBoss->BodySprite->Height / 2;
+
+	CurrentBoss->JabSprite->Position.y = CurrentBoss->Position.y + 120.0f;
 
 	if(CurrentPlayer.Position.x < CurrentBoss->Position.x)
 	{
@@ -497,8 +511,63 @@ void PlayerDamageResult(int damage)
 /*************************************************************************/
 void FreeKevinBoss(KevinBoss* CurrentBoss)
 {
+	PoofSelf(CurrentBoss->BodySprite);
 	FreeSprite(CurrentBoss->JabSprite);
 	FreeSprite(CurrentBoss->BodySprite);
 	FreeMyAlloc(CurrentBoss);
 }
 
+/*************************************************************************/
+/*!
+	\brief
+	Creates the boss's sprites
+
+	\param Object
+	The boss to create
+*/
+/*************************************************************************/
+void CreateKevinSprites(KevinBoss *Object)
+{
+	Object->KevinSpriteParts.Body = (Sprite *) CreateSprite("TextureFiles/KevinBody.png", 450.0f, 450.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+
+	Object->KevinSpriteParts.ArmUpper = (Sprite *) CreateSprite("TextureFiles/KevinArmUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+
+	Object->KevinSpriteParts.ArmUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/KevinArmUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->KevinSpriteParts.ArmUpper2->SpriteMesh = Object->KevinSpriteParts.ArmUpper->SpriteMesh;
+
+	Object->KevinSpriteParts.ArmLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/KevinArmLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex - 2, 1, 1, 0, 0);
+	Object->KevinSpriteParts.ArmLower2->SpriteMesh = Object->KevinSpriteParts.ArmUpper->SpriteMesh;
+
+	Object->KevinSpriteParts.LegUpper = (Sprite *) CreateSpriteNoMesh("TextureFiles/KevinLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->KevinSpriteParts.LegUpper->SpriteMesh = Object->KevinSpriteParts.ArmUpper->SpriteMesh;
+
+	Object->KevinSpriteParts.LegLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/KevinLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->KevinSpriteParts.LegLower->SpriteMesh = Object->KevinSpriteParts.ArmUpper->SpriteMesh;
+
+	Object->KevinSpriteParts.LegUpper2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/KevinLegUpper.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->KevinSpriteParts.LegUpper2->SpriteMesh = Object->KevinSpriteParts.ArmUpper->SpriteMesh;
+
+	Object->KevinSpriteParts.LegLower2 = (Sprite *) CreateSpriteNoMesh("TextureFiles/KevinLegLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex, 1, 1, 0, 0);
+	Object->KevinSpriteParts.LegLower2->SpriteMesh = Object->KevinSpriteParts.ArmUpper->SpriteMesh;
+
+	Object->KevinSpriteParts.ArmLower = (Sprite *) CreateSpriteNoMesh("TextureFiles/KevinArmLower.png", 192.0f, 192.0f, Object->BodySprite->ZIndex + 2, 1, 1, 0, 0);
+	Object->KevinSpriteParts.ArmLower->SpriteMesh = Object->KevinSpriteParts.ArmUpper->SpriteMesh;
+
+}
+
+/*************************************************************************/
+/*!
+	\brief
+	Removes the Boss in a fashionable way
+*/
+/*************************************************************************/
+static void PoofSelf(Sprite *Boss)
+{
+	//Poof the self away
+	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Boss->Position.x, Boss->Position.y, Boss->ZIndex + 6, 40, 40, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
+	Poof->emitDisplacementX = 200;
+	Poof->emitDisplacementY = 200;
+	Poof->emitScale = 1.5f;
+	Poof->emitLife = 2.0f;
+	Poof->emitThenDestroy = TRUE;
+}

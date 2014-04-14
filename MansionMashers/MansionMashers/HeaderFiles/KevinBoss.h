@@ -7,6 +7,23 @@
 #include "CollisionBox.h"
 #include "Sound.h"
 
+typedef struct KevinParts
+{
+	Sprite *LegUpper;
+	Sprite *LegLower;
+	Sprite *LegUpper2;
+	Sprite *LegLower2;
+	Sprite *Body;
+	Sprite *ArmUpper;
+	Sprite *ArmLower;
+	Sprite *ArmUpper2;
+	Sprite *ArmLower2;
+	float AttackRotationArm;
+	float AttackRotationArmLower;
+	float AttackRotationArm2;
+	float AttackRotationArmLower2;
+}KevinParts;
+
 typedef struct KevinBoss
 {
 	Sprite *BodySprite;
@@ -16,11 +33,16 @@ typedef struct KevinBoss
 	int InnerState;
 	int PositionState;
 
+	float LegSinValue;
+
 	RigidBody KevinRigidBody;
+
+	KevinParts KevinSpriteParts;
 
 	CollisionBox JabAttack;
 	CollisionBox BossCollider;
 
+	float jumpTimer;
 	int playerHit; // No need for a collision list
 	float cooldownTimer;
 	int SpinDamage;
@@ -41,5 +63,8 @@ void DetectKevinBossCollision(KevinBoss *CurrentBoss);
 void KevinBossCollideWeapon(KevinBoss *CurrentBoss);
 static void PlayerDamageResult(int damage);
 void FreeKevinBoss(KevinBoss* CurrentBoss);
+void CreateKevinSprites(KevinBoss *Object);
+void KevinAnimation(KevinBoss *Object);
+void PoofSelf(Sprite *Boss);
 
 #endif

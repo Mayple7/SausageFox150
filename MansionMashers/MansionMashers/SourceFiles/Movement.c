@@ -23,6 +23,7 @@
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/HandGuyBoss.h"
+#include "../HeaderFiles/KevinBoss.h"
 
 static enum HeadColor {RedHead, GreenHead, BlueHead };
 static enum YeahGuyState { CooldownYeah, AOE, ProjectYeah, Pound, Vault };
@@ -1116,6 +1117,160 @@ void YeahGuyAnimation(YeahGuyBoss *Object)
 			Object->YeahGuySpriteParts.HeadBlue->CurrentFrame = 0;
 		}
 		// -----------------------------------------------------------------------------------------
+
+	}
+
+	//*************************************************************************************************
+}
+
+
+/*************************************************************************/
+/*!
+	\brief
+	Animates the enemies legs and arms.
+*/
+/*************************************************************************/
+void KevinAnimation(KevinBoss *Object)
+{
+	float LegDistance = (2.3f / (((Object->Speed * (1 / 60.0f)) * 0.075f + 0.5f)) );
+	float LegUpperDirection = (float)sin(Object->LegSinValue)/(LegDistance);
+	float LegLowerDirection;
+	float LegUpperDirection2 = (float)sin(Object->LegSinValue)/(LegDistance);
+	float LegLowerDirection2;
+	
+
+	Sprite *LegUpr = Object->KevinSpriteParts.LegUpper;
+	Sprite *LegUpr2 = Object->KevinSpriteParts.LegUpper2;
+	Sprite *LegLwr = Object->KevinSpriteParts.LegLower;
+	Sprite *LegLwr2 = Object->KevinSpriteParts.LegLower2;
+	Sprite *ArmUpr = Object->KevinSpriteParts.ArmUpper;
+	Sprite *ArmUpr2 = Object->KevinSpriteParts.ArmUpper2;
+	Sprite *ArmLwr = Object->KevinSpriteParts.ArmLower;
+	Sprite *ArmLwr2 = Object->KevinSpriteParts.ArmLower2;
+	Sprite *Bdy = Object->KevinSpriteParts.Body;
+
+	Object->LegSinValue += (Object->Speed * GetDeltaTime()) / 75.0f; 
+
+	Bdy->Position.x = Object->Position.x;
+	Bdy->Position.y = Object->Position.y + (Bdy->Height / 10) - ((float)sin(-Object->LegSinValue*2)*5/(LegDistance));
+
+
+	if (Object->KevinRigidBody.onGround || Object->Position.y <= GROUNDLEVEL)
+	{
+		if (LegUpperDirection < 0)
+			LegLowerDirection = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
+		else
+			LegLowerDirection = (LegUpperDirection + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
+
+		if (LegUpperDirection2 > 0)
+			LegLowerDirection2 = ((float)sin(Object->LegSinValue)/1.25f + (float)sin(Object->LegSinValue) * -0.1f)/(LegDistance);
+		else
+			LegLowerDirection2 = (LegUpperDirection2 + (float)sin(Object->LegSinValue) + (float)sin(Object->LegSinValue) * 0.4f)/(LegDistance);
+	}
+	else
+	{
+		LegUpperDirection = (float)sin(LegDistance/10) - 1.0f;
+		LegUpperDirection2 = (float)sin(LegDistance/10) - 1.0f;//60.0f * GetDeltaTime();
+		LegLowerDirection = LegUpperDirection + 0.5f;//30.0f * GetDeltaTime();
+		LegLowerDirection2 = LegUpperDirection2 - 0.5f;//30.0f * GetDeltaTime();
+	}
+	LegUpr->FlipX = Object->BodySprite->FlipX;
+	LegLwr->FlipX = Object->BodySprite->FlipX;
+	LegUpr2->FlipX = Object->BodySprite->FlipX;
+	LegLwr2->FlipX = Object->BodySprite->FlipX;
+	Bdy->FlipX = Object->BodySprite->FlipX;
+	ArmUpr->FlipX = Object->BodySprite->FlipX;
+	ArmLwr->FlipX = Object->BodySprite->FlipX;
+	ArmUpr2->FlipX = Object->BodySprite->FlipX;
+	ArmLwr2->FlipX = Object->BodySprite->FlipX;
+
+	if (Object->BodySprite->FlipX == FALSE)
+	{
+		
+		LegUpr->Rotation = LegUpperDirection;
+		LegUpr->Position.x = Object->Position.x;
+		
+		LegUpr->Position.y = Bdy->Position.y;
+		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
+		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
+		LegLwr->Rotation = LegLowerDirection;
+		
+		LegUpr2->Rotation = -LegUpperDirection2;
+		LegUpr2->Position.x = Object->Position.x;
+		
+		LegUpr2->Position.y = Bdy->Position.y;
+		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
+		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
+		LegLwr2->Rotation = -LegLowerDirection2;
+		
+		
+		// Attacking! -----------------------------------------------------------------------------------------
+		ArmUpr2->Rotation = -LegUpperDirection/1.5f + 1.5f;
+		ArmLwr2->Rotation = -(ArmUpr->Rotation - 1.75f + LegUpperDirection/2.0f);
+		ArmUpr->Rotation = LegUpperDirection/1.5f + 1.5f;
+		ArmLwr->Rotation = ArmUpr->Rotation - 1.25f + LegUpperDirection/2.0f;
+
+		if (Object->JabSprite->Visible)
+		{
+			ArmUpr2->Rotation = -FOX_PI / 12;
+			ArmUpr->Rotation = -FOX_PI / 12;
+		}
+		// -----------------------------------------------------------------------------------------
+
+		ArmUpr2->Position.x = Bdy->Position.x;
+		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
+		ArmLwr2->Position.x = ArmUpr2->Position.x - (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
+		ArmLwr2->Position.y = ArmUpr2->Position.y - (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
+		
+		ArmUpr->Position.x = Bdy->Position.x;
+		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
+		ArmLwr->Position.x = ArmUpr->Position.x - (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
+		ArmLwr->Position.y = ArmUpr->Position.y - (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
+		
+	}
+	else
+	{
+		
+		LegUpr->Rotation = -LegUpperDirection;
+		LegUpr->Position.x = Object->Position.x;
+		
+		LegUpr->Position.y = Bdy->Position.y;
+		LegLwr->Position.x = (float)cos(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.x;
+		LegLwr->Position.y = (float)sin(LegUpr->Rotation-(FOX_PI/2)) * (LegLwr->Width/4.2f) + LegUpr->Position.y;
+		LegLwr->Rotation = -LegLowerDirection;
+		
+		LegUpr2->Rotation = LegUpperDirection2;
+		LegUpr2->Position.x = Object->Position.x;
+		
+		LegUpr2->Position.y = Bdy->Position.y;
+		LegLwr2->Position.x = (float)cos(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.x;
+		LegLwr2->Position.y = (float)sin(LegUpr2->Rotation-(FOX_PI/2)) * (LegLwr2->Width/4.2f) + LegUpr2->Position.y;
+		LegLwr2->Rotation = LegLowerDirection2;
+		
+		
+		// Attacking! -----------------------------------------------------------------------------------------
+		ArmUpr->Rotation = -LegUpperDirection/1.5f - 1.5f;
+		ArmLwr->Rotation = ArmUpr->Rotation + 1.25f - LegUpperDirection/2.0f;
+		ArmUpr2->Rotation = LegUpperDirection/1.5f - 1.5f;
+		ArmLwr2->Rotation = ArmUpr2->Rotation + 1.25f + LegUpperDirection/2.0f;
+
+		if (Object->JabSprite->Visible)
+		{
+			ArmUpr2->Rotation = FOX_PI / 12;
+			ArmUpr->Rotation = FOX_PI / 12;
+		}
+		// -----------------------------------------------------------------------------------------
+
+		ArmUpr->Position.x = Bdy->Position.x;
+		ArmUpr->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
+		ArmLwr->Position.x = ArmUpr->Position.x + (float)cos(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
+		ArmLwr->Position.y = ArmUpr->Position.y + (float)sin(ArmUpr->Rotation) * (ArmLwr->Width/3.2f);
+
+		
+		ArmUpr2->Position.x = Bdy->Position.x;
+		ArmUpr2->Position.y = Bdy->Position.y + (Bdy->Width/5.25f);
+		ArmLwr2->Position.x = ArmUpr2->Position.x + (float)cos(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
+		ArmLwr2->Position.y = ArmUpr2->Position.y + (float)sin(ArmUpr2->Rotation) * (ArmLwr2->Width/3.2f);
 
 	}
 

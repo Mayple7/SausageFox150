@@ -1123,7 +1123,7 @@ void PoofHead(Sprite *Head)
 	Removes the Boss in a fashionable way
 */
 /*************************************************************************/
-void PoofSelf(Sprite *Boss)
+static void PoofSelf(Sprite *Boss)
 {
 	//Poof the self away
 	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Boss->Position.x, Boss->Position.y, Boss->ZIndex + 6, 40, 40, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
