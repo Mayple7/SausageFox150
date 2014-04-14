@@ -99,13 +99,13 @@ void CreateUpgradeScreenObjects(void)
 	//Title
 	Vec3Set(&NewTint, 1, 1, 1);
 	UpgradesName = CreateText("Upgrades Available!", 0, -2000, 140, NewTint, Center, Border);
-	ChangeTextVisibility(UpgradesName);
+	TextAllVisible(UpgradesName);
 	ChangeTextZIndex(UpgradesName, 4003);
 
 	//Upgrades remaining
 	Vec3Set(&NewTint, 0.32f, 0.11f, 0.47f);
 	UpgradesLeft = CreateText("Sweg", 0, -2000, 100, NewTint, Center, Border);
-	ChangeTextVisibility(UpgradesLeft);
+	TextAllVisible(UpgradesLeft);
 	ChangeTextZIndex(UpgradesLeft, 4003);
 
 	//Overlays
@@ -140,15 +140,15 @@ void CreateUpgradeScreenObjects(void)
 	Vec3Set(&NewTint, 0.32f, 0.11f, 0.47f);
 
 	UpgradeAmount1 = CreateText("Swog", 0, -2000, 120, NewTint, Center, Border);
-	ChangeTextVisibility(UpgradeAmount1);
+	TextAllVisible(UpgradeAmount1);
 	ChangeTextZIndex(UpgradeAmount1, 4004);
 
 	UpgradeAmount2 = CreateText("Swug", 0, -2000, 120, NewTint, Center, Border);
-	ChangeTextVisibility(UpgradeAmount2);
+	TextAllVisible(UpgradeAmount2);
 	ChangeTextZIndex(UpgradeAmount2, 4004);
 
 	UpgradeAmount3 = CreateText("Swyg", 0, -2000, 120, NewTint, Center, Border);
-	ChangeTextVisibility(UpgradeAmount3);
+	TextAllVisible(UpgradeAmount3);
 	ChangeTextZIndex(UpgradeAmount3, 4004);
 
 	//Done upgrading button
@@ -218,6 +218,7 @@ void UpdateUpgradeScreenObjects(void)
 			sprintf(CharTemp, "%i Points to Spend!", CurrentPlayer.CurrentPlayerStats.Upgrades);
 		ChangeTextString(UpgradesLeft, CharTemp);
 		ChangeTextZIndex(UpgradesLeft, 4003);
+		TextAllVisible(UpgradesLeft);
 		lastUpgrades = CurrentPlayer.CurrentPlayerStats.Upgrades;
 	}
 	Vec2Set(&NewPosition, camX, 380);
@@ -273,18 +274,21 @@ void UpdateUpgradeScreenObjects(void)
 	sprintf(CharTemp, "%i", CurrentPlayer.CurrentPlayerStats.Strength);
 	ChangeTextString(UpgradeAmount1, CharTemp);
 	ChangeTextZIndex(UpgradeAmount1, 4003);
+	TextAllVisible(UpgradeAmount1);
 	Vec2Set(&NewPosition, camX - 590, 200);
 	ChangeTextPosition(UpgradeAmount1, NewPosition, Center);
 	//Agi --
 	sprintf(CharTemp, "%i", CurrentPlayer.CurrentPlayerStats.Agility);
 	ChangeTextString(UpgradeAmount2, CharTemp);
 	ChangeTextZIndex(UpgradeAmount2, 4003);
+	TextAllVisible(UpgradeAmount2);
 	Vec2Set(&NewPosition, camX - 590, 0);
 	ChangeTextPosition(UpgradeAmount2, NewPosition, Center);
 	//Def --
 	sprintf(CharTemp, "%i", CurrentPlayer.CurrentPlayerStats.Defense);
 	ChangeTextString(UpgradeAmount3, CharTemp);
 	ChangeTextZIndex(UpgradeAmount3, 4003);
+	TextAllVisible(UpgradeAmount3);
 	Vec2Set(&NewPosition, camX - 590, -200);
 	ChangeTextPosition(UpgradeAmount3, NewPosition, Center);
 
