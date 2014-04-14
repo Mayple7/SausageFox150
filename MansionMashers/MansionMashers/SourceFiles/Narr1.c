@@ -298,7 +298,7 @@ void EventNarr1(void)
 
 	if(!fadeInGoing)
 	{
-		Subtitles->Position.y += 100 * GetDeltaTime();
+		Subtitles->Position.y += 200 * GetDeltaTime();
 	}
 
 	if (TimerGoingUp)
