@@ -255,6 +255,7 @@ void InitializeLevel31(void)
 
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, -958, 0);
 	Wall1->WallSprite->Visible = FALSE;
+	Wall1->enemyNotCollidable = TRUE;
 
 	//Top Cicle Blockers
 	//Panel 1
