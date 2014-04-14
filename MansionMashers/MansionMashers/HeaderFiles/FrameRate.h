@@ -7,6 +7,7 @@ void StartFoxFrame(void);
 double testFrameTime(void);
 void EndFoxFrame(void);
 float GetDeltaTime(void);
+void GetFrequency(void);
 
 float animationTest; //To test clunky animation
 

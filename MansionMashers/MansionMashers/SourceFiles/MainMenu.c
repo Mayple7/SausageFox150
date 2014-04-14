@@ -256,6 +256,9 @@ void UpdateMainMenu(void)
 {
 	PlayAudio(&MenuBackSnd);
 
+	if(FoxInput_KeyTriggered('O'))
+		SetNextState(GS_Narr1);
+
 	//Handle input and run background animation
 	if (DogScroll->CurrentFrame == 17)
 	{
