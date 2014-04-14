@@ -131,6 +131,12 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->YeahGuyDie = CreateSound("Sounds/YeahGuyDie.mp3", SmallSnd);
 	CurrentBoss->YeahGuySoundsPlay = FALSE;
 	
+	// ParticleSystems
+	CurrentBoss->DamageParticle		= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex + 1,	0,	5,	0.0f,	270,	90,		1.0f,	-5.0f,	25,	24,	50,		2.0f,	1.0f);
+	CurrentBoss->PoundParticle[0]	= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, GROUNDLEVEL - 75.0f,		CurrentBoss->BodySprite->ZIndex + 1,	0,	5,	0.0f,	175,	10,		1.0f,	-5.0f,	25,	5,	750,	2.0f,	0.5f);
+	CurrentBoss->PoundParticle[1]	= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, GROUNDLEVEL - 75.0f,		CurrentBoss->BodySprite->ZIndex + 1,	0,	5,	0.0f,	5,		10,		1.0f,	-5.0f,	25,	5,	750,	2.0f,	0.5f);
+	CurrentBoss->AOEParticle		= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex + 1,	0,	5,	0.0f,	270,	360,	1.0f,	-5.0f,	25,	24,	50,		2.0f,	1.0f);
+
 
 
 	return CurrentBoss;
@@ -414,6 +420,10 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 				// Set the boss to be on the ground
 				CurrentBoss->Position.y = GROUNDLEVEL + CurrentBoss->BodySprite->Height / 4;
 				CurrentBoss->BossCollider.Position.y = CurrentBoss->Position.y;
+
+				CurrentBoss->PoundParticle[0]->amountTotal = 25;
+				CurrentBoss->PoundParticle[1]->amountTotal = 25;
+
 
 				// Check if the ground pound hit the player
 				if(CollisionRectangles(&CurrentBoss->BossCollider, &CurrentPlayer.PlayerCollider) || CurrentPlayer.Position.y <= GROUNDLEVEL)
@@ -712,6 +722,10 @@ void UpdateYeahGuyBoss(YeahGuyBoss *CurrentBoss)
 		}
 		break;
 	}
+
+	// Particle Placement Update
+	CurrentBoss->PoundParticle[0]->Position.x = CurrentBoss->Position.x - 25;
+	CurrentBoss->PoundParticle[1]->Position.x = CurrentBoss->Position.x + 25;
 
 	// Speed for the animation
 	CurrentBoss->Speed = (float)fabs(CurrentBoss->YeahGuyRigidBody.Velocity.x);

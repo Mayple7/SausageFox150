@@ -41,6 +41,10 @@ typedef struct YeahGuyBoss
 	int greenHead;
 	int blueHead;
 
+	struct ParticleSystem *DamageParticle;
+	struct ParticleSystem *PoundParticle[2];
+	struct ParticleSystem *AOEParticle;
+
 	enum HeadColor HeadAttacking;
 
 	float Speed;
