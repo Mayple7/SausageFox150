@@ -135,6 +135,19 @@ Enemy *CreateEnemy(int enemyType, int collisionGroup, float xPos, float yPos, in
 			CurrentEnemy->CurrentEnemyStats.CurrentHealth = CurrentEnemy->CurrentEnemyStats.MaxHealth;
 		}
 
+		if(CurrentPlayer.PlayerWeapon->WeaponRarity == Uncommon)
+		{
+			CurrentEnemy->CurrentEnemyStats.Damage += 15;
+			CurrentEnemy->CurrentEnemyStats.MaxHealth += 30;
+		}
+		else if(CurrentPlayer.PlayerWeapon->WeaponRarity == Rare)
+		{
+			CurrentEnemy->CurrentEnemyStats.Damage += 30;
+			CurrentEnemy->CurrentEnemyStats.MaxHealth += 60;
+		}
+
+		CurrentEnemy->CurrentEnemyStats.CurrentHealth = CurrentEnemy->CurrentEnemyStats.MaxHealth;
+
 		CurrentEnemy->EnemyParticleSystem = CreateFoxParticleSystem("TextureFiles/Particle.png", CurrentEnemy->Position.x, CurrentEnemy->Position.y, CurrentEnemy->EnemySprite->ZIndex + 5, 0, 5, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 20, 2.0f, 0.5f);
 
 		CreateCollisionBox(&CurrentEnemy->EnemyCollider, &CurrentEnemy->Position, EnemyType, 100, 200, GetObjectID());

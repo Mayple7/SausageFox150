@@ -177,8 +177,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		
 		while(GetCurrentState() == GetNextState())
 		{
-			AESysFrameStart();
-			StartFoxFrame();						
+			StartFoxFrame();
+			AESysFrameStart();						
 
 			AEInputUpdate();
 			
@@ -198,8 +198,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 			FoxInput_Update();
 
-			EndFoxFrame();
 			AESysFrameEnd();
+			EndFoxFrame();
 		}
 
 		GSMPointers.pFree();
