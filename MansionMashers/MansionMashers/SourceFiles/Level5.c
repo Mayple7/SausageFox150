@@ -174,7 +174,7 @@ void InitializeLevel5(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Right Blocker Barrier
-	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, 820, 0);
+	RightBarrier = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080.0f, 870, 0); //Updated for new FR Controller
 	RightBarrier->WallSprite->Visible = FALSE;
 
 	/////////////////////////////////

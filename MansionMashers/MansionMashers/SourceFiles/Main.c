@@ -133,9 +133,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
 	//GSM Start
-	animationTest = 1.0f; //For testing
+	animationTest = 1.0;
 	FoxSystemInitialize();
-	GetFrequency();
 #ifndef _DEBUG
 	GSMInitialize(GS_SplashScreen);
 #else
@@ -177,8 +176,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		
 		while(GetCurrentState() == GetNextState())
 		{
+			StartFoxFrame();
 			AESysFrameStart();
-			StartFoxFrame();						
+									
 
 			AEInputUpdate();
 			
@@ -198,8 +198,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 			FoxInput_Update();
 
-			EndFoxFrame();
+			
 			AESysFrameEnd();
+			EndFoxFrame();
 		}
 
 		GSMPointers.pFree();

@@ -163,12 +163,12 @@ void InitializeLevel7(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Far Left Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, -958, 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 300, 1130.0f, -1018, 0); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1->enemyNotCollidable = TRUE;
 
 	//Far Right Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, -958 + 2 * PANELSIZE, 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 300, 1080.0f, -868 + 2 * PANELSIZE, 0); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1->enemyNotCollidable = TRUE;
 

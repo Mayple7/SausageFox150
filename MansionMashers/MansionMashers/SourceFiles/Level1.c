@@ -196,7 +196,7 @@ void InitializeLevel1(void)
 	/////////////////////////////////
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, 865, 130);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, -900, 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1040.0f, -950, 0); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 160.0f, 500.0f, 2785, 130);
 	Wall1->WallSprite->Visible = FALSE;

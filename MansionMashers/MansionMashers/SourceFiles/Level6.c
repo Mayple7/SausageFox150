@@ -220,7 +220,7 @@ void InitializeLevel6(void)
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 1920.0f, 100.0f, PANELSIZE * 3, 250);
 	Wall1->WallSprite->Visible = FALSE;	
 	//Far Left Wall
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100, 1080.0f, -958, 0);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 1080.0f, -1018, 0); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
 
 	/////////////////////////////////

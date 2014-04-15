@@ -229,29 +229,29 @@ void InitializeLevel2(void)
 	//Stairs
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 450.0f, 100.0f, -869, -232);
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -618, -281);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 200.0f, -668, -331); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -559, -336);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 200.0f, -609, -386); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -488, -370);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 200.0f, -538, -420); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -408, -420);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 200.0f, -458, -470); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
 	
 	//Left Bounding Wall
 	LeftBarrier = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, -958, 0);
 	LeftBarrier->WallSprite->Visible = FALSE;
 	//Stone Door
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 540.0f, 810, 140);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 540.0f, 860, 140); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
 	//Door Hang Over
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 100.0f, -903, 226);
 	Wall1->WallSprite->Visible = FALSE;
 	//Top of Watch Tower
-	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 100.0f, 4020, 370);
+	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 350.0f, 200.0f, 4020, 420); //Updated for new FR Controller
 	Wall1->WallSprite->Visible = FALSE;
 	//Bottom of Watch Tower
-	WTBot = CreateWall("TextureFiles/BlankPlatform.png", 260.0f, 65.0f, 4025, 22);
+	WTBot = CreateWall("TextureFiles/BlankPlatform.png", 260.0f, 100.0f, 4025, 0); //Updated for new FR Controller
 	WTBot->WallSprite->Visible = FALSE;
 	//Top of Forest Door
 	Wall1 = CreateWall("TextureFiles/BlankPlatform.png", 200, 250.0f, 6630, 2);
