@@ -79,8 +79,25 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 	CurrentBoss->JabSprite->Visible = FALSE;
 
 	CurrentBoss->playerHit = 0;
-	CurrentBoss->MaxHealth = 1000;
-	CurrentBoss->CurrentHealth = 1000;
+	if(CurrentPlayer.armClear)
+	{
+		CurrentBoss->MaxHealth = 2000;
+		CurrentBoss->CurrentHealth = 2000;
+
+		CurrentBoss->ShoutDamage = 40;
+		CurrentBoss->QuestionDamage = 20;
+		CurrentBoss->JabDamage = 30;
+	}
+	else
+	{
+		CurrentBoss->MaxHealth = 1000;
+		CurrentBoss->CurrentHealth = 1000;
+
+		CurrentBoss->ShoutDamage = 30;
+		CurrentBoss->QuestionDamage = 10;
+		CurrentBoss->JabDamage = 20;
+	}
+
 	CurrentBoss->CurrentState = Cooldown;
 	CurrentBoss->InnerState = Start;
 	CurrentBoss->PositionState = B;
@@ -106,9 +123,6 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->cooldownTimer = 0;
-	CurrentBoss->ShoutDamage = 30;
-	CurrentBoss->QuestionDamage = 10;
-	CurrentBoss->JabDamage = 15;
 
 	// Player Sprites
 	CreateHandGuySprites(CurrentBoss);

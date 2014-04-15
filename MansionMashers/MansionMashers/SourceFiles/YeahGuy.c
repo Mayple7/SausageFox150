@@ -167,14 +167,14 @@ void InitializeYeahGuy(void)
 	BlackOverlay->Tint = Tint;
 
 	// Boss HP Bar
-	BossHPBarRed = (Sprite *)CreateSprite("TextureFiles/BossRedHealthBarMid.png", 1, 22, 399, 1, 1, -200, 470);
-	BossHPBarBackRed = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 398, 1, 1, 0, 470);
+	BossHPBarRed = (Sprite *)CreateSprite("TextureFiles/BossRedHealthBarMid.png", 1, 22, 3, 1, 1, -200, 470);
+	BossHPBarBackRed = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 2, 1, 1, 0, 470);
 
-	BossHPBarGreen = (Sprite *)CreateSprite("TextureFiles/BossGreenHealthBarMid.png", 1, 22, 399, 1, 1, -200, 430);
-	BossHPBarBackGreen = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 398, 1, 1, 0, 430);
+	BossHPBarGreen = (Sprite *)CreateSprite("TextureFiles/BossGreenHealthBarMid.png", 1, 22, 3, 1, 1, -200, 430);
+	BossHPBarBackGreen = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 2, 1, 1, 0, 430);
 
-	BossHPBarBlue = (Sprite *)CreateSprite("TextureFiles/BossBlueHealthBarMid.png", 1, 22, 399, 1, 1, -200, 390);
-	BossHPBarBackBlue = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 398, 1, 1, 0, 390);
+	BossHPBarBlue = (Sprite *)CreateSprite("TextureFiles/BossBlueHealthBarMid.png", 1, 22, 3, 1, 1, -200, 390);
+	BossHPBarBackBlue = (Sprite *)CreateSprite("TextureFiles/BossYeahHealthBarBack.png", 820, 34, 2, 1, 1, 0, 390);
 
 	/////////////////////////////////
 	//		Platforms			   //

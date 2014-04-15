@@ -85,9 +85,6 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos)
 	CurrentBoss->ArmSmashSprite = (Sprite *) CreateSprite("TextureFiles/ArmGuyArmSmash.png", 600, 600, 11, 3, 3, 750, -140);
 	CurrentBoss->ArmSmashSprite->FlipX = TRUE;
 	CurrentBoss->ArmSmashSprite->Visible = FALSE;
-	CurrentBoss->playerHit = 0;
-	CurrentBoss->MaxHealth = 1000;
-	CurrentBoss->CurrentHealth = 1000;
 	CurrentBoss->CurrentState = Cooldown;
 	CurrentBoss->InnerState = Start;
 
@@ -111,9 +108,25 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos)
 
 	CurrentBoss->playerHit = -1; // No need for a collision list
 	CurrentBoss->cooldownTimer = 0;
-	CurrentBoss->SpinDamage = 30;
-	CurrentBoss->JabDamage = 30;
-	CurrentBoss->SmashDamage = 25;
+
+	if(CurrentPlayer.handClear)
+	{
+		CurrentBoss->SpinDamage = 45;
+		CurrentBoss->JabDamage = 45;
+		CurrentBoss->SmashDamage = 40;
+
+		CurrentBoss->MaxHealth = 2000;
+		CurrentBoss->CurrentHealth = 2000;
+	}
+	else
+	{
+		CurrentBoss->SpinDamage = 30;
+		CurrentBoss->JabDamage = 30;
+		CurrentBoss->SmashDamage = 25;
+
+		CurrentBoss->MaxHealth = 1000;
+		CurrentBoss->CurrentHealth = 1000;
+	}
 
 	//Sounds
 	//Hit Sounds
