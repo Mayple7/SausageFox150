@@ -1012,15 +1012,18 @@ static void PlayerDamageResult(int damage)
 	CurrentPlayer.CurrentPlayerStats.CurrentHealth -= damageDealt;
 	sprintf(num, "-%d", damageDealt);
 
-	//Voice Hit Reponse
-	for(i = 0; i < 5; i++)
+	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth > 0)
 	{
-		if(FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.VoiceHit[i]))
-			SoundIsPlaying = TRUE;
-	}
+		//Voice Hit Reponse
+		for(i = 0; i < 5; i++)
+		{
+			if(FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.VoiceHit[i]))
+				SoundIsPlaying = TRUE;
+		}
 
-	if(!SoundIsPlaying)
-		PlayAudio(CurrentPlayer.CurrentPlayerSounds.VoiceHit[randNum]);
+		if(!SoundIsPlaying)
+			PlayAudio(CurrentPlayer.CurrentPlayerSounds.VoiceHit[randNum]);
+	}
 
 	// Create Floating Combat Text
 	FirstLetter = CreateText(num, (CurrentPlayer.Position.x + rand() % 81 - 40), (CurrentPlayer.Position.y + CurrentPlayer.PlayerSpriteParts.Body->Height / 2), 80, textColor, Center, Border);
@@ -1098,6 +1101,12 @@ void FreeYeahGuyBoss(YeahGuyBoss* CurrentBoss)
 	FreeSprite(CurrentBoss->YeahGuySpriteParts.LegUpper);
 	FreeSprite(CurrentBoss->YeahGuySpriteParts.LegUpper2);
 	FreeSprite(CurrentBoss->YeahGuySpriteParts.Tail);
+
+	FreeParticleSystem(CurrentBoss->AOEParticle);
+	FreeParticleSystem(CurrentBoss->DamageParticle);
+	FreeParticleSystem(CurrentBoss->PoundParticle[0]);
+	FreeParticleSystem(CurrentBoss->PoundParticle[1]);
+
 }
 
 /*************************************************************************/

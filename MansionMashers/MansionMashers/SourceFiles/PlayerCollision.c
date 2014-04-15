@@ -308,15 +308,19 @@ void PlayerCollideEnemyWeapon(Player* CurrentPlayer, Enemy *CurrentEnemy)
 
 	//Weapon Clashes
 	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
-	//Voice Hit Reponse
-	for(i = 0; i < 5; i++)
+	
+	if(CurrentPlayer->CurrentPlayerStats.CurrentHealth > 0)
 	{
-		if(FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.VoiceHit[i]))
-			SoundIsPlaying = TRUE;
-	}
+		//Voice Hit Reponse
+		for(i = 0; i < 5; i++)
+		{
+			if(FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.VoiceHit[i]))
+				SoundIsPlaying = TRUE;
+		}
 
-	if(!SoundIsPlaying)
-		PlayAudio(CurrentPlayer->CurrentPlayerSounds.VoiceHit[randNum]);
+		if(!SoundIsPlaying)
+			PlayAudio(CurrentPlayer->CurrentPlayerSounds.VoiceHit[randNum]);
+	}
 
 	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
@@ -358,17 +362,21 @@ void PlayerCollideEnemyProjectile(Player* CurrentPlayer, Projectile *CurrentProj
 	}
 	
 	CurrentPlayer->CurrentPlayerStats.CurrentHealth -= damageDealt;
-	PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
-
-	//Voice Hit Reponse
-	for(i = 0; i < 5; i++)
+	
+	if(CurrentPlayer->CurrentPlayerStats.CurrentHealth > 0)
 	{
-		if(FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.VoiceHit[i]))
-			SoundIsPlaying = TRUE;
-	}
+		PlayAudio(rand() % 2 ? CurrentPlayer->CurrentPlayerSounds.GetHit1 : CurrentPlayer->CurrentPlayerSounds.GetHit2);
 
-	if(!SoundIsPlaying)
-		PlayAudio(CurrentPlayer->CurrentPlayerSounds.VoiceHit[randNum]);
+		//Voice Hit Reponse
+		for(i = 0; i < 5; i++)
+		{
+			if(FoxSoundCheckIsPlaying(CurrentPlayer->CurrentPlayerSounds.VoiceHit[i]))
+				SoundIsPlaying = TRUE;
+		}
+
+		if(!SoundIsPlaying)
+			PlayAudio(CurrentPlayer->CurrentPlayerSounds.VoiceHit[randNum]);
+	}
 
 	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text

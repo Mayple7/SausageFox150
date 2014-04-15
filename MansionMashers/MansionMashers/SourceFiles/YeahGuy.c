@@ -52,6 +52,9 @@ int greenHead;
 int blueHead;
 int moveBars;
 
+FoxSound* IntelFoxStart;
+FoxSound* IntelFoxEnd;
+
 static int timer;
 static int timerOn;
 static int prevPlayed;
@@ -88,6 +91,10 @@ CollisionBox* GreenBuffCollider;
 
 Sprite* BlueBuff;
 CollisionBox* BlueBuffCollider;
+
+Sprite* IntelFoxBack;
+Sprite* IntelFox;
+static float IntelFoxValue;
 
 Platform* Plat;
 
@@ -186,6 +193,12 @@ void InitializeYeahGuy(void)
 	Plat = CreatePlatform("TextureFiles/BlankPlatform.png", PlatformType, 300, 50, 0, 100);
 	Plat->PlatformSprite->Visible = FALSE;
 
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
+	IntelFoxStart = CreateSound("Sounds/IntelFoxYeahGuy.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxYeahGuyEnd.mp3", SmallSnd);
+
 
 	/////////////////////////////////
 	//			Walls			   //
@@ -202,6 +215,14 @@ void InitializeYeahGuy(void)
 	redHead = TRUE;
 	greenHead = TRUE;
 	blueHead = TRUE;
+
+	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
 
 	/////////////////////////////////
 	//			Buffs			   //
@@ -505,21 +526,58 @@ void EventYeahGuy(void)
 		Boss->YeahGuySoundsPlay = TRUE;
 
 	//Play sound if boss died
-	if(Boss->CurrentBlueHealth <= 0 && !DieSound1 && !Boss->YeahGuySoundsPlay)
+	if(Boss->CurrentBlueHealth <= 0 && !DieSound1 && !Boss->YeahGuySoundsPlay && (Boss->CurrentGreenHealth > 0 || Boss->CurrentRedHealth > 0))
 	{
 		DieSound1 = TRUE;
 		PlayAudio(Boss->YeahGuyDie);
 	}
-	if(Boss->CurrentGreenHealth <= 0 && !DieSound2 && !Boss->YeahGuySoundsPlay)
+	if(Boss->CurrentGreenHealth <= 0 && !DieSound2 && !Boss->YeahGuySoundsPlay && (Boss->CurrentGreenHealth > 0 || Boss->CurrentRedHealth > 0))
 	{
 		DieSound2 = TRUE;
 		PlayAudio(Boss->YeahGuyDie);
 	}
-	if(Boss->CurrentRedHealth <= 0 && !DieSound3 && !Boss->YeahGuySoundsPlay)
+	if(Boss->CurrentRedHealth <= 0 && !DieSound3 && !Boss->YeahGuySoundsPlay && (Boss->CurrentGreenHealth > 0 || Boss->CurrentRedHealth > 0))
 	{
 		DieSound3 = TRUE;
 		PlayAudio(Boss->YeahGuyDie);
 	}
+
+	//Intel Fox Starting Narrative
+	if(!IntelFoxStart->hasPlayed)
+	{
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
+	}
+
+	if(Boss->CurrentBlueHealth <= 0 && Boss->CurrentGreenHealth <= 0 && Boss->CurrentRedHealth <= 0)
+	{
+		if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
+		{
+			PlayAudio(IntelFoxEnd);
+			IntelFoxEnd->hasPlayed = TRUE;
+		}
+	}
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(IntelFoxStart) || FoxSoundCheckIsPlaying(IntelFoxEnd))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
+	
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
 }
 
 /*************************************************************************/
