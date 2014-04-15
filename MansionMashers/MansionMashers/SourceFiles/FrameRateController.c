@@ -25,6 +25,8 @@
 
 static LARGE_INTEGER CycleStart, CycleEnd, Freq; 		//for framerate controller
 static double DeltaTime;
+static double FinalDT;
+static int vsync;
 
 /*************************************************************************/
 /*!
@@ -37,6 +39,7 @@ void StartFoxFrame(void)
 	DEVMODE *freq = (DEVMODE *) malloc(sizeof(DEVMODE));
 	freq->dmSize = sizeof(DEVMODE);
 	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, freq);
+	vsync = freq->dmDisplayFrequency;
 
 	//Start the first frame
 	QueryPerformanceCounter(&CycleStart);
@@ -61,14 +64,18 @@ void EndFoxFrame(void)
 {
 	//Watch over framerate
 	QueryPerformanceCounter(&CycleEnd);
-	QueryPerformanceFrequency(&Freq);
+	//QueryPerformanceFrequency(&Freq);
 	DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
 	
-	while(DeltaTime < animationTest / FRAMERATE) //animationTest is NOT PERMANENT
+	while(DeltaTime < (double)(animationTest / FRAMERATE)) //animationTest is NOT PERMANENT
 	{
 		QueryPerformanceCounter(&CycleEnd);
 		DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
 	}
+
+	FinalDT = DeltaTime;
+	//printf("%f\n", FinalDT);
+	//printf("DT : %f as a Float : %f\n", DeltaTime, (float)DeltaTime);
 }
 
 /*************************************************************************/
@@ -82,5 +89,10 @@ void EndFoxFrame(void)
 /*************************************************************************/
 float GetDeltaTime(void)
 {
-	return (float)DeltaTime;	
+	return (float)FinalDT;	
+}
+
+void GetFrequency(void)
+{
+	QueryPerformanceFrequency(&Freq);
 }
