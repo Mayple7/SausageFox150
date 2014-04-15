@@ -64,7 +64,6 @@ static int timerOn;
 TextGlyphs* Skip;
 float SkipTimer;
 
-static float count;
 FoxSound* BackSnd;
 
 /*************************************************************************/
@@ -95,7 +94,6 @@ void InitializeNarr1(void)
 	ResetEnemyPanelNumber();
 	fadeInGoing = TRUE;
 	timer = 2 * FRAMERATE;
-	count = 0;
 
 	//Set the camera so it currently isn't gated
 	ResetGatedCamera();
@@ -215,9 +213,6 @@ void DrawNarr1(void)
 /*************************************************************************/
 void FreeNarr1(void)
 {
-	printf("Count %f\n", count);
-
-
 	FreeAllLists();
 }
 
@@ -285,7 +280,6 @@ void EventNarr1(void)
 	ParticleSystemUpdate();
 	BoundingBoxUpdate();
 
-	count += GetDeltaTime();
 
 	if(!fadeInGoing && !KingFox->hasPlayed)
 	{
@@ -303,7 +297,7 @@ void EventNarr1(void)
 
 	if(!fadeInGoing)
 	{
-		Subtitles->Position.y += 150 * GetDeltaTime();
+		Subtitles->Position.y += 100 * GetDeltaTime(); //Updated for new FR Controller
 	}
 
 	if (TimerGoingUp)

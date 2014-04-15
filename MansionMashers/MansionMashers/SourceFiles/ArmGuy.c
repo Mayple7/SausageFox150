@@ -188,8 +188,8 @@ void InitializeArmGuy(void)
 	//			Walls			   //
 	/////////////////////////////////
 	//Create Bounding Walls
-	CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, -1160, 0);
-	RightWall = CreateWall("TextureFiles/BlankPlatform.png", 400.0f, 1040.0f, 1160, 0);
+	CreateWall("TextureFiles/BlankPlatform.png", 800.0f, 1040.0f, -1360, 0); //Updated for new FR Controller
+	RightWall = CreateWall("TextureFiles/BlankPlatform.png", 800.0f, 1040.0f, 1360, 0); //Updated for new FR Controller
 
 	/////////////////////////////////
 	//			Objects			   //

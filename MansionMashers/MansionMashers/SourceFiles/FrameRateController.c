@@ -62,10 +62,10 @@ void EndFoxFrame(void)
 {
 	//Watch over framerate
 	QueryPerformanceCounter(&CycleEnd);
-	//QueryPerformanceFrequency(&Freq);
+	QueryPerformanceFrequency(&Freq);
 	DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
 	
-	while(DeltaTime < (double)(animationTest / FRAMERATE)) //animationTest is NOT PERMANENT
+	while(DeltaTime < (double)(animationTest / FRAMERATE)) 
 	{
 		QueryPerformanceCounter(&CycleEnd);
 		DeltaTime = ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
@@ -88,9 +88,4 @@ void EndFoxFrame(void)
 float GetDeltaTime(void)
 {
 	return (float)FinalDT;	
-}
-
-void GetFrequency(void)
-{
-	QueryPerformanceFrequency(&Freq);
 }

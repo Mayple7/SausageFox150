@@ -126,7 +126,7 @@ void InitializeTutorial(void)
 	GameLogo->Alpha = 0;
 
 	//Invisible walls
-	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 100.0f, 1040.0f, -900, 0);
+	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1040.0f, -950, 0); //Updated for new FR Controller
 	WallTemp->WallSprite->Visible = FALSE;
 	WallTemp = CreateWall("TextureFiles/BlankPlatform.png", 240.0f, 500.0f, 840, 200);
 	WallTemp->WallSprite->Visible = FALSE;
