@@ -71,6 +71,9 @@ typedef struct HandGuyBoss
 	float TailSinValue;
 	int QuestionAttackAnimation; // bool for animation
 
+	struct ParticleSystem *DamageParticle;
+	struct ParticleSystem *AOEParticle;
+
 	float Speed;
 	Vec2 Position;
 }HandGuyBoss;
@@ -85,6 +88,5 @@ void HandGuyPlatformCollision(HandGuyBoss* CurrentBoss, Platform* CurrentPlatfor
 void HandGuyAnimation( HandGuyBoss *Object);
 void CreateHandGuySprites(HandGuyBoss *Object);
 void FreeHandGuyBoss(HandGuyBoss* CurrentBoss);
-void PoofSelf(Sprite *Boss);
 
 #endif

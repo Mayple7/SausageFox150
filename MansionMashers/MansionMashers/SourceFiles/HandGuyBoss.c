@@ -42,6 +42,23 @@ static enum PositionState { A, B, C, D };
 /*************************************************************************/
 /*!
 	\brief
+	Removes the Boss in a fashionable way
+*/
+/*************************************************************************/
+static void PoofSelf(Sprite *Boss)
+{
+	//Poof the self away
+	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Boss->Position.x, Boss->Position.y, Boss->ZIndex + 6, 40, 40, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
+	Poof->emitDisplacementX = 200;
+	Poof->emitDisplacementY = 200;
+	Poof->emitScale = 1.5f;
+	Poof->emitLife = 2.0f;
+	Poof->emitThenDestroy = TRUE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Handles the collision between an enemy and the attacking weapon
 	
 	\param CurrentEnemy
@@ -52,7 +69,12 @@ void LoadHandGuyBoss(void)
 {
 
 	LoadTexture("TextureFiles/QuickJab.png");
-	LoadTexture("TextureFiles/DebugCircle.png");
+	LoadTexture("TextureFiles/HandGuyBody.png");
+	LoadTexture("TextureFiles/HandGuyLegLower.png");
+	LoadTexture("TextureFiles/HandGuyLegUpper.png");
+	LoadTexture("TextureFiles/HandGuyArmLower.png");
+	LoadTexture("TextureFiles/YeahGuyParticle2.png");
+	LoadTexture("TextureFiles/Particle.png");
 }
 
 /*************************************************************************/
@@ -141,6 +163,11 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 
 	CurrentBoss->HandGuyYell = CreateSound("Sounds/HandGuyYell.mp3", SmallSnd);
 	CurrentBoss->HandGuySoundsPlay = FALSE;
+
+	// Particles
+	CurrentBoss->DamageParticle		= CreateFoxParticleSystem("TextureFiles/Particle.png",			CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex + 1,	0,	5,		0.0f,	270,	90,		1.0f,	-5.0f,	100,	250,	50,		2.0f,	0.5f);
+	CurrentBoss->AOEParticle		= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle2.png",	CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex - 5,	0,	100,	0.15f,	0,		360,	1.0f,	-5.0f,	25,		24,		2050,	0.3f,	1.0f);
+	CurrentBoss->AOEParticle->RandomVelocity = FALSE;
 
 	return CurrentBoss;
 }
@@ -288,6 +315,10 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				CurrentBoss->HandGuyYell->hasPlayed = TRUE;
 				PlayAudio(CurrentBoss->HandGuyYell);
 			}
+
+			CurrentBoss->AOEParticle->amountTotal = 100;
+			CurrentBoss->AOEParticle->emitVelocity = 250;
+
 			//printf("SHOUT TIME START\n");
 			//CurrentBoss->BodySprite->SpriteTexture = LoadTexture("TextureFiles/TempHandGuyShout.png");
 			CurrentBoss->cooldownTimer += GetDeltaTime();
@@ -297,6 +328,10 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		case Attack:
 			//printf("SHOUT TIME ATTACK\n");
 			CurrentBoss->HandGuyYell->hasPlayed = FALSE;
+
+			CurrentBoss->AOEParticle->amountTotal = 100;
+			CurrentBoss->AOEParticle->emitVelocity = 2333;
+
 			if(RectCircleCollision(&CurrentBoss->Position, CurrentBoss->ShoutRadius, &CurrentPlayer.PlayerCollider))
 			{
 				// If attack hits, daze player and switch to the jab
@@ -366,18 +401,18 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 				if(CurrentPlayer.Position.x > CurrentBoss->Position.x)
 				{
 					projectileAngle = 0;
-					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->HandGuySpriteParts.ArmLower->Position.x, CurrentBoss->HandGuySpriteParts.ArmLower->Position.y, Arrow, WeaponEnemy, CurrentBoss->QuestionDamage, 750, projectileAngle + (CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->HandGuySpriteParts.ArmLower->Position.x, CurrentBoss->HandGuySpriteParts.ArmLower->Position.y, HandGuyProjectile, WeaponEnemy, CurrentBoss->QuestionDamage, 750, projectileAngle + (CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
 					FreeSprite(CurrentProjectile->ProjectileSprite);
-					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
+					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 1, 1, CurrentBoss->Position.x, CurrentBoss->Position.y);
 					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
 				}
 				// Creates the projectile and aims to in the direction of the player in a cone
 				else
 				{
 					projectileAngle = FOX_PI;
-					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->HandGuySpriteParts.ArmLower->Position.x, CurrentBoss->HandGuySpriteParts.ArmLower->Position.y, Arrow, WeaponEnemy, CurrentBoss->QuestionDamage, 750, projectileAngle - (float)(CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
+					CurrentProjectile = CreateProjectile("TextureFiles/QuestionProjectile.png", 120, 120, CurrentBoss->HandGuySpriteParts.ArmLower->Position.x, CurrentBoss->HandGuySpriteParts.ArmLower->Position.y, HandGuyProjectile, WeaponEnemy, CurrentBoss->QuestionDamage, 750, projectileAngle - (float)(CurrentBoss->numProjectiles * 12 * FOX_PI / 180.0f));
 					FreeSprite(CurrentProjectile->ProjectileSprite);
-					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 3, 3, CurrentBoss->Position.x, CurrentBoss->Position.y);
+					CurrentProjectile->ProjectileSprite = (Sprite *)CreateSprite("TextureFiles/QuestionProjectile.png", 120, 120, 36, 1, 1, CurrentBoss->Position.x, CurrentBoss->Position.y);
 					CurrentProjectile->ProjectileSprite->AnimationSpeed = 4;
 				}
 
@@ -576,6 +611,13 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 		break;
 	}
 
+	// Particle positioning
+	CurrentBoss->AOEParticle->Position.x = CurrentBoss->Position.x;
+	CurrentBoss->AOEParticle->Position.y = CurrentBoss->Position.y + 175.0f;
+	CurrentBoss->DamageParticle->Position.x = CurrentBoss->Position.x;
+	CurrentBoss->DamageParticle->Position.y = CurrentBoss->Position.y + 75.0f;
+
+
 	if (CurrentBoss->Speed < 0.001f)
 		CurrentBoss->LegSinValue = 0;
 
@@ -748,6 +790,9 @@ void HandGuyBossCollideWeapon(HandGuyBoss *CurrentBoss)
 	else
 		damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
+	// Particles
+	CurrentBoss->DamageParticle->amountTotal += 5;
+
 	CurrentBoss->CurrentHealth -= damageDealt;
 	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
@@ -872,6 +917,9 @@ void FreeHandGuyBoss(HandGuyBoss* CurrentBoss)
 {	
 	PoofSelf(CurrentBoss->BodySprite);
 
+	FreeParticleSystem(CurrentBoss->AOEParticle);
+	FreeParticleSystem(CurrentBoss->DamageParticle);
+
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegLower);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper2);
@@ -884,19 +932,3 @@ void FreeHandGuyBoss(HandGuyBoss* CurrentBoss)
 	FreeSprite(CurrentBoss->HandGuySpriteParts.ArmLower2);
 }
 
-/*************************************************************************/
-/*!
-	\brief
-	Removes the Boss in a fashionable way
-*/
-/*************************************************************************/
-static void PoofSelf(Sprite *Boss)
-{
-	//Poof the self away
-	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Boss->Position.x, Boss->Position.y, Boss->ZIndex + 6, 40, 40, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
-	Poof->emitDisplacementX = 200;
-	Poof->emitDisplacementY = 200;
-	Poof->emitScale = 1.5f;
-	Poof->emitLife = 2.0f;
-	Poof->emitThenDestroy = TRUE;
-}

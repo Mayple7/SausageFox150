@@ -40,6 +40,23 @@ static enum InnerState {Start, Attack, End, SpinR, SpinL };
 /*************************************************************************/
 /*!
 	\brief
+	Removes the Boss in a fashionable way
+*/
+/*************************************************************************/
+static void PoofSelf(Sprite *Boss)
+{
+	//Poof the self away
+	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Boss->Position.x, Boss->Position.y, Boss->ZIndex + 6, 40, 40, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
+	Poof->emitDisplacementX = 200;
+	Poof->emitDisplacementY = 200;
+	Poof->emitScale = 1.5f;
+	Poof->emitLife = 2.0f;
+	Poof->emitThenDestroy = TRUE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Handles the collision between an enemy and the attacking weapon
 	
 	\param CurrentEnemy
@@ -48,9 +65,13 @@ static enum InnerState {Start, Attack, End, SpinR, SpinL };
 /*************************************************************************/
 void LoadArmGuyBoss(void)
 {
-	LoadTexture("TextureFiles/ArmGuy.png");
+	LoadTexture("TextureFiles/ArmGuyBody.png");
 	LoadTexture("TextureFiles/ArmGuyArm.png");
-	LoadTexture("TextureFiles/TempBossSpin.png");
+	LoadTexture("TextureFiles/ArmGuySpin.png");
+	LoadTexture("TextureFiles/ArmGuyOffArm.png");
+	LoadTexture("TextureFiles/ArmGuyArmPoke.png");
+	LoadTexture("TextureFiles/ArmGuyArmSmash.png");
+	LoadTexture("TextureFiles/ArmGuyParticle.png");
 }
 
 /*************************************************************************/
@@ -89,8 +110,9 @@ ArmGuyBoss* CreateArmGuyBoss(float xPos, float yPos)
 	CurrentBoss->InnerState = Start;
 
 	// Particle System
-	CurrentBoss->ArmGuyParticle = CreateFoxParticleSystem("TextureFiles/ArmGuyParticle.png", CurrentBoss->Position.x, CurrentBoss->Position.y - 260.0f, CurrentBoss->SpinSprite->ZIndex + 1, 0, 5, 0.0f, 90, 110, 1, 1, 90, 0, 750, 0.25f, 0.5f);
-
+	CurrentBoss->ArmGuyParticle		= CreateFoxParticleSystem("TextureFiles/ArmGuyParticle.png", CurrentBoss->Position.x, CurrentBoss->Position.y - 260.0f, CurrentBoss->SpinSprite->ZIndex + 1, 0, 5, 0.0f, 90, 110, 1, 1, 90, 0, 750, 0.25f, 0.5f);
+	CurrentBoss->DamageParticle		= CreateFoxParticleSystem("TextureFiles/Particle.png",			CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex + 1,	0,	5,		0.0f,	270,	90,		1.0f,	-5.0f,	100,	250,	50,		2.0f,	0.5f);
+	
 	// Armguy colliders
 	CreateCollisionBox(&CurrentBoss->BossCollider, &CurrentBoss->Position, EnemyType, 150, 430, GetObjectID());
 	CreateCollisionBox(&CurrentBoss->SpinAttack, &CurrentBoss->Position, WeaponEnemy, 300, 200, GetObjectID()); 
@@ -771,6 +793,10 @@ void UpdateArmGuyBoss(ArmGuyBoss *CurrentBoss)
 	CurrentBoss->ArmSmashSprite->FlipX = CurrentBoss->ArmSprite->FlipX;
 	
 
+	// Particle Placement Update
+
+	CurrentBoss->DamageParticle->Position = CurrentBoss->Position;
+
 	//Check if boss is dead
 	//Give ability to end the level
 }
@@ -865,6 +891,9 @@ void ArmGuyBossCollideWeapon(ArmGuyBoss *CurrentBoss)
 	else
 		damageDealt = CurrentPlayer.CurrentPlayerStats.Damage;
 	
+	// Particles
+	CurrentBoss->DamageParticle->amountTotal += 5;
+
 	CurrentBoss->CurrentHealth -= damageDealt;
 	sprintf(num, "-%d", damageDealt);
 	// Create Floating Combat Text
@@ -958,7 +987,10 @@ void PlayerDamageResult(int damage)
 /*************************************************************************/
 void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
 {
+	PoofSelf(CurrentBoss->BodySprite);
+
 	FreeParticleSystem(CurrentBoss->ArmGuyParticle);
+	FreeParticleSystem(CurrentBoss->DamageParticle);
 	FreeSprite(CurrentBoss->ArmJabSprite);
 	FreeSprite(CurrentBoss->ArmSmashSprite);
 	FreeSprite(CurrentBoss->ArmSprite);
@@ -973,4 +1005,5 @@ void FreeArmGuyBoss(ArmGuyBoss* CurrentBoss)
 	freeSound(CurrentBoss->PunchSFX);
 	
 }
+
 
