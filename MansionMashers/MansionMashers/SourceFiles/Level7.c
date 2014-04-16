@@ -315,7 +315,7 @@ void UpdateLevel7(void)
 	}
 
 	// What to do when the boss is dead
-	if(levelComplete)
+	if(bossDefeated)
 	{
 		BossHPBar->Visible = FALSE;
 

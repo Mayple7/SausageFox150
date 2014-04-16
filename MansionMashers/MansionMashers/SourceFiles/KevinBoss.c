@@ -124,6 +124,9 @@ KevinBoss* CreateKevinBoss(float xPos, float yPos)
 
 	CurrentBoss->KevinSoundsPlay = FALSE;
 
+	CurrentBoss->HitSFX[0] = CreateSound("Sounds/KevinPunch.mp3", SmallSnd);
+	CurrentBoss->HitSFX[1] = CreateSound("Sounds/KevinPunch2.mp3", SmallSnd);
+
 
 	return CurrentBoss;
 }
@@ -162,6 +165,9 @@ void UpdateKevinBoss(KevinBoss *CurrentBoss)
 			// This jab has no wind-up.
 			break;
 		case Attack:
+			PlayAudio(CurrentBoss->HitSFX[0]);
+			
+
 			//printf("JAB TIME ATTACK\n");
 			CurrentBoss->JabSprite->Visible = TRUE;
 			CurrentBoss->cooldownTimer += GetDeltaTime();
@@ -178,6 +184,7 @@ void UpdateKevinBoss(KevinBoss *CurrentBoss)
 				CurrentBoss->InnerState = End;
 				CurrentBoss->cooldownTimer = 0.0f;
 			}
+			PlayAudio(CurrentBoss->HitSFX[1]);
 			break;
 			break;
 		case End:
