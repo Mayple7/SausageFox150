@@ -109,6 +109,13 @@ KevinBoss* CreateKevinBoss(float xPos, float yPos)
 	CreateKevinSprites(CurrentBoss);
 	CurrentBoss->LegSinValue = 0;
 
+	//Sounds
+	CurrentBoss->KevinHit[0] = CreateSound("Sounds/KevinHit1.mp3", SmallSnd);
+	CurrentBoss->KevinHit[1] = CreateSound("Sounds/KevinHit2.mp3", SmallSnd);
+	CurrentBoss->KevinHit[2] = CreateSound("Sounds/KevinHit3.mp3", SmallSnd);
+	CurrentBoss->KevinHit[3] = CreateSound("Sounds/KevinHit4.mp3", SmallSnd);
+
+
 	return CurrentBoss;
 }
 
