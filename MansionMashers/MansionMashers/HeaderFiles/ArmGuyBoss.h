@@ -15,7 +15,9 @@ typedef struct ArmGuyBoss
 	Sprite *OffArmSprite;
 	Sprite *ArmJabSprite;
 	Sprite *ArmSmashSprite;
+
 	struct ParticleSystem *ArmGuyParticle;
+	struct ParticleSystem *DamageParticle;
 
 	int CurrentState;
 	int InnerState;

@@ -5,7 +5,7 @@
 #include "Sprite.h"
 #include "CollisionBox.h"
 
-enum ProjectileType {Arrow, CannonBall, Wind};
+enum ProjectileType {Arrow, CannonBall, Wind, HandGuyProjectile};
 
 typedef struct Projectile
 {

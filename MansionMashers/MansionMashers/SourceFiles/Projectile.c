@@ -111,8 +111,6 @@ void UpdateProjectile(Projectile *CurrentProjectile)
 	else if (!CurrentProjectile->ProjectileSprite->FlipX && CurrentProjectile->Direction < 0)
 		CurrentProjectile->Direction = 0 + CurrentProjectile->Direction;
 
-	//Rotate the mesh to the correct angle
-	CurrentProjectile->ProjectileSprite->Rotation = CurrentProjectile->Direction;
 
 	//Cannon ball shoots in an arc (Arrows clearly can fly straight forever) //TODO: FIX THE DROP
 	if (CurrentProjectile->ProjectileType == CannonBall)
@@ -144,6 +142,16 @@ void UpdateProjectile(Projectile *CurrentProjectile)
 	{
 		CurrentProjectile->ProjectileParticleSystem->Position.x = CurrentProjectile->Position.x;
 		CurrentProjectile->ProjectileSprite->Rotation = sinf(CurrentProjectile->Position.x / 100.0f) / 5.0f;
+	}
+	if (CurrentProjectile->ProjectileType == HandGuyProjectile)
+	{
+		CurrentProjectile->ProjectileSprite->Rotation += GetDeltaTime() * 10;
+	}
+	else
+	{
+		
+	//Rotate the mesh to the correct angle
+	CurrentProjectile->ProjectileSprite->Rotation = CurrentProjectile->Direction;
 	}
 }
 

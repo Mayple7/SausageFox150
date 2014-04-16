@@ -103,6 +103,8 @@ void LoadArmGuy(void)
 	//Allocate space for a large texture
 	CreateTextureList();
 
+	LoadArmGuyBoss();
+
 }
 
 /*************************************************************************/

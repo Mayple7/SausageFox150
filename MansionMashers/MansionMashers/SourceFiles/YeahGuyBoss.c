@@ -42,6 +42,23 @@ static enum YeahGuyState { Cooldown, AOE, ProjectYeah, Pound, Vault };
 /*************************************************************************/
 /*!
 	\brief
+	Removes the Boss in a fashionable way
+*/
+/*************************************************************************/
+static void PoofSelf(Sprite *Boss)
+{
+	//Poof the self away
+	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Boss->Position.x, Boss->Position.y, Boss->ZIndex + 6, 40, 40, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
+	Poof->emitDisplacementX = 200;
+	Poof->emitDisplacementY = 200;
+	Poof->emitScale = 1.5f;
+	Poof->emitLife = 2.0f;
+	Poof->emitThenDestroy = TRUE;
+}
+
+/*************************************************************************/
+/*!
+	\brief
 	Handles the collision between an enemy and the attacking weapon
 	
 	\param CurrentEnemy
@@ -52,14 +69,16 @@ void LoadYeahGuyBoss(void)
 {
 	LoadTexture("TextureFiles/YeahProjectile.png");
 	LoadTexture("TextureFiles/YeahProjectileBack.png");
-	LoadTexture("TextureFiles/TempYeahGuy.png");
-	LoadTexture("TextureFiles/TempYeahGuyShout.png");
 	LoadTexture("TextureFiles/YeahGuyBody.png");
 	LoadTexture("TextureFiles/YeahGuyRedHead.png");
 	LoadTexture("TextureFiles/YeahGuyBlueHead.png");
 	LoadTexture("TextureFiles/YeahGuyGreenHead.png");
 	LoadTexture("TextureFiles/YeahGuyLegLower.png");
 	LoadTexture("TextureFiles/YeahGuyLegUpper.png");
+	LoadTexture("TextureFiles/Particle.png");
+	LoadTexture("TextureFiles/YeahGuyParticle2.png");
+	LoadTexture("TextureFiles/YeahGuyParticle.png");
+	LoadTexture("TextureFiles/BlankPlatform.png");
 }
 
 /*************************************************************************/
@@ -139,7 +158,6 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->PoundParticle[1]	= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle.png",	CurrentBoss->Position.x, GROUNDLEVEL - 75.0f,		CurrentBoss->BodySprite->ZIndex + 1,	0,	5,		0.0f,	5,		10,		1.0f,	-5.0f,	25,		5,		750,	2.0f,	0.5f);
 	CurrentBoss->AOEParticle		= CreateFoxParticleSystem("TextureFiles/YeahGuyParticle2.png",	CurrentBoss->Position.x, CurrentBoss->Position.y,	CurrentBoss->BodySprite->ZIndex - 5,	0,	100,	0.15f,	0,		360,	1.0f,	-5.0f,	25,		24,		2050,	0.3f,	1.0f);
 	CurrentBoss->AOEParticle->RandomVelocity = FALSE;
-
 
 	return CurrentBoss;
 }
@@ -1123,22 +1141,5 @@ void PoofHead(Sprite *Head)
 	Poof->emitDisplacementY = 50;
 	Poof->emitScale = 1.5f;
 	Poof->emitLife = 1.0f;
-	Poof->emitThenDestroy = TRUE;
-}
-
-/*************************************************************************/
-/*!
-	\brief
-	Removes the Boss in a fashionable way
-*/
-/*************************************************************************/
-static void PoofSelf(Sprite *Boss)
-{
-	//Poof the self away
-	ParticleSystem *Poof = CreateFoxParticleSystem("TextureFiles/Particle.png", Boss->Position.x, Boss->Position.y, Boss->ZIndex + 6, 40, 40, 0.0f, 0, 360, 1.0f, -5.0f, 25, 24, 50, 2.0f, 1.0f);
-	Poof->emitDisplacementX = 200;
-	Poof->emitDisplacementY = 200;
-	Poof->emitScale = 1.5f;
-	Poof->emitLife = 2.0f;
 	Poof->emitThenDestroy = TRUE;
 }
