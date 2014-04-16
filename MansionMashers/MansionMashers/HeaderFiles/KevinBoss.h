@@ -52,7 +52,10 @@ typedef struct KevinBoss
 	int MaxHealth;
 	int CurrentHealth;
 
+	FoxSound* KevinStart;
 	FoxSound* KevinHit[4];
+	FoxSound* KevinPhrase[4];
+	int KevinSoundsPlay;
 
 	float Speed;
 	Vec2 Position;

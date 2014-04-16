@@ -115,6 +115,15 @@ KevinBoss* CreateKevinBoss(float xPos, float yPos)
 	CurrentBoss->KevinHit[2] = CreateSound("Sounds/KevinHit3.mp3", SmallSnd);
 	CurrentBoss->KevinHit[3] = CreateSound("Sounds/KevinHit4.mp3", SmallSnd);
 
+	CurrentBoss->KevinPhrase[0] = CreateSound("Sounds/KevinPhrase1.mp3", SmallSnd);
+	CurrentBoss->KevinPhrase[1] = CreateSound("Sounds/KevinPhrase2.mp3", SmallSnd);
+	CurrentBoss->KevinPhrase[2] = CreateSound("Sounds/KevinPhrase3.mp3", SmallSnd);
+	CurrentBoss->KevinPhrase[3] = CreateSound("Sounds/KevinPhrase4.mp3", SmallSnd);
+
+	CurrentBoss->KevinStart = CreateSound("Sounds/KevinStart.mp3", SmallSnd);
+
+	CurrentBoss->KevinSoundsPlay = FALSE;
+
 
 	return CurrentBoss;
 }
@@ -429,6 +438,7 @@ void KevinBossCollideWeapon(KevinBoss *CurrentBoss)
 	char num[10];
 
 	//bool for sounds
+	int i;
 	int SoundIsPlaying = FALSE;
 	int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 4;
 
@@ -452,6 +462,18 @@ void KevinBossCollideWeapon(KevinBoss *CurrentBoss)
 	AddFloatingText(FirstLetter);
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);
+
+	//Voice Hit Reponse
+	for(i = 0; i < 4; i++)
+	{
+		if(FoxSoundCheckIsPlaying(CurrentBoss->KevinHit[i]))
+			SoundIsPlaying = TRUE;
+		if(FoxSoundCheckIsPlaying(CurrentBoss->KevinPhrase[i]))
+			SoundIsPlaying = TRUE;
+	}
+
+	if(!SoundIsPlaying)
+		PlayAudio(CurrentBoss->KevinHit[randNum]);
 }
 
 /*************************************************************************/
@@ -524,7 +546,6 @@ void FreeKevinBoss(KevinBoss* CurrentBoss)
 	PoofSelf(CurrentBoss->BodySprite);
 	FreeSprite(CurrentBoss->JabSprite);
 	FreeSprite(CurrentBoss->BodySprite);
-	FreeMyAlloc(CurrentBoss);
 }
 
 /*************************************************************************/

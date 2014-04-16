@@ -49,7 +49,7 @@ static int PlayerIsAlive;
 static int beginningAnimation;
 static float spawnTimer;			// Timer for spawning enemies
 static float spawnTime;				// When to spawn more enemies
-
+static int bossDefeated;
 static float levelTimer;
 
 KevinBoss *Boss;
@@ -66,6 +66,16 @@ Wall* Wall1;
 
 Sprite* PlatOverlay[GLOW_OVERLAY_NUM];
 static int GlowBool;
+
+static int timer;
+static int timerOn;
+static int prevPlayed;
+
+FoxSound* IntelFoxStart;
+FoxSound* IntelFoxEnd;
+Sprite* IntelFoxBack;
+Sprite* IntelFox;
+static float IntelFoxValue;
 
 // Tree Background
 Sprite* TreeBackground1[4];
@@ -109,6 +119,7 @@ void InitializeLevel7(void)
 	levelTimer = 60.0f;
 	ResetEnemyPanelNumber();
 	GlowBool = TRUE;
+	bossDefeated = FALSE;
 
 	// Initialize the player
 	InitializePlayer(&CurrentPlayer, Mayple, -1300, -220);
@@ -148,6 +159,15 @@ void InitializeLevel7(void)
 
 	for(i = 0; i < 4; i++)
 		TreeBackground3[i] = (Sprite *)CreateSprite("TextureFiles/TreeBackground3.png", 1920, 1080, 0, 1, 1, 1920.0f * i, 0);
+
+	/////////////////////////////////
+	//		Sounds				   //
+	/////////////////////////////////
+	//BackSnd = CreateSound("Sounds/BossMusic.mp3", LargeSnd);
+	//WinTheme = CreateSound("Sounds/CreditTheme.mp3", LargeSnd);
+
+	IntelFoxStart = CreateSound("Sounds/IntelFoxBreakingUp.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl7End.mp3", SmallSnd);
 
 	/////////////////////////////////
 	//		Platforms			   //
@@ -196,6 +216,14 @@ void InitializeLevel7(void)
 	CurrentEnemy->EnemyState = AINone;
 	CurrentEnemy = CreateEnemy(2, EnemyType, 0, GROUNDLEVEL - 5000, 0);
 	CurrentEnemy->EnemyState = AINone;
+
+	/////////////////////////////////
+	//			Objects			   //
+	/////////////////////////////////
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -279,7 +307,7 @@ void UpdateLevel7(void)
 	// When the boss dies
 	if(!levelComplete && Boss->CurrentHealth <= 0)
 	{
-		levelComplete = TRUE;
+		bossDefeated = TRUE;
 		FreeKevinBoss(Boss);
 	}
 
@@ -349,6 +377,7 @@ void FreeLevel7(void)
 	if (levelComplete)
 		SavePlayer(&CurrentPlayer);
 
+	FreeMyAlloc(Boss);
 	FreeAllLists();
 	FreeHUD(CurrentHUD);
 }
@@ -374,11 +403,13 @@ void UnloadLevel7(void)
 /*************************************************************************/
 void EventLevel(void)
 {	
+	int i;
+
 	if(!levelComplete && !beginningAnimation)
 	{
 		DetectPlayerCollision();
 		DetectKevinBossCollision(Boss);
-	// Handle any input for the current player
+		// Handle any input for the current player
 		InputPlayer(&CurrentPlayer);
 		
 	}
@@ -391,7 +422,7 @@ void EventLevel(void)
 		// Fade in the level
 		if(BlackOverlay->Alpha > 0)
 		{
-			BlackOverlay->Alpha -= 1 * GetDeltaTime();
+			BlackOverlay->Alpha -= 1 * GetDeltaTime() / 3;
 		}
 		// Makes the player walk into view
 		else
@@ -472,6 +503,113 @@ void EventLevel(void)
 		BlackOverlay->Alpha = 0.5f;
 
 		UpdateDeathConfirmObjects();
+	}
+
+	if(!IntelFoxStart->hasPlayed)
+	{
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
+	}
+
+	if(bossDefeated == TRUE && !IntelFoxEnd->hasPlayed)
+	{
+		PlayAudio(IntelFoxEnd);
+		IntelFoxEnd->hasPlayed;
+	}
+
+	if(IntelFoxEnd->hasPlayed && !FoxSoundCheckIsPlaying(IntelFoxEnd))
+		levelComplete = TRUE;
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(IntelFoxStart) || FoxSoundCheckIsPlaying(IntelFoxEnd))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
+	
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
+
+	if(IntelFoxStart->hasPlayed && !FoxSoundCheckIsPlaying(IntelFoxStart) && !Boss->KevinStart->hasPlayed)
+	{
+		PlayAudio(Boss->KevinStart);
+		Boss->KevinStart->hasPlayed = TRUE;
+	}
+
+	if(Boss->CurrentHealth > 0)
+	{
+		//Check if the boss is already saying something
+		Boss->KevinSoundsPlay = FALSE;
+		for(i = 0; i < 4; i++)
+		{
+			if(FoxSoundCheckIsPlaying(Boss->KevinHit[i]))
+				Boss->KevinSoundsPlay = TRUE;
+			if(FoxSoundCheckIsPlaying(Boss->KevinPhrase[i]))
+				Boss->KevinSoundsPlay = TRUE;
+		}
+
+		//Say Random Phrases Randomly when not beginning animation, intel fox talking, or smashing
+		if(!beginningAnimation && !FoxSoundCheckIsPlaying(IntelFoxStart) && !FoxSoundCheckIsPlaying(Boss->KevinStart) /*
+			&& !FoxSoundCheckIsPlaying(IntelFoxEnd) && !FoxSoundCheckIsPlaying(Boss->ArmGuyPhraseSmash)*/)
+		{
+			//Get RandNum to choose rand Sound and a random time
+			int randNum = ((int)((rand() / (float)RAND_MAX) * 60)) % 4;
+			int randInstance = ((int)((rand() / (float)RAND_MAX) * 720)) % 360;
+
+			//Randomly go but wait if a phrase was just said
+			if(randInstance > 356 && !timerOn)
+			{
+				//Start timer
+				timerOn = TRUE;
+
+				//If a sound is not playing let's say something
+				if(Boss->KevinSoundsPlay == FALSE)
+				{
+					//Check if phrase your about to say was just said
+					if(randNum == prevPlayed)
+					{
+						//if it was the same phrase say a differnt one
+						if(randNum == 0)
+						{
+							PlayAudio(Boss->KevinPhrase[randNum + 1]);
+							prevPlayed = randNum + 1;
+						}
+						else
+						{
+							PlayAudio(Boss->KevinPhrase[randNum - 1]);
+							prevPlayed = randNum - 1;
+						}
+
+					}
+					//Wasn't the same so just say what you wanna say
+					else
+					{
+						PlayAudio(Boss->KevinPhrase[randNum]);
+						prevPlayed = randNum;
+					}
+				}
+			}
+		}
+	}
+
+	//For Random Phrase Timer (see above)
+	if(timerOn)
+		timer -= 1;
+	if(timer < 0)
+	{
+		timer = 5 * FRAMERATE;
+		timerOn = FALSE;
 	}
 }
 
