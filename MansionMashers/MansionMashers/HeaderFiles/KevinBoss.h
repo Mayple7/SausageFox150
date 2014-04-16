@@ -56,7 +56,7 @@ typedef struct KevinBoss
 	FoxSound* KevinHit[4];
 	FoxSound* KevinPhrase[4];
 	int KevinSoundsPlay;
-	FoxSound* HitSFX[2];
+	FoxSound* HitSFX;
 
 	float Speed;
 	Vec2 Position;
