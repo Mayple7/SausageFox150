@@ -71,6 +71,13 @@ FoxSound* WinTheme;
 FoxSound* KeySFX;
 static int KeyDropped;
 
+Sprite* IntelFoxBack;
+Sprite* IntelFox;
+static float IntelFoxValue;
+
+FoxSound* IntelFoxStart;
+FoxSound* IntelFoxEnd;
+
 // Tree Background
 Sprite* TreeBackground1[4];
 Sprite* TreeBackground2[4];
@@ -154,6 +161,9 @@ void InitializeHandGuy(void)
 	WinTheme = CreateSound("Sounds/CreditTheme.mp3", LargeSnd);
 	KeySFX = CreateSound("Sounds/KeyDrop.mp3", SmallSnd);
 
+	IntelFoxStart = CreateSound("Sounds/IntelFoxBossStart.mp3", SmallSnd);
+	IntelFoxEnd = CreateSound("Sounds/IntelFoxFoundKey.mp3", SmallSnd);
+
 	/////////////////////////////////
 	//		Platforms			   //
 	/////////////////////////////////
@@ -180,6 +190,10 @@ void InitializeHandGuy(void)
 	/////////////////////////////////
 	AGKey = CreateFood(Key, 80, 120, 0, 1100);
 
+	IntelFoxBack	= (Sprite*)CreateSprite("TextureFiles/IntelFoxHeadBack.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox		= (Sprite*)CreateSprite("TextureFiles/IntelFoxHead.png", 256, 256, 300, 1, 1, 740, 380);
+	IntelFox->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
 
 	/////////////////////////////////
 	//		On Death			   //
@@ -241,11 +255,11 @@ void UpdateHandGuy(void)
 		AGKey->FoodCollider.Position.y -= 650 * GetDeltaTime();
 		AGKey->FoodParticle->Position.y -= 650 * GetDeltaTime();
 		KeyDropped = TRUE;
-		//if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
-		//{
-		//	PlayAudio(IntelFoxEnd);
-		//	IntelFoxEnd->hasPlayed = TRUE;
-		//}
+		if(!IntelFoxEnd->hasPlayed && PlayerIsAlive)
+		{
+			PlayAudio(IntelFoxEnd);
+			IntelFoxEnd->hasPlayed = TRUE;
+		}
 	}
 
 	if(AGKey->FoodSprite->Position.y < 500 && !KeySFX->hasPlayed)
@@ -447,8 +461,8 @@ void EventHandGuy(void)
 			Boss->HandGuySoundsPlay = TRUE;
 
 		//Say Phrase Randomly when not beginning animation, intel fox talking, or smashing
-		if(/*!beginningAnimation && !FoxSoundCheckIsPlaying(IntelFoxStart) 
-			&& !FoxSoundCheckIsPlaying(IntelFoxEnd) &&*/ !FoxSoundCheckIsPlaying(Boss->HandGuyYell))
+		if(!beginningAnimation && !FoxSoundCheckIsPlaying(IntelFoxStart) 
+			&& !FoxSoundCheckIsPlaying(IntelFoxEnd) && !FoxSoundCheckIsPlaying(Boss->HandGuyYell))
 		{
 			//Get RandNum to choose rand Sound and a random time
 			int randInstance = ((int)((rand() / (float)RAND_MAX) * 720)) % 540;
@@ -474,6 +488,35 @@ void EventHandGuy(void)
 		timer = 10 * FRAMERATE;
 		timerOn = FALSE;
 	}
+
+	//Intel Fox Starting Narrative
+	if(!IntelFoxStart->hasPlayed)
+	{
+		PlayAudio(IntelFoxStart);
+		IntelFoxStart->hasPlayed = TRUE;
+	}
+
+
+	//When sound is play show Intel Fox in da corner
+	if(FoxSoundCheckIsPlaying(IntelFoxStart) || FoxSoundCheckIsPlaying(IntelFoxEnd))
+	{
+		if(IntelFox->Alpha < 1)
+			IntelFox->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(IntelFox->Alpha > 0)
+			IntelFox->Alpha -= 3 * GetDeltaTime();
+	}
+
+	//Always update intel foxes position you need him
+	IntelFox->Position.x = GetCameraXPosition() + 740;
+	
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	IntelFox->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	IntelFoxBack->Position = IntelFox->Position;
+	IntelFoxBack->Alpha = IntelFox->Alpha;
 
 
 }

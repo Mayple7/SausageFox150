@@ -567,7 +567,7 @@ void GameCompletion(void)
 	if (BlackOverlay->Alpha > 1)
 	{
 		// Change to narrative
-		SetNextState(GS_Credits);
+		SetNextState(GS_Narr2);
 	}
 	else
 		BlackOverlay->Alpha += GetDeltaTime() / 3;
