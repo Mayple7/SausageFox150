@@ -85,6 +85,7 @@ void LoadTutorial(void)
 {
 	CreateTextureList();
 	LoadEnemy(Dummy);
+	LoadPlayerSprites(CurrentPlayer.Princess);
 }
 
 void InitializeTutorial(void)

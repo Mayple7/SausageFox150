@@ -63,6 +63,7 @@ void LoadShop1(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
+	LoadPlayerSprites(CurrentPlayer.Princess);
 }
 
 /*************************************************************************/

@@ -49,7 +49,13 @@ static enum PositionState { A, B, C, D };
 /*************************************************************************/
 void LoadKevinBoss(void)
 {
-	LoadTexture("TextureFiles/Kevin.png");
+	LoadTexture("TextureFiles/KevinQuickJab.png");
+	LoadTexture("TextureFiles/KevinBody.png");
+	LoadTexture("TextureFiles/KevinLegLower.png");
+	LoadTexture("TextureFiles/KevinLegUpper.png");
+	LoadTexture("TextureFiles/KevinArmLower.png");
+	LoadTexture("TextureFiles/Particle.png");
+	LoadTexture("TextureFiles/BlankPlatform.png");
 }
 
 /*************************************************************************/
@@ -551,8 +557,19 @@ void PlayerDamageResult(int damage)
 void FreeKevinBoss(KevinBoss* CurrentBoss)
 {
 	PoofSelf(CurrentBoss->BodySprite);
+
 	FreeSprite(CurrentBoss->JabSprite);
 	FreeSprite(CurrentBoss->BodySprite);
+	FreeSprite(CurrentBoss->KevinSpriteParts.ArmLower);
+	FreeSprite(CurrentBoss->KevinSpriteParts.ArmLower2);
+	FreeSprite(CurrentBoss->KevinSpriteParts.ArmUpper);
+	FreeSprite(CurrentBoss->KevinSpriteParts.ArmUpper2);
+	FreeSprite(CurrentBoss->KevinSpriteParts.Body);
+	FreeSprite(CurrentBoss->KevinSpriteParts.LegLower);
+	FreeSprite(CurrentBoss->KevinSpriteParts.LegLower2);
+	FreeSprite(CurrentBoss->KevinSpriteParts.LegUpper);
+	FreeSprite(CurrentBoss->KevinSpriteParts.LegUpper2);
+
 }
 
 /*************************************************************************/

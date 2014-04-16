@@ -25,6 +25,7 @@
 
 #include "../AEEngine.h"
 #include "../HeaderFiles/Kevin.h"
+#include "../HeaderFiles/KevinBoss.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
@@ -70,6 +71,8 @@ void LoadKevin(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
+	LoadKevinBoss();
+	LoadPlayerSprites(CurrentPlayer.Princess);
 }
 
 /*************************************************************************/

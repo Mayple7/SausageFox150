@@ -44,7 +44,6 @@ static int levelComplete;
 static int PlayerIsAlive; 
 static int beginningAnimation;
 
-Sprite* DebugCircle;
 Sprite* BlackOverlay;
 
 Platform* Plat;
@@ -94,7 +93,8 @@ void LoadHandGuy(void)
 {
 	//Allocate space for a large texture
 	CreateTextureList();
-
+	LoadHandGuyBoss();
+	LoadPlayerSprites(CurrentPlayer.Princess);
 }
 
 /*************************************************************************/
@@ -182,9 +182,6 @@ void InitializeHandGuy(void)
 	/////////////////////////////////
 	Boss = CreateHandGuyBoss(0, 0);
 
-	DebugCircle = (Sprite *)CreateSprite("TextureFiles/DebugCircle.png", Boss->ShoutRadius * 2, Boss->ShoutRadius * 2, 300, 1, 1, Boss->Position.x, Boss->Position.y);
-	DebugCircle->Visible = FALSE;
-
 	/////////////////////////////////
 	//			Objects			   //
 	/////////////////////////////////
@@ -233,15 +230,6 @@ void UpdateHandGuy(void)
 	BoundingBoxUpdate();
 	UpdateAllProjectiles();
 	ParticleSystemUpdate();
-
-	// Shows the hit circle for handguy - should change this for final
-	if(!levelComplete && Boss->CurrentState == 1 && Boss->InnerState != 2)
-	{
-		DebugCircle->Visible = TRUE;
-		DebugCircle->Position = Boss->Position;
-	}
-	else
-		DebugCircle->Visible = FALSE;
 
 	//When the boss dies
 	if(Boss->CurrentHealth <= 0 && AGKey->FoodSprite->Position.y > (GROUNDLEVEL + AGKey->FoodSprite->Height / 2))

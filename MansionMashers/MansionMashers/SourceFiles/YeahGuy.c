@@ -55,8 +55,6 @@ int moveBars;
 FoxSound* IntelFoxStart;
 FoxSound* IntelFoxEnd;
 
-static int timer;
-static int timerOn;
 static int prevPlayed;
 static int DieSound1;
 static int DieSound2;
@@ -116,7 +114,7 @@ void LoadYeahGuy(void)
 	LoadTexture("TextureFiles/YGBuffRed.png");
 	LoadTexture("TextureFiles/YGBuffGreen.png");
 	LoadTexture("TextureFiles/YGBuffBlue.png");
-
+	LoadPlayerSprites(CurrentPlayer.Princess);
 	LoadYeahGuyBoss();
 }
 
@@ -136,8 +134,6 @@ void InitializeYeahGuy(void)
 	beginningAnimation = TRUE;
 	PlayerIsAlive = TRUE;
 
-	// I have no idea what this timer is used for!!!!!!!!!!!!!!! BAD CODE NAME OWOEIFJWEOIFWEHG
-	timer = 10 * FRAMERATE;
 	DieSound1 = FALSE;
 	DieSound2 = FALSE;
 	DieSound3 = FALSE;
@@ -229,7 +225,7 @@ void InitializeYeahGuy(void)
 	/////////////////////////////////
 	Vec2Set(&Position, 0, 0);
 
-	CurrentBuffSprite = (Sprite *)CreateSprite("TextureFiles/RedBuff.png", 50, 50, 200, 1, 1, 920, 500);
+	CurrentBuffSprite = (Sprite *)CreateSprite("TextureFiles/YGBuffRed.png", 50, 50, 200, 1, 1, 920, 500);
 
 	// Creates the buffs, do not add these to 
 	RedBuffCollider = (CollisionBox *) CallocMyAlloc(1, sizeof(CollisionBox));
@@ -276,21 +272,21 @@ void UpdateYeahGuy(void)
 	{
 		CurrentBuffSprite->Visible = TRUE;
 		if(CurrentBuff == Red && redHead)
-			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/RedBuff.png");
+			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/YGBuffRed.png");
 		else if(CurrentBuff == Red && !redHead)
 		{
 			moveBars = TRUE;
 			CurrentBuff = None;
 		}
 		else if(CurrentBuff == Green && greenHead)
-			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/GreenBuff.png");
+			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/YGBuffGreen.png");
 		else if(CurrentBuff == Green && !greenHead)
 		{
 			moveBars = TRUE;
 			CurrentBuff = None;
 		}
 		else if(CurrentBuff == Blue && blueHead)
-			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/BlueBuff.png");
+			CurrentBuffSprite->SpriteTexture = LoadTexture("TextureFiles/YGBuffBlue.png");
 		else if(CurrentBuff == Blue && !blueHead)
 		{
 			moveBars = TRUE;

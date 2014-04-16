@@ -28,6 +28,8 @@ Sprite* GinkoSelected;
 Sprite* KayaSelected;
 Sprite* HollySelected;
 
+static ParticleSystem* SelectParticleSystem;
+
 static int selected;
 
 void LoadCharacterSelect(void)
@@ -40,6 +42,11 @@ void LoadCharacterSelect(void)
 
 	//Allocate space for a large texture
 	CreateTextureList();
+
+	LoadPlayerSprites(Mayple);
+	LoadPlayerSprites(Ginko);
+	LoadPlayerSprites(Kaya);
+	LoadPlayerSprites(Holly);
 }
 
 void InitializeCharacterSelect(void)
@@ -56,10 +63,9 @@ void InitializeCharacterSelect(void)
 	ResetObjectList();
 	Vec3Set(&Tint, 0.475f, 0.463f, 0.311f);
 
-	BackgroundColor = (Sprite *) CreateSprite("TextureFiles/BlankPlatform.png", 1920, 1080, 1, 1, 1, 0, 0);
-	BackgroundColor->Tint = Tint;
+	BackgroundColor = (Sprite *) CreateSprite("TextureFiles/CharacterSelectBack.png", 1920, 1080, 0, 1, 1, 0, 0);
 
-	BackgroundText = (Sprite *) CreateSprite("TextureFiles/CharacterSelectText.png", 1920, 1080, 2, 1, 1, 0, 0);
+	BackgroundText = (Sprite *) CreateSprite("TextureFiles/CharacterSelectText.png", 1920, 1080, 1, 1, 1, 0, 0);
 	
 	MaypleSelected = (Sprite *) CreateSprite("TextureFiles/MaypleSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
 	GinkoSelected = (Sprite *) CreateSprite("TextureFiles/GinkoSelect.png", 1920, 1080, 2, 1, 1, 0, 0);
@@ -112,6 +118,10 @@ void InitializeCharacterSelect(void)
 	CharacterHolly->FlipX = FALSE;
 	UpdatePlayerPosition(CharacterHolly);
 	CharacterHolly->PlayerSpriteParts.Tail->CurrentFrame = 14;
+
+	// particles
+	SelectParticleSystem = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 0, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
+	SelectParticleSystem->FadeIn = TRUE;
 }
 
 void UpdateCharacterSelect(void)
@@ -199,6 +209,8 @@ void UpdateCharacterSelect(void)
 	Animation(CharacterGinko);
 	Animation(CharacterKaya);
 	Animation(CharacterHolly);
+
+	ParticleSystemUpdate();
 }
 
 void DrawCharacterSelect(void)

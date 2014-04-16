@@ -101,6 +101,7 @@ void LoadLevel1(void)
 	//Allocate space for a large texture
 	CreateTextureList();
 	LoadEnemy(BasicMelee);
+	LoadPlayerSprites(CurrentPlayer.Princess);
 }
 
 /*************************************************************************/

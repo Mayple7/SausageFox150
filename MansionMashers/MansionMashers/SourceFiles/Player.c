@@ -1470,3 +1470,50 @@ void UpdateBuffTimers(Player* CurrentPlayer)
 		updateMoveSpeed(&CurrentPlayer->CurrentPlayerStats);
 	}
 }
+
+void LoadPlayerSprites(enum Character princess)
+{
+	switch(princess)
+	{
+	case Mayple:
+		LoadTexture("TextureFiles/LegUpper.png");
+		LoadTexture("TextureFiles/LegLower.png");
+		LoadTexture("TextureFiles/TailRun.png");
+		LoadTexture("TextureFiles/ArmLower.png");
+
+		LoadTexture("TextureFiles/SkirtMayple.png");
+		LoadTexture("TextureFiles/BodyMayple.png");
+		LoadTexture("TextureFiles/ArmUpperMayple.png");
+		break;
+	case Ginko:
+		LoadTexture("TextureFiles/LegUpper.png");
+		LoadTexture("TextureFiles/LegLower.png");
+		LoadTexture("TextureFiles/TailRun.png");
+		LoadTexture("TextureFiles/ArmLower.png");
+
+		LoadTexture("TextureFiles/SkirtGinko.png");
+		LoadTexture("TextureFiles/BodyGinko.png");
+		LoadTexture("TextureFiles/ArmUpperGinko.png");
+		break;
+	case Kaya:
+		LoadTexture("TextureFiles/LegUpper.png");
+		LoadTexture("TextureFiles/LegLower.png");
+		LoadTexture("TextureFiles/TailRun.png");
+		LoadTexture("TextureFiles/ArmLower.png");
+
+		LoadTexture("TextureFiles/SkirtKaya.png");
+		LoadTexture("TextureFiles/BodyKaya.png");
+		LoadTexture("TextureFiles/ArmUpperKaya.png");
+		break;
+	case Holly:
+		LoadTexture("TextureFiles/LegUpper.png");
+		LoadTexture("TextureFiles/LegLower.png");
+		LoadTexture("TextureFiles/TailRun.png");
+		LoadTexture("TextureFiles/ArmLower.png");
+
+		LoadTexture("TextureFiles/SkirtHolly.png");
+		LoadTexture("TextureFiles/BodyHolly.png");
+		LoadTexture("TextureFiles/ArmUpperHolly.png");
+		break;
+	}
+}

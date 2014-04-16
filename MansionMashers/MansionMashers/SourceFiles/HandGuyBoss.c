@@ -72,7 +72,9 @@ void LoadHandGuyBoss(void)
 	LoadTexture("TextureFiles/HandGuyBody.png");
 	LoadTexture("TextureFiles/HandGuyLegLower.png");
 	LoadTexture("TextureFiles/HandGuyLegUpper.png");
-	LoadTexture("TextureFiles/HandGuyArmLower.png");
+	LoadTexture("TextureFiles/HandGuyArmUpper.png");
+	LoadTexture("TextureFiles/HandGuyArmLowerIn.png");
+	LoadTexture("TextureFiles/HandGuyArmLowerOut.png");
 	LoadTexture("TextureFiles/YeahGuyParticle2.png");
 	LoadTexture("TextureFiles/Particle.png");
 }
@@ -921,6 +923,7 @@ void FreeHandGuyBoss(HandGuyBoss* CurrentBoss)
 	FreeParticleSystem(CurrentBoss->AOEParticle);
 	FreeParticleSystem(CurrentBoss->DamageParticle);
 
+	FreeSprite(CurrentBoss->JabSprite);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegLower);
 	FreeSprite(CurrentBoss->HandGuySpriteParts.LegUpper2);

@@ -95,6 +95,8 @@ void LoadLevel7(void)
 	CreateTextureList();
 	LoadEnemy(BasicMelee);
 	LoadEnemy(BasicRanged);
+	LoadPlayerSprites(CurrentPlayer.Princess);
+	LoadKevinBoss();
 }
 
 /*************************************************************************/
@@ -410,10 +412,22 @@ void EventLevel(void)
 
 	if(!levelComplete && !beginningAnimation)
 	{
-		DetectPlayerCollision();
-		DetectKevinBossCollision(Boss);
-		// Handle any input for the current player
-		InputPlayer(&CurrentPlayer);
+
+		if (IntelFoxStart->Playing)
+		{
+			Boss->CurrentState = 0; // Stays in CD state
+			Boss->cooldownTimer = 0;
+			CurrentPlayer.LegSinValue = 0;
+			CurrentPlayer.Speed = 0;
+			Animation(&CurrentPlayer);
+		}
+		else
+		{
+			DetectPlayerCollision();
+			DetectKevinBossCollision(Boss);
+			// Handle any input for the current player
+			InputPlayer(&CurrentPlayer);
+		}
 		
 	}
 	else if(!levelComplete)

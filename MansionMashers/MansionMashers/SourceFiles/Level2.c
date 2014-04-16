@@ -114,6 +114,7 @@ void LoadLevel2(void)
 	CreateTextureList();
 	LoadEnemy(BasicMelee);
 	LoadEnemy(BasicRanged);
+	LoadPlayerSprites(CurrentPlayer.Princess);
 }
 
 /*************************************************************************/

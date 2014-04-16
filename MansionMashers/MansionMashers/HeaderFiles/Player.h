@@ -162,6 +162,7 @@ void CreatePlayerSprites(Player *Player);
 void SavePlayer(Player *CurrentPlayer);
 int LoadPlayer(Player *CurrentPlayer);
 void LoadNewPlayer(Player *CurrentPlayer, enum Character Princess);
+void LoadPlayerSprites(enum Character princess);
 
 //Updating non-modifiable player stats
 void updateMaxHealth(PlayerStats *CurrentPlayerStats);
@@ -170,6 +171,7 @@ void updateAttackSpeed(PlayerStats *CurrentPlayerStats);
 void updateDamageReduction(PlayerStats *CurrentPlayerStats);
 void updateDamage(Player *CurrentPlayer);
 void UpdateBuffTimers(Player* CurrentPlayer);
+
 
 float RotateToAngle(float angle, float angleTo, float speed);
 
