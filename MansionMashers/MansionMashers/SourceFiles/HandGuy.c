@@ -416,10 +416,16 @@ void EventHandGuy(void)
 	{
 		if(PlayerIsAlive)
 		{
-			//TogglePauseSound(BackSnd);
+			if(KeyDropped)
+				TogglePauseSound(WinTheme);
+			else
+				TogglePauseSound(BackSnd);
 			InitializePause(&DrawHandGuy);
 			UpdatePause();
-			//TogglePauseSound(BackSnd);
+			if(KeyDropped)
+				TogglePauseSound(WinTheme);
+			else
+				TogglePauseSound(BackSnd);
 		}
 	}
 

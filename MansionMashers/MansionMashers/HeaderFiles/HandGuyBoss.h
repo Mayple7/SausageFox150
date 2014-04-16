@@ -60,7 +60,7 @@ typedef struct HandGuyBoss
 	FoxSound* HandGuyYell;
 
 	FoxSound* PunchSFX;
-	FoxSound* SwooshSFX[2];
+	FoxSound* SwooshSFX;
 
 
 	int HandGuySoundsPlay;

@@ -311,6 +311,7 @@ void UpdateUpgradeScreenObjects(void)
 
 			UpgradeButton1->ButtonSprite->ScaleX = 1.16f;
 			UpgradeButton1->ButtonSprite->ScaleY = 1.16f;
+			PlayAudio(CurrentPlayer.CurrentPlayerSounds.KeyPickUp);
 		}
 	}
 	else
@@ -336,6 +337,7 @@ void UpdateUpgradeScreenObjects(void)
 
 			UpgradeButton2->ButtonSprite->ScaleX = 1.16f;
 			UpgradeButton2->ButtonSprite->ScaleY = 1.16f;
+			PlayAudio(CurrentPlayer.CurrentPlayerSounds.KeyPickUp);
 		}
 	}
 	else
@@ -361,6 +363,7 @@ void UpdateUpgradeScreenObjects(void)
 
 			UpgradeButton3->ButtonSprite->ScaleX = 1.16f;
 			UpgradeButton3->ButtonSprite->ScaleY = 1.16f;
+			PlayAudio(CurrentPlayer.CurrentPlayerSounds.KeyPickUp);
 		}
 	}
 	else

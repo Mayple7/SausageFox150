@@ -96,6 +96,8 @@ static float IntelFoxValue;
 
 Platform* Plat;
 
+FoxSound* BackSnd;
+
 YeahGuyBoss *Boss;
 
 static enum BossBuff { None, Red, Green, Blue };
@@ -195,7 +197,7 @@ void InitializeYeahGuy(void)
 	IntelFoxStart = CreateSound("Sounds/IntelFoxYeahGuy.mp3", SmallSnd);
 	IntelFoxEnd = CreateSound("Sounds/IntelFoxYeahGuyEnd.mp3", SmallSnd);
 
-
+	BackSnd = CreateSound("Sounds/BossMusic.mp3", LargeSnd);
 	/////////////////////////////////
 	//			Walls			   //
 	/////////////////////////////////
@@ -259,6 +261,8 @@ void InitializeYeahGuy(void)
 /*************************************************************************/
 void UpdateYeahGuy(void)
 {
+	PlayAudio(BackSnd);
+
 	redHead = Boss->redHead;
 	greenHead = Boss->greenHead;
 	blueHead = Boss->blueHead;
@@ -493,17 +497,17 @@ void EventYeahGuy(void)
 	{
 		if(PlayerIsAlive)
 		{
-			//TogglePauseSound(BackSnd);
+			TogglePauseSound(BackSnd);
 			InitializePause(&DrawYeahGuy);
 			UpdatePause();
-			//TogglePauseSound(BackSnd);
+			TogglePauseSound(BackSnd);
 		}
 	}
 
 	//Player Dies
 	if(CurrentPlayer.CurrentPlayerStats.CurrentHealth <= 0.0f)
 	{
-		//freeSound(BackSnd);
+		freeSound(BackSnd);
 		PlayerIsAlive = FALSE;
 		BlackOverlay->Position.x = GetCameraXPosition();
 		BlackOverlay->Alpha = 0.5f;

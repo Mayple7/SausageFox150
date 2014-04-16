@@ -332,8 +332,13 @@ void EventLevel(void)
 		
 		PlayAudio(CurrentPlayer.CurrentPlayerSounds.MooseWelcome[randNum]);
 		CurrentPlayer.CurrentPlayerSounds.MooseWelcome[randNum]->hasPlayed = TRUE;
+	}
 
-		MooseWelcomeSaid = TRUE;
+	if(CurrentPlayer.CurrentPlayerSounds.MooseWelcome[0]->hasPlayed || CurrentPlayer.CurrentPlayerSounds.MooseWelcome[1]->hasPlayed)
+	{
+		if(!FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.MooseWelcome[0]) && 
+			!FoxSoundCheckIsPlaying(CurrentPlayer.CurrentPlayerSounds.MooseWelcome[1]))
+			MooseWelcomeSaid = TRUE;
 	}
 
 	CurrentPlayer.CurrentPlayerSounds.MoosePlay = FALSE;

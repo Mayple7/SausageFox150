@@ -161,7 +161,7 @@ void InitializeNarr2(void)
 	OakleySaved = CreateSound("Sounds/IntelFoxEndGame.mp3", SmallSnd);
 	KPoof = CreateSound("Sounds/Poof1.mp3", SmallSnd);
 
-	BackSnd = CreateSound("Sounds/Narr1MusicCut.mp3", LargeSnd);
+	CreatePauseSound(&WinBackSnd, "Sounds/WinningTheme.mp3", LargeSnd);
 	
 	/////////////////////////////////
 	//			Walls			   //
@@ -248,11 +248,8 @@ void UpdateNarr2(void)
 {
 	//Handle the special events right off the bat yo
 	EventNarr2();
-	if(!BackSnd->hasPlayed)
-	{
-		BackSnd->hasPlayed = TRUE;
-		PlayAudio(BackSnd);
-	}
+	
+	PlayAudio(&WinBackSnd);
 }
 
 /*************************************************************************/
@@ -311,11 +308,11 @@ void EventNarr2(void)
 		if(!levelComplete)
 		{
 			InitializePause(&DrawNarr2);
-			TogglePauseSound(BackSnd);
+			TogglePauseSound(&WinBackSnd);
 			TogglePauseChannel(EffectType);
 			UpdatePause();
 			TogglePauseChannel(EffectType);
-			TogglePauseSound(BackSnd);
+			TogglePauseSound(&WinBackSnd);
 		}
 	}
 

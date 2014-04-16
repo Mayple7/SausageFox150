@@ -436,10 +436,16 @@ void EventArmGuy(void)
 	{
 		if(PlayerIsAlive)
 		{
-			TogglePauseSound(BackSnd);
+			if(KeyDropped)
+				TogglePauseSound(WinTheme);
+			else
+				TogglePauseSound(BackSnd);
 			InitializePause(&DrawArmGuy);
 			UpdatePause();
-			TogglePauseSound(BackSnd);
+			if(KeyDropped)
+				TogglePauseSound(WinTheme);
+			else
+				TogglePauseSound(BackSnd);
 		}
 	}
 
