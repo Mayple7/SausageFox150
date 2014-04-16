@@ -875,7 +875,6 @@ void ArmGuyBossCollideWeapon(ArmGuyBoss *CurrentBoss)
 	ChangeTextVisibility(FirstLetter);
 	ChangeTextZIndex(FirstLetter, 201);
 
-
 	//Voice Hit Reponse
 	for(i = 0; i < 4; i++)
 	{

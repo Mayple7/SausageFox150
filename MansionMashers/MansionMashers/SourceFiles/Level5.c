@@ -399,7 +399,7 @@ void EventLevel(void)
 	//Key Checking
 	if(CurrentPlayer.armClear && CurrentPlayer.handClear && !beginningAnimation)
 	{
-		RightBarrier->WallCollider.Position.x = 870;
+		RightBarrier->WallCollider.Position.x = 930;
 		keysObtained = TRUE;
 	}
 
