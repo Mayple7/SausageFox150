@@ -245,10 +245,12 @@ void UpdateLevel7(void)
 
 	EventLevel();
 
-	// This should be the last line in this function
 	if(!levelComplete)
-	{
 		UpdateKevinBoss(Boss);
+
+	// This should be the last line in this function
+	if(!bossDefeated)
+	{
 
 		// Infini-Spawner Logic
 		spawnTimer += GetDeltaTime();
@@ -305,10 +307,11 @@ void UpdateLevel7(void)
 	}
 
 	// When the boss dies
-	if(!levelComplete && Boss->CurrentHealth <= 0)
+	if(!bossDefeated && Boss->CurrentHealth <= 0)
 	{
 		bossDefeated = TRUE;
 		FreeKevinBoss(Boss);
+		Boss->Position.x = -8000;
 	}
 
 	// What to do when the boss is dead
@@ -422,7 +425,7 @@ void EventLevel(void)
 		// Fade in the level
 		if(BlackOverlay->Alpha > 0)
 		{
-			BlackOverlay->Alpha -= 1 * GetDeltaTime() / 3;
+			BlackOverlay->Alpha -= 1 * GetDeltaTime();
 		}
 		// Makes the player walk into view
 		else
@@ -514,7 +517,7 @@ void EventLevel(void)
 	if(bossDefeated == TRUE && !IntelFoxEnd->hasPlayed)
 	{
 		PlayAudio(IntelFoxEnd);
-		IntelFoxEnd->hasPlayed;
+		IntelFoxEnd->hasPlayed = TRUE;
 	}
 
 	if(IntelFoxEnd->hasPlayed && !FoxSoundCheckIsPlaying(IntelFoxEnd))

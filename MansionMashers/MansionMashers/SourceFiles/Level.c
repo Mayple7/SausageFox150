@@ -570,6 +570,6 @@ void GameCompletion(void)
 		SetNextState(GS_Narr2);
 	}
 	else
-		BlackOverlay->Alpha += GetDeltaTime() / 3;
+		BlackOverlay->Alpha += GetDeltaTime();
 
 }
