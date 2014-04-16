@@ -184,8 +184,9 @@ void UpdatePause(void)
 {
 	while(pause)
 	{
-		AESysFrameStart();
 		StartFoxFrame();
+		AESysFrameStart();
+
 		PlayAudio(&BackgroundSnd);
 
 		if(FoxInput_KeyTriggered(VK_ESCAPE))
@@ -208,8 +209,8 @@ void UpdatePause(void)
 		SetChannelGroupVolume(MusicType, BGMVolume);
 		UpdateSoundSystem();
 
-		EndFoxFrame();
 		AESysFrameEnd();
+		EndFoxFrame();
 	}
 	SaveSettings();
 	FreePause();
