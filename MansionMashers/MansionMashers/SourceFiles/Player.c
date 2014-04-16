@@ -392,7 +392,7 @@ void SelectiveInput(struct Player *CurrentPlayer, int jumpingNow, int dropdownNo
 	}
 
 	//Use the buff
-	if(FoxInput_KeyTriggered('F'))
+	if(FoxInput_KeyTriggered('F') && CurrentPlayer->CurrentPlayerStats.CurrentHealth > 0)
 	{
 		if(CurrentPlayer->BuffHeld[CurrentPlayer->BuffSelected])
 		{
