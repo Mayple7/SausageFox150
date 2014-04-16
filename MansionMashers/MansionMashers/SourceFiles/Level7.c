@@ -489,10 +489,16 @@ void EventLevel(void)
 	{
 		if(PlayerIsAlive)
 		{
-			//TogglePauseSound(BackSnd);
+			if(bossDefeated)
+				TogglePauseSound(WinTheme);
+			else
+				TogglePauseSound(BackSnd);
 			InitializePause(&DrawLevel7);
 			UpdatePause();
-			//TogglePauseSound(BackSnd);
+			if(bossDefeated)
+				TogglePauseSound(WinTheme);
+			else
+				TogglePauseSound(BackSnd);
 		}
 	}
 

@@ -77,6 +77,7 @@ Sprite* TreeBackground3[4];
 static void TreeBackgroundUpdate(void);
 
 
+
 /*************************************************************************/
 /*!
 	\brief
@@ -159,7 +160,7 @@ void InitializeLevel5(void)
 	/////////////////////////////////
 	//		Sounds				   //
 	/////////////////////////////////
-	BackSnd = CreateSound("Sounds/MMBGMusic.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/TutorialTheme.mp3", LargeSnd);
 
 	IntelFoxTwoKeys = CreateSound("Sounds/IntelFoxLvl5TwoKeys.mp3", SmallSnd);
 	IntelFoxLook = CreateSound("Sounds/IntelFoxLvl5Look.mp3", SmallSnd);
@@ -199,6 +200,7 @@ void InitializeLevel5(void)
 void UpdateLevel5(void)
 {
 	EventLevel();
+	PlayAudio(BackSnd);
 
 	ParticleSystemUpdate();
 	UpdateAllProjectiles();
@@ -283,9 +285,10 @@ void EventLevel(void)
 	if(FoxInput_KeyTriggered(VK_ESCAPE))
 	{
 		InitializePause(&DrawLevel5);
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(BackSnd);
 		UpdatePause();
-		//TogglePauseSound(&BackgroundSnd);
+		TogglePauseSound(BackSnd);
+
 	}
 
 	// Runs if the beginning animation is finished
