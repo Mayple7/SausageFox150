@@ -331,7 +331,7 @@ void EventNarr2(void)
 		fadeInGoing = FALSE;
 
 	if(FoxInput_KeyTriggered(' '))
-		SetNextState(GS_MapLevel);
+		SetNextState(GS_Credits);
 
 	//////////////////////////////////
 	//    CAMERA POSITION SECOND    //

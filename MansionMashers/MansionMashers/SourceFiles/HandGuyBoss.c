@@ -159,7 +159,8 @@ HandGuyBoss* CreateHandGuyBoss(float xPos, float yPos)
 
 	CurrentBoss->HandGuyPhrase = CreateSound("Sounds/HandGuyPhrase.mp3", SmallSnd);
 	CurrentBoss->PunchSFX = CreateSound("Sounds/HGPunch.mp3", SmallSnd);
-	CurrentBoss->SwooshSFX = CreateSound("Sounds/HGSwoosh.mp3", SmallSnd);
+	CurrentBoss->SwooshSFX[0] = CreateSound("Sounds/HGSwoosh.mp3", SmallSnd);
+	CurrentBoss->SwooshSFX[1] = CreateSound("Sounds/HGSwoosh.mp3", SmallSnd);
 
 	CurrentBoss->HandGuyYell = CreateSound("Sounds/HandGuyYell.mp3", SmallSnd);
 	CurrentBoss->HandGuySoundsPlay = FALSE;
@@ -389,7 +390,8 @@ void UpdateHandGuyBoss(HandGuyBoss *CurrentBoss)
 					CurrentBoss->HandGuySpriteParts.AttackRotationArmLower2 = 0;
 				}
 				CurrentBoss->QuestionAttackAnimation = TRUE;
-				PlayAudio(CurrentBoss->SwooshSFX);
+				PlayAudio(CurrentBoss->SwooshSFX[0]);
+				
 				
 			}
 			
