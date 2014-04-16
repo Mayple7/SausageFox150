@@ -385,6 +385,7 @@ void EventLevel(void)
 	else if(!levelComplete)
 	{
 		// Make sure the boss stays put during the start
+		Boss->CurrentState = 0; // Stays in CD state
 		Boss->cooldownTimer = 0;
 
 		// Fade in the level
