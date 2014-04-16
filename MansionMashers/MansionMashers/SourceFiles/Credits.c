@@ -24,12 +24,14 @@
 // includes
 
 #include "../AEEngine.h"
-#include "../HeaderFiles/TemplateLevel.h"
+#include "../HeaderFiles/Credits.h"
+#include "../HeaderFiles/Narr2.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../HeaderFiles/FoxMath.h"
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
+
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -103,7 +105,8 @@ void InitializeCredits(void)
 	Skip = (Sprite *)CreateSprite("TextureFiles/Skip.png", 1920, 1080, 600, 1, 1, 0, 0);
 	Skip->Alpha = -2.5;
 
-	BackSnd = CreateSound("Sounds/CreditTheme.mp3", LargeSnd);
+	if(GetPreviousState() != GS_Narr2)
+		BackSnd = CreateSound("Sounds/CreditTheme.mp3", LargeSnd);
 
 	HazeBackground = (Sprite *)CreateSprite("TextureFiles/MapHaze.png", 4000, 1080, 1, 1, 1, 480, 0);
 	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
@@ -121,7 +124,10 @@ void InitializeCredits(void)
 void UpdateCredits(void)
 {
 	EventLevel();
-	PlayAudio(BackSnd);
+	if(GetPreviousState() != GS_Narr2)
+		PlayAudio(BackSnd);
+	else
+		PlayAudio(&WinBackSnd);
 	SystemOne->Position.x = GetCameraXPosition();
 	HazeBackground->Position.x = GetCameraXPosition();
 }
@@ -148,6 +154,8 @@ void DrawCredits(void)
 void FreeCredits(void)
 {
 	FreeAllLists();
+	if(GetPreviousState() == GS_Narr2)
+		freeSound(&WinBackSnd);
 }
 
 /*************************************************************************/

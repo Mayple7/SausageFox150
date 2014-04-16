@@ -83,6 +83,10 @@ Sprite* TreeBackground2[4];
 Sprite* TreeBackground3[4];
 static void TreeBackgroundUpdate(void);
 static void ObjectGlowUpdate(void);
+
+FoxSound* BackSnd;
+FoxSound* WinTheme;
+
 /*************************************************************************/
 /*!
 	\brief
@@ -163,8 +167,8 @@ void InitializeLevel7(void)
 	/////////////////////////////////
 	//		Sounds				   //
 	/////////////////////////////////
-	//BackSnd = CreateSound("Sounds/BossMusic.mp3", LargeSnd);
-	//WinTheme = CreateSound("Sounds/CreditTheme.mp3", LargeSnd);
+	BackSnd = CreateSound("Sounds/BossMusic.mp3", LargeSnd);
+	WinTheme = CreateSound("Sounds/CreditTheme.mp3", LargeSnd);
 
 	IntelFoxStart = CreateSound("Sounds/IntelFoxBreakingUp.mp3", SmallSnd);
 	IntelFoxEnd = CreateSound("Sounds/IntelFoxLvl7End.mp3", SmallSnd);
@@ -244,6 +248,11 @@ void UpdateLevel7(void)
 	Weapon* wList = weaponList;
 
 	EventLevel();
+
+	if(PlayerIsAlive && !bossDefeated)
+		PlayAudio(BackSnd);
+	else if(PlayerIsAlive)
+		PlayAudio(WinTheme);
 
 	if(!levelComplete)
 		UpdateKevinBoss(Boss);
