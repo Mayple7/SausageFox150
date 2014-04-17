@@ -124,7 +124,7 @@ void UpdateEP2Screen(void)
 	// Fades the slides if needed to and returns when to change levels
 	changeLevel = fadeLogic();
 
-	if(AEInputCheckTriggered(VK_ESCAPE))
+	if(FoxInput_KeyTriggered(VK_ESCAPE))
 		SetNextState(GS_MainMenu);
 
 	if(changeLevel == 1)
@@ -285,13 +285,13 @@ static int fadeLogic(void)
 		slideTimer += 1;
 
 	// Start fading out the slide after some time
-	if(AEInputCheckTriggered(VK_SPACE) && alpha > 0.5)
+	if(FoxInput_KeyTriggered(VK_SPACE) && alpha > 0.5)
 	{
 		slideDir = 1;
 		fade = 2;
 		slideTimer = 0;
 	}
-	else if(AEInputCheckTriggered(VK_BACK) && alpha > 0.5)
+	else if(FoxInput_KeyTriggered(VK_BACK) && alpha > 0.5)
 	{
 		if(slideTextureNum != Slide1)
 		{

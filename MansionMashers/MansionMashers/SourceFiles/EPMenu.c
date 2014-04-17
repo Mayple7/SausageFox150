@@ -1,3 +1,26 @@
+/*****************************************************************************/
+/*!
+\file				EPMenu.c
+\author				Dan Muller (d.muller
+\date				Jan 8, 2014
+
+\brief				Functions for fading in and out all the splash screen slides
+
+\par				Functions:
+\li					LoadEP2Screen
+\li					InitializeEP2Screen
+\li					UpdateEP2Screen
+\li					DrawEP2Screen
+\li					FreeEP2Screen
+\li					UnloadEP2Screen
+\li					fadeLogic
+  
+\par 
+<b> Copyright (C) 2014 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
+*/ 
+/*****************************************************************************/
 // ---------------------------------------------------------------------------
 // includes
 

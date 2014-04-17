@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*!
 \file				Level7.c
-\author				Juli Gregg (j.gregg)	
+\author				Dan Muller (d.muller)	
 \date				Mar 8, 2014
 
 \brief				Functions for Level7

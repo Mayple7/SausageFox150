@@ -1,4 +1,20 @@
+/*****************************************************************************/
+/*!
+\file				SearchIntArray.c
+\author				Dan Muller (d.muller)
+\date				Feb 26, 2024
 
+\brief				Searches through an int array
+
+\par				Functions:
+\li					searchhitArray
+  
+\par 
+<b> Copyright (C) 2024 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
+*/ 
+/*****************************************************************************/
 #include <stdio.h>
 #include "../HeaderFiles/SearchIntArray.h"
 

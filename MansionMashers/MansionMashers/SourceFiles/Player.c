@@ -744,7 +744,6 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -795,7 +794,6 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -857,7 +855,6 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -908,7 +905,6 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -958,7 +954,6 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -1010,7 +1005,6 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)
@@ -1062,7 +1056,6 @@ void DetectPlayerCollision(void)
 				if(hitPrev < 0 || CurrentPlayer.CollisionData[hitPrev] % 10 == 0)
 				{
 					// NEVER COLLIDED OR DIDNT COLLIDE PREV FRAME
-					AE_ASSERT_MESG("No collision and not colliding, should never be here.");
 				}
 				// Found target, collision ended
 				else if(CurrentPlayer.CollisionData[hitPrev] % 10 == 1)

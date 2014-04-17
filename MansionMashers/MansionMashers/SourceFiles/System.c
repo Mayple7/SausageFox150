@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*
 File:				System.c
-Author:				Juli Gregg (j.gregg)
+Author:				Dan Muller (d.muller)
 Creation Date:		Feb 2, 2014
 
 Purpose:			System Functions

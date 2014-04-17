@@ -1,3 +1,21 @@
+/*****************************************************************************/
+/*!
+\file				Input.c
+\author				Dan Muller (d.muller)
+\author				Lucas Conlon (l.conlon)
+\date				Feb 26, 2024
+
+\brief				Functions for the heads up display
+
+\par				Functions:
+\li					CreateHUD
+  
+\par 
+<b> Copyright (C) 2024 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior 
+ written consent of DigiPen Institute of Technology is prohibited. </b>
+*/ 
+/*****************************************************************************/
 #include "../HeaderFiles/FoxEngine.h"
 #include <Windows.h>
 #include <string.h>
