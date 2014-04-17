@@ -7,7 +7,10 @@
 \brief				
 
 \par				Functions:
-\li					
+					- CreateBoundingBoxes	
+					- BoundingBoxUpdate
+					- CreateBlockerBoxes
+					- UpdateBlockerBoxes
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
@@ -78,7 +81,7 @@ void BoundingBoxUpdate(void)
 	Creates sprite for the blocker boxes
 */
 /*************************************************************************/
-void CreateBlockerBoxes()
+void CreateBlockerBoxes(void)
 {
 	// Bounding Box Walls
 	BBWallLeft = CreateWall("TextureFiles/BlankPlatform.png", 200.0f, 1080.0f, 0, 0);

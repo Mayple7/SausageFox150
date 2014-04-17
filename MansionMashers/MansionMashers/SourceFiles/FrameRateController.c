@@ -43,13 +43,6 @@ void StartFoxFrame(void)
 	QueryPerformanceCounter(&CycleStart);
 }
 
-double testFrameTime(void)
-{
-	//For testing
-	QueryPerformanceCounter(&CycleEnd);
-	QueryPerformanceFrequency(&Freq);
-	return ((double)(CycleEnd.QuadPart - CycleStart.QuadPart) / (double)Freq.QuadPart);
-}
 
 /*************************************************************************/
 /*!

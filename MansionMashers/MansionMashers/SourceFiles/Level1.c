@@ -3,7 +3,6 @@
 \file				Level1.c
 
 \author				Juli Gregg (j.gregg)	
-					Dan Muller (d.muller)
 
 \date				Feb 15, 2014
 
