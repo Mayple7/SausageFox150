@@ -3,4 +3,4 @@ Role: Tech Director
 Main Contribution: Object creation and interaction, physics and collision architecture, bosses and player logic
 Files: Player.c, Enemy.c, YeahGuyBoss.c, MainMenu.c, ArmGuyBoss.c, HandGuyBoss.c, YeahGuy.c, TextCreation.c, OptionsMenu.c, Weapon.c, MapLevel.c, Level7.c, KevinBoss.c, ArmGuy.c, HandGuy.c, PlayerCollision.c, PauseMenu.c, WeaponNames.c, CharacterSelect.c, DevMenu.c, EPMenu.c, Main.c, Sprite.c, EP2Slides.c, TestLevel.c, HUD.c, EnemyCollision.c, ShowcaseLevel.c, EP1Slides.c, RigidBody.c, Kevin.c, System.c, StartSlides.c, CollisionManager.c, TemplateLevel.c, CollisionBox.c, EnemySpawner.c, Food.c, Wall.c, Platform.c, UIButton.c, SearchIntArray.c
 Total Code Lines: 12626 lines
-Personal Notes: 
+Personal Notes: I learned that Tartaglia loves particles! Also I wish we had more time so we could revisit some of our earlier modules since some of them are not very good now that we have more experience.
