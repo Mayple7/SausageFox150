@@ -1258,28 +1258,37 @@ int LoadPlayer(Player *CurrentPlayer)
 			CreateStatsString(CurrentPlayer->PlayerWeapon->WeaponStatsString, CurrentPlayer->PlayerWeapon->BonusStrength, CurrentPlayer->PlayerWeapon->BonusAgility, CurrentPlayer->PlayerWeapon->BonusDefense);
 			ChangeTextString(CurrentPlayer->PlayerWeapon->WeaponStatsGlyphs, CurrentPlayer->PlayerWeapon->WeaponStatsString);
 			//Updates the weapon sprite for the correct weapon
-			switch(CurrentPlayer->PlayerWeapon->WeaponType)
+
+			if (CurrentPlayer->PlayerWeapon->WeaponRarity != Sausage)
 			{
-			case Sword:
+				switch(CurrentPlayer->PlayerWeapon->WeaponType)
+				{
+				case Sword:
+					FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
+					CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
+					break;
+				case Axe:
+					FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
+					CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, 0, 0);
+					break;
+				case Hammer:
+					FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
+					CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, 0, 0);
+					break;
+				case Spear:
+					FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
+					CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, 0, 0);
+					break;
+				default:
+					FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
+					CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
+					break;
+				}
+			}
+			else
+			{
 				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
-				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
-				break;
-			case Axe:
-				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
-				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Axe.png", 256, 256, 5, 1, 1, 0, 0);
-				break;
-			case Hammer:
-				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
-				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Hammer.png", 256, 256, 5, 1, 1, 0, 0);
-				break;
-			case Spear:
-				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
-				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Spear.png", 256, 256, 5, 1, 1, 0, 0);
-				break;
-			default:
-				FreeSprite(CurrentPlayer->PlayerWeapon->WeaponSprite);
-				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/Sword.png", 256, 256, 5, 1, 1, 0, 0);
-				break;
+				CurrentPlayer->PlayerWeapon->WeaponSprite = (Sprite *) CreateSprite("TextureFiles/GinkoSmall.png", 256, 256, 5, 1, 1, 0, 0);
 			}
 			//Updates weapon hover text
 			nameLen = strlen(CurrentPlayer->PlayerWeapon->WeaponName);

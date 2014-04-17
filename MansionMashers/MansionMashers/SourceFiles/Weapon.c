@@ -201,6 +201,26 @@ void CreateWeaponName(char** Name, int WType, int WRarity)
 		}
 		strcat(*Name, GetRareEnd());
 	}
+	else if(WRarity == Sausage)
+	{
+		strcpy(*Name, GetRareStart());
+		switch(WType)
+		{
+		case Sword:
+			strcat(*Name, "Ginko ");
+			break;
+		case Axe:
+			strcat(*Name, "Ginko ");
+			break;
+		case Hammer:
+			strcat(*Name, "Ginko ");
+			break;
+		case Spear:
+			strcat(*Name, "Ginko ");
+			break;
+		}
+		strcat(*Name, GetRareEnd());
+	}
 }
 
 void WeaponOnTheRun(Weapon* CurrentWeapon)
@@ -369,6 +389,37 @@ void CreateWeaponStats(int WType, int WRarity, int* BonusStrength, int* BonusAgi
 			break;
 		}
 	}
+	else if(WRarity == Sausage)
+	{
+		switch(WType)
+		{
+		case Sword:
+			*BonusStrength = rand() % 8 + 6;
+			*BonusAgility = rand() % 8 + 8;
+			*BonusDefense = rand() % 8 + 8;
+			break;
+		case Axe:
+			*BonusStrength = rand() % 8 + 8;
+			*BonusAgility = rand() % 8 + 8;
+			*BonusDefense = rand() % 8 + 6;
+			break;
+		case Hammer:
+			*BonusStrength = rand() % 8 + 8;
+			*BonusAgility = rand() % 8 + 6;
+			*BonusDefense = rand() % 8 + 8;
+			break;
+		case Spear:
+			*BonusStrength = rand() % 8 + 6;
+			*BonusAgility = rand() % 8 + 10;
+			*BonusDefense = rand() % 8 + 6;
+			break;
+		case FoxWeapon:
+			*BonusStrength = rand() % 8 + 8;
+			*BonusAgility = rand() % 8 + 8;
+			*BonusDefense = rand() % 8 + 8;
+			break;
+		}
+	}
 }
 
 Sprite* CreateWeaponSprite(int WType, int WRarity, float xPos, float yPos)
@@ -436,6 +487,10 @@ Sprite* CreateWeaponSprite(int WType, int WRarity, float xPos, float yPos)
 			WeaponSprite = (Sprite *) CreateSprite("TextureFiles/GinkoSmall.png", 256, 256, 50, 1, 1, xPos, yPos);
 			break;
 		}
+	}
+	else if(WRarity == Sausage)
+	{
+		WeaponSprite = (Sprite *) CreateSprite("TextureFiles/GinkoSmall.png", 256, 256, 50, 1, 1, xPos, yPos);
 	}
 	return WeaponSprite;
 }
