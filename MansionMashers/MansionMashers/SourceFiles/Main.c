@@ -208,11 +208,12 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			functions are called for freeing and allocing.
 		*/
 		TotalMemoryAllocs -= TotalMemoryFrees;
+#if defined _DEBUG
 		printf("\nMEMORY NOT FREED: %i \n\n", TotalMemoryAllocs);
 		if (TotalMemoryAllocs)
 			printf(":: MEMORY LEAKS: PLEASE GET A BUCKET AND MOP ::\n\n");
 		printf("----------------A NEW DAY----------------\n\n");
-		
+#endif
 		SetPreviousState(GetCurrentState());
 		SetCurrentState(GetNextState());
 	}

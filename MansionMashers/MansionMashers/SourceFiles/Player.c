@@ -112,7 +112,7 @@ void InitializePlayer(struct Player *CurrentPlayer, enum Character Princess, flo
 	/*////////////////////////////////
 	//    PLAYER WEAPON & STATS     //
 	////////////////////////////////*/
-	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/stick.png", Sword, Common, WeaponFriendly, 256, 256);
+	CurrentPlayer->PlayerWeapon = CreateWeapon("Fragile Stick", "TextureFiles/Sword.png", Sword, Common, WeaponFriendly, 256, 256);
 
 	if(LoadPlayer(CurrentPlayer) < 1)
 	{
