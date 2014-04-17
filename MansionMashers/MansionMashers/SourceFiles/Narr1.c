@@ -245,12 +245,12 @@ void EventNarr1(void)
 		if(!levelComplete)
 		{
 			InitializePause(&DrawNarr1);
-			//TogglePauseSound(BackSnd);
+			TogglePauseSound(BackSnd);
 			TogglePauseSound(KingFox);
 			UpdatePause();
 			TogglePauseSound(KingFox);
 
-			//TogglePauseSound(BackSnd);
+			TogglePauseSound(BackSnd);
 		}
 	}
 
