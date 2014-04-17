@@ -264,10 +264,10 @@ void InitializeMapLevel(void)
 			FadeOverlay->Position.x = 700.0f;
 		break;
 	case GS_Level6:
-		FadeOverlay->Position.x = 1100.0f;
+		FadeOverlay->Position.x = 1300.0f;
 		break;
 	case GS_YeahGuy:
-		FadeOverlay->Position.x = 1500.0f;
+		FadeOverlay->Position.x = 1700.0f;
 		break;
 	case GS_Level7:
 	case GS_Shop4:
@@ -463,7 +463,7 @@ void EventLevel(void)
 			iconPosition = GS_Level5;
 		}
 		//Shop2
-		else if(PointRectCollision(&Shop2->ButtonCollider, &MouseClick) && (CurrentPlayer.armClear || Cheats))
+		else if(PointRectCollision(&Shop2->ButtonCollider, &MouseClick) && (CurrentPlayer.handClear || CurrentPlayer.armClear || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Shop2);
 			iconPosition = GS_Shop2;
@@ -481,7 +481,7 @@ void EventLevel(void)
 			iconPosition = GS_YeahGuy;
 		}
 		//Shop4
-		else if(PointRectCollision(&Shop4->ButtonCollider, &MouseClick) && (GS_Level7 <= CurrentPlayer.CurrentLevel || Cheats))
+		else if(PointRectCollision(&Shop4->ButtonCollider, &MouseClick) && (GS_Level6 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
 			GetNewIconPosition(&PlayerIcon->Position, GS_Shop4);
 			iconPosition = GS_Shop4;

@@ -101,10 +101,10 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->BodySprite->FlipX = TRUE;
 
 	CurrentBoss->playerHit = 0;
-	CurrentBoss->MaxHealth = 3000;
-	CurrentBoss->CurrentRedHealth = 3000;
-	CurrentBoss->CurrentGreenHealth = 3000;
-	CurrentBoss->CurrentBlueHealth = 3000;
+	CurrentBoss->MaxHealth = 2000;
+	CurrentBoss->CurrentRedHealth = 2000;
+	CurrentBoss->CurrentGreenHealth = 2000;
+	CurrentBoss->CurrentBlueHealth = 2000;
 
 	CurrentBoss->redHead = TRUE;
 	CurrentBoss->greenHead = TRUE;
@@ -135,9 +135,9 @@ YeahGuyBoss* CreateYeahGuyBoss(float xPos, float yPos)
 	CurrentBoss->YeahAOEDamage = 40;
 	CurrentBoss->YeahAOERadius = 600;
 
-	CurrentBoss->YeahPoundDamage = 40;
+	CurrentBoss->YeahPoundDamage = 30;
 
-	CurrentBoss->YeahProjectileDamage = 20;
+	CurrentBoss->YeahProjectileDamage = 10;
 
 	CurrentBoss->HeadAttacking = RedHead;
 

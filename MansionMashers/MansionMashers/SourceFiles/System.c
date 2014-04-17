@@ -48,6 +48,7 @@ void FoxSystemInitialize(void)
 	if(!fp)
 	{
 		fp = fopen(Settings, "wt");
+		// Folder does not exist
 		if(!fp)
 		{
 			strcpy(Settings, Buffer);
@@ -58,6 +59,7 @@ void FoxSystemInitialize(void)
 
 			fp = fopen(Settings, "wt");
 
+			// Sub-sub folder does not exist -_-
 			if(!fp)
 			{
 				strcpy(Settings, Buffer);

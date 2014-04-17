@@ -382,7 +382,7 @@ void FreeLevel7(void)
 	if(levelComplete && CurrentPlayer.CurrentLevel < GS_Kevin)
 	{
 		CurrentPlayer.levelClearBitFlags |= 256;
-		CurrentPlayer.CurrentLevel = GS_Kevin;
+		CurrentPlayer.CurrentLevel = GS_Level7;
 	}
 	else if(CurrentPlayer.CurrentLevel < GS_Level7)
 		CurrentPlayer.CurrentLevel = GS_Level7;

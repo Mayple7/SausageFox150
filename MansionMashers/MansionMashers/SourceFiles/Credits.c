@@ -208,14 +208,14 @@ void EventLevel(void)
 	//		Camera				//
 	//////////////////////////////
 
-	if(GetCameraXPosition() < PANELSIZE + 800)
+	if(GetCameraXPosition() < PANELSIZE + 1440)
 		SetCameraXPosition(GetCameraXPosition() + ((PANELSIZE / 10.0f) * GetLoadRatio()) * GetDeltaTime());
 	else
 	{
-		SetCameraXPosition(PANELSIZE + 800);
+		SetCameraXPosition(PANELSIZE + 1440);
 	}
 
-	if(GetCameraXPosition() >= PANELSIZE + 400)
+	if(GetCameraXPosition() >= PANELSIZE + 800)
 	{
 		if(GetPreviousState() == GS_Narr2)
 		{
