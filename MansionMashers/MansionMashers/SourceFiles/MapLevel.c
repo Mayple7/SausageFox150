@@ -154,11 +154,11 @@ void InitializeMapLevel(void)
 	}
 	else if(iconPosition == GS_ArmGuy && CurrentPlayer.armClear)
 	{
-		iconPosition = GS_Shop2;
+		iconPosition = GS_Level5;
 	}
 	else if(iconPosition == GS_HandGuy && CurrentPlayer.handClear)
 	{
-		iconPosition = GS_Shop3;
+		iconPosition = GS_Level5;
 	}
 	else if(iconPosition == GS_Level5 && CurrentPlayer.CurrentLevel >= GS_Level6)
 	{
@@ -171,10 +171,6 @@ void InitializeMapLevel(void)
 	else if(iconPosition == GS_YeahGuy && CurrentPlayer.CurrentLevel > GS_YeahGuy)
 	{
 		iconPosition = GS_Level7;
-	}
-	else if(iconPosition == GS_Level7 && CurrentPlayer.CurrentLevel > GS_Level7)
-	{
-		iconPosition = GS_Kevin;
 	}
 	if(iconPosition == GS_Level31)
 		iconPosition = GS_Level3;

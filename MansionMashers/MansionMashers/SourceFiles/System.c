@@ -18,6 +18,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 */
 /*****************************************************************************/
 
+#include <shlobj.h>
 #include "../AEEngine.h"
 #include "../HeaderFiles/FoxEngine.h"
 #include "../FMODHeaders/fmod.h"
@@ -35,17 +36,44 @@ int maxWidth, maxHeight;
 /*************************************************************************/
 void FoxSystemInitialize(void)
 {
-	char Buffer[100];
+	char Buffer[200];
 	FILE *fp;
-	GetCurrentDirectory(sizeof(Buffer), Buffer);
+	HRESULT result = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, Buffer);
+	
 	strcpy(GameData, Buffer);
-	strcat(GameData, "/GameData.cfg");
+	strcat(GameData, "\\DigiPen\\MansionMashers\\GameData.cfg");
 	strcpy(Settings, Buffer);
-	strcat(Settings, "/Settings.cfg");
+	strcat(Settings, "\\DigiPen\\MansionMashers\\Settings.cfg");
 	fp = fopen(Settings, "rt");
 	if(!fp)
 	{
 		fp = fopen(Settings, "wt");
+		if(!fp)
+		{
+			strcpy(Settings, Buffer);
+			strcat(Settings, "\\DigiPen\\MansionMashers");
+
+			CreateDirectory(Settings, NULL);
+			strcat(Settings, "\\Settings.cfg");
+
+			fp = fopen(Settings, "wt");
+
+			if(!fp)
+			{
+				strcpy(Settings, Buffer);
+				strcat(Settings, "\\DigiPen");
+
+				CreateDirectory(Settings, NULL);
+				strcat(Settings, "\\MansionMashers");
+				CreateDirectory(Settings, NULL);
+
+				strcat(Settings, "\\Settings.cfg");
+
+				fp = fopen(Settings, "wt");
+			}
+
+		}
+
 		fprintf(fp, "SFX: 100\nBGM: 100\nCheats: 0\nLookAtMouse: 0");
 		fclose(fp);
 		fp = fopen(Settings, "rt");
