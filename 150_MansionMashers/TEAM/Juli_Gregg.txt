@@ -1,7 +1,61 @@
 Name: Juli Gregg
+
 Role: Producer
-Main Contribution: Fmod implementation, environment art, level logic and design
-Files: Sound.c, Level3.1.c, Level2.c, Level6.c, Narr2.c, Level1.c, Level4.c, GameStateManager.c, Level5.c, Level3.c, Matrix3.c, Credits.c, Narr1.c, Camera.c, Death.c, PaperScroll.c, Vector2.c, Vector3.c, EasyEdit.c, 
-BoundingBox.c, FrameRateController.c
+
+Main Contribution: 
+-Fmod Implementation/Wrapper
+-Environment/Background Art
+-Level Design
+-Level Logic
+-Sounds Effects/Narrative
+-Math Libraries
+-Game State Manager
+-Camera Movement/Logic
+-Editing Tools
+-FrameRate Controller
+-Presentation Assets
+
+
+Files: 
+-Sound.c
+-Level3.1.c
+-Level2.c
+-Level6.c
+-Narr2.c
+-Level1.c
+-Level4.c
+-GameStateManager.c
+-Level5.c
+-Level3.c
+-Matrix3.c
+-Credits.c 
+-Narr1.c
+-Camera.c 
+-Death.c
+-PaperScroll.c
+-Vector2.c
+-Vector3.c 
+-EasyEdit.c
+-BoundingBox.c
+-FrameRateController.c
+
 Total Code Lines: 4084 lines
+
 Personal Notes: 
+
+What I learned:
+-Learned to appreciate having a designated designer/artist. I spent a lot of
+time making art, planning out levels, and implenting all the logic for each level.
+Next year I hope to have a designer so I can focus more on programming.
+
+What I liked:
+-We made a really good game that each of our teammates should be proud of. We 
+worked hard and created a great final product for only a one semester game. I 
+hope my teammates realize this even though we will not be on a team together
+next semester.
+
+Other Comments:
+-We had team conflicts for sure. As producer I felt I wasn't really respected and
+many times I felt that the amount of art Luke and I were making was not appreciated especially since we dedicated a lot of time to ensure the game did not look like programmer art. More than once I was told by a teammate that doing art was not working on the game. Since they made no art for the game I felt this was an unfair statement. Also I felt like there were several times this semester where a teammate has made me feel like my contributions to the game were worthless and that he was far superior. I don't mix well with these types of personalities as I have conflict confrontation issues that I hope to get over while at DigiPen. I have spent a lot of time on this game and dedicated the majority of my spring break to ensure that almost all the content we wanted would be in it. I hope that my teammates actually appreciated this. Moving forward I plan to work with different team members each project in order to experience working with all types of personalities since in the industry you don't necessarily get to choose your teammates. 
+
+
