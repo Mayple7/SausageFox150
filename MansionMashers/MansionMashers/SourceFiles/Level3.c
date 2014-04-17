@@ -42,7 +42,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/EasyEdit.h"
+
 
 
 // ---------------------------------------------------------------------------
@@ -223,7 +223,6 @@ void UpdateLevel3(void)
 	EventLevel3();
 	PlayAudio(&Level3BackSnd);
 
-	EasyEditWall(Wall1, 10);
 
 
 	// This should be the last line in this function

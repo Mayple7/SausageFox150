@@ -30,7 +30,6 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/EasyEdit.h"
 
 // ---------------------------------------------------------------------------
 // Libraries
@@ -304,8 +303,6 @@ void UpdateLevel6(void)
 
 	if(PlayerIsAlive)
 		PlayAudio(BackSnd);
-	//EasyEditPlatform(Plat, 10);
-	//EasyEditWall(Wall1, 10);
 
 	if(!EnemyPanelNumber[0])
 		Arrow1->Visible = TRUE;
