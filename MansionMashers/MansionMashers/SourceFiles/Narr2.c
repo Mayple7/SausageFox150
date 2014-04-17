@@ -215,7 +215,7 @@ void InitializeNarr2(void)
 		PlayerHead = (Sprite*)CreateSprite("TextureFiles/GinkoHead.png", HEAD_SCALE * 129.75f, HEAD_SCALE * 101.25f, 30, 1, 1, -310, 310);
 		break;
 	case Holly:
-		PlayerHead = (Sprite*)CreateSprite("TextureFiles/MaypleHead.png", HEAD_SCALE * 140.25f, HEAD_SCALE * 108.75f, 30, 1, 1, -310, 310);
+		PlayerHead = (Sprite*)CreateSprite("TextureFiles/HollyHead.png", HEAD_SCALE * 140.25f, HEAD_SCALE * 108.75f, 30, 1, 1, -310, 310);
 		break;
 	}
 
