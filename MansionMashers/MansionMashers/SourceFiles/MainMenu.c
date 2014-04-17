@@ -314,12 +314,13 @@ void UpdateMainMenu(void)
 			TimerGoingUp = TRUE;
 	}
 
+#if defined _DEBUG
 	// REMOVE FOR RELEASE BUILD
 	if(FoxInput_KeyTriggered(VK_HOME))
 	{
 		SetNextState(GS_EPMenu);
 	}
-
+#endif
 
 	InputHandling();
 	BackgroundAnimation();
