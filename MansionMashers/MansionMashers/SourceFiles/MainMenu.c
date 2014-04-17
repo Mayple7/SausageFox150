@@ -254,8 +254,6 @@ void InitializeMainMenu(void)
 /*************************************************************************/
 void UpdateMainMenu(void)
 {
-	if(FoxInput_KeyTriggered('O'))
-		SetNextState(GS_Narr2);
 
 	PlayAudio(&MenuBackSnd);
 

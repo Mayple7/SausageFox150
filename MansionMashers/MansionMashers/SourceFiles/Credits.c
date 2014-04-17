@@ -56,8 +56,14 @@ FoxSound* BackSnd;
 
 Sprite* Copyright;
 
+FoxSound* IntelFoxEnd;
+
 ParticleSystem* SystemOne;
 Sprite* HazeBackground;
+
+Sprite* HeadBack;
+static float IntelFoxValue;
+Sprite* Oakley;
 
 /*************************************************************************/
 /*!
@@ -113,6 +119,15 @@ void InitializeCredits(void)
 	SystemOne->FadeIn = TRUE;
 
 	Copyright = (Sprite*)CreateSprite("TextureFiles/Copyright.png", 1920, 177, 30, 1, 1, 1890, 540-(177/2));
+
+	if(GetPreviousState() == GS_Narr2)
+		IntelFoxEnd = CreateSound("Sounds/IntelFoxTheEnd.mp3", SmallSnd);
+
+	Oakley = (Sprite*)CreateSprite("TextureFiles/OakleyHead.png", 400, 250, 32, 1, 1, 0, 0);
+	HeadBack = (Sprite*) CreateSprite("TextureFiles/IntelFoxHeadBack.png", 540, 500, 28, 1, 1, 0, 0);
+	Oakley->Alpha = 0.0f;
+	IntelFoxValue	= 0.0f;
+	HeadBack->Alpha = 0.0f;
 }
 
 /*************************************************************************/
@@ -201,7 +216,42 @@ void EventLevel(void)
 	}
 
 	if(GetCameraXPosition() >= PANELSIZE + 400)
-		levelComplete = TRUE;
+	{
+		if(GetPreviousState() == GS_Narr2)
+		{
+			Oakley->Position.x = GetCameraXPosition();
+			HeadBack->Position = Oakley->Position;
+
+			if(!IntelFoxEnd->hasPlayed)
+			{
+				IntelFoxEnd->hasPlayed = TRUE;
+				PlayAudio(IntelFoxEnd);
+			}
+			else if(IntelFoxEnd->hasPlayed && !FoxSoundCheckIsPlaying(IntelFoxEnd))
+				levelComplete = TRUE;
+
+		}
+		else
+			levelComplete = TRUE;
+	}
+
+	if(FoxSoundCheckIsPlaying(IntelFoxEnd))
+	{
+		if(Oakley->Alpha < 1)
+			Oakley->Alpha += 3 * GetDeltaTime();
+	}
+	else
+	{
+		if(Oakley->Alpha > 0)
+			Oakley->Alpha -= 3 * GetDeltaTime();
+	}
+
+	
+	IntelFoxValue += GetDeltaTime() * 8.0f;
+	Oakley->Rotation = sinf(IntelFoxValue) / 4.0f;
+
+	HeadBack->Alpha = Oakley->Alpha;
+
 
 
 	//////////////////////////////

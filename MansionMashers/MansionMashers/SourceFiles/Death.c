@@ -7,7 +7,8 @@
 \brief				
 
 \par				Functions:
-\li					
+					- CreateDeathConfirmObjects		
+					- UpdateDeathConfirmObjects
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.

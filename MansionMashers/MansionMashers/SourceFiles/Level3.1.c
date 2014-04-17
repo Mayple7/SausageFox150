@@ -43,7 +43,7 @@
 #include "../HeaderFiles/FoxObjects.h"
 #include "../HeaderFiles/GameStateManager.h"
 #include "../HeaderFiles/GameStateList.h"
-#include "../HeaderFiles/EasyEdit.h"
+
 
 
 
@@ -352,8 +352,6 @@ void UpdateLevel31(void)
 	if(PlayerIsAlive)
 		PlayAudio(&Level3BackSnd);
 
-	EasyEditPlatform(Plat, 10);
-	//EasyEditWall(Wall1 ,10);
 
 	if(!EnemyPanelNumber[0])
 		Arrow1->Visible = TRUE;

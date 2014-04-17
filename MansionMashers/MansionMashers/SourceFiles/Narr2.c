@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /*!
-\file				Level1.c
+\file				Narr2.c
 
 \author				Juli Gregg (j.gregg)	
 
@@ -83,8 +83,12 @@ FoxSound* OakleySaved;
 
 Sprite* Medal;
 
+ParticleSystem* FireWork[6];
+
 static float timer;
 static int timerOn;
+static int fireworkShot = 0;
+static float fireworkTimer = 0;
 
 /*************************************************************************/
 /*!
@@ -117,6 +121,7 @@ void InitializeNarr2(void)
 	KevinIsOut = FALSE;
 	timer = 6;
 	timerOn = FALSE;
+	
 
 	//Set the camera so it currently isn't gated
 	ResetGatedCamera();
@@ -176,6 +181,12 @@ void InitializeNarr2(void)
 
 	KevinDie = CreateFoxParticleSystem("TextureFiles/Particle.png", 310, 310, 35, 0, 20, 0.0f, 0, 360, 1.0f, 15.0f, 200, 200, 20, 2.0f, 0.5f);
 
+	FireWork[0] = CreateFoxParticleSystem("TextureFiles/BuffPartOrange.png", -710, -540, 101, 0, 10, 0.0f, 75 - 180, 15, 1.0f, -15.0f, 3, 3, 200, 1.0f, 1.0f);
+	FireWork[1] = CreateFoxParticleSystem("TextureFiles/BuffPartBlue.png", 0, -540, 101, 0, 10, 0.0f, 90 - 180, 15, 1.0f, -15.0f, 3, 3, 200, 1.0f, 1.0f);
+	FireWork[2] = CreateFoxParticleSystem("TextureFiles/BuffPartGreen.png", 710, -540, 101, 0, 10, 0.0f, 105 - 180, 15, 1.0f, -15.0f, 3, 3, 200, 1.0f, 1.0f);
+	FireWork[3] = CreateFoxParticleSystem("TextureFiles/YGPartGreen.png", -710, -540, 101, 0, 10, 0.0f, 75 - 180, 15, 1.0f, -15.0f, 3, 3, 200, 1.0f, 1.0f);
+	FireWork[4] = CreateFoxParticleSystem("TextureFiles/YGPartRed.png", 0, -540, 101, 0, 10, 0.0f, 90 - 180, 15, 1.0f, -15.0f, 3, 3, 200, 1.0f, 1.0f);
+	FireWork[5] = CreateFoxParticleSystem("TextureFiles/YGPartBlue.png", 710, -540, 101, 0, 10, 0.0f, 105 - 180, 15, 1.0f, -15.0f, 3, 3, 200, 1.0f, 1.0f);
 
 	/////////////////////////////////
 	//			Spawners		   //
@@ -189,8 +200,6 @@ void InitializeNarr2(void)
 	HeadBack = (Sprite*) CreateSprite("TextureFiles/IntelFoxHeadBack.png", 540, 500, 28, 1, 1, 310, 320);
 	PlayerBack = (Sprite*) CreateSprite("TextureFiles/IntelFoxHeadBack.png", 540, 500, 28, 1, 1, -310, 320);
 	Medal = (Sprite*) CreateSprite("TextureFiles/PawOfHonor.png", 800, 1080, 28, 1, 1, -470, 0);
-
-
 
 	//To fade in characters
 	Oakley->Alpha = 0.0f; 
@@ -215,7 +224,7 @@ void InitializeNarr2(void)
 		PlayerHead = (Sprite*)CreateSprite("TextureFiles/GinkoHead.png", HEAD_SCALE * 129.75f, HEAD_SCALE * 101.25f, 30, 1, 1, -310, 310);
 		break;
 	case Holly:
-		PlayerHead = (Sprite*)CreateSprite("TextureFiles/MaypleHead.png", HEAD_SCALE * 140.25f, HEAD_SCALE * 108.75f, 30, 1, 1, -310, 310);
+		PlayerHead = (Sprite*)CreateSprite("TextureFiles/HollyHead.png", HEAD_SCALE * 140.25f, HEAD_SCALE * 108.75f, 30, 1, 1, -310, 310);
 		break;
 	}
 
@@ -459,7 +468,40 @@ void EventNarr2(void)
 	if(timerOn)
 		timer -= GetDeltaTime();
 	if(timer < 0)
+	{
 		Medal->Alpha = 1.0f;
+
+		if (!fireworkShot)
+		{
+			fireworkShot++;
+			fireworkTimer = 1.0f;
+			FireWork[fireworkShot - 1]->amountTotal = -1;
+		}
+	}
+
+	fireworkTimer -= GetDeltaTime();
+
+	if (fireworkShot && fireworkShot < 7)
+	{
+		if (fireworkTimer > 0)
+			{
+				FireWork[fireworkShot - 1]->Position.x += cosf((FireWork[fireworkShot - 1]->emitAngle - 180) / 180.0f * FOX_PI) * 15.0f;
+				FireWork[fireworkShot - 1]->Position.y += sinf((FireWork[fireworkShot - 1]->emitAngle - 180) / 180.0f * FOX_PI) * 15.0f;
+			}
+			else
+			{
+				FireWork[fireworkShot - 1]->amountTotal = 100;
+				FireWork[fireworkShot - 1]->emitAngleRandom = 360;
+				FireWork[fireworkShot - 1]->emitAmount = 100;
+				FireWork[fireworkShot - 1]->emitVelocity *= 1.5f;
+				fireworkShot++;
+				if (fireworkShot < 7)
+				{
+					fireworkTimer = 1.0f;
+					FireWork[fireworkShot - 1]->amountTotal = -1;
+				}
+			}
+	}
 
 	//Everything done lets get out of here
 	if(KevinIsOut && OakleySaved->hasPlayed && !FoxSoundCheckIsPlaying(OakleySaved))

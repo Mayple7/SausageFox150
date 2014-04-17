@@ -7,6 +7,10 @@ Creation Date:		Feb 2, 2014
 Purpose:			System Functions
 
 Functions:			
+					- FoxSystemInitialize
+					- FoxSystemExit
+					- InitWindow
+					- SaveSettings
  
 Copyright (C) 2014 DigiPen Institute of Technology. 
 Reproduction or disclosure of this file or its contents without the prior 

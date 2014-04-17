@@ -7,7 +7,9 @@
 \brief				
 
 \par				Functions:
-\li					
+					- EasyEditSprite	
+					- EasyEditPlatform
+					- EasyEditWall
   
 \par 
 <b> Copyright (C) 2014 DigiPen Institute of Technology.
