@@ -82,9 +82,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	sysInitInfo.mpWinCallBack		= NULL;//MyWinCallBack;
 	sysInitInfo.mClassStyle			= CS_HREDRAW | CS_VREDRAW;
 //#ifndef _DEBUG
-	//sysInitInfo.mWindowStyle		= WS_POPUP & ~WS_THICKFRAME;
+	sysInitInfo.mWindowStyle		= WS_POPUP & ~WS_THICKFRAME;
 //#else
-	sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
+	//sysInitInfo.mWindowStyle		= WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME;//WS_POPUP | WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;;	
 //#endif
 	AESysInit (&sysInitInfo);
 

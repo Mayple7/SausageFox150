@@ -1,0 +1,7 @@
+Name: Kaden Nugent
+Role: Product Manager
+Main Contribution: Object and texture management, shops and tutorial levels, leveling and upgrade system
+Files: ObjectManagerMake.c, Level.c, TutorialLevel.c, Shop3.c, Shop4.c, Shop2.c, Shop1.c, ObjectManagerFree.c, 
+Projectile.c, Shop.c, TextureManager.c, MemoryManager.c
+Total Code Lines: 2519 lines
+Personal Notes: 

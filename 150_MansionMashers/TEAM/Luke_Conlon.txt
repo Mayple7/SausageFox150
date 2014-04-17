@@ -1,0 +1,6 @@
+Name: Luke Conlon
+Role: Lead Designer
+Main Contribution: Particle system, character design and animations, enemy AI and animations
+Files: Movement.c, ParticleSystem.c, Input.c, Enemy.c
+Total Code Lines: 2232 lines
+Personal Notes: 

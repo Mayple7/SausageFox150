@@ -1,0 +1,7 @@
+Name: Juli Gregg
+Role: Producer
+Main Contribution: Fmod implementation, environment art, level logic and design
+Files: Sound.c, Level3.1.c, Level2.c, Level6.c, Narr2.c, Level1.c, Level4.c, GameStateManager.c, Level5.c, Level3.c, Matrix3.c, Credits.c, Narr1.c, Camera.c, Death.c, PaperScroll.c, Vector2.c, Vector3.c, EasyEdit.c, 
+BoundingBox.c, FrameRateController.c
+Total Code Lines: 4084 lines
+Personal Notes: 

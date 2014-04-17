@@ -1,0 +1,569 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="AE Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fox Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fox Source Files\Fox Level Sources">
+      <UniqueIdentifier>{61d5b9b7-dcbc-4f25-9bb7-8c67f14acba5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Source Files\Fox Math Sources">
+      <UniqueIdentifier>{a5e986d6-de3a-475b-a852-e15811ad4a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Source Files\Fox Engine Sources">
+      <UniqueIdentifier>{93333951-5d5b-4419-9d45-8c033d179f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files">
+      <UniqueIdentifier>{19d2fe8c-ac40-4ff9-bd2c-f9b741e98e83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files\Fox Engine Headers">
+      <UniqueIdentifier>{4a2b1a30-0542-4ab2-9b25-e73e033c5c22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files\Fox Math Headers">
+      <UniqueIdentifier>{de4a7a39-09d6-425c-ac77-608c5ea3f918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files\Fox Level Headers">
+      <UniqueIdentifier>{40d97c4c-fafb-4599-99bb-8fe21e69b826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Source Files\Fox Object Sources">
+      <UniqueIdentifier>{5a01428f-408b-445b-b12e-348418e1c603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox Header Files\Fox Object Headers">
+      <UniqueIdentifier>{a6968583-69c8-49ee-ada5-bea8e76d0b11}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3DPipelineTools.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AECollision.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEEngine.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEExport.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEFrameRateController.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEGameStateMgr.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEGraphics.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEInput.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AELineSegment2.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEMath.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEMtx33.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AESystem.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AETypes.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEUtil.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AEVec2.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Point4.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\StartSlides.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\MainMenu.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Vector2.h">
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Matrix3.h">
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Vector3.h">
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\ObjectManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\FoxEngine.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Sprite.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\RigidBody.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Movement.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Camera.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\CollisionManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\FoxMath.h">
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>AE Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\GameStateList.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\GameStateManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\PhysicsConstants.h">
+      <Filter>Fox Header Files\Fox Math Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Enemy.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Player.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Platform.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\FoxObjects.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\CollisionBox.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\PlayerCollision.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\TextureManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\SearchIntArray.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Food.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\TutorialLevel.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\MapLevel.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Sound.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\System.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\TextCreation.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\PauseMenu.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\FrameRate.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\WeaponNames.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\MemoryManager.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\EPMenu.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\EP1Slides.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\EP2Slides.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Weapon.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\EnemyCollision.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\ParticleSystem.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Input.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level1.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level2.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level3.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level4.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\TemplateLevel.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\ArmGuy.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\HandGuy.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\YeahGuy.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Kevin.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\FoxLevels.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\UIButton.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\CharacterSelect.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\BoundingBox.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Wall.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\OptionsMenu.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\PaperScroll.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\EasyEdit.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop1.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop2.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop3.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\EnemySpawner.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\HUD.h">
+      <Filter>Fox Header Files\Fox Engine Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\ArmGuyBoss.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level5.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level6.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level7.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Shop4.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level3.1.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Death.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Projectile.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\HandGuyBoss.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\YeahGuyBoss.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Level.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Credits.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Narr1.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\KevinBoss.h">
+      <Filter>Fox Header Files\Fox Object Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Narr2.h">
+      <Filter>Fox Header Files\Fox Level Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SourceFiles\Vector2.c">
+      <Filter>Fox Source Files\Fox Math Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Matrix3.c">
+      <Filter>Fox Source Files\Fox Math Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Vector3.c">
+      <Filter>Fox Source Files\Fox Math Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\MainMenu.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\StartSlides.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Main.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Camera.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Movement.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Sprite.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\CollisionManager.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\RigidBody.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\GameStateManager.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Player.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Platform.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Enemy.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\CollisionBox.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\PlayerCollision.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\TextureManager.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Food.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\SearchIntArray.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\TutorialLevel.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\MapLevel.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Sound.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\System.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\TextCreation.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\PauseMenu.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\FrameRateController.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Weapon.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\WeaponNames.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\MemoryManager.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\EPMenu.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\EP1Slides.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\EP2Slides.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\EnemyCollision.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\ParticleSystem.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Input.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level1.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level2.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level3.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level4.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\TemplateLevel.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\ArmGuy.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\YeahGuy.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\HandGuy.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Kevin.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\UIButton.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\ObjectManagerFree.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\ObjectManagerMake.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\CharacterSelect.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\BoundingBox.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Wall.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\OptionsMenu.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\PaperScroll.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\EasyEdit.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop1.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop2.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop3.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\EnemySpawner.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\HUD.c">
+      <Filter>Fox Source Files\Fox Engine Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\ArmGuyBoss.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Shop4.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level7.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level6.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level5.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level3.1.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Death.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Projectile.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\HandGuyBoss.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\YeahGuyBoss.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Level.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Credits.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Narr1.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\KevinBoss.c">
+      <Filter>Fox Source Files\Fox Object Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Narr2.c">
+      <Filter>Fox Source Files\Fox Level Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\fox_head.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MansionMashers.rc" />
+  </ItemGroup>
+</Project>

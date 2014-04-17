@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E5DD1C4C-50B9-45EE-9C02-912C0BBEC9A8}</ProjectGuid>
+    <RootNamespace>MansionMashers</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);C:\Program Files (x86)\Visual Leak Detector\include</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <CompileAs>CompileAsC</CompileAs>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Winmm.lib;fmodex_vc.lib;fmodexL_vc.lib;</AdditionalDependencies>
+      <Profile>false</Profile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Winmm.lib;fmodex_vc.lib;fmodexL_vc.lib;</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="3DPipelineTools.h" />
+    <ClInclude Include="AECollision.h" />
+    <ClInclude Include="AEEngine.h" />
+    <ClInclude Include="AEExport.h" />
+    <ClInclude Include="AEFrameRateController.h" />
+    <ClInclude Include="AEGameStateMgr.h" />
+    <ClInclude Include="AEGraphics.h" />
+    <ClInclude Include="AEInput.h" />
+    <ClInclude Include="AELineSegment2.h" />
+    <ClInclude Include="AEMath.h" />
+    <ClInclude Include="AEMtx33.h" />
+    <ClInclude Include="AESystem.h" />
+    <ClInclude Include="AETypes.h" />
+    <ClInclude Include="AEUtil.h" />
+    <ClInclude Include="AEVec2.h" />
+    <ClInclude Include="HeaderFiles\ArmGuy.h" />
+    <ClInclude Include="HeaderFiles\ArmGuyBoss.h" />
+    <ClInclude Include="HeaderFiles\BoundingBox.h" />
+    <ClInclude Include="HeaderFiles\Camera.h" />
+    <ClInclude Include="HeaderFiles\CharacterSelect.h" />
+    <ClInclude Include="HeaderFiles\CollisionBox.h" />
+    <ClInclude Include="HeaderFiles\CollisionManager.h" />
+    <ClInclude Include="HeaderFiles\Credits.h" />
+    <ClInclude Include="HeaderFiles\Death.h" />
+    <ClInclude Include="HeaderFiles\EasyEdit.h" />
+    <ClInclude Include="HeaderFiles\Enemy.h" />
+    <ClInclude Include="HeaderFiles\EnemyCollision.h" />
+    <ClInclude Include="HeaderFiles\EnemySpawner.h" />
+    <ClInclude Include="HeaderFiles\EP1Slides.h" />
+    <ClInclude Include="HeaderFiles\EP2Slides.h" />
+    <ClInclude Include="HeaderFiles\EPMenu.h" />
+    <ClInclude Include="HeaderFiles\Food.h" />
+    <ClInclude Include="HeaderFiles\FoxEngine.h" />
+    <ClInclude Include="HeaderFiles\FoxLevels.h" />
+    <ClInclude Include="HeaderFiles\FoxMath.h" />
+    <ClInclude Include="HeaderFiles\FoxObjects.h" />
+    <ClInclude Include="HeaderFiles\FrameRate.h" />
+    <ClInclude Include="HeaderFiles\GameStateList.h" />
+    <ClInclude Include="HeaderFiles\GameStateManager.h" />
+    <ClInclude Include="HeaderFiles\HandGuy.h" />
+    <ClInclude Include="HeaderFiles\HandGuyBoss.h" />
+    <ClInclude Include="HeaderFiles\HUD.h" />
+    <ClInclude Include="HeaderFiles\Input.h" />
+    <ClInclude Include="HeaderFiles\Kevin.h" />
+    <ClInclude Include="HeaderFiles\KevinBoss.h" />
+    <ClInclude Include="HeaderFiles\Level.h" />
+    <ClInclude Include="HeaderFiles\Level1.h" />
+    <ClInclude Include="HeaderFiles\Level2.h" />
+    <ClInclude Include="HeaderFiles\Level3.1.h" />
+    <ClInclude Include="HeaderFiles\Level3.h" />
+    <ClInclude Include="HeaderFiles\Level4.h" />
+    <ClInclude Include="HeaderFiles\Level5.h" />
+    <ClInclude Include="HeaderFiles\Level6.h" />
+    <ClInclude Include="HeaderFiles\Level7.h" />
+    <ClInclude Include="HeaderFiles\MainMenu.h" />
+    <ClInclude Include="HeaderFiles\MapLevel.h" />
+    <ClInclude Include="HeaderFiles\Matrix3.h" />
+    <ClInclude Include="HeaderFiles\MemoryManager.h" />
+    <ClInclude Include="HeaderFiles\Movement.h" />
+    <ClInclude Include="HeaderFiles\Narr1.h" />
+    <ClInclude Include="HeaderFiles\Narr2.h" />
+    <ClInclude Include="HeaderFiles\ObjectManager.h" />
+    <ClInclude Include="HeaderFiles\OptionsMenu.h" />
+    <ClInclude Include="HeaderFiles\PaperScroll.h" />
+    <ClInclude Include="HeaderFiles\ParticleSystem.h" />
+    <ClInclude Include="HeaderFiles\PauseMenu.h" />
+    <ClInclude Include="HeaderFiles\PhysicsConstants.h" />
+    <ClInclude Include="HeaderFiles\Platform.h" />
+    <ClInclude Include="HeaderFiles\Player.h" />
+    <ClInclude Include="HeaderFiles\PlayerCollision.h" />
+    <ClInclude Include="HeaderFiles\Projectile.h" />
+    <ClInclude Include="HeaderFiles\RigidBody.h" />
+    <ClInclude Include="HeaderFiles\SearchIntArray.h" />
+    <ClInclude Include="HeaderFiles\Shop.h" />
+    <ClInclude Include="HeaderFiles\Shop1.h" />
+    <ClInclude Include="HeaderFiles\Shop2.h" />
+    <ClInclude Include="HeaderFiles\Shop3.h" />
+    <ClInclude Include="HeaderFiles\Shop4.h" />
+    <ClInclude Include="HeaderFiles\Sound.h" />
+    <ClInclude Include="HeaderFiles\Sprite.h" />
+    <ClInclude Include="HeaderFiles\StartSlides.h" />
+    <ClInclude Include="HeaderFiles\System.h" />
+    <ClInclude Include="HeaderFiles\TemplateLevel.h" />
+    <ClInclude Include="HeaderFiles\TextCreation.h" />
+    <ClInclude Include="HeaderFiles\TextureManager.h" />
+    <ClInclude Include="HeaderFiles\TutorialLevel.h" />
+    <ClInclude Include="HeaderFiles\UIButton.h" />
+    <ClInclude Include="HeaderFiles\Vector2.h" />
+    <ClInclude Include="HeaderFiles\Vector3.h" />
+    <ClInclude Include="HeaderFiles\Wall.h" />
+    <ClInclude Include="HeaderFiles\Weapon.h" />
+    <ClInclude Include="HeaderFiles\WeaponNames.h" />
+    <ClInclude Include="HeaderFiles\YeahGuy.h" />
+    <ClInclude Include="HeaderFiles\YeahGuyBoss.h" />
+    <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="Point4.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Vector4.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SourceFiles\ArmGuy.c" />
+    <ClCompile Include="SourceFiles\ArmGuyBoss.c" />
+    <ClCompile Include="SourceFiles\BoundingBox.c" />
+    <ClCompile Include="SourceFiles\Camera.c" />
+    <ClCompile Include="SourceFiles\CharacterSelect.c" />
+    <ClCompile Include="SourceFiles\CollisionBox.c" />
+    <ClCompile Include="SourceFiles\CollisionManager.c" />
+    <ClCompile Include="SourceFiles\Credits.c" />
+    <ClCompile Include="SourceFiles\Death.c" />
+    <ClCompile Include="SourceFiles\EasyEdit.c" />
+    <ClCompile Include="SourceFiles\Enemy.c" />
+    <ClCompile Include="SourceFiles\EnemyCollision.c" />
+    <ClCompile Include="SourceFiles\EnemySpawner.c" />
+    <ClCompile Include="SourceFiles\EP1Slides.c" />
+    <ClCompile Include="SourceFiles\EP2Slides.c" />
+    <ClCompile Include="SourceFiles\EPMenu.c" />
+    <ClCompile Include="SourceFiles\Food.c" />
+    <ClCompile Include="SourceFiles\FrameRateController.c" />
+    <ClCompile Include="SourceFiles\GameStateManager.c" />
+    <ClCompile Include="SourceFiles\HandGuy.c" />
+    <ClCompile Include="SourceFiles\HandGuyBoss.c" />
+    <ClCompile Include="SourceFiles\HUD.c" />
+    <ClCompile Include="SourceFiles\Input.c" />
+    <ClCompile Include="SourceFiles\Kevin.c" />
+    <ClCompile Include="SourceFiles\KevinBoss.c" />
+    <ClCompile Include="SourceFiles\Level.c" />
+    <ClCompile Include="SourceFiles\Level1.c" />
+    <ClCompile Include="SourceFiles\Level2.c" />
+    <ClCompile Include="SourceFiles\Level3.1.c" />
+    <ClCompile Include="SourceFiles\Level3.c" />
+    <ClCompile Include="SourceFiles\Level4.c" />
+    <ClCompile Include="SourceFiles\Level5.c" />
+    <ClCompile Include="SourceFiles\Level6.c" />
+    <ClCompile Include="SourceFiles\Level7.c" />
+    <ClCompile Include="SourceFiles\Main.c" />
+    <ClCompile Include="SourceFiles\MainMenu.c" />
+    <ClCompile Include="SourceFiles\MapLevel.c" />
+    <ClCompile Include="SourceFiles\Matrix3.c" />
+    <ClCompile Include="SourceFiles\MemoryManager.c" />
+    <ClCompile Include="SourceFiles\Movement.c" />
+    <ClCompile Include="SourceFiles\Narr1.c" />
+    <ClCompile Include="SourceFiles\Narr2.c" />
+    <ClCompile Include="SourceFiles\ObjectManagerFree.c" />
+    <ClCompile Include="SourceFiles\ObjectManagerMake.c" />
+    <ClCompile Include="SourceFiles\OptionsMenu.c" />
+    <ClCompile Include="SourceFiles\PaperScroll.c" />
+    <ClCompile Include="SourceFiles\ParticleSystem.c" />
+    <ClCompile Include="SourceFiles\PauseMenu.c" />
+    <ClCompile Include="SourceFiles\Platform.c" />
+    <ClCompile Include="SourceFiles\Player.c" />
+    <ClCompile Include="SourceFiles\PlayerCollision.c" />
+    <ClCompile Include="SourceFiles\Projectile.c" />
+    <ClCompile Include="SourceFiles\RigidBody.c" />
+    <ClCompile Include="SourceFiles\SearchIntArray.c" />
+    <ClCompile Include="SourceFiles\Shop.c" />
+    <ClCompile Include="SourceFiles\Shop1.c" />
+    <ClCompile Include="SourceFiles\Shop2.c" />
+    <ClCompile Include="SourceFiles\Shop3.c" />
+    <ClCompile Include="SourceFiles\Shop4.c" />
+    <ClCompile Include="SourceFiles\Sound.c" />
+    <ClCompile Include="SourceFiles\Sprite.c" />
+    <ClCompile Include="SourceFiles\StartSlides.c" />
+    <ClCompile Include="SourceFiles\System.c" />
+    <ClCompile Include="SourceFiles\TemplateLevel.c" />
+    <ClCompile Include="SourceFiles\TextCreation.c" />
+    <ClCompile Include="SourceFiles\TextureManager.c" />
+    <ClCompile Include="SourceFiles\TutorialLevel.c" />
+    <ClCompile Include="SourceFiles\UIButton.c" />
+    <ClCompile Include="SourceFiles\Vector2.c" />
+    <ClCompile Include="SourceFiles\Vector3.c" />
+    <ClCompile Include="SourceFiles\Wall.c" />
+    <ClCompile Include="SourceFiles\Weapon.c" />
+    <ClCompile Include="SourceFiles\WeaponNames.c" />
+    <ClCompile Include="SourceFiles\YeahGuy.c" />
+    <ClCompile Include="SourceFiles\YeahGuyBoss.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\fox_head.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MansionMashers.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
