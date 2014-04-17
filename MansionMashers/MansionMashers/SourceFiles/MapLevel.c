@@ -54,7 +54,6 @@ Button* Tutorial;
 Button* Level1;
 Button* Level2;
 
-Button* Shop1;
 Button* Level3;
 Button* Level4;
 
@@ -62,7 +61,6 @@ Button* ArmGuy;
 Button* Shop2;
 
 Button* HandGuy;
-Button* Shop3;
 
 Button* Level5;
 Button* Level6;
@@ -70,7 +68,6 @@ Button* YeahGuy;
 
 Button* Shop4;
 Button* Level7;
-Button* Kevin;
 
 FoxSound* BackSnd;
 
@@ -205,33 +202,29 @@ void InitializeMapLevel(void)
 		break;
 	}
 
-	Tutorial = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -233.28f, 175, 75);
-	Level1 = CreateButton("TextureFiles/BlankPlatform.png", -432.86f, -221.43f, 175, 75);
-	Level2 = CreateButton("TextureFiles/BlankPlatform.png", -113.06f, -120.21f, 175, 75);
+	Tutorial = CreateButton("TextureFiles/BlankPlatform.png", -652.52f, -233.28f, 175, 100);
+	Level1 = CreateButton("TextureFiles/BlankPlatform.png", -432.86f, -221.43f, 175, 100);
+	Level2 = CreateButton("TextureFiles/BlankPlatform.png", -113.06f, -120.21f, 175, 100);
 
-	Shop1 = CreateButton("TextureFiles/BlankPlatform.png", -211.05f, 97.29f, 175, 75);
-	Level3 = CreateButton("TextureFiles/BlankPlatform.png", 114.14f, -273.12f, 175, 75);
-	Level4 = CreateButton("TextureFiles/BlankPlatform.png", 122.75f, 236.19f, 175, 75);
+	Level3 = CreateButton("TextureFiles/BlankPlatform.png", 114.14f, -273.12f, 175, 100);
+	Level4 = CreateButton("TextureFiles/BlankPlatform.png", 122.75f, 236.19f, 175, 100);
 
-	ArmGuy = CreateButton("TextureFiles/BlankPlatform.png", 388.71f, -235.43f, 175, 75);
-	Shop2 = CreateButton("TextureFiles/BlankPlatform.png", 627.76f, -258.04f, 175, 75);
+	ArmGuy = CreateButton("TextureFiles/BlankPlatform.png", 479.71f, -239.43f, 175, 100);
+	Shop2 = CreateButton("TextureFiles/BlankPlatform.png", 163.76f, -10.04f, 175, 100);
 
-	HandGuy = CreateButton("TextureFiles/BlankPlatform.png", 386.56f, 184.51f, 175, 75);
-	Shop3 = CreateButton("TextureFiles/BlankPlatform.png", 606.22f, 186.66f, 175, 75);
+	HandGuy = CreateButton("TextureFiles/BlankPlatform.png", 479.56f, 177.51f, 175, 100);
 
-	Level5 = CreateButton("TextureFiles/BlankPlatform.png", 400.56f, 5.77f, 175, 75);
-	Level6 = CreateButton("TextureFiles/BlankPlatform.png", 658.98f, -28.69f, 175, 75);
-	YeahGuy = CreateButton("TextureFiles/BlankPlatform.png", 1064.93f, -86.83f, 175, 75);
+	Level5 = CreateButton("TextureFiles/BlankPlatform.png", 492.0f, 0.77f, 175, 100);
+	Level6 = CreateButton("TextureFiles/BlankPlatform.png", 873.98f, -43.69f, 175, 100);
+	YeahGuy = CreateButton("TextureFiles/BlankPlatform.png", 1327.43f, -121.29f, 175, 100);
 
-	Shop4 = CreateButton("TextureFiles/BlankPlatform.png", 1106.91f, 155.44f, 175, 75);
-	Level7 = CreateButton("TextureFiles/BlankPlatform.png", 1324.43f, -121.29f, 175, 75);
-	Kevin = CreateButton("TextureFiles/BlankPlatform.png", 1582.85f, -139.60f, 175, 75);
+	Shop4 = CreateButton("TextureFiles/BlankPlatform.png", 1108.91f, 155.44f, 175, 100);
+	Level7 = CreateButton("TextureFiles/BlankPlatform.png", 1583.0f, -138.9f, 175, 100);
 
 	Tutorial->ButtonSprite->Visible = FALSE;
 	Level1->ButtonSprite->Visible = FALSE;
 	Level2->ButtonSprite->Visible = FALSE;
 
-	Shop1->ButtonSprite->Visible = FALSE;
 	Level3->ButtonSprite->Visible = FALSE;
 	Level4->ButtonSprite->Visible = FALSE;
 
@@ -239,7 +232,6 @@ void InitializeMapLevel(void)
 	Shop2->ButtonSprite->Visible = FALSE;
 
 	HandGuy->ButtonSprite->Visible = FALSE;
-	Shop3->ButtonSprite->Visible = FALSE;
 
 	Level5->ButtonSprite->Visible = FALSE;
 	Level6->ButtonSprite->Visible = FALSE;
@@ -247,7 +239,6 @@ void InitializeMapLevel(void)
 
 	Shop4->ButtonSprite->Visible = FALSE;
 	Level7->ButtonSprite->Visible = FALSE;
-	Kevin->ButtonSprite->Visible = FALSE;
 
 	SystemOne = CreateFoxParticleSystem("TextureFiles/MapParticle.png", 0, 0, 10, -1, 15, 0.5f, 0, 100, 20.0f, 5.0f, 4000, 1080, 50, 2.0f, 2.0f);
 	SystemOne->FadeIn = TRUE;
@@ -263,7 +254,6 @@ void InitializeMapLevel(void)
 	case GS_Level2:
 		FadeOverlay->Position.x = 400.0f;
 		break;
-	case GS_Shop1:
 	case GS_Level3:
 	case GS_Level4:
 		FadeOverlay->Position.x = 600.0f;
@@ -272,7 +262,6 @@ void InitializeMapLevel(void)
 	case GS_HandGuy:
 	case GS_Level5:
 	case GS_Shop2:
-	case GS_Shop3:
 		if(CurrentPlayer.armUnlock || CurrentPlayer.handUnlock)
 			FadeOverlay->Position.x = 1100.0f;
 		else
@@ -286,9 +275,6 @@ void InitializeMapLevel(void)
 		break;
 	case GS_Level7:
 	case GS_Shop4:
-		FadeOverlay->Position.x = 1800.0f;
-		break;
-	case GS_Kevin:
 		FadeOverlay->Visible = FALSE;
 		break;
 	default:
@@ -450,12 +436,6 @@ void EventLevel(void)
 			GetNewIconPosition(&PlayerIcon->Position, GS_Level2);
 			iconPosition = GS_Level2;
 		}
-		//Shop1
-		else if(PointRectCollision(&Shop1->ButtonCollider, &MouseClick) && (GS_Shop1 <= CurrentPlayer.CurrentLevel || Cheats))
-		{
-			GetNewIconPosition(&PlayerIcon->Position, GS_Shop1);
-			iconPosition = GS_Shop1;
-		}
 		//Level3
 		else if(PointRectCollision(&Level3->ButtonCollider, &MouseClick) && (GS_Shop1 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
@@ -492,12 +472,6 @@ void EventLevel(void)
 			GetNewIconPosition(&PlayerIcon->Position, GS_Shop2);
 			iconPosition = GS_Shop2;
 		}
-		//Shop3
-		else if(PointRectCollision(&Shop3->ButtonCollider, &MouseClick) && (CurrentPlayer.handClear || Cheats))
-		{
-			GetNewIconPosition(&PlayerIcon->Position, GS_Shop3);
-			iconPosition = GS_Shop3;
-		}
 		//Level6
 		else if(PointRectCollision(&Level6->ButtonCollider, &MouseClick) && (GS_Level6 <= CurrentPlayer.CurrentLevel || Cheats))
 		{
@@ -522,14 +496,9 @@ void EventLevel(void)
 			GetNewIconPosition(&PlayerIcon->Position, GS_Level7);
 			iconPosition = GS_Level7;
 		}
-		//Kevin
-		else if(PointRectCollision(&Kevin->ButtonCollider, &MouseClick) && (GS_Kevin <= CurrentPlayer.CurrentLevel || Cheats))
-		{
-			GetNewIconPosition(&PlayerIcon->Position, GS_Kevin);
-			iconPosition = GS_Kevin;
-		}
 	}
 
+#if defined _DEBUG
 	//Debug Buttons
 	if(FoxInput_KeyTriggered('U'))
 	{
@@ -539,6 +508,7 @@ void EventLevel(void)
 	{
 		RemoveDebugMode();
 	}
+#endif
 }
 
 /*************************************************************************/
@@ -561,55 +531,46 @@ void GetNewIconPosition(Vec2 *NewPosition, int newLocation)
 	switch(newLocation)
 	{
 	case GS_Tutorial:
-		Vec2Set(NewPosition, -652.52f, -228.28f);
+		Vec2Set(NewPosition, Tutorial->Position.x, Tutorial->Position.y + 10);
 		break;
 	case GS_Level1:
-		Vec2Set(NewPosition, -432.86f, -216.43f);
+		Vec2Set(NewPosition, Level1->Position.x, Level1->Position.y + 10);
 		break;
 	case GS_Level2:
-		Vec2Set(NewPosition, -113.06f, -115.21f);		
-		break;
-	case GS_Shop1:
-		Vec2Set(NewPosition, -211.05f, 102.29f);
+		Vec2Set(NewPosition, Level2->Position.x, Level2->Position.y + 10);
 		break;
 	case GS_Level3:
-		Vec2Set(NewPosition, 114.14f, -268.12f);
+		Vec2Set(NewPosition, Level3->Position.x, Level3->Position.y + 10);
 		break;
 	case GS_Level4:
-		Vec2Set(NewPosition, 122.75f, 241.19f);
+		Vec2Set(NewPosition, Level4->Position.x, Level4->Position.y + 10);
 		break;
 	case GS_ArmGuy:
-		Vec2Set(NewPosition, 388.71f, -230.43f);
+		Vec2Set(NewPosition, ArmGuy->Position.x, ArmGuy->Position.y + 10);
 		break;
 	case GS_Shop2:
-		Vec2Set(NewPosition, 627.76f, -258.04f);
+		Vec2Set(NewPosition, Shop2->Position.x, Shop2->Position.y + 10);
 		break;
 	case GS_HandGuy:
-		Vec2Set(NewPosition, 387.63f, 195.97f);
-		break;
-	case GS_Shop3:
-		Vec2Set(NewPosition, 606.22f, 186.66f);
+		Vec2Set(NewPosition, HandGuy->Position.x, HandGuy->Position.y + 10);
 		break;
 	case GS_Level5:
-		Vec2Set(NewPosition, 400.56f, 5.77f);
+		Vec2Set(NewPosition, Level5->Position.x, Level5->Position.y + 10);
 		break;
 	case GS_Level6:
-		Vec2Set(NewPosition, 658.98f, -28.69f);
+		Vec2Set(NewPosition, Level6->Position.x, Level6->Position.y + 10);
 		break;
 	case GS_YeahGuy:
-		Vec2Set(NewPosition, 1067.22f, -80.76f);
+		Vec2Set(NewPosition, YeahGuy->Position.x, YeahGuy->Position.y + 10);
 		break;
 	case GS_Shop4:
-		Vec2Set(NewPosition, 1106.91f, 155.44f);
+		Vec2Set(NewPosition, Shop4->Position.x, Shop4->Position.y + 10);
 		break;
 	case GS_Level7:
-		Vec2Set(NewPosition, 1324.43f, -121.29f);
-		break;
-	case GS_Kevin:
-		Vec2Set(NewPosition, 1582.85f, -139.60f);
+		Vec2Set(NewPosition, Level7->Position.x, Level7->Position.y + 10);
 		break;
 	default:
-		Vec2Set(NewPosition, -596.4f, -41.4f);
+		Vec2Set(NewPosition, Tutorial->Position.x, Tutorial->Position.y + 10);
 		break;
 	}
 }
@@ -619,121 +580,111 @@ void SetClearFlags(Player *CurrentPlayer)
 	// Tutorial Level
 	if(CurrentPlayer->levelClearBitFlags & 1)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, -645.52f, -179.28f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, Tutorial->Position.x + 5, Tutorial->Position.y + 56);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, -645.52f, -179.28f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, Tutorial->Position.x + 5, Tutorial->Position.y + 56);
 	}
 
 
 	// Level 1
 	if(CurrentPlayer->levelClearBitFlags & 2)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, -422.86f, -172.43f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, Level1->Position.x + 5, Level1->Position.y + 51);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, -422.86f, -172.43f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, Level1->Position.x + 5, Level1->Position.y + 51);
 	}
 
 	// Level 2
 	if(CurrentPlayer->levelClearBitFlags & 4)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, -103.06f, -70.21f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, Level2->Position.x + 5, Level2->Position.y + 53);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, -103.06f, -70.21f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, Level2->Position.x + 5, Level2->Position.y + 53);
 	}
 
 	// Level 3
 	if(CurrentPlayer->levelClearBitFlags & 8)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 122.14f, -222.12f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, Level3->Position.x + 5, Level3->Position.y + 54);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 122.14f, -222.12f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, Level3->Position.x + 5, Level3->Position.y + 54);
 	}
 
 	// Level 4
 	if(CurrentPlayer->levelClearBitFlags & 16)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 132.75f, 281.19f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, Level4->Position.x + 5, Level4->Position.y + 48);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 132.75f, 281.19f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, Level4->Position.x + 5, Level4->Position.y + 48);
 	}
 
 	// ArmGuy
 	if(CurrentPlayer->armClear)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 398.71f, -185.43f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, ArmGuy->Position.x + 5, ArmGuy->Position.y + 45);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 398.71f, -185.43f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, ArmGuy->Position.x + 5, ArmGuy->Position.y + 45);
 	}
 
 	// HandGuy
 	if(CurrentPlayer->handClear)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 397.63f, 235.97f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, HandGuy->Position.x + 5, HandGuy->Position.y + 52);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 397.63f, 235.97f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, HandGuy->Position.x + 5, HandGuy->Position.y + 52);
 	}
 
 	// Level 5
 	if(CurrentPlayer->levelClearBitFlags & 32)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 410.56f, 53.77f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, Level5->Position.x + 5, Level5->Position.y + 46);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 410.56f, 53.77f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, Level5->Position.x + 5, Level5->Position.y + 46);
 	}
 
 	// Level 6
 	if(CurrentPlayer->levelClearBitFlags & 64)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 668.98f, 17.69f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, Level6->Position.x + 5, Level6->Position.y + 49);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 668.98f, 17.69f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, Level6->Position.x + 5, Level6->Position.y + 49);
 	}
 
 	// YeahGuy
 	if(CurrentPlayer->levelClearBitFlags & 128)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 1077.22f, -37.76f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, YeahGuy->Position.x + 5, YeahGuy->Position.y + 43);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 1077.22f, -37.76f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, YeahGuy->Position.x + 5, YeahGuy->Position.y + 43);
 	}
 
 	// Level 7
 	if(CurrentPlayer->levelClearBitFlags & 256)
 	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 1334.43f, -71.29f);
+		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, Level7->Position.x + 5, Level7->Position.y + 55);
 	}
 	else
 	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 1334.43f, -71.29f);
-	}
-
-	// Kevin
-	if(CurrentPlayer->levelClearBitFlags & 512)
-	{
-		CreateSprite("TextureFiles/FoxFlag.png", 110, 110, 40, 1, 1, 1597.85f, -85.60f);
-	}
-	else
-	{
-		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, 1597.85f, -85.60f);
+		CreateSprite("TextureFiles/DogFlag.png", 110, 110, 40, 1, 1, Level7->Position.x + 5, Level7->Position.y + 55);
 	}
 }

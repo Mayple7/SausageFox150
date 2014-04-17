@@ -149,8 +149,12 @@ void InitializePause(void (*DrawLevel)())
 
 	LevelToDraw = DrawLevel;
 
-	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - SFXSliderBack->Width - 140, 200, 100, TextColor, Right, Border);
-	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - BGMSliderBack->Width - 140, 0, 100, TextColor, Right, Border);
+	SFXLabel = CreateText("SFX", SFXSliderBack->Position.x - SFXSliderBack->Width / 2, 200, 100, TextColor, Right, Border);
+	BGMLabel = CreateText("BGM", BGMSliderBack->Position.x - BGMSliderBack->Width / 2, 0, 100, TextColor, Right, Border);
+	TextAllVisible(SFXLabel);
+	TextAllVisible(BGMLabel);
+	ChangeTextZIndex(SFXLabel, 4003);
+	ChangeTextZIndex(BGMLabel, 4003);
 
 	// Check if we pause the map level or not
 	if(GetCurrentState() == GS_MapLevel)
