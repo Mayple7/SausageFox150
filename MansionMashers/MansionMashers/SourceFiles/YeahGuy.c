@@ -261,7 +261,9 @@ void InitializeYeahGuy(void)
 /*************************************************************************/
 void UpdateYeahGuy(void)
 {
-	PlayAudio(BackSnd);
+	
+	if(PlayerIsAlive)
+		PlayAudio(BackSnd);
 
 	redHead = Boss->redHead;
 	greenHead = Boss->greenHead;
